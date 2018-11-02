@@ -23,3 +23,10 @@ access_level = 'everyone'
 members = [
   'acrichton@mozilla.com',
 ]
+
+[[lists]]
+address = 'recursive@rustlang.com'
+access_level = 'everyone'
+members = [
+  'test@rustlang.com',
+]
