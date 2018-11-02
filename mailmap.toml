@@ -16,6 +16,12 @@
 #
 # All mailing lists behave the same way. When an email is received it then
 # broadcasts the email to all users of the mailing list.
+#
+#
+# Current list of domains you can choose from:
+#
+#   * rustlang.com
+#   * rustlang.net
 
 [[lists]]
 address = 'test@rustlang.com'
