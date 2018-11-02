@@ -1,0 +1,6 @@
+language: rust
+
+script:
+  - cargo build
+  - export RUST_LOG=mailgun_mailmap=debug
+  - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then cargo run; fi
