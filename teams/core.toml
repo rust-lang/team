@@ -1,0 +1,20 @@
+name = "core"
+
+[people]
+leads = []
+members = [
+    "nrc",
+    "alexcrichton",
+    "aidanhs",
+    "wycats",
+    "steveklabnik",
+    "nikomatsakis",
+    "carols10cents",
+    "Mark-Simulacrum",
+    "aturon",
+    "ashleygwilliams",
+]
+
+[website]
+name = "Core team"
+description = "overall direction of the project, subteam leadership, cross-cutting concerns"

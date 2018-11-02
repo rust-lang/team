@@ -1,0 +1,18 @@
+name = "ides"
+
+[people]
+leads = ["nrc"]
+members = [
+    "alexheretic",
+    "autozimu",
+    "jasonwilliams",
+    "LucasBullen",
+    "matklad",
+    "nrc",
+    "vlad20012",
+    "Xanewok",
+]
+
+[website]
+name = "IDEs and editors team"
+description = "IDEs, editors, and supporting tools such as Racer and the RLS"

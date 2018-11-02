@@ -1,0 +1,15 @@
+name = "rustdoc"
+
+[people]
+leads = ["QuietMisdreavus"]
+members = [
+    "GuillaumeGomez",
+    "QuietMisdreavus",
+    "ollie27",
+    "onur",
+    "steveklabnik",
+]
+
+[website]
+name = "Rustdoc team"
+description = "Documentation tools including Rustdoc and docs.rs"

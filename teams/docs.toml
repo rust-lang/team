@@ -1,0 +1,14 @@
+name = "docs"
+
+[people]
+leads = ["steveklabnik"]
+members = [
+    "steveklabnik",
+    "GuillaumeGomez",
+    "frewsxcv",
+    "QuietMisdreavus",
+]
+
+[website]
+name = "Documentation team"
+description = "ensuring Rust has fantastic documentation"

@@ -1,0 +1,21 @@
+name = "compiler"
+
+[people]
+leads = ["nikomatsakis"]
+members = [
+    "cramertj",
+    "eddyb",
+    "estebank",
+    "nagisa",
+    "oli-obk",
+    "petrochenkov",
+    "pnkfelix",
+    "nikomatsakis",
+    "michaelwoerister",
+    "varkor",
+    "Zoxc",
+]
+
+[website]
+name = "Compiler team"
+description = "compiler internals, optimizations"

@@ -1,0 +1,13 @@
+name = "lang-shepherds"
+
+[people]
+leads = []
+members = [
+    "solson",
+    "whitequark",
+    "rpjohnst",
+]
+
+[website]
+name = "Language team shepherds"
+description = "helping guide language RFCs to completion, assisting the language team with its work"

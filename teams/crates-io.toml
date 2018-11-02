@@ -1,0 +1,20 @@
+name = "crates-io"
+
+[people]
+leads = ["ashleygwilliams", "sgrif"]
+members = [
+    "carols10cents",
+    "ashleygwilliams",
+    "sgrif",
+    "jtgeibel",
+    "withoutboats",
+    "joshtriplett",
+    "ishitatsuyuki",
+    "steveklabnik",
+    "wycats",
+]
+
+[website]
+name = "Crates.io team"
+description = "management of operations, development, and policies for crates.io"
+email = "help@crates.io"

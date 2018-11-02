@@ -1,0 +1,28 @@
+name = "community"
+
+[people]
+leads = ["ashleygwilliams"]
+members = [
+    "skade",
+    "manishearth",
+    "sebasmagri",
+    "badboy",
+    "booyaa",
+    "ashleygwilliams",
+    "oe",
+    "technetos",
+    "arshiamufti",
+    "parrywinkle",
+    "spacekookie",
+    "flaki",
+    "mattgathu",
+    "celaus",
+    "wezm",
+    "bstrie",
+    "jonathandturner",
+]
+
+[website]
+name = "Community team"
+description = "coordinating events, outreach, commercial users, teaching materials, and exposure"
+email = "community@rust-lang.org"

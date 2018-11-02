@@ -1,0 +1,30 @@
+name = "release"
+
+[people]
+leads = ["Mark-Simulacrum"]
+members = [
+    "Mark-Simulacrum",
+    "jrozner",
+    "jkordish",
+    "cuviper",
+    "alexcrichton",
+    "dirtybit",
+    "Centril",
+    "sgrif",
+    "pietroalbini",
+    "BatmanAoD",
+    "PramodBisht",
+    "Lubits",
+    "ArazAbishov",
+    "Aaronepower",
+    "treiff",
+    "cssivision",
+    "gsollazzo",
+    "pambihira",
+    "stokhos",
+]
+
+[website]
+name = "Release team"
+description = "tracking regressions, stabilizations, and producing Rust releases"
+email = "release@rust-lang.org"

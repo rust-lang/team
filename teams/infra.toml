@@ -1,0 +1,21 @@
+name = "infra"
+
+[people]
+leads = ["aidanhs"]
+members = [
+    "alexcrichton",
+    "shepmaster",
+    "aidanhs",
+    "TimNN",
+    "Mark-Simulacrum",
+    "erickt",
+    "kennytm",
+    "ashleygwilliams",
+    "sgrif",
+    "pietroalbini",
+]
+
+[website]
+name = "Infrastructure team"
+description = "infrastructure supporting the Rust project itself: CI, releases, bots, metrics"
+email = "infra@rust-lang.org"

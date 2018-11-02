@@ -1,0 +1,17 @@
+name = "devtools"
+
+[people]
+leads = ["nrc"]
+members = [
+    "fitzgen",
+    "japaric",
+    "killercup",
+    "manishearth",
+    "nrc",
+    "steveklabnik",
+    "withoutboats",
+]
+
+[website]
+name = "Dev tools team"
+description = "Rust developer tools"
