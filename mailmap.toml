@@ -1,5 +1,25 @@
+# All mailing lists managed on Mailgun.
+#
+# This file is synchronized to configuration on Mailgun via Travis whenever a
+# commit is pushed to master. Travis just runs `cargo run` for this. The
+# configuration for this file is one top-level key, `lists`, which is an array
+# of mailing lists.
+#
+# Each mailing list has three keys:
+#
+#   * `address` - the email address of this mailing list (including the domain)
+#   * `access_level` - one of the following:
+#       * `readonly` - only authenticated users can post
+#       * `members` - only members can post to the list
+#       * `everyone` - anyone can post to the list
+#   * `members` - an array of email addresses to forward mail to
+#
+# All mailing lists behave the same way. When an email is received it then
+# broadcasts the email to all users of the mailing list.
+
 [[lists]]
-address = 'another@rustlang.com'
+address = 'test@rustlang.com'
 access_level = 'everyone'
 members = [
+  'acrichton@mozilla.com',
 ]
