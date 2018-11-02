@@ -1,0 +1,3 @@
+# Mailgun Mailmap
+
+A work in progress...
