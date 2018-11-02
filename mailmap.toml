@@ -1,0 +1,5 @@
+[[lists]]
+address = 'another@rustlang.com'
+access_level = 'everyone'
+members = [
+]
