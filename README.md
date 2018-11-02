@@ -1,5 +1,7 @@
 # Mailgun Mailmap
 
+[![Build Status](https://travis-ci.org/rust-lang/mailgun-mailmap.svg?branch=master)](https://travis-ci.org/rust-lang/mailgun-mailmap)
+
 Mail configuration for rust-lang domains.
 
 > **Note**: This repository is still being tested. The words below describe in
