@@ -1,6 +1,24 @@
+mod data;
+mod schema;
 mod sync;
+mod validate;
 
-use failure::Error;
+use crate::data::Data;
+use failure::{Error, err_msg};
+use structopt::StructOpt;
+
+#[derive(structopt::StructOpt)]
+#[structopt(name = "team", about = "manage the rust team members")]
+enum Cli {
+    #[structopt(name = "check", help = "check if the configuration is correct")]
+    Check,
+    #[structopt(name = "sync", help = "synchronize the configuration")]
+    Sync,
+    #[structopt(name = "dump-team", help = "print the members of a team")]
+    DumpTeam {
+        name: String,
+    }
+}
 
 fn main() {
     env_logger::init();
@@ -14,24 +32,29 @@ fn main() {
 }
 
 fn run() -> Result<(), Error> {
-    let args = std::env::args().skip(1).collect::<Vec<_>>();
-    if args.len() != 1 {
-        usage();
-    }
-
-    match args[0].as_str() {
-        "sync" => {
+    let cli = Cli::from_args();
+    match cli {
+        Cli::Check => {
+            let data = Data::load()?;
+            crate::validate::validate(&data)?;
+        }
+        Cli::Sync => {
             sync::lists::run()?;
         }
-        _ => usage(),
+        Cli::DumpTeam { ref name } => {
+            let data = Data::load()?;
+            let team = data.team(name).ok_or_else(|| err_msg("unknown team"))?;
+
+            let leads = team.leads();
+            for member in team.members(&data)? {
+                println!("{}{}", member, if leads.contains(member) {
+                    " (lead)"
+                } else {
+                    ""
+                });
+            }
+        }
     }
 
     Ok(())
-}
-
-fn usage() {
-    eprintln!("usage: {} <mode>", std::env::args().next().unwrap());
-    eprintln!("available modes:");
-    eprintln!("- sync: synchronize local state with the remote providers");
-    std::process::exit(1);
 }
