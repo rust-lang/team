@@ -12,3 +12,13 @@ members = [
 [website]
 name = "Documentation team"
 description = "ensuring Rust has fantastic documentation"
+
+[[lists]]
+address = "docs@rust-lang.org"
+access-level = "everyone"
+extra-teams = ["docs-peers"]
+
+[[lists]]
+address = "doc-team@rust-lang.org"
+access-level = "everyone"
+extra-teams = ["docs-peers"]

@@ -1,0 +1,14 @@
+name = "security"
+
+[people]
+leads = []
+members = [
+    "alexcrichton",
+    "nikomatsakis",
+    "steveklabnik",
+    "wycats",
+]
+
+[[lists]]
+address = "security@rust-lang.org"
+access-level = "everyone"

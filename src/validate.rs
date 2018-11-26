@@ -8,6 +8,7 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     validate_team_leads(data, &mut errors);
     validate_team_members(data, &mut errors);
     validate_inactive_members(data, &mut errors);
+    validate_list_email_addresses(data, &mut errors);
 
     if !errors.is_empty() {
         for err in &errors {
@@ -22,58 +23,73 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
 
 /// Ensure team leaders are part of the teams they lead
 fn validate_team_leads(data: &Data, errors: &mut Vec<String>) {
-    for team in data.teams() {
-        let members = match team.members(data) {
-            Ok(m) => m,
-            Err(err) => {
-                errors.push(err.to_string());
-                continue;
-            }
-        };
-        for lead in team.leads() {
+    wrapper(data.teams(), errors, |team, errors| {
+        let members = team.members(data)?;
+        wrapper(team.leads().iter(), errors, |lead, _| {
             if !members.contains(lead) {
-                errors.push(format!("`{}` leads team `{}`, but is not a member of it", lead, team.name()));
+                bail!("`{}` leads team `{}`, but is not a member of it", lead, team.name());
             }
-        }
-    }
+            Ok(())
+        });
+        Ok(())
+    });
 }
 
 /// Ensure team members are people
 fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
-    for team in data.teams() {
-        let members = match team.members(data) {
-            Ok(m) => m,
-            Err(err) => {
-                errors.push(err.to_string());
-                continue;
-            }
-        };
-        for member in members {
+    wrapper(data.teams(), errors, |team, errors| {
+        wrapper(team.members(data)?.iter(), errors, |member, _| {
             if data.person(member).is_none() {
-                errors.push(format!("person `{}` is member of team `{}` but doesn't exist", member, team.name()));
+                bail!("person `{}` is member of team `{}` but doesn't exist", member, team.name());
             }
-        }
-    }
+            Ok(())
+        });
+        Ok(())
+    });
 }
 
 /// Ensure every person is part of at least a team
 fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
     let mut active_members = HashSet::new();
-    for team in data.teams() {
-        let members = match team.members(data) {
-            Ok(m) => m,
-            Err(err) => {
-                errors.push(err.to_string());
-                continue;
-            }
-        };
+    wrapper(data.teams(), errors, |team, _| {
+        let members = team.members(data)?;
         for member in members {
             active_members.insert(member);
         }
-    }
+        Ok(())
+    });
 
     let all_members = data.people().map(|p| p.github()).collect::<HashSet<_>>();
-    for person in all_members.difference(&active_members) {
-        errors.push(format!("person `{}` is not a member of any team", person));
+    wrapper(all_members.difference(&active_members), errors, |person, _| {
+        bail!("person `{}` is not a member of any team", person);
+    });
+}
+
+/// Ensure every member of a team with a mailing list has an email address
+fn validate_list_email_addresses(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, errors| {
+        if team.lists(data)?.is_empty() {
+            return Ok(());
+        }
+        wrapper(team.members(data)?.iter(), errors, |member, _| {
+            let member = data.person(member).unwrap();
+            if member.email().is_none() {
+                bail!("person `{}` is a member of a mailing list but has no email address", member.github());
+            }
+            Ok(())
+        });
+        Ok(())
+    });
+}
+
+fn wrapper<T, I, F>(iter: I, errors: &mut Vec<String>, mut func: F)
+where
+    I: Iterator<Item = T>,
+    F: FnMut(T, &mut Vec<String>) -> Result<(), Error>,
+{
+    for item in iter {
+        if let Err(err) = func(item, errors) {
+            errors.push(err.to_string());
+        }
     }
 }

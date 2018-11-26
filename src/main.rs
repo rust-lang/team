@@ -17,7 +17,11 @@ enum Cli {
     #[structopt(name = "dump-team", help = "print the members of a team")]
     DumpTeam {
         name: String,
-    }
+    },
+    #[structopt(name = "dump-list", help = "print all the emails in a list")]
+    DumpList {
+        name: String,
+    },
 }
 
 fn main() {
@@ -52,6 +56,13 @@ fn run() -> Result<(), Error> {
                 } else {
                     ""
                 });
+            }
+        }
+        Cli::DumpList { ref name } => {
+            let data = Data::load()?;
+            let list = data.list(name)?.ok_or_else(|| err_msg("unknown list"))?;
+            for email in list.emails() {
+                println!("{}", email);
             }
         }
     }

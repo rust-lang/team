@@ -3,18 +3,40 @@ name = "core"
 [people]
 leads = []
 members = [
-    "nrc",
-    "alexcrichton",
-    "aidanhs",
-    "wycats",
-    "steveklabnik",
-    "nikomatsakis",
-    "carols10cents",
     "Mark-Simulacrum",
-    "aturon",
+    "aidanhs",
+    "alexcrichton",
     "ashleygwilliams",
+    "aturon",
+    "carols10cents",
+    "erickt",
+    "nikomatsakis",
+    "nrc",
+    "steveklabnik",
+    "wycats",
 ]
 
 [website]
 name = "Core team"
 description = "overall direction of the project, subteam leadership, cross-cutting concerns"
+
+[[lists]]
+address = "core@rust-lang.org"
+access-level = "everyone"
+
+[[lists]]
+address = "core-team@rust-lang.org"
+access-level = "everyone"
+
+[[lists]]
+address = "legal@crates.io"
+access-level = "everyone"
+
+[[lists]]
+address = "trademark@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-people = [
+    "aturon",
+    "nikomatsakis",
+]

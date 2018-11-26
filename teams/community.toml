@@ -26,3 +26,19 @@ members = [
 name = "Community team"
 description = "coordinating events, outreach, commercial users, teaching materials, and exposure"
 email = "community@rust-lang.org"
+
+[[lists]]
+address = "community@rust-lang.org"
+access-level = "everyone"
+extra-emails = [
+    "rust-community@googlegroups.com",
+    "varma.sunjay@gmail.com",
+]
+
+[[lists]]
+address = "community-team@rust-lang.org"
+access-level = "everyone"
+extra-emails = [
+    "rust-community@googlegroups.com",
+    "varma.sunjay@gmail.com",
+]

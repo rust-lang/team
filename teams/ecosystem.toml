@@ -1,0 +1,14 @@
+name = "ecosystem"
+
+[people]
+leads = []
+members = [
+    "KodrAus",
+    "withoutboats",
+    "sfackler",
+    "aturon",
+]
+
+[[lists]]
+address = "ecosystem@rust-lang.org"
+access-level = "everyone"

@@ -1,0 +1,18 @@
+name = "leads"
+
+[people]
+leads = []
+members = [
+    "aturon",
+    "ashleygwilliams",
+    "nikomatsakis",
+    "nrc",
+    "aidanhs",
+    "Mark-Simulacrum",
+    "steveklabnik",
+]
+
+[[lists]]
+address = "leads@rust-lang.org"
+access-level = "everyone"
+extra-teams = ["wg-leads"]

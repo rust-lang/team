@@ -19,3 +19,90 @@ members = [
 name = "Infrastructure team"
 description = "infrastructure supporting the Rust project itself: CI, releases, bots, metrics"
 email = "infra@rust-lang.org"
+
+[[lists]]
+address = "infra@rust-lang.org"
+access-level = "everyone"
+extra-people = [
+    "aturon",
+]
+
+[[lists]]
+address = "infra-team@rust-lang.org"
+access-level = "everyone"
+extra-people = [
+    "aturon",
+]
+
+[[lists]]
+address = "craterbot@rust-lang.org"
+access-level = "everyone"
+extra-people = [
+    "aturon",
+]
+
+[[lists]]
+address = "admin@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-people = [
+    "aturon",
+    "alexcrichton",
+]
+
+[[lists]]
+address = "rust-key@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-people = [
+    "aturon",
+    "alexcrichton",
+]
+
+[[lists]]
+address = "appveyor@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-emails = [
+    "rust-ops@googlegroups.com",
+]
+
+[[lists]]
+address = "appveyor-libs@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-emails = [
+    "rust-ops@googlegroups.com",
+]
+
+[[lists]]
+address = "bors@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-people = [
+    "alexcrichton",
+]
+
+[[lists]]
+address = "crates-io-cert@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-emails = [
+    "rust-ops@googlegroups.com",
+]
+
+[[lists]]
+address = "dmarc-rua@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-emails = [
+    "rust-ops@googlegroups.com",
+]
+
+[[lists]]
+address = "docker-hub-rustci@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-emails = [
+    "rust-ops@googlegroups.com",
+]

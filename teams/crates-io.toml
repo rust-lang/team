@@ -18,3 +18,34 @@ members = [
 name = "Crates.io team"
 description = "management of operations, development, and policies for crates.io"
 email = "help@crates.io"
+
+[[lists]]
+address = "help@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-people = [
+    "carols10cents",
+    "ashleygwilliams",
+    "sgrif",
+    "alexcrichton",
+]
+
+[[lists]]
+address = "crates-io@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-people = [
+    "carols10cents",
+    "ashleygwilliams",
+    "sgrif",
+    "alexcrichton",
+]
+
+[[lists]]
+address = "admin@crates.io"
+access-level = "everyone"
+include-team-members = false
+extra-people = [
+    "aturon",
+    "alexcrichton",
+]

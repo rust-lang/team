@@ -1,4 +1,4 @@
-use crate::schema::{Person, Team};
+use crate::schema::{Person, Team, List};
 use failure::{Error, ResultExt};
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -46,6 +46,21 @@ impl Data {
         }
 
         Ok(())
+    }
+
+    pub(crate) fn lists(&self) -> Result<HashMap<String, List>, Error> {
+        let mut lists = HashMap::new();
+        for team in self.teams.values() {
+            for list in team.lists(self)? {
+                lists.insert(list.address().to_string(), list);
+            }
+        }
+        Ok(lists)
+    }
+
+    pub(crate) fn list(&self, name: &str) -> Result<Option<List>, Error> {
+        let mut lists = self.lists()?;
+        Ok(lists.remove(name))
     }
 
     pub(crate) fn team(&self, name: &str) -> Option<&Team> {

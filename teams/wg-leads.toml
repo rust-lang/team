@@ -1,0 +1,11 @@
+name = "wg-leads"
+
+[people]
+leads = []
+members = [
+    "cramertj",
+    "withoutboats",
+    "killercup",
+    "fitzgen",
+    "japaric",
+]

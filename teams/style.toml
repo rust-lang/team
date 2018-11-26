@@ -1,0 +1,16 @@
+name = "style"
+
+[people]
+leads = []
+members = [
+    "japaric",
+    "joshtriplett",
+    "nrc",
+    "solson",
+    "steveklabnik",
+    "ubsan",
+]
+
+[[lists]]
+address = "style-team@rust-lang.org"
+access-level = "everyone"

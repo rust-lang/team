@@ -1,0 +1,12 @@
+name = "twir"
+
+[people]
+leads = []
+members = [
+    "llogiq",
+    "nasa42",
+]
+
+[[lists]]
+address = "twir@rust-lang.org"
+access-level = "everyone"

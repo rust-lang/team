@@ -13,3 +13,7 @@ members = [
 [website]
 name = "Rustdoc team"
 description = "Documentation tools including Rustdoc and docs.rs"
+
+[[lists]]
+address = "rustdoc@rust-lang.org"
+access-level = "everyone"

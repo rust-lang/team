@@ -5,10 +5,13 @@ children = [
     "core",
     "devtools",
     "docs",
+    "docs-peers",
     "infra",
     "lang",
+    "lang-shepherds",
     "libs",
     "release",
+    "rustdoc",
 ]
 
 [people]

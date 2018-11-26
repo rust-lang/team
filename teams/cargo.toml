@@ -16,3 +16,7 @@ members = [
 [website]
 name = "Cargo team"
 description = "design and implementation of Cargo"
+
+[[lists]]
+address = "cargo@rust-lang.org"
+access-level = "everyone"
