@@ -23,23 +23,14 @@ email = "infra@rust-lang.org"
 [[lists]]
 address = "infra@rust-lang.org"
 access-level = "everyone"
-extra-people = [
-    "aturon",
-]
 
 [[lists]]
 address = "infra-team@rust-lang.org"
 access-level = "everyone"
-extra-people = [
-    "aturon",
-]
 
 [[lists]]
 address = "craterbot@rust-lang.org"
 access-level = "everyone"
-extra-people = [
-    "aturon",
-]
 
 [[lists]]
 address = "admin@rust-lang.org"

@@ -1,0 +1,61 @@
+name = "wg-net"
+
+[people]
+leads = ["withoutboats", "cramertj"]
+members = [
+    "withoutboats",
+    "cramertj",
+    "aturon",
+    "Mark-Simulacrum",
+    "aidanhs",
+    "sfackler",
+]
+
+[[lists]]
+address = "net@rust-lang.org"
+access-level = "everyone"
+extra-emails = [
+    "bob@cloudflare.com",
+    "mail@josefbrandl.de",
+    "tinagma@gmail.com",
+    "coleman.mcfarland@gmail.com",
+    "dbarsky@amazon.com",
+    "inejge@gmail.com",
+    "bhargav.voleti93@gmail.com",
+    "azdle@azdle.net",
+    "yoshuawuyts@gmail.com",
+    "aajtodd@gmail.com",
+    "hello@stephanbuys.com",
+    "wg-net@nemo157.com",
+    "gruberbastian@me.com",
+    "jsgf@fb.com",
+    "mail@jakub-kozlowski.com",
+    "michaeljkillough@gmail.com",
+    "sloretan@gmail.com",
+    "ashfordneil0@gmail.com",
+    "a@tj.id.au",
+    "yarnnd@gmail.com",
+    "eric@reichertconsulting.com",
+    "karimair@gmail.com",
+    "flo@andersground.net",
+    "rolf@zxcv.nl",
+    "jbcden@gmail.com",
+    "me@kleimkuhler.com",
+    "pierre.krieger1708@gmail.com",
+    "etryzelaar@google.com",
+    "contact@geoffroycouprie.com",
+    "eric@dattore.me",
+    "service@maksims.co",
+    "sriram@tinverse.com",
+    "yusuke.sasaki.nuem@gmail.com",
+    "ricky@hosfelt.io",
+    "alberto@albertocoscia.me",
+    "kulshrax@gmail.com",
+    "alec@mocatta.net",
+    "xenith@xenith.org",
+    "arve.knudsen@gmail.com",
+    "ben.e.saunders@gmail.com",
+    "pickfire@riseup.net",
+    "lkurusa@kernelstuff.org",
+    "armin.ronacher@active-4.com",
+]

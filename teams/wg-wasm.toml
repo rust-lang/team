@@ -1,0 +1,10 @@
+name = "wg-wasm"
+
+[people]
+leads = ["fitzgen"]
+members = [
+    "fitzgen",
+    "alexcrichton",
+    "aturon",
+    "mgattozzi",
+]

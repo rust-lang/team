@@ -42,3 +42,25 @@ extra-emails = [
     "rust-community@googlegroups.com",
     "varma.sunjay@gmail.com",
 ]
+
+[[lists]]
+address = "reach@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-people = [
+    "ashleygwilliams",
+    "carols10cents",
+    "aidanhs",
+]
+extra-emails = [
+    "dhosfelt@mozilla.com",
+]
+
+[[lists]]
+address = "rustbridge@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-people = [
+    "ashleygwilliams",
+    "arshiamufti",
+]

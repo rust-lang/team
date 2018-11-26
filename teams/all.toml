@@ -25,3 +25,19 @@ access-level = "everyone"
 [[lists]]
 address = "team@rust-lang.org"
 access-level = "everyone"
+
+[[lists]]
+address = "underhanded@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-emails = [
+    "rust-underhanded@googlegroups.com",
+]
+
+[[lists]]
+address = "verification@rust-lang.org"
+access-level = "everyone"
+include-team-members = false
+extra-emails = [
+    "rust-verification@googlegroups.com",
+]

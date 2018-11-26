@@ -29,6 +29,10 @@ address = "core-team@rust-lang.org"
 access-level = "everyone"
 
 [[lists]]
+address = "user-logos@rust-lang.org"
+access-level = "everyone"
+
+[[lists]]
 address = "legal@crates.io"
 access-level = "everyone"
 

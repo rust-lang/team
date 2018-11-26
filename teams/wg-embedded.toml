@@ -1,0 +1,20 @@
+name = "wg-embedded"
+
+[people]
+leads = ["japaric"]
+members = [
+    "japaric"
+]
+
+[[lists]]
+address = "embedded-wg@rust-lang.org"
+access-level = "everyone"
+extra-emails = [
+    "david@craven.ch",
+    "hanno@braun-robotics.com",
+    "james.munns@gmail.com",
+    "jcsoo@bobbin.io",
+    "jp@thejpster.org.uk",
+    "me@dylanmckay.io",
+    "pftbest@gmail.com",
+]
