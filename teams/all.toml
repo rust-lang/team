@@ -1,0 +1,24 @@
+name = "all"
+children = [
+    "community",
+    "compiler",
+    "core",
+    "devtools",
+    "docs",
+    "infra",
+    "lang",
+    "libs",
+    "release",
+]
+
+[people]
+leads = []
+members = []
+
+[[lists]]
+address = "all@rust-lang.org"
+access-level = "everyone"
+
+[[lists]]
+address = "team@rust-lang.org"
+access-level = "everyone"
