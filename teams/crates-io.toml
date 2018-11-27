@@ -20,7 +20,7 @@ description = "management of operations, development, and policies for crates.io
 email = "help@crates.io"
 
 [[lists]]
-address = "help@rust-lang.org"
+address = "help@crates.io"
 access-level = "everyone"
 include-team-members = false
 extra-people = [

@@ -1,17 +1,25 @@
 name = "all"
 children = [
+    "alumni",
+    "cargo",
     "community",
     "compiler",
     "core",
+    "crates-io",
     "devtools",
     "docs",
     "docs-peers",
+    "ides",
     "infra",
     "lang",
     "lang-shepherds",
     "libs",
+    "mods",
+    "production",
     "release",
     "rustdoc",
+    "style",
+    "twir",
 ]
 
 [people]

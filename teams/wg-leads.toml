@@ -4,3 +4,8 @@ name = "wg-leads"
 leads = []
 members = []
 include-wg-leads = true
+
+[[lists]]
+address = "wg-leads@rust-lang.org"
+access-level = "everyone"
+extra-teams = ["core"]

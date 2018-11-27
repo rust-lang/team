@@ -9,3 +9,7 @@ members = [
     "aturon",
     "mgattozzi",
 ]
+
+[[lists]]
+address = "wasm@rust-lang.org"
+access-level = "everyone"

@@ -1,0 +1,14 @@
+name = "production"
+
+[people]
+leads = []
+members = [
+    "aidanhs",
+    "nrc",
+    "aturon",
+    "celaus",
+]
+
+[[lists]]
+address = "production@rust-lang.org"
+access-level = "everyone"
