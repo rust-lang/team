@@ -1,4 +1,4 @@
-use crate::schema::{Person, Team, List};
+use crate::schema::{List, Person, Team};
 use failure::{Error, ResultExt};
 use serde::Deserialize;
 use std::collections::HashMap;

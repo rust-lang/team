@@ -4,7 +4,7 @@ mod sync;
 mod validate;
 
 use crate::data::Data;
-use failure::{Error, err_msg};
+use failure::{err_msg, Error};
 use structopt::StructOpt;
 
 #[derive(structopt::StructOpt)]
@@ -15,13 +15,9 @@ enum Cli {
     #[structopt(name = "sync", help = "synchronize the configuration")]
     Sync,
     #[structopt(name = "dump-team", help = "print the members of a team")]
-    DumpTeam {
-        name: String,
-    },
+    DumpTeam { name: String },
     #[structopt(name = "dump-list", help = "print all the emails in a list")]
-    DumpList {
-        name: String,
-    },
+    DumpList { name: String },
 }
 
 fn main() {
@@ -50,11 +46,15 @@ fn run() -> Result<(), Error> {
 
             let leads = team.leads();
             for member in team.members(&data)? {
-                println!("{}{}", member, if leads.contains(member) {
-                    " (lead)"
-                } else {
-                    ""
-                });
+                println!(
+                    "{}{}",
+                    member,
+                    if leads.contains(member) {
+                        " (lead)"
+                    } else {
+                        ""
+                    }
+                );
             }
         }
         Cli::DumpList { ref name } => {

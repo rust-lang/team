@@ -1,5 +1,5 @@
 use crate::data::Data;
-use failure::{Error, bail};
+use failure::{bail, Error};
 use regex::Regex;
 use std::collections::HashSet;
 
@@ -34,7 +34,11 @@ fn validate_team_leads(data: &Data, errors: &mut Vec<String>) {
         let members = team.members(data)?;
         wrapper(team.leads().iter(), errors, |lead, _| {
             if !members.contains(lead) {
-                bail!("`{}` leads team `{}`, but is not a member of it", lead, team.name());
+                bail!(
+                    "`{}` leads team `{}`, but is not a member of it",
+                    lead,
+                    team.name()
+                );
             }
             Ok(())
         });
@@ -47,7 +51,11 @@ fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
         wrapper(team.members(data)?.iter(), errors, |member, _| {
             if data.person(member).is_none() {
-                bail!("person `{}` is member of team `{}` but doesn't exist", member, team.name());
+                bail!(
+                    "person `{}` is member of team `{}` but doesn't exist",
+                    member,
+                    team.name()
+                );
             }
             Ok(())
         });
@@ -67,9 +75,13 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
     });
 
     let all_members = data.people().map(|p| p.github()).collect::<HashSet<_>>();
-    wrapper(all_members.difference(&active_members), errors, |person, _| {
-        bail!("person `{}` is not a member of any team", person);
-    });
+    wrapper(
+        all_members.difference(&active_members),
+        errors,
+        |person, _| {
+            bail!("person `{}` is not a member of any team", person);
+        },
+    );
 }
 
 /// Ensure every member of a team with a mailing list has an email address
@@ -81,7 +93,10 @@ fn validate_list_email_addresses(data: &Data, errors: &mut Vec<String>) {
         wrapper(team.members(data)?.iter(), errors, |member, _| {
             let member = data.person(member).unwrap();
             if member.email().is_none() {
-                bail!("person `{}` is a member of a mailing list but has no email address", member.github());
+                bail!(
+                    "person `{}` is a member of a mailing list but has no email address",
+                    member.github()
+                );
             }
             Ok(())
         });
@@ -95,7 +110,11 @@ fn validate_list_extra_people(data: &Data, errors: &mut Vec<String>) {
         wrapper(team.raw_lists().iter(), errors, |list, _| {
             for person in &list.extra_people {
                 if data.person(person).is_none() {
-                    bail!("person `{}` does not exist (in list `{}`)", person, list.address);
+                    bail!(
+                        "person `{}` does not exist (in list `{}`)",
+                        person,
+                        list.address
+                    );
                 }
             }
             Ok(())
@@ -110,7 +129,11 @@ fn validate_list_extra_teams(data: &Data, errors: &mut Vec<String>) {
         wrapper(team.raw_lists().iter(), errors, |list, _| {
             for list_team in &list.extra_teams {
                 if data.team(list_team).is_none() {
-                    bail!("team `{}` does not exist (in list `{}`)", list_team, list.address);
+                    bail!(
+                        "team `{}` does not exist (in list `{}`)",
+                        list_team,
+                        list.address
+                    );
                 }
             }
             Ok(())
@@ -126,7 +149,11 @@ fn validate_discord_name(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.people(), errors, |person, _| {
         if let Some(name) = person.discord() {
             if !name_re.is_match(name) {
-                bail!("user `{}` has an invalid discord name: {}", person.github(), name);
+                bail!(
+                    "user `{}` has an invalid discord name: {}",
+                    person.github(),
+                    name
+                );
             }
         }
         Ok(())
