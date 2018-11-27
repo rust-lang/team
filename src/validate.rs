@@ -13,6 +13,9 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     validate_list_extra_teams(data, &mut errors);
 
     if !errors.is_empty() {
+        errors.sort();
+        errors.dedup_by(|a, b| a == b);
+
         for err in &errors {
             eprintln!("validation error: {}", err);
         }
