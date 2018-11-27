@@ -1,22 +1,11 @@
+use crate::data::Data;
+use crate::schema::List;
 use curl::easy::{Easy, Form};
 use failure::{bail, format_err, Error, ResultExt};
 use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
 use std::env;
-use std::fs;
 use std::str;
-
-#[derive(serde_derive::Deserialize)]
-struct Mailmap {
-    lists: Vec<List>,
-}
-
-#[derive(serde_derive::Deserialize)]
-struct List {
-    address: String,
-    access_level: String,
-    members: Vec<String>,
-}
 
 mod api {
     #[derive(serde_derive::Deserialize)]
@@ -55,12 +44,8 @@ mod api {
 #[derive(serde_derive::Deserialize)]
 struct Empty {}
 
-pub(crate) fn run() -> Result<(), Error> {
-    let mailmap =
-        fs::read_to_string("mailmap.toml").with_context(|_| "failed to read `mailmap.toml`")?;
-
-    let mailmap: Mailmap =
-        toml::from_str(&mailmap).with_context(|_| "failed to deserialize toml mailmap")?;
+pub(crate) fn run(data: &Data) -> Result<(), Error> {
+    let mailmap = data.lists()?;
 
     let mut lists = Vec::new();
     let mut response = get::<api::ListResponse>("/lists/pages")?;
@@ -70,15 +55,15 @@ pub(crate) fn run() -> Result<(), Error> {
     }
 
     let mut addr2list = HashMap::new();
-    for list in mailmap.lists.iter() {
-        if addr2list.insert(&list.address, list).is_some() {
-            bail!("duplicate address: {}", list.address);
+    for list in mailmap.values() {
+        if addr2list.insert(list.address(), list).is_some() {
+            bail!("duplicate address: {}", list.address());
         }
     }
 
     for prev_list in lists {
         let address = &prev_list.address;
-        match addr2list.remove(address) {
+        match addr2list.remove(address.as_str()) {
             Some(new_list) => sync(&prev_list, &new_list)
                 .with_context(|_| format!("failed to sync {}", address))?,
             None => del(&prev_list).with_context(|_| format!("failed to delete {}", address))?,
@@ -86,7 +71,7 @@ pub(crate) fn run() -> Result<(), Error> {
     }
 
     for (_, list) in addr2list.iter() {
-        create(list).with_context(|_| format!("failed to create {}", list.address))?;
+        create(list).with_context(|_| format!("failed to create {}", list.address()))?;
     }
 
     Ok(())
@@ -95,24 +80,24 @@ pub(crate) fn run() -> Result<(), Error> {
 fn create(new: &List) -> Result<(), Error> {
     let mut form = Form::new();
     form.part("address")
-        .contents(new.address.as_bytes())
+        .contents(new.address().as_bytes())
         .add()?;
     form.part("access_level")
-        .contents(new.access_level.as_bytes())
+        .contents(new.access_level_str().as_bytes())
         .add()?;
     post::<Empty>("/lists", form)?;
 
-    add_members(&new.address, &new.members)?;
+    add_members(new.address(), new.emails())?;
     Ok(())
 }
 
 fn sync(prev: &api::List, new: &List) -> Result<(), Error> {
-    assert_eq!(prev.address, new.address);
+    assert_eq!(prev.address, new.address());
     let url = format!("/lists/{}", prev.address);
-    if prev.access_level != new.access_level {
+    if prev.access_level != new.access_level_str() {
         let mut form = Form::new();
         form.part("access_level")
-            .contents(new.access_level.as_bytes())
+            .contents(new.access_level_str().as_bytes())
             .add()?;
         put::<Empty>(&url, form)?;
     }
@@ -126,17 +111,17 @@ fn sync(prev: &api::List, new: &List) -> Result<(), Error> {
     }
 
     let mut to_add = Vec::new();
-    for member in new.members.iter() {
+    for member in new.emails() {
         if !prev_members.remove(member) {
             to_add.push(member.clone());
         }
     }
 
     if to_add.len() > 0 {
-        add_members(&new.address, &to_add)?;
+        add_members(new.address(), &to_add)?;
     }
     for member in prev_members {
-        delete::<Empty>(&format!("/lists/{}/members/{}", new.address, member))?;
+        delete::<Empty>(&format!("/lists/{}/members/{}", new.address(), member))?;
     }
 
     Ok(())

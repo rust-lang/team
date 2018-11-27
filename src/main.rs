@@ -37,16 +37,15 @@ fn main() {
 
 fn run() -> Result<(), Error> {
     let cli = Cli::from_args();
+    let data = Data::load()?;
     match cli {
         Cli::Check => {
-            let data = Data::load()?;
             crate::validate::validate(&data)?;
         }
         Cli::Sync => {
-            sync::lists::run()?;
+            sync::lists::run(&data)?;
         }
         Cli::DumpTeam { ref name } => {
-            let data = Data::load()?;
             let team = data.team(name).ok_or_else(|| err_msg("unknown team"))?;
 
             let leads = team.leads();
@@ -59,7 +58,6 @@ fn run() -> Result<(), Error> {
             }
         }
         Cli::DumpList { ref name } => {
-            let data = Data::load()?;
             let list = data.list(name)?.ok_or_else(|| err_msg("unknown list"))?;
             for email in list.emails() {
                 println!("{}", email);

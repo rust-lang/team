@@ -172,8 +172,7 @@ pub(crate) struct TeamList {
 pub(crate) enum ListAccessLevel {
     Everyone,
     Members,
-    #[serde(rename = "read-only")]
-    Readonly,
+    ReadOnly,
 }
 
 #[derive(Debug)]
@@ -186,6 +185,14 @@ pub(crate) struct List {
 impl List {
     pub(crate) fn address(&self) -> &str {
         &self.address
+    }
+
+    pub(crate) fn access_level_str(&self) -> &str {
+        match self.access_level {
+            ListAccessLevel::Everyone => "everyone",
+            ListAccessLevel::Members => "members",
+            ListAccessLevel::ReadOnly => "readonly",
+        }
     }
 
     pub(crate) fn emails(&self) -> &[String] {
