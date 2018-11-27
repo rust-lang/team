@@ -3,7 +3,11 @@
 This repository contains the structure of the Rust teams. It's automatically
 synchronized with the following services:
 
-* Mailing lists (through MailGun)
+* Team mailing lists (through Mailgun)
+
+If you need to add or remove a person from a team send a PR to this repository,
+and after it's merged their account will be added/removed from all the
+supported services.
 
 ## Using the CLI tool
 
@@ -20,7 +24,7 @@ $ cargo run sync
 
 You need to have the following environment variables:
 
-* `MAILGUN_API_TOKEN`: the authentication token for the Rust MailGun account
+* `MAILGUN_API_TOKEN`: the authentication token for the Rust Mailgun account
 
 ### Verifying the integrity of the repository
 
