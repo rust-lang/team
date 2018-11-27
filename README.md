@@ -1,24 +1,74 @@
-# Mailgun Mailmap
+# Rust teams structure
 
-[![Build Status](https://travis-ci.org/rust-lang/mailgun-mailmap.svg?branch=master)](https://travis-ci.org/rust-lang/mailgun-mailmap)
+This repository contains the structure of the Rust teams.
 
-Mail configuration for rust-lang domains.
+## Schema
 
-> **Note**: This repository is still being tested. The words below describe in
-> theory what happens if all testing goes well.
+### People
 
-This repository contains mail configuration for all rust-lang domains. All our
-mail is handled by [Mailgun](https://www.mailgun.com/). On Mailgun all our mail
-goes through mailing lists. This means that any email send to an email address
-for rust-lang is then broadcast to a list of members.
+Every member of a Rust team is represented by a file in the `people` directory.
+The file structure is this:
 
-Configuration of mailing lists is done via this git repository. The
-[`mailmap.toml`](https://github.com/rust-lang/mailgun-mailmap/blob/master/mailmap.toml)
-file contains a description of all mailing lists for the rust-lang domains. Each
-mailing list has a list of members as well.
+```toml
+name = "John Doe"  # Real name of the person (required)
+github = "johndoe"  # GitHub username of the person (required)
+email = "john@doe.com"  # Email address used for mailing lists (optional)
+irc-nickname = "jdoe"  # Nickname of the person on IRC, if different than the GitHub one (optional)
+```
 
-Updates to this repository should be done through pull requests. Anyone can send
-a pull request!
+The file must be named the same as the GitHub username.
 
-When a pull requests is merged Travis will run and will sync the state of
-`mailmap.toml` to Mailgun itself.
+### Teams
+
+Each Rust team or working group is represented by a file in the `teams`
+directory. The structure of the file is this:
+
+```toml
+name = "overlords"  # Name of the team, used for GitHub (required)
+# Include all the members of the listed teams as members of this team (optional)
+inherit = [
+    "kings",
+]
+
+[people]
+# Leads of the team, can be more than one and must be members of the team.
+# Required, but it can be empty
+leads = ["bors"]
+# Members of the team, can be empty
+members = [
+    "bors",
+    "rust-highfive",
+    "rfcbot",
+    "craterbot",
+    "rust-timer",
+]
+
+# Define the mailing lists used by the team
+# It's optional, and there can be more than one
+[[lists]]
+# The email address of the list (required)
+address = "overlords@rust-lang.org"
+# Access level of the list (required)
+# - readonly: only users authenticated with Mailgun can send mails
+# - members: only members of the list can send mails
+# - everyone: everyone can send mails
+access-level = "everyone"
+# This can be set to false to avoid including all the team members in the list
+# It's useful if you want to create the list with a different set of members
+# It's optional, and the default is `true`.
+include-team-members = true
+# Include the following extra people in the mailing list. Their email address
+# will be fetched from theirs TOML in people/ (optional).
+extra-people = [
+    "alexcrichton",
+]
+# Include the following email addresses in the mailing list (optional).
+extra-emails = [
+    "noreply@rust-lang.org",
+]
+# Include all the memebrs of the following teams in the mailing list
+# (optional).
+extra-teams = [
+    "bots-nursery",
+]
+```
