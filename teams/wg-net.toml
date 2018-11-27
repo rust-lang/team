@@ -1,4 +1,5 @@
 name = "wg-net"
+wg = true
 
 [people]
 leads = ["withoutboats", "cramertj"]

@@ -1,4 +1,5 @@
 name = "wg-wasm"
+wg = true
 
 [people]
 leads = ["fitzgen"]

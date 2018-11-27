@@ -1,4 +1,5 @@
 name = "wg-embedded"
+wg = true
 
 [people]
 leads = ["japaric"]

@@ -9,6 +9,8 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     validate_team_members(data, &mut errors);
     validate_inactive_members(data, &mut errors);
     validate_list_email_addresses(data, &mut errors);
+    validate_list_extra_people(data, &mut errors);
+    validate_list_extra_teams(data, &mut errors);
 
     if !errors.is_empty() {
         for err in &errors {
@@ -75,6 +77,36 @@ fn validate_list_email_addresses(data: &Data, errors: &mut Vec<String>) {
             let member = data.person(member).unwrap();
             if member.email().is_none() {
                 bail!("person `{}` is a member of a mailing list but has no email address", member.github());
+            }
+            Ok(())
+        });
+        Ok(())
+    });
+}
+
+/// Ensure members of extra-people in a list are real people
+fn validate_list_extra_people(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, errors| {
+        wrapper(team.raw_lists().iter(), errors, |list, _| {
+            for person in &list.extra_people {
+                if data.person(person).is_none() {
+                    bail!("person `{}` does not exist (in list `{}`)", person, list.address);
+                }
+            }
+            Ok(())
+        });
+        Ok(())
+    });
+}
+
+/// Ensure members of extra-people in a list are real people
+fn validate_list_extra_teams(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, errors| {
+        wrapper(team.raw_lists().iter(), errors, |list, _| {
+            for list_team in &list.extra_teams {
+                if data.team(list_team).is_none() {
+                    bail!("team `{}` does not exist (in list `{}`)", list_team, list.address);
+                }
             }
             Ok(())
         });

@@ -2,15 +2,8 @@ name = "leads"
 
 [people]
 leads = []
-members = [
-    "aturon",
-    "ashleygwilliams",
-    "nikomatsakis",
-    "nrc",
-    "aidanhs",
-    "Mark-Simulacrum",
-    "steveklabnik",
-]
+members = []
+include-team-leads = true
 
 [[lists]]
 address = "leads@rust-lang.org"

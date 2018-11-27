@@ -3,6 +3,7 @@ use failure::{err_msg, Error};
 use std::collections::HashSet;
 
 #[derive(serde_derive::Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
 pub(crate) struct Person {
     name: String,
     github: String,
@@ -35,11 +36,15 @@ impl Person {
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
 pub(crate) struct Team {
     name: String,
+    #[serde(default = "default_false")]
+    wg: bool,
     #[serde(default)]
     children: Vec<String>,
     people: TeamPeople,
+    website: Option<WebsiteData>,
     #[serde(default)]
     lists: Vec<TeamList>,
 }
@@ -47,6 +52,10 @@ pub(crate) struct Team {
 impl Team {
     pub(crate) fn name(&self) -> &str {
         &self.name
+    }
+
+    pub(crate) fn is_wg(&self) -> bool {
+        self.wg
     }
 
     pub(crate) fn leads(&self) -> HashSet<&str> {
@@ -63,7 +72,22 @@ impl Team {
                 members.insert(person);
             }
         }
+        if self.people.include_team_leads || self.people.include_wg_leads {
+            for team in data.teams() {
+                let include_wg = team.is_wg() && self.people.include_wg_leads;
+                let include_team = !team.is_wg() && self.people.include_team_leads;
+                if include_wg || include_team {
+                    for lead in team.leads() {
+                        members.insert(lead);
+                    }
+                }
+            }
+        }
         Ok(members)
+    }
+
+    pub(crate) fn raw_lists(&self) -> &[TeamList] {
+        &self.lists
     }
 
     pub(crate) fn lists(&self, data: &Data) -> Result<Vec<List>, Error> {
@@ -110,24 +134,37 @@ impl Team {
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
 struct TeamPeople {
     leads: Vec<String>,
     members: Vec<String>,
+    #[serde(default = "default_false")]
+    include_team_leads: bool,
+    #[serde(default = "default_false")]
+    include_wg_leads: bool,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
-#[serde(rename_all = "kebab-case")]
+#[serde(deny_unknown_fields)]
+pub(crate) struct WebsiteData {
+    name: String,
+    description: String,
+    email: Option<String>,
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct TeamList {
-    address: String,
-    access_level: ListAccessLevel,
+    pub(crate) address: String,
+    pub(crate) access_level: ListAccessLevel,
     #[serde(default = "default_true")]
-    include_team_members: bool,
+    pub(crate) include_team_members: bool,
     #[serde(default)]
-    extra_people: Vec<String>,
+    pub(crate) extra_people: Vec<String>,
     #[serde(default)]
-    extra_emails: Vec<String>,
+    pub(crate) extra_emails: Vec<String>,
     #[serde(default)]
-    extra_teams: Vec<String>,
+    pub(crate) extra_teams: Vec<String>,
 }
 
 #[derive(serde_derive::Deserialize, Debug, Copy, Clone)]
@@ -158,4 +195,8 @@ impl List {
 
 fn default_true() -> bool {
     true
+}
+
+fn default_false() -> bool {
+    false
 }
