@@ -1,13 +1,15 @@
-use crate::schema::{List, Person, Team};
+use crate::schema::{List, Person, Team, Config};
 use failure::{Error, ResultExt};
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::ffi::OsStr;
+use std::path::Path;
 
 #[derive(Debug)]
 pub(crate) struct Data {
     people: HashMap<String, Person>,
     teams: HashMap<String, Team>,
+    config: Config,
 }
 
 impl Data {
@@ -15,6 +17,7 @@ impl Data {
         let mut data = Data {
             people: HashMap::new(),
             teams: HashMap::new(),
+            config: load_file(&Path::new("config.toml"))?,
         };
 
         data.load_dir("people", |this, person: Person| {
@@ -37,15 +40,15 @@ impl Data {
             let path = entry?.path();
 
             if path.is_file() && path.extension() == Some(OsStr::new("toml")) {
-                let content = std::fs::read(&path)
-                    .with_context(|_| format!("failed to read {}", path.display()))?;
-                let parsed: T = toml::from_slice(&content)
-                    .with_context(|_| format!("failed to parse {}", path.display()))?;
-                f(self, parsed);
+                f(self, load_file(&path)?);
             }
         }
 
         Ok(())
+    }
+
+    pub(crate) fn config(&self) -> &Config {
+        &self.config
     }
 
     pub(crate) fn lists(&self) -> Result<HashMap<String, List>, Error> {
@@ -78,4 +81,12 @@ impl Data {
     pub(crate) fn people(&self) -> impl Iterator<Item = &Person> {
         self.people.values()
     }
+}
+
+fn load_file<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T, Error> {
+    let content = std::fs::read(&path)
+        .with_context(|_| format!("failed to read {}", path.display()))?;
+    let parsed = toml::from_slice(&content)
+        .with_context(|_| format!("failed to parse {}", path.display()))?;
+    Ok(parsed)
 }

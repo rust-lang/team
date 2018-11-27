@@ -3,6 +3,18 @@ use failure::{err_msg, Error};
 use std::collections::HashSet;
 
 #[derive(serde_derive::Deserialize, Debug)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub(crate) struct Config {
+    allowed_mailing_lists_domains: HashSet<String>,
+}
+
+impl Config {
+    pub(crate) fn allowed_mailing_lists_domains(&self) -> &HashSet<String> {
+        &self.allowed_mailing_lists_domains
+    }
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct Person {
     name: String,

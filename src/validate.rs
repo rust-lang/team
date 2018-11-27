@@ -12,6 +12,7 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     validate_list_email_addresses(data, &mut errors);
     validate_list_extra_people(data, &mut errors);
     validate_list_extra_teams(data, &mut errors);
+    validate_list_addresses(data, &mut errors);
     validate_discord_name(data, &mut errors);
 
     if !errors.is_empty() {
@@ -46,7 +47,7 @@ fn validate_team_leads(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
-/// Ensure team members are people
+/// Ensure t_eam members are people
 fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
         wrapper(team.members(data)?.iter(), errors, |member, _| {
@@ -135,6 +136,25 @@ fn validate_list_extra_teams(data: &Data, errors: &mut Vec<String>) {
                         list.address
                     );
                 }
+            }
+            Ok(())
+        });
+        Ok(())
+    });
+}
+
+/// Ensure the list addresses are correct
+fn validate_list_addresses(data: &Data, errors: &mut Vec<String>) {
+    let email_re = Regex::new(r"^[a-zA-Z0-9_\.-]+@([a-zA-Z0-9_\.-]+)$").unwrap();
+    let config = data.config().allowed_mailing_lists_domains();
+    wrapper(data.teams(), errors, |team, errors| {
+        wrapper(team.raw_lists().iter(), errors, |list, _| {
+            if let Some(captures) = email_re.captures(&list.address) {
+                if !config.contains(&captures[1]) {
+                    bail!("list address on a domain we don't own: `{}`", list.address);
+                }
+            } else {
+                bail!("invalid list address: `{}`", list.address);
             }
             Ok(())
         });
