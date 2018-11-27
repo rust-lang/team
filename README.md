@@ -1,6 +1,52 @@
 # Rust teams structure
 
-This repository contains the structure of the Rust teams.
+This repository contains the structure of the Rust teams. It's automatically
+synchronized with the following services:
+
+* Mailing lists (through MailGun)
+
+## Using the CLI tool
+
+It's possible to interact with this repository through its CLI tool.
+
+### Synchronizing with third-party providers
+
+The `sync` subcommand synchronizes the repository with all the third-party
+providers we support:
+
+```
+$ cargo run sync
+```
+
+You need to have the following environment variables:
+
+* `MAILGUN_API_TOKEN`: the authentication token for the Rust MailGun account
+
+### Verifying the integrity of the repository
+
+This repository contains some sanity checks to avoid having stale or broken
+data. You can run the checks locally with the `check` command:
+
+```
+$ cargo run check
+```
+
+### Querying information out of the repository
+
+There are a few CLI commands that allow you to get some information generated
+from the data in the repository.
+
+You can get a list of all the people in a team:
+
+```
+$ cargo run dump-team all
+```
+
+You can get a list of all the email addresses subscribed to a list:
+
+```
+$ cargo run dump-list all@rust-lang.org
+```
 
 ## Schema
 
