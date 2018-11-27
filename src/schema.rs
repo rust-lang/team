@@ -9,6 +9,7 @@ pub(crate) struct Person {
     github: String,
     irc: Option<String>,
     email: Option<String>,
+    discord: Option<String>,
 }
 
 impl Person {
@@ -32,6 +33,10 @@ impl Person {
 
     pub(crate) fn email(&self) -> Option<&str> {
         self.email.as_ref().map(|e| e.as_str())
+    }
+
+    pub(crate) fn discord(&self) -> Option<&str> {
+        self.discord.as_ref().map(|e| e.as_str())
     }
 }
 

@@ -1,6 +1,7 @@
 use crate::data::Data;
-use std::collections::HashSet;
 use failure::{Error, bail};
+use regex::Regex;
+use std::collections::HashSet;
 
 pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     let mut errors = Vec::new();
@@ -11,6 +12,7 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     validate_list_email_addresses(data, &mut errors);
     validate_list_extra_people(data, &mut errors);
     validate_list_extra_teams(data, &mut errors);
+    validate_discord_name(data, &mut errors);
 
     if !errors.is_empty() {
         errors.sort();
@@ -115,6 +117,20 @@ fn validate_list_extra_teams(data: &Data, errors: &mut Vec<String>) {
         });
         Ok(())
     });
+}
+
+/// Ensure the Discord name is formatted properly
+fn validate_discord_name(data: &Data, errors: &mut Vec<String>) {
+    // https://discordapp.com/developers/docs/resources/user#usernames-and-nicknames
+    let name_re = Regex::new(r"^[^@#:`]{2,32}#[0-9]{4}$").unwrap();
+    wrapper(data.people(), errors, |person, _| {
+        if let Some(name) = person.discord() {
+            if !name_re.is_match(name) {
+                bail!("user `{}` has an invalid discord name: {}", person.github(), name);
+            }
+        }
+        Ok(())
+    })
 }
 
 fn wrapper<T, I, F>(iter: I, errors: &mut Vec<String>, mut func: F)
