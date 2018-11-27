@@ -13,6 +13,7 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     validate_list_extra_people(data, &mut errors);
     validate_list_extra_teams(data, &mut errors);
     validate_list_addresses(data, &mut errors);
+    validate_people_addresses(data, &mut errors);
     validate_discord_name(data, &mut errors);
 
     if !errors.is_empty() {
@@ -158,6 +159,18 @@ fn validate_list_addresses(data: &Data, errors: &mut Vec<String>) {
             }
             Ok(())
         });
+        Ok(())
+    });
+}
+
+/// Ensure people email addresses are correct
+fn validate_people_addresses(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.people(), errors, |person, _| {
+        if let Some(email) = person.email() {
+            if !email.contains('@') {
+                bail!("invalid email address of `{}`: {}", person.github(), email);
+            }
+        }
         Ok(())
     });
 }
