@@ -1,0 +1,20 @@
+name = "community-events"
+
+[people]
+leads = ["skade"]
+members = [
+    "skade",
+    "mattgathu",
+    "celaus",
+    "flaki",
+    "badboy",
+    "manishearth",
+    "mgattozzi",
+]
+
+[website]
+name = "Events team"
+description = "Supporting community events with knowledge and resources."
+repo = "https://github.com/rust-community/events-team"
+discord-invite = "https://discord.gg/cj5HMXA"
+discord-name = "#events"

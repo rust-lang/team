@@ -1,0 +1,16 @@
+name = "wg-debugging"
+wg = true
+
+[people]
+leads = ["manishearth", "michaelwoerister", "tromey"]
+members = [
+    "manishearth",
+    "michaelwoerister",
+    "tromey",
+]
+
+[website]
+name = "Debugging working group"
+description = "debugging tools and foundations"
+discord-invite = "https://discord.gg/UW3rnhd"
+discord-name = "#wg-debugging"

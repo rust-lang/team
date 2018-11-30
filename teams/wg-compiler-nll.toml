@@ -1,0 +1,10 @@
+name = "wg-compiler-nll"
+wg = true
+
+[people]
+leads = ["nikomatsakis", "pnkfelix"]
+members = ["nikomatsakis", "pnkfelix"]
+
+[website]
+name = "Non-Lexical Lifetimes (NLL)"
+description = "Implementing the new MIR-based borrow check and non-lexical lifetimes"

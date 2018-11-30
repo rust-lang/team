@@ -15,6 +15,9 @@ members = [
 [website]
 name = "Dev tools team"
 description = "Rust developer tools"
+repo = "https://github.com/rust-dev-tools/dev-tools-team"
+discord-invite = "https://discord.gg/sG23nSS"
+discord-name = "#dev-tools"
 
 [[lists]]
 address = "dev-tools@rust-lang.org"

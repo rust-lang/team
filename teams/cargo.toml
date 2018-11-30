@@ -16,6 +16,8 @@ members = [
 [website]
 name = "Cargo team"
 description = "design and implementation of Cargo"
+discord-invite = "https://discord.gg/aEbd4eT"
+discord-name = "#cargo"
 
 [[lists]]
 address = "cargo@rust-lang.org"

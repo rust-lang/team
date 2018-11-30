@@ -1,0 +1,13 @@
+name = "community-survey"
+
+[people]
+leads = ["jturner"]
+members = [
+    "jturner",
+    "manishearth",
+    "mgattozzi",
+]
+
+[website]
+name = "Survey team"
+description = "Running, analysing, and presenting the community survey."

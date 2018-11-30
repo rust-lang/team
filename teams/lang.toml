@@ -3,16 +3,16 @@ name = "lang"
 [people]
 leads = ["nikomatsakis"]
 members = [
+    "Centril",
+    "aturon",
     "cramertj",
-    "withoutboats",
     "eddyb",
+    "joshtriplett",
+    "nikomatsakis",
     "nrc",
     "pnkfelix",
-    "nikomatsakis",
-    "aturon",
-    "joshtriplett",
     "scottmcm",
-    "Centril",
+    "withoutboats",
 ]
 
 [website]

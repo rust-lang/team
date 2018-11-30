@@ -162,11 +162,14 @@ struct TeamPeople {
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
-#[serde(deny_unknown_fields)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct WebsiteData {
     name: String,
     description: String,
     email: Option<String>,
+    repo: Option<String>,
+    discord_invite: Option<String>,
+    discord_name: Option<String>,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]

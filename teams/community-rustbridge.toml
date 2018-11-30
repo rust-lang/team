@@ -1,0 +1,19 @@
+name = "community-rustbridge"
+
+[people]
+leads = ["oe"]
+members = [
+    "oe",
+    "ashleygwilliams",
+    "technetos",
+    "arshiamufti",
+    "spacekookie",
+    "sebasmagri",
+]
+
+[website]
+name = "RustBridge team"
+description = "An inclusive educational initiative focused on bringing underrepresented groups into Rust."
+repo = "https://github.com/rustbridge/team"
+discord-invite = "https://discord.gg/cj5HMXA"
+discord-name = "#rustbridge"

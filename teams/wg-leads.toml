@@ -1,4 +1,5 @@
 name = "wg-leads"
+wg = true
 
 [people]
 leads = []

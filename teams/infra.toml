@@ -3,22 +3,24 @@ name = "infra"
 [people]
 leads = ["aidanhs"]
 members = [
-    "alexcrichton",
-    "shepmaster",
-    "aidanhs",
-    "TimNN",
     "Mark-Simulacrum",
+    "TimNN",
+    "aidanhs",
+    "alexcrichton",
+    "ashleygwilliams",
     "erickt",
     "kennytm",
-    "ashleygwilliams",
-    "sgrif",
     "pietroalbini",
+    "sgrif",
+    "shepmaster",
 ]
 
 [website]
 name = "Infrastructure team"
 description = "infrastructure supporting the Rust project itself: CI, releases, bots, metrics"
 email = "infra@rust-lang.org"
+discord-invite = "https://discord.gg/AxXmxzN"
+discord-name = "#infra"
 
 [[lists]]
 address = "infra@rust-lang.org"

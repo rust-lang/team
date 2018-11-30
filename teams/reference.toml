@@ -1,0 +1,13 @@
+name = "reference"
+
+[people]
+leads = ["Havvy"]
+members = [
+    "Havvy",
+    "matthewjasper",
+    "alercah",
+]
+
+[website]
+name = "Reference team"
+description = "working on the rust reference"

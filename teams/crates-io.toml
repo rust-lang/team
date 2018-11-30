@@ -11,13 +11,13 @@ members = [
     "joshtriplett",
     "ishitatsuyuki",
     "steveklabnik",
-    "wycats",
 ]
 
 [website]
 name = "Crates.io team"
 description = "management of operations, development, and policies for crates.io"
-email = "help@crates.io"
+discord-invite = "https://discord.gg/Rbq8W5K"
+discord-name = "#crates-io"
 
 [[lists]]
 address = "help@crates.io"

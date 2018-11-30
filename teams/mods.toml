@@ -6,7 +6,6 @@ members = [
     "mbrubeck",
     "BurntSushi",
     "manishearth",
-    "pnkfelix",
     "niconii",
     "llogiq",
     "matthieu-m",
@@ -14,7 +13,7 @@ members = [
 
 [website]
 name = "Moderation team"
-description = "helping uphold the <a href='https://www.rust-lang.org/conduct.html'>code of conduct</a>"
+description = "helping uphold the code of conduct"
 email = "rust-mods@rust-lang.org"
 
 [[lists]]

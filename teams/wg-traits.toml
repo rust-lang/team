@@ -1,0 +1,10 @@
+name = "wg-traits"
+wg = true
+
+[people]
+leads = ["nikomatsakis"]
+members = ["nikomatsakis"]
+
+[website]
+name = "Traits"
+description = "Revamping the rustc trait implementation to follow the Chalk approach."

@@ -8,7 +8,6 @@ children = [
     "crates-io",
     "devtools",
     "docs",
-    "docs-peers",
     "ides",
     "infra",
     "lang",

@@ -1,0 +1,17 @@
+name = "community-content"
+
+[people]
+leads = []
+members = [
+    "adityac8",
+    "nasa42",
+    "skade",
+    "wezm",
+]
+
+[website]
+name = "Content team"
+description = "Helping support community content collection and development."
+repo = "https://github.com/rust-community/content-team"
+discord-invite = "https://discord.gg/b7a22kw"
+discord-name = "#content"

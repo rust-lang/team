@@ -1,0 +1,15 @@
+name = "wg-rustfmt"
+wg = true
+
+[people]
+leads = ["nrc", "topecongiro"]
+members = [
+    "nrc",
+    "topecongiro",
+]
+
+[website]
+name = "Rustfmt working group"
+description = "design and implementation of Rustfmt"
+discord-invite = "https://discord.gg/e6Q3cvu"
+discord-name = "#wg-rustfmt"

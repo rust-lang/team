@@ -6,6 +6,7 @@ use std::collections::HashSet;
 pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     let mut errors = Vec::new();
 
+    validate_wg_names(data, &mut errors);
     validate_team_leads(data, &mut errors);
     validate_team_members(data, &mut errors);
     validate_inactive_members(data, &mut errors);
@@ -28,6 +29,18 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     }
 
     Ok(())
+}
+
+/// Ensure working group names start with `wg-`
+fn validate_wg_names(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, _| {
+        match (team.is_wg() == team.name().starts_with("wg-"), team.is_wg()) {
+            (false, true) => bail!("working group `{}`'s name doesn't start with wg-", team.name()),
+            (false, false) => bail!("team `{}` seems like a working group but has `wg = false`", team.name()),
+            (true, _) => {}
+        }
+        Ok(())
+    });
 }
 
 /// Ensure team leaders are part of the teams they lead

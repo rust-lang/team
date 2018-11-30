@@ -1,0 +1,10 @@
+name = "wg-grammar"
+wg = true
+
+[people]
+leads = ["Centril", "qmx"]
+members = ["Centril", "qmx"]
+
+[website]
+name = "Grammar"
+description = "Working out a the official, formal grammar for Rust and validating it against existing implementations."

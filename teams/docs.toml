@@ -5,7 +5,6 @@ leads = ["steveklabnik"]
 members = [
     "steveklabnik",
     "GuillaumeGomez",
-    "frewsxcv",
     "QuietMisdreavus",
 ]
 
@@ -16,9 +15,9 @@ description = "ensuring Rust has fantastic documentation"
 [[lists]]
 address = "docs@rust-lang.org"
 access-level = "everyone"
-extra-teams = ["docs-peers"]
+extra-teams = ["reference"]
 
 [[lists]]
 address = "doc-team@rust-lang.org"
 access-level = "everyone"
-extra-teams = ["docs-peers"]
+extra-teams = ["reference"]

@@ -7,25 +7,19 @@ members = [
     "manishearth",
     "sebasmagri",
     "badboy",
-    "booyaa",
     "ashleygwilliams",
     "oe",
     "technetos",
-    "arshiamufti",
-    "parrywinkle",
-    "spacekookie",
-    "flaki",
-    "mattgathu",
-    "celaus",
-    "wezm",
-    "bstrie",
     "jonathandturner",
 ]
 
 [website]
 name = "Community team"
-description = "coordinating events, outreach, commercial users, teaching materials, and exposure"
+description = "coordination and supporting events, content creation, the RustBridge program, and the survey"
 email = "community@rust-lang.org"
+repo = "https://github.com/rust-community/team"
+discord-invite = "https://discord.gg/KskHZGT"
+discord-name = "#general"
 
 [[lists]]
 address = "community@rust-lang.org"

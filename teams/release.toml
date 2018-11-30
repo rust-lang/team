@@ -25,6 +25,8 @@ members = [
 name = "Release team"
 description = "tracking regressions, stabilizations, and producing Rust releases"
 email = "release@rust-lang.org"
+discord-invite = "https://discord.gg/pVTkgpv"
+discord-name = "#release"
 
 [[lists]]
 address = "release@rust-lang.org"
