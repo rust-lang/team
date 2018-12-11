@@ -1,7 +1,7 @@
 name = "style"
 
 [people]
-leads = []
+leads = ["nrc"]
 members = [
     "japaric",
     "joshtriplett",
