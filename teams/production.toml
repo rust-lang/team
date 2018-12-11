@@ -1,11 +1,10 @@
 name = "production"
 
 [people]
-leads = []
+leads = ["aidanhs"]
 members = [
     "aidanhs",
     "nrc",
-    "aturon",
     "celaus",
 ]
 
