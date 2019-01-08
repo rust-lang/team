@@ -17,7 +17,6 @@ children = [
     "production",
     "release",
     "rustdoc",
-    "style",
     "twir",
 ]
 

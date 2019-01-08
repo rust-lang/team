@@ -26,7 +26,6 @@ access-level = "everyone"
 extra-people = [
     "arielb1",
     "jseyfried",
-    "nrc",
 ]
 
 [[lists]]
@@ -35,5 +34,4 @@ access-level = "everyone"
 extra-people = [
     "arielb1",
     "jseyfried",
-    "nrc",
 ]
