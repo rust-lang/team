@@ -16,7 +16,7 @@ members = [
 ]
 
 [website]
-name = "Rustupt working group"
+name = "Rustup working group"
 description = "design and implementation of Rustup"
 discord-invite = "https://discord.gg/e6Q3cvu"
 discord-name = "#wg-rustup"
