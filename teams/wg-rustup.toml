@@ -1,0 +1,22 @@
+name = "wg-rustup"
+wg = true
+
+[people]
+leads = [
+    "alexcrichton",
+    "dwijnand",
+    "kinnison",
+    "nrc",
+]
+members = [
+    "alexcrichton",
+    "dwijnand",
+    "kinnison",
+    "nrc",
+]
+
+[website]
+name = "Rustupt working group"
+description = "design and implementation of Rustup"
+discord-invite = "https://discord.gg/e6Q3cvu"
+discord-name = "#wg-rustup"

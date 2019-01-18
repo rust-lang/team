@@ -1,8 +1,7 @@
-name = "wg-clippy"
-wg = true
+name = "clippy"
 
 [people]
-leads = ["llogiq", "killercup", "manishearth", "oli-obk"]
+leads = ["manishearth", "oli-obk"]
 members = [
     "llogiq",
     "killercup",
@@ -11,7 +10,7 @@ members = [
 ]
 
 [website]
-name = "Clippy working group"
+name = "Clippy"
 description = "design and implementation of the Clippy linter"
 discord-invite = "https://discord.gg/vNNtpyD"
-discord-name = "#wg-clippy"
+discord-name = "#clippy"

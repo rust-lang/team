@@ -2,11 +2,10 @@ name = "wg-debugging"
 wg = true
 
 [people]
-leads = ["manishearth", "michaelwoerister", "tromey"]
+leads = ["manishearth", "michaelwoerister"]
 members = [
     "manishearth",
     "michaelwoerister",
-    "tromey",
 ]
 
 [website]
