@@ -2,9 +2,11 @@ name = "wg-rustfmt"
 wg = true
 
 [people]
-leads = ["nrc", "topecongiro"]
+leads = ["topecongiro"]
 members = [
     "nrc",
+    "otavio",
+    "scampi",
     "topecongiro",
 ]
 

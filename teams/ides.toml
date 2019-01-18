@@ -1,7 +1,7 @@
 name = "ides"
 
 [people]
-leads = ["nrc"]
+leads = ["nrc", "Xanewok"]
 members = [
     "alexheretic",
     "autozimu",
