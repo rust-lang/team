@@ -3,21 +3,18 @@ name = "release"
 [people]
 leads = ["Mark-Simulacrum"]
 members = [
-    "Mark-Simulacrum",
-    "jrozner",
-    "jkordish",
-    "cuviper",
-    "alexcrichton",
-    "dirtybit",
-    "Centril",
-    "sgrif",
-    "pietroalbini",
-    "BatmanAoD",
-    "PramodBisht",
-    "ArazAbishov",
     "Aaronepower",
-    "treiff",
-    "cssivision",
+    "alexcrichton",
+    "ArazAbishov",
+    "BatmanAoD",
+    "Centril",
+    "cuviper",
+    "Dylan-DPC",
+    "jkordish",
+    "Mark-Simulacrum",
+    "pietroalbini",
+    "PramodBisht",
+    "sgrif",
     "stokhos",
 ]
 
