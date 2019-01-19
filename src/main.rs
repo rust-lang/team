@@ -18,8 +18,6 @@ enum Cli {
     DumpTeam { name: String },
     #[structopt(name = "dump-list", help = "print all the emails in a list")]
     DumpList { name: String },
-    #[structopt(name = "foo")]
-    Tmp,
 }
 
 fn main() {
@@ -63,13 +61,6 @@ fn run() -> Result<(), Error> {
             let list = data.list(name)?.ok_or_else(|| err_msg("unknown list"))?;
             for email in list.emails() {
                 println!("{}", email);
-            }
-        }
-        Cli::Tmp => {
-            for list in data.lists()?.values() {
-                for member in list.emails() {
-                    println!("{} {} {}", list.address(), list.access_level_str(), member);
-                }
             }
         }
     }
