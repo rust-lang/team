@@ -22,7 +22,6 @@ description = "compiler internals, optimizations"
 
 [[lists]]
 address = "compiler@rust-lang.org"
-access-level = "everyone"
 extra-people = [
     "arielb1",
     "jseyfried",
@@ -30,7 +29,6 @@ extra-people = [
 
 [[lists]]
 address = "compiler-team@rust-lang.org"
-access-level = "everyone"
 extra-people = [
     "arielb1",
     "jseyfried",

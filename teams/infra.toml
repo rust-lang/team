@@ -25,19 +25,15 @@ discord-name = "#infra"
 
 [[lists]]
 address = "infra@rust-lang.org"
-access-level = "everyone"
 
 [[lists]]
 address = "infra-team@rust-lang.org"
-access-level = "everyone"
 
 [[lists]]
 address = "craterbot@rust-lang.org"
-access-level = "everyone"
 
 [[lists]]
 address = "admin@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-people = [
     "aturon",
@@ -46,7 +42,6 @@ extra-people = [
 
 [[lists]]
 address = "rust-key@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-people = [
     "aturon",
@@ -55,7 +50,6 @@ extra-people = [
 
 [[lists]]
 address = "appveyor@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-emails = [
     "rust-ops@googlegroups.com",
@@ -63,7 +57,6 @@ extra-emails = [
 
 [[lists]]
 address = "appveyor-libs@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-emails = [
     "rust-ops@googlegroups.com",
@@ -71,7 +64,6 @@ extra-emails = [
 
 [[lists]]
 address = "bors@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-people = [
     "alexcrichton",
@@ -79,7 +71,6 @@ extra-people = [
 
 [[lists]]
 address = "crates-io-cert@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-emails = [
     "rust-ops@googlegroups.com",
@@ -87,7 +78,6 @@ extra-emails = [
 
 [[lists]]
 address = "dmarc-rua@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-emails = [
     "rust-ops@googlegroups.com",
@@ -95,7 +85,6 @@ extra-emails = [
 
 [[lists]]
 address = "docker-hub-rustci@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-emails = [
     "rust-ops@googlegroups.com",

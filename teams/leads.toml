@@ -7,5 +7,4 @@ include-team-leads = true
 
 [[lists]]
 address = "leads@rust-lang.org"
-access-level = "everyone"
 extra-teams = ["wg-leads", "core"]

@@ -17,7 +17,6 @@ discord-name = "#wg-net"
 
 [[lists]]
 address = "net@rust-lang.org"
-access-level = "everyone"
 extra-people = [
     "aturon",
     "Mark-Simulacrum",

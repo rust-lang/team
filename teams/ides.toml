@@ -20,8 +20,6 @@ description = "IDEs, editors, and supporting tools such as Racer and the RLS"
 
 [[lists]]
 address = "ides@rust-lang.org"
-access-level = "everyone"
 
 [[lists]]
 address = "editors@rust-lang.org"
-access-level = "everyone"

@@ -19,7 +19,6 @@ email = "rust-mods@rust-lang.org"
 
 [[lists]]
 address = "rust-mods@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-emails = [
     "rust-mods@googlegroups.com"

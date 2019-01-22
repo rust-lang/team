@@ -9,4 +9,3 @@ members = [
 
 [[lists]]
 address = "production@rust-lang.org"
-access-level = "everyone"

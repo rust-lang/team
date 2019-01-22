@@ -21,7 +21,6 @@ discord-name = "#crates-io"
 
 [[lists]]
 address = "help@crates.io"
-access-level = "everyone"
 include-team-members = false
 extra-people = [
     "carols10cents",
@@ -32,7 +31,6 @@ extra-people = [
 
 [[lists]]
 address = "crates-io@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-people = [
     "carols10cents",
@@ -43,7 +41,6 @@ extra-people = [
 
 [[lists]]
 address = "admin@crates.io"
-access-level = "everyone"
 include-team-members = false
 extra-people = [
     "aturon",

@@ -21,12 +21,9 @@ description = "the Rust standard library, rust-lang crates, conventions, and eco
 
 [[lists]]
 address = "libs-private@rust-lang.org"
-access-level = "everyone"
 
 [[lists]]
 address = "libs@rust-lang.org"
-access-level = "everyone"
 
 [[lists]]
 address = "library-team@rust-lang.org"
-access-level = "everyone"

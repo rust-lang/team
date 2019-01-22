@@ -23,7 +23,6 @@ discord-name = "#community-team"
 
 [[lists]]
 address = "community@rust-lang.org"
-access-level = "everyone"
 extra-emails = [
     "rust-community@googlegroups.com",
     "varma.sunjay@gmail.com",
@@ -31,7 +30,6 @@ extra-emails = [
 
 [[lists]]
 address = "community-team@rust-lang.org"
-access-level = "everyone"
 extra-emails = [
     "rust-community@googlegroups.com",
     "varma.sunjay@gmail.com",
@@ -39,7 +37,6 @@ extra-emails = [
 
 [[lists]]
 address = "reach@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-people = [
     "ashleygwilliams",
@@ -52,7 +49,6 @@ extra-emails = [
 
 [[lists]]
 address = "rustbridge@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-people = [
     "ashleygwilliams",

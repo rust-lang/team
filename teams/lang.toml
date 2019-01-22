@@ -20,14 +20,11 @@ description = "designing new language features"
 
 [[lists]]
 address = "lang-private@rust-lang.org"
-access-level = "everyone"
 
 [[lists]]
 address = "lang@rust-lang.org"
-access-level = "everyone"
 extra-teams = ["lang-shepherds"]
 
 [[lists]]
 address = "language-design-team@rust-lang.org"
-access-level = "everyone"
 extra-teams = ["lang-shepherds"]

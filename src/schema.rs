@@ -155,7 +155,6 @@ impl Team {
         for raw_list in &self.lists {
             let mut list = List {
                 address: raw_list.address.clone(),
-                access_level: raw_list.access_level,
                 emails: Vec::new(),
             };
 
@@ -261,7 +260,6 @@ impl WebsiteData {
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct TeamList {
     pub(crate) address: String,
-    pub(crate) access_level: ListAccessLevel,
     #[serde(default = "default_true")]
     pub(crate) include_team_members: bool,
     #[serde(default)]
@@ -272,33 +270,15 @@ pub(crate) struct TeamList {
     pub(crate) extra_teams: Vec<String>,
 }
 
-#[derive(serde_derive::Deserialize, Debug, Copy, Clone)]
-#[serde(rename_all = "kebab-case")]
-pub(crate) enum ListAccessLevel {
-    Everyone,
-    Members,
-    ReadOnly,
-}
-
 #[derive(Debug)]
 pub(crate) struct List {
     address: String,
-    access_level: ListAccessLevel,
     emails: Vec<String>,
 }
 
 impl List {
     pub(crate) fn address(&self) -> &str {
         &self.address
-    }
-
-    #[allow(unused)]
-    pub(crate) fn access_level_str(&self) -> &str {
-        match self.access_level {
-            ListAccessLevel::Everyone => "everyone",
-            ListAccessLevel::Members => "members",
-            ListAccessLevel::ReadOnly => "readonly",
-        }
     }
 
     pub(crate) fn emails(&self) -> &[String] {

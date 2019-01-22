@@ -16,10 +16,8 @@ description = "ensuring Rust has fantastic documentation"
 
 [[lists]]
 address = "docs@rust-lang.org"
-access-level = "everyone"
 extra-teams = ["reference"]
 
 [[lists]]
 address = "doc-team@rust-lang.org"
-access-level = "everyone"
 extra-teams = ["reference"]

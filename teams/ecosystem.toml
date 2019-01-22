@@ -11,4 +11,3 @@ members = [
 
 [[lists]]
 address = "ecosystem@rust-lang.org"
-access-level = "everyone"

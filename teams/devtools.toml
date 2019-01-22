@@ -14,12 +14,9 @@ discord-name = "#dev-tools"
 
 [[lists]]
 address = "dev-tools@rust-lang.org"
-access-level = "everyone"
 
 [[lists]]
 address = "rust-dev-tools@rust-lang.org"
-access-level = "everyone"
 
 [[lists]]
 address = "tools-team@rust-lang.org"
-access-level = "everyone"

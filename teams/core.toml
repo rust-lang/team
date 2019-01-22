@@ -23,23 +23,18 @@ weight = 1000
 
 [[lists]]
 address = "core@rust-lang.org"
-access-level = "everyone"
 
 [[lists]]
 address = "core-team@rust-lang.org"
-access-level = "everyone"
 
 [[lists]]
 address = "user-logos@rust-lang.org"
-access-level = "everyone"
 
 [[lists]]
 address = "legal@crates.io"
-access-level = "everyone"
 
 [[lists]]
 address = "trademark@rust-lang.org"
-access-level = "everyone"
 include-team-members = false
 extra-people = [
     "aturon",

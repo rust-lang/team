@@ -28,4 +28,3 @@ discord-name = "#release"
 
 [[lists]]
 address = "release@rust-lang.org"
-access-level = "everyone"

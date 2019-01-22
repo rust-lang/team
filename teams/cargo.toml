@@ -22,4 +22,3 @@ discord-name = "#cargo"
 
 [[lists]]
 address = "cargo@rust-lang.org"
-access-level = "everyone"

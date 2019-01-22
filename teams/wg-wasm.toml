@@ -9,7 +9,6 @@ members = [
 
 [[lists]]
 address = "wasm@rust-lang.org"
-access-level = "everyone"
 extra-people = [
     "alexcrichton",
     "aturon",
