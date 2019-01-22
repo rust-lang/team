@@ -1,4 +1,5 @@
 name = "wg-grammar"
+subteam-of = "lang"
 wg = true
 
 [people]

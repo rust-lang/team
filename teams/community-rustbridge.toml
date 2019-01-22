@@ -1,4 +1,5 @@
 name = "community-rustbridge"
+subteam-of = "community"
 
 [people]
 leads = ["oe"]

@@ -2,9 +2,11 @@ mod data;
 mod schema;
 mod sync;
 mod validate;
+mod static_api;
 
 use crate::data::Data;
 use failure::{err_msg, Error};
+use std::path::PathBuf;
 use structopt::StructOpt;
 
 #[derive(structopt::StructOpt)]
@@ -14,6 +16,8 @@ enum Cli {
     Check,
     #[structopt(name = "sync", help = "synchronize the configuration")]
     Sync,
+    #[structopt(name = "static-api", help = "generate the static API")]
+    StaticApi { dest: String },
     #[structopt(name = "dump-team", help = "print the members of a team")]
     DumpTeam { name: String },
     #[structopt(name = "dump-list", help = "print all the emails in a list")]
@@ -40,6 +44,11 @@ fn run() -> Result<(), Error> {
         }
         Cli::Sync => {
             sync::lists::run(&data)?;
+        }
+        Cli::StaticApi { ref dest } => {
+            let dest = PathBuf::from(dest);
+            let generator = crate::static_api::Generator::new(&dest, &data)?;
+            generator.generate()?;
         }
         Cli::DumpTeam { ref name } => {
             let team = data.team(name).ok_or_else(|| err_msg("unknown team"))?;

@@ -1,0 +1,9 @@
+name = "operations"
+
+[people]
+leads = []
+members = []
+
+[website]
+name = "Operations team"
+description = "Handling releases, bots, infra, and more."

@@ -1,0 +1,13 @@
+name = "wg-cli"
+wg = true
+
+[people]
+leads = ["killercup"]
+members = ["killercup"]
+
+[website]
+page = "cli"
+name = "Command-line interfaces (CLI) working group"
+description = "Focusing on the end-to-end experience of writing CLI apps, both large and small, in Rust."
+discord-invite = "https://discord.gg/BXCBYX6"
+discord-name = "#wg-cli"

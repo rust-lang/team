@@ -1,0 +1,16 @@
+name = "wg-net-embedded"
+subteam-of = "wg-net"
+wg = true
+
+[people]
+leads = ["Nemo157", "levex"]
+members = [
+    "Nemo157",
+    "levex",
+]
+
+[website]
+name = "Embedded networking group"
+description = "Our goal is to support IoT development."
+discord-invite = "https://discord.gg/wUQwRea"
+discord-name = "#wg-net-embedded"

@@ -1,4 +1,5 @@
 name = "rustdoc"
+subteam-of = "devtools"
 
 [people]
 leads = ["QuietMisdreavus"]

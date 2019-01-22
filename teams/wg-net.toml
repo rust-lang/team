@@ -6,18 +6,27 @@ leads = ["withoutboats", "cramertj"]
 members = [
     "withoutboats",
     "cramertj",
-    "aturon",
-    "Mark-Simulacrum",
-    "aidanhs",
-    "sfackler",
 ]
+
+[website]
+page = "networking"
+name = "Networking working group"
+description = "Focusing on the end-to-end experience for both sync and async networking code, in coordination with the growing ecosystem in this space."
+discord-invite = "https://discord.gg/ueak2ds"
+discord-name = "#wg-net"
 
 [[lists]]
 address = "net@rust-lang.org"
 access-level = "everyone"
+extra-people = [
+    "aturon",
+    "Mark-Simulacrum",
+    "aidanhs",
+    "sfackler",
+    "MajorBreakfast",
+]
 extra-emails = [
     "bob@cloudflare.com",
-    "mail@josefbrandl.de",
     "tinagma@gmail.com",
     "coleman.mcfarland@gmail.com",
     "dbarsky@amazon.com",

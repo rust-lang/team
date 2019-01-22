@@ -1,0 +1,13 @@
+name = "wg-net-web"
+subteam-of = "wg-net"
+wg = true
+
+[people]
+leads = ["aturon", "yoshuawuyts"]
+members = ["aturon", "yoshuawuyts"]
+
+[website]
+name = "Web foundations working group"
+description = "Our goal is to improve web programming in Rust."
+discord-invite = "https://discord.gg/NKHgJpq"
+discord-name = "#wg-net-web"

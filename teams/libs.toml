@@ -15,6 +15,7 @@ members = [
 ]
 
 [website]
+page = "library"
 name = "Library team"
 description = "the Rust standard library, rust-lang crates, conventions, and ecosystem support"
 

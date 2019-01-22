@@ -1,4 +1,5 @@
 name = "wg-codegen"
+subteam-of = "compiler"
 wg = true
 
 [people]

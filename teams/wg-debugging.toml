@@ -1,4 +1,5 @@
 name = "wg-debugging"
+subteam-of = "devtools"
 wg = true
 
 [people]

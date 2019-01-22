@@ -1,4 +1,5 @@
 name = "cargo"
+subteam-of = "devtools"
 
 [people]
 leads = ["nrc"]

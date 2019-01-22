@@ -48,7 +48,6 @@ pub(crate) struct Person {
 }
 
 impl Person {
-    #[allow(unused)]
     pub(crate) fn name(&self) -> &str {
         &self.name
     }
@@ -88,11 +87,12 @@ impl Person {
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Team {
     name: String,
     #[serde(default = "default_false")]
     wg: bool,
+    subteam_of: Option<String>,
     #[serde(default)]
     children: Vec<String>,
     people: TeamPeople,
@@ -110,8 +110,16 @@ impl Team {
         self.wg
     }
 
+    pub(crate) fn subteam_of(&self) -> Option<&str> {
+        self.subteam_of.as_ref().map(|s| s.as_str())
+    }
+
     pub(crate) fn leads(&self) -> HashSet<&str> {
         self.people.leads.iter().map(|s| s.as_str()).collect()
+    }
+
+    pub(crate) fn website_data(&self) -> Option<&WebsiteData> {
+        self.website.as_ref()
     }
 
     pub(crate) fn members<'a>(&'a self, data: &'a Data) -> Result<HashSet<&'a str>, Error> {
@@ -196,15 +204,57 @@ struct TeamPeople {
     include_wg_leads: bool,
 }
 
+pub(crate) struct DiscordInvite<'a> {
+    pub(crate) url: &'a str,
+    pub(crate) channel: &'a str,
+}
+
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct WebsiteData {
     name: String,
     description: String,
+    page: Option<String>,
     email: Option<String>,
     repo: Option<String>,
     discord_invite: Option<String>,
     discord_name: Option<String>,
+    #[serde(default)]
+    weight: i64,
+}
+
+impl WebsiteData {
+    pub(crate) fn name(&self) -> &str {
+        &self.name
+    }
+
+    pub(crate) fn description(&self) -> &str {
+        &self.description
+    }
+
+    pub(crate) fn weight(&self) -> i64 {
+        self.weight
+    }
+
+    pub(crate) fn page(&self) -> Option<&str> {
+        self.page.as_ref().map(|s| s.as_str())
+    }
+
+    pub(crate) fn email(&self) -> Option<&str> {
+        self.email.as_ref().map(|s| s.as_str())
+    }
+
+    pub(crate) fn repo(&self) -> Option<&str> {
+        self.repo.as_ref().map(|s| s.as_str())
+    }
+
+    pub(crate) fn discord(&self) -> Option<DiscordInvite> {
+        if let (Some(url), Some(channel)) = (&self.discord_invite, &self.discord_name) {
+            Some(DiscordInvite { url: url.as_ref(), channel: channel.as_ref() })
+        } else {
+            None
+        }
+    }
 }
 
 #[derive(serde_derive::Deserialize, Debug)]

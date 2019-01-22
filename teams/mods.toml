@@ -12,6 +12,7 @@ members = [
 ]
 
 [website]
+page = "moderation"
 name = "Moderation team"
 description = "helping uphold the code of conduct"
 email = "rust-mods@rust-lang.org"

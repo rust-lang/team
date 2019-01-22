@@ -1,6 +1,6 @@
 use crate::data::Data;
-use failure::{bail, Error};
 use crate::schema::Email;
+use failure::{bail, ensure, Error};
 use regex::Regex;
 use std::collections::HashSet;
 
@@ -8,6 +8,7 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     let mut errors = Vec::new();
 
     validate_wg_names(data, &mut errors);
+    validate_subteam_of(data, &mut errors);
     validate_team_leads(data, &mut errors);
     validate_team_members(data, &mut errors);
     validate_inactive_members(data, &mut errors);
@@ -39,6 +40,17 @@ fn validate_wg_names(data: &Data, errors: &mut Vec<String>) {
             (false, true) => bail!("working group `{}`'s name doesn't start with wg-", team.name()),
             (false, false) => bail!("team `{}` seems like a working group but has `wg = false`", team.name()),
             (true, _) => {}
+        }
+        Ok(())
+    });
+}
+
+/// Ensure `subteam-of` points to an existing team
+fn validate_subteam_of(data: &Data, errors: &mut Vec<String>) {
+    let team_names: HashSet<_> = data.teams().map(|t| t.name()).collect();
+    wrapper(data.teams(), errors, |team, _| {
+        if let Some(subteam_of) = team.subteam_of() {
+            ensure!(team_names.contains(subteam_of), "team `{}` doesn't exist", subteam_of);
         }
         Ok(())
     });

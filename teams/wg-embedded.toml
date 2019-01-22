@@ -33,6 +33,11 @@ members = [
     "wizofe",
 ]
 
+[website]
+page = "embedded"
+name = "Embedded devices working group"
+description = "Focusing on the end-to-end experience of using Rust in resource-constrained environments and non-traditional platforms."
+
 [[lists]]
 address = "embedded-wg@rust-lang.org"
 access-level = "everyone"

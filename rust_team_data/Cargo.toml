@@ -1,0 +1,9 @@
+[package]
+name = "rust_team_data"
+version = "1.0.0"
+authors = ["Pietro Albini <pietro@pietroalbini.org>"]
+edition = "2018"
+
+[dependencies]
+serde = { version = "1.0.85", features = ["derive"] }
+indexmap = { version = "1.0.2", features = ["serde-1"] }

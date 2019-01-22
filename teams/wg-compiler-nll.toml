@@ -1,4 +1,5 @@
 name = "wg-compiler-nll"
+subteam-of = "compiler"
 wg = true
 
 [people]

@@ -1,4 +1,5 @@
 name = "wg-traits"
+subteam-of = "compiler"
 wg = true
 
 [people]

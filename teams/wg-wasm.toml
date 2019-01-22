@@ -5,11 +5,18 @@ wg = true
 leads = ["fitzgen"]
 members = [
     "fitzgen",
-    "alexcrichton",
-    "aturon",
-    "mgattozzi",
 ]
 
 [[lists]]
 address = "wasm@rust-lang.org"
 access-level = "everyone"
+extra-people = [
+    "alexcrichton",
+    "aturon",
+    "mgattozzi",
+]
+
+[website]
+page = "wasm"
+name = "WebAssembly (WASM) working group"
+description = "Focusing on the end-to-end experience of embedding Rust code in JS libraries and apps via WebAssembly."

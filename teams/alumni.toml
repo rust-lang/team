@@ -23,3 +23,4 @@ members = [
 [website]
 name = "Rust team alumni"
 description = "enjoying a leisurely retirement"
+weight = -1000

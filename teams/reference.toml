@@ -1,4 +1,5 @@
 name = "reference"
+subteam-of = "docs"
 
 [people]
 leads = ["Havvy"]

@@ -1,0 +1,13 @@
+name = "wg-net-async"
+subteam-of = "wg-net"
+wg = true
+
+[people]
+leads = ["cramertj", "MajorBreakfast"]
+members = ["cramertj", "MajorBreakfast"]
+
+[website]
+name = "Async foundations working group"
+description = "Our goal is to bring async/await onto a path to stabilization and to provide documentation for asynchronous programming."
+discord-invite = "https://discord.gg/JebCvj5"
+discord-name = "#wg-net-async"

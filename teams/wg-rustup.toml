@@ -1,4 +1,5 @@
 name = "wg-rustup"
+subteam-of = "devtools"
 wg = true
 
 [people]

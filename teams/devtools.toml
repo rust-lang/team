@@ -5,6 +5,7 @@ leads = []
 members = []
 
 [website]
+page = "dev-tools"
 name = "Dev tools team"
 description = "Rust developer tools"
 repo = "https://github.com/rust-dev-tools/dev-tools-team"

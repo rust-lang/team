@@ -1,4 +1,5 @@
 name = "clippy"
+subteam-of = "devtools"
 
 [people]
 leads = ["manishearth", "oli-obk"]

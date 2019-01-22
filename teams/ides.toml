@@ -1,4 +1,5 @@
 name = "ides"
+subteam-of = "devtools"
 
 [people]
 leads = ["nrc", "Xanewok"]

@@ -1,4 +1,5 @@
 name = "wg-rustfmt"
+subteam-of = "devtools"
 wg = true
 
 [people]

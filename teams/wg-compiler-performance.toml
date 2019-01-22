@@ -1,0 +1,11 @@
+name = "wg-compiler-performance"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["nikomatsakis"]
+members = ["nikomatsakis"]
+
+[website]
+name = "Compiler Performance"
+description = "Improving rustc compilation performance (build times)."

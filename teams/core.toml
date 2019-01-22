@@ -17,8 +17,9 @@ members = [
 
 [website]
 name = "Core team"
-description = "overall direction of the project, subteam leadership, cross-cutting concerns"
+description = "Direction of the project, subteam leadership, cross-cutting concerns."
 email = "core@rust-lang.org"
+weight = 1000
 
 [[lists]]
 address = "core@rust-lang.org"

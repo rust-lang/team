@@ -1,4 +1,5 @@
 name = "community-content"
+subteam-of = "community"
 
 [people]
 leads = []

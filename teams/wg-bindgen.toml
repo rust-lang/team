@@ -1,4 +1,5 @@
 name = "wg-bindgen"
+subteam-of = "devtools"
 wg = true
 
 [people]

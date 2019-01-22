@@ -15,11 +15,11 @@ members = [
 
 [website]
 name = "Community team"
-description = "coordination and supporting events, content creation, the RustBridge program, and the survey"
+description = "Coordination and supporting events, content creation, the RustBridge program, and the survey."
 email = "community@rust-lang.org"
 repo = "https://github.com/rust-community/team"
 discord-invite = "https://discord.gg/KskHZGT"
-discord-name = "#general"
+discord-name = "#community-team"
 
 [[lists]]
 address = "community@rust-lang.org"
