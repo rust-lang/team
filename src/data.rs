@@ -21,11 +21,14 @@ impl Data {
         };
 
         data.load_dir("people", |this, person: Person| {
+            person.validate()?;
             this.people.insert(person.github().to_string(), person);
+            Ok(())
         })?;
 
         data.load_dir("teams", |this, team: Team| {
             this.teams.insert(team.name().to_string(), team);
+            Ok(())
         })?;
 
         Ok(data)
@@ -34,13 +37,13 @@ impl Data {
     fn load_dir<T, F>(&mut self, dir: &str, f: F) -> Result<(), Error>
     where
         T: for<'de> Deserialize<'de>,
-        F: Fn(&mut Self, T),
+        F: Fn(&mut Self, T) -> Result<(), Error>,
     {
         for entry in std::fs::read_dir(dir)? {
             let path = entry?.path();
 
             if path.is_file() && path.extension() == Some(OsStr::new("toml")) {
-                f(self, load_file(&path)?);
+                f(self, load_file(&path)?)?;
             }
         }
 

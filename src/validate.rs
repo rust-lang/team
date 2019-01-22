@@ -1,5 +1,6 @@
 use crate::data::Data;
 use failure::{bail, Error};
+use crate::schema::Email;
 use regex::Regex;
 use std::collections::HashSet;
 
@@ -107,7 +108,7 @@ fn validate_list_email_addresses(data: &Data, errors: &mut Vec<String>) {
         }
         wrapper(team.members(data)?.iter(), errors, |member, _| {
             let member = data.person(member).unwrap();
-            if member.email().is_none() {
+            if let Email::Missing = member.email() {
                 bail!(
                     "person `{}` is a member of a mailing list but has no email address",
                     member.github()
@@ -179,7 +180,7 @@ fn validate_list_addresses(data: &Data, errors: &mut Vec<String>) {
 /// Ensure people email addresses are correct
 fn validate_people_addresses(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.people(), errors, |person, _| {
-        if let Some(email) = person.email() {
+        if let Email::Present(email) = person.email() {
             if !email.contains('@') {
                 bail!("invalid email address of `{}`: {}", person.github(), email);
             }

@@ -1,5 +1,5 @@
 use crate::data::Data;
-use failure::{err_msg, Error};
+use failure::{bail, err_msg, Error};
 use std::collections::HashSet;
 
 #[derive(serde_derive::Deserialize, Debug)]
@@ -14,13 +14,36 @@ impl Config {
     }
 }
 
+// This is an enum to allow two kinds of values for the email field:
+//   email = false
+//   email = "foo@example.com"
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(untagged)]
+enum EmailField {
+    Disabled(bool),
+    Explicit(Option<String>),
+}
+
+impl Default for EmailField {
+    fn default() -> Self {
+        EmailField::Explicit(None)
+    }
+}
+
+pub(crate) enum Email<'a> {
+    Missing,
+    Disabled,
+    Present(&'a str),
+}
+
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct Person {
     name: String,
     github: String,
     irc: Option<String>,
-    email: Option<String>,
+    #[serde(default)]
+    email: EmailField,
     discord: Option<String>,
 }
 
@@ -43,12 +66,24 @@ impl Person {
         }
     }
 
-    pub(crate) fn email(&self) -> Option<&str> {
-        self.email.as_ref().map(|e| e.as_str())
+    pub(crate) fn email(&self) -> Email {
+        match &self.email {
+            EmailField::Disabled(false) => Email::Disabled,
+            EmailField::Disabled(true) => Email::Missing,
+            EmailField::Explicit(None) => Email::Missing,
+            EmailField::Explicit(Some(addr)) => Email::Present(addr.as_str()),
+        }
     }
 
     pub(crate) fn discord(&self) -> Option<&str> {
         self.discord.as_ref().map(|e| e.as_str())
+    }
+
+    pub(crate) fn validate(&self) -> Result<(), Error> {
+        if let EmailField::Disabled(true) = &self.email {
+            bail!("`email = true` is not valid (for person {})", self.github);
+        }
+        Ok(())
     }
 }
 
@@ -137,7 +172,7 @@ impl Team {
                 let member = data
                     .person(member)
                     .ok_or_else(|| err_msg(format!("member {} is missing", member)))?;
-                if let Some(email) = member.email() {
+                if let Email::Present(email) = member.email() {
                     list.emails.push(email.to_string());
                 }
             }
