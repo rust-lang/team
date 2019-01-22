@@ -292,6 +292,7 @@ impl List {
         &self.address
     }
 
+    #[allow(unused)]
     pub(crate) fn access_level_str(&self) -> &str {
         match self.access_level {
             ListAccessLevel::Everyone => "everyone",

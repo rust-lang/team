@@ -1,6 +1,5 @@
 mod data;
 mod schema;
-mod sync;
 mod validate;
 mod static_api;
 
@@ -14,8 +13,6 @@ use structopt::StructOpt;
 enum Cli {
     #[structopt(name = "check", help = "check if the configuration is correct")]
     Check,
-    #[structopt(name = "sync", help = "synchronize the configuration")]
-    Sync,
     #[structopt(name = "static-api", help = "generate the static API")]
     StaticApi { dest: String },
     #[structopt(name = "dump-team", help = "print the members of a team")]
@@ -41,9 +38,6 @@ fn run() -> Result<(), Error> {
     match cli {
         Cli::Check => {
             crate::validate::validate(&data)?;
-        }
-        Cli::Sync => {
-            sync::lists::run(&data)?;
         }
         Cli::StaticApi { ref dest } => {
             let dest = PathBuf::from(dest);
