@@ -17,6 +17,7 @@ members = [
     "PramodBisht",
     "sgrif",
     "stokhos",
+    "jonas-schievink",
 ]
 
 [website]
