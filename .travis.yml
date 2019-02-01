@@ -4,3 +4,10 @@ rust: stable
 script:
   - cargo run check
   - cargo run static-api build
+
+deploy:
+  provider: script
+  script: curl -LsSf https://git.io/fhJ8n | rustc - && (cd build && ../rust_out)
+  skip_cleanup: true
+  on:
+    branch: master
