@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use indexmap::IndexMap;
 
-pub static BASE_URL: &str = "http://localhost:8000/build/v1";
+pub static BASE_URL: &str = "https://team-api.infra.rust-lang.org/v1";
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
