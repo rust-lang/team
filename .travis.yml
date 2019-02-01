@@ -3,3 +3,4 @@ rust: stable
 
 script:
   - cargo run check
+  - cargo run static-api build
