@@ -4,6 +4,7 @@ rust: stable
 script:
   - cargo run check
   - cargo run static-api build
+  - echo "team-api.infra.rust-lang.org" > build/CNAME
 
 deploy:
   provider: script
