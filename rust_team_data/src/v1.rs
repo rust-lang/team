@@ -48,3 +48,14 @@ pub struct Teams {
     #[serde(flatten)]
     pub teams: IndexMap<String, Team>,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct List {
+    pub address: String,
+    pub members: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Lists {
+    pub lists: IndexMap<String, List>,
+}

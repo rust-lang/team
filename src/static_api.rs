@@ -22,6 +22,7 @@ impl<'a> Generator<'a> {
 
     pub(crate) fn generate(&self) -> Result<(), Error> {
         self.generate_teams()?;
+        self.generate_lists()?;
         Ok(())
     }
 
@@ -74,6 +75,26 @@ impl<'a> Generator<'a> {
         self.add(
             "v1/teams.json",
             &v1::Teams { teams },
+        )?;
+        Ok(())
+    }
+
+    fn generate_lists(&self) -> Result<(), Error> {
+        let mut lists = IndexMap::new();
+
+        for list in self.data.lists()?.values() {
+            let mut members = list.emails().to_vec();
+            members.sort();
+            lists.insert(list.address().to_string(), v1::List {
+                address: list.address().to_string(),
+                members,
+            });
+        }
+
+        lists.sort_keys();
+        self.add(
+            "v1/lists.json",
+            &v1::Lists { lists },
         )?;
         Ok(())
     }
