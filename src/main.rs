@@ -1,7 +1,9 @@
+#![allow(clippy::new_ret_no_self)]
+
 mod data;
 mod schema;
-mod validate;
 mod static_api;
+mod validate;
 
 use crate::data::Data;
 use failure::{err_msg, Error};

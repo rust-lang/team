@@ -1,5 +1,5 @@
-use serde::{Serialize, Deserialize};
 use indexmap::IndexMap;
+use serde::{Deserialize, Serialize};
 
 pub static BASE_URL: &str = "https://team-api.infra.rust-lang.org/v1";
 
@@ -47,4 +47,15 @@ pub struct DiscordInvite {
 pub struct Teams {
     #[serde(flatten)]
     pub teams: IndexMap<String, Team>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct List {
+    pub address: String,
+    pub members: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Lists {
+    pub lists: IndexMap<String, List>,
 }

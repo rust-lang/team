@@ -1,8 +1,13 @@
 language: rust
 rust: stable
 
+before_script:
+  - rustup component add rustfmt-preview clippy-preview
+
 script:
+  - cargo fmt -- --check
   - cargo run check
+  - cargo clippy
   - cargo run static-api build
   - echo "team-api.infra.rust-lang.org" > build/CNAME
 

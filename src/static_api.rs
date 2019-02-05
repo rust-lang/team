@@ -1,9 +1,9 @@
 use crate::data::Data;
-use rust_team_data::v1;
 use failure::Error;
-use log::info;
-use std::path::Path;
 use indexmap::IndexMap;
+use log::info;
+use rust_team_data::v1;
+use std::path::Path;
 
 pub(crate) struct Generator<'a> {
     dest: &'a Path,
@@ -22,6 +22,7 @@ impl<'a> Generator<'a> {
 
     pub(crate) fn generate(&self) -> Result<(), Error> {
         self.generate_teams()?;
+        self.generate_lists()?;
         Ok(())
     }
 
@@ -55,7 +56,7 @@ impl<'a> Generator<'a> {
                 website_data: team.website_data().map(|ws| v1::TeamWebsite {
                     name: ws.name().into(),
                     description: ws.description().into(),
-                    page: ws.page().unwrap_or(team.name()).into(),
+                    page: ws.page().unwrap_or_else(|| team.name()).into(),
                     email: ws.email().map(|e| e.into()),
                     repo: ws.repo().map(|e| e.into()),
                     discord: ws.discord().map(|i| v1::DiscordInvite {
@@ -71,10 +72,27 @@ impl<'a> Generator<'a> {
         }
 
         teams.sort_keys();
-        self.add(
-            "v1/teams.json",
-            &v1::Teams { teams },
-        )?;
+        self.add("v1/teams.json", &v1::Teams { teams })?;
+        Ok(())
+    }
+
+    fn generate_lists(&self) -> Result<(), Error> {
+        let mut lists = IndexMap::new();
+
+        for list in self.data.lists()?.values() {
+            let mut members = list.emails().to_vec();
+            members.sort();
+            lists.insert(
+                list.address().to_string(),
+                v1::List {
+                    address: list.address().to_string(),
+                    members,
+                },
+            );
+        }
+
+        lists.sort_keys();
+        self.add("v1/lists.json", &v1::Lists { lists })?;
         Ok(())
     }
 

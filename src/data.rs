@@ -1,4 +1,4 @@
-use crate::schema::{List, Person, Team, Config};
+use crate::schema::{Config, List, Person, Team};
 use failure::{Error, ResultExt};
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -87,8 +87,8 @@ impl Data {
 }
 
 fn load_file<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T, Error> {
-    let content = std::fs::read(&path)
-        .with_context(|_| format!("failed to read {}", path.display()))?;
+    let content =
+        std::fs::read(&path).with_context(|_| format!("failed to read {}", path.display()))?;
     let parsed = toml::from_slice(&content)
         .with_context(|_| format!("failed to parse {}", path.display()))?;
     Ok(parsed)
