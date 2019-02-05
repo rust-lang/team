@@ -4,11 +4,15 @@ wg = true
 [people]
 leads = []
 members = [
-           "Aaronepower", "codesections",
-           "Dylan-DPC", "epage",
-           "killercup", "matthiasbeyer",
-           "spacekookie", "yoshuawuyts",
-          ]
+    "Aaronepower",
+    "codesections",
+    "Dylan-DPC",
+    "epage",
+    "killercup",
+    "matthiasbeyer",
+    "spacekookie",
+    "yoshuawuyts",
+]
 
 [website]
 page = "cli"
