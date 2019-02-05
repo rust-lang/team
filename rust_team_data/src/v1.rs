@@ -1,5 +1,5 @@
-use serde::{Serialize, Deserialize};
 use indexmap::IndexMap;
+use serde::{Deserialize, Serialize};
 
 pub static BASE_URL: &str = "https://team-api.infra.rust-lang.org/v1";
 

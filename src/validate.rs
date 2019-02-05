@@ -37,8 +37,14 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
 fn validate_wg_names(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
         match (team.is_wg() == team.name().starts_with("wg-"), team.is_wg()) {
-            (false, true) => bail!("working group `{}`'s name doesn't start with wg-", team.name()),
-            (false, false) => bail!("team `{}` seems like a working group but has `wg = false`", team.name()),
+            (false, true) => bail!(
+                "working group `{}`'s name doesn't start with wg-",
+                team.name()
+            ),
+            (false, false) => bail!(
+                "team `{}` seems like a working group but has `wg = false`",
+                team.name()
+            ),
             (true, _) => {}
         }
         Ok(())
@@ -50,7 +56,11 @@ fn validate_subteam_of(data: &Data, errors: &mut Vec<String>) {
     let team_names: HashSet<_> = data.teams().map(|t| t.name()).collect();
     wrapper(data.teams(), errors, |team, _| {
         if let Some(subteam_of) = team.subteam_of() {
-            ensure!(team_names.contains(subteam_of), "team `{}` doesn't exist", subteam_of);
+            ensure!(
+                team_names.contains(subteam_of),
+                "team `{}` doesn't exist",
+                subteam_of
+            );
         }
         Ok(())
     });

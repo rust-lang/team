@@ -249,7 +249,10 @@ impl WebsiteData {
 
     pub(crate) fn discord(&self) -> Option<DiscordInvite> {
         if let (Some(url), Some(channel)) = (&self.discord_invite, &self.discord_name) {
-            Some(DiscordInvite { url: url.as_ref(), channel: channel.as_ref() })
+            Some(DiscordInvite {
+                url: url.as_ref(),
+                channel: channel.as_ref(),
+            })
         } else {
             None
         }
