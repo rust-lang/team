@@ -1,6 +1,8 @@
 #![allow(clippy::new_ret_no_self)]
 
 mod data;
+#[macro_use]
+mod permissions;
 mod schema;
 mod static_api;
 mod validate;
@@ -21,6 +23,11 @@ enum Cli {
     DumpTeam { name: String },
     #[structopt(name = "dump-list", help = "print all the emails in a list")]
     DumpList { name: String },
+    #[structopt(
+        name = "dump-permission",
+        help = "print all the people with a permission"
+    )]
+    DumpPermission { name: String },
 }
 
 fn main() {
@@ -66,6 +73,15 @@ fn run() -> Result<(), Error> {
             let list = data.list(name)?.ok_or_else(|| err_msg("unknown list"))?;
             for email in list.emails() {
                 println!("{}", email);
+            }
+        }
+        Cli::DumpPermission { ref name } => {
+            if !crate::schema::Permissions::AVAILABLE.contains(&name.as_str()) {
+                failure::bail!("unknown permission: {}", name);
+            }
+            let allowed = crate::permissions::allowed_github_users(&data, name)?;
+            for github_username in &allowed {
+                println!("{}", github_username);
             }
         }
     }

@@ -36,6 +36,12 @@ You can get a list of all the email addresses subscribed to a list:
 $ cargo run dump-list all@rust-lang.org
 ```
 
+You can get a list of all the users with a permission:
+
+```
+$ cargo run dump-permission perf
+```
+
 ## Schema
 
 ### People
@@ -50,6 +56,9 @@ github = "johndoe"  # GitHub username of the person (required)
 # This will, for example, avoid adding the person to the mailing lists.
 email = "john@doe.com"  # Email address used for mailing lists (optional)
 irc-nickname = "jdoe"  # Nickname of the person on IRC, if different than the GitHub one (optional)
+
+[permissions]
+# Optional, see the permissions documentation
 ```
 
 The file must be named the same as the GitHub username.
@@ -80,6 +89,9 @@ members = [
     "rust-timer",
 ]
 
+[permissions]
+# Optional, see the permissions documentation
+
 # Define the mailing lists used by the team
 # It's optional, and there can be more than one
 [[lists]]
@@ -108,4 +120,16 @@ extra-emails = [
 extra-teams = [
     "bots-nursery",
 ]
+```
+
+### Permissions
+
+Permissions can be applied either to a single person or to a whole team, and
+they grant access to some pieces of rust-lang tooling. The following
+permissions are available:
+
+```toml
+[permissions]
+# Optional, grants access to the @rust-timer GitHub bot
+perf = true
 ```

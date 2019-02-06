@@ -59,3 +59,8 @@ pub struct List {
 pub struct Lists {
     pub lists: IndexMap<String, List>,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Permission {
+    pub github_users: Vec<String>,
+}

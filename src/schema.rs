@@ -45,6 +45,8 @@ pub(crate) struct Person {
     #[serde(default)]
     email: EmailField,
     discord: Option<String>,
+    #[serde(default)]
+    permissions: Permissions,
 }
 
 impl Person {
@@ -78,6 +80,10 @@ impl Person {
         self.discord.as_ref().map(|e| e.as_str())
     }
 
+    pub(crate) fn permissions(&self) -> &Permissions {
+        &self.permissions
+    }
+
     pub(crate) fn validate(&self) -> Result<(), Error> {
         if let EmailField::Disabled(true) = &self.email {
             bail!("`email = true` is not valid (for person {})", self.github);
@@ -96,6 +102,8 @@ pub(crate) struct Team {
     #[serde(default)]
     children: Vec<String>,
     people: TeamPeople,
+    #[serde(default)]
+    permissions: Permissions,
     website: Option<WebsiteData>,
     #[serde(default)]
     lists: Vec<TeamList>,
@@ -190,6 +198,10 @@ impl Team {
         }
         Ok(lists)
     }
+
+    pub(crate) fn permissions(&self) -> &Permissions {
+        &self.permissions
+    }
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
@@ -202,6 +214,10 @@ struct TeamPeople {
     #[serde(default = "default_false")]
     include_wg_leads: bool,
 }
+
+permissions!(pub(crate) struct Permissions {
+    perf,
+});
 
 pub(crate) struct DiscordInvite<'a> {
     pub(crate) url: &'a str,
