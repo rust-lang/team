@@ -2,8 +2,17 @@ name = "wg-cli"
 wg = true
 
 [people]
-leads = ["killercup"]
-members = ["killercup"]
+leads = []
+members = [
+    "Aaronepower",
+    "codesections",
+    "Dylan-DPC",
+    "epage",
+    "killercup",
+    "matthiasbeyer",
+    "spacekookie",
+    "yoshuawuyts",
+]
 
 [website]
 page = "cli"
