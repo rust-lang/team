@@ -16,6 +16,9 @@ members = [
     "Zoxc",
 ]
 
+[permissions]
+perf = true
+
 [website]
 name = "Compiler team"
 description = "compiler internals, optimizations"

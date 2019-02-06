@@ -16,6 +16,9 @@ members = [
     "shepmaster",
 ]
 
+[permissions]
+perf = true
+
 [website]
 name = "Infrastructure team"
 description = "infrastructure supporting the Rust project itself: CI, releases, bots, metrics"

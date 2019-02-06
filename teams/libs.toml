@@ -15,6 +15,9 @@ members = [
     "Amanieu",
 ]
 
+[permissions]
+perf = true
+
 [website]
 page = "library"
 name = "Library team"

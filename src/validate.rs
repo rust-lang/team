@@ -1,5 +1,5 @@
 use crate::data::Data;
-use crate::schema::Email;
+use crate::schema::{Email, Permissions};
 use failure::{bail, ensure, Error};
 use regex::Regex;
 use std::collections::HashSet;
@@ -18,6 +18,7 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     validate_list_addresses(data, &mut errors);
     validate_people_addresses(data, &mut errors);
     validate_discord_name(data, &mut errors);
+    validate_duplicate_permissions(data, &mut errors);
 
     if !errors.is_empty() {
         errors.sort();
@@ -117,7 +118,13 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
         all_members.difference(&active_members),
         errors,
         |person, _| {
-            bail!("person `{}` is not a member of any team", person);
+            if !data.person(person).unwrap().permissions().has_any() {
+                bail!(
+                    "person `{}` is not a member of any team and has no permissions",
+                    person
+                );
+            }
+            Ok(())
         },
     );
 }
@@ -227,6 +234,28 @@ fn validate_discord_name(data: &Data, errors: &mut Vec<String>) {
         }
         Ok(())
     })
+}
+
+/// Ensure members of teams with permissions don't explicitly have those permissions
+fn validate_duplicate_permissions(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, errors| {
+        wrapper(team.members(&data)?.iter(), errors, |member, _| {
+            let person = data.person(member).unwrap();
+            for permission in Permissions::AVAILABLE {
+                if team.permissions().has(permission) && person.permissions().has(permission) {
+                    bail!(
+                        "user `{}` has the permission `{}` both explicitly and through \
+                         the `{}` team",
+                        member,
+                        permission,
+                        team.name()
+                    );
+                }
+            }
+            Ok(())
+        });
+        Ok(())
+    });
 }
 
 fn wrapper<T, I, F>(iter: I, errors: &mut Vec<String>, mut func: F)

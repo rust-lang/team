@@ -14,6 +14,9 @@ members = [
     "withoutboats",
 ]
 
+[permissions]
+perf = true
+
 [website]
 name = "Language team"
 description = "designing new language features"

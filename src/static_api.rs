@@ -1,4 +1,5 @@
 use crate::data::Data;
+use crate::schema::Permissions;
 use failure::Error;
 use indexmap::IndexMap;
 use log::info;
@@ -23,6 +24,7 @@ impl<'a> Generator<'a> {
     pub(crate) fn generate(&self) -> Result<(), Error> {
         self.generate_teams()?;
         self.generate_lists()?;
+        self.generate_permissions()?;
         Ok(())
     }
 
@@ -93,6 +95,20 @@ impl<'a> Generator<'a> {
 
         lists.sort_keys();
         self.add("v1/lists.json", &v1::Lists { lists })?;
+        Ok(())
+    }
+
+    fn generate_permissions(&self) -> Result<(), Error> {
+        for perm in Permissions::AVAILABLE {
+            let mut github_users = crate::permissions::allowed_github_users(&self.data, perm)?
+                .into_iter()
+                .collect::<Vec<_>>();
+            github_users.sort();
+            self.add(
+                &format!("v1/permissions/{}.json", perm),
+                &v1::Permission { github_users },
+            )?;
+        }
         Ok(())
     }
 
