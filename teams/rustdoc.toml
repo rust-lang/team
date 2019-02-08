@@ -11,6 +11,9 @@ members = [
     "steveklabnik",
 ]
 
+[permissions]
+crater = true
+
 [website]
 name = "Rustdoc team"
 description = "Documentation tools including Rustdoc and docs.rs"

@@ -20,6 +20,9 @@ members = [
     "jonas-schievink",
 ]
 
+[permissions]
+crater = true
+
 [website]
 name = "Release team"
 description = "tracking regressions, stabilizations, and producing Rust releases"

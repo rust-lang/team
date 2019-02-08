@@ -217,6 +217,7 @@ struct TeamPeople {
 
 permissions!(pub(crate) struct Permissions {
     perf,
+    crater,
 });
 
 pub(crate) struct DiscordInvite<'a> {

@@ -1,6 +1,10 @@
 # Rust teams structure
 
-This repository contains the structure of the Rust teams.
+This repository contains the structure of the Rust teams. The repository is
+automatically synchronized with:
+
+* [Governance section on the website](https://www.rust-lang.org/governance)
+* [Crater and @craterbot](https://github.com/rust-lang-nursery/crater)
 
 If you need to add or remove a person from a team send a PR to this repository,
 and after it's merged their account will be added/removed from all the
