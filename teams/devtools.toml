@@ -14,6 +14,16 @@ discord-name = "#dev-tools"
 
 [[lists]]
 address = "dev-tools@rust-lang.org"
+extra-teams = [
+    "cargo",
+    "clippy",
+    "ides",
+    "rustdoc",
+    "wg-bindgen",
+    "wg-debugging",
+    "wg-rustfmt",
+    "wg-rustup",
+]
 
 [[lists]]
 address = "rust-dev-tools@rust-lang.org"
