@@ -40,12 +40,3 @@ description = "Focusing on the end-to-end experience of using Rust in resource-c
 
 [[lists]]
 address = "embedded-wg@rust-lang.org"
-extra-emails = [
-    "david@craven.ch",
-    "hanno@braun-robotics.com",
-    "james.munns@gmail.com",
-    "jcsoo@bobbin.io",
-    "jp@thejpster.org.uk",
-    "me@dylanmckay.io",
-    "pftbest@gmail.com",
-]
