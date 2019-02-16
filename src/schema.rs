@@ -99,8 +99,6 @@ pub(crate) struct Team {
     #[serde(default = "default_false")]
     wg: bool,
     subteam_of: Option<String>,
-    #[serde(default)]
-    children: Vec<String>,
     people: TeamPeople,
     #[serde(default)]
     permissions: Permissions,
@@ -132,14 +130,6 @@ impl Team {
 
     pub(crate) fn members<'a>(&'a self, data: &'a Data) -> Result<HashSet<&'a str>, Error> {
         let mut members: HashSet<_> = self.people.members.iter().map(|s| s.as_str()).collect();
-        for subteam in &self.children {
-            let submembers = data
-                .team(&subteam)
-                .ok_or_else(|| err_msg(format!("missing team {}", subteam)))?;
-            for person in submembers.members(data)? {
-                members.insert(person);
-            }
-        }
         if self.people.include_team_leads || self.people.include_wg_leads {
             for team in data.teams() {
                 let include_wg = team.is_wg() && self.people.include_wg_leads;

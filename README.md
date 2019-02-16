@@ -75,10 +75,6 @@ directory. The structure of the file is this:
 ```toml
 name = "overlords"  # Name of the team, used for GitHub (required)
 subteam-of = "gods"  # Name of the parent team of this team (optional)
-# Include all the members of the listed teams as members of this team (optional)
-inherit = [
-    "kings",
-]
 
 [people]
 # Leads of the team, can be more than one and must be members of the team.
