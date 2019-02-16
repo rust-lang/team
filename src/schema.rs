@@ -144,10 +144,20 @@ impl Team {
             for team in data.teams() {
                 let include_wg = team.is_wg() && self.people.include_wg_leads;
                 let include_team = !team.is_wg() && self.people.include_team_leads;
-                if include_wg || include_team {
+                if team.name != self.name && (include_wg || include_team) {
                     for lead in team.leads() {
                         members.insert(lead);
                     }
+                }
+            }
+        }
+        if self.people.include_all_team_members {
+            for team in data.teams() {
+                if team.is_wg() || team.name == self.name {
+                    continue;
+                }
+                for member in team.members(data)? {
+                    members.insert(member);
                 }
             }
         }
@@ -213,6 +223,8 @@ struct TeamPeople {
     include_team_leads: bool,
     #[serde(default = "default_false")]
     include_wg_leads: bool,
+    #[serde(default = "default_false")]
+    include_all_team_members: bool,
 }
 
 permissions!(pub(crate) struct Permissions {

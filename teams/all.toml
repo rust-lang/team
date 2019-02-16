@@ -1,28 +1,9 @@
 name = "all"
-children = [
-    "alumni",
-    "cargo",
-    "community",
-    "compiler",
-    "core",
-    "crates-io",
-    "devtools",
-    "docs",
-    "ides",
-    "infra",
-    "lang",
-    "lang-shepherds",
-    "libs",
-    "mods",
-    "production",
-    "release",
-    "rustdoc",
-    "twir",
-]
 
 [people]
 leads = []
 members = []
+include-all-team-members = true
 
 [[lists]]
 address = "all@rust-lang.org"
