@@ -1,0 +1,16 @@
+name = "wg-localization"
+subteam-of = "community"
+wg = true
+
+[people]
+leads = ["sebasmagri"]
+members = [
+    "sebasmagri",
+    "manishearth",
+]
+
+[website]
+name = "Localization WG"
+description = "Working towards"
+discord-invite = "https://discord.gg/cj5HMXA"
+discord-name = "#community-team"
