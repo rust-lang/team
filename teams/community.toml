@@ -23,16 +23,26 @@ discord-name = "#community-team"
 
 [[lists]]
 address = "community@rust-lang.org"
+extra-teams = [
+    "community-content",
+    "community-events",
+    "community-rustbridge",
+    "community-survey",
+]
 extra-emails = [
     "rust-community@googlegroups.com",
-    "varma.sunjay@gmail.com",
 ]
 
 [[lists]]
 address = "community-team@rust-lang.org"
+extra-teams = [
+    "community-content",
+    "community-events",
+    "community-rustbridge",
+    "community-survey",
+]
 extra-emails = [
     "rust-community@googlegroups.com",
-    "varma.sunjay@gmail.com",
 ]
 
 [[lists]]
