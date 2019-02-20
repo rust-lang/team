@@ -133,4 +133,6 @@ permissions are available:
 [permissions]
 # Optional, grants access to the @rust-timer GitHub bot
 perf = true
+# Optional, grants access to the @craterbot GitHub bot
+crater = true
 ```
