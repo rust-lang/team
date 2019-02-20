@@ -5,6 +5,7 @@ automatically synchronized with:
 
 * [Governance section on the website](https://www.rust-lang.org/governance)
 * [Crater and @craterbot](https://github.com/rust-lang-nursery/crater)
+* Mailing lists and aliases for `@rust-lang.org` and `@crates.io`
 
 If you need to add or remove a person from a team send a PR to this repository,
 and after it's merged their account will be added/removed from all the
@@ -132,4 +133,6 @@ permissions are available:
 [permissions]
 # Optional, grants access to the @rust-timer GitHub bot
 perf = true
+# Optional, grants access to the @craterbot GitHub bot
+crater = true
 ```
