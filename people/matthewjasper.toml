@@ -1,3 +1,6 @@
 name = "Matthew Jasper"
 github = "matthewjasper"
 email = "mjjasper1@gmail.com"
+
+[permissions]
+crater = true
