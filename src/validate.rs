@@ -270,11 +270,14 @@ fn validate_duplicate_permissions(data: &Data, errors: &mut Vec<String>) {
 /// Ensure the permissions are valid
 fn validate_permissions(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
-        team.permissions().validate(format!("team `{}`", team.name()))?;
+        team.permissions()
+            .validate(format!("team `{}`", team.name()))?;
         Ok(())
     });
     wrapper(data.people(), errors, |person, _| {
-        person.permissions().validate(format!("user `{}`", person.github()))?;
+        person
+            .permissions()
+            .validate(format!("user `{}`", person.github()))?;
         Ok(())
     });
 }

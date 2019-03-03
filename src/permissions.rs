@@ -1,5 +1,5 @@
 use crate::data::Data;
-use failure::{Error, bail};
+use failure::{bail, Error};
 use std::collections::HashSet;
 
 macro_rules! permissions {
