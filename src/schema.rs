@@ -1,4 +1,5 @@
 use crate::data::Data;
+pub(crate) use crate::permissions::Permissions;
 use failure::{bail, err_msg, Error};
 use std::collections::HashSet;
 
@@ -216,11 +217,6 @@ struct TeamPeople {
     #[serde(default = "default_false")]
     include_all_team_members: bool,
 }
-
-permissions!(pub(crate) struct Permissions {
-    perf,
-    crater,
-});
 
 pub(crate) struct DiscordInvite<'a> {
     pub(crate) url: &'a str,

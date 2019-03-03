@@ -1,43 +1,137 @@
 use crate::data::Data;
-use failure::Error;
+use failure::{Error, bail};
 use std::collections::HashSet;
 
-#[macro_export]
 macro_rules! permissions {
-    ($vis:vis struct $name:ident { $($key:ident,)* }) => {
+    (
+        booleans {
+            $($boolean:ident,)*
+        }
+        bors_repos {
+            $($bors:ident,)*
+        }
+    ) => {
         #[derive(serde_derive::Deserialize, Debug)]
-        #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-        $vis struct $name {
-            $(
-                #[serde(default)]
-                $key: bool,
-            )*
+        #[serde(deny_unknown_fields)]
+        pub(crate) struct BorsACL {
+            #[serde(default)]
+            review: bool,
+            #[serde(rename = "try", default)]
+            try_: bool,
         }
 
-        impl Default for $name {
+        impl Default for BorsACL {
             fn default() -> Self {
-                $name {
-                    $($key: false,)*
+                BorsACL {
+                    review: false,
+                    try_: false,
                 }
             }
         }
 
-        impl $name {
-            $vis const AVAILABLE: &'static [&'static str] = &[$(stringify!($key),)*];
+        #[derive(serde_derive::Deserialize, Debug)]
+        #[serde(deny_unknown_fields)]
+        pub(crate) struct BorsPermissions {
+            $(
+                #[serde(default)]
+                $bors: BorsACL,
+            )*
+        }
 
-            $vis fn has(&self, permission: &str) -> bool {
+        impl Default for BorsPermissions {
+            fn default() -> Self {
+                BorsPermissions {
+                    $($bors: BorsACL::default(),)*
+                }
+            }
+        }
+
+        #[derive(serde_derive::Deserialize, Debug)]
+        #[serde(rename_all = "kebab-case", deny_unknown_fields)]
+        pub(crate) struct Permissions {
+            $(
+                #[serde(default)]
+                $boolean: bool,
+            )*
+            #[serde(default)]
+            bors: BorsPermissions,
+        }
+
+        impl Default for Permissions {
+            fn default() -> Self {
+                Permissions {
+                    $($boolean: false,)*
+                    bors: BorsPermissions::default(),
+                }
+            }
+        }
+
+        impl Permissions {
+            pub(crate) const AVAILABLE: &'static [&'static str] = &[
+                $(stringify!($boolean),)*
+                $(concat!("bors.", stringify!($bors), ".review"),)*
+                $(concat!("bors.", stringify!($bors), ".try"),)*
+            ];
+
+            pub(crate) fn has(&self, permission: &str) -> bool {
                 $(
-                    if permission == stringify!($key) {
-                        return self.$key;
+                    if permission == stringify!($boolean) {
+                        return self.$boolean;
+                    }
+                )*
+                $(
+                    if permission == concat!("bors.", stringify!($bors), ".review") {
+                        return self.bors.$bors.review;
+                    }
+                )*
+                $(
+                    if permission == concat!("bors.", stringify!($bors), ".try") {
+                        return self.bors.$bors.try_ || self.bors.$bors.review;
                     }
                 )*
                 false
             }
 
-            $vis fn has_any(&self) -> bool {
-                false $(|| self.$key)*
+            pub(crate) fn has_any(&self) -> bool {
+                false
+                $(|| self.$boolean)*
+                $(|| self.bors.$bors.review)*
+                $(|| self.bors.$bors.try_)*
+            }
+
+            pub(crate) fn validate(&self, what: String) -> Result<(), Error> {
+                $(
+                    if self.bors.$bors.try_ == true && self.bors.$bors.review == true {
+                        bail!(
+                            "{} has both the `bors.{}.review` and `bors.{}.try` permissions",
+                            what,
+                            stringify!($bors),
+                            stringify!($bors),
+                        );
+                    }
+                )*
+                Ok(())
             }
         }
+    }
+}
+
+permissions! {
+    booleans {
+        perf,
+        crater,
+    }
+    bors_repos {
+        cargo,
+        clippy,
+        compiler_builtins,
+        crater,
+        crates_io,
+        libc,
+        regex,
+        rls,
+        rust,
+        rustup_rs,
     }
 }
 
