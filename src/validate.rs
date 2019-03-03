@@ -136,12 +136,13 @@ fn validate_list_email_addresses(data: &Data, errors: &mut Vec<String>) {
             return Ok(());
         }
         wrapper(team.members(data)?.iter(), errors, |member, _| {
-            let member = data.person(member).unwrap();
-            if let Email::Missing = member.email() {
-                bail!(
-                    "person `{}` is a member of a mailing list but has no email address",
-                    member.github()
-                );
+            if let Some(member) = data.person(member) {
+                if let Email::Missing = member.email() {
+                    bail!(
+                        "person `{}` is a member of a mailing list but has no email address",
+                        member.github()
+                    );
+                }
             }
             Ok(())
         });
@@ -240,16 +241,17 @@ fn validate_discord_name(data: &Data, errors: &mut Vec<String>) {
 fn validate_duplicate_permissions(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
         wrapper(team.members(&data)?.iter(), errors, |member, _| {
-            let person = data.person(member).unwrap();
-            for permission in Permissions::AVAILABLE {
-                if team.permissions().has(permission) && person.permissions().has(permission) {
-                    bail!(
-                        "user `{}` has the permission `{}` both explicitly and through \
-                         the `{}` team",
-                        member,
-                        permission,
-                        team.name()
-                    );
+            if let Some(person) = data.person(member) {
+                for permission in Permissions::AVAILABLE {
+                    if team.permissions().has(permission) && person.permissions().has(permission) {
+                        bail!(
+                            "user `{}` has the permission `{}` both explicitly and through \
+                             the `{}` team",
+                            member,
+                            permission,
+                            team.name()
+                        );
+                    }
                 }
             }
             Ok(())
