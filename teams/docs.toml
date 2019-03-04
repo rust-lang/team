@@ -22,8 +22,4 @@ extra-teams = ["reference"]
 
 [[lists]]
 address = "doc-team@rust-lang.org"
-extra-teams = ["reference"]
-
-[[lists]]
-address = "doc-team@rust-lang.org"
-extra-teams = ["rust-by-example"]
+extra-teams = ["reference", "rust-by-example"]
