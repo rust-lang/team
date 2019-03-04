@@ -1,3 +1,5 @@
 name = "Brian Anderson"
 github = "brson"
-email = "andersrb@gmail.com"
+# email = "andersrb@gmail.com"
+email = false
+
