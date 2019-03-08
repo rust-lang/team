@@ -1,19 +1,23 @@
 name = "devtools"
 
 [people]
-leads = []
-members = []
+leads = ["killercup", "Manishearth"]
+members = ["killercup", "Manishearth", "Xanewok", "fitzgen", "GuillaumeGomez", "oli-obk", "dwijnand"]
 
 [website]
 page = "dev-tools"
 name = "Dev tools team"
+email = "tools@rust-lang.org"
 description = "Rust developer tools"
 repo = "https://github.com/rust-dev-tools/dev-tools-team"
 discord-invite = "https://discord.gg/sG23nSS"
 discord-name = "#dev-tools"
 
 [[lists]]
-address = "dev-tools@rust-lang.org"
+address = "tools@rust-lang.org"
+
+[[lists]]
+address = "tools-all@rust-lang.org"
 extra-teams = [
     "cargo",
     "clippy",
@@ -24,6 +28,10 @@ extra-teams = [
     "wg-rustfmt",
     "wg-rustup",
 ]
+extra-people = ["spacekookie"]
+
+[[lists]]
+address = "dev-tools@rust-lang.org"
 
 [[lists]]
 address = "rust-dev-tools@rust-lang.org"
