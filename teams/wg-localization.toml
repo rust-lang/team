@@ -6,7 +6,7 @@ wg = true
 leads = ["sebasmagri"]
 members = [
     "sebasmagri",
-    "manishearth",
+    "Manishearth",
 ]
 
 [website]

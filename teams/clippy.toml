@@ -2,11 +2,11 @@ name = "clippy"
 subteam-of = "devtools"
 
 [people]
-leads = ["manishearth", "oli-obk"]
+leads = ["Manishearth", "oli-obk"]
 members = [
     "llogiq",
     "killercup",
-    "manishearth",
+    "Manishearth",
     "oli-obk",
 ]
 

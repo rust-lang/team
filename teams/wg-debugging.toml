@@ -3,9 +3,9 @@ subteam-of = "devtools"
 wg = true
 
 [people]
-leads = ["manishearth", "michaelwoerister"]
+leads = ["Manishearth", "michaelwoerister"]
 members = [
-    "manishearth",
+    "Manishearth",
     "michaelwoerister",
 ]
 
