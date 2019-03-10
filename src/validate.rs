@@ -250,7 +250,9 @@ fn validate_duplicate_permissions(data: &Data, errors: &mut Vec<String>) {
         wrapper(team.members(&data)?.iter(), errors, |member, _| {
             if let Some(person) = data.person(member) {
                 for permission in Permissions::AVAILABLE {
-                    if team.permissions().has(permission) && person.permissions().has(permission) {
+                    if team.permissions().has(permission)
+                        && person.permissions().has_directly(permission)
+                    {
                         bail!(
                             "user `{}` has the permission `{}` both explicitly and through \
                              the `{}` team",

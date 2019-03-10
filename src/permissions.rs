@@ -74,6 +74,10 @@ macro_rules! permissions {
             ];
 
             pub(crate) fn has(&self, permission: &str) -> bool {
+                self.has_directly(permission) || self.has_indirectly(permission)
+            }
+
+            pub(crate) fn has_directly(&self, permission: &str) -> bool {
                 $(
                     if permission == stringify!($boolean) {
                         return self.$boolean;
@@ -83,10 +87,17 @@ macro_rules! permissions {
                     if permission == concat!("bors.", stringify!($bors), ".review") {
                         return self.bors.$bors.review;
                     }
+                    if permission == concat!("bors.", stringify!($bors), ".try") {
+                        return self.bors.$bors.try_
+                    }
                 )*
+                false
+            }
+
+            pub fn has_indirectly(&self, permission: &str) -> bool {
                 $(
                     if permission == concat!("bors.", stringify!($bors), ".try") {
-                        return self.bors.$bors.try_ || self.bors.$bors.review;
+                        return self.bors.$bors.review;
                     }
                 )*
                 false
