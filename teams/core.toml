@@ -13,6 +13,9 @@ members = [
     "wycats",
 ]
 
+[permissions]
+bors.rust.review = true
+
 [website]
 name = "Core team"
 description = "Direction of the project, subteam leadership, cross-cutting concerns."

@@ -19,6 +19,7 @@ members = [
 [permissions]
 perf = true
 crater = true
+bors.rust.review = true
 
 [website]
 name = "Compiler team"

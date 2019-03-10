@@ -1,0 +1,5 @@
+name = "Alexandre Martin"
+github = "scalexm"
+
+[permissions]
+bors.rust.review = true

@@ -3,3 +3,4 @@ github = "nnethercote"
 
 [permissions]
 perf = true
+bors.rust.review = true

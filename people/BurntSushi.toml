@@ -2,3 +2,6 @@ name = "Andrew Gallant"
 github = "BurntSushi"
 irc = "burntsushi"
 email = "jamslam@gmail.com"
+
+[permissions]
+bors.regex.review = true

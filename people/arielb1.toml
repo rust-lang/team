@@ -1,3 +1,6 @@
 name = "Ariel Ben-Yehuda"
 github = "arielb1"
 email = "ariel.byd@gmail.com"
+
+[permissions]
+bors.rust.review = true

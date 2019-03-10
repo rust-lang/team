@@ -1,3 +1,6 @@
 name = "Alex Butler"
 github = "alexheretic"
 email = "alexheretic@gmail.com"
+
+[permissions]
+bors.rls.review = true

@@ -1,3 +1,6 @@
 name = "Aaron Power"
 github = "Aaronepower"
 email = "theaaronepower@gmail.com"
+
+[permissions]
+bors.rust.review = true

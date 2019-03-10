@@ -1,0 +1,5 @@
+name = "Philipp Krones"
+github = "flip1995"
+
+[permissions]
+bors.clippy.review = true

@@ -1,3 +1,6 @@
 name = "Steve Klabnik"
 github = "steveklabnik"
 email = "steve@steveklabnik.com"
+
+[permissions]
+bors.cargo.review = true

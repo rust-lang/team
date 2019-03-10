@@ -79,7 +79,10 @@ fn run() -> Result<(), Error> {
             if !crate::schema::Permissions::AVAILABLE.contains(&name.as_str()) {
                 failure::bail!("unknown permission: {}", name);
             }
-            let allowed = crate::permissions::allowed_github_users(&data, name)?;
+            let mut allowed = crate::permissions::allowed_github_users(&data, name)?
+                .into_iter()
+                .collect::<Vec<_>>();
+            allowed.sort();
             for github_username in &allowed {
                 println!("{}", github_username);
             }

@@ -6,13 +6,16 @@ leads = ["nrc"]
 members = [
     "alexcrichton",
     "dwijnand",
-    "eh2406",
+    "Eh2406",
     "ehuss",
     "joshtriplett",
     "nrc",
     "withoutboats",
     "wycats",
 ]
+
+[permissions]
+bors.cargo.review = true
 
 [website]
 name = "Cargo team"

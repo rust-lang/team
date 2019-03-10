@@ -1,0 +1,5 @@
+name = "Robin Kruppe"
+github = "rkruppe"
+
+[permissions]
+bors.rust.review = true

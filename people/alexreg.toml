@@ -1,0 +1,5 @@
+name = "Alexander Regueiro"
+github = "alexreg"
+
+[permissions]
+bors.rust.review = true

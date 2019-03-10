@@ -4,21 +4,28 @@ use failure::{bail, ensure, Error};
 use regex::Regex;
 use std::collections::HashSet;
 
+static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
+    validate_wg_names,
+    validate_subteam_of,
+    validate_team_leads,
+    validate_team_members,
+    validate_inactive_members,
+    validate_list_email_addresses,
+    validate_list_extra_people,
+    validate_list_extra_teams,
+    validate_list_addresses,
+    validate_people_addresses,
+    validate_discord_name,
+    validate_duplicate_permissions,
+    validate_permissions,
+];
+
 pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     let mut errors = Vec::new();
 
-    validate_wg_names(data, &mut errors);
-    validate_subteam_of(data, &mut errors);
-    validate_team_leads(data, &mut errors);
-    validate_team_members(data, &mut errors);
-    validate_inactive_members(data, &mut errors);
-    validate_list_email_addresses(data, &mut errors);
-    validate_list_extra_people(data, &mut errors);
-    validate_list_extra_teams(data, &mut errors);
-    validate_list_addresses(data, &mut errors);
-    validate_people_addresses(data, &mut errors);
-    validate_discord_name(data, &mut errors);
-    validate_duplicate_permissions(data, &mut errors);
+    for check in CHECKS {
+        check(data, &mut errors);
+    }
 
     if !errors.is_empty() {
         errors.sort();
@@ -243,7 +250,9 @@ fn validate_duplicate_permissions(data: &Data, errors: &mut Vec<String>) {
         wrapper(team.members(&data)?.iter(), errors, |member, _| {
             if let Some(person) = data.person(member) {
                 for permission in Permissions::AVAILABLE {
-                    if team.permissions().has(permission) && person.permissions().has(permission) {
+                    if team.permissions().has(permission)
+                        && person.permissions().has_directly(permission)
+                    {
                         bail!(
                             "user `{}` has the permission `{}` both explicitly and through \
                              the `{}` team",
@@ -256,6 +265,21 @@ fn validate_duplicate_permissions(data: &Data, errors: &mut Vec<String>) {
             }
             Ok(())
         });
+        Ok(())
+    });
+}
+
+/// Ensure the permissions are valid
+fn validate_permissions(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, _| {
+        team.permissions()
+            .validate(format!("team `{}`", team.name()))?;
+        Ok(())
+    });
+    wrapper(data.people(), errors, |person, _| {
+        person
+            .permissions()
+            .validate(format!("user `{}`", person.github()))?;
         Ok(())
     });
 }

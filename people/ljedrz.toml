@@ -1,0 +1,5 @@
+name = "ljedrz"
+github = "ljedrz"
+
+[permissions]
+bors.rust.try = true

@@ -1,3 +1,6 @@
 name = "Aleksey Kladov"
 github = "matklad"
 email = "aleksey.kladov@gmail.com"
+
+[permissions]
+bors.rust.review = true

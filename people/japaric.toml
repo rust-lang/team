@@ -1,3 +1,7 @@
 name = "Jorge Aparicio"
 github = "japaric"
 email = "jorge@japaric.io"
+
+[permissions]
+bors.compiler_builtins.review = true
+bors.rust.review = true

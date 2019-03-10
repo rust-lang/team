@@ -19,6 +19,8 @@ members = [
 [permissions]
 perf = true
 crater = true
+bors.rust.review = true
+bors.crater.review = true
 
 [website]
 name = "Infrastructure team"

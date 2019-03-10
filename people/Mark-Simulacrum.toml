@@ -2,3 +2,6 @@ name = "Mark Rousskov"
 github = "Mark-Simulacrum"
 irc = "simulacrum"
 email = "mark.simulacrum@gmail.com"
+
+[permissions]
+bors.cargo.review = true

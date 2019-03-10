@@ -1,0 +1,5 @@
+name = "gnzlbg"
+github = "gnzlbg"
+
+[permissions]
+bors.libc.review = true

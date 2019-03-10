@@ -1,0 +1,5 @@
+name = "Andrew Paseltiner"
+github = "apasel422"
+
+[permissions]
+bors.rust.review = true
