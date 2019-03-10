@@ -1,0 +1,5 @@
+name = "Seo Sanghyeon"
+github = "sanxiyn"
+
+[permissions]
+bors.rust.review = true

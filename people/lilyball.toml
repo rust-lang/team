@@ -1,0 +1,5 @@
+name = "Lily Ballard"
+github = "lilyball"
+
+[permissions]
+bors.rust.review = true

@@ -4,3 +4,4 @@ email = "mjjasper1@gmail.com"
 
 [permissions]
 crater = true
+bors.rust.review = true

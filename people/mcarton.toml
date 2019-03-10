@@ -1,0 +1,5 @@
+name = "Martin Carton"
+github = "mcarton"
+
+[permissions]
+bors.clippy.review = true

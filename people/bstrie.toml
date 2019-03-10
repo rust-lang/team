@@ -1,3 +1,6 @@
 name = "Ben Striegel"
 github = "bstrie"
 email = "ben.striegel@gmail.com"
+
+[permissions]
+bors.rust.review = true

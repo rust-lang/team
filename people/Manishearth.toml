@@ -1,3 +1,6 @@
 name = "Manish Goregaokar"
 github = "Manishearth"
 email = "manishsmail@gmail.com"
+
+[permissions]
+bors.rust.review = true

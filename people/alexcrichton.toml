@@ -2,3 +2,8 @@ name = "Alex Crichton"
 github = "alexcrichton"
 irc = "acrichto"
 email = "acrichton@mozilla.com"
+
+[permissions]
+bors.libc.review = true
+bors.rustup_rs.review = true
+bors.compiler_builtins.review = true

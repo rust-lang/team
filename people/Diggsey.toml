@@ -1,0 +1,5 @@
+name = "Diggory Blake"
+github = "Diggsey"
+
+[permissions]
+bors.rustup_rs.review = true

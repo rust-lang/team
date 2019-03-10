@@ -1,3 +1,6 @@
 name = "Pascal Hertleif"
 github = "killercup"
 email = "killercup@gmail.com"
+
+[permissions]
+bors.rust.review = true

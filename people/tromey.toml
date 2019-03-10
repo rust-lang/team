@@ -1,0 +1,5 @@
+name = "Tom Tromey"
+github = "tromey"
+
+[permissions]
+bors.rust.review = true

@@ -2,3 +2,6 @@ name = "Huon Wilson"
 github = "huonw"
 irc = "huon"
 email = "dbau.pp@gmail.com"
+
+[permissions]
+bors.rust.review = true

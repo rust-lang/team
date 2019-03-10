@@ -3,3 +3,4 @@ github = "RalfJung"
 
 [permissions]
 perf = true
+bors.rust.review = true

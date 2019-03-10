@@ -1,0 +1,5 @@
+name = "Wesley Wiser"
+github = "wesleywiser"
+
+[permissions]
+bors.rust.review = true

@@ -1,3 +1,6 @@
 name = "Amanieu d'Antras"
 github = "Amanieu"
 email = "amanieu@gmail.com"
+
+[permissions]
+bors.compiler_builtins.review = true

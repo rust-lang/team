@@ -1,0 +1,5 @@
+name = "Tyler Mandry"
+github = "tmandry"
+
+[permissions]
+bors.rust.review = true

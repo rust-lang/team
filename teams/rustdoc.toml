@@ -12,6 +12,7 @@ members = [
 
 [permissions]
 crater = true
+bors.rust.review = true
 
 [website]
 name = "Rustdoc team"

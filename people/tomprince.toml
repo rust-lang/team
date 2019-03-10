@@ -1,3 +1,6 @@
 name = "Tom Prince"
 github = "tomprince"
 email = "tom.prince@twistedmatrix.com"
+
+[permissions]
+bors.rust.review = true

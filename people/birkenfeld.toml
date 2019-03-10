@@ -1,0 +1,5 @@
+name = "Georg Brandl"
+github = "birkenfeld"
+
+[permissions]
+bors.clippy.review = true

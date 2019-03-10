@@ -11,6 +11,9 @@ members = [
     "celaus",
 ]
 
+[permissions]
+bors.rust.review = true
+
 [website]
 page = "documentation"
 name = "Documentation team"

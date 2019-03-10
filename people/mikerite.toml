@@ -1,0 +1,5 @@
+name = "mikerite"
+github = "mikerite"
+
+[permissions]
+bors.clippy.review = true

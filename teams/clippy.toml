@@ -10,6 +10,9 @@ members = [
     "oli-obk",
 ]
 
+[permissions]
+bors.clippy.review = true
+
 [website]
 name = "Clippy"
 description = "design and implementation of the Clippy linter"

@@ -1,0 +1,5 @@
+name = "est31"
+github = "est31"
+
+[permissions]
+bors.rust.try = true

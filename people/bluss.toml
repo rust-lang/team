@@ -1,0 +1,5 @@
+name = "bluss"
+github = "bluss"
+
+[permissions]
+bors.rust.review = true

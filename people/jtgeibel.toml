@@ -1,3 +1,6 @@
 name = "Justin Geibel"
 github = "jtgeibel"
 email = "jtgeibel@gmail.com"
+
+[permissions]
+bors.crates_io.review = true
