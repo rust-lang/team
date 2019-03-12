@@ -5,6 +5,7 @@ automatically synchronized with:
 
 | Service | Synchronized every | |
 | --- | :---: | --- |
+| [@bors][bors] | *In real time* | [Integration source][bors-src] |
 | [Crater and @craterbot][crater] | *In real time* | [Integration source][crater-src] |
 | Mailing lists and aliases (`@rust-lang.org`, `@crates.io`) | 5 minutes | [Integration source][ml-src]
 | [Governance section on the website][www] | 2 minutes | [Integration source][www-src] |
@@ -13,6 +14,8 @@ If you need to add or remove a person from a team send a PR to this repository,
 and after it's merged their account will be added/removed from all the
 supported services.
 
+[bors]: https://buildbot2.rust-lang.org/homu
+[bors-src]: https://github.com/rust-lang/homu/blob/master/homu/auth.py
 [www]: https://www.rust-lang.org/governance
 [www-src]: https://github.com/rust-lang/www.rust-lang.org/blob/master/src/teams.rs
 [crater]: https://github.com/rust-lang-nursery/crater
