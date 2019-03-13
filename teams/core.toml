@@ -11,6 +11,7 @@ members = [
     "nikomatsakis",
     "steveklabnik",
     "wycats",
+    "Manishearth",
 ]
 
 [permissions]
