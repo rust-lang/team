@@ -1,0 +1,15 @@
+name = "core-observers"
+subteam-of = "core"
+
+[people]
+leads = []
+members = [
+    "skade",
+]
+
+[permissions]
+bors.rust.review = true
+
+[website]
+name = "Core Team Observers"
+description = "observers on the core team"
