@@ -7,6 +7,7 @@ automatically synchronized with:
 | --- | :---: | --- |
 | [@bors][bors] | *In real time* | [Integration source][bors-src] |
 | [Crater and @craterbot][crater] | *In real time* | [Integration source][crater-src] |
+| [Perf and @rust-timer][perf] | *In real time* | [Integration source][perf-src] |
 | Mailing lists and aliases (`@rust-lang.org`, `@crates.io`) | 5 minutes | [Integration source][ml-src]
 | [Governance section on the website][www] | 2 minutes | [Integration source][www-src] |
 
@@ -21,6 +22,8 @@ supported services.
 [crater]: https://github.com/rust-lang-nursery/crater
 [crater-src]: https://github.com/rust-lang-nursery/crater/blob/master/src/server/auth.rs
 [ml-src]: https://github.com/rust-lang/rust-central-station/tree/master/sync-mailgun
+[perf]: https://perf.rust-lang.org
+[perf-src]: https://github.com/rust-lang-nursery/rustc-perf/blob/master/site/src/server.rs
 
 ## Documentation
 
