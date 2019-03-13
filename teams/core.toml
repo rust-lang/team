@@ -25,9 +25,11 @@ weight = 1000
 
 [[lists]]
 address = "core@rust-lang.org"
+extra-teams = ["core-observers"]
 
 [[lists]]
 address = "core-team@rust-lang.org"
+extra-teams = ["core-observers"]
 
 [[lists]]
 address = "user-logos@rust-lang.org"
