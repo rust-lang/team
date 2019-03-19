@@ -1,3 +1,7 @@
 name = "Josh Stone"
 github = "cuviper"
 email = "cuviper@gmail.com"
+irc = "jistone"
+
+[permissions]
+bors.rust.review = true
