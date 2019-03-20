@@ -21,3 +21,9 @@ address = "rust-mods@rust-lang.org"
 
 [[lists]]
 address = "mods@rust-lang.org"
+
+[[lists]]
+address = "mods-all@rust-lang.org"
+extra-teams = [
+    "mods-discord",
+]

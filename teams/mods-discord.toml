@@ -1,0 +1,17 @@
+name = "mods-discord"
+subteam-of = "mods"
+
+[people]
+leads = []
+members = [
+    "komaeda",
+    "centril",
+    "Khionu",
+    "sgrif",
+    "technetos",
+    "pietroalbini",
+]
+
+[website]
+name = "Discord moderators"
+description = "Moderating the Discord channel"
