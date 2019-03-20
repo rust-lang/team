@@ -1,4 +1,4 @@
-name = "wg-compiler-nll"
+name = "wg-nll"
 subteam-of = "compiler"
 wg = true
 
@@ -9,3 +9,4 @@ members = ["nikomatsakis", "pnkfelix"]
 [website]
 name = "Non-Lexical Lifetimes (NLL)"
 description = "Implementing the new MIR-based borrow check and non-lexical lifetimes"
+repo = "https://github.com/rust-lang/compiler-team/tree/master/working-groups/nll"

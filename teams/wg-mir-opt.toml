@@ -1,0 +1,12 @@
+name = "wg-mir-opt"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["oli-obk"]
+members = ["oli-obk"]
+
+[website]
+name = "MIR Optimizations"
+description = "Write MIR optimizations and refactor the MIR to be more optimizable."
+repo = "https://github.com/rust-lang/compiler-team/tree/master/working-groups/mir-opt"
