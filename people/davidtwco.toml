@@ -1,5 +1,6 @@
 name = "David Wood"
 github = "davidtwco"
+email = "david@davidtw.co"
 
 [permissions]
 bors.rust.review = true

@@ -1,5 +1,6 @@
 name = "Wesley Wiser"
 github = "wesleywiser"
+email = "wwiser@gmail.com"
 
 [permissions]
 bors.rust.review = true
