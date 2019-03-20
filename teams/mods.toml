@@ -18,7 +18,6 @@ email = "rust-mods@rust-lang.org"
 
 [[lists]]
 address = "rust-mods@rust-lang.org"
-include-team-members = false
-extra-emails = [
-    "rust-mods@googlegroups.com"
-]
+
+[[lists]]
+address = "mods@rust-lang.org"
