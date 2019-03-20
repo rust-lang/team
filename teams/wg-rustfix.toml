@@ -1,0 +1,21 @@
+name = "wg-rustfix"
+subteam-of = "devtools"
+wg = true
+
+[people]
+leads = []
+members = [
+    "Manishearth",
+    "estebank",
+    "killercup",
+    "oli-obk",
+    "phansch",
+    "pietroalbini",
+    "zackmdavis",
+]
+
+[website]
+name = "Rustfix working group"
+description = "Improve cargo-fix and be a point of contact for other teams"
+discord-invite = "https://discord.gg/e6Q3cvu"
+discord-name = "#wg-rustfix"

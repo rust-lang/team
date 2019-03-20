@@ -27,6 +27,7 @@ extra-teams = [
     "wg-debugging",
     "wg-rustfmt",
     "wg-rustup",
+    "wg-rustfix",
 ]
 extra-people = ["spacekookie"]
 
