@@ -2,3 +2,6 @@ name = "Olivia Hugger"
 github = "komaeda"
 irc = "liv"
 email = "819880950@qq.com"
+
+[permissions]
+bors.rustlings.review = true

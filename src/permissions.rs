@@ -142,6 +142,7 @@ permissions! {
         regex,
         rls,
         rust,
+        rustlings,
         rustup_rs,
     }
 }
