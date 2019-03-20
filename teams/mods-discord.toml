@@ -5,7 +5,7 @@ subteam-of = "mods"
 leads = []
 members = [
     "komaeda",
-    "centril",
+    "Centril",
     "Khionu",
     "sgrif",
     "technetos",
@@ -14,4 +14,7 @@ members = [
 
 [website]
 name = "Discord moderators"
-description = "Moderating the Discord channel"
+description = "Moderating the Discord server"
+
+[[lists]]
+address = "discord-mods@rust-lang.org"
