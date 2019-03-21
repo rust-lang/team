@@ -23,6 +23,7 @@ bors.rust.review = true
 
 [website]
 name = "Compiler team"
+repo = "http://github.com/rust-lang/compiler-team"
 description = "compiler internals, optimizations"
 
 [[lists]]
