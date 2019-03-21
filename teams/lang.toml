@@ -21,6 +21,7 @@ bors.rust.review = true
 [website]
 name = "Language team"
 description = "designing new language features"
+repo = "http://github.com/rust-lang/lang-team"
 
 [[lists]]
 address = "lang-private@rust-lang.org"
