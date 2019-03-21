@@ -26,5 +26,6 @@ address = "mods@rust-lang.org"
 address = "mods-all@rust-lang.org"
 extra-teams = [
     "mods-discord",
+    "mods-discourse",
 ]
 extra-people = ["Manishearth"] # Temporary, while we focus on trying to improve moderation and stuff
