@@ -1,0 +1,12 @@
+name = "wg-async-await"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["nikomatsakis", "cramertj"]
+members = ["nikomatsakis", "cramertj"]
+
+[website]
+name = "Async-await Implementation"
+description = "Implementing async-await"
+repo = "https://github.com/rust-lang/compiler-team/blob/master/working-groups/async-await"

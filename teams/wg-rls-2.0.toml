@@ -1,0 +1,12 @@
+name = "wg-rls-2.0"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["matklad"]
+members = ["matklad"]
+
+[website]
+name = "RLS 2.0"
+description = "Experimenting with a new compiler architecture tailored for IDEs"
+repo = "https://github.com/rust-lang/compiler-team/blob/master/working-groups/rls-2.0"

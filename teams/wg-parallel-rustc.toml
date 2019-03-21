@@ -1,0 +1,12 @@
+name = "wg-parallel-rustc"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["Zoxc", "michaelwoerister"]
+members = ["Zoxc", "michaelwoerister"]
+
+[website]
+name = "Parallel rustc"
+description = "Making parallel compilation the default for rustc"
+repo = "https://github.com/rust-lang/compiler-team/tree/master/working-groups/parallel-rustc"

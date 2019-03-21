@@ -1,0 +1,12 @@
+name = "wg-llvm"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["nagisa"]
+members = ["nagisa"]
+
+[website]
+name = "LLVM"
+description = "Working with LLVM upstream to represent Rust in its development"
+repo = "https://github.com/rust-lang/compiler-team/blob/master/working-groups/llvm"

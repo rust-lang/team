@@ -1,0 +1,12 @@
+name = "wg-self-profile"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["michaelwoerister", "wesleywiser"]
+members = ["michaelwoerister", "wesleywiser"]
+
+[website]
+name = "Self-Profile"
+description = "Improving the -Z self-profile feature"
+repo = "https://github.com/rust-lang/compiler-team/blob/master/working-groups/self-profile"

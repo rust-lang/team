@@ -1,0 +1,12 @@
+name = "wg-rfc-2229"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["nikomatsakis", "blitzerr"]
+members = ["nikomatsakis", "blitzerr"]
+
+[website]
+name = "RFC 2229"
+description = "Make a closure capture individual fields of the variable rather than the entire composite variable"
+repo = "https://github.com/rust-lang/compiler-team/blob/master/working-groups/rfc-2229"

@@ -1,0 +1,12 @@
+name = "wg-meta"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["nikomatsakis", "davidtwco", "spastorino"]
+members = ["nikomatsakis", "davidtwco", "spastorino"]
+
+[website]
+name = "Meta"
+description = "How compiler team organizes itself"
+repo = "https://github.com/rust-lang/compiler-team/blob/master/working-groups/meta"
