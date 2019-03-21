@@ -11,6 +11,7 @@ members = [
     "joshtriplett",
     "ishitatsuyuki",
     "steveklabnik",
+    "pietroalbini",
 ]
 
 [website]
@@ -26,6 +27,7 @@ extra-people = [
     "carols10cents",
     "ashleygwilliams",
     "sgrif",
+    "pietroalbini",
 ]
 
 [[lists]]
@@ -35,6 +37,7 @@ extra-people = [
     "carols10cents",
     "ashleygwilliams",
     "sgrif",
+    "pietroalbini",
 ]
 
 [[lists]]
