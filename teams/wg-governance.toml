@@ -1,0 +1,24 @@
+name = "wg-governance"
+subteamof = "core"
+wg = true
+
+[people]
+leads = ["skade"]
+members = [
+    # Need to add Nell Shamrell to the people dir first
+    # Need to add Benjamin Kampmann to the people dir first
+    "mgattozzi",
+    "arshiamufti",
+    "nikomatsakis",
+    "jonathandturner",
+    "Manishearth",
+]
+
+[[lists]]
+address = "governance@rust-lang.org"
+extra-people = []
+
+[website]
+name = "Governance Working Group"
+description = "Working on improving Rust Governance"
+repo = "https://github.com/rust-lang/wg-governance"
