@@ -1,0 +1,16 @@
+name = "mods-discourse"
+subteam-of = "mods"
+
+[people]
+leads = []
+members = [
+    "notriddle",
+    "mbrubeck",
+]
+
+[website]
+name = "Discourse moderators"
+description = "Moderating users.rust-lang.org and internals.rust-lang.org"
+
+[[lists]]
+address = "discourse-mods@rust-lang.org"

@@ -1,0 +1,20 @@
+name = "mods-discord"
+subteam-of = "mods"
+
+[people]
+leads = []
+members = [
+    "komaeda",
+    "Centril",
+    "Khionu",
+    "sgrif",
+    "technetos",
+    "pietroalbini",
+]
+
+[website]
+name = "Discord moderators"
+description = "Moderating the Discord server"
+
+[[lists]]
+address = "discord-mods@rust-lang.org"
