@@ -1,5 +1,5 @@
 name = "wg-governance"
-subteamof = "core"
+subteam-of = "core"
 wg = true
 
 [people]
