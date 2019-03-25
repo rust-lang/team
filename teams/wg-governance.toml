@@ -5,8 +5,9 @@ wg = true
 [people]
 leads = ["skade"]
 members = [
-    # Need to add Nell Shamrell to the people dir first
-    # Need to add Benjamin Kampmann to the people dir first
+    "skade",
+    "gnunicorn",
+    "nellshamrell",
     "mgattozzi",
     "arshiamufti",
     "nikomatsakis",
