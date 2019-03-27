@@ -1,0 +1,25 @@
+name = "wg-governance"
+subteam-of = "core"
+wg = true
+
+[people]
+leads = ["skade"]
+members = [
+    "skade",
+    "gnunicorn",
+    "nellshamrell",
+    "mgattozzi",
+    "arshiamufti",
+    "nikomatsakis",
+    "jonathandturner",
+    "Manishearth",
+]
+
+[[lists]]
+address = "governance@rust-lang.org"
+extra-people = []
+
+[website]
+name = "Governance Working Group"
+description = "Working on improving Rust Governance"
+repo = "https://github.com/rust-lang/wg-governance"
