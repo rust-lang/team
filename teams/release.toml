@@ -22,7 +22,8 @@ members = [
 
 [permissions]
 crater = true
-bors.rust.try = true
+perf = true
+bors.rust.review = true
 
 [website]
 name = "Release team"
