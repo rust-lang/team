@@ -1,0 +1,13 @@
+name = "rust-by-example"
+subteam-of = "docs"
+
+[people]
+leads = ["steveklabnik"]
+members = [
+    "steveklabnik",
+    "marioidival",
+]
+
+[website]
+name = "Rust by Example team"
+description = "maintaining and updating Rust By Example"
