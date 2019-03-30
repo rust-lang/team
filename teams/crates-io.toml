@@ -14,6 +14,11 @@ members = [
     "pietroalbini",
 ]
 
+[rfcbot]
+label = "T-crates-io"
+name = "Crates.io"
+ping = "rust-lang/crates-io"
+
 [website]
 name = "Crates.io team"
 description = "management of operations, development, and policies for crates.io"

@@ -22,6 +22,11 @@ crater = true
 bors.rust.review = true
 bors.crater.review = true
 
+[rfcbot]
+label = "T-infra"
+name = "Infrastructure"
+ping = "rust-lang/infra"
+
 [website]
 name = "Infrastructure team"
 description = "infrastructure supporting the Rust project itself: CI, releases, bots, metrics"

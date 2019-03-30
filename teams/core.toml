@@ -17,6 +17,11 @@ members = [
 [permissions]
 bors.rust.review = true
 
+[rfcbot]
+label = "T-core"
+name = "Core"
+ping = "rust-lang/core"
+
 [website]
 name = "Core team"
 description = "Direction of the project, subteam leadership, cross-cutting concerns."

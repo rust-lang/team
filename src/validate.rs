@@ -18,6 +18,7 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_discord_name,
     validate_duplicate_permissions,
     validate_permissions,
+    validate_rfcbot_labels,
 ];
 
 pub(crate) fn validate(data: &Data) -> Result<(), Error> {
@@ -280,6 +281,19 @@ fn validate_permissions(data: &Data, errors: &mut Vec<String>) {
         person
             .permissions()
             .validate(format!("user `{}`", person.github()))?;
+        Ok(())
+    });
+}
+
+/// Ensure there are no duplicate rfcbot labels
+fn validate_rfcbot_labels(data: &Data, errors: &mut Vec<String>) {
+    let mut labels = HashSet::new();
+    wrapper(data.teams(), errors, move |team, errors| {
+        if let Some(rfcbot) = team.rfcbot_data() {
+            if !labels.insert(rfcbot.label.clone()) {
+                errors.push(format!("duplicate rfcbot label: {}", rfcbot.label));
+            }
+        }
         Ok(())
     });
 }

@@ -25,6 +25,11 @@ crater = true
 perf = true
 bors.rust.review = true
 
+[rfcbot]
+label = "T-release"
+name = "Release"
+ping = "rust-lang/release"
+
 [website]
 name = "Release team"
 description = "tracking regressions, stabilizations, and producing Rust releases"
