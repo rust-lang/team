@@ -18,6 +18,11 @@ members = [
 perf = true
 bors.rust.review = true
 
+[rfcbot]
+label = "T-lang"
+name = "Language"
+ping = "rust-lang/lang"
+
 [website]
 name = "Language team"
 description = "designing new language features"

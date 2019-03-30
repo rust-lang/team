@@ -4,6 +4,11 @@ name = "devtools"
 leads = ["killercup", "Manishearth"]
 members = ["killercup", "Manishearth", "Xanewok", "fitzgen", "GuillaumeGomez", "oli-obk", "dwijnand"]
 
+[rfcbot]
+label = "T-dev-tools"
+name = "Dev tols"
+ping = "rust-lang/dev-tools"
+
 [website]
 page = "dev-tools"
 name = "Dev tools team"

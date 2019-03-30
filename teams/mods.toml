@@ -10,6 +10,11 @@ members = [
     "matthieu-m",
 ]
 
+[rfcbot]
+label = "T-moderation"
+name = "Moderation"
+ping = "rust-lang/moderation"
+
 [website]
 page = "moderation"
 name = "Moderation team"

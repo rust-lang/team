@@ -14,6 +14,11 @@ members = [
 [permissions]
 bors.rust.review = true
 
+[rfcbot]
+label = "T-doc"
+name = "Documentation"
+ping = "rust-lang/docs"
+
 [website]
 page = "documentation"
 name = "Documentation team"

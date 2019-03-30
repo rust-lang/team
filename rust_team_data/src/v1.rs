@@ -64,3 +64,15 @@ pub struct Lists {
 pub struct Permission {
     pub github_users: Vec<String>,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Rfcbot {
+    pub teams: IndexMap<String, RfcbotTeam>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RfcbotTeam {
+    pub name: String,
+    pub ping: String,
+    pub members: Vec<String>,
+}

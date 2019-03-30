@@ -20,6 +20,11 @@ perf = true
 crater = true
 bors.rust.review = true
 
+[rfcbot]
+label = "T-libs"
+name = "Libraries"
+ping = "rust-lang/libs"
+
 [website]
 page = "library"
 name = "Library team"

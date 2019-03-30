@@ -103,6 +103,7 @@ pub(crate) struct Team {
     people: TeamPeople,
     #[serde(default)]
     permissions: Permissions,
+    rfcbot: Option<RfcbotData>,
     website: Option<WebsiteData>,
     #[serde(default)]
     lists: Vec<TeamList>,
@@ -123,6 +124,10 @@ impl Team {
 
     pub(crate) fn leads(&self) -> HashSet<&str> {
         self.people.leads.iter().map(|s| s.as_str()).collect()
+    }
+
+    pub(crate) fn rfcbot_data(&self) -> Option<&RfcbotData> {
+        self.rfcbot.as_ref()
     }
 
     pub(crate) fn website_data(&self) -> Option<&WebsiteData> {
@@ -216,6 +221,14 @@ struct TeamPeople {
     include_wg_leads: bool,
     #[serde(default = "default_false")]
     include_all_team_members: bool,
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+pub(crate) struct RfcbotData {
+    pub(crate) label: String,
+    pub(crate) name: String,
+    pub(crate) ping: String,
 }
 
 pub(crate) struct DiscordInvite<'a> {

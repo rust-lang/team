@@ -14,6 +14,11 @@ members = [
 crater = true
 bors.rust.review = true
 
+[rfcbot]
+label = "T-rustdoc"
+name = "Rustdoc"
+ping = "rust-lang/rustdoc"
+
 [website]
 name = "Rustdoc team"
 description = "Documentation tools including Rustdoc and docs.rs"

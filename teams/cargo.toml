@@ -17,6 +17,11 @@ members = [
 [permissions]
 bors.cargo.review = true
 
+[rfcbot]
+label = "T-cargo"
+name = "Cargo"
+ping = "rust-lang/cargo"
+
 [website]
 name = "Cargo team"
 description = "design and implementation of Cargo"

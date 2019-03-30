@@ -21,6 +21,11 @@ perf = true
 crater = true
 bors.rust.review = true
 
+[rfcbot]
+label = "T-compiler"
+name = "Compiler"
+ping = "rust-lang/compiler"
+
 [website]
 name = "Compiler team"
 description = "compiler internals, optimizations"

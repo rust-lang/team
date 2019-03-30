@@ -25,6 +25,7 @@ impl<'a> Generator<'a> {
         self.generate_teams()?;
         self.generate_lists()?;
         self.generate_permissions()?;
+        self.generate_rfcbot()?;
         Ok(())
     }
 
@@ -109,6 +110,33 @@ impl<'a> Generator<'a> {
                 &v1::Permission { github_users },
             )?;
         }
+        Ok(())
+    }
+
+    fn generate_rfcbot(&self) -> Result<(), Error> {
+        let mut teams = IndexMap::new();
+
+        for team in self.data.teams() {
+            if let Some(rfcbot) = team.rfcbot_data() {
+                let mut members = team
+                    .members(&self.data)?
+                    .into_iter()
+                    .map(|s| s.to_string())
+                    .collect::<Vec<_>>();
+                members.sort();
+                teams.insert(
+                    rfcbot.label.clone(),
+                    v1::RfcbotTeam {
+                        name: rfcbot.name.clone(),
+                        ping: rfcbot.ping.clone(),
+                        members,
+                    },
+                );
+            }
+        }
+
+        teams.sort_keys();
+        self.add("v1/rfcbot.json", &v1::Rfcbot { teams })?;
         Ok(())
     }
 
