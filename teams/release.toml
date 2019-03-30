@@ -24,6 +24,11 @@ members = [
 crater = true
 bors.rust.try = true
 
+[rfcbot]
+label = "T-release"
+name = "Release"
+ping = "rust-lang/release"
+
 [website]
 name = "Release team"
 description = "tracking regressions, stabilizations, and producing Rust releases"
