@@ -4,7 +4,6 @@ subteam-of = "operations"
 [people]
 leads = ["Mark-Simulacrum"]
 members = [
-    "Aaronepower",
     "alexcrichton",
     "ArazAbishov",
     "BatmanAoD",
@@ -18,6 +17,7 @@ members = [
     "sgrif",
     "stokhos",
     "jonas-schievink",
+    "XAMPPRocky",
 ]
 
 [permissions]

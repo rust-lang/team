@@ -4,13 +4,13 @@ wg = true
 [people]
 leads = []
 members = [
-    "Aaronepower",
     "codesections",
     "Dylan-DPC",
     "epage",
     "killercup",
     "matthiasbeyer",
     "spacekookie",
+    "XAMPPRocky",
     "yoshuawuyts",
 ]
 
