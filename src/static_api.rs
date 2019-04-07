@@ -122,6 +122,7 @@ impl<'a> Generator<'a> {
                     .members(&self.data)?
                     .into_iter()
                     .map(|s| s.to_string())
+                    .filter(|member| !rfcbot.exclude_members.contains(&member))
                     .collect::<Vec<_>>();
                 members.sort();
                 teams.insert(

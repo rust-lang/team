@@ -19,6 +19,7 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_duplicate_permissions,
     validate_permissions,
     validate_rfcbot_labels,
+    validate_rfcbot_exclude_members,
 ];
 
 pub(crate) fn validate(data: &Data) -> Result<(), Error> {
@@ -293,6 +294,34 @@ fn validate_rfcbot_labels(data: &Data, errors: &mut Vec<String>) {
             if !labels.insert(rfcbot.label.clone()) {
                 errors.push(format!("duplicate rfcbot label: {}", rfcbot.label));
             }
+        }
+        Ok(())
+    });
+}
+
+/// Ensure rfcbot's exclude-members only contains not duplicated team members
+fn validate_rfcbot_exclude_members(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, move |team, errors| {
+        if let Some(rfcbot) = team.rfcbot_data() {
+            let mut exclude = HashSet::new();
+            let members = team.members(data)?;
+            wrapper(rfcbot.exclude_members.iter(), errors, move |member, _| {
+                if !exclude.insert(member) {
+                    bail!(
+                        "duplicate member in `{}` rfcbot.exclude-members: {}",
+                        team.name(),
+                        member
+                    );
+                }
+                if !members.contains(member.as_str()) {
+                    bail!(
+                        "person `{}` is not a member of team `{}` (in rfcbot.exclude-members)",
+                        member,
+                        team.name()
+                    );
+                }
+                Ok(())
+            });
         }
         Ok(())
     });
