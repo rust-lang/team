@@ -229,6 +229,8 @@ pub(crate) struct RfcbotData {
     pub(crate) label: String,
     pub(crate) name: String,
     pub(crate) ping: String,
+    #[serde(default)]
+    pub(crate) exclude_members: Vec<String>,
 }
 
 pub(crate) struct DiscordInvite<'a> {

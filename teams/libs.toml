@@ -24,6 +24,11 @@ bors.rust.review = true
 label = "T-libs"
 name = "Libraries"
 ping = "rust-lang/libs"
+exclude-members = [
+    "BurntSushi",
+    "KodrAus",
+    "aturon",
+]
 
 [website]
 page = "library"
