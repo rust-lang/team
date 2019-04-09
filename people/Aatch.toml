@@ -2,5 +2,3 @@ name = "James Miller"
 github = "Aatch"
 email = "james@aatch.net"
 
-[permissions]
-bors.rust.review = true

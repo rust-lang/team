@@ -1,5 +1,3 @@
 name = "vadimcn"
 github = "vadimcn"
 
-[permissions]
-bors.rust.review = true

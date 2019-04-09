@@ -2,5 +2,3 @@ name = "Brian Koropoff"
 github = "bkoropoff"
 email = "bkoropoff@gmail.com"
 
-[permissions]
-bors.rust.review = true

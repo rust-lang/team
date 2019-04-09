@@ -3,5 +3,3 @@ github = "jonathandturner"
 irc = "jntrnr"
 email = "jonathan.d.turner@gmail.com"
 
-[permissions]
-bors.rust.review = true

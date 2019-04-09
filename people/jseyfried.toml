@@ -3,5 +3,3 @@ github = "jseyfried"
 irc = "jseyfried"
 email = "jeffrey.seyfried@gmail.com"
 
-[permissions]
-bors.rust.review = true
