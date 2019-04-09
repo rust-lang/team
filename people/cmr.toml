@@ -1,5 +1,0 @@
-name = "Corey Richardson"
-github = "cmr"
-
-[permissions]
-bors.rust.review = true

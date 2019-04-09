@@ -1,5 +1,0 @@
-name = "Flavio Percoco"
-github = "flaper87"
-
-[permissions]
-bors.rust.review = true

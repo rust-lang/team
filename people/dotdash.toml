@@ -3,5 +3,3 @@ github = "dotdash"
 irc = "doener"
 email = "bsteinbr@gmail.com"
 
-[permissions]
-bors.rust.review = true

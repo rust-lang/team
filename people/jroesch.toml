@@ -1,5 +1,0 @@
-name = "Jared Roesch"
-github = "jroesch"
-
-[permissions]
-bors.rust.review = true

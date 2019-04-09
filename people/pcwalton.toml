@@ -2,5 +2,3 @@ name = "Patrick Walton"
 github = "pcwalton"
 email = "pcwalton@mimiga.net"
 
-[permissions]
-bors.rust.review = true
