@@ -2,7 +2,7 @@ name = "devtools"
 
 [people]
 leads = ["killercup", "Manishearth"]
-members = ["killercup", "Manishearth", "Xanewok", "fitzgen", "GuillaumeGomez", "oli-obk", "dwijnand"]
+members = ["killercup", "Manishearth", "Xanewok", "fitzgen", "GuillaumeGomez", "oli-obk"]
 
 [rfcbot]
 label = "T-dev-tools"

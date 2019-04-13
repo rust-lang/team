@@ -5,7 +5,6 @@ subteam-of = "devtools"
 leads = ["nrc"]
 members = [
     "alexcrichton",
-    "dwijnand",
     "Eh2406",
     "ehuss",
     "joshtriplett",
