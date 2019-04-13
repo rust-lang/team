@@ -12,6 +12,7 @@ members = [
     "brson",
     "bstrie",
     "dotdash",
+    "dwijnand",
     "edunham",
     "erickt",
     "huonw",

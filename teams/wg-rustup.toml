@@ -5,13 +5,11 @@ wg = true
 [people]
 leads = [
     "alexcrichton",
-    "dwijnand",
     "kinnison",
     "nrc",
 ]
 members = [
     "alexcrichton",
-    "dwijnand",
     "kinnison",
     "nrc",
 ]
