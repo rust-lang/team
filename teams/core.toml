@@ -9,8 +9,8 @@ members = [
     "ashleygwilliams",
     "carols10cents",
     "nikomatsakis",
+    "nrc",
     "steveklabnik",
-    "wycats",
     "Manishearth",
 ]
 
@@ -45,7 +45,4 @@ address = "legal@crates.io"
 [[lists]]
 address = "trademark@rust-lang.org"
 include-team-members = false
-extra-people = [
-    "aturon",
-    "nikomatsakis",
-]
+extra-people = ["nikomatsakis"]
