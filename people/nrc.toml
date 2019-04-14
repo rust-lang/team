@@ -3,6 +3,5 @@ github = "nrc"
 email = "nrc@ncameron.org"
 
 [permissions]
-bors.rust.review = true
 bors.rustup_rs.review = true
 bors.rls.review = true
