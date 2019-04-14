@@ -2,7 +2,7 @@ name = "cargo"
 subteam-of = "devtools"
 
 [people]
-leads = ["nrc"]
+leads = ["nrc", "ehuss"]
 members = [
     "alexcrichton",
     "Eh2406",
@@ -10,7 +10,6 @@ members = [
     "joshtriplett",
     "nrc",
     "withoutboats",
-    "wycats",
 ]
 
 [permissions]
