@@ -32,6 +32,9 @@ repo = "http://github.com/rust-lang/compiler-team"
 description = "compiler internals, optimizations"
 
 [[lists]]
+address = "compiler-private@rust-lang.org"
+
+[[lists]]
 address = "compiler@rust-lang.org"
 extra-people = [
     "arielb1",
