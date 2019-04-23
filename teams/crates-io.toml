@@ -12,6 +12,8 @@ members = [
     "ishitatsuyuki",
     "steveklabnik",
     "pietroalbini",
+    "locks",
+    "Turbo87",
 ]
 
 [rfcbot]

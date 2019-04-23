@@ -1,0 +1,6 @@
+name = "Ricardo Mendes"
+github = "locks"
+email = "rokusu@gmail.com"
+
+[permissions]
+bors.crates_io.review = true
