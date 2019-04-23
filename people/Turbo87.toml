@@ -1,0 +1,6 @@
+name = "Tobias Bieniek"
+github = "Turbo87"
+email = "tobias.bieniek@gmail.com"
+
+[permissions]
+bors.crates_io.review = true
