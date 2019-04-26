@@ -138,6 +138,7 @@ permissions! {
         compiler_builtins,
         crater,
         crates_io,
+        hashbrown,
         libc,
         regex,
         rls,
