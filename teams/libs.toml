@@ -19,6 +19,7 @@ members = [
 perf = true
 crater = true
 bors.rust.review = true
+bors.hashbrown.review = true
 
 [rfcbot]
 label = "T-libs"
