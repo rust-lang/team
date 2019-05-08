@@ -6,6 +6,9 @@ wg = true
 leads = ["michaelwoerister", "wesleywiser"]
 members = ["michaelwoerister", "wesleywiser"]
 
+[permissions]
+perf = true
+
 [website]
 name = "Self-Profile"
 description = "Improving the -Z self-profile feature"
