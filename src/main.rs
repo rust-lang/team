@@ -1,4 +1,4 @@
-#![allow(clippy::new_ret_no_self)]
+#![allow(clippy::new_ret_no_self, clippy::redundant_closure)]
 
 mod data;
 #[macro_use]
