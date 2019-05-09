@@ -36,6 +36,7 @@ address = "compiler-private@rust-lang.org"
 
 [[lists]]
 address = "compiler@rust-lang.org"
+extra-teams = ["compiler-contributors"]
 extra-people = [
     "arielb1",
     "jseyfried",
@@ -43,6 +44,7 @@ extra-people = [
 
 [[lists]]
 address = "compiler-team@rust-lang.org"
+extra-teams = ["compiler-contributors"]
 extra-people = [
     "arielb1",
     "jseyfried",
