@@ -7,6 +7,7 @@ members = [
   "lqd",
   "matklad",
   "matthewjasper",
+  "nikic",
   "nnethercote",
   "scalexm",
   "spastorino",
