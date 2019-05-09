@@ -3,17 +3,17 @@ name = "compiler-contributors"
 [people]
 leads = []
 members = [
-  "spastorino",
-  "matthewjasper",
-  "wesleywiser",
-  "scalexm",
-  "lqd",
-  "tmandry",
-  "zackmdavis",
-  "nnethercote",
-  "xanewok",
-  "matklad",
   "flodiebold",
+  "lqd",
+  "matklad",
+  "matthewjasper",
+  "nnethercote",
+  "scalexm",
+  "spastorino",
+  "tmandry",
+  "wesleywiser",
+  "xanewok",
+  "zackmdavis",
 ]
 
 [permissions]
