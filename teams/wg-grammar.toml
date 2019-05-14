@@ -4,7 +4,11 @@ wg = true
 
 [people]
 leads = ["Centril", "qmx"]
-members = ["Centril", "qmx"]
+members = [
+    "CAD97",
+    "Centril",
+    "qmx",
+]
 
 [website]
 name = "Grammar"
