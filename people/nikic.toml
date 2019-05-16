@@ -1,5 +1,2 @@
 name = "Nikita Popov"
 github = "nikic"
-
-[permissions]
-bors.rust.review = true
