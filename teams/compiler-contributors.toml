@@ -1,4 +1,5 @@
 name = "compiler-contributors"
+subteam-of = "compiler"
 
 [people]
 leads = []
