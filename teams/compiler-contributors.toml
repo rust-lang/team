@@ -26,4 +26,4 @@ bors.rust.review = true
 [website]
 name = "Compiler team contributors"
 repo = "http://github.com/rust-lang/compiler-team"
-
+description = "folks who contribute on a regular basis"
