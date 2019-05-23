@@ -82,8 +82,8 @@ fn run() -> Result<(), Error> {
             for team in data.teams() {
                 if let Some(ref website) = team.website_data() {
                     let name = team.name();
-                    println!("governance-{}-name = {}", name, website.name());
-                    println!("governance-{}-description = {}\n", name, website.description());
+                    println!("governance-team-{}-name = {}", name, website.name());
+                    println!("governance-team-{}-description = {}\n", name, website.description());
                 }
             }
         }
