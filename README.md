@@ -68,6 +68,15 @@ You can get a list of all the users with a permission:
 $ cargo run dump-permission perf
 ```
 
+
+You can generate [www.rust-lang.org](https://github.com/rust-lang/www.rust-lang.org)'s locales/en-US/tools.ftl file by running
+
+```
+$ cargo run dump-website
+```
+
+The website will automatically load new teams added here, however they cannot be translated unless `tools.ftl` is also updated.
+
 ### Building the static API
 
 You can build locally the content of `https://team-api.infra.rust-lang.org/v1/`

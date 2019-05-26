@@ -20,6 +20,7 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_permissions,
     validate_rfcbot_labels,
     validate_rfcbot_exclude_members,
+    validate_team_names,
 ];
 
 pub(crate) fn validate(data: &Data) -> Result<(), Error> {
@@ -322,6 +323,30 @@ fn validate_rfcbot_exclude_members(data: &Data, errors: &mut Vec<String>) {
                 }
                 Ok(())
             });
+        }
+        Ok(())
+    });
+}
+
+/// Ensure team names are alphanumeric + `-`
+fn validate_team_names(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, _| {
+        if !team.name().chars().all(|c| c.is_alphanumeric() || c == '-') {
+            bail!(
+                "team name `{}` can only be alphanumeric with dashes",
+                team.name()
+            );
+        }
+        match (team.is_wg() == team.name().starts_with("wg-"), team.is_wg()) {
+            (false, true) => bail!(
+                "working group `{}`'s name doesn't start with wg-",
+                team.name()
+            ),
+            (false, false) => bail!(
+                "team `{}` seems like a working group but has `wg = false`",
+                team.name()
+            ),
+            (true, _) => {}
         }
         Ok(())
     });
