@@ -1,5 +1,3 @@
 name = "Nikita Popov"
 github = "nikic"
-
-[permissions]
-bors.rust.review = true
+email = "nikita.ppv@gmail.com"

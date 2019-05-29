@@ -1,5 +1,3 @@
 name = "Zack M. Davis"
 github = "zackmdavis"
-
-[permissions]
-bors.rust.review = true
+email = false

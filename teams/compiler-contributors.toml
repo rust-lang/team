@@ -1,0 +1,30 @@
+name = "compiler-contributors"
+subteam-of = "compiler"
+
+[people]
+leads = []
+members = [
+  "davidtwco",
+  "flodiebold",
+  "lqd",
+  "matklad",
+  "matthewjasper",
+  "nikic",
+  "nnethercote",
+  "scalexm",
+  "spastorino",
+  "tmandry",
+  "wesleywiser",
+  "Xanewok",
+  "zackmdavis",
+]
+
+[permissions]
+perf = true
+crater = true
+bors.rust.review = true
+
+[website]
+name = "Compiler team contributors"
+repo = "http://github.com/rust-lang/compiler-team"
+description = "folks who contribute on a regular basis"

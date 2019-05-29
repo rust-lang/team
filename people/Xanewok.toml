@@ -3,6 +3,4 @@ github = "Xanewok"
 email = "xanewok@gmail.com"
 
 [permissions]
-perf = true
-bors.rust.review = true
 bors.rls.review = true

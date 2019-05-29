@@ -1,6 +1,3 @@
 name = "Nicholas Nethercote"
 github = "nnethercote"
-
-[permissions]
-perf = true
-bors.rust.review = true
+email = "n.nethercote@gmail.com"
