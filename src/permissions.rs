@@ -139,6 +139,7 @@ permissions! {
         crater,
         crates_io,
         hashbrown,
+        miri,
         libc,
         regex,
         rls,
