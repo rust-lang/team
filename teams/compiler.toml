@@ -20,6 +20,7 @@ members = [
 perf = true
 crater = true
 bors.rust.review = true
+bors.miri.review = true
 
 [rfcbot]
 label = "T-compiler"
