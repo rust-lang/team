@@ -12,7 +12,6 @@ address = "wasm@rust-lang.org"
 extra-people = [
     "alexcrichton",
     "aturon",
-    "mgattozzi",
 ]
 
 [website]
