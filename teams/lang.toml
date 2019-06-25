@@ -4,7 +4,6 @@ name = "lang"
 leads = ["nikomatsakis"]
 members = [
     "Centril",
-    "aturon",
     "cramertj",
     "eddyb",
     "joshtriplett",
