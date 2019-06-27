@@ -31,3 +31,11 @@ extra-teams = ["reference"]
 [[lists]]
 address = "doc-team@rust-lang.org"
 extra-teams = ["reference", "rust-by-example"]
+
+[[lists]]
+address = "help@docs.rs"
+include-team-members = false
+extra-people = [
+    "QuietMisdreavus",
+    "onur",
+]

@@ -1,4 +1,5 @@
 allowed-mailing-lists-domains = [
     "rust-lang.org",
     "crates.io",
+    "docs.rs",
 ]
