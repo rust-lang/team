@@ -47,7 +47,6 @@ address = "craterbot@rust-lang.org"
 address = "admin@rust-lang.org"
 include-team-members = false
 extra-people = [
-    "aturon",
     "alexcrichton",
 ]
 
@@ -55,7 +54,6 @@ extra-people = [
 address = "rust-key@rust-lang.org"
 include-team-members = false
 extra-people = [
-    "aturon",
     "alexcrichton",
 ]
 
