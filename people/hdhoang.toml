@@ -1,6 +1,3 @@
 name = "Hoàng Đức Hiếu"
 github = "hdhoang"
 email = "2hdhoang@gmail.com"
-
-[permissions]
-bors.compiler_builtins.review = false

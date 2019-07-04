@@ -1,6 +1,3 @@
 name = "Yuki Okushi"
 github = "JohnTitor"
 email = "huyuumi.dev@gmail.com"
-
-[permissions]
-bors.compiler_builtins.review = false
