@@ -1,0 +1,6 @@
+name = "Sonia"
+github = "soniasingla"
+email = "soniasingla.1812@gmail.com"
+
+[permissions]
+bors.compiler_builtins.review = false

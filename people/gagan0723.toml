@@ -1,0 +1,6 @@
+name = "Gagandeep Singh"
+github = "gagan0723"
+email = "gaganrattan9@gmail.com"
+
+[permissions]
+bors.compiler_builtins.review = false

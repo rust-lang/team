@@ -1,0 +1,6 @@
+name = "Luis Manarang"
+github = "ProgrammaticNajel"
+email = "programmaticnajel@gmail.com"
+
+[permissions]
+bors.compiler_builtins.review = false

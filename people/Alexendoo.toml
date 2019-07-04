@@ -1,0 +1,6 @@
+name = "Alex Macleod"
+github = "Alexendoo"
+email = "alex@macleod.io"
+
+[permissions]
+bors.compiler_builtins.review = false

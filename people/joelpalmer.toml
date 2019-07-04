@@ -1,0 +1,6 @@
+name = "Joel Parmer"
+github = "joelpalmer"
+email = "joel@joel.systems"
+
+[permissions]
+bors.compiler_builtins.review = false

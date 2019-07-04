@@ -1,0 +1,6 @@
+name = "Chase Wilson"
+github = "Kixiron"
+email = "chase.h.wilson3@gmail.com"
+
+[permissions]
+bors.compiler_builtins.review = false

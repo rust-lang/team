@@ -1,0 +1,29 @@
+name = "wg-triage"
+subteam-of = "release"
+wg = true
+
+[people]
+leads = []
+members = [
+    "Dylan-DPC",
+    "fairingrey",
+    "gagan0723",
+    "JohnTitor",
+    "Kixiron",
+    "joelpalmer",
+    "hdhoang",
+    "johncsimon",
+    "edmilsonefes",
+    "rholderfield",
+    "ProgrammaticNajel",
+    "Alexendoo",
+    "soniasingla",
+    "championshuttler",
+    "JuanPotato"
+]
+
+[website]
+name = "Triage Working Group"
+description = "Triage repositories under rust-lang organisation"
+discord-invite = "https://discord.gg/e6Q3cvu"
+discord-name = "#triage-wg"
