@@ -3,7 +3,7 @@ subteam-of = "release"
 wg = true
 
 [people]
-leads = []
+leads = ["Dylan-DPC"]
 members = [
     "Dylan-DPC",
     "fairingrey",
