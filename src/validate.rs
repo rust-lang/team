@@ -1,8 +1,8 @@
 use crate::data::Data;
 use crate::schema::{Email, Permissions};
-use failure::{bail, ensure, Error};
+use failure::{bail, Error};
 use regex::Regex;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_wg_names,
@@ -64,14 +64,25 @@ fn validate_wg_names(data: &Data, errors: &mut Vec<String>) {
 
 /// Ensure `subteam-of` points to an existing team
 fn validate_subteam_of(data: &Data, errors: &mut Vec<String>) {
-    let team_names: HashSet<_> = data.teams().map(|t| t.name()).collect();
+    let teams: HashMap<_, _> = data
+        .teams()
+        .map(|t| (t.name(), t.subteam_of().is_some()))
+        .collect();
     wrapper(data.teams(), errors, |team, _| {
         if let Some(subteam_of) = team.subteam_of() {
-            ensure!(
-                team_names.contains(subteam_of),
-                "team `{}` doesn't exist",
-                subteam_of
-            );
+            match teams.get(subteam_of) {
+                Some(false) => {}
+                Some(true) => bail!(
+                    "team `{}` can't be a subteam of a subteam (`{}`)",
+                    team.name(),
+                    subteam_of
+                ),
+                None => bail!(
+                    "the parent of team `{}` doesn't exist: `{}`",
+                    team.name(),
+                    subteam_of
+                ),
+            }
         }
         Ok(())
     });
