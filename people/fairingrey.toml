@@ -1,0 +1,6 @@
+name = "Allen Bui"
+github = "fairingrey"
+email = "allenbui94@gmail.com"
+
+[permissions]
+bors.compiler_builtins.review = false

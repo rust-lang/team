@@ -1,0 +1,6 @@
+name = "Rdmilson Ferreira Da Silva"
+github = "edmilsonefs"
+email = "edmilson.efs@gmail.com"
+
+[permissions]
+bors.compiler_builtins.review = false

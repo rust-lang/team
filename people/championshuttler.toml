@@ -1,0 +1,6 @@
+name = "Shivam Singhal"
+github = "championshuttler"
+email = "shivams2799@gmail.com"
+
+[permissions]
+bors.compiler_builtins.review = false

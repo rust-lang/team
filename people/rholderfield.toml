@@ -1,0 +1,6 @@
+name = "Ryan Holderfield"
+github = "rholderfield"
+email = "raholderfield@gmail.com"
+
+[permissions]
+bors.compiler_builtins.review = false

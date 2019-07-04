@@ -1,0 +1,6 @@
+name = "John Simon"
+github = "johncsimon"
+email = "johncsimon@gmail.com"
+
+[permissions]
+bors.compiler_builtins.review = false
