@@ -1,6 +1,8 @@
 use crate::data::Data;
+use crate::github::GitHubApi;
 use crate::schema::{Email, Permissions};
 use failure::{bail, Error};
+use log::{error, warn};
 use regex::Regex;
 use std::collections::{HashMap, HashSet};
 
@@ -23,6 +25,8 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_team_names,
 ];
 
+static GITHUB_CHECKS: &[fn(&Data, &GitHubApi, &mut Vec<String>)] = &[validate_github_usernames];
+
 pub(crate) fn validate(data: &Data) -> Result<(), Error> {
     let mut errors = Vec::new();
 
@@ -30,12 +34,24 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
         check(data, &mut errors);
     }
 
+    match GitHubApi::new() {
+        Ok(github) => {
+            for check in GITHUB_CHECKS {
+                check(data, &github, &mut errors);
+            }
+        }
+        Err(err) => {
+            warn!("couldn't perform checks relying on the GitHub API, some errors will not be detected");
+            warn!("cause: {}", err);
+        }
+    }
+
     if !errors.is_empty() {
         errors.sort();
         errors.dedup_by(|a, b| a == b);
 
         for err in &errors {
-            eprintln!("validation error: {}", err);
+            error!("validation error: {}", err);
         }
 
         bail!("{} validation errors found", errors.len());
@@ -361,6 +377,24 @@ fn validate_team_names(data: &Data, errors: &mut Vec<String>) {
         }
         Ok(())
     });
+}
+
+/// Ensure there are no misspelled GitHub account names
+fn validate_github_usernames(data: &Data, github: &GitHubApi, errors: &mut Vec<String>) {
+    let people = data
+        .people()
+        .map(|p| (p.github_id(), p))
+        .collect::<HashMap<_, _>>();
+    match github.usernames(&people.keys().cloned().collect::<Vec<_>>()) {
+        Ok(res) => wrapper(res.iter(), errors, |(id, name), _| {
+            let original = people[id].github();
+            if original != name {
+                bail!("user `{}` changed username to `{}`", original, name);
+            }
+            Ok(())
+        }),
+        Err(err) => errors.push(format!("couldn't verify GitHub usernames: {}", err)),
+    }
 }
 
 fn wrapper<T, I, F>(iter: I, errors: &mut Vec<String>, mut func: F)
