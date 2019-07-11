@@ -3,12 +3,14 @@
 mod data;
 #[macro_use]
 mod permissions;
+mod github;
 mod schema;
 mod static_api;
 mod validate;
 
 use crate::data::Data;
 use failure::{err_msg, Error};
+use log::{error, info, warn};
 use std::path::PathBuf;
 use structopt::StructOpt;
 
@@ -17,6 +19,11 @@ use structopt::StructOpt;
 enum Cli {
     #[structopt(name = "check", help = "check if the configuration is correct")]
     Check,
+    #[structopt(
+        name = "add-person",
+        help = "add a new person from their GitHub profile"
+    )]
+    AddPerson { github_name: String },
     #[structopt(name = "static-api", help = "generate the static API")]
     StaticApi { dest: String },
     #[structopt(name = "dump-team", help = "print the members of a team")]
@@ -36,11 +43,19 @@ enum Cli {
 }
 
 fn main() {
-    env_logger::init();
+    let mut env = env_logger::Builder::new();
+    env.default_format_timestamp(false);
+    env.default_format_module_path(false);
+    env.filter_module("rust_team", log::LevelFilter::Info);
+    if let Ok(content) = std::env::var("RUST_LOG") {
+        env.parse(&content);
+    }
+    env.init();
+
     if let Err(e) = run() {
-        eprintln!("error: {}", e);
+        error!("{}", e);
         for e in e.iter_causes() {
-            eprintln!("  cause: {}", e);
+            error!("cause: {}", e);
         }
         std::process::exit(1);
     }
@@ -52,6 +67,44 @@ fn run() -> Result<(), Error> {
     match cli {
         Cli::Check => {
             crate::validate::validate(&data)?;
+        }
+        Cli::AddPerson { ref github_name } => {
+            #[derive(serde::Serialize)]
+            struct PersonToAdd<'a> {
+                name: &'a str,
+                github: &'a str,
+                #[serde(skip_serializing_if = "Option::is_none")]
+                email: Option<&'a str>,
+            }
+
+            let github = github::GitHubApi::new()?;
+            let user = github.user(github_name)?;
+            let github_name = user.login;
+
+            if data.person(&github_name).is_some() {
+                failure::bail!("person already in the repo: {}", github_name);
+            }
+
+            let file = format!("people/{}.toml", github_name);
+            std::fs::write(
+                &file,
+                toml::to_string_pretty(&PersonToAdd {
+                    name: user.name.as_ref().map(|n| n.as_str()).unwrap_or_else(|| {
+                        warn!(
+                            "the person is missing the name on GitHub, defaulting to the username"
+                        );
+                        github_name.as_str()
+                    }),
+                    github: &github_name,
+                    email: user.email.as_ref().map(|e| e.as_str()).or_else(|| {
+                        warn!("the person is missing the email on GitHub, leaving the field empty");
+                        None
+                    }),
+                })?
+                .as_bytes(),
+            )?;
+
+            info!("written data to {}", file);
         }
         Cli::StaticApi { ref dest } => {
             let dest = PathBuf::from(dest);
