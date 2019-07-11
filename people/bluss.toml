@@ -1,5 +1,6 @@
 name = "bluss"
 github = "bluss"
+github-id = 3209739
 
 [permissions]
 bors.rust.review = true
