@@ -46,3 +46,16 @@ address = "legal@crates.io"
 address = "trademark@rust-lang.org"
 include-team-members = false
 extra-people = ["nikomatsakis"]
+
+[[lists]]
+address = "mediation@rust-lang.org"
+include-team-members = false
+extra-people = [
+    "Mark-Simulacrum",
+    "aidanhs",
+    "ashleygwilliams",
+    "nikomatsakis",
+    "nrc",
+    "steveklabnik",
+    "Manishearth",
+]
