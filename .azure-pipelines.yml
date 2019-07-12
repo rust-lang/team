@@ -20,6 +20,9 @@ steps:
 
   - checkout: self
     fetchDepth: 1
+    # Store the GitHub authentication token in the git config. This allows the
+    # next steps to retrieve it.
+    persistCredentials: true
 
   - bash: |
       set -e
@@ -29,7 +32,12 @@ steps:
       rustc -vV
     displayName: Install Rust stable
 
-  - bash: cargo run -- check
+  - bash: |
+      set -euo pipefail
+      # Extract the GitHub authentication token from the git config. The token
+      # will be used to authenticate with the GitHub API.
+      export GITHUB_TOKEN=$(git config -l | grep "\.extraheader=AUTHORIZATION" | awk '{print($3)}' | base64 -d | awk '{split($0,a,":"); print(a[2])}')
+      cargo run -- check --strict
     displayName: Validate the repository contents
 
   - bash: cargo fmt -- --check

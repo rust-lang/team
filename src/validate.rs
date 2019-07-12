@@ -27,7 +27,7 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
 
 static GITHUB_CHECKS: &[fn(&Data, &GitHubApi, &mut Vec<String>)] = &[validate_github_usernames];
 
-pub(crate) fn validate(data: &Data) -> Result<(), Error> {
+pub(crate) fn validate(data: &Data, strict: bool) -> Result<(), Error> {
     let mut errors = Vec::new();
 
     for check in CHECKS {
@@ -41,8 +41,12 @@ pub(crate) fn validate(data: &Data) -> Result<(), Error> {
             }
         }
         Err(err) => {
-            warn!("couldn't perform checks relying on the GitHub API, some errors will not be detected");
-            warn!("cause: {}", err);
+            if strict {
+                return Err(err);
+            } else {
+                warn!("couldn't perform checks relying on the GitHub API, some errors will not be detected");
+                warn!("cause: {}", err);
+            }
         }
     }
 
