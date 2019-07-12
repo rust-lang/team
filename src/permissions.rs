@@ -1,4 +1,5 @@
 use crate::data::Data;
+use crate::schema::Person;
 use failure::{bail, Error};
 use std::collections::HashSet;
 
@@ -149,22 +150,20 @@ permissions! {
     }
 }
 
-pub(crate) fn allowed_github_users(
-    data: &Data,
+pub(crate) fn allowed_people<'a>(
+    data: &'a Data,
     permission: &str,
-) -> Result<HashSet<String>, Error> {
-    let mut github_users = HashSet::new();
+) -> Result<Vec<&'a Person>, Error> {
+    let mut members_with_perms = HashSet::new();
     for team in data.teams() {
         if team.permissions().has(permission) {
             for member in team.members(&data)? {
-                github_users.insert(member.to_string());
+                members_with_perms.insert(member);
             }
         }
     }
-    for person in data.people() {
-        if person.permissions().has(permission) {
-            github_users.insert(person.github().to_string());
-        }
-    }
-    Ok(github_users)
+    Ok(data
+        .people()
+        .filter(|p| members_with_perms.contains(p.github()) || p.permissions().has(permission))
+        .collect())
 }

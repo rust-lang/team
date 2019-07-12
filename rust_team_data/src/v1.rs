@@ -23,6 +23,7 @@ pub struct Team {
 pub struct TeamMember {
     pub name: String,
     pub github: String,
+    pub github_id: usize,
     pub is_lead: bool,
 }
 
@@ -63,6 +64,7 @@ pub struct Lists {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Permission {
     pub github_users: Vec<String>,
+    pub github_ids: Vec<usize>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
