@@ -18,7 +18,10 @@ use structopt::StructOpt;
 #[structopt(name = "team", about = "manage the rust team members")]
 enum Cli {
     #[structopt(name = "check", help = "check if the configuration is correct")]
-    Check,
+    Check {
+        #[structopt(long = "strict", help = "fail if optional checks are not executed")]
+        strict: bool,
+    },
     #[structopt(
         name = "add-person",
         help = "add a new person from their GitHub profile"
@@ -65,8 +68,8 @@ fn run() -> Result<(), Error> {
     let cli = Cli::from_args();
     let data = Data::load()?;
     match cli {
-        Cli::Check => {
-            crate::validate::validate(&data)?;
+        Cli::Check { strict } => {
+            crate::validate::validate(&data, strict)?;
         }
         Cli::AddPerson { ref github_name } => {
             #[derive(serde::Serialize)]
