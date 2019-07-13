@@ -9,7 +9,7 @@ variables:
   - group: secrets
 
 pool:
-  vmImage: ubuntu-18.04
+  vmImage: ubuntu-16.04
 
 steps:
 
