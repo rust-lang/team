@@ -5,8 +5,7 @@ authors = ["Alex Crichton <alex@alexcrichton.com>", "Pietro Albini <pietro@pietr
 edition = '2018'
 
 [dependencies]
-curl = "0.4"
-toml = "0.4"
+toml = "0.5.1"
 failure = "0.1"
 serde = "1"
 serde_derive = "1"
@@ -17,6 +16,8 @@ structopt = "0.2.13"
 regex = "1.0.6"
 rust_team_data = { path = "rust_team_data" }
 indexmap = "1.0.2"
+reqwest = "0.9.18"
+base64 = "0.10.1"
 
 [workspace]
 members = [

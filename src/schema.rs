@@ -38,10 +38,11 @@ pub(crate) enum Email<'a> {
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Person {
     name: String,
     github: String,
+    github_id: usize,
     irc: Option<String>,
     #[serde(default)]
     email: EmailField,
@@ -57,6 +58,10 @@ impl Person {
 
     pub(crate) fn github(&self) -> &str {
         &self.github
+    }
+
+    pub(crate) fn github_id(&self) -> usize {
+        self.github_id
     }
 
     #[allow(unused)]

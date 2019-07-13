@@ -40,6 +40,7 @@ impl<'a> Generator<'a> {
                     members.push(v1::TeamMember {
                         name: person.name().into(),
                         github: (*github_name).into(),
+                        github_id: person.github_id(),
                         is_lead: leads.contains(github_name),
                     });
                 }
@@ -101,13 +102,20 @@ impl<'a> Generator<'a> {
 
     fn generate_permissions(&self) -> Result<(), Error> {
         for perm in Permissions::AVAILABLE {
-            let mut github_users = crate::permissions::allowed_github_users(&self.data, perm)?
-                .into_iter()
+            let allowed = crate::permissions::allowed_people(&self.data, perm)?;
+            let mut github_users = allowed
+                .iter()
+                .map(|p| p.github().to_string())
                 .collect::<Vec<_>>();
+            let mut github_ids = allowed.iter().map(|p| p.github_id()).collect::<Vec<_>>();
             github_users.sort();
+            github_ids.sort();
             self.add(
                 &format!("v1/permissions/{}.json", perm),
-                &v1::Permission { github_users },
+                &v1::Permission {
+                    github_users,
+                    github_ids,
+                },
             )?;
         }
         Ok(())

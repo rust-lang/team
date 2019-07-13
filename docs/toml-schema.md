@@ -8,6 +8,7 @@ The file structure is this:
 ```toml
 name = "John Doe"  # Real name of the person (required)
 github = "johndoe"  # GitHub username of the person (required)
+github-id = 123456  # GitHub ID of the person (required)
 # You can also set `email = false` to explicitly disable the email for the user.
 # This will, for example, avoid adding the person to the mailing lists.
 email = "john@doe.com"  # Email address used for mailing lists (optional)
