@@ -71,7 +71,7 @@ impl GitHubApi {
 
     fn graphql<R, V>(&self, query: &str, variables: V) -> Result<R, Error>
     where
-        R: for<'de> serde::Deserialize<'de>,
+        R: serde::de::DeserializeOwned,
         V: serde::Serialize,
     {
         #[derive(serde::Serialize)]
