@@ -29,16 +29,19 @@ steps:
       rustc -vV
     displayName: Install Rust stable
 
+  - bash: cargo run -- check
+    displayName: Validate the repository contents
+
   - bash: cargo fmt -- --check
     displayName: Run rustfmt
 
   - bash: cargo clippy -- -Dwarnings
     displayName: Run clippy
 
-  - bash: cargo run -- check
-    displayName: Validate the repository contents
-
-  - bash: cargo run -- static-api build
+  - bash: |
+      set -e
+      cargo run -- static-api build
+      echo "team-api.infra.rust-lang.org" > build/CNAME
     displayName: Build the contents of the static API
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
