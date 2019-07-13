@@ -11,6 +11,11 @@ variables:
 pool:
   vmImage: ubuntu-16.04
 
+trigger:
+  - master
+pr:
+  - master
+
 steps:
 
   - checkout: self
@@ -18,11 +23,13 @@ steps:
 
   - bash: |
       set -e
-      curl https://sh.rustup.rs -sSf | sh -s -- -y
-      echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      rustc -vV
+      rustup update stable
+      rustup default stable
+      rustc -vV
     displayName: Install Rust stable
 
-  - bash: cargo fmt --check
+  - bash: cargo fmt -- --check
     displayName: Run rustfmt
 
   - bash: cargo clippy -- -Dwarnings
