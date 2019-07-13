@@ -34,19 +34,17 @@ pub(crate) fn validate(data: &Data, strict: bool) -> Result<(), Error> {
         check(data, &mut errors);
     }
 
-    match GitHubApi::new() {
-        Ok(github) => {
-            for check in GITHUB_CHECKS {
-                check(data, &github, &mut errors);
-            }
+    let github = GitHubApi::new();
+    if let Err(err) = github.require_auth() {
+        if strict {
+            return Err(err);
+        } else {
+            warn!("couldn't perform checks relying on the GitHub API, some errors will not be detected");
+            warn!("cause: {}", err);
         }
-        Err(err) => {
-            if strict {
-                return Err(err);
-            } else {
-                warn!("couldn't perform checks relying on the GitHub API, some errors will not be detected");
-                warn!("cause: {}", err);
-            }
+    } else {
+        for check in GITHUB_CHECKS {
+            check(data, &github, &mut errors);
         }
     }
 

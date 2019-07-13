@@ -80,7 +80,7 @@ fn run() -> Result<(), Error> {
                 email: Option<&'a str>,
             }
 
-            let github = github::GitHubApi::new()?;
+            let github = github::GitHubApi::new();
             let user = github.user(github_name)?;
             let github_name = user.login;
 

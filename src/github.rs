@@ -1,4 +1,4 @@
-use failure::{bail, Error, ResultExt};
+use failure::{bail, Error};
 use reqwest::header::{self, HeaderValue};
 use reqwest::{Client, Method, RequestBuilder};
 use std::borrow::Cow;
@@ -33,29 +33,40 @@ struct GraphNodes<T> {
 
 pub(crate) struct GitHubApi {
     http: Client,
-    token: String,
+    token: Option<String>,
 }
 
 impl GitHubApi {
-    pub(crate) fn new() -> Result<Self, Error> {
-        let token = std::env::var(TOKEN_VAR)
-            .with_context(|_| format!("missing environment variable {}", TOKEN_VAR))?;
-        Ok(GitHubApi {
+    pub(crate) fn new() -> Self {
+        GitHubApi {
             http: Client::new(),
-            token: token.to_string(),
-        })
+            token: std::env::var(TOKEN_VAR).ok(),
+        }
     }
 
-    fn prepare(&self, method: Method, url: &str) -> Result<RequestBuilder, Error> {
+    fn prepare(
+        &self,
+        require_auth: bool,
+        method: Method,
+        url: &str,
+    ) -> Result<RequestBuilder, Error> {
         let url = if url.starts_with("https://") {
             Cow::Borrowed(url)
         } else {
             Cow::Owned(format!("{}{}", API_BASE, url))
         };
-        Ok(self.http.request(method, url.as_ref()).header(
-            header::AUTHORIZATION,
-            HeaderValue::from_str(&format!("token {}", self.token))?,
-        ))
+        if require_auth {
+            self.require_auth()?;
+        }
+
+        let mut req = self.http.request(method, url.as_ref());
+        if let Some(token) = &self.token {
+            req = req.header(
+                header::AUTHORIZATION,
+                HeaderValue::from_str(&format!("token {}", token))?,
+            );
+        }
+        Ok(req)
     }
 
     fn graphql<R, V>(&self, query: &str, variables: V) -> Result<R, Error>
@@ -69,7 +80,7 @@ impl GitHubApi {
             variables: V,
         }
         let res: GraphResult<R> = self
-            .prepare(Method::POST, "graphql")?
+            .prepare(true, Method::POST, "graphql")?
             .json(&Request { query, variables })
             .send()?
             .error_for_status()?
@@ -83,9 +94,16 @@ impl GitHubApi {
         }
     }
 
+    pub(crate) fn require_auth(&self) -> Result<(), Error> {
+        if self.token.is_none() {
+            bail!("missing environment variable {}", TOKEN_VAR);
+        }
+        Ok(())
+    }
+
     pub(crate) fn user(&self, login: &str) -> Result<User, Error> {
         Ok(self
-            .prepare(Method::GET, &format!("users/{}", login))?
+            .prepare(false, Method::GET, &format!("users/{}", login))?
             .send()?
             .error_for_status()?
             .json()?)
