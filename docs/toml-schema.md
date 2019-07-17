@@ -48,7 +48,7 @@ members = [
 # Configure the GitHub integration
 # This is optional, and if missing the team won't be synchronized with GitHub
 [github]
-name = "overlords-team"  # The name of the GitHub team (optional)
+team-name = "overlords-team"  # The name of the GitHub team (optional)
 orgs = ["rust-lang"]  # Organizations to create the team in (required)
 
 # Define the mailing lists used by the team

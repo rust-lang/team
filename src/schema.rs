@@ -223,7 +223,7 @@ impl Team {
     pub(crate) fn github_teams(&self) -> Vec<(&str, &str)> {
         if let Some(github) = &self.github {
             let name = github
-                .name
+                .team_name
                 .as_ref()
                 .map(|n| n.as_str())
                 .unwrap_or(&self.name);
@@ -250,7 +250,7 @@ struct TeamPeople {
 #[derive(serde::Deserialize, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 struct GitHubData {
-    name: Option<String>,
+    team_name: Option<String>,
     orgs: Vec<String>,
 }
 
