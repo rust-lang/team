@@ -23,6 +23,7 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_rfcbot_labels,
     validate_rfcbot_exclude_members,
     validate_team_names,
+    validate_github_teams,
 ];
 
 static GITHUB_CHECKS: &[fn(&Data, &GitHubApi, &mut Vec<String>)] = &[validate_github_usernames];
@@ -377,6 +378,34 @@ fn validate_team_names(data: &Data, errors: &mut Vec<String>) {
             ),
             (true, _) => {}
         }
+        Ok(())
+    });
+}
+
+/// Ensure GitHub teams are unique and in the allowed orgs
+fn validate_github_teams(data: &Data, errors: &mut Vec<String>) {
+    let mut found = HashMap::new();
+    let allowed = data.config().allowed_github_orgs();
+    wrapper(data.teams(), errors, |team, errors| {
+        wrapper(team.github_teams().into_iter(), errors, |(org, name), _| {
+            if !allowed.contains(&*org) {
+                bail!(
+                    "GitHub organization `{}` isn't allowed (in team `{}`)",
+                    org,
+                    team.name()
+                );
+            }
+            if let Some(other) = found.insert((org, name), team.name()) {
+                bail!(
+                    "GitHub team `{}/{}` is defined for both the `{}` and `{}` teams",
+                    org,
+                    name,
+                    team.name(),
+                    other
+                );
+            }
+            Ok(())
+        });
         Ok(())
     });
 }
