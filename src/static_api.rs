@@ -48,6 +48,9 @@ impl<'a> Generator<'a> {
             members.sort_by_key(|member| member.github.to_lowercase());
             members.sort_by_key(|member| !member.is_lead);
 
+            let mut github_teams = team.github_teams();
+            github_teams.sort();
+
             let team_data = v1::Team {
                 name: team.name().into(),
                 kind: if team.is_wg() {
@@ -57,6 +60,16 @@ impl<'a> Generator<'a> {
                 },
                 subteam_of: team.subteam_of().map(|st| st.into()),
                 members,
+                github: Some(v1::TeamGitHub {
+                    teams: github_teams
+                        .iter()
+                        .map(|(org, name)| v1::GitHubTeam {
+                            org: org.to_string(),
+                            name: name.to_string(),
+                        })
+                        .collect::<Vec<_>>(),
+                })
+                .filter(|gh| !gh.teams.is_empty()),
                 website_data: team.website_data().map(|ws| v1::TeamWebsite {
                     name: ws.name().into(),
                     description: ws.description().into(),

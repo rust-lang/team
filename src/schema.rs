@@ -7,11 +7,16 @@ use std::collections::HashSet;
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Config {
     allowed_mailing_lists_domains: HashSet<String>,
+    allowed_github_orgs: HashSet<String>,
 }
 
 impl Config {
     pub(crate) fn allowed_mailing_lists_domains(&self) -> &HashSet<String> {
         &self.allowed_mailing_lists_domains
+    }
+
+    pub(crate) fn allowed_github_orgs(&self) -> &HashSet<String> {
+        &self.allowed_github_orgs
     }
 }
 
@@ -108,6 +113,7 @@ pub(crate) struct Team {
     people: TeamPeople,
     #[serde(default)]
     permissions: Permissions,
+    github: Option<GitHubData>,
     rfcbot: Option<RfcbotData>,
     website: Option<WebsiteData>,
     #[serde(default)]
@@ -213,6 +219,19 @@ impl Team {
     pub(crate) fn permissions(&self) -> &Permissions {
         &self.permissions
     }
+
+    pub(crate) fn github_teams(&self) -> Vec<(&str, &str)> {
+        if let Some(github) = &self.github {
+            let name = github
+                .name
+                .as_ref()
+                .map(|n| n.as_str())
+                .unwrap_or(&self.name);
+            github.orgs.iter().map(|org| (org.as_str(), name)).collect()
+        } else {
+            Vec::new()
+        }
+    }
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
@@ -226,6 +245,13 @@ struct TeamPeople {
     include_wg_leads: bool,
     #[serde(default = "default_false")]
     include_all_team_members: bool,
+}
+
+#[derive(serde::Deserialize, Debug)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+struct GitHubData {
+    name: Option<String>,
+    orgs: Vec<String>,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
