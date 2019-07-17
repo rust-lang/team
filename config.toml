@@ -3,3 +3,8 @@ allowed-mailing-lists-domains = [
     "crates.io",
     "docs.rs",
 ]
+
+allowed-github-orgs = [
+    "rust-lang",
+    "rust-lang-nursery",
+]
