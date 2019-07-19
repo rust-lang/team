@@ -47,16 +47,20 @@ address = "craterbot@rust-lang.org"
 address = "admin@rust-lang.org"
 include-team-members = false
 extra-people = [
-    "aturon",
+    "Mark-Simulacrum",
+    "aidanhs",
     "alexcrichton",
+    "pietroalbini",
 ]
 
 [[lists]]
 address = "rust-key@rust-lang.org"
 include-team-members = false
 extra-people = [
-    "aturon",
+    "Mark-Simulacrum",
+    "aidanhs",
     "alexcrichton",
+    "pietroalbini",
 ]
 
 [[lists]]
@@ -77,7 +81,10 @@ extra-emails = [
 address = "bors@rust-lang.org"
 include-team-members = false
 extra-people = [
+    "Mark-Simulacrum",
+    "aidanhs",
     "alexcrichton",
+    "pietroalbini",
 ]
 
 [[lists]]
