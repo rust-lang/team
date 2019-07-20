@@ -24,6 +24,9 @@ perf = true
 crater = true
 bors.rust.review = true
 
+[github]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
 [website]
 name = "Compiler team contributors"
 repo = "http://github.com/rust-lang/compiler-team"
