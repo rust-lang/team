@@ -15,6 +15,9 @@ members = [
 [permissions]
 bors.cargo.review = true
 
+[github]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
 [rfcbot]
 label = "T-cargo"
 name = "Cargo"
