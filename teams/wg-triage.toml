@@ -28,3 +28,6 @@ name = "Triage Working Group"
 description = "Triage repositories under rust-lang organisation"
 discord-invite = "https://discord.gg/e6Q3cvu"
 discord-name = "#triage-wg"
+
+[github]
+orgs = ["rust-lang"]
