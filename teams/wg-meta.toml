@@ -9,4 +9,4 @@ members = ["nikomatsakis", "davidtwco", "spastorino"]
 [website]
 name = "Meta"
 description = "How compiler team organizes itself"
-repo = "https://github.com/rust-lang/compiler-team/blob/master/working-groups/meta"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/meta/"
