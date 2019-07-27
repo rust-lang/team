@@ -9,4 +9,4 @@ members = ["nikomatsakis"]
 [website]
 name = "Traits"
 description = "Revamping the rustc trait implementation to follow the Chalk approach."
-repo = "https://github.com/rust-lang/compiler-team/tree/master/working-groups/traits"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/traits/"
