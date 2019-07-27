@@ -9,4 +9,4 @@ members = ["nikomatsakis", "pnkfelix"]
 [website]
 name = "Non-Lexical Lifetimes (NLL)"
 description = "Implementing the new MIR-based borrow check and non-lexical lifetimes"
-repo = "https://github.com/rust-lang/compiler-team/tree/master/working-groups/nll"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/nll/"

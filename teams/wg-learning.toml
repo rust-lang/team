@@ -9,4 +9,4 @@ members = ["nikomatsakis", "spastorino"]
 [website]
 name = "Learning"
 description = "Make the compiler easier to learn by ensuring that rustc-guide and api docs are 'complete'"
-repo = "https://github.com/rust-lang/compiler-team/blob/master/working-groups/learning"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/learning/"

@@ -9,4 +9,4 @@ members = ["nikomatsakis", "cramertj"]
 [website]
 name = "Async-await Implementation"
 description = "Implementing async-await"
-repo = "https://github.com/rust-lang/compiler-team/blob/master/working-groups/async-await"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/async-await/"
