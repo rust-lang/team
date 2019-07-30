@@ -1,0 +1,12 @@
+name = "bots"
+
+[people]
+leads = ["bors"]
+members = [
+  "bors",
+  "rust-highfive",
+  "craterbot",
+  "rust-timer",
+  "rfcbot",
+  "rustbot",
+]
