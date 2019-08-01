@@ -9,4 +9,4 @@ members = ["nagisa"]
 [website]
 name = "LLVM"
 description = "Working with LLVM upstream to represent Rust in its development"
-repo = "https://github.com/rust-lang/compiler-team/blob/master/working-groups/llvm"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/llvm/"

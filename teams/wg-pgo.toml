@@ -9,4 +9,4 @@ members = ["michaelwoerister"]
 [website]
 name = "Profile-guided optimization"
 description = "Implementing profile-guided optimization for rustc"
-repo = "https://github.com/rust-lang/compiler-team/blob/master/working-groups/pgo"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/pgo/"

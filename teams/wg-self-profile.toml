@@ -12,4 +12,4 @@ perf = true
 [website]
 name = "Self-Profile"
 description = "Improving the -Z self-profile feature"
-repo = "https://github.com/rust-lang/compiler-team/blob/master/working-groups/self-profile"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/self-profile/"
