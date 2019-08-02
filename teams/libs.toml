@@ -20,6 +20,8 @@ perf = true
 crater = true
 bors.rust.review = true
 bors.hashbrown.review = true
+bors.libc.review = true
+bors.stdarch.review = true
 
 [rfcbot]
 label = "T-libs"
