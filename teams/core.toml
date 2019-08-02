@@ -16,6 +16,7 @@ members = [
 
 [permissions]
 bors.rust.review = true
+bors.team.review = true
 
 [rfcbot]
 label = "T-core"

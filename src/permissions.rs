@@ -147,6 +147,8 @@ permissions! {
         rust,
         rustlings,
         rustup_rs,
+        stdarch,
+        team,
     }
 }
 
