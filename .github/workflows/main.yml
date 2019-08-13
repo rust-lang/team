@@ -1,0 +1,40 @@
+on: [push, pull_request]
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+
+      - name: Install Rust Stable
+        run: |
+          rustc -vV
+          rustup update stable
+          rustup default stable
+          rustc -vV
+
+      - name: Validate the repository contents
+        run: cargo run -- check --strict
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+
+      - name: Run rustfmt
+        run: cargo fmt -- --check
+
+      - name: Run clippy
+        run: cargo clippy -- -Dwarnings
+
+      - name: Build the contents of the static API
+        run: |
+          cargo run -- static-api build
+          echo "team-api.infra.rust-lang.org" > build/CNAME
+
+      - uses: rust-lang/simpleinfra/github-actions/static-websites@master
+        with:
+          deploy_dir: build
+          github_token: "${{ secrets.github_token }}"
+        if: github.ref == 'refs/heads/master'
