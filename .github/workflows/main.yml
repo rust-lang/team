@@ -40,3 +40,4 @@ jobs:
           (cd build && /tmp/deploy)
         env:
           GITHUB_DEPLOY_KEY: ${{ secrets.GITHUB_DEPLOY_KEY }}
+        if: github.ref == 'refs/heads/master'
