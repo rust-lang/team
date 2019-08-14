@@ -33,8 +33,10 @@ jobs:
           cargo run -- static-api build
           echo "team-api.infra.rust-lang.org" > build/CNAME
 
-      - uses: rust-lang/simpleinfra/github-actions/static-websites@master
-        with:
-          deploy_dir: build
-          github_token: "${{ secrets.github_token }}"
-        if: github.ref == 'refs/heads/master'
+      - name: Deploy to GitHub Pages
+        run: |
+          touch build/.nojekyll
+          curl -LsSf https://raw.githubusercontent.com/rust-lang/simpleinfra/master/setup-deploy-keys/src/deploy.rs | rustc - -o /tmp/deploy
+          (cd build && /tmp/deploy)
+        env:
+          GITHUB_DEPLOY_KEY: ${{ secrets.GITHUB_DEPLOY_KEY }}
