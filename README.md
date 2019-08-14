@@ -44,7 +44,7 @@ This repository contains some sanity checks to avoid having stale or broken
 data. You can run the checks locally with the `check` command:
 
 ```
-$ cargo run check
+cargo run check
 ```
 
 ### Adding a person to the repository
@@ -55,7 +55,7 @@ store it in a person's TOML file. To do that you need to have the
 and you need to run the command:
 
 ```
-$ cargo run add-person <username>
+cargo run add-person <username>
 ```
 
 ### Querying information out of the repository
@@ -66,26 +66,26 @@ from the data in the repository.
 You can get a list of all the people in a team:
 
 ```
-$ cargo run dump-team all
+cargo run dump-team all
 ```
 
 You can get a list of all the email addresses subscribed to a list:
 
 ```
-$ cargo run dump-list all@rust-lang.org
+cargo run dump-list all@rust-lang.org
 ```
 
 You can get a list of all the users with a permission:
 
 ```
-$ cargo run dump-permission perf
+cargo run dump-permission perf
 ```
 
 
 You can generate [www.rust-lang.org](https://github.com/rust-lang/www.rust-lang.org)'s locales/en-US/tools.ftl file by running
 
 ```
-$ cargo run dump-website
+cargo run dump-website
 ```
 
 The website will automatically load new teams added here, however they cannot be translated unless `tools.ftl` is also updated.
@@ -96,7 +96,7 @@ You can build locally the content of `https://team-api.infra.rust-lang.org/v1/`
 by running the command:
 
 ```
-$ cargo run static-api output-dir/
+cargo run static-api output-dir/
 ```
 
 The content will be placed in `output-dir/`.
