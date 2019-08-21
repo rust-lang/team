@@ -1,8 +1,7 @@
-name = "Olivia Hugger"
+name = "Marisa"
 github = "komaeda"
 github-id = 45509655
-irc = "liv"
-email = "oh@mokou.de"
+email = "mokou@posteo.de"
 
 [permissions]
 bors.rustlings.review = true
