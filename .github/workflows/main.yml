@@ -17,6 +17,9 @@ jobs:
           rustup default stable
           rustc -vV
 
+      - name: Build the validation tool
+        run: cargo build
+
       - name: Validate the repository contents
         run: cargo run -- check --strict
         env:
