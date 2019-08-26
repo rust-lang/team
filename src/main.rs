@@ -73,9 +73,11 @@ fn run() -> Result<(), Error> {
         }
         Cli::AddPerson { ref github_name } => {
             #[derive(serde::Serialize)]
+            #[serde(rename_all = "kebab-case")]
             struct PersonToAdd<'a> {
                 name: &'a str,
                 github: &'a str,
+                github_id: usize,
                 #[serde(skip_serializing_if = "Option::is_none")]
                 email: Option<&'a str>,
             }
@@ -83,6 +85,7 @@ fn run() -> Result<(), Error> {
             let github = github::GitHubApi::new();
             let user = github.user(github_name)?;
             let github_name = user.login;
+            let github_id = user.id;
 
             if data.person(&github_name).is_some() {
                 failure::bail!("person already in the repo: {}", github_name);
@@ -99,6 +102,7 @@ fn run() -> Result<(), Error> {
                         github_name.as_str()
                     }),
                     github: &github_name,
+                    github_id,
                     email: user.email.as_ref().map(|e| e.as_str()).or_else(|| {
                         warn!("the person is missing the email on GitHub, leaving the field empty");
                         None

@@ -9,6 +9,7 @@ static TOKEN_VAR: &str = "GITHUB_TOKEN";
 
 #[derive(serde::Deserialize)]
 pub(crate) struct User {
+    pub(crate) id: usize,
     pub(crate) login: String,
     pub(crate) name: Option<String>,
     pub(crate) email: Option<String>,
