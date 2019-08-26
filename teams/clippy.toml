@@ -13,6 +13,9 @@ members = [
 [permissions]
 bors.clippy.review = true
 
+[github]
+orgs = ["rust-lang"]
+
 [website]
 name = "Clippy"
 description = "design and implementation of the Clippy linter"
