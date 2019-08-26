@@ -2,23 +2,25 @@ name = "wg-embedded"
 wg = true
 
 [people]
-leads = ["japaric"]
+leads = ["japaric", "therealprof", "jamesmunns"]
 members = [
-    "japaric",
     "adamgreig",
     "andre-richter",
     "awygle",
     "bradjc",
     "cr1901",
     "danc86",
+    "Disasm",
     "dvc94ch",
     "dylanmckay",
     "Emilgardis",
     "hannobraun",
     "ithinuel",
     "jamesmunns",
-    "jcsoo",
+    "japaric",
     "korken89",
+    "laanwj",
+    "mathk",
     "nastevens",
     "nerdyvaishali",
     "paoloteti",
@@ -26,6 +28,7 @@ members = [
     "pftbest",
     "posborne",
     "raw-bin",
+    "reitermarkus",
     "ryankurte",
     "sekineh",
     "thejpster",
