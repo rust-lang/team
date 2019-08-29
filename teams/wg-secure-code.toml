@@ -1,0 +1,14 @@
+name = "wg-secure-code"
+wg = true
+
+[people]
+leads = ["Shnatsel", "tarcieri"]
+members = [
+    "Shnatsel",
+    "tarcieri"
+]
+
+[website]
+name = "Secure Code WG"
+description = "Making it easy to write secure code in Rust"
+repo = "https://github.com/rust-secure-code/wg"
