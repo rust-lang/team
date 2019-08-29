@@ -22,6 +22,9 @@ crater = true
 bors.rust.review = true
 bors.miri.review = true
 
+[github]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
 [rfcbot]
 label = "T-compiler"
 name = "Compiler"
