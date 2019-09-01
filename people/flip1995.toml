@@ -1,6 +1,4 @@
 name = "Philipp Krones"
 github = "flip1995"
 github-id = 9744647
-
-[permissions]
-bors.clippy.review = true
+email = "hello@philkrones.com"

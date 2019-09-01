@@ -1,6 +1,5 @@
 name = "Martin Carton"
 github = "mcarton"
 github-id = 3751788
+email = "cartonmartin@gmail.com"
 
-[permissions]
-bors.clippy.review = true
