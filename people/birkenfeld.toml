@@ -1,6 +1,4 @@
 name = "Georg Brandl"
 github = "birkenfeld"
 github-id = 144359
-
-[permissions]
-bors.clippy.review = true
+email = "georg@python.org"

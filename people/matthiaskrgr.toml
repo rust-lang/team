@@ -1,6 +1,4 @@
 name = "Matthias Krüger"
 github = "matthiaskrgr"
 github-id = 476013
-
-[permissions]
-bors.clippy.review = true
+email = "matthias.krueger@famsik.de"

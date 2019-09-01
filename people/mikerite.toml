@@ -1,6 +1,4 @@
 name = "mikerite"
 github = "mikerite"
 github-id = 33983332
-
-[permissions]
-bors.clippy.review = true
+email = "mikerite@lavabit.com"
