@@ -5,11 +5,12 @@ wg = true
 [people]
 leads = ["topecongiro"]
 members = [
-    "nrc",
-    "otavio",
     "scampi",
     "topecongiro",
 ]
+
+[github]
+orgs = ["rust-lang"]
 
 [website]
 name = "Rustfmt working group"
