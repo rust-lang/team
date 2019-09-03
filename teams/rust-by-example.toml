@@ -8,6 +8,9 @@ members = [
     "marioidival",
 ]
 
+[github]
+orgs = ["rust-lang"]
+
 [website]
 name = "Rust by Example team"
 description = "maintaining and updating Rust By Example"
