@@ -11,6 +11,9 @@ members = [
     "topecongiro",
 ]
 
+[github]
+orgs = ["rust-lang"]
+
 [website]
 name = "Rustfmt working group"
 description = "design and implementation of Rustfmt"
