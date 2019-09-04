@@ -220,17 +220,49 @@ impl Team {
         &self.permissions
     }
 
-    pub(crate) fn github_teams(&self) -> Vec<(&str, &str)> {
+    pub(crate) fn github_teams<'a>(&'a self, data: &Data) -> Result<Vec<GitHubTeam<'a>>, Error> {
         if let Some(github) = &self.github {
+            let members = self
+                .members(data)?
+                .iter()
+                .filter_map(|name| data.person(name).map(|p| p.github_id()))
+                .collect::<Vec<_>>();
             let name = github
                 .team_name
                 .as_ref()
                 .map(|n| n.as_str())
                 .unwrap_or(&self.name);
-            github.orgs.iter().map(|org| (org.as_str(), name)).collect()
+            Ok(github
+                .orgs
+                .iter()
+                .map(|org| GitHubTeam {
+                    org: org.as_str(),
+                    name,
+                    members: members.clone(),
+                })
+                .collect())
         } else {
-            Vec::new()
+            Ok(Vec::new())
         }
+    }
+}
+
+#[derive(Eq, PartialEq)]
+pub(crate) struct GitHubTeam<'a> {
+    pub(crate) org: &'a str,
+    pub(crate) name: &'a str,
+    pub(crate) members: Vec<usize>,
+}
+
+impl std::cmp::PartialOrd for GitHubTeam<'_> {
+    fn partial_cmp(&self, other: &GitHubTeam) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl std::cmp::Ord for GitHubTeam<'_> {
+    fn cmp(&self, other: &GitHubTeam) -> std::cmp::Ordering {
+        self.org.cmp(&other.org).then(self.name.cmp(&other.name))
     }
 }
 

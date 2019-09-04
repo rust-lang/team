@@ -387,25 +387,29 @@ fn validate_github_teams(data: &Data, errors: &mut Vec<String>) {
     let mut found = HashMap::new();
     let allowed = data.config().allowed_github_orgs();
     wrapper(data.teams(), errors, |team, errors| {
-        wrapper(team.github_teams().into_iter(), errors, |(org, name), _| {
-            if !allowed.contains(&*org) {
-                bail!(
-                    "GitHub organization `{}` isn't allowed (in team `{}`)",
-                    org,
-                    team.name()
-                );
-            }
-            if let Some(other) = found.insert((org, name), team.name()) {
-                bail!(
-                    "GitHub team `{}/{}` is defined for both the `{}` and `{}` teams",
-                    org,
-                    name,
-                    team.name(),
-                    other
-                );
-            }
-            Ok(())
-        });
+        wrapper(
+            team.github_teams(data)?.into_iter(),
+            errors,
+            |gh_team, _| {
+                if !allowed.contains(&*gh_team.org) {
+                    bail!(
+                        "GitHub organization `{}` isn't allowed (in team `{}`)",
+                        gh_team.org,
+                        team.name()
+                    );
+                }
+                if let Some(other) = found.insert((gh_team.org, gh_team.name), team.name()) {
+                    bail!(
+                        "GitHub team `{}/{}` is defined for both the `{}` and `{}` teams",
+                        gh_team.org,
+                        gh_team.name,
+                        team.name(),
+                        other
+                    );
+                }
+                Ok(())
+            },
+        );
         Ok(())
     });
 }

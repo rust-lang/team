@@ -37,6 +37,7 @@ pub struct TeamGitHub {
 pub struct GitHubTeam {
     pub org: String,
     pub name: String,
+    pub members: Vec<usize>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

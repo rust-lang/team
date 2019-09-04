@@ -48,7 +48,7 @@ impl<'a> Generator<'a> {
             members.sort_by_key(|member| member.github.to_lowercase());
             members.sort_by_key(|member| !member.is_lead);
 
-            let mut github_teams = team.github_teams();
+            let mut github_teams = team.github_teams(&self.data)?;
             github_teams.sort();
 
             let team_data = v1::Team {
@@ -62,10 +62,11 @@ impl<'a> Generator<'a> {
                 members,
                 github: Some(v1::TeamGitHub {
                     teams: github_teams
-                        .iter()
-                        .map(|(org, name)| v1::GitHubTeam {
-                            org: org.to_string(),
-                            name: name.to_string(),
+                        .into_iter()
+                        .map(|team| v1::GitHubTeam {
+                            org: team.org.to_string(),
+                            name: team.name.to_string(),
+                            members: team.members,
                         })
                         .collect::<Vec<_>>(),
                 })
