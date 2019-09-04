@@ -26,6 +26,7 @@ bors.rust.review = true
 
 [github]
 orgs = ["rust-lang", "rust-lang-nursery"]
+extra-teams = ["compiler"]
 
 [website]
 name = "Compiler team contributors"
