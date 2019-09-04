@@ -222,11 +222,20 @@ impl Team {
 
     pub(crate) fn github_teams<'a>(&'a self, data: &Data) -> Result<Vec<GitHubTeam<'a>>, Error> {
         if let Some(github) = &self.github {
-            let members = self
+            let mut members = self
                 .members(data)?
                 .iter()
                 .filter_map(|name| data.person(name).map(|p| p.github_id()))
                 .collect::<Vec<_>>();
+            for team in &github.extra_teams {
+                members.extend(
+                    data.team(team)
+                        .ok_or_else(|| failure::err_msg(format!("missing team {}", team)))?
+                        .members(data)?
+                        .iter()
+                        .filter_map(|name| data.person(name).map(|p| p.github_id())),
+                );
+            }
             let name = github
                 .team_name
                 .as_ref()
@@ -284,6 +293,8 @@ struct TeamPeople {
 struct GitHubData {
     team_name: Option<String>,
     orgs: Vec<String>,
+    #[serde(default)]
+    extra_teams: Vec<String>,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]

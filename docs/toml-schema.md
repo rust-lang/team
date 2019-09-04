@@ -50,6 +50,8 @@ members = [
 [github]
 team-name = "overlords-team"  # The name of the GitHub team (optional)
 orgs = ["rust-lang"]  # Organizations to create the team in (required)
+# Include members of these Rust teams in this GitHub team (optional)
+extra-teams = ["bots-nursery"]
 
 # Define the mailing lists used by the team
 # It's optional, and there can be more than one
