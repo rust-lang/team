@@ -1,0 +1,22 @@
+name = "wg-embedded-resources"
+subteam-of = "wg-embedded"
+wg = true
+
+[people]
+leads = []
+members = [
+    "adamgreig",
+    "andre-richter",
+    "jamesmunns",
+    "korken89",
+    "ryankurte",
+    "thejpster",
+    "therealprof",
+]
+
+[website]
+name = "Embedded devices working group -- resources team"
+description = "Managing various resources owned by the embedded WG"
+
+[github]
+orgs = ["rust-lang"]
