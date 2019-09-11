@@ -17,6 +17,9 @@ members = [
     "smarnach",
 ]
 
+[github]
+orgs = ["rust-lang"]
+
 [rfcbot]
 label = "T-crates-io"
 name = "Crates.io"
