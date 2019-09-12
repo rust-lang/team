@@ -1,0 +1,15 @@
+name = "wg-polonius"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["lqd", "nikomatsakis"]
+members = ["lqd", "nikomatsakis", "albins"]
+
+[website]
+name = "Polonius"
+description = "Experimental work on a new borrow-checker implementation"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/polonius/"
+
+[github]
+orgs = ["rust-lang"]
