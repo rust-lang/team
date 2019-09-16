@@ -1,0 +1,6 @@
+name = 'Rust timing data pusher'
+github = 'rust-timer'
+github-id = 12471139
+
+[permissions]
+bors.rust.try = true
