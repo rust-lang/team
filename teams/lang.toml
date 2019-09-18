@@ -1,7 +1,7 @@
 name = "lang"
 
 [people]
-leads = ["nikomatsakis"]
+leads = ["nikomatsakis", "joshtriplett"]
 members = [
     "Centril",
     "cramertj",
