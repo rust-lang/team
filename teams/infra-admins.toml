@@ -1,0 +1,34 @@
+name = "infra-admins"
+
+[people]
+leads = []
+members = [
+    "Mark-Simulacrum",
+    "aidanhs",
+    "alexcrichton",
+    "pietroalbini",
+]
+
+[[lists]]
+address = "admin@rust-lang.org"
+
+[[lists]]
+address = "rust-key@rust-lang.org"
+
+[[lists]]
+address = "appveyor@rust-lang.org"
+
+[[lists]]
+address = "appveyor-libs@rust-lang.org"
+
+[[lists]]
+address = "bors@rust-lang.org"
+
+[[lists]]
+address = "crates-io-cert@rust-lang.org"
+
+[[lists]]
+address = "dmarc-rua@rust-lang.org"
+
+[[lists]]
+address = "docker-hub-rustci@rust-lang.org"
