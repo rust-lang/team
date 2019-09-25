@@ -5,8 +5,8 @@ leads = []
 members = [
     "alexcrichton",
     "nikomatsakis",
+    "pietroalbini",
     "steveklabnik",
-    "wycats",
 ]
 
 [[lists]]
