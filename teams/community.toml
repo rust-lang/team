@@ -66,3 +66,13 @@ extra-people = [
     "ashleygwilliams",
     "arshiamufti",
 ]
+
+[[lists]]
+address = "rust-all-hands@rust-lang.org"
+include-team-members = false
+extra-people = [
+    "Manishearth",
+    "nikomatsakis",
+    "Dylan-DPC",
+    "spastorino",
+]
