@@ -1,0 +1,24 @@
+name = "wg-gamedev"
+wg = true
+
+[people]
+leads = ["AlexEne", "erlend-sh", "kvark"]
+
+members = [
+    "17cupsofcoffee",
+    "AlexEne",
+    "erlend-sh",
+    "kvark",
+    "ozkriff",
+    "repi"
+]
+
+[website]
+page = "gamedev"
+name = "Game development working group"
+description = "Focusing on making rust the default choice for game development."
+repo = "https://github.com/rust-gamedev"
+
+
+[[lists]]
+address = "gamedev-wg@rust-lang.org"
