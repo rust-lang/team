@@ -22,6 +22,6 @@ address = "governance@rust-lang.org"
 extra-people = []
 
 [website]
-name = "Governance Working Group"
-description = "Managing and improving Rust Governance"
+name = "Governance working group"
+description = "Managing and improving Rust team governance"
 repo = "https://github.com/rust-lang/wg-governance"
