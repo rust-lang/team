@@ -7,6 +7,6 @@ leads = ["oli-obk"]
 members = ["oli-obk"]
 
 [website]
-name = "MIR Optimizations"
-description = "Write MIR optimizations and refactor the MIR to be more optimizable."
+name = "MIR optimizations working group"
+description = "Writing MIR optimizations and refactoring the MIR to be more optimizable"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/mir-opt/"
