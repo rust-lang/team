@@ -11,7 +11,7 @@ members = [
 
 [website]
 name = "Bindgen working group"
-description = "tools for generating FFI bindings"
+description = "Developing tools for generating FFI bindings"
 repo = "https://github.com/rust-lang-nursery/rust-bindgen"
 discord-invite = "https://discord.gg/kgujzMR"
 discord-name = "#wg-bindgen"
