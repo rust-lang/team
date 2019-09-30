@@ -21,7 +21,7 @@ ping = "rust-lang/docs"
 [website]
 page = "documentation"
 name = "Documentation team"
-description = "ensuring Rust has fantastic documentation"
+description = "Improving and moderating the quality of Rust's documentation"
 
 [[lists]]
 address = "docs@rust-lang.org"
