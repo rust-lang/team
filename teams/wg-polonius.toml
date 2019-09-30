@@ -7,8 +7,8 @@ leads = ["lqd", "nikomatsakis"]
 members = ["lqd", "nikomatsakis", "albins", "matthewjasper"]
 
 [website]
-name = "Polonius"
-description = "Experimental work on a new borrow-checker implementation"
+name = "Polonius working group"
+description = "Working on an experimental new borrow-checker implementation"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/polonius/"
 
 [github]
