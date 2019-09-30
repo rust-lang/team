@@ -15,7 +15,7 @@ members = [
 
 [website]
 name = "RustBridge team"
-description = "An inclusive educational initiative focused on bringing underrepresented groups into Rust."
+description = "Helping to bring underrepresented groups into Rust"
 repo = "https://github.com/rustbridge/team"
 discord-invite = "https://discord.gg/cj5HMXA"
 discord-name = "#rustbridge"
