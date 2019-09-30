@@ -15,8 +15,8 @@ members = [
 ]
 
 [website]
-name = "Embedded devices working group -- resources team"
-description = "Managing various resources owned by the embedded WG"
+name = "Resources team"
+description = "Managing various resources owned by the embedded working group"
 
 [github]
 orgs = ["rust-lang"]
