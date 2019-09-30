@@ -12,5 +12,5 @@ members = [
 ]
 
 [website]
-name = "Grammar"
+name = "Grammar working group"
 description = "Working out the official, formal grammar for Rust and validating it against existing implementations"
