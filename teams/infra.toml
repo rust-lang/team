@@ -28,7 +28,7 @@ ping = "rust-lang/infra"
 
 [website]
 name = "Infrastructure team"
-description = "infrastructure supporting the Rust project itself: CI, releases, bots, metrics"
+description = "Managing the infrastructure supporting the Rust project itself, including CI, releases, bots, and metrics"
 email = "infra@rust-lang.org"
 discord-invite = "https://discord.gg/AxXmxzN"
 discord-name = "#infra"
