@@ -8,4 +8,4 @@ members = ["nikomatsakis"]
 
 [website]
 name = "Compiler Performance"
-description = "Improving rustc compilation performance (build times)."
+description = "Improving rustc compilation performance (build times)"
