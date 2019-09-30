@@ -14,6 +14,6 @@ orgs = ["rust-lang"]
 
 [website]
 name = "Rustfmt working group"
-description = "design and implementation of Rustfmt"
+description = "Designing and implementing rustfmt, a formatting tool for Rust code"
 discord-invite = "https://discord.gg/e6Q3cvu"
 discord-name = "#wg-rustfmt"
