@@ -7,6 +7,6 @@ leads = ["Zoxc", "michaelwoerister"]
 members = ["Zoxc", "michaelwoerister"]
 
 [website]
-name = "Parallel rustc"
+name = "Parallel rustc working group"
 description = "Making parallel compilation the default for rustc"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/parallel-rustc/"
