@@ -9,7 +9,7 @@ members = [
 
 [website]
 name = "Survey team"
-description = "Running, analysing, and presenting the community survey."
+description = "Running, analysing, and presenting the community survey"
 
 [github]
 orgs = ["rust-lang"]
