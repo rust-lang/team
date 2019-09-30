@@ -25,7 +25,7 @@ ping = "rust-lang/cargo"
 
 [website]
 name = "Cargo team"
-description = "Designing and implemententing the official Rust package manager, Cargo"
+description = "Designing and implementing the official Rust package manager, Cargo"
 discord-invite = "https://discord.gg/aEbd4eT"
 discord-name = "#cargo"
 
