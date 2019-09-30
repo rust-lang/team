@@ -7,6 +7,6 @@ leads = ["nikomatsakis", "cramertj"]
 members = ["nikomatsakis", "cramertj"]
 
 [website]
-name = "Async-await Implementation"
+name = "Async-await implementation working group"
 description = "Implementing async-await functionality"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/async-await/"
