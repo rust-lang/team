@@ -23,5 +23,5 @@ extra-people = []
 
 [website]
 name = "Governance Working Group"
-description = "Working on improving Rust Governance"
+description = "Managing and improving Rust Governance"
 repo = "https://github.com/rust-lang/wg-governance"
