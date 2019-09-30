@@ -7,8 +7,8 @@ leads = ["nikomatsakis"]
 members = ["nikomatsakis", "jackh726", "detrumi", "skinny121"]
 
 [website]
-name = "Traits"
-description = "Revamping the rustc trait implementation."
+name = "Traits working group"
+description = "Revamping the rustc trait implementation to follow the Chalk approach"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/traits/"
 
 [github]
