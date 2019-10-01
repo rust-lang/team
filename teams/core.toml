@@ -60,3 +60,6 @@ extra-people = [
     "steveklabnik",
     "Manishearth",
 ]
+
+[[lists]]
+address = "privacy@rust-lang.org"
