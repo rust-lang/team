@@ -7,6 +7,7 @@ leads = ["sebasmagri"]
 members = [
     "sebasmagri",
     "Manishearth",
+    "JohnTitor",
 ]
 
 [website]
