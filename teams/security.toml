@@ -9,5 +9,11 @@ members = [
     "steveklabnik",
 ]
 
+[website]
+name = "Security team"
+description = "Triaging and responding to incoming vulnerability reports"
+email = "security@rust-lang.org"
+repo = "https://github.com/rust-lang/security-team"
+
 [[lists]]
 address = "security@rust-lang.org"
