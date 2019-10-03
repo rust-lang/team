@@ -3,17 +3,19 @@ name = "libs"
 [people]
 leads = ["alexcrichton"]
 members = [
-    "alexcrichton",
-    "sfackler",
+    "Amanieu",
     "BurntSushi",
     "Kimundi",
-    "SimonSapin",
-    "dtolnay",
-    "aturon",
     "KodrAus",
+    "SimonSapin",
+    "alexcrichton",
+    "dtolnay",
+    "sfackler",
     "withoutboats",
-    "Amanieu",
 ]
+
+[github]
+orgs = ["rust-lang", "rust-lang-nursery"]
 
 [permissions]
 perf = true
@@ -30,7 +32,6 @@ ping = "rust-lang/libs"
 exclude-members = [
     "BurntSushi",
     "KodrAus",
-    "aturon",
 ]
 
 [website]
