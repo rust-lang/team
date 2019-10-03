@@ -9,6 +9,9 @@ members = [
     "steveklabnik",
 ]
 
+[github]
+orgs = ["rust-lang"]
+
 [website]
 name = "Security team"
 description = "Triaging and responding to incoming vulnerability reports"
