@@ -4,6 +4,7 @@ name = "security"
 leads = []
 members = [
     "alexcrichton",
+    "cuviper",
     "nikomatsakis",
     "pietroalbini",
     "steveklabnik",
