@@ -109,6 +109,8 @@ pub(crate) struct Team {
     name: String,
     #[serde(default = "default_false")]
     wg: bool,
+    #[serde(default = "default_false")]
+    marker_team: bool,
     subteam_of: Option<String>,
     people: TeamPeople,
     #[serde(default)]
@@ -127,6 +129,10 @@ impl Team {
 
     pub(crate) fn is_wg(&self) -> bool {
         self.wg
+    }
+
+    pub(crate) fn is_marker_team(&self) -> bool {
+        self.marker_team
     }
 
     pub(crate) fn subteam_of(&self) -> Option<&str> {
@@ -160,7 +166,7 @@ impl Team {
         }
         if self.people.include_all_team_members {
             for team in data.teams() {
-                if team.is_wg() || team.name == self.name {
+                if team.is_wg() || team.is_marker_team() || team.name == self.name {
                     continue;
                 }
                 for member in team.members(data)? {

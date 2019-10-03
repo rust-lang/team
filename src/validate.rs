@@ -24,6 +24,7 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_rfcbot_exclude_members,
     validate_team_names,
     validate_github_teams,
+    validate_marker_team,
 ];
 
 static GITHUB_CHECKS: &[fn(&Data, &GitHubApi, &mut Vec<String>)] = &[validate_github_usernames];
@@ -430,6 +431,19 @@ fn validate_github_usernames(data: &Data, github: &GitHubApi, errors: &mut Vec<S
         }),
         Err(err) => errors.push(format!("couldn't verify GitHub usernames: {}", err)),
     }
+}
+
+/// Ensure teams are not working group and marker team at the same time
+fn validate_marker_team(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, _| {
+        if team.is_wg() && team.is_marker_team() {
+            bail!(
+                "`{}` is a working group and marker team at the same time",
+                team.name()
+            );
+        }
+        Ok(())
+    });
 }
 
 fn wrapper<T, I, F>(iter: I, errors: &mut Vec<String>, mut func: F)
