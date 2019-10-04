@@ -8,6 +8,9 @@ pub static BASE_URL: &str = "https://team-api.infra.rust-lang.org/v1";
 pub enum TeamKind {
     Team,
     WorkingGroup,
+    MarkerTeam,
+    #[serde(other)]
+    Unknown,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
