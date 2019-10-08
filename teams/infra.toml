@@ -2,7 +2,7 @@ name = "infra"
 subteam-of = "operations"
 
 [people]
-leads = ["aidanhs"]
+leads = ["aidanhs", "pietroalbini"]
 members = [
     "Mark-Simulacrum",
     "TimNN",
