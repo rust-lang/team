@@ -19,3 +19,6 @@ description = "Supporting community events with knowledge and resources."
 repo = "https://github.com/rust-community/events-team"
 discord-invite = "https://discord.gg/cj5HMXA"
 discord-name = "#events"
+
+[github]
+orgs = ["rust-lang"]

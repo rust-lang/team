@@ -19,3 +19,6 @@ description = "An inclusive educational initiative focused on bringing underrepr
 repo = "https://github.com/rustbridge/team"
 discord-invite = "https://discord.gg/cj5HMXA"
 discord-name = "#rustbridge"
+
+[github]
+orgs = ["rust-lang"]

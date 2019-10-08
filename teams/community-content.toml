@@ -16,3 +16,6 @@ description = "Helping support community content collection and development."
 repo = "https://github.com/rust-community/content-team"
 discord-invite = "https://discord.gg/b7a22kw"
 discord-name = "#content"
+
+[github]
+orgs = ["rust-lang"]
