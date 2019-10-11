@@ -32,17 +32,10 @@ discord-invite = "https://discord.gg/Rbq8W5K"
 discord-name = "#crates-io"
 
 [[lists]]
-address = "help@crates.io"
-include-team-members = false
-extra-people = [
-    "carols10cents",
-    "ashleygwilliams",
-    "sgrif",
-    "pietroalbini",
-]
+address = "crates-io@rust-lang.org"
 
 [[lists]]
-address = "crates-io@rust-lang.org"
+address = "help@crates.io"
 include-team-members = false
 extra-people = [
     "carols10cents",
