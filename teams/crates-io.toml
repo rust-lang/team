@@ -43,11 +43,3 @@ extra-people = [
     "sgrif",
     "pietroalbini",
 ]
-
-[[lists]]
-address = "admin@crates.io"
-include-team-members = false
-extra-people = [
-    "aturon",
-    "alexcrichton",
-]
