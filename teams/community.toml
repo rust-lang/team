@@ -10,6 +10,7 @@ members = [
     "ashleygwilliams",
     "fmoko",
     "technetos",
+    "JohnTitor",
 ]
 
 [website]
@@ -75,4 +76,5 @@ extra-people = [
     "Dylan-DPC",
     "spastorino",
     "skade",
+    "XAMPPRocky",
 ]

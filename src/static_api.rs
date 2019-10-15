@@ -55,6 +55,8 @@ impl<'a> Generator<'a> {
                 name: team.name().into(),
                 kind: if team.is_wg() {
                     v1::TeamKind::WorkingGroup
+                } else if team.is_marker_team() {
+                    v1::TeamKind::MarkerTeam
                 } else {
                     v1::TeamKind::Team
                 },

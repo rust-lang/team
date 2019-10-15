@@ -3,8 +3,9 @@ subteam-of = "lang"
 wg = true
 
 [people]
-leads = ["Centril", "qmx"]
+leads = ["eddyb", "qmx"]
 members = [
+    "eddyb",
     "CAD97",
     "Centril",
     "qmx",

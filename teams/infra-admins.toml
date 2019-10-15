@@ -13,6 +13,9 @@ members = [
 address = "admin@rust-lang.org"
 
 [[lists]]
+address = "admin@crates.io"
+
+[[lists]]
 address = "rust-key@rust-lang.org"
 
 [[lists]]

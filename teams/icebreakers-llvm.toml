@@ -1,0 +1,9 @@
+name = "icebreakers-llvm"
+marker-team = true
+
+[people]
+leads = []
+members = [
+    "nagisa",
+    "nikic",
+]

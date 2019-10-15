@@ -4,7 +4,7 @@ wg = true
 
 [people]
 leads = ["lqd", "nikomatsakis"]
-members = ["lqd", "nikomatsakis", "albins"]
+members = ["lqd", "nikomatsakis", "albins", "matthewjasper"]
 
 [website]
 name = "Polonius"
