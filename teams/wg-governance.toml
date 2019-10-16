@@ -2,16 +2,18 @@ name = "wg-governance"
 subteam-of = "core"
 wg = true
 
+[github]
+orgs = ["rust-lang"]
+
 [people]
 leads = ["skade"]
 members = [
     "skade",
     "gnunicorn",
     "nellshamrell",
-    "arshiamufti",
     "nikomatsakis",
-    "jonathandturner",
     "Manishearth",
+    "XAMPPRocky",
 ]
 
 [[lists]]
