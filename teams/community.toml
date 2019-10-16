@@ -1,13 +1,13 @@
 name = "community"
 
 [people]
-leads = ["ashleygwilliams"]
+leads = []
 members = [
     "skade",
     "Manishearth",
     "sebasmagri",
-    "badboy",
     "ashleygwilliams",
+    "badboy",
     "fmoko",
     "technetos",
     "jonathandturner",
@@ -21,6 +21,9 @@ email = "community@rust-lang.org"
 repo = "https://github.com/rust-community/team"
 discord-invite = "https://discord.gg/KskHZGT"
 discord-name = "#community-team"
+
+[github]
+orgs = ["rust-lang"]
 
 [[lists]]
 address = "community@rust-lang.org"
@@ -64,6 +67,7 @@ extra-emails = [
 address = "rustbridge@rust-lang.org"
 include-team-members = false
 extra-people = [
+    "fmoko",
     "ashleygwilliams",
     "arshiamufti",
 ]
