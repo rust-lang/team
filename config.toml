@@ -7,4 +7,5 @@ allowed-mailing-lists-domains = [
 allowed-github-orgs = [
     "rust-lang",
     "rust-lang-nursery",
+    "rust-dev-tools",
 ]

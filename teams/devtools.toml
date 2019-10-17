@@ -18,6 +18,9 @@ repo = "https://github.com/rust-dev-tools/dev-tools-team"
 discord-invite = "https://discord.gg/sG23nSS"
 discord-name = "#dev-tools"
 
+[github]
+orgs = ["rust-lang", "rust-dev-tools"]
+
 [[lists]]
 address = "tools@rust-lang.org"
 
