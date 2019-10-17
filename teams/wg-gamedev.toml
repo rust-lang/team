@@ -16,7 +16,7 @@ members = [
 [website]
 page = "gamedev"
 name = "Game development working group"
-description = "Focusing on making rust the default choice for game development."
+description = "Focusing on making Rust the default choice for game development."
 repo = "https://github.com/rust-gamedev"
 discord-invite = "https://discord.gg/sG23nSS"
 discord-name = "#wg-gamedev"
