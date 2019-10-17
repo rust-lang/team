@@ -6,6 +6,7 @@ leads = []
 members = [
   "Centril",
   "davidtwco",
+  "esctatic-morse",
   "flodiebold",
   "lqd",
   "Mark-Simulacrum",
