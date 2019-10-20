@@ -31,7 +31,6 @@ name = "Libraries"
 ping = "rust-lang/libs"
 exclude-members = [
     "BurntSushi",
-    "KodrAus",
 ]
 
 [website]
