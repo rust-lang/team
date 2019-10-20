@@ -2,3 +2,7 @@ name = "Yuki Okushi"
 github = "JohnTitor"
 github-id = 25030997
 email = "huyuumi.dev@gmail.com"
+
+[permissions]
+# for rollup work
+bors.rust.review = true
