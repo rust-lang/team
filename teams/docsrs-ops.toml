@@ -1,0 +1,12 @@
+name = "docsrs-ops"
+marker-team = true
+
+[people]
+leads = []
+members = [
+    "QuietMisdreavus",
+    "onur",
+]
+
+[github]
+orgs = ["rust-lang"]
