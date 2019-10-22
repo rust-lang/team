@@ -6,7 +6,7 @@ members = ["killercup", "Manishearth", "Xanewok", "fitzgen", "GuillaumeGomez", "
 
 [rfcbot]
 label = "T-dev-tools"
-name = "Dev tols"
+name = "Dev tools"
 ping = "rust-lang/dev-tools"
 
 [website]
