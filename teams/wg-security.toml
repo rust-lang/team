@@ -1,4 +1,5 @@
-name = "security"
+name = "wg-security"
+wg = true
 
 [people]
 leads = []
