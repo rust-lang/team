@@ -4,8 +4,8 @@ marker-team = true
 [people]
 leads = []
 members = [
+    "mmilenko",
     "nagisa",
     "nikic",
     "rkruppe",
-    "mmilenko",
 ]
