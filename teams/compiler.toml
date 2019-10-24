@@ -1,7 +1,7 @@
 name = "compiler"
 
 [people]
-leads = ["nikomatsakis"]
+leads = ["nikomatsakis", "pnkfelix"]
 members = [
     "cramertj",
     "eddyb",
