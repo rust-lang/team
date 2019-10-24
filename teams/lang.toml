@@ -17,6 +17,9 @@ members = [
 perf = true
 bors.rust.review = true
 
+[github]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
 [rfcbot]
 label = "T-lang"
 name = "Language"
