@@ -10,4 +10,5 @@ members = [
     "nagisa",
     "nikic",
     "rkruppe",
+    "vertexclique"
 ]
