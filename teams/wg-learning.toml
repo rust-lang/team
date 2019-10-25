@@ -3,7 +3,7 @@ subteam-of = "compiler"
 wg = true
 
 [people]
-leads = ["nikomatsakis", "spastorino"]
+leads = ["nikomatsakis", "spastorino", "mark-i-m"]
 members = ["nikomatsakis", "spastorino", "mark-i-m", "amanjeev", "tshepang", "togiberlin", "JohnTitor"]
 
 [github]
