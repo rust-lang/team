@@ -15,10 +15,10 @@ members = [
 orgs = ["rust-lang"]
 
 [website]
-name = "Security team"
+name = "Security WG"
 description = "Triaging and responding to incoming vulnerability reports"
 email = "security@rust-lang.org"
-repo = "https://github.com/rust-lang/security-team"
+repo = "https://github.com/rust-lang/wg-security"
 
 [[lists]]
 address = "security@rust-lang.org"
