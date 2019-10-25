@@ -3,8 +3,8 @@ subteam-of = "compiler"
 wg = true
 
 [people]
-leads = ["nikomatsakis", "spastorino", "mark-i-m"]
-members = ["nikomatsakis", "spastorino", "mark-i-m", "amanjeev", "tshepang", "togiberlin", "JohnTitor"]
+leads = ["spastorino", "mark-i-m"]
+members = ["spastorino", "mark-i-m", "amanjeev", "tshepang", "togiberlin", "JohnTitor"]
 
 [github]
 orgs = ["rust-lang"]
