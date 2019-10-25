@@ -1,9 +1,0 @@
-name = "lang-shepherds"
-
-[people]
-leads = []
-members = [
-    "solson",
-    "whitequark",
-    "rpjohnst",
-]

@@ -17,6 +17,9 @@ members = [
 perf = true
 bors.rust.review = true
 
+[github]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
 [rfcbot]
 label = "T-lang"
 name = "Language"
@@ -32,8 +35,6 @@ address = "lang-private@rust-lang.org"
 
 [[lists]]
 address = "lang@rust-lang.org"
-extra-teams = ["lang-shepherds"]
 
 [[lists]]
 address = "language-design-team@rust-lang.org"
-extra-teams = ["lang-shepherds"]
