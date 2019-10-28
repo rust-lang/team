@@ -1,4 +1,4 @@
-name = "wg-security"
+name = "wg-security-response"
 wg = true
 
 [people]
@@ -12,13 +12,14 @@ members = [
 ]
 
 [github]
+team-name = "security"
 orgs = ["rust-lang"]
 
 [website]
-name = "Security WG"
+name = "Security Response WG"
 description = "Triaging and responding to incoming vulnerability reports"
 email = "security@rust-lang.org"
-repo = "https://github.com/rust-lang/wg-security"
+repo = "https://github.com/rust-lang/wg-security-response"
 
 [[lists]]
 address = "security@rust-lang.org"
