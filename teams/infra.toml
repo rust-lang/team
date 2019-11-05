@@ -5,11 +5,9 @@ subteam-of = "operations"
 leads = ["aidanhs", "pietroalbini"]
 members = [
     "Mark-Simulacrum",
-    "TimNN",
     "aidanhs",
     "alexcrichton",
     "ashleygwilliams",
-    "erickt",
     "kennytm",
     "pietroalbini",
     "sgrif",
