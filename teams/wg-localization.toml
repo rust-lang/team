@@ -13,6 +13,6 @@ members = [
 
 [website]
 name = "Localization WG"
-description = "Working towards"
+description = "Working on localization of compiler, documentation and websites"
 discord-invite = "https://discord.gg/cj5HMXA"
 discord-name = "#community-team"
