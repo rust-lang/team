@@ -1,0 +1,27 @@
+name = "docs-rs"
+subteam-of = "devtools"
+
+[people]
+leads = ["QuietMisdreavus"]
+members = [
+    "QuietMisdreavus",
+    "onur",
+    "pietroalbini",
+]
+
+[github]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
+[rfcbot]
+label = "T-docs-rs"
+name = "Docs.rs"
+ping = "rust-lang/docs-rs"
+
+[website]
+name = "Docs.rs team"
+description = "Docs.rs, the documentation hosting service for crates"
+discord-invite = "https://discord.gg/f7mTXPW"
+discord-name = "#docs-rs"
+
+[[lists]]
+address = "docs-rs@rust-lang.org"
