@@ -5,6 +5,7 @@ subteam-of = "devtools"
 leads = ["QuietMisdreavus"]
 members = [
     "QuietMisdreavus",
+    "GuillaumeGomez",
     "onur",
     "pietroalbini",
 ]
