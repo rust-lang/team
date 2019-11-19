@@ -15,6 +15,7 @@ members = [
 
 [permissions]
 perf = true
+crater = true
 bors.rust.review = true
 
 [github]
