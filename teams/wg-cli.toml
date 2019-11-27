@@ -2,21 +2,22 @@ name = "wg-cli"
 wg = true
 
 [people]
-leads = []
+leads = ["spacekookie"]
 members = [
-    "codesections",
     "Dylan-DPC",
+    "XAMPPRocky",
+    "codesections",
     "epage",
     "killercup",
     "matthiasbeyer",
     "spacekookie",
-    "XAMPPRocky",
     "yoshuawuyts",
 ]
 
 [website]
 page = "cli"
 name = "Command-line interfaces (CLI) working group"
-description = "Focusing on the end-to-end experience of writing CLI apps, both large and small, in Rust."
-discord-invite = "https://discord.gg/BXCBYX6"
-discord-name = "#wg-cli"
+description = "Focusing on the end-to-end experience of writing terminal apps, both large and small, in Rust."
+
+[[lists]]
+address = "cli-wg@rust-lang.org"
