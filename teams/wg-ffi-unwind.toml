@@ -14,7 +14,7 @@ members = [
 
 [website]
 name = "ffi-unwind project group"
-description = "Figureing out how unwinding and FFI should interact"
+description = "A working-group project to extend the Rust language to support unwinding that crosses FFI boundaries"
 repo = "https://github.com/rust-lang/project-ffi-unwind"
 
 [github]
