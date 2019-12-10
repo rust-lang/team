@@ -1,0 +1,21 @@
+name = "wg-ffi-unwind"
+subteam-of = "lang"
+wg = true
+
+[people]
+leads = ["nikomatsakis", "acfoltzer", "BatmanAoD"]
+members = [
+    "acfoltzer",
+    "Amanieu",
+    "BatmanAoD",
+    "gnzlbg",
+    "nikomatsakis",
+]
+
+[website]
+name = "ffi-unwind project group"
+description = "A working-group project to extend the Rust language to support unwinding that crosses FFI boundaries"
+repo = "https://github.com/rust-lang/project-ffi-unwind"
+
+[github]
+orgs = ["rust-lang"]
