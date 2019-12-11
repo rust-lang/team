@@ -34,6 +34,9 @@ address = "core@rust-lang.org"
 extra-teams = ["core-observers"]
 
 [[lists]]
+address = "core-private@rust-lang.org"
+
+[[lists]]
 address = "core-team@rust-lang.org"
 extra-teams = ["core-observers"]
 
