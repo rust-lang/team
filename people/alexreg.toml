@@ -1,6 +1,0 @@
-name = "Alexander Regueiro"
-github = "alexreg"
-github-id = 67036
-
-[permissions]
-bors.rust.review = true
