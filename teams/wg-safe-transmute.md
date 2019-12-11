@@ -1,4 +1,4 @@
-name = "safe-transmute"
+name = "wg-safe-transmute"
 subteam-of = "lang"
 wg = true
 
