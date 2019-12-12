@@ -12,7 +12,7 @@ members = [
 
 [website]
 name = "Content team"
-description = "Collecting and contributing to the development of community content"
+description = "Collecting and developing community content"
 repo = "https://github.com/rust-community/content-team"
 discord-invite = "https://discord.gg/b7a22kw"
 discord-name = "#content"
