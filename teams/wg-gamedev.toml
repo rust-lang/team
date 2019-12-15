@@ -6,11 +6,14 @@ leads = ["AlexEne", "erlend-sh", "kvark"]
 
 members = [
     "17cupsofcoffee",
+    "aclysma",
     "AlexEne",
     "erlend-sh",
     "kvark",
+    "Lokathor",
     "ozkriff",
-    "repi"
+    "repi",
+    "Wodann"
 ]
 
 [website]
