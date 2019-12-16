@@ -12,6 +12,7 @@ members = [
     "dtolnay",
     "sfackler",
     "withoutboats",
+    "LukasKalbertodt",
 ]
 
 [github]
@@ -32,6 +33,7 @@ ping = "rust-lang/libs"
 exclude-members = [
     "BurntSushi",
     "Kimundi",
+    "LukasKalbertodt",
 ]
 
 [website]
