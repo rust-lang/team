@@ -11,13 +11,11 @@ members = [
   "lqd",
   "Mark-Simulacrum",
   "matklad",
-  "matthewjasper",
   "nikic",
   "nnethercote",
   "scalexm",
   "spastorino",
   "tmandry",
-  "wesleywiser",
   "Xanewok",
   "zackmdavis",
 ]
