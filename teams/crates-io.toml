@@ -1,7 +1,7 @@
 name = "crates-io"
 
 [people]
-leads = ["ashleygwilliams", "sgrif"]
+leads = ["ashleygwilliams", "sgrif", "jtgeibel"]
 members = [
     "carols10cents",
     "ashleygwilliams",
