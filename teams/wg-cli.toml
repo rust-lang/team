@@ -22,5 +22,8 @@ description = "Focusing on the end-to-end experience of writing terminal apps, b
 [[lists]]
 address = "cli-wg@rust-lang.org"
 
-extra-emails = ["mail@r0tty.org"]
+extra-emails = [
+    "mail@r0tty.org",
+    "creepy-skeleton@yandex.ru"
+]
 
