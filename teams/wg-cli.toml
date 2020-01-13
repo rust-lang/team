@@ -24,6 +24,6 @@ address = "cli-wg@rust-lang.org"
 
 extra-emails = [
     "mail@r0tty.org",
-    "creepy-skeleton@yandex.ru"
+    "creepy-skeleton@yandex.ru",
+    "msarfati@protonmail.com",
 ]
-
