@@ -6,7 +6,7 @@ wg = true
 orgs = ["rust-lang"]
 
 [people]
-leads = ["skade"]
+leads = ["XAMPPRocky", "nikomatsakis"]
 members = [
     "skade",
     "gnunicorn",
@@ -14,6 +14,7 @@ members = [
     "nikomatsakis",
     "Manishearth",
     "XAMPPRocky",
+    "valgrimm",
 ]
 
 [[lists]]
