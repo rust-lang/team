@@ -25,4 +25,5 @@ extra-emails = [
     "mail@r0tty.org",
     "creepy-skeleton@yandex.ru",
     "msarfati@protonmail.com",
+    "mail+rust-wg-cli@pksunkara.com",
 ]
