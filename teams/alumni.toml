@@ -3,12 +3,14 @@ name = "alumni"
 [people]
 leads = []
 members = [
-    "Gankra",
     "Aatch",
+    "Gankra",
     "Kimundi",
+    "MajorBreakfast",
     "TimNN",
     "alercah",
     "arielb1",
+    "aturon",
     "birkenfeld",
     "bkoropoff",
     "booyaa",
