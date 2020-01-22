@@ -1,0 +1,27 @@
+name = "wg-mail"
+wg = true
+
+[people]
+leads = []
+members = [
+]
+
+[website]
+page = "mail"
+name = "Mail working group"
+description = "Building safe abstractions to handle mail, in Rust."
+
+[[lists]]
+address = "mail-wg@rust-lang.org"
+
+extra-emails = [
+  "kookie@spacekookie.de",
+  "jos@vandenoever.info",
+  "philippkorber@gmail.com",
+  "eaon@posteo.net",
+  "aram@poor.dev",
+  "dirkjan@ochtman.nl",
+  "andy@notasquirrel.dev",
+  "neal@sequoia-pgp.org",
+  "hi@alyssa.is",
+]
