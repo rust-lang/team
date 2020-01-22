@@ -3,4 +3,6 @@ marker-team = true
 
 [people]
 leads = []
-members = []
+members = [
+    "spastorino",
+]
