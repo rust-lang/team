@@ -17,6 +17,9 @@ members = [
     "smarnach",
 ]
 
+[permissions]
+bors.crates_io.review = true
+
 [github]
 orgs = ["rust-lang"]
 

@@ -2,6 +2,3 @@ name = "Sean Griffin"
 github = "sgrif"
 github-id = 1529387
 email = "sean@seantheprogrammer.com"
-
-[permissions]
-bors.crates_io.review = true
