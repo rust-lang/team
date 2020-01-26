@@ -2,6 +2,3 @@ name = "Ricardo Mendes"
 github = "locks"
 github-id = 32344
 email = "rokusu@gmail.com"
-
-[permissions]
-bors.crates_io.review = true
