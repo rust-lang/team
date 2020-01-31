@@ -94,3 +94,9 @@ pub struct RfcbotTeam {
     pub ping: String,
     pub members: Vec<String>,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ZulipMapping {
+    /// Zulip ID to GitHub ID
+    pub users: IndexMap<usize, usize>,
+}

@@ -26,6 +26,7 @@ impl<'a> Generator<'a> {
         self.generate_lists()?;
         self.generate_permissions()?;
         self.generate_rfcbot()?;
+        self.generate_zulip_map()?;
         Ok(())
     }
 
@@ -162,6 +163,25 @@ impl<'a> Generator<'a> {
 
         teams.sort_keys();
         self.add("v1/rfcbot.json", &v1::Rfcbot { teams })?;
+        Ok(())
+    }
+
+    fn generate_zulip_map(&self) -> Result<(), Error> {
+        let mut zulip_people = IndexMap::new();
+
+        for person in self.data.people() {
+            if let Some(zulip_id) = person.zulip_id() {
+                zulip_people.insert(zulip_id, person.github_id());
+            }
+        }
+
+        zulip_people.sort_keys();
+        self.add(
+            "v1/zulip-map.json",
+            &v1::ZulipMapping {
+                users: zulip_people,
+            },
+        )?;
         Ok(())
     }
 
