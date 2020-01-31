@@ -48,6 +48,7 @@ pub(crate) struct Person {
     name: String,
     github: String,
     github_id: usize,
+    zulip_id: Option<usize>,
     irc: Option<String>,
     #[serde(default)]
     email: EmailField,
@@ -67,6 +68,10 @@ impl Person {
 
     pub(crate) fn github_id(&self) -> usize {
         self.github_id
+    }
+
+    pub(crate) fn zulip_id(&self) -> Option<usize> {
+        self.zulip_id
     }
 
     #[allow(unused)]
