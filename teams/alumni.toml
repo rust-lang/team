@@ -3,12 +3,15 @@ name = "alumni"
 [people]
 leads = []
 members = [
-    "Gankra",
     "Aatch",
+    "Gankra",
     "Kimundi",
+    "MajorBreakfast",
+    "Nemo157",
     "TimNN",
     "alercah",
     "arielb1",
+    "aturon",
     "birkenfeld",
     "bkoropoff",
     "booyaa",
@@ -22,6 +25,7 @@ members = [
     "huonw",
     "jonathandturner",
     "jseyfried",
+    "levex",
     "niconii",
     "pcwalton",
     "peschkaj",
