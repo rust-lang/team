@@ -4,9 +4,12 @@ wg = true
 
 [people]
 leads = ["nikomatsakis"]
-members = ["nikomatsakis"]
+members = ["nikomatsakis", "jackh726", "detrumi", "skinny121"]
 
 [website]
 name = "Traits"
-description = "Revamping the rustc trait implementation to follow the Chalk approach."
+description = "Revamping the rustc trait implementation."
 repo = "https://rust-lang.github.io/compiler-team/working-groups/traits/"
+
+[github]
+orgs = ["rust-lang", "rust-lang-nursery"]
