@@ -4,7 +4,6 @@ wg = true
 [people]
 leads = []
 members = [
-    "alexcrichton",
     "cuviper",
     "nikomatsakis",
     "pietroalbini",
