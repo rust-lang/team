@@ -2,6 +2,3 @@ name = "Eric Huss"
 github = "ehuss"
 github-id = 43198
 email = "eric@huss.org"
-
-[permissions]
-bors.rust.review = true
