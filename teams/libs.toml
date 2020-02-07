@@ -1,13 +1,12 @@
 name = "libs"
 
 [people]
-leads = ["alexcrichton"]
+leads = []
 members = [
     "Amanieu",
     "BurntSushi",
     "KodrAus",
     "SimonSapin",
-    "alexcrichton",
     "dtolnay",
     "sfackler",
     "withoutboats",
