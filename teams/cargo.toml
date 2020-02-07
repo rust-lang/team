@@ -12,6 +12,7 @@ members = [
 ]
 
 [permissions]
+bors.rust.review = true
 bors.cargo.review = true
 
 [github]
