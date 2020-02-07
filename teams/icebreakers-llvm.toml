@@ -5,6 +5,8 @@ marker-team = true
 leads = []
 members = [
     "comex",
+    "DutchGhost",
+    "hanna-kruppe",
     "hdhoang",
     "heyrutvik",
     "JOE1994",
@@ -12,11 +14,9 @@ members = [
     "mmilenko",
     "nagisa",
     "nikic",
-    "hanna-kruppe",
+    "Noah-Kennedy",
     "SiavoshZarrasvand",
     "spastorino",
     "vertexclique",
     "vgxbj",
-    "Noah-Kennedy",
-    "DutchGhost",
 ]
