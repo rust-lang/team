@@ -2,7 +2,7 @@ name = "community-localization"
 subteam-of = "community"
 
 [people]
-leads = ["vertexclique"]
+leads = ["vertexclique", "Manishearth"]
 members = [
     "Manishearth",
     "JohnTitor",
