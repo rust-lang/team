@@ -1,0 +1,29 @@
+name = "community-localization"
+subteam-of = "community"
+
+[people]
+leads = ["vertexclique", "Manishearth"]
+members = [
+    "Manishearth",
+    "JohnTitor",
+    "XAMPPRocky",
+    "vertexclique"
+]
+
+[rfcbot]
+label = "T-localization"
+name = "Localization"
+ping = "rust-lang/localization"
+
+[website]
+name = "Localization team"
+description = "Working on localization of compiler, documentation and websites"
+repo = "https://github.com/rust-lang/community-localization"
+discord-invite = "https://discord.gg/6DauHpr"
+discord-name = "#localization"
+
+[github]
+orgs = ["rust-lang"]
+
+[[lists]]
+address = "localization@rust-lang.org"

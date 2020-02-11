@@ -31,7 +31,7 @@ extra-teams = [
     "community-events",
     "community-rustbridge",
     "community-survey",
-    "wg-localization",
+    "community-localization",
 ]
 extra-emails = [
     "rust-community@googlegroups.com",
@@ -44,7 +44,7 @@ extra-teams = [
     "community-events",
     "community-rustbridge",
     "community-survey",
-    "wg-localization",
+    "community-localization",
 ]
 extra-emails = [
     "rust-community@googlegroups.com",
