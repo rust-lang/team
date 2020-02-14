@@ -13,6 +13,9 @@ members = [
   "Aaron1011",
 ]
 
+[github]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
 [website]
 name = "Async Foundations working group"
 description = "Pursuing core language and library support for async-await"
