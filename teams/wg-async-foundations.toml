@@ -19,4 +19,4 @@ orgs = ["rust-lang", "rust-lang-nursery"]
 [website]
 name = "Async Foundations working group"
 description = "Pursuing core language and library support for async-await"
-repo = "https://rust-lang.github.io/compiler-team/working-groups/async-await/"
+repo = "https://github.com/rust-lang/wg-async-foundations"
