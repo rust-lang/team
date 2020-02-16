@@ -3,8 +3,8 @@ subteam-of = "lang"
 wg = true
 
 [people]
-leads = ["nikomatsakis", "avadacatavra"]
-members = ["nikomatsakis", "avadacatavra"]
+leads = ["nikomatsakis", "avadacatavra", "RalfJung"]
+members = ["nikomatsakis", "avadacatavra", "RalfJung"]
 
 [website]
 name = "Unsafe Code Guidelines (UCG)"
