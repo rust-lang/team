@@ -1,0 +1,14 @@
+name = "miri"
+subteam-of = "compiler"
+
+[people]
+leads = ["RalfJung", "oli-obk"]
+members = ["RalfJung", "oli-obk"]
+
+[permissions]
+bors.miri.review = true
+
+[website]
+name = "Miri"
+description = "design and implementation of the Miri interpreter"
+repo = "https://github.com/rust-lang/miri"
