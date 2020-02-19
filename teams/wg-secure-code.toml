@@ -13,7 +13,7 @@ members = [
 ]
 
 [website]
-name = "Secure Code working group"
+name = "Secure code working group"
 description = "Making it easy to write secure code in Rust"
 repo = "https://github.com/rust-secure-code/wg"
 
