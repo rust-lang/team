@@ -15,7 +15,7 @@ team-name = "security"
 orgs = ["rust-lang"]
 
 [website]
-name = "Security Response WG"
+name = "Security response working group"
 description = "Triaging and responding to incoming vulnerability reports"
 email = "security@rust-lang.org"
 repo = "https://github.com/rust-lang/wg-security-response"
