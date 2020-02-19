@@ -13,7 +13,7 @@ members = [
 ]
 
 [github]
-orgs = ["rust-lang", "rust-lang-nursery"]
+orgs = ["rust-lang", "rust-lang-ci", "rust-lang-nursery"]
 
 [permissions]
 perf = true
