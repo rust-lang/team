@@ -6,4 +6,3 @@ email = "post@ralfj.de"
 [permissions]
 perf = true
 bors.rust.review = true
-bors.miri.review = true
