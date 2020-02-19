@@ -6,4 +6,4 @@ members = []
 
 [website]
 name = "Operations team"
-description = "Handling releases, bots, infra, and more."
+description = "Handling releases, bots, infra, and more"

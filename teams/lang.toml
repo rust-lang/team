@@ -28,7 +28,7 @@ ping = "rust-lang/lang"
 
 [website]
 name = "Language team"
-description = "designing new language features"
+description = "Designing and helping to implement new language features"
 repo = "http://github.com/rust-lang/lang-team"
 
 [[lists]]

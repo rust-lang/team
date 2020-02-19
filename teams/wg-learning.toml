@@ -10,6 +10,6 @@ members = ["spastorino", "mark-i-m", "amanjeev", "tshepang", "togiberlin", "John
 orgs = ["rust-lang"]
 
 [website]
-name = "Learning"
-description = "Make the compiler easier to learn by ensuring that rustc-guide and api docs are 'complete'"
+name = "Learning working group"
+description = "Making the compiler easier to learn by ensuring that the compiler guide and API documentation are updated"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/learning/"

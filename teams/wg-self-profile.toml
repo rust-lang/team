@@ -10,6 +10,6 @@ members = ["michaelwoerister", "wesleywiser"]
 perf = true
 
 [website]
-name = "Self-Profile"
-description = "Improving the -Z self-profile feature"
+name = "Self-profile working group"
+description = "Improving the -Z self-profile feature of the Rust compiler"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/self-profile/"

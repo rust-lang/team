@@ -15,7 +15,7 @@ members = [
 
 [website]
 name = "Events team"
-description = "Supporting community events with knowledge and resources."
+description = "Supporting and organizing community events"
 repo = "https://github.com/rust-community/events-team"
 discord-invite = "https://discord.gg/cj5HMXA"
 discord-name = "#events"

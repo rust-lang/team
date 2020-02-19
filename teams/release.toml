@@ -31,7 +31,7 @@ ping = "rust-lang/release"
 
 [website]
 name = "Release team"
-description = "tracking regressions, stabilizations, and producing Rust releases"
+description = "Tracking regressions and stabilizations, and producing Rust releases"
 email = "release@rust-lang.org"
 discord-invite = "https://discord.gg/pVTkgpv"
 discord-name = "#release"

@@ -28,7 +28,7 @@ ping = "rust-lang/core"
 
 [website]
 name = "Core team"
-description = "Direction of the project, subteam leadership, cross-cutting concerns."
+description = "Managing the overall direction of Rust, subteam leadership, and any cross-cutting issues"
 email = "core@rust-lang.org"
 weight = 1000
 

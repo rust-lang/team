@@ -39,7 +39,7 @@ members = [
 [website]
 page = "embedded"
 name = "Embedded devices working group"
-description = "Focusing on the end-to-end experience of using Rust in resource-constrained environments and non-traditional platforms."
+description = "Focusing on improving the end-to-end experience of using Rust in resource-constrained environments and non-traditional platforms"
 repo = "https://github.com/rust-embedded/wg"
 
 [[lists]]

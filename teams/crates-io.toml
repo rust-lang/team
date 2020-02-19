@@ -30,7 +30,7 @@ ping = "rust-lang/crates-io"
 
 [website]
 name = "Crates.io team"
-description = "Management of operations, development, and policies for crates.io."
+description = "Managing operations, development, and official policies for crates.io"
 discord-invite = "https://discord.gg/Rbq8W5K"
 discord-name = "#crates-io"
 

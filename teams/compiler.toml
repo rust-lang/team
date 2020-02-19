@@ -35,7 +35,7 @@ ping = "rust-lang/compiler"
 [website]
 name = "Compiler team"
 repo = "http://github.com/rust-lang/compiler-team"
-description = "compiler internals, optimizations"
+description = "Developing and managing compiler internals and optimizations"
 
 [[lists]]
 address = "compiler-private@rust-lang.org"

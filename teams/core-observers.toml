@@ -11,5 +11,5 @@ members = [
 bors.rust.review = true
 
 [website]
-name = "Core Team Observers"
-description = "observers on the core team"
+name = "Core team observers"
+description = "Observers on the core team"

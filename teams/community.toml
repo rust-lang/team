@@ -15,7 +15,7 @@ members = [
 
 [website]
 name = "Community team"
-description = "Coordination and supporting events, content creation, running the RustBridge program, and conducting the survey."
+description = "Coordinating and supporting events, content creation, and the RustBridge program, as well as conducting community surveys"
 email = "community@rust-lang.org"
 repo = "https://github.com/rust-community/team"
 discord-invite = "https://discord.gg/KskHZGT"
