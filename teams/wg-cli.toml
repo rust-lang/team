@@ -16,7 +16,7 @@ members = [
 [website]
 page = "cli"
 name = "Command-line interfaces (CLI) working group"
-description = "Focusing on the end-to-end experience of writing terminal apps, both large and small, in Rust."
+description = "Focusing on the end-to-end experience of writing terminal apps, both large and small, in Rust"
 
 [[lists]]
 address = "cli-wg@rust-lang.org"
