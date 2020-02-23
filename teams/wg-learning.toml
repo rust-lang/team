@@ -4,7 +4,7 @@ wg = true
 
 [people]
 leads = ["spastorino", "mark-i-m"]
-members = ["spastorino", "mark-i-m", "amanjeev", "tshepang", "togiberlin", "JohnTitor"]
+members = ["spastorino", "mark-i-m", "amanjeev", "tshepang", "togiberlin", "JohnTitor", "chrissimpkins"]
 
 [github]
 orgs = ["rust-lang"]
