@@ -8,12 +8,13 @@ orgs = ["rust-lang"]
 [people]
 leads = ["XAMPPRocky", "nikomatsakis"]
 members = [
-    "skade",
+    "BatmanAoD",
+    "Manishearth",
+    "XAMPPRocky",
     "gnunicorn",
     "nellshamrell",
     "nikomatsakis",
-    "Manishearth",
-    "XAMPPRocky",
+    "skade",
     "valgrimm",
 ]
 
