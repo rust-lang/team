@@ -4,7 +4,7 @@ wg = true
 
 [people]
 leads = ["nikomatsakis"]
-members = ["nikomatsakis", "jackh726", "detrumi", "skinny121"]
+members = ["nikomatsakis", "jackh726", "detrumi", "skinny121", "yaahc"]
 
 [website]
 name = "Traits working group"
