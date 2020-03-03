@@ -5,7 +5,6 @@ leads = ["nikomatsakis", "joshtriplett"]
 members = [
     "Centril",
     "cramertj",
-    "eddyb",
     "joshtriplett",
     "nikomatsakis",
     "pnkfelix",
