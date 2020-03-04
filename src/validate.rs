@@ -151,6 +151,9 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
         for member in members {
             active_members.insert(member);
         }
+        for person in team.alumni() {
+            active_members.insert(&person);
+        }
         Ok(())
     });
 

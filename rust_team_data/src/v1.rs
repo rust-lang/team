@@ -19,6 +19,7 @@ pub struct Team {
     pub kind: TeamKind,
     pub subteam_of: Option<String>,
     pub members: Vec<TeamMember>,
+    pub alumni: Vec<TeamMember>,
     pub github: Option<TeamGitHub>,
     pub website_data: Option<TeamWebsite>,
 }

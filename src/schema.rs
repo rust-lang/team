@@ -179,7 +179,18 @@ impl Team {
                 }
             }
         }
+        if self.people.include_all_alumni {
+            for team in data.teams() {
+                for person in &team.people.alumni {
+                    members.insert(&person);
+                }
+            }
+        }
         Ok(members)
+    }
+
+    pub(crate) fn alumni(&self) -> &[String] {
+        &self.people.alumni
     }
 
     pub(crate) fn raw_lists(&self) -> &[TeamList] {
@@ -291,12 +302,16 @@ impl std::cmp::Ord for GitHubTeam<'_> {
 struct TeamPeople {
     leads: Vec<String>,
     members: Vec<String>,
+    #[serde(default)]
+    alumni: Vec<String>,
     #[serde(default = "default_false")]
     include_team_leads: bool,
     #[serde(default = "default_false")]
     include_wg_leads: bool,
     #[serde(default = "default_false")]
     include_all_team_members: bool,
+    #[serde(default = "default_false")]
+    include_all_alumni: bool,
 }
 
 #[derive(serde::Deserialize, Debug)]
