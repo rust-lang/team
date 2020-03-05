@@ -34,6 +34,9 @@ members = [
     "whitequark",
     "wycats",
 ]
+# Temporary key that includes all members listed as alumni in the individual
+# teams. This is needed while we migrate away from the alumni team.
+include-all-alumni = true
 
 [website]
 name = "Rust team alumni"
