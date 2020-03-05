@@ -14,8 +14,10 @@ members = [
     "gnunicorn",
     "nellshamrell",
     "nikomatsakis",
-    "skade",
     "valgrimm",
+]
+alumni = [
+    "skade",
 ]
 
 [[lists]]
