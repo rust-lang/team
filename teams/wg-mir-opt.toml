@@ -4,7 +4,7 @@ wg = true
 
 [people]
 leads = ["oli-obk"]
-members = ["oli-obk"]
+members = ["oli-obk", "spastorino", "eddyb", "davidtwco", "wesleywiser"]
 
 [website]
 name = "MIR optimizations working group"
