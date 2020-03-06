@@ -6,6 +6,9 @@ wg = true
 leads = ["oli-obk"]
 members = ["oli-obk", "spastorino", "eddyb", "davidtwco", "wesleywiser"]
 
+[github]
+orgs = ["rust-lang"]
+
 [website]
 name = "MIR optimizations working group"
 description = "Writing MIR optimizations and refactoring the MIR to be more optimizable"
