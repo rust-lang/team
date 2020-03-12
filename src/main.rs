@@ -95,7 +95,7 @@ fn run() -> Result<(), Error> {
             std::fs::write(
                 &file,
                 toml::to_string_pretty(&PersonToAdd {
-                    name: user.name.as_ref().map(|n| n.as_str()).unwrap_or_else(|| {
+                    name: user.name.as_deref().unwrap_or_else(|| {
                         warn!(
                             "the person is missing the name on GitHub, defaulting to the username"
                         );
@@ -103,7 +103,7 @@ fn run() -> Result<(), Error> {
                     }),
                     github: &github_name,
                     github_id,
-                    email: user.email.as_ref().map(|e| e.as_str()).or_else(|| {
+                    email: user.email.as_deref().or_else(|| {
                         warn!("the person is missing the email on GitHub, leaving the field empty");
                         None
                     }),
