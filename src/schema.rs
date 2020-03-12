@@ -93,7 +93,7 @@ impl Person {
     }
 
     pub(crate) fn discord(&self) -> Option<&str> {
-        self.discord.as_ref().map(|e| e.as_str())
+        self.discord.as_deref()
     }
 
     pub(crate) fn permissions(&self) -> &Permissions {
@@ -141,7 +141,7 @@ impl Team {
     }
 
     pub(crate) fn subteam_of(&self) -> Option<&str> {
-        self.subteam_of.as_ref().map(|s| s.as_str())
+        self.subteam_of.as_deref()
     }
 
     pub(crate) fn leads(&self) -> HashSet<&str> {
@@ -258,11 +258,7 @@ impl Team {
                         .filter_map(|name| data.person(name).map(|p| p.github_id())),
                 );
             }
-            let name = github
-                .team_name
-                .as_ref()
-                .map(|n| n.as_str())
-                .unwrap_or(&self.name);
+            let name = github.team_name.as_deref().unwrap_or(&self.name);
             Ok(github
                 .orgs
                 .iter()
@@ -366,15 +362,15 @@ impl WebsiteData {
     }
 
     pub(crate) fn page(&self) -> Option<&str> {
-        self.page.as_ref().map(|s| s.as_str())
+        self.page.as_deref()
     }
 
     pub(crate) fn email(&self) -> Option<&str> {
-        self.email.as_ref().map(|s| s.as_str())
+        self.email.as_deref()
     }
 
     pub(crate) fn repo(&self) -> Option<&str> {
-        self.repo.as_ref().map(|s| s.as_str())
+        self.repo.as_deref()
     }
 
     pub(crate) fn discord(&self) -> Option<DiscordInvite> {
