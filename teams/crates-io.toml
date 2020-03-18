@@ -33,7 +33,7 @@ ping = "rust-lang/crates-io"
 name = "Crates.io team"
 description = "Managing operations, development, and official policies for crates.io"
 discord-invite = "https://discord.gg/Rbq8W5K"
-discord-name = "#crates-io"
+discord-name = "#crates-io-team"
 
 [[lists]]
 address = "crates-io@rust-lang.org"
