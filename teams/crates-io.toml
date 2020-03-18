@@ -15,6 +15,7 @@ members = [
     "locks",
     "Turbo87",
     "smarnach",
+    "JohnTitor",
 ]
 
 [permissions]
