@@ -5,9 +5,11 @@ wg = true
 leads = ["japaric", "therealprof", "jamesmunns"]
 members = [
     "adamgreig",
+    "almindor",
     "andre-richter",
     "awygle",
     "bradjc",
+    "burrbull",
     "cr1901",
     "danc86",
     "Disasm",
@@ -21,6 +23,7 @@ members = [
     "jcsoo",
     "jonas-schievink",
     "korken89",
+    "laanwj",
     "nastevens",
     "paoloteti",
     "parched",
