@@ -1,9 +1,11 @@
 name = "reference"
-subteam-of = "docs"
+subteam-of = "lang"
 
 [people]
-leads = ["Havvy"]
+leads = ["Centril", "ehuss"]
 members = [
+    "Centril",
+    "ehuss",
     "Havvy",
     "matthewjasper",
 ]
