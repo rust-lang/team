@@ -1,5 +1,6 @@
-name = "rust-by-example"
+name = "wg-rust-by-example"
 subteam-of = "docs"
+kind = "working-group"
 
 [people]
 leads = ["steveklabnik"]
@@ -12,5 +13,5 @@ members = [
 orgs = ["rust-lang"]
 
 [website]
-name = "Rust by Example team"
+name = "Rust by Example working group"
 description = "Maintaining and updating an official Rust book, Rust By Example"
