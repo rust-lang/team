@@ -4,6 +4,7 @@ subteam-of = "compiler"
 [people]
 leads = []
 members = [
+  "Aaron1011",
   "Centril",
   "davidtwco",
   "ecstatic-morse",
