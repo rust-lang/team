@@ -3,7 +3,6 @@ name = "compiler"
 [people]
 leads = ["nikomatsakis", "pnkfelix"]
 members = [
-    "cramertj",
     "eddyb",
     "estebank",
     "nagisa",
@@ -12,10 +11,13 @@ members = [
     "pnkfelix",
     "nikomatsakis",
     "matthewjasper",
-    "michaelwoerister",
     "varkor",
     "wesleywiser",
     "Zoxc",
+]
+alumni = [
+    "cramertj",
+    "michaelwoerister",
 ]
 
 [permissions]
