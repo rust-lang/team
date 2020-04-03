@@ -1,0 +1,15 @@
+name = "wg-rustc-dev-guide"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["spastorino", "mark-i-m"]
+members = ["spastorino", "mark-i-m", "amanjeev", "tshepang", "togiberlin", "JohnTitor", "chrissimpkins", "LeSeulArtichaut"]
+
+[github]
+orgs = ["rust-lang"]
+
+[website]
+name = "Rustc Dev Guide working group"
+description = "Make the compiler easier to learn by ensuring that rustc-dev-guide is \"complete\""
+repo = "https://rust-lang.github.io/compiler-team/working-groups/rustc-dev-guide/"
