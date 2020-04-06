@@ -154,6 +154,11 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
         for person in team.alumni() {
             active_members.insert(&person);
         }
+        for list in team.raw_lists() {
+            for person in &list.extra_people {
+                active_members.insert(&person);
+            }
+        }
         Ok(())
     });
 
