@@ -11,6 +11,7 @@ members = [
     "matthiasbeyer",
     "spacekookie",
     "yoshuawuyts",
+    "deg4uss3r",
 ]
 
 [website]
@@ -26,4 +27,5 @@ extra-emails = [
     "creepy-skeleton@yandex.ru",
     "msarfati@protonmail.com",
     "mail+rust-wg-cli@pksunkara.com",
+    "Ricky@Hosfelt.io",
 ]
