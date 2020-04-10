@@ -3,8 +3,8 @@ subteam-of = "compiler"
 wg = true
 
 [people]
-leads = ["Zoxc", "michaelwoerister"]
-members = ["Zoxc", "michaelwoerister"]
+leads = ["Mark-Simulacrum", "nikomatsakis"]
+members = ["nikomatsakis", "Mark-Simulacrum", "alexcrichton", "cuviper", "spastorino"]
 
 [website]
 name = "Parallel rustc working group"
