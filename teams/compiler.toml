@@ -13,11 +13,11 @@ members = [
     "matthewjasper",
     "varkor",
     "wesleywiser",
-    "Zoxc",
 ]
 alumni = [
     "cramertj",
     "michaelwoerister",
+    "Zoxc",
 ]
 
 [permissions]
