@@ -1,0 +1,17 @@
+name = "wg-embedded-msp430"
+subteam-of = "wg-embedded"
+kind = "working-group"
+
+[people]
+leads = []
+members = [
+    "cr1901",
+]
+
+[website]
+name = "Embedded MSP430 team"
+description = "Develops and maintains the core of the embedded MSP430 crate ecosystem"
+
+[[github]]
+orgs = ["rust-embedded"]
+team-name = "msp430"

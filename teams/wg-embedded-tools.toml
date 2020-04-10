@@ -1,0 +1,20 @@
+name = "wg-embedded-tools"
+subteam-of = "wg-embedded"
+kind = "working-group"
+
+[people]
+leads = []
+members = [
+    "almindor",
+    "Disasm",
+    "thejpster",
+    "dkhayes117",
+]
+
+[website]
+name = "Embedded Tools Team"
+description = "Develops and maintains core embedded tools"
+
+[[github]]
+orgs = ["rust-embedded"]
+team-name = "tools"

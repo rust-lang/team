@@ -1,0 +1,19 @@
+name = "wg-embedded-core"
+subteam-of = "wg-embedded"
+kind = "working-group"
+
+[people]
+leads = []
+members = [
+    "adamgreig",
+    "therealprof",
+    "japaric",
+]
+
+[website]
+name = "Embedded core team"
+description = "The core team represents the WG in meetings with the Rust teams"
+
+[[github]]
+orgs = ["rust-embedded"]
+team-name = "core"
