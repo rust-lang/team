@@ -11,6 +11,9 @@ members = [
     "technetos",
     "JohnTitor",
 ]
+alumni = [
+    "fmoko",
+]
 
 [website]
 name = "Community team"
