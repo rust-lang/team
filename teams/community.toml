@@ -8,7 +8,6 @@ members = [
     "sebasmagri",
     "ashleygwilliams",
     "badboy",
-    "fmoko",
     "technetos",
     "JohnTitor",
 ]
@@ -29,7 +28,6 @@ address = "community@rust-lang.org"
 extra-teams = [
     "community-content",
     "community-events",
-    "community-rustbridge",
     "community-survey",
     "community-localization",
 ]
@@ -42,7 +40,6 @@ address = "community-team@rust-lang.org"
 extra-teams = [
     "community-content",
     "community-events",
-    "community-rustbridge",
     "community-survey",
     "community-localization",
 ]
@@ -60,15 +57,6 @@ extra-people = [
 ]
 extra-emails = [
     "dhosfelt@mozilla.com",
-]
-
-[[lists]]
-address = "rustbridge@rust-lang.org"
-include-team-members = false
-extra-people = [
-    "fmoko",
-    "ashleygwilliams",
-    "arshiamufti",
 ]
 
 [[lists]]
