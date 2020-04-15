@@ -7,8 +7,10 @@ leads = ["eddyb", "qmx"]
 members = [
     "eddyb",
     "CAD97",
-    "Centril",
     "qmx",
+]
+alumni = [
+    "Centril",
 ]
 
 [website]

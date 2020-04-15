@@ -4,7 +4,10 @@ wg = true
 
 [people]
 leads = ["spastorino", "wesleywiser"]
-members = ["spastorino", "wesleywiser", "pnkfelix", "Centril", "LeSeulArtichaut", "JohnTitor", "Dylan-DPC"]
+members = ["spastorino", "wesleywiser", "pnkfelix", "LeSeulArtichaut", "JohnTitor", "Dylan-DPC"]
+alumni = [
+    "Centril",
+]
 
 [website]
 name = "Prioritization working group"
