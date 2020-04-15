@@ -2,12 +2,14 @@ name = "reference"
 subteam-of = "lang"
 
 [people]
-leads = ["Centril", "ehuss"]
+leads = ["ehuss"]
 members = [
-    "Centril",
     "ehuss",
     "Havvy",
     "matthewjasper",
+]
+alumni = [
+    "Centril",
 ]
 
 [website]

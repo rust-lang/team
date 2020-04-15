@@ -5,7 +5,6 @@ subteam-of = "compiler"
 leads = []
 members = [
   "Aaron1011",
-  "Centril",
   "davidtwco",
   "ecstatic-morse",
   "flodiebold",
@@ -20,6 +19,9 @@ members = [
   "tmandry",
   "Xanewok",
   "zackmdavis",
+]
+alumni = [
+    "Centril",
 ]
 
 [permissions]
