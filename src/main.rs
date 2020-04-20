@@ -122,7 +122,9 @@ fn run() -> Result<(), Error> {
             let team = data.team(name).ok_or_else(|| err_msg("unknown team"))?;
 
             let leads = team.leads();
-            for member in team.members(&data)? {
+            let mut members = team.members(&data)?.into_iter().collect::<Vec<_>>();
+            members.sort();
+            for member in members {
                 println!(
                     "{}{}",
                     member,
@@ -136,7 +138,9 @@ fn run() -> Result<(), Error> {
         }
         Cli::DumpList { ref name } => {
             let list = data.list(name)?.ok_or_else(|| err_msg("unknown list"))?;
-            for email in list.emails() {
+            let mut emails = list.emails().iter().collect::<Vec<_>>();
+            emails.sort();
+            for email in emails {
                 println!("{}", email);
             }
         }
