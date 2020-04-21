@@ -3,8 +3,21 @@ subteam-of = "compiler"
 wg = true
 
 [people]
-leads = ["nikomatsakis"]
-members = ["nikomatsakis", "jackh726", "detrumi", "skinny121", "yaahc"]
+leads = ["nikomatsakis", "jackh726"]
+members = [
+    "Areredify",
+    "detrumi",
+    "flodiebold",
+    "jackh726",
+    "MarkMcCaskey",
+    "nikomatsakis",
+    "skinny121",
+    "yaahc",
+]
+alumni = [
+    "scalexm",
+    "tmandry",
+]
 
 [website]
 name = "Traits working group"
