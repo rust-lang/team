@@ -7,6 +7,9 @@ members = [
     "skade",
 ]
 
+[github]
+orgs = ["rust-lang"]
+
 [permissions]
 bors.rust.review = true
 
