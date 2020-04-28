@@ -14,6 +14,7 @@ members = [
   "matklad",
   "nikic",
   "nnethercote",
+  "RalfJung",
   "scalexm",
   "spastorino",
   "tmandry",
