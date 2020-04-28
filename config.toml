@@ -2,6 +2,7 @@ allowed-mailing-lists-domains = [
     "rust-lang.org",
     "crates.io",
     "docs.rs",
+    "rust-embedded.org",
 ]
 
 allowed-github-orgs = [
@@ -9,4 +10,5 @@ allowed-github-orgs = [
     "rust-lang-ci",
     "rust-lang-nursery",
     "rust-dev-tools",
+    "rust-embedded",
 ]

@@ -1,0 +1,19 @@
+name = "wg-embedded-infra"
+subteam-of = "wg-embedded"
+wg = true
+
+[people]
+leads = []
+members = [
+    "ryankurte",
+    "nastevens",
+]
+
+[website]
+name = "Embedded infrastructure team"
+description = "This teams manages embedded-wg domains, DNS records, e-mails aliases, etc."
+
+[github]
+orgs = ["rust-embedded"]
+team-name = "infrastructure"
+
