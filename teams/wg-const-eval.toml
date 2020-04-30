@@ -12,7 +12,7 @@ members = [
 
 [website]
 name = "Compile-time function evaluation"
-description = "Expanding the capabilities of compile-time function evaluation in Rust"
+description = "Soundly expanding the capabilities of compile-time function evaluation in Rust"
 repo = "https://github.com/rust-lang/const-eval"
 
 [github]
