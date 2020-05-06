@@ -4,7 +4,7 @@ wg = true
 
 [people]
 leads = ["spastorino", "wesleywiser"]
-members = ["spastorino", "wesleywiser", "pnkfelix", "LeSeulArtichaut", "JohnTitor", "Dylan-DPC"]
+members = ["spastorino", "wesleywiser", "pnkfelix", "LeSeulArtichaut", "JohnTitor", "Dylan-DPC", "lcnr"]
 alumni = [
     "Centril",
 ]
