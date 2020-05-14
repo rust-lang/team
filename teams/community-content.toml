@@ -9,6 +9,9 @@ members = [
     "skade",
     "wezm",
 ]
+alumni = [
+    "nasa42",
+]
 
 [website]
 name = "Content team"
