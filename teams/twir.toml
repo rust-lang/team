@@ -6,6 +6,9 @@ members = [
     "llogiq",
     "nellshamrell",
 ]
+alumni = [
+    "nasa42",
+]
 
 [[lists]]
 address = "twir@rust-lang.org"
