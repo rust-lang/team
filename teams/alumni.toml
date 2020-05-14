@@ -1,3 +1,6 @@
+# DEPRECATED: Do not add new members to this team, instead add to `people.alumni`
+# in the team's file or create a new `people.alumni` key and add the
+# person's name there instead.
 name = "alumni"
 
 [people]
@@ -25,7 +28,6 @@ members = [
     "jonathandturner",
     "jseyfried",
     "levex",
-    "nasa42",
     "niconii",
     "pcwalton",
     "peschkaj",
