@@ -52,7 +52,7 @@ pub(crate) struct Person {
     irc: Option<String>,
     #[serde(default)]
     email: EmailField,
-    discord: Option<String>,
+    discord_id: Option<String>,
     #[serde(default)]
     permissions: Permissions,
 }
@@ -92,8 +92,8 @@ impl Person {
         }
     }
 
-    pub(crate) fn discord(&self) -> Option<&str> {
-        self.discord.as_deref()
+    pub(crate) fn discord_id(&self) -> Option<&str> {
+        self.discord_id.as_deref()
     }
 
     pub(crate) fn permissions(&self) -> &Permissions {
