@@ -17,7 +17,6 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_list_extra_teams,
     validate_list_addresses,
     validate_people_addresses,
-    validate_discord_id,
     validate_duplicate_permissions,
     validate_permissions,
     validate_rfcbot_labels,
@@ -266,24 +265,6 @@ fn validate_people_addresses(data: &Data, errors: &mut Vec<String>) {
         }
         Ok(())
     });
-}
-
-/// Ensure the Discord id is formatted properly
-fn validate_discord_id(data: &Data, errors: &mut Vec<String>) {
-    // A Discord ID is 18 digits
-    let id_re = Regex::new(r"^[0-9]{18}$").unwrap();
-    wrapper(data.people(), errors, |person, _| {
-        if let Some(id) = person.discord_id() {
-            if !id_re.is_match(id) {
-                bail!(
-                    "user `{}` has an invalid discord id: {}",
-                    person.github(),
-                    id
-                );
-            }
-        }
-        Ok(())
-    })
 }
 
 /// Ensure members of teams with permissions don't explicitly have those permissions
