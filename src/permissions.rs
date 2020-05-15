@@ -11,6 +11,9 @@ macro_rules! permissions {
         bors_repos {
             $($bors:ident,)*
         }
+        crates_io_ops_apps {
+            $($crates_io_ops_apps:ident,)*
+        }
     ) => {
         #[derive(serde_derive::Deserialize, Debug)]
         #[serde(deny_unknown_fields)]
@@ -132,7 +135,6 @@ permissions! {
     booleans {
         perf,
         crater,
-        crates-io-ops,
     }
     bors_repos {
         cargo,
@@ -150,6 +152,9 @@ permissions! {
         rustup_rs,
         stdarch,
         team,
+    }
+    crates_io_ops_apps {
+       heroku_crates_io_staging, // Placeholder until I get the actual app name
     }
 }
 
