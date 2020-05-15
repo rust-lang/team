@@ -132,6 +132,7 @@ permissions! {
     booleans {
         perf,
         crater,
+        crates-io-ops,
     }
     bors_repos {
         cargo,

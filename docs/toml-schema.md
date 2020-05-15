@@ -101,4 +101,5 @@ permissions are available:
 perf = true
 # Optional, grants access to the @craterbot GitHub bot
 crater = true
+# Optional, grants access to the crates-io-ops Discord bot
 ```

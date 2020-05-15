@@ -19,6 +19,7 @@ orgs = ["rust-lang", "rust-lang-ci", "rust-lang-nursery"]
 [permissions]
 perf = true
 crater = true
+crates-io-ops = true
 bors.rust.review = true
 bors.crater.review = true
 
