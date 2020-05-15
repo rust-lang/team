@@ -19,9 +19,9 @@ orgs = ["rust-lang", "rust-lang-ci", "rust-lang-nursery"]
 [permissions]
 perf = true
 crater = true
-crates-io-ops = true
 bors.rust.review = true
 bors.crater.review = true
+crates_io_ops_app.crates_io_staging = true
 
 [rfcbot]
 label = "T-infra"

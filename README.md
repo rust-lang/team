@@ -23,7 +23,6 @@ supported services.
 [www-src]: https://github.com/rust-lang/www.rust-lang.org/blob/master/src/teams.rs
 [crater]: https://github.com/rust-lang-nursery/crater
 [crater-src]: https://github.com/rust-lang-nursery/crater/blob/master/src/server/auth.rs
-[crates-io-ios]: https://github.com/rust-lang/crates-io-ops-bot/
 [ml-src]: https://github.com/rust-lang/rust-central-station/tree/master/sync-mailgun
 [perf]: https://perf.rust-lang.org
 [perf-src]: https://github.com/rust-lang-nursery/rustc-perf/blob/master/site/src/server.rs

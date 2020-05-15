@@ -12,7 +12,7 @@ macro_rules! permissions {
             $($bors:ident,)*
         }
         crates_io_ops_apps {
-            $($crates_io_ops_apps:ident,)*
+            $($crates_io_ops_app:ident,)*
         }
     ) => {
         #[derive(serde_derive::Deserialize, Debug)]
@@ -59,6 +59,7 @@ macro_rules! permissions {
             )*
             #[serde(default)]
             bors: BorsPermissions,
+            crates_io_ops_bot: CratesIoOps,
         }
 
         impl Default for Permissions {
@@ -66,6 +67,7 @@ macro_rules! permissions {
                 Permissions {
                     $($boolean: false,)*
                     bors: BorsPermissions::default(),
+                    crates_io_ops_bot: CratesIoOps::default(),
                 }
             }
         }
@@ -75,6 +77,7 @@ macro_rules! permissions {
                 $(stringify!($boolean),)*
                 $(concat!("bors.", stringify!($bors), ".review"),)*
                 $(concat!("bors.", stringify!($bors), ".try"),)*
+                $(concat!("crates_io_ops_app.", stringify!($crates_io_ops_app)),)*
             ];
 
             pub(crate) fn has(&self, permission: &str) -> bool {
@@ -93,6 +96,11 @@ macro_rules! permissions {
                     }
                     if permission == concat!("bors.", stringify!($bors), ".try") {
                         return self.bors.$bors.try_
+                    }
+                )*
+                $(
+                    if permission == concat!("crates_io_ops_app", stringify!($crates_io_ops_app)) {
+                        return self.$crates_io_ops_app;
                     }
                 )*
                 false
@@ -128,6 +136,25 @@ macro_rules! permissions {
                 Ok(())
             }
         }
+
+        #[derive(serde_derive::Deserialize, Debug)]
+        #[serde(deny_unknown_fields)]
+        pub(crate) struct CratesIoOps {
+            $(
+                #[serde(default)]
+                $crates_io_ops_app: bool,
+            )*
+        }
+
+        impl Default for CratesIoOps {
+            fn default() -> Self {
+                CratesIoOps {
+                    $($crates_io_ops_app: false,)*
+                }
+            }
+        }
+
+
     }
 }
 
@@ -154,7 +181,6 @@ permissions! {
         team,
     }
     crates_io_ops_apps {
-       heroku_crates_io_staging, // Placeholder until I get the actual app name
     }
 }
 
