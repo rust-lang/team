@@ -100,7 +100,7 @@ macro_rules! permissions {
                     }
                 )*
                 $(
-                    if permission == concat!("crates_io_ops_app", stringify!($crates_io_ops_app)) {
+                    if permission == concat!("crates_io_ops_bot", stringify!($crates_io_ops_app)) {
                         return self.crates_io_ops_bot.$crates_io_ops_app
                     }
                 )*
