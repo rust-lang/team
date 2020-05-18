@@ -78,7 +78,7 @@ macro_rules! permissions {
                 $(stringify!($boolean),)*
                 $(concat!("bors.", stringify!($bors), ".review"),)*
                 $(concat!("bors.", stringify!($bors), ".try"),)*
-                $(concat!("crates_io_ops_app.", stringify!($crates_io_ops_app)),)*
+                $(concat!("crates_io_ops_bot.", stringify!($crates_io_ops_app)),)*
             ];
 
             pub(crate) fn has(&self, permission: &str) -> bool {
