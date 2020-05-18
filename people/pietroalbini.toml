@@ -2,3 +2,6 @@ name = "Pietro Albini"
 github = "pietroalbini"
 github-id = 2299951
 email = "pietro@pietroalbini.org"
+
+[permissions]
+crates-io-ops-bot.staging_crates_io = true

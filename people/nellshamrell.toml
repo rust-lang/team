@@ -2,3 +2,6 @@ name = "Nell Shamrell-Harrington"
 github = "nellshamrell"
 github-id = 813007
 email = "nellshamrell@gmail.com"
+
+[permissions]
+crates-io-ops-bot.staging_crates_io = true

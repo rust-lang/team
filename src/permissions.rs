@@ -59,6 +59,7 @@ macro_rules! permissions {
             )*
             #[serde(default)]
             bors: BorsPermissions,
+            #[serde(default)]
             crates_io_ops_bot: CratesIoOps,
         }
 
@@ -100,7 +101,7 @@ macro_rules! permissions {
                 )*
                 $(
                     if permission == concat!("crates_io_ops_app", stringify!($crates_io_ops_app)) {
-                        return self.$crates_io_ops_app;
+                        return self.crates_io_ops_bot.$crates_io_ops_app 
                     }
                 )*
                 false
@@ -153,8 +154,6 @@ macro_rules! permissions {
                 }
             }
         }
-
-
     }
 }
 
@@ -181,6 +180,8 @@ permissions! {
         team,
     }
     crates_io_ops_apps {
+        crates_io,
+        staging_crates_io,
     }
 }
 
