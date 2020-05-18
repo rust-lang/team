@@ -82,6 +82,7 @@ pub struct Lists {
 pub struct Permission {
     pub github_users: Vec<String>,
     pub github_ids: Vec<usize>,
+    pub discord_ids: Vec<usize>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

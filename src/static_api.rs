@@ -139,13 +139,21 @@ impl<'a> Generator<'a> {
                 .map(|p| p.github().to_string())
                 .collect::<Vec<_>>();
             let mut github_ids = allowed.iter().map(|p| p.github_id()).collect::<Vec<_>>();
+
+            let mut discord_ids = allowed
+                .iter()
+                .map(|p| p.discord_id().unwrap_or(0))
+                .collect::<Vec<_>>();
+
             github_users.sort();
             github_ids.sort();
+            discord_ids.sort();
             self.add(
                 &format!("v1/permissions/{}.json", perm),
                 &v1::Permission {
                     github_users,
                     github_ids,
+                    discord_ids,
                 },
             )?;
         }

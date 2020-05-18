@@ -17,7 +17,6 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_list_extra_teams,
     validate_list_addresses,
     validate_people_addresses,
-    validate_discord_name,
     validate_duplicate_permissions,
     validate_permissions,
     validate_rfcbot_labels,
@@ -266,24 +265,6 @@ fn validate_people_addresses(data: &Data, errors: &mut Vec<String>) {
         }
         Ok(())
     });
-}
-
-/// Ensure the Discord name is formatted properly
-fn validate_discord_name(data: &Data, errors: &mut Vec<String>) {
-    // https://discordapp.com/developers/docs/resources/user#usernames-and-nicknames
-    let name_re = Regex::new(r"^[^@#:`]{2,32}#[0-9]{4}$").unwrap();
-    wrapper(data.people(), errors, |person, _| {
-        if let Some(name) = person.discord() {
-            if !name_re.is_match(name) {
-                bail!(
-                    "user `{}` has an invalid discord name: {}",
-                    person.github(),
-                    name
-                );
-            }
-        }
-        Ok(())
-    })
 }
 
 /// Ensure members of teams with permissions don't explicitly have those permissions
