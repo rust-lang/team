@@ -121,6 +121,7 @@ macro_rules! permissions {
                 $(|| self.$boolean)*
                 $(|| self.bors.$bors.review)*
                 $(|| self.bors.$bors.try_)*
+                $(|| self.crates_io_ops_bot.$crates_io_ops_app)*
             }
 
             pub(crate) fn validate(&self, what: String) -> Result<(), Error> {
