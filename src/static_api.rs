@@ -142,7 +142,7 @@ impl<'a> Generator<'a> {
 
             let mut discord_ids = allowed
                 .iter()
-                .map(|p| p.discord_id().unwrap_or(0))
+                .filter_map( |p| p.discord_id())
                 .collect::<Vec<_>>();
 
             github_users.sort();
