@@ -17,7 +17,7 @@ ping = "rust-lang/moderation"
 [website]
 page = "moderation"
 name = "Moderation team"
-description = "helping uphold the code of conduct"
+description = "Helping uphold the code of conduct and community standards"
 email = "rust-mods@rust-lang.org"
 
 [[lists]]

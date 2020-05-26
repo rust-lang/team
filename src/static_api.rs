@@ -49,6 +49,19 @@ impl<'a> Generator<'a> {
             members.sort_by_key(|member| member.github.to_lowercase());
             members.sort_by_key(|member| !member.is_lead);
 
+            let mut alumni = Vec::new();
+            for github_name in team.alumni() {
+                if let Some(person) = self.data.person(github_name) {
+                    alumni.push(v1::TeamMember {
+                        name: person.name().into(),
+                        github: github_name.to_string(),
+                        github_id: person.github_id(),
+                        is_lead: false,
+                    });
+                }
+            }
+            alumni.sort_by_key(|member| member.github.to_lowercase());
+
             let mut github_teams = team.github_teams(&self.data)?;
             github_teams.sort();
 
@@ -63,6 +76,7 @@ impl<'a> Generator<'a> {
                 },
                 subteam_of: team.subteam_of().map(|st| st.into()),
                 members,
+                alumni,
                 github: Some(v1::TeamGitHub {
                     teams: github_teams
                         .into_iter()
@@ -125,13 +139,21 @@ impl<'a> Generator<'a> {
                 .map(|p| p.github().to_string())
                 .collect::<Vec<_>>();
             let mut github_ids = allowed.iter().map(|p| p.github_id()).collect::<Vec<_>>();
+
+            let mut discord_ids = allowed
+                .iter()
+                .filter_map(|p| p.discord_id())
+                .collect::<Vec<_>>();
+
             github_users.sort();
             github_ids.sort();
+            discord_ids.sort();
             self.add(
                 &format!("v1/permissions/{}.json", perm),
                 &v1::Permission {
                     github_users,
                     github_ids,
+                    discord_ids,
                 },
             )?;
         }

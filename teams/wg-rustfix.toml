@@ -16,6 +16,6 @@ members = [
 
 [website]
 name = "Rustfix working group"
-description = "Improve cargo-fix and be a point of contact for other teams"
+description = "Developing cargo-fix and serving as a point of contact for other teams"
 discord-invite = "https://discord.gg/e6Q3cvu"
 discord-name = "#wg-rustfix"

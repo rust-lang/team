@@ -7,6 +7,6 @@ leads = ["nikomatsakis", "blitzerr"]
 members = ["nikomatsakis", "blitzerr"]
 
 [website]
-name = "RFC 2229"
-description = "Make a closure capture individual fields of the variable rather than the entire composite variable"
+name = "RFC 2229 working group"
+description = "Improving the behavior of closure-capture, and improving the documentation on closures"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/rfc-2229/"

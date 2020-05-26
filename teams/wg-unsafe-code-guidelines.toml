@@ -3,9 +3,9 @@ subteam-of = "lang"
 wg = true
 
 [people]
-leads = ["nikomatsakis", "avadacatavra"]
-members = ["nikomatsakis", "avadacatavra"]
+leads = ["nikomatsakis", "avadacatavra", "RalfJung"]
+members = ["nikomatsakis", "avadacatavra", "RalfJung"]
 
 [website]
-name = "Unsafe Code Guidelines (UCG)"
-description = "Working out the \"Unsafe Code Guidelines\", which define what kind of behavior unsafe code can and cannot do."
+name = "Unsafe Code Guidelines (UCG) working group"
+description = "Working out the \"Unsafe Code Guidelines\", which define what kind of behavior unsafe code can and cannot do"

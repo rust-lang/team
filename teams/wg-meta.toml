@@ -7,6 +7,6 @@ leads = ["nikomatsakis", "davidtwco", "spastorino"]
 members = ["nikomatsakis", "davidtwco", "spastorino"]
 
 [website]
-name = "Meta"
-description = "How compiler team organizes itself"
+name = "Meta working group"
+description = "Organizing and managing the Rust compiler team"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/meta/"

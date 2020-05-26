@@ -3,12 +3,25 @@ subteam-of = "compiler"
 wg = true
 
 [people]
-leads = ["nikomatsakis"]
-members = ["nikomatsakis", "jackh726", "detrumi", "skinny121"]
+leads = ["nikomatsakis", "jackh726"]
+members = [
+    "Areredify",
+    "detrumi",
+    "flodiebold",
+    "jackh726",
+    "MarkMcCaskey",
+    "nikomatsakis",
+    "skinny121",
+    "yaahc",
+]
+alumni = [
+    "scalexm",
+    "tmandry",
+]
 
 [website]
-name = "Traits"
-description = "Revamping the rustc trait implementation."
+name = "Traits working group"
+description = "Revamping the rustc trait implementation to follow the Chalk approach"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/traits/"
 
 [github]

@@ -2,13 +2,14 @@ name = "docs-rs"
 subteam-of = "devtools"
 
 [people]
-leads = ["QuietMisdreavus"]
+leads = ["jyn514", "pietroalbini"]
 members = [
-    "QuietMisdreavus",
     "GuillaumeGomez",
+    "Kixiron",
+    "Nemo157",
+    "jyn514",
     "onur",
     "pietroalbini",
-    "jyn514",
 ]
 
 [github]
@@ -27,3 +28,6 @@ discord-name = "#docs-rs"
 
 [[lists]]
 address = "docs-rs@rust-lang.org"
+
+[[lists]]
+address = "help@docs.rs"

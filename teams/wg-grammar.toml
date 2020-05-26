@@ -7,10 +7,12 @@ leads = ["eddyb", "qmx"]
 members = [
     "eddyb",
     "CAD97",
-    "Centril",
     "qmx",
+]
+alumni = [
+    "Centril",
 ]
 
 [website]
-name = "Grammar"
-description = "Working out the official, formal grammar for Rust and validating it against existing implementations."
+name = "Grammar working group"
+description = "Working out the official, formal grammar for Rust and validating it against existing implementations"

@@ -5,10 +5,12 @@ subteam-of = "mods"
 leads = []
 members = [
     "fmoko",
-    "Centril",
     "khionu",
     "sgrif",
     "technetos",
+]
+alumni = [
+    "Centril",
 ]
 
 [website]

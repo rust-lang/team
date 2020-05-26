@@ -1,0 +1,19 @@
+name = "web-presence"
+
+[people]
+leads = []
+members = []
+
+[[lists]]
+address = "web-presence@rust-lang.org"
+extra-teams = [
+    "crates-io",
+    "docs-rs",
+]
+extra-people = [
+    "Manishearth",
+    "skade",
+    "XAMPPRocky",
+    "shepmaster",
+    "pichfl",
+]

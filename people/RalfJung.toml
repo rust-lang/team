@@ -1,8 +1,4 @@
 name = "Ralf Jung"
 github = "RalfJung"
 github-id = 330628
-
-[permissions]
-perf = true
-bors.rust.review = true
-bors.miri.review = true
+email = "post@ralfj.de"

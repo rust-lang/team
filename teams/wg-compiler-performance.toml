@@ -7,5 +7,5 @@ leads = ["nikomatsakis"]
 members = ["nikomatsakis"]
 
 [website]
-name = "Compiler Performance"
-description = "Improving rustc compilation performance (build times)."
+name = "Compiler performance working group"
+description = "Improving rustc compilation performance (build times)"

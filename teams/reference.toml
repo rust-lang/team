@@ -1,13 +1,17 @@
 name = "reference"
-subteam-of = "docs"
+subteam-of = "lang"
 
 [people]
-leads = ["Havvy"]
+leads = ["ehuss"]
 members = [
+    "ehuss",
     "Havvy",
     "matthewjasper",
+]
+alumni = [
+    "Centril",
 ]
 
 [website]
 name = "Reference team"
-description = "working on the Rust reference"
+description = "Developing and writing the Rust reference"

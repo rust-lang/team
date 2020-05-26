@@ -21,7 +21,7 @@ ping = "rust-lang/ides"
 
 [website]
 name = "IDEs and editors team"
-description = "IDEs, editors, and supporting tools such as Racer and the RLS"
+description = "Developing IDEs, editors, and other development tools such as Racer and the RLS"
 
 [[lists]]
 address = "ides@rust-lang.org"

@@ -8,7 +8,6 @@ members = [
     "Eh2406",
     "ehuss",
     "joshtriplett",
-    "nrc",
 ]
 
 [permissions]
@@ -25,7 +24,7 @@ ping = "rust-lang/cargo"
 
 [website]
 name = "Cargo team"
-description = "design and implementation of Cargo"
+description = "Designing and implementing the official Rust package manager, Cargo"
 discord-invite = "https://discord.gg/aEbd4eT"
 discord-name = "#cargo"
 

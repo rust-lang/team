@@ -1,0 +1,24 @@
+name = "wg-async-foundations"
+wg = true
+
+[people]
+leads = ["nikomatsakis", "tmandry"]
+members = [
+  "nikomatsakis",
+  "cramertj",
+  "tmandry",
+  "withoutboats",
+  "gilescope",
+  "csmoe",
+  "Aaron1011",
+  "taiki-e",
+  "nellshamrell",
+]
+
+[github]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
+[website]
+name = "Async Foundations working group"
+description = "Pursuing core language and library support for async-await"
+repo = "https://github.com/rust-lang/wg-async-foundations"

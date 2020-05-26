@@ -19,6 +19,7 @@ pub struct Team {
     pub kind: TeamKind,
     pub subteam_of: Option<String>,
     pub members: Vec<TeamMember>,
+    pub alumni: Vec<TeamMember>,
     pub github: Option<TeamGitHub>,
     pub website_data: Option<TeamWebsite>,
 }
@@ -81,6 +82,7 @@ pub struct Lists {
 pub struct Permission {
     pub github_users: Vec<String>,
     pub github_ids: Vec<usize>,
+    pub discord_ids: Vec<usize>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

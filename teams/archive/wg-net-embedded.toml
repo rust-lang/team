@@ -10,7 +10,7 @@ members = [
 ]
 
 [website]
-name = "Embedded networking group"
-description = "Our goal is to support IoT development."
+name = "Embedded networking working group"
+description = "Supporting IoT development with Rust"
 discord-invite = "https://discord.gg/wUQwRea"
 discord-name = "#wg-net-embedded"

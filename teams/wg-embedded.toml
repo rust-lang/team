@@ -5,9 +5,11 @@ wg = true
 leads = ["japaric", "therealprof", "jamesmunns"]
 members = [
     "adamgreig",
+    "almindor",
     "andre-richter",
     "awygle",
     "bradjc",
+    "burrbull",
     "cr1901",
     "danc86",
     "Disasm",
@@ -21,6 +23,7 @@ members = [
     "jcsoo",
     "jonas-schievink",
     "korken89",
+    "laanwj",
     "nastevens",
     "paoloteti",
     "parched",
@@ -39,7 +42,7 @@ members = [
 [website]
 page = "embedded"
 name = "Embedded devices working group"
-description = "Focusing on the end-to-end experience of using Rust in resource-constrained environments and non-traditional platforms."
+description = "Focusing on improving the end-to-end experience of using Rust in resource-constrained environments and non-traditional platforms"
 repo = "https://github.com/rust-embedded/wg"
 
 [[lists]]
