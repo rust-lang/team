@@ -5,7 +5,6 @@ subteam-of = "operations"
 leads = ["Mark-Simulacrum"]
 members = [
     "BatmanAoD",
-    "Centril",
     "cuviper",
     "Dylan-DPC",
     "Mark-Simulacrum",
@@ -14,6 +13,9 @@ members = [
     "jonas-schievink",
     "XAMPPRocky",
     "tmandry",
+]
+alumni = [
+    "Centril",
 ]
 
 [permissions]
@@ -31,7 +33,7 @@ ping = "rust-lang/release"
 
 [website]
 name = "Release team"
-description = "tracking regressions, stabilizations, and producing Rust releases"
+description = "Tracking regressions and stabilizations, and producing Rust releases"
 email = "release@rust-lang.org"
 discord-invite = "https://discord.gg/pVTkgpv"
 discord-name = "#release"

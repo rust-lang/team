@@ -29,6 +29,7 @@ label = "T-libs"
 name = "Libraries"
 ping = "rust-lang/libs"
 exclude-members = [
+    "KodrAus",
     "BurntSushi",
     "LukasKalbertodt",
 ]
@@ -36,7 +37,7 @@ exclude-members = [
 [website]
 page = "library"
 name = "Library team"
-description = "the Rust standard library, rust-lang crates, conventions, and ecosystem support"
+description = "Developing and managing the Rust standard library, official rust-lang crates, code conventions, and ecosystem support"
 
 [[lists]]
 address = "libs-private@rust-lang.org"

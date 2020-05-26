@@ -4,20 +4,25 @@ subteam-of = "compiler"
 [people]
 leads = []
 members = [
-  "Centril",
+  "Aaron1011",
   "davidtwco",
   "ecstatic-morse",
   "flodiebold",
+  "jonas-schievink",
   "lqd",
   "Mark-Simulacrum",
   "matklad",
   "nikic",
   "nnethercote",
+  "RalfJung",
   "scalexm",
   "spastorino",
   "tmandry",
   "Xanewok",
   "zackmdavis",
+]
+alumni = [
+    "Centril",
 ]
 
 [permissions]
@@ -32,4 +37,4 @@ extra-teams = ["compiler"]
 [website]
 name = "Compiler team contributors"
 repo = "http://github.com/rust-lang/compiler-team"
-description = "folks who contribute on a regular basis"
+description = "Folks who contribute to the Rust compiler on a regular basis"

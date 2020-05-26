@@ -42,6 +42,11 @@ members = [
     "craterbot",
     "rust-timer",
 ]
+# Past members of the team. They will not be considered as part of the team,
+# but they will be recognized on the website.
+alumni = [
+    "buildbot",
+]
 
 [permissions]
 # Optional, see the permissions documentation

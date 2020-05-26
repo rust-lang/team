@@ -52,7 +52,7 @@ pub(crate) struct Person {
     irc: Option<String>,
     #[serde(default)]
     email: EmailField,
-    discord: Option<String>,
+    discord_id: Option<usize>,
     #[serde(default)]
     permissions: Permissions,
 }
@@ -92,8 +92,8 @@ impl Person {
         }
     }
 
-    pub(crate) fn discord(&self) -> Option<&str> {
-        self.discord.as_ref().map(|e| e.as_str())
+    pub(crate) fn discord_id(&self) -> Option<usize> {
+        self.discord_id
     }
 
     pub(crate) fn permissions(&self) -> &Permissions {
@@ -141,7 +141,7 @@ impl Team {
     }
 
     pub(crate) fn subteam_of(&self) -> Option<&str> {
-        self.subteam_of.as_ref().map(|s| s.as_str())
+        self.subteam_of.as_deref()
     }
 
     pub(crate) fn leads(&self) -> HashSet<&str> {
@@ -179,7 +179,18 @@ impl Team {
                 }
             }
         }
+        if self.people.include_all_alumni {
+            for team in data.teams() {
+                for person in &team.people.alumni {
+                    members.insert(&person);
+                }
+            }
+        }
         Ok(members)
+    }
+
+    pub(crate) fn alumni(&self) -> &[String] {
+        &self.people.alumni
     }
 
     pub(crate) fn raw_lists(&self) -> &[TeamList] {
@@ -247,11 +258,7 @@ impl Team {
                         .filter_map(|name| data.person(name).map(|p| p.github_id())),
                 );
             }
-            let name = github
-                .team_name
-                .as_ref()
-                .map(|n| n.as_str())
-                .unwrap_or(&self.name);
+            let name = github.team_name.as_deref().unwrap_or(&self.name);
             Ok(github
                 .orgs
                 .iter()
@@ -291,12 +298,16 @@ impl std::cmp::Ord for GitHubTeam<'_> {
 struct TeamPeople {
     leads: Vec<String>,
     members: Vec<String>,
+    #[serde(default)]
+    alumni: Vec<String>,
     #[serde(default = "default_false")]
     include_team_leads: bool,
     #[serde(default = "default_false")]
     include_wg_leads: bool,
     #[serde(default = "default_false")]
     include_all_team_members: bool,
+    #[serde(default = "default_false")]
+    include_all_alumni: bool,
 }
 
 #[derive(serde::Deserialize, Debug)]
@@ -351,15 +362,15 @@ impl WebsiteData {
     }
 
     pub(crate) fn page(&self) -> Option<&str> {
-        self.page.as_ref().map(|s| s.as_str())
+        self.page.as_deref()
     }
 
     pub(crate) fn email(&self) -> Option<&str> {
-        self.email.as_ref().map(|s| s.as_str())
+        self.email.as_deref()
     }
 
     pub(crate) fn repo(&self) -> Option<&str> {
-        self.repo.as_ref().map(|s| s.as_str())
+        self.repo.as_deref()
     }
 
     pub(crate) fn discord(&self) -> Option<DiscordInvite> {

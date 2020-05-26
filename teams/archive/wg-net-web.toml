@@ -8,6 +8,6 @@ members = ["aturon", "yoshuawuyts"]
 
 [website]
 name = "Web foundations working group"
-description = "Our goal is to improve web programming in Rust."
+description = "Improving web development with Rust"
 discord-invite = "https://discord.gg/NKHgJpq"
 discord-name = "#wg-net-web"

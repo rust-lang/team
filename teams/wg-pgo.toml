@@ -7,6 +7,6 @@ leads = ["michaelwoerister"]
 members = ["michaelwoerister"]
 
 [website]
-name = "Profile-guided optimization"
+name = "Profile-guided optimization working group"
 description = "Implementing profile-guided optimization for rustc"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/pgo/"

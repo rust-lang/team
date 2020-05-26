@@ -20,12 +20,15 @@ members = [
     "soniasingla",
     "championshuttler",
     "JuanPotato",
-    "chocol4te"
+    "chocol4te",
+    "bstrie",
+    "crlf0710",
+    "Elinvynia",
 ]
 
 [website]
-name = "Triage Working Group"
-description = "Triage repositories under rust-lang organisation"
+name = "Triage working group"
+description = "Triaging repositories under the rust-lang organisation"
 discord-invite = "https://discord.gg/e6Q3cvu"
 discord-name = "#triage-wg"
 

@@ -4,6 +4,9 @@ name = "twir"
 leads = []
 members = [
     "llogiq",
+    "nellshamrell",
+]
+alumni = [
     "nasa42",
 ]
 

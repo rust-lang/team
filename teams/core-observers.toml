@@ -7,9 +7,12 @@ members = [
     "skade",
 ]
 
+[github]
+orgs = ["rust-lang"]
+
 [permissions]
 bors.rust.review = true
 
 [website]
-name = "Core Team Observers"
-description = "observers on the core team"
+name = "Core team observers"
+description = "Observers on the core team"

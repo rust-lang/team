@@ -1,3 +1,6 @@
+# DEPRECATED: Do not add new members to this team, instead add to `people.alumni`
+# in the team's file or create a new `people.alumni` key and add the
+# person's name there instead.
 name = "alumni"
 
 [people]
@@ -7,7 +10,7 @@ members = [
     "Gankra",
     "Kimundi",
     "MajorBreakfast",
-    "Nemo157",
+    "QuietMisdreavus",
     "TimNN",
     "alercah",
     "arielb1",
@@ -16,7 +19,6 @@ members = [
     "bkoropoff",
     "booyaa",
     "brson",
-    "bstrie",
     "dotdash",
     "dwijnand",
     "edunham",
@@ -30,13 +32,15 @@ members = [
     "pcwalton",
     "peschkaj",
     "rpjohnst",
-    "solson",
     "tomprince",
     "whitequark",
     "wycats",
 ]
+# Temporary key that includes all members listed as alumni in the individual
+# teams. This is needed while we migrate away from the alumni team.
+include-all-alumni = true
 
 [website]
 name = "Rust team alumni"
-description = "enjoying a leisurely retirement"
+description = "Enjoying a leisurely retirement"
 weight = -1000

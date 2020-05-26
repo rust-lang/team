@@ -1,0 +1,18 @@
+name = "wg-prioritization"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["spastorino", "wesleywiser"]
+members = ["spastorino", "wesleywiser", "pnkfelix", "LeSeulArtichaut", "JohnTitor", "Dylan-DPC", "lcnr"]
+alumni = [
+    "Centril",
+]
+
+[website]
+name = "Prioritization working group"
+description = "Triaging bugs, mainly deciding if bugs are critical (potential release blockers) or not"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/prioritization/"
+
+[github]
+orgs = ["rust-lang"]

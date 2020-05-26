@@ -8,13 +8,16 @@ orgs = ["rust-lang"]
 [people]
 leads = ["XAMPPRocky", "nikomatsakis"]
 members = [
-    "skade",
+    "BatmanAoD",
+    "Manishearth",
+    "XAMPPRocky",
     "gnunicorn",
     "nellshamrell",
     "nikomatsakis",
-    "Manishearth",
-    "XAMPPRocky",
     "valgrimm",
+]
+alumni = [
+    "skade",
 ]
 
 [[lists]]
@@ -22,6 +25,6 @@ address = "governance@rust-lang.org"
 extra-people = []
 
 [website]
-name = "Governance Working Group"
-description = "Working on improving Rust Governance"
+name = "Governance working group"
+description = "Managing and improving Rust team governance"
 repo = "https://github.com/rust-lang/wg-governance"

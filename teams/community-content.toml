@@ -5,17 +5,20 @@ subteam-of = "community"
 leads = []
 members = [
     "adityac8",
-    "nasa42",
+    "nellshamrell",
     "skade",
     "wezm",
+]
+alumni = [
+    "nasa42",
 ]
 
 [website]
 name = "Content team"
-description = "Helping support community content collection and development."
+description = "Collecting and developing community content"
 repo = "https://github.com/rust-community/content-team"
 discord-invite = "https://discord.gg/b7a22kw"
-discord-name = "#content"
+discord-name = "#content-team"
 
 [github]
 orgs = ["rust-lang"]

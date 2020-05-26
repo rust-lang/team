@@ -5,7 +5,6 @@ leads = ["steveklabnik"]
 members = [
     "steveklabnik",
     "GuillaumeGomez",
-    "QuietMisdreavus",
     "rylev",
     "celaus",
 ]
@@ -21,7 +20,7 @@ ping = "rust-lang/docs"
 [website]
 page = "documentation"
 name = "Documentation team"
-description = "ensuring Rust has fantastic documentation"
+description = "Improving and moderating the quality of Rust's documentation"
 
 [[lists]]
 address = "docs@rust-lang.org"
@@ -30,11 +29,3 @@ extra-teams = ["reference"]
 [[lists]]
 address = "doc-team@rust-lang.org"
 extra-teams = ["reference", "rust-by-example"]
-
-[[lists]]
-address = "help@docs.rs"
-include-team-members = false
-extra-people = [
-    "QuietMisdreavus",
-    "onur",
-]

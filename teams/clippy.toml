@@ -23,7 +23,7 @@ bors.clippy.review = true
 orgs = ["rust-lang"]
 
 [website]
-name = "Clippy"
-description = "design and implementation of the Clippy linter"
+name = "Clippy team"
+description = "Designing and implementing the Clippy linter"
 discord-invite = "https://discord.gg/vNNtpyD"
 discord-name = "#clippy"

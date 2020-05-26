@@ -19,8 +19,6 @@ ping = "rust-lang/localization"
 name = "Localization team"
 description = "Working on localization of compiler, documentation and websites"
 repo = "https://github.com/rust-lang/community-localization"
-discord-invite = "https://discord.gg/6DauHpr"
-discord-name = "#localization"
 
 [github]
 orgs = ["rust-lang"]
