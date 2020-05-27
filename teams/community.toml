@@ -63,6 +63,15 @@ extra-emails = [
 ]
 
 [[lists]]
+address = "rustbridge@rust-lang.org"
+include-team-members = false
+extra-people = [
+    "fmoko",
+    "ashleygwilliams",
+    "arshiamufti"
+]
+
+[[lists]]
 address = "rust-all-hands@rust-lang.org"
 include-team-members = false
 extra-people = [
