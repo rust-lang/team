@@ -2,6 +2,7 @@ name = "Justin Geibel"
 github = "jtgeibel"
 github-id = 22186
 email = "jtgeibel@gmail.com"
+discord-id = 451522714101088258
 
 [permissions]
 crates-io-ops-bot.staging_crates_io = true
