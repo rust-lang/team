@@ -24,6 +24,7 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_team_names,
     validate_github_teams,
     validate_marker_team,
+    validate_discord_permissions,
 ];
 
 static GITHUB_CHECKS: &[fn(&Data, &GitHubApi, &mut Vec<String>)] = &[validate_github_usernames];
@@ -433,6 +434,46 @@ fn validate_marker_team(data: &Data, errors: &mut Vec<String>) {
         }
         Ok(())
     });
+}
+
+/// Ensure all users with a Discord permission have a Discord ID.
+fn validate_discord_permissions(data: &Data, errors: &mut Vec<String>) {
+    wrapper(
+        Permissions::REQUIRES_DISCORD.iter(),
+        errors,
+        |permission, errors| {
+            wrapper(data.people(), errors, |person, _| {
+                if person.permissions().has(permission) && person.discord_id().is_none() {
+                    bail!(
+                        "person `{}` has a Discord permission (`{}`) but no Discord ID",
+                        person.github(),
+                        permission
+                    );
+                }
+                Ok(())
+            });
+            wrapper(data.teams(), errors, |team, errors| {
+                if !team.permissions().has(permission) {
+                    return Ok(());
+                }
+                wrapper(team.members(data)?.iter(), errors, |member, _| {
+                    let person = data
+                        .person(member)
+                        .ok_or_else(|| failure::format_err!("missing person {}", member))?;
+                    if person.discord_id().is_none() {
+                        bail!(
+                            "person `{}` has a Discord permission (`{}`) but no Discord ID",
+                            person.github(),
+                            permission
+                        );
+                    }
+                    Ok(())
+                });
+                Ok(())
+            });
+            Ok(())
+        },
+    );
 }
 
 fn wrapper<T, I, F>(iter: I, errors: &mut Vec<String>, mut func: F)
