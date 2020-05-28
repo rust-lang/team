@@ -81,6 +81,10 @@ macro_rules! permissions {
                 $(concat!("crates_io_ops_bot.", stringify!($crates_io_ops_app)),)*
             ];
 
+            pub(crate) const REQUIRES_DISCORD: &'static [&'static str] = &[
+                $(concat!("crates_io_ops_bot.", stringify!($crates_io_ops_app)),)*
+            ];
+
             pub(crate) fn has(&self, permission: &str) -> bool {
                 self.has_directly(permission) || self.has_indirectly(permission)
             }
