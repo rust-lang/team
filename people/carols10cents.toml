@@ -3,6 +3,3 @@ github = "carols10cents"
 github-id = 193874
 email = "carol.nichols@gmail.com"
 discord-id = 388091358901960705
-
-[permissions]
-crates-io-ops-bot.staging_crates_io = true
