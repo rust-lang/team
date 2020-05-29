@@ -2,6 +2,7 @@ name = "Steve Klabnik"
 github = "steveklabnik"
 github-id = 27786
 email = "steve@steveklabnik.com"
+discord-id = 271866667292819456
 
 [permissions]
 bors.cargo.review = true
