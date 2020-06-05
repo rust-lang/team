@@ -4,6 +4,7 @@ marker-team = true
 [people]
 leads = []
 members = [
+    "camelid",
     "comex",
     "cuviper",
     "DutchGhost",
