@@ -3,8 +3,21 @@ subteam-of = "compiler"
 wg = true
 
 [people]
-leads = ["nikomatsakis", "blitzerr"]
-members = ["nikomatsakis", "blitzerr"]
+leads = ["nikomatsakis", "matthewjasper"]
+members = [
+        "nikomatsakis",
+        "matthewjasper",
+        "arora-aman",
+        "Azhng",
+        "ChrisPardy",
+        "jenniferwills",
+        "logmosier",
+        "null-sleep",
+        "roxelo"
+]
+
+[github]
+orgs = ["rust-lang"]
 
 [website]
 name = "RFC 2229 working group"
