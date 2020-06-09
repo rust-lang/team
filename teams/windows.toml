@@ -1,0 +1,17 @@
+name = "windows"
+marker-team = true
+
+[people]
+leads = []
+members = [
+    "arlosi",
+    "danielframpton",
+    "gdr-at-ms",
+    "kennykerr",
+    "luqmana",
+    "lzybkr",
+    "retep998",
+    "rylev",
+    "sivadeilra",
+    "spastorino",
+]
