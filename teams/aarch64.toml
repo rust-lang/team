@@ -1,0 +1,12 @@
+name = "aarch64"
+marker-team = true
+
+[people]
+leads = []
+members = [
+    "JamieCunliffe",
+    "Stammark",
+    "joaopaulocarreiro",
+    "raw-bin",
+    "vigoux",
+]
