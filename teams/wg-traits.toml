@@ -5,14 +5,18 @@ wg = true
 [people]
 leads = ["nikomatsakis", "jackh726"]
 members = [
+    "Aaron1011",
     "Areredify",
     "detrumi",
     "flodiebold",
     "jackh726",
     "MarkMcCaskey",
+    "Mcat12",
+    "nathanwhit",
     "nikomatsakis",
     "skinny121",
     "yaahc",
+    "zaharidichev",
 ]
 alumni = [
     "scalexm",
