@@ -16,4 +16,4 @@ description = "Soundly expanding the capabilities of compile-time function evalu
 repo = "https://github.com/rust-lang/const-eval"
 
 [github]
-orgs = ["rust-lang", "rust-lang-nursery"]
+orgs = ["rust-lang"]
