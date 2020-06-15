@@ -1,0 +1,10 @@
+name = "riscv"
+marker-team = true
+
+[people]
+leads = []
+members = [
+    "denisvasilik",
+    "Disasm",
+    "tblah",
+]
