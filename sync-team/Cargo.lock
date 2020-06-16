@@ -1242,7 +1242,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sync-github"
+name = "sync-team"
 version = "0.1.0"
 dependencies = [
  "base64 0.10.1",

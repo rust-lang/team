@@ -66,7 +66,7 @@ fn main() {
 
 fn init_log() {
     let mut env = env_logger::Builder::new();
-    env.filter_module("sync_github", log::LevelFilter::Info);
+    env.filter_module("sync_team", log::LevelFilter::Info);
     if let Ok(content) = std::env::var("RUST_LOG") {
         env.parse_filters(&content);
     }

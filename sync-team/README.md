@@ -1,4 +1,6 @@
-# sync-github
+# sync-team
+
+TODO
 
 This CLI tool synchronizes our GitHub organizations with the [team repo][team].
 
