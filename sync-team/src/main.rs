@@ -1,12 +1,18 @@
 mod github;
 mod team_api;
 
-use crate::team_api::TeamApi;
 use crate::github::SyncGitHub;
+use crate::team_api::TeamApi;
 use failure::{Error, ResultExt};
-use log::error;
+use log::{error, info};
+
+const AVAILABLE_SERVICES: &[&str] = &["github"];
 
 fn usage() {
+    eprintln!("available services:");
+    for service in AVAILABLE_SERVICES {
+        eprintln!("  {}", service);
+    }
     eprintln!("available flags:");
     eprintln!("  --help              Show this help message");
     eprintln!("  --live              Apply the proposed changes to GitHub");
@@ -16,12 +22,10 @@ fn usage() {
 }
 
 fn app() -> Result<(), Error> {
-    let token = std::env::var("GITHUB_TOKEN")
-        .with_context(|_| "failed to get the GITHUB_TOKEN environment variable")?;
-
     let mut dry_run = true;
     let mut next_team_repo = false;
     let mut team_repo = None;
+    let mut services = Vec::new();
     for arg in std::env::args().skip(1) {
         if next_team_repo {
             team_repo = Some(arg);
@@ -35,8 +39,9 @@ fn app() -> Result<(), Error> {
                 usage();
                 return Ok(());
             }
-            other => {
-                eprintln!("unknown argument: {}", other);
+            service if AVAILABLE_SERVICES.contains(&service) => services.push(service.to_string()),
+            _ => {
+                eprintln!("unknown argument: {}", arg);
                 usage();
                 std::process::exit(1);
             }
@@ -47,8 +52,24 @@ fn app() -> Result<(), Error> {
         .map(|p| TeamApi::Local(p.into()))
         .unwrap_or(TeamApi::Production);
 
-    let sync = SyncGitHub::new(token, &team_api, dry_run)?;
-    sync.synchronize_all()?;
+    if services.is_empty() {
+        info!("no service to synchronize specified, defaulting to all services");
+        services = AVAILABLE_SERVICES.iter().map(|s| s.to_string()).collect();
+    }
+
+    for service in services {
+        info!("synchronizing {}", service);
+        match service.as_str() {
+            "github" => {
+                let token = std::env::var("GITHUB_TOKEN")
+                    .with_context(|_| "failed to get the GITHUB_TOKEN environment variable")?;
+
+                let sync = SyncGitHub::new(token, &team_api, dry_run)?;
+                sync.synchronize_all()?;
+            }
+            _ => panic!("unknown service: {}", service),
+        }
+    }
 
     Ok(())
 }
