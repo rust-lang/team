@@ -1,4 +1,5 @@
 mod github;
+mod mailgun;
 mod team_api;
 
 use crate::github::SyncGitHub;
@@ -6,7 +7,7 @@ use crate::team_api::TeamApi;
 use failure::{Error, ResultExt};
 use log::{error, info};
 
-const AVAILABLE_SERVICES: &[&str] = &["github"];
+const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun"];
 
 fn usage() {
     eprintln!("available services:");
@@ -18,7 +19,8 @@ fn usage() {
     eprintln!("  --live              Apply the proposed changes to GitHub");
     eprintln!("  --team-repo <path>  Path to the local team repo to use");
     eprintln!("environment variables:");
-    eprintln!("  GITHUB_TOKEN  Authentication token with GitHub");
+    eprintln!("  GITHUB_TOKEN       Authentication token with GitHub");
+    eprintln!("  MAILGUN_API_TOKEN  Authentication token with Mailgun");
 }
 
 fn app() -> Result<(), Error> {
@@ -66,6 +68,9 @@ fn app() -> Result<(), Error> {
 
                 let sync = SyncGitHub::new(token, &team_api, dry_run)?;
                 sync.synchronize_all()?;
+            }
+            "mailgun" => {
+                mailgun::run()?;
             }
             _ => panic!("unknown service: {}", service),
         }
