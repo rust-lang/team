@@ -5,7 +5,7 @@ mod team_api;
 use crate::github::SyncGitHub;
 use crate::team_api::TeamApi;
 use failure::{Error, ResultExt};
-use log::{error, info};
+use log::{error, warn, info};
 
 const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun"];
 
@@ -16,7 +16,7 @@ fn usage() {
     }
     eprintln!("available flags:");
     eprintln!("  --help              Show this help message");
-    eprintln!("  --live              Apply the proposed changes to GitHub");
+    eprintln!("  --live              Apply the proposed changes to the services");
     eprintln!("  --team-repo <path>  Path to the local team repo to use");
     eprintln!("environment variables:");
     eprintln!("  GITHUB_TOKEN       Authentication token with GitHub");
@@ -59,6 +59,11 @@ fn app() -> Result<(), Error> {
         services = AVAILABLE_SERVICES.iter().map(|s| s.to_string()).collect();
     }
 
+    if dry_run {
+        warn!("sync-team is running in dry mode, no changes will be applied.");
+        warn!("run the binary with the --live flag to apply the changes.");
+    }
+
     for service in services {
         info!("synchronizing {}", service);
         match service.as_str() {
@@ -70,7 +75,7 @@ fn app() -> Result<(), Error> {
                 sync.synchronize_all()?;
             }
             "mailgun" => {
-                mailgun::run()?;
+                mailgun::run(dry_run)?;
             }
             _ => panic!("unknown service: {}", service),
         }

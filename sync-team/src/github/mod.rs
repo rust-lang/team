@@ -3,7 +3,7 @@ mod api;
 use self::api::{GitHub, TeamPrivacy, TeamRole};
 use crate::TeamApi;
 use failure::Error;
-use log::{debug, info, warn};
+use log::{debug, info};
 use std::collections::{HashMap, HashSet};
 
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
@@ -19,10 +19,6 @@ pub(crate) struct SyncGitHub {
 impl SyncGitHub {
     pub(crate) fn new(token: String, team_api: &TeamApi, dry_run: bool) -> Result<Self, Error> {
         let github = GitHub::new(token, dry_run);
-        if dry_run {
-            warn!("sync-github is running in dry mode, no changes will be applied.");
-            warn!("run the binary with the --live flag to apply the changes.");
-        }
         let teams = team_api.get_teams()?;
 
         debug!("caching mapping between user ids and usernames");

@@ -7,6 +7,7 @@ use std::str;
 use self::api::Empty;
 use curl::easy::Form;
 use failure::{bail, Error, ResultExt};
+use log::info;
 use rust_team_data::v1 as team_data;
 
 const DESCRIPTION: &str = "managed by an automatic script on github";
@@ -80,7 +81,7 @@ fn mangle_address(addr: &str) -> Result<String, Error> {
     }
 }
 
-pub(crate) fn run() -> Result<(), Error> {
+pub(crate) fn run(dry_run: bool) -> Result<(), Error> {
     let api_url = if let Ok(url) = std::env::var("TEAM_DATA_BASE_URL") {
         format!("{}/lists.json", url)
     } else {
@@ -125,15 +126,16 @@ pub(crate) fn run() -> Result<(), Error> {
         let address = extract(&route.expression, "match_recipient(\"", "\")");
         let key = (address.to_string(), route.priority);
         match addr2list.remove(&key) {
-            Some(new_list) => {
-                sync(&route, &new_list).with_context(|_| format!("failed to sync {}", address))?
+            Some(new_list) => sync(&route, &new_list, dry_run)
+                .with_context(|_| format!("failed to sync {}", address))?,
+            None => {
+                del(&route, dry_run).with_context(|_| format!("failed to delete {}", address))?
             }
-            None => del(&route).with_context(|_| format!("failed to delete {}", address))?,
         }
     }
 
     for (_, list) in addr2list.iter() {
-        create(list).with_context(|_| format!("failed to create {}", list.address))?;
+        create(list, dry_run).with_context(|_| format!("failed to create {}", list.address))?;
     }
 
     Ok(())
@@ -147,7 +149,12 @@ fn build_route_actions(list: &List) -> impl Iterator<Item = String> + '_ {
     list.members.iter().map(|member| build_route_action(member))
 }
 
-fn create(new: &List) -> Result<(), Error> {
+fn create(new: &List, dry_run: bool) -> Result<(), Error> {
+    info!("creating list {}", new.address);
+    if dry_run {
+        return Ok(());
+    }
+
     let mut form = Form::new();
     form.part("priority")
         .contents(new.priority.to_string().as_bytes())
@@ -165,7 +172,7 @@ fn create(new: &List) -> Result<(), Error> {
     Ok(())
 }
 
-fn sync(route: &api::Route, list: &List) -> Result<(), Error> {
+fn sync(route: &api::Route, list: &List, dry_run: bool) -> Result<(), Error> {
     let before = route
         .actions
         .iter()
@@ -173,6 +180,11 @@ fn sync(route: &api::Route, list: &List) -> Result<(), Error> {
         .collect::<HashSet<_>>();
     let after = list.members.iter().map(|s| &s[..]).collect::<HashSet<_>>();
     if before == after {
+        return Ok(());
+    }
+
+    info!("updating list {}", list.address);
+    if dry_run {
         return Ok(());
     }
 
@@ -188,7 +200,12 @@ fn sync(route: &api::Route, list: &List) -> Result<(), Error> {
     Ok(())
 }
 
-fn del(route: &api::Route) -> Result<(), Error> {
+fn del(route: &api::Route, dry_run: bool) -> Result<(), Error> {
+    info!("deleting list with expression {}", route.expression);
+    if dry_run {
+        return Ok(());
+    }
+
     http::delete::<Empty>(&format!("/routes/{}", route.id))?;
     Ok(())
 }
