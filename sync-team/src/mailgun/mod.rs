@@ -5,6 +5,7 @@ use std::collections::{HashMap, HashSet};
 use std::str;
 
 use self::api::Empty;
+use crate::TeamApi;
 use curl::easy::Form;
 use failure::{bail, Error, ResultExt};
 use log::info;
@@ -81,13 +82,8 @@ fn mangle_address(addr: &str) -> Result<String, Error> {
     }
 }
 
-pub(crate) fn run(dry_run: bool) -> Result<(), Error> {
-    let api_url = if let Ok(url) = std::env::var("TEAM_DATA_BASE_URL") {
-        format!("{}/lists.json", url)
-    } else {
-        format!("{}/lists.json", team_data::BASE_URL)
-    };
-    let mailmap = http::get::<team_data::Lists>(&api_url)?;
+pub(crate) fn run(team_api: &TeamApi, dry_run: bool) -> Result<(), Error> {
+    let mailmap = team_api.get_lists()?;
 
     // Mangle all the mailing lists
     let lists = mangle_lists(mailmap)?;

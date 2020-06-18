@@ -20,6 +20,11 @@ impl TeamApi {
             .collect())
     }
 
+    pub(crate) fn get_lists(&self) -> Result<rust_team_data::v1::Lists, Error> {
+        debug!("loading email lists list from the Team API");
+        self.req::<rust_team_data::v1::Lists>("lists.json")
+    }
+
     fn req<T: serde::de::DeserializeOwned>(&self, url: &str) -> Result<T, Error> {
         match self {
             TeamApi::Production => {

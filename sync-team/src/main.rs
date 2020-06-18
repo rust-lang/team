@@ -5,7 +5,7 @@ mod team_api;
 use crate::github::SyncGitHub;
 use crate::team_api::TeamApi;
 use failure::{Error, ResultExt};
-use log::{error, warn, info};
+use log::{error, info, warn};
 
 const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun"];
 
@@ -75,7 +75,7 @@ fn app() -> Result<(), Error> {
                 sync.synchronize_all()?;
             }
             "mailgun" => {
-                mailgun::run(dry_run)?;
+                mailgun::run(&team_api, dry_run)?;
             }
             _ => panic!("unknown service: {}", service),
         }
