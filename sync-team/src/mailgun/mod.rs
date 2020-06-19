@@ -1,12 +1,10 @@
 mod api;
-mod http;
 
 use std::collections::{HashMap, HashSet};
 use std::str;
 
-use self::api::Empty;
+use self::api::Mailgun;
 use crate::TeamApi;
-use curl::easy::Form;
 use failure::{bail, Error, ResultExt};
 use log::info;
 use rust_team_data::v1 as team_data;
@@ -82,14 +80,15 @@ fn mangle_address(addr: &str) -> Result<String, Error> {
     }
 }
 
-pub(crate) fn run(team_api: &TeamApi, dry_run: bool) -> Result<(), Error> {
+pub(crate) fn run(token: &str, team_api: &TeamApi, dry_run: bool) -> Result<(), Error> {
+    let mailgun = Mailgun::new(token, dry_run);
     let mailmap = team_api.get_lists()?;
 
     // Mangle all the mailing lists
     let lists = mangle_lists(mailmap)?;
 
     let mut routes = Vec::new();
-    let mut response = http::get::<api::RoutesResponse>("/routes")?;
+    let mut response = mailgun.get_routes(None)?;
     let mut cur = 0;
     while response.items.len() > 0 {
         cur += response.items.len();
@@ -97,8 +96,7 @@ pub(crate) fn run(team_api: &TeamApi, dry_run: bool) -> Result<(), Error> {
         if cur >= response.total_count {
             break;
         }
-        let url = format!("/routes?skip={}", cur);
-        response = http::get::<api::RoutesResponse>(&url)?;
+        response = mailgun.get_routes(Some(cur))?;
     }
 
     let mut addr2list = HashMap::new();
@@ -122,16 +120,16 @@ pub(crate) fn run(team_api: &TeamApi, dry_run: bool) -> Result<(), Error> {
         let address = extract(&route.expression, "match_recipient(\"", "\")");
         let key = (address.to_string(), route.priority);
         match addr2list.remove(&key) {
-            Some(new_list) => sync(&route, &new_list, dry_run)
+            Some(new_list) => sync(&mailgun, &route, &new_list)
                 .with_context(|_| format!("failed to sync {}", address))?,
-            None => {
-                del(&route, dry_run).with_context(|_| format!("failed to delete {}", address))?
-            }
+            None => mailgun
+                .delete_route(&route.id)
+                .with_context(|_| format!("failed to delete {}", address))?,
         }
     }
 
     for (_, list) in addr2list.iter() {
-        create(list, dry_run).with_context(|_| format!("failed to create {}", list.address))?;
+        create(&mailgun, list).with_context(|_| format!("failed to create {}", list.address))?;
     }
 
     Ok(())
@@ -145,30 +143,16 @@ fn build_route_actions(list: &List) -> impl Iterator<Item = String> + '_ {
     list.members.iter().map(|member| build_route_action(member))
 }
 
-fn create(new: &List, dry_run: bool) -> Result<(), Error> {
-    info!("creating list {}", new.address);
-    if dry_run {
-        return Ok(());
-    }
+fn create(mailgun: &Mailgun, list: &List) -> Result<(), Error> {
+    info!("creating list {}", list.address);
 
-    let mut form = Form::new();
-    form.part("priority")
-        .contents(new.priority.to_string().as_bytes())
-        .add()?;
-    form.part("description")
-        .contents(DESCRIPTION.as_bytes())
-        .add()?;
-    let expr = format!("match_recipient(\"{}\")", new.address);
-    form.part("expression").contents(expr.as_bytes()).add()?;
-    for action in build_route_actions(new) {
-        form.part("action").contents(action.as_bytes()).add()?;
-    }
-    http::post::<Empty>("/routes", form)?;
-
+    let expr = format!("match_recipient(\"{}\")", list.address);
+    let actions = build_route_actions(list).collect::<Vec<_>>();
+    mailgun.create_route(list.priority, DESCRIPTION, &expr, &actions)?;
     Ok(())
 }
 
-fn sync(route: &api::Route, list: &List, dry_run: bool) -> Result<(), Error> {
+fn sync(mailgun: &Mailgun, route: &api::Route, list: &List) -> Result<(), Error> {
     let before = route
         .actions
         .iter()
@@ -180,29 +164,8 @@ fn sync(route: &api::Route, list: &List, dry_run: bool) -> Result<(), Error> {
     }
 
     info!("updating list {}", list.address);
-    if dry_run {
-        return Ok(());
-    }
-
-    let mut form = Form::new();
-    form.part("priority")
-        .contents(list.priority.to_string().as_bytes())
-        .add()?;
-    for action in build_route_actions(list) {
-        form.part("action").contents(action.as_bytes()).add()?;
-    }
-    http::put::<Empty>(&format!("/routes/{}", route.id), form)?;
-
-    Ok(())
-}
-
-fn del(route: &api::Route, dry_run: bool) -> Result<(), Error> {
-    info!("deleting list with expression {}", route.expression);
-    if dry_run {
-        return Ok(());
-    }
-
-    http::delete::<Empty>(&format!("/routes/{}", route.id))?;
+    let actions = build_route_actions(list).collect::<Vec<_>>();
+    mailgun.update_route(&route.id, list.priority, &actions)?;
     Ok(())
 }
 

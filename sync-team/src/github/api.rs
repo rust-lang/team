@@ -9,9 +9,6 @@ use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
 
-static USER_AGENT: &str =
-    "rust-lang teams sync (https://github.com/rust-lang/rust-central-station)";
-
 pub(crate) struct GitHub {
     token: String,
     dry_run: bool,
@@ -40,7 +37,7 @@ impl GitHub {
                 header::AUTHORIZATION,
                 HeaderValue::from_str(&format!("token {}", self.token))?,
             )
-            .header(header::USER_AGENT, HeaderValue::from_static(USER_AGENT)))
+            .header(header::USER_AGENT, HeaderValue::from_static(crate::USER_AGENT)))
     }
 
     fn graphql<R, V>(&self, query: &str, variables: V) -> Result<R, Error>

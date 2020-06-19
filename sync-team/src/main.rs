@@ -8,6 +8,7 @@ use failure::{Error, ResultExt};
 use log::{error, info, warn};
 
 const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun"];
+const USER_AGENT: &str = "rust-lang teams sync (https://github.com/rust-lang/sync-team)";
 
 fn usage() {
     eprintln!("available services:");
@@ -75,7 +76,9 @@ fn app() -> Result<(), Error> {
                 sync.synchronize_all()?;
             }
             "mailgun" => {
-                mailgun::run(&team_api, dry_run)?;
+                let token = std::env::var("MAILGUN_API_TOKEN")
+                    .with_context(|_| "failed to get the MAILGUN_API_TOKEN environment variable")?;
+                mailgun::run(&token, &team_api, dry_run)?;
             }
             _ => panic!("unknown service: {}", service),
         }
