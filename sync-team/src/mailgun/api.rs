@@ -33,7 +33,13 @@ impl Mailgun {
             .json()?)
     }
 
-    pub(super) fn create_route(&self, priority: i32, description: &str, expression: &str, actions: &[String]) -> Result<(), Error> {
+    pub(super) fn create_route(
+        &self,
+        priority: i32,
+        description: &str,
+        expression: &str,
+        actions: &[String],
+    ) -> Result<(), Error> {
         if self.dry_run {
             return Ok(());
         }
@@ -56,15 +62,18 @@ impl Mailgun {
         Ok(())
     }
 
-    pub(super) fn update_route(&self, id: &str, priority: i32, actions: &[String]) -> Result<(), Error> {
+    pub(super) fn update_route(
+        &self,
+        id: &str,
+        priority: i32,
+        actions: &[String],
+    ) -> Result<(), Error> {
         if self.dry_run {
             return Ok(());
         }
 
         let priority_str = priority.to_string();
-        let mut form = vec![
-            ("priority", priority_str.as_str()),
-        ];
+        let mut form = vec![("priority", priority_str.as_str())];
         for action in actions {
             form.push(("action", action.as_str()));
         }

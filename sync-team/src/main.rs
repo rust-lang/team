@@ -57,7 +57,10 @@ fn app() -> Result<(), Error> {
 
     if services.is_empty() {
         info!("no service to synchronize specified, defaulting to all services");
-        services = AVAILABLE_SERVICES.iter().map(|s| s.to_string()).collect();
+        services = AVAILABLE_SERVICES
+            .iter()
+            .map(|s| (*s).to_string())
+            .collect();
     }
 
     if dry_run {

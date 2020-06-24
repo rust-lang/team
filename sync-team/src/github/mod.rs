@@ -40,7 +40,7 @@ impl SyncGitHub {
             .collect::<HashSet<_>>();
         let mut org_owners = HashMap::new();
         for org in &orgs {
-            org_owners.insert(org.to_string(), github.org_owners(&org)?);
+            org_owners.insert((*org).to_string(), github.org_owners(&org)?);
         }
 
         Ok(SyncGitHub {
