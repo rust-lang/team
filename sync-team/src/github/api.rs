@@ -25,9 +25,10 @@ impl GitHub {
     }
 
     fn req(&self, method: Method, url: &str) -> Result<RequestBuilder, Error> {
-        let url = match url.starts_with("https://") {
-            true => Cow::Borrowed(url),
-            false => Cow::Owned(format!("https://api.github.com/{}", url)),
+        let url = if url.starts_with("https://") {
+            Cow::Borrowed(url)
+        } else {
+            Cow::Owned(format!("https://api.github.com/{}", url))
         };
         trace!("http request: {} {}", method, url);
         Ok(self
@@ -37,7 +38,10 @@ impl GitHub {
                 header::AUTHORIZATION,
                 HeaderValue::from_str(&format!("token {}", self.token))?,
             )
-            .header(header::USER_AGENT, HeaderValue::from_static(crate::USER_AGENT)))
+            .header(
+                header::USER_AGENT,
+                HeaderValue::from_static(crate::USER_AGENT),
+            ))
     }
 
     fn graphql<R, V>(&self, query: &str, variables: V) -> Result<R, Error>
@@ -290,7 +294,7 @@ impl GitHub {
                     QUERY,
                     Params {
                         team: team_node_id(id),
-                        cursor: page_info.end_cursor.as_ref().map(|s| s.as_str()),
+                        cursor: page_info.end_cursor.as_deref(),
                     },
                 )?;
                 if let Some(team) = res.node {

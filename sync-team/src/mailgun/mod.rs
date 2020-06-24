@@ -90,7 +90,7 @@ pub(crate) fn run(token: &str, team_api: &TeamApi, dry_run: bool) -> Result<(), 
     let mut routes = Vec::new();
     let mut response = mailgun.get_routes(None)?;
     let mut cur = 0;
-    while response.items.len() > 0 {
+    while !response.items.is_empty() {
         cur += response.items.len();
         routes.extend(response.items);
         if cur >= response.total_count {
