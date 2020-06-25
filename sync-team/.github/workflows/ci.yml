@@ -2,8 +2,8 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  test:
-    name: Test
+  ci:
+    name: CI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,3 +23,16 @@ jobs:
 
       - name: Run tests
         run: cargo test
+
+      - name: Build the Docker container
+        run: docker build -t sync-team .
+
+      - name: Upload the container to ECR
+        uses: rust-lang/simpleinfra/github-actions/upload-docker-image@master
+        with:
+          image: sync-team
+          repository: sync-team
+          region: us-west-1
+          aws_access_key_id: "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          aws_secret_access_key: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
