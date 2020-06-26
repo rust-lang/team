@@ -9,8 +9,8 @@ automatically synchronized with:
 | [Crater and @craterbot][crater] | *In real time* | [Integration source][crater-src] |
 | [Perf and @rust-timer][perf] | *In real time* | [Integration source][perf-src] |
 | [@rfcbot][rfcbot] | 5 minutes | [Integration source][rfcbot-src] |
-| GitHub teams membership | 5 minutes | [Integration source][github-teams-src] |
-| Mailing lists and aliases (`@rust-lang.org`, `@crates.io`) | 5 minutes | [Integration source][ml-src] |
+| GitHub teams membership | *Shorty after merge* | [Integration source][sync-team-src] |
+| Mailing lists and aliases (`@rust-lang.org`, `@crates.io`) | *Shortly after merge* | [Integration source][sync-team-src] |
 | [Governance section on the website][www] | 2 minutes | [Integration source][www-src] |
 
 If you need to add or remove a person from a team send a PR to this repository,
@@ -23,12 +23,11 @@ supported services.
 [www-src]: https://github.com/rust-lang/www.rust-lang.org/blob/master/src/teams.rs
 [crater]: https://github.com/rust-lang-nursery/crater
 [crater-src]: https://github.com/rust-lang-nursery/crater/blob/master/src/server/auth.rs
-[ml-src]: https://github.com/rust-lang/rust-central-station/tree/master/sync-mailgun
 [perf]: https://perf.rust-lang.org
 [perf-src]: https://github.com/rust-lang-nursery/rustc-perf/blob/master/site/src/server.rs
 [rfcbot]: https://rfcbot.rs
 [rfcbot-src]: https://github.com/anp/rfcbot-rs/blob/master/src/teams.rs
-[github-teams-src]: https://github.com/rust-lang/rust-central-station/tree/master/sync-github
+[sync-team-src]: https://github.com/rust-lang/sync-team
 
 ## Documentation
 

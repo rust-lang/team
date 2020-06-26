@@ -43,4 +43,13 @@ jobs:
           (cd build && /tmp/deploy)
         env:
           GITHUB_DEPLOY_KEY: ${{ secrets.GITHUB_DEPLOY_KEY }}
-        if: github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+
+      - name: Start the synchronization tool
+        run: |
+          aws lambda invoke --function-name start-sync-team output.json
+          cat output.json | python3 -m json.tool
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
