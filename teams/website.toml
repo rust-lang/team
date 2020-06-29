@@ -1,0 +1,14 @@
+name = "website"
+subteam-of = "web-presence"
+
+[people]
+leads = ["Manishearth", "skade"]
+members = [
+    "Manishearth",
+    "XAMPPRocky",
+    "pietroalbini",
+    "skade",
+]
+
+[github]
+orgs = ["rust-lang"]
