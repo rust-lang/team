@@ -20,7 +20,7 @@ name = "Localization team"
 description = "Working on localization of compiler, documentation and websites"
 repo = "https://github.com/rust-lang/community-localization"
 
-[github]
+[[github]]
 orgs = ["rust-lang"]
 
 [[lists]]

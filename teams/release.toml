@@ -23,7 +23,7 @@ crater = true
 perf = true
 bors.rust.review = true
 
-[github]
+[[github]]
 orgs = ["rust-lang"]
 
 [rfcbot]

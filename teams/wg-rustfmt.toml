@@ -10,7 +10,7 @@ members = [
     "calebcartwright",
 ]
 
-[github]
+[[github]]
 orgs = ["rust-lang"]
 
 [website]

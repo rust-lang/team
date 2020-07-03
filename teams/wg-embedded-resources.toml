@@ -18,5 +18,5 @@ members = [
 name = "Embedded resources working group"
 description = "Managing various resources owned by the embedded working group"
 
-[github]
+[[github]]
 orgs = ["rust-lang"]

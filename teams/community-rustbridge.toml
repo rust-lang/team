@@ -20,5 +20,5 @@ repo = "https://github.com/rustbridge/team"
 discord-invite = "https://discord.gg/cj5HMXA"
 discord-name = "#rustbridge"
 
-[github]
+[[github]]
 orgs = ["rust-lang"]

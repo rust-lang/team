@@ -7,7 +7,7 @@ members = [
     "skade",
 ]
 
-[github]
+[[github]]
 orgs = ["rust-lang"]
 
 [permissions]

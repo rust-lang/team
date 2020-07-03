@@ -8,7 +8,7 @@ members = [
     "marioidival",
 ]
 
-[github]
+[[github]]
 orgs = ["rust-lang"]
 
 [website]

@@ -14,7 +14,7 @@ members = [
 bors.rust.review = true
 bors.cargo.review = true
 
-[github]
+[[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
 
 [rfcbot]

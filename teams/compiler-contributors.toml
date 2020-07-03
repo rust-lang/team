@@ -31,7 +31,7 @@ perf = true
 crater = true
 bors.rust.review = true
 
-[github]
+[[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
 extra-teams = ["compiler"]
 

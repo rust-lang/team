@@ -19,7 +19,7 @@ members = [
 [permissions]
 bors.clippy.review = true
 
-[github]
+[[github]]
 orgs = ["rust-lang"]
 
 [website]

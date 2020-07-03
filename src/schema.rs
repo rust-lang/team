@@ -120,7 +120,8 @@ pub(crate) struct Team {
     people: TeamPeople,
     #[serde(default)]
     permissions: Permissions,
-    github: Option<GitHubData>,
+    #[serde(default)]
+    github: Vec<GitHubData>,
     rfcbot: Option<RfcbotData>,
     website: Option<WebsiteData>,
     #[serde(default)]
@@ -243,7 +244,8 @@ impl Team {
     }
 
     pub(crate) fn github_teams<'a>(&'a self, data: &Data) -> Result<Vec<GitHubTeam<'a>>, Error> {
-        if let Some(github) = &self.github {
+        let mut result = Vec::new();
+        for github in &self.github {
             let mut members = self
                 .members(data)?
                 .iter()
@@ -258,19 +260,18 @@ impl Team {
                         .filter_map(|name| data.person(name).map(|p| p.github_id())),
                 );
             }
+            members.sort();
             let name = github.team_name.as_deref().unwrap_or(&self.name);
-            Ok(github
-                .orgs
-                .iter()
-                .map(|org| GitHubTeam {
+
+            for org in &github.orgs {
+                result.push(GitHubTeam {
                     org: org.as_str(),
                     name,
                     members: members.clone(),
-                })
-                .collect())
-        } else {
-            Ok(Vec::new())
+                });
+            }
         }
+        Ok(result)
     }
 }
 
