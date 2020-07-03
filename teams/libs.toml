@@ -13,7 +13,7 @@ members = [
     "LukasKalbertodt",
 ]
 
-[github]
+[[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
 
 [permissions]

@@ -16,7 +16,7 @@ members = [
         "roxelo"
 ]
 
-[github]
+[[github]]
 orgs = ["rust-lang"]
 
 [website]

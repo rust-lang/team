@@ -15,5 +15,5 @@ name = "Compile-time Function Evaluation Working Group"
 description = "Soundly expanding the capabilities of compile-time function evaluation in Rust"
 repo = "https://github.com/rust-lang/const-eval"
 
-[github]
+[[github]]
 orgs = ["rust-lang"]

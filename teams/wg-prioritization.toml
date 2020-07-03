@@ -25,5 +25,5 @@ name = "Prioritization working group"
 description = "Triaging bugs, mainly deciding if bugs are critical (potential release blockers) or not"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/prioritization/"
 
-[github]
+[[github]]
 orgs = ["rust-lang"]

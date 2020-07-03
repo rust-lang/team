@@ -10,7 +10,7 @@ members = [
     "steveklabnik",
 ]
 
-[github]
+[[github]]
 team-name = "security"
 orgs = ["rust-lang"]
 

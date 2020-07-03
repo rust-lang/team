@@ -11,5 +11,5 @@ members = [
 name = "Survey team"
 description = "Running, analysing, and presenting the community survey"
 
-[github]
+[[github]]
 orgs = ["rust-lang"]

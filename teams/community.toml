@@ -24,7 +24,7 @@ repo = "https://github.com/rust-community/team"
 discord-invite = "https://discord.gg/KskHZGT"
 discord-name = "#community-team"
 
-[github]
+[[github]]
 orgs = ["rust-lang"]
 
 [[lists]]

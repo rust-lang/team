@@ -11,5 +11,5 @@ name = "Polonius working group"
 description = "Working on an experimental new borrow-checker implementation"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/polonius/"
 
-[github]
+[[github]]
 orgs = ["rust-lang"]

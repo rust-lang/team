@@ -13,5 +13,5 @@ name = "Miri"
 description = "design and implementation of the Miri interpreter"
 repo = "https://github.com/rust-lang/miri"
 
-[github]
+[[github]]
 orgs = ["rust-lang"]

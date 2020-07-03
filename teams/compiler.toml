@@ -26,7 +26,7 @@ crater = true
 bors.rust.review = true
 bors.miri.review = true
 
-[github]
+[[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
 
 [rfcbot]

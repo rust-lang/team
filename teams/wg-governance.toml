@@ -2,7 +2,7 @@ name = "wg-governance"
 subteam-of = "core"
 wg = true
 
-[github]
+[[github]]
 orgs = ["rust-lang"]
 
 [people]
