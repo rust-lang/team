@@ -2,7 +2,7 @@ name = "wg-embedded"
 wg = true
 
 [people]
-leads = ["japaric", "therealprof", "jamesmunns"]
+leads = ["adamgreig", "japaric", "therealprof"]
 members = [
     "adamgreig",
     "almindor",
