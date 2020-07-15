@@ -172,7 +172,12 @@ impl Team {
         }
         if self.people.include_all_team_members {
             for team in data.teams() {
-                if team.is_wg() || team.is_marker_team() || team.name == self.name {
+                if team.is_wg()
+                    || team.is_marker_team()
+                    || team.name == self.name
+                    // This matches the special alumni team.
+                    || team.people.include_all_alumni
+                {
                     continue;
                 }
                 for member in team.members(data)? {
