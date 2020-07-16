@@ -32,4 +32,3 @@ extra-teams = [
     "mods-discord",
     "mods-discourse",
 ]
-extra-people = ["Manishearth"] # Temporary, while we focus on trying to improve moderation and stuff
