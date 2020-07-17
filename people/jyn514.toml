@@ -2,7 +2,3 @@ name = 'Joshua Nelson'
 github = 'jyn514'
 github-id = 23638587
 email = 'jyn514@gmail.com'
-
-[permissions]
-bors.rust.try = true
-perf = true

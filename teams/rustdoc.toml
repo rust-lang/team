@@ -7,6 +7,8 @@ members = [
     "GuillaumeGomez",
     "ollie27",
     "kinnison",
+    "jyn514",
+    "Manishearth",
 ]
 
 [[github]]
@@ -15,6 +17,7 @@ orgs = ["rust-lang", "rust-lang-nursery"]
 [permissions]
 crater = true
 bors.rust.review = true
+perf = true
 
 [rfcbot]
 label = "T-rustdoc"
