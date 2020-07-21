@@ -6,3 +6,4 @@ github-id = 12471139
 # Needed for try builds and rollup=never, used to extract PRs from rollups to
 # benchmark separately.
 bors.rust.try = true
+perf = true
