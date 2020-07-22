@@ -169,6 +169,7 @@ permissions! {
     }
     bors_repos {
         cargo,
+        chalk,
         clippy,
         compiler_builtins,
         crater,
