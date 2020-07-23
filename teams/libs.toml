@@ -29,7 +29,6 @@ label = "T-libs"
 name = "Libraries"
 ping = "rust-lang/libs"
 exclude-members = [
-    "KodrAus",
     "BurntSushi",
     "LukasKalbertodt",
 ]
