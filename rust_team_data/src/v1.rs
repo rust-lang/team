@@ -52,6 +52,7 @@ pub struct TeamWebsite {
     pub email: Option<String>,
     pub repo: Option<String>,
     pub discord: Option<DiscordInvite>,
+    pub zulip_stream: Option<String>,
     pub weight: i64,
 }
 

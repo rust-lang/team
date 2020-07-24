@@ -25,6 +25,7 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_github_teams,
     validate_marker_team,
     validate_discord_permissions,
+    validate_zulip_stream_name,
 ];
 
 static GITHUB_CHECKS: &[fn(&Data, &GitHubApi, &mut Vec<String>)] = &[validate_github_usernames];
@@ -474,6 +475,21 @@ fn validate_discord_permissions(data: &Data, errors: &mut Vec<String>) {
             Ok(())
         },
     );
+}
+
+/// Ensure the user doens't put an URL as the Zulip stream name.
+fn validate_zulip_stream_name(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, _| {
+        if let Some(stream) = team.website_data().and_then(|ws| ws.zulip_stream()) {
+            if stream.starts_with("https://") {
+                bail!(
+                    "the zulip stream name of the team `{}` is a link: only the name is required",
+                    team.name()
+                );
+            }
+        }
+        Ok(())
+    })
 }
 
 fn wrapper<T, I, F>(iter: I, errors: &mut Vec<String>, mut func: F)

@@ -98,6 +98,7 @@ impl<'a> Generator<'a> {
                         channel: i.channel.into(),
                         url: i.url.into(),
                     }),
+                    zulip_stream: ws.zulip_stream().map(|s| s.into()),
                     weight: ws.weight(),
                 }),
             };
