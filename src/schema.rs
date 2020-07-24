@@ -350,6 +350,7 @@ pub(crate) struct WebsiteData {
     repo: Option<String>,
     discord_invite: Option<String>,
     discord_name: Option<String>,
+    zulip_stream: Option<String>,
     #[serde(default)]
     weight: i64,
 }
@@ -388,6 +389,10 @@ impl WebsiteData {
         } else {
             None
         }
+    }
+
+    pub(crate) fn zulip_stream(&self) -> Option<&str> {
+        self.zulip_stream.as_deref()
     }
 }
 
