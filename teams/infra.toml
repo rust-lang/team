@@ -35,8 +35,7 @@ ping = "rust-lang/infra"
 name = "Infrastructure team"
 description = "Managing the infrastructure supporting the Rust project itself, including CI, releases, bots, and metrics"
 email = "infra@rust-lang.org"
-discord-invite = "https://discord.gg/AxXmxzN"
-discord-name = "#infra"
+zulip-stream = "t-infra"
 
 [[lists]]
 address = "infra@rust-lang.org"

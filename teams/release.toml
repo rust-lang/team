@@ -35,8 +35,7 @@ ping = "rust-lang/release"
 name = "Release team"
 description = "Tracking regressions and stabilizations, and producing Rust releases"
 email = "release@rust-lang.org"
-discord-invite = "https://discord.gg/pVTkgpv"
-discord-name = "#release"
+zulip-stream = "t-release"
 
 [[lists]]
 address = "release@rust-lang.org"
