@@ -7,4 +7,5 @@ members = [
     "denisvasilik",
     "Disasm",
     "tblah",
+    "your_name_here", # Don't forget to run `cargo run add-person` if you're new!
 ]
