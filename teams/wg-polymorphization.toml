@@ -1,0 +1,12 @@
+name = "wg-polymorphization"
+subteam-of = "compiler"
+wg = true
+
+[people]
+leads = ["davidtwco"]
+members = ["davidtwco", "eddyb", "lcnr"]
+
+[website]
+name = "Polymorphization working group"
+description = "Implementing polymorphization to reduce unnecessary monomorphisation in rustc"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/polymorphization/"
