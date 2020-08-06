@@ -9,13 +9,13 @@ members = [
     "Dylan-DPC",
     "Mark-Simulacrum",
     "pietroalbini",
-    "sgrif",
     "jonas-schievink",
     "XAMPPRocky",
     "tmandry",
 ]
 alumni = [
     "Centril",
+    "sgrif",
 ]
 
 [permissions]
