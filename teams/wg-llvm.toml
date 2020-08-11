@@ -4,7 +4,11 @@ wg = true
 
 [people]
 leads = ["nagisa"]
-members = ["nagisa"]
+members = [
+    "nagisa",
+    "nikic",
+    "cuviper",
+]
 
 [[github]]
 orgs = ["rust-lang"]
