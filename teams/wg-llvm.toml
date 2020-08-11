@@ -6,6 +6,9 @@ wg = true
 leads = ["nagisa"]
 members = ["nagisa"]
 
+[[github]]
+orgs = ["rust-lang"]
+
 [website]
 name = "LLVM working group"
 description = "Working with LLVM upstream to represent Rust in its development"
