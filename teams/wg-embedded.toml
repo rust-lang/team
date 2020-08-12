@@ -4,14 +4,15 @@ wg = true
 [people]
 leads = ["adamgreig", "japaric", "therealprof"]
 members = [
+    "Disasm",
+    "Emilgardis",
     "adamgreig",
     "almindor",
     "andre-richter",
     "burrbull",
     "cr1901",
-    "Disasm",
-    "Emilgardis",
     "eldruin",
+    "hargoniX",
     "ithinuel",
     "jamesmunns",
     "japaric",
