@@ -1,5 +1,5 @@
 name = "wg-net"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["withoutboats", "cramertj"]

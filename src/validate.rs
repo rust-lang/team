@@ -1,13 +1,13 @@
 use crate::data::Data;
 use crate::github::GitHubApi;
-use crate::schema::{Email, Permissions};
+use crate::schema::{Email, Permissions, Team, TeamKind};
 use failure::{bail, Error};
 use log::{error, warn};
 use regex::Regex;
 use std::collections::{HashMap, HashSet};
 
 static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
-    validate_wg_names,
+    validate_name_prefixes,
     validate_subteam_of,
     validate_team_leads,
     validate_team_members,
@@ -23,9 +23,9 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_rfcbot_exclude_members,
     validate_team_names,
     validate_github_teams,
-    validate_marker_team,
     validate_discord_permissions,
     validate_zulip_stream_name,
+    validate_project_groups_have_parent_teams,
 ];
 
 static GITHUB_CHECKS: &[fn(&Data, &GitHubApi, &mut Vec<String>)] = &[validate_github_usernames];
@@ -66,19 +66,29 @@ pub(crate) fn validate(data: &Data, strict: bool) -> Result<(), Error> {
 }
 
 /// Ensure working group names start with `wg-`
-fn validate_wg_names(data: &Data, errors: &mut Vec<String>) {
-    wrapper(data.teams(), errors, |team, _| {
-        match (team.is_wg() == team.name().starts_with("wg-"), team.is_wg()) {
-            (false, true) => bail!(
-                "working group `{}`'s name doesn't start with wg-",
-                team.name()
-            ),
-            (false, false) => bail!(
-                "team `{}` seems like a working group but has `wg = false`",
-                team.name()
-            ),
-            (true, _) => {}
+fn validate_name_prefixes(data: &Data, errors: &mut Vec<String>) {
+    fn ensure_prefix(team: &Team, kind: TeamKind, prefix: &str) -> Result<(), Error> {
+        if team.kind() == kind && !team.name().starts_with(prefix) {
+            bail!(
+                "{} `{}`'s name doesn't start with `{}`",
+                kind,
+                team.name(),
+                prefix,
+            );
+        } else if team.kind() != kind && team.name().starts_with(prefix) {
+            bail!(
+                "{} `{}` seems like a {} (since it has the `{}` prefix)",
+                team.kind(),
+                team.name(),
+                kind,
+                prefix,
+            );
         }
+        Ok(())
+    }
+    wrapper(data.teams(), errors, |team, _| {
+        ensure_prefix(team, TeamKind::WorkingGroup, "wg-")?;
+        ensure_prefix(team, TeamKind::ProjectGroup, "project-")?;
         Ok(())
     });
 }
@@ -359,17 +369,6 @@ fn validate_team_names(data: &Data, errors: &mut Vec<String>) {
                 team.name()
             );
         }
-        match (team.is_wg() == team.name().starts_with("wg-"), team.is_wg()) {
-            (false, true) => bail!(
-                "working group `{}`'s name doesn't start with wg-",
-                team.name()
-            ),
-            (false, false) => bail!(
-                "team `{}` seems like a working group but has `wg = false`",
-                team.name()
-            ),
-            (true, _) => {}
-        }
         Ok(())
     });
 }
@@ -424,19 +423,6 @@ fn validate_github_usernames(data: &Data, github: &GitHubApi, errors: &mut Vec<S
     }
 }
 
-/// Ensure teams are not working group and marker team at the same time
-fn validate_marker_team(data: &Data, errors: &mut Vec<String>) {
-    wrapper(data.teams(), errors, |team, _| {
-        if team.is_wg() && team.is_marker_team() {
-            bail!(
-                "`{}` is a working group and marker team at the same time",
-                team.name()
-            );
-        }
-        Ok(())
-    });
-}
-
 /// Ensure all users with a Discord permission have a Discord ID.
 fn validate_discord_permissions(data: &Data, errors: &mut Vec<String>) {
     wrapper(
@@ -487,6 +473,19 @@ fn validate_zulip_stream_name(data: &Data, errors: &mut Vec<String>) {
                     team.name()
                 );
             }
+        }
+        Ok(())
+    })
+}
+
+/// Ensure each project group has a parent team, according to RFC 2856.
+fn validate_project_groups_have_parent_teams(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, _| {
+        if team.kind() == TeamKind::ProjectGroup && team.subteam_of().is_none() {
+            bail!(
+                "the project group `{}` doesn't have a parent team, but it's required to have one",
+                team.name()
+            );
         }
         Ok(())
     })

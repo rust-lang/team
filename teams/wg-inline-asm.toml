@@ -1,6 +1,6 @@
 name = "wg-inline-asm"
 subteam-of = "lang"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["Amanieu", "joshtriplett"]

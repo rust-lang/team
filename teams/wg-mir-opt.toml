@@ -1,6 +1,6 @@
 name = "wg-mir-opt"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["oli-obk"]

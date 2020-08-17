@@ -1,5 +1,5 @@
 name = "wg-security-response"
-wg = true
+kind = "working-group"
 
 [people]
 leads = []

@@ -108,14 +108,42 @@ impl Person {
     }
 }
 
+#[derive(serde_derive::Deserialize, Debug, Copy, Clone, PartialEq, Eq)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum TeamKind {
+    Team,
+    WorkingGroup,
+    ProjectGroup,
+    MarkerTeam,
+}
+
+impl std::fmt::Display for TeamKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::Team => "team",
+                Self::WorkingGroup => "working group",
+                Self::ProjectGroup => "project group",
+                Self::MarkerTeam => "marker team",
+            }
+        )
+    }
+}
+
+impl Default for TeamKind {
+    fn default() -> Self {
+        Self::Team
+    }
+}
+
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Team {
     name: String,
-    #[serde(default = "default_false")]
-    wg: bool,
-    #[serde(default = "default_false")]
-    marker_team: bool,
+    #[serde(default)]
+    kind: TeamKind,
     subteam_of: Option<String>,
     people: TeamPeople,
     #[serde(default)]
@@ -133,12 +161,8 @@ impl Team {
         &self.name
     }
 
-    pub(crate) fn is_wg(&self) -> bool {
-        self.wg
-    }
-
-    pub(crate) fn is_marker_team(&self) -> bool {
-        self.marker_team
+    pub(crate) fn kind(&self) -> TeamKind {
+        self.kind
     }
 
     pub(crate) fn subteam_of(&self) -> Option<&str> {
@@ -161,9 +185,13 @@ impl Team {
         let mut members: HashSet<_> = self.people.members.iter().map(|s| s.as_str()).collect();
         if self.people.include_team_leads || self.people.include_wg_leads {
             for team in data.teams() {
-                let include_wg = team.is_wg() && self.people.include_wg_leads;
-                let include_team = !team.is_wg() && self.people.include_team_leads;
-                if team.name != self.name && (include_wg || include_team) {
+                let should_include = match self.kind {
+                    TeamKind::Team => self.people.include_team_leads,
+                    TeamKind::WorkingGroup => self.people.include_wg_leads,
+                    TeamKind::ProjectGroup => self.people.include_project_group_leads,
+                    TeamKind::MarkerTeam => false,
+                };
+                if team.name != self.name && should_include {
                     for lead in team.leads() {
                         members.insert(lead);
                     }
@@ -172,8 +200,7 @@ impl Team {
         }
         if self.people.include_all_team_members {
             for team in data.teams() {
-                if team.is_wg()
-                    || team.is_marker_team()
+                if team.kind != TeamKind::Team
                     || team.name == self.name
                     // This matches the special alumni team.
                     || team.people.include_all_alumni
@@ -310,6 +337,8 @@ struct TeamPeople {
     include_team_leads: bool,
     #[serde(default = "default_false")]
     include_wg_leads: bool,
+    #[serde(default = "default_false")]
+    include_project_group_leads: bool,
     #[serde(default = "default_false")]
     include_all_team_members: bool,
     #[serde(default = "default_false")]

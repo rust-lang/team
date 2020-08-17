@@ -1,6 +1,6 @@
 name = "wg-traits"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["nikomatsakis", "jackh726"]

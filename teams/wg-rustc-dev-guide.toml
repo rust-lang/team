@@ -1,6 +1,6 @@
 name = "wg-rustc-dev-guide"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["spastorino", "mark-i-m"]

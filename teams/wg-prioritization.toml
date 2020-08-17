@@ -1,6 +1,6 @@
 name = "wg-prioritization"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["spastorino", "wesleywiser"]

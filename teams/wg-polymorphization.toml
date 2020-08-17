@@ -1,6 +1,6 @@
 name = "wg-polymorphization"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["davidtwco"]

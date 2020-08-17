@@ -1,6 +1,6 @@
 name = "wg-llvm"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["nagisa"]

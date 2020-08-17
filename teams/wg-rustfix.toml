@@ -1,6 +1,6 @@
 name = "wg-rustfix"
 subteam-of = "devtools"
-wg = true
+kind = "working-group"
 
 [people]
 leads = []

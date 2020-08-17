@@ -1,5 +1,5 @@
 name = "icebreakers-llvm"
-marker-team = true
+kind = "marker-team"
 
 [people]
 leads = []

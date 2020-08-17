@@ -1,6 +1,6 @@
 name = "wg-self-profile"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["michaelwoerister", "wesleywiser"]

@@ -30,6 +30,13 @@ directory. The structure of the file is this:
 name = "overlords"  # Name of the team, used for GitHub (required)
 subteam-of = "gods"  # Name of the parent team of this team (optional)
 
+# The kind of the team (optional). Could be be:
+# - team (default)
+# - working-group
+# - project-group
+# - marker-team
+kind = "working-group"
+
 [people]
 # Leads of the team, can be more than one and must be members of the team.
 # Required, but it can be empty

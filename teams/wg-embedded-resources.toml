@@ -1,6 +1,6 @@
 name = "wg-embedded-resources"
 subteam-of = "wg-embedded"
-wg = true
+kind = "working-group"
 
 [people]
 leads = []

@@ -1,6 +1,6 @@
 name = "wg-net-web"
 subteam-of = "wg-net"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["aturon", "yoshuawuyts"]

@@ -1,6 +1,6 @@
 name = "wg-incr-comp"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["pnkfelix", "spastorino"]

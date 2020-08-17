@@ -1,6 +1,6 @@
 name = "wg-net-async"
 subteam-of = "wg-net"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["cramertj", "MajorBreakfast"]

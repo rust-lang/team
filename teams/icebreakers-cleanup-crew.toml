@@ -1,5 +1,5 @@
 name = "icebreakers-cleanup-crew"
-marker-team = true
+kind = "marker-team"
 
 [people]
 leads = []

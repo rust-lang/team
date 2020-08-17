@@ -1,5 +1,5 @@
 name = "wg-secure-code"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["Shnatsel", "tarcieri"]
