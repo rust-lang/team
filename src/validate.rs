@@ -87,6 +87,7 @@ fn validate_name_prefixes(data: &Data, errors: &mut Vec<String>) {
     }
     wrapper(data.teams(), errors, |team, _| {
         ensure_prefix(team, TeamKind::WorkingGroup, "wg-")?;
+        ensure_prefix(team, TeamKind::ProjectGroup, "project-")?;
         Ok(())
     });
 }

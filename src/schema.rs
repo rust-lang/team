@@ -113,6 +113,7 @@ impl Person {
 pub(crate) enum TeamKind {
     Team,
     WorkingGroup,
+    ProjectGroup,
     MarkerTeam,
 }
 
@@ -124,6 +125,7 @@ impl std::fmt::Display for TeamKind {
             match self {
                 Self::Team => "team",
                 Self::WorkingGroup => "working group",
+                Self::ProjectGroup => "project group",
                 Self::MarkerTeam => "marker team",
             }
         )
@@ -186,6 +188,7 @@ impl Team {
                 let should_include = match self.kind {
                     TeamKind::Team => self.people.include_team_leads,
                     TeamKind::WorkingGroup => self.people.include_wg_leads,
+                    TeamKind::ProjectGroup => self.people.include_project_group_leads,
                     TeamKind::MarkerTeam => false,
                 };
                 if team.name != self.name && should_include {
@@ -334,6 +337,8 @@ struct TeamPeople {
     include_team_leads: bool,
     #[serde(default = "default_false")]
     include_wg_leads: bool,
+    #[serde(default = "default_false")]
+    include_project_group_leads: bool,
     #[serde(default = "default_false")]
     include_all_team_members: bool,
     #[serde(default = "default_false")]

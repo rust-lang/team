@@ -5,6 +5,7 @@ kind = "working-group"
 leads = []
 members = []
 include-wg-leads = true
+include-project-group-leads = true
 
 [[lists]]
 address = "wg-leads@rust-lang.org"

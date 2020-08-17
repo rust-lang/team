@@ -70,6 +70,7 @@ impl<'a> Generator<'a> {
                 kind: match team.kind() {
                     TeamKind::Team => v1::TeamKind::Team,
                     TeamKind::WorkingGroup => v1::TeamKind::WorkingGroup,
+                    TeamKind::ProjectGroup => v1::TeamKind::ProjectGroup,
                     TeamKind::MarkerTeam => v1::TeamKind::MarkerTeam,
                 },
                 subteam_of: team.subteam_of().map(|st| st.into()),
