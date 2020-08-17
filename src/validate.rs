@@ -25,6 +25,7 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_github_teams,
     validate_discord_permissions,
     validate_zulip_stream_name,
+    validate_project_groups_have_parent_teams,
 ];
 
 static GITHUB_CHECKS: &[fn(&Data, &GitHubApi, &mut Vec<String>)] = &[validate_github_usernames];
@@ -472,6 +473,19 @@ fn validate_zulip_stream_name(data: &Data, errors: &mut Vec<String>) {
                     team.name()
                 );
             }
+        }
+        Ok(())
+    })
+}
+
+/// Ensure each project group has a parent team, according to RFC 2856.
+fn validate_project_groups_have_parent_teams(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, _| {
+        if team.kind() == TeamKind::ProjectGroup && team.subteam_of().is_none() {
+            bail!(
+                "the project group `{}` doesn't have a parent team, but it's required to have one",
+                team.name()
+            );
         }
         Ok(())
     })
