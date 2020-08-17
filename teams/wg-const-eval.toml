@@ -1,6 +1,6 @@
 name = "wg-const-eval"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["oli-obk", "RalfJung"]

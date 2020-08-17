@@ -1,6 +1,6 @@
 name = "wg-polonius"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["lqd", "nikomatsakis"]

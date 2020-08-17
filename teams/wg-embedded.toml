@@ -1,5 +1,5 @@
 name = "wg-embedded"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["adamgreig", "japaric", "therealprof"]

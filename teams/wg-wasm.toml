@@ -1,5 +1,5 @@
 name = "wg-wasm"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["fitzgen"]

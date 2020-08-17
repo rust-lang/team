@@ -1,6 +1,6 @@
 name = "wg-net-embedded"
 subteam-of = "wg-net"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["Nemo157", "levex"]

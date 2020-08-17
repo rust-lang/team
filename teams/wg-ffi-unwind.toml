@@ -1,6 +1,6 @@
 name = "wg-ffi-unwind"
 subteam-of = "lang"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["nikomatsakis", "acfoltzer", "BatmanAoD"]

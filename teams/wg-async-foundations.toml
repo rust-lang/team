@@ -1,5 +1,5 @@
 name = "wg-async-foundations"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["nikomatsakis", "tmandry"]

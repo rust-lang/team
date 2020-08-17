@@ -1,6 +1,6 @@
 name = "wg-pgo"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["michaelwoerister"]

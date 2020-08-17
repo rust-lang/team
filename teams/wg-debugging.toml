@@ -1,6 +1,6 @@
 name = "wg-debugging"
 subteam-of = "devtools"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["Manishearth", "michaelwoerister"]

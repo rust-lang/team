@@ -1,5 +1,5 @@
 name = "wg-gamedev"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["AlexEne", "erlend-sh", "kvark"]

@@ -1,6 +1,6 @@
 name = "wg-rfc-2229"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["nikomatsakis", "matthewjasper"]

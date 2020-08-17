@@ -1,6 +1,6 @@
 name = "wg-bindgen"
 subteam-of = "devtools"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["emilio", "fitzgen"]

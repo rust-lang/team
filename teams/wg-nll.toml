@@ -1,6 +1,6 @@
 name = "wg-nll"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["nikomatsakis", "pnkfelix"]

@@ -1,6 +1,6 @@
 name = "wg-parallel-rustc"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["Mark-Simulacrum", "nikomatsakis"]

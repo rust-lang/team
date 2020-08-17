@@ -1,6 +1,6 @@
 name = "wg-triage"
 subteam-of = "operations"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["Dylan-DPC"]

@@ -1,5 +1,5 @@
 name = "risc-v"
-marker-team = true
+kind = "marker-team"
 
 [people]
 leads = []

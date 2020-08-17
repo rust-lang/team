@@ -1,5 +1,5 @@
 name = "windows"
-marker-team = true
+kind = "marker-team"
 
 [people]
 leads = []

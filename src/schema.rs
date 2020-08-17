@@ -108,14 +108,26 @@ impl Person {
     }
 }
 
+#[derive(serde_derive::Deserialize, Debug, PartialEq, Eq)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum TeamKind {
+    Team,
+    WorkingGroup,
+    MarkerTeam,
+}
+
+impl Default for TeamKind {
+    fn default() -> Self {
+        Self::Team
+    }
+}
+
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Team {
     name: String,
-    #[serde(default = "default_false")]
-    wg: bool,
-    #[serde(default = "default_false")]
-    marker_team: bool,
+    #[serde(default)]
+    kind: TeamKind,
     subteam_of: Option<String>,
     people: TeamPeople,
     #[serde(default)]
@@ -134,11 +146,11 @@ impl Team {
     }
 
     pub(crate) fn is_wg(&self) -> bool {
-        self.wg
+        self.kind == TeamKind::WorkingGroup
     }
 
     pub(crate) fn is_marker_team(&self) -> bool {
-        self.marker_team
+        self.kind == TeamKind::MarkerTeam
     }
 
     pub(crate) fn subteam_of(&self) -> Option<&str> {

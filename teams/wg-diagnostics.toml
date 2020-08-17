@@ -1,6 +1,6 @@
 name = "wg-diagnostics"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["estebank", "oli-obk"]

@@ -1,6 +1,6 @@
 name = "wg-grammar"
 subteam-of = "lang"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["eddyb", "qmx"]

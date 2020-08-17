@@ -1,6 +1,6 @@
 name = "wg-rls-2"
 subteam-of = "compiler"
-wg = true
+kind = "working-group"
 
 [people]
 leads = ["matklad"]
