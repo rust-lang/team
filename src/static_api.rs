@@ -1,5 +1,5 @@
 use crate::data::Data;
-use crate::schema::Permissions;
+use crate::schema::{Permissions, TeamKind};
 use failure::Error;
 use indexmap::IndexMap;
 use log::info;
@@ -67,12 +67,10 @@ impl<'a> Generator<'a> {
 
             let team_data = v1::Team {
                 name: team.name().into(),
-                kind: if team.is_wg() {
-                    v1::TeamKind::WorkingGroup
-                } else if team.is_marker_team() {
-                    v1::TeamKind::MarkerTeam
-                } else {
-                    v1::TeamKind::Team
+                kind: match team.kind() {
+                    TeamKind::Team => v1::TeamKind::Team,
+                    TeamKind::WorkingGroup => v1::TeamKind::WorkingGroup,
+                    TeamKind::MarkerTeam => v1::TeamKind::MarkerTeam,
                 },
                 subteam_of: team.subteam_of().map(|st| st.into()),
                 members,
