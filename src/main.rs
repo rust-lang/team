@@ -50,6 +50,9 @@ fn main() {
     env.default_format_timestamp(false);
     env.default_format_module_path(false);
     env.filter_module("rust_team", log::LevelFilter::Info);
+    if std::env::var("RUST_TEAM_FORCE_COLORS").is_ok() {
+        env.write_style(env_logger::WriteStyle::Always);
+    }
     if let Ok(content) = std::env::var("RUST_LOG") {
         env.parse(&content);
     }

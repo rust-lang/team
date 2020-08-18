@@ -1,0 +1,16 @@
+{
+  "name": "foo",
+  "kind": "team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Pietro Albini",
+      "github": "pietroalbini",
+      "github_id": 2299951,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null
+}

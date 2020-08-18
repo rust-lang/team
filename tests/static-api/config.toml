@@ -1,0 +1,7 @@
+allowed-mailing-lists-domains = [
+    "example.com",
+]
+
+allowed-github-orgs = [
+    "test-org",
+]
