@@ -185,7 +185,7 @@ impl Team {
         let mut members: HashSet<_> = self.people.members.iter().map(|s| s.as_str()).collect();
         if self.people.include_team_leads || self.people.include_wg_leads {
             for team in data.teams() {
-                let should_include = match self.kind {
+                let should_include = match team.kind {
                     TeamKind::Team => self.people.include_team_leads,
                     TeamKind::WorkingGroup => self.people.include_wg_leads,
                     TeamKind::ProjectGroup => self.people.include_project_group_leads,
