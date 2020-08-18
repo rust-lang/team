@@ -6,9 +6,11 @@ leads = ["GuillaumeGomez"]
 members = [
     "GuillaumeGomez",
     "ollie27",
-    "kinnison",
     "jyn514",
     "Manishearth",
+]
+alumni = [
+    "kinnison",
 ]
 
 [[github]]
