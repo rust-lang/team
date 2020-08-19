@@ -24,3 +24,4 @@ orgs = ["rust-lang", "rust-lang-nursery"]
 name = "Async Foundations working group"
 description = "Pursuing core language and library support for async-await"
 repo = "https://github.com/rust-lang/wg-async-foundations"
+zulip-stream = "wg-async-foundations"

@@ -9,3 +9,4 @@ members = ["nikomatsakis", "avadacatavra", "RalfJung"]
 [website]
 name = "Unsafe Code Guidelines (UCG) working group"
 description = "Working out the \"Unsafe Code Guidelines\", which define what kind of behavior unsafe code can and cannot do"
+zulip-stream = "t-lang.2Fwg-unsafe-code-guidelines"

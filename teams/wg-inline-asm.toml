@@ -13,6 +13,7 @@ members = [
 name = "inline-asm project group"
 description = "A working-group project to extend the Rust language to support inline assembly"
 repo = "https://github.com/rust-lang/project-inline-asm"
+zulip-stream = "project-inline-asm"
 
 [[github]]
 orgs = ["rust-lang"]

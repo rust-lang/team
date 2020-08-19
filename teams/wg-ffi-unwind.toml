@@ -16,6 +16,7 @@ members = [
 name = "ffi-unwind project group"
 description = "A working-group project to extend the Rust language to support unwinding that crosses FFI boundaries"
 repo = "https://github.com/rust-lang/project-ffi-unwind"
+zulip-stream = "project-ffi-unwind"
 
 [[github]]
 orgs = ["rust-lang"]

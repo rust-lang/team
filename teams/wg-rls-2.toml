@@ -10,3 +10,4 @@ members = ["matklad"]
 name = "RLS 2.0 working group"
 description = "Experimenting with a new compiler architecture tailored for IDEs"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/rls-2.0/"
+zulip-stream = "t-compiler.2Fwg-rls-2.2E0"

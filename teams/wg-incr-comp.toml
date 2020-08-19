@@ -13,3 +13,4 @@ orgs = ["rust-lang"]
 name = "Incremental compilation working group"
 description = "Fixing bugs, adding features and improving incremental compilation in rustc"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/incr-comp/"
+zulip-stream = "t-compiler.2Fwg-incr-comp"

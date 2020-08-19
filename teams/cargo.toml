@@ -25,8 +25,7 @@ ping = "rust-lang/cargo"
 [website]
 name = "Cargo team"
 description = "Designing and implementing the official Rust package manager, Cargo"
-discord-invite = "https://discord.gg/aEbd4eT"
-discord-name = "#cargo"
+zulip-stream = "t-cargo"
 
 [[lists]]
 address = "cargo@rust-lang.org"

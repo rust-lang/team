@@ -14,6 +14,7 @@ members = [
 name = "safe-transmute project group"
 description = "A working-group project to extend the Rust language to support safe transmute between types"
 repo = "https://github.com/rust-lang/project-safe-transmute"
+zulip-stream = "project-safe-transmute"
 
 [[github]]
 orgs = ["rust-lang"]

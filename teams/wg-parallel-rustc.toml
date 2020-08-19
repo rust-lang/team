@@ -10,3 +10,4 @@ members = ["nikomatsakis", "Mark-Simulacrum", "alexcrichton", "cuviper", "spasto
 name = "Parallel rustc working group"
 description = "Making parallel compilation the default for rustc"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/parallel-rustc/"
+zulip-stream = "t-compiler.2Fwg-parallel-rustc"

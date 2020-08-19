@@ -38,6 +38,7 @@ ping = "rust-lang/compiler"
 name = "Compiler team"
 repo = "http://github.com/rust-lang/compiler-team"
 description = "Developing and managing compiler internals and optimizations"
+zulip-stream = "t-compiler"
 
 [[lists]]
 address = "compiler-private@rust-lang.org"

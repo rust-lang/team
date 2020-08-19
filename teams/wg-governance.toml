@@ -28,3 +28,4 @@ extra-people = []
 name = "Governance working group"
 description = "Managing and improving Rust team governance"
 repo = "https://github.com/rust-lang/wg-governance"
+zulip-stream = "wg-governance"

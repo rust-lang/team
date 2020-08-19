@@ -16,6 +16,7 @@ members = [
 name = "Secure Code working group"
 description = "Making it easy to write secure code in Rust"
 repo = "https://github.com/rust-secure-code/wg"
+zulip-stream = "wg-secure-code"
 
 [[lists]]
 address = "secure-code-wg@rust-lang.org"

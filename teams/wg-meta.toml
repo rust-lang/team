@@ -10,3 +10,4 @@ members = ["nikomatsakis", "davidtwco", "spastorino"]
 name = "Meta working group"
 description = "Organizing and managing the Rust compiler team"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/meta/"
+zulip-stream = "t-compiler.2Fwg-meta"
