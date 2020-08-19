@@ -10,4 +10,4 @@ members = ["nagisa"]
 name = "LLVM working group"
 description = "Working with LLVM upstream to represent Rust in its development"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/llvm/"
-zulip-stream = "t-compiler.2Fwg-llvm"
+zulip-stream = "t-compiler/wg-llvm"

@@ -13,4 +13,4 @@ orgs = ["rust-lang"]
 name = "Rustc Dev Guide working group"
 description = "Make the compiler easier to learn by ensuring that rustc-dev-guide is \"complete\""
 repo = "https://rust-lang.github.io/compiler-team/working-groups/rustc-dev-guide/"
-zulip-stream = "t-compiler.2Fwg-rustc-dev-guide"
+zulip-stream = "t-compiler/wg-rustc-dev-guide"

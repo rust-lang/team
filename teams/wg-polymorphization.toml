@@ -10,4 +10,4 @@ members = ["davidtwco", "eddyb", "lcnr"]
 name = "Polymorphization working group"
 description = "Implementing polymorphization to reduce unnecessary monomorphisation in rustc"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/polymorphization/"
-zulip-stream = "t-compiler.2Fwg-polymorphization"
+zulip-stream = "t-compiler/wg-polymorphization"
