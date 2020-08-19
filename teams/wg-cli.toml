@@ -18,6 +18,7 @@ members = [
 page = "cli"
 name = "Command-line interfaces (CLI) working group"
 description = "Focusing on the end-to-end experience of writing terminal apps, both large and small, in Rust."
+zulip-stream = "wg-cli"
 
 [[lists]]
 address = "cli-wg@rust-lang.org"

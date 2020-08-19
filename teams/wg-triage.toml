@@ -21,8 +21,7 @@ members = [
 [website]
 name = "Triage working group"
 description = "Triaging repositories under the rust-lang organisation"
-discord-invite = "https://discord.gg/e6Q3cvu"
-discord-name = "#triage-wg"
+zulip-stream = "t-release/triage"
 
 [[github]]
 orgs = ["rust-lang"]

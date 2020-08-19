@@ -37,6 +37,7 @@ exclude-members = [
 page = "library"
 name = "Library team"
 description = "Developing and managing the Rust standard library, official rust-lang crates, code conventions, and ecosystem support"
+zulip-stream = "t-libs"
 
 [[lists]]
 address = "libs-private@rust-lang.org"
