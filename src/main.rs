@@ -35,7 +35,7 @@ enum Cli {
     DumpList { name: String },
     #[structopt(
         name = "dump-website",
-        help = "Dump website internationalization data as a .ftl file"
+        help = "dump website internationalization data as a .ftl file"
     )]
     DumpWebsite,
     #[structopt(
