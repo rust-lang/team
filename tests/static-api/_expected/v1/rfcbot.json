@@ -1,3 +1,11 @@
 {
-  "teams": {}
+  "teams": {
+    "T-foo": {
+      "name": "Demo Team",
+      "ping": "@ghost/foo",
+      "members": [
+        "pietroalbini"
+      ]
+    }
+  }
 }

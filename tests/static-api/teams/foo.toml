@@ -1,5 +1,46 @@
 name = "foo"
 
 [people]
-leads = []
-members = ["pietroalbini"]
+leads = ["pietroalbini"]
+members = ["pietroalbini", "nellshamrell"]
+
+[permissions]
+crater = true
+bors.rust.review = true
+bors.crater.try = true
+crates-io-ops-bot.crates_io = true
+
+[rfcbot]
+label = "T-foo"
+name = "Demo Team"
+ping = "@ghost/foo"
+exclude-members = ["nellshamrell"]
+
+[website]
+name = "Demo Team"
+description = "Why do you care about the description of test teams?"
+page = "demo"
+email = "foo@example.com"
+repo = "https://github.com/ghost/foo"
+discord-invite = "https://discord.gg/MCMm5YC"
+discord-name = "#foo"
+zulip-stream = "t-foo"
+weight = 1000
+
+[[github]]
+orgs = ["test-org"]
+
+[[github]]
+orgs = ["test-org"]
+team-name = "renamed-team"
+extra-teams = ["wg-test"]
+
+[[lists]]
+address = "foo@example.com"
+
+[[lists]]
+address = "bar@example.com"
+include-team-members = false
+extra-people = ["kennytm"]
+extra-emails = ["bar@example.com"]
+extra-teams = ["wg-test"]

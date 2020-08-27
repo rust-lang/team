@@ -1,0 +1,11 @@
+name = 'Mark Rousskov'
+github = 'Mark-Simulacrum'
+github-id = 5047365
+email = "mark.simulacrum@gmail.com"
+discord-id = 442403469580566528
+
+[permissions]
+crater = true
+bors.rust.review = true
+bors.crater.try = true
+crates-io-ops-bot.crates_io = true

@@ -1,0 +1,5 @@
+name = "leaderless"
+
+[people]
+leads = []
+members = ["pietroalbini"]

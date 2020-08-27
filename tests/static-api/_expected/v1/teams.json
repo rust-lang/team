@@ -8,10 +8,71 @@
         "name": "Pietro Albini",
         "github": "pietroalbini",
         "github_id": 2299951,
+        "is_lead": true
+      },
+      {
+        "name": "Nell Shamrell-Harrington",
+        "github": "nellshamrell",
+        "github_id": 813007,
         "is_lead": false
       }
     ],
     "alumni": [],
+    "github": {
+      "teams": [
+        {
+          "org": "test-org",
+          "name": "foo",
+          "members": [
+            813007,
+            2299951
+          ]
+        },
+        {
+          "org": "test-org",
+          "name": "renamed-team",
+          "members": [
+            813007,
+            2299951,
+            5047365
+          ]
+        }
+      ]
+    },
+    "website_data": {
+      "name": "Demo Team",
+      "description": "Why do you care about the description of test teams?",
+      "page": "demo",
+      "email": "foo@example.com",
+      "repo": "https://github.com/ghost/foo",
+      "discord": {
+        "channel": "#foo",
+        "url": "https://discord.gg/MCMm5YC"
+      },
+      "zulip_stream": "t-foo",
+      "weight": 1000
+    }
+  },
+  "wg-test": {
+    "name": "wg-test",
+    "kind": "working_group",
+    "subteam_of": null,
+    "members": [
+      {
+        "name": "Mark Rousskov",
+        "github": "Mark-Simulacrum",
+        "github_id": 5047365,
+        "is_lead": true
+      }
+    ],
+    "alumni": [
+      {
+        "name": "Pietro Albini",
+        "github": "pietroalbini",
+        "github_id": 2299951,
+        "is_lead": false
+      }
+    ],
     "github": null,
     "website_data": null
   }

@@ -1,5 +1,17 @@
 {
-  "github_users": [],
-  "github_ids": [],
-  "discord_ids": []
+  "github_users": [
+    "Mark-Simulacrum",
+    "nellshamrell",
+    "pietroalbini"
+  ],
+  "github_ids": [
+    813007,
+    2299951,
+    5047365
+  ],
+  "discord_ids": [
+    244302461718757376,
+    296309029947441155,
+    442403469580566528
+  ]
 }

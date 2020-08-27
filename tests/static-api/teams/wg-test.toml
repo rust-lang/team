@@ -1,0 +1,7 @@
+name = "wg-test"
+kind = "working-group"
+
+[people]
+leads = ["Mark-Simulacrum"]
+members = ["Mark-Simulacrum"]
+alumni = ["pietroalbini"]
