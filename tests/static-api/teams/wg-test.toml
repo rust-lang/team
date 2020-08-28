@@ -2,6 +2,6 @@ name = "wg-test"
 kind = "working-group"
 
 [people]
-leads = ["Mark-Simulacrum"]
-members = ["Mark-Simulacrum"]
-alumni = ["pietroalbini"]
+leads = ["user-2"]
+members = ["user-2"]
+alumni = ["user-0"]

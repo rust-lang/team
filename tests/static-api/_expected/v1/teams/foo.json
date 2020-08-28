@@ -4,15 +4,15 @@
   "subteam_of": null,
   "members": [
     {
-      "name": "Pietro Albini",
-      "github": "pietroalbini",
-      "github_id": 2299951,
+      "name": "Zeroth user",
+      "github": "user-0",
+      "github_id": 0,
       "is_lead": true
     },
     {
-      "name": "Nell Shamrell-Harrington",
-      "github": "nellshamrell",
-      "github_id": 813007,
+      "name": "First user",
+      "github": "user-1",
+      "github_id": 0,
       "is_lead": false
     }
   ],
@@ -23,17 +23,17 @@
         "org": "test-org",
         "name": "foo",
         "members": [
-          813007,
-          2299951
+          0,
+          0
         ]
       },
       {
         "org": "test-org",
         "name": "renamed-team",
         "members": [
-          813007,
-          2299951,
-          5047365
+          0,
+          0,
+          2
         ]
       }
     ]
@@ -46,7 +46,7 @@
     "repo": "https://github.com/ghost/foo",
     "discord": {
       "channel": "#foo",
-      "url": "https://discord.gg/MCMm5YC"
+      "url": "https://discord.gg/AAAAA"
     },
     "zulip_stream": "t-foo",
     "weight": 1000

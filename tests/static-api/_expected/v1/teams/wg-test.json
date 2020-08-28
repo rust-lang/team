@@ -4,17 +4,17 @@
   "subteam_of": null,
   "members": [
     {
-      "name": "Mark Rousskov",
-      "github": "Mark-Simulacrum",
-      "github_id": 5047365,
+      "name": "Second user",
+      "github": "user-2",
+      "github_id": 2,
       "is_lead": true
     }
   ],
   "alumni": [
     {
-      "name": "Pietro Albini",
-      "github": "pietroalbini",
-      "github_id": 2299951,
+      "name": "Zeroth user",
+      "github": "user-0",
+      "github_id": 0,
       "is_lead": false
     }
   ],
