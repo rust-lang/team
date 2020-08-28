@@ -43,10 +43,10 @@ fn static_api() -> Result<(), Error> {
     for file in &files {
         let expected = std::fs::read_to_string(dir_expected.join(file))
             .ok()
-            .unwrap_or_else(String::new);
+            .unwrap_or_default();
         let output = std::fs::read_to_string(dir_output.join(file))
             .ok()
-            .unwrap_or_else(String::new);
+            .unwrap_or_default();
 
         let changeset = difference::Changeset::new(&expected, &output, "\n");
         if changeset.distance != 0 {
