@@ -6,7 +6,18 @@ use log::{error, warn};
 use regex::Regex;
 use std::collections::{HashMap, HashSet};
 
-static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
+macro_rules! checks {
+    ($($f:ident,)*) => {
+        &[$(
+            Check {
+                f: $f,
+                name: stringify!($f)
+            }
+        ),*]
+    }
+}
+
+static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_name_prefixes,
     validate_subteam_of,
     validate_team_leads,
@@ -28,13 +39,24 @@ static CHECKS: &[fn(&Data, &mut Vec<String>)] = &[
     validate_project_groups_have_parent_teams,
 ];
 
-static GITHUB_CHECKS: &[fn(&Data, &GitHubApi, &mut Vec<String>)] = &[validate_github_usernames];
+static GITHUB_CHECKS: &[Check<fn(&Data, &GitHubApi, &mut Vec<String>)>] =
+    checks![validate_github_usernames,];
 
-pub(crate) fn validate(data: &Data, strict: bool) -> Result<(), Error> {
+struct Check<F> {
+    f: F,
+    name: &'static str,
+}
+
+pub(crate) fn validate(data: &Data, strict: bool, skip: &[&str]) -> Result<(), Error> {
     let mut errors = Vec::new();
 
     for check in CHECKS {
-        check(data, &mut errors);
+        if skip.contains(&check.name) {
+            warn!("skipped check: {}", check.name);
+            continue;
+        }
+
+        (check.f)(data, &mut errors);
     }
 
     let github = GitHubApi::new();
@@ -47,7 +69,12 @@ pub(crate) fn validate(data: &Data, strict: bool) -> Result<(), Error> {
         }
     } else {
         for check in GITHUB_CHECKS {
-            check(data, &github, &mut errors);
+            if skip.contains(&check.name) {
+                warn!("skipped check: {}", check.name);
+                continue;
+            }
+
+            (check.f)(data, &github, &mut errors);
         }
     }
 

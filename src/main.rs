@@ -21,6 +21,12 @@ enum Cli {
     Check {
         #[structopt(long = "strict", help = "fail if optional checks are not executed")]
         strict: bool,
+        #[structopt(
+            long = "skip",
+            multiple = true,
+            help = "skip one or more validation steps"
+        )]
+        skip: Vec<String>,
     },
     #[structopt(
         name = "add-person",
@@ -71,8 +77,12 @@ fn run() -> Result<(), Error> {
     let cli = Cli::from_args();
     let data = Data::load()?;
     match cli {
-        Cli::Check { strict } => {
-            crate::validate::validate(&data, strict)?;
+        Cli::Check { strict, skip } => {
+            crate::validate::validate(
+                &data,
+                strict,
+                &skip.iter().map(|s| s.as_ref()).collect::<Vec<_>>(),
+            )?;
         }
         Cli::AddPerson { ref github_name } => {
             #[derive(serde::Serialize)]
