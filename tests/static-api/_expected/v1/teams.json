@@ -53,6 +53,22 @@
       "weight": 1000
     }
   },
+  "leaderless": {
+    "name": "leaderless",
+    "kind": "team",
+    "subteam_of": null,
+    "members": [
+      {
+        "name": "Zeroth user",
+        "github": "user-0",
+        "github_id": 0,
+        "is_lead": false
+      }
+    ],
+    "alumni": [],
+    "github": null,
+    "website_data": null
+  },
   "wg-test": {
     "name": "wg-test",
     "kind": "working_group",
