@@ -1,0 +1,54 @@
+{
+  "name": "foo",
+  "kind": "team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Zeroth user",
+      "github": "user-0",
+      "github_id": 0,
+      "is_lead": true
+    },
+    {
+      "name": "First user",
+      "github": "user-1",
+      "github_id": 0,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "test-org",
+        "name": "foo",
+        "members": [
+          0,
+          0
+        ]
+      },
+      {
+        "org": "test-org",
+        "name": "renamed-team",
+        "members": [
+          0,
+          0,
+          2
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Demo Team",
+    "description": "Why do you care about the description of test teams?",
+    "page": "demo",
+    "email": "foo@example.com",
+    "repo": "https://github.com/ghost/foo",
+    "discord": {
+      "channel": "#foo",
+      "url": "https://discord.gg/AAAAA"
+    },
+    "zulip_stream": "t-foo",
+    "weight": 1000
+  }
+}

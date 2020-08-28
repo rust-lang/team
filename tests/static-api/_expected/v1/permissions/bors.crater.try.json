@@ -1,0 +1,17 @@
+{
+  "github_users": [
+    "user-0",
+    "user-1",
+    "user-2"
+  ],
+  "github_ids": [
+    0,
+    0,
+    2
+  ],
+  "discord_ids": [
+    0,
+    1,
+    2
+  ]
+}

@@ -21,6 +21,12 @@ enum Cli {
     Check {
         #[structopt(long = "strict", help = "fail if optional checks are not executed")]
         strict: bool,
+        #[structopt(
+            long = "skip",
+            multiple = true,
+            help = "skip one or more validation steps"
+        )]
+        skip: Vec<String>,
     },
     #[structopt(
         name = "add-person",
@@ -50,6 +56,9 @@ fn main() {
     env.default_format_timestamp(false);
     env.default_format_module_path(false);
     env.filter_module("rust_team", log::LevelFilter::Info);
+    if std::env::var("RUST_TEAM_FORCE_COLORS").is_ok() {
+        env.write_style(env_logger::WriteStyle::Always);
+    }
     if let Ok(content) = std::env::var("RUST_LOG") {
         env.parse(&content);
     }
@@ -68,8 +77,12 @@ fn run() -> Result<(), Error> {
     let cli = Cli::from_args();
     let data = Data::load()?;
     match cli {
-        Cli::Check { strict } => {
-            crate::validate::validate(&data, strict)?;
+        Cli::Check { strict, skip } => {
+            crate::validate::validate(
+                &data,
+                strict,
+                &skip.iter().map(|s| s.as_ref()).collect::<Vec<_>>(),
+            )?;
         }
         Cli::AddPerson { ref github_name } => {
             #[derive(serde::Serialize)]

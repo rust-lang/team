@@ -19,6 +19,13 @@ indexmap = "1.0.2"
 reqwest = "0.9.18"
 base64 = "0.10.1"
 
+[dev-dependencies]
+duct = "0.13.4"
+atty = "0.2.14"
+ansi_term = "0.12.1"
+difference = "2.0.0"
+walkdir = "2.3.1"
+
 [workspace]
 members = [
     "rust_team_data"

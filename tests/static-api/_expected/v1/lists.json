@@ -1,0 +1,19 @@
+{
+  "lists": {
+    "bar@example.com": {
+      "address": "bar@example.com",
+      "members": [
+        "bar@example.com",
+        "user2@example.com",
+        "user3@example.com"
+      ]
+    },
+    "foo@example.com": {
+      "address": "foo@example.com",
+      "members": [
+        "user0@example.com",
+        "user1@example.com"
+      ]
+    }
+  }
+}

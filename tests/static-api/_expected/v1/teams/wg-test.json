@@ -1,0 +1,23 @@
+{
+  "name": "wg-test",
+  "kind": "working_group",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Second user",
+      "github": "user-2",
+      "github_id": 2,
+      "is_lead": true
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Zeroth user",
+      "github": "user-0",
+      "github_id": 0,
+      "is_lead": false
+    }
+  ],
+  "github": null,
+  "website_data": null
+}

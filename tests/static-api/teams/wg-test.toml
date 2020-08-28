@@ -1,0 +1,7 @@
+name = "wg-test"
+kind = "working-group"
+
+[people]
+leads = ["user-2"]
+members = ["user-2"]
+alumni = ["user-0"]

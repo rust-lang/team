@@ -1,0 +1,12 @@
+name = 'Second user'
+github = 'user-2'
+github-id = 2
+email = "user2@example.com"
+discord-id = 2
+zulip-id = 2
+
+[permissions]
+crater = true
+bors.rust.review = true
+bors.crater.try = true
+crates-io-ops-bot.crates_io = true

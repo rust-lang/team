@@ -31,6 +31,9 @@ jobs:
       - name: Run clippy
         run: cargo clippy -- -Dwarnings
 
+      - name: Run tests
+        run: cargo test
+
       - name: Build the contents of the static API
         run: |
           cargo run -- static-api build
