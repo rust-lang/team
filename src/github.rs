@@ -86,7 +86,7 @@ impl GitHubApi {
             .send()?
             .error_for_status()?
             .json()?;
-        if let Some(error) = res.errors.iter().next() {
+        if let Some(error) = res.errors.get(0) {
             bail!("graphql error: {}", error.message);
         } else if let Some(data) = res.data {
             Ok(data)

@@ -17,6 +17,7 @@ macro_rules! checks {
     }
 }
 
+#[allow(clippy::type_complexity)]
 static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_name_prefixes,
     validate_subteam_of,
@@ -39,6 +40,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_project_groups_have_parent_teams,
 ];
 
+#[allow(clippy::type_complexity)]
 static GITHUB_CHECKS: &[Check<fn(&Data, &GitHubApi, &mut Vec<String>)>] =
     checks![validate_github_usernames,];
 
