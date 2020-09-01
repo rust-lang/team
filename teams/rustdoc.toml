@@ -28,7 +28,7 @@ ping = "rust-lang/rustdoc"
 
 [website]
 name = "Rustdoc team"
-description = "Developing and managing documentation tools, including Rustdoc and docs.rs"
+description = "Developing and managing the Rustdoc documentation tool
 discord-invite = "https://discord.gg/4yEYPuT"
 discord-name = "#rustdoc"
 
