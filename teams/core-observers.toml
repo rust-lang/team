@@ -3,9 +3,7 @@ subteam-of = "core"
 
 [people]
 leads = []
-members = [
-    "skade",
-]
+members = []
 
 [[github]]
 orgs = ["rust-lang"]

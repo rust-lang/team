@@ -8,10 +8,13 @@ members = [
     "ashleygwilliams",
     "carols10cents",
     "nikomatsakis",
-    "nrc",
     "pietroalbini",
+    "skade",
     "steveklabnik",
     "Manishearth",
+]
+alumni = [
+    "nrc",
 ]
 
 [permissions]
@@ -62,7 +65,6 @@ extra-people = [
     "aidanhs",
     "ashleygwilliams",
     "nikomatsakis",
-    "nrc",
     "steveklabnik",
     "Manishearth",
 ]

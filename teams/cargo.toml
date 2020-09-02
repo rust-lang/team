@@ -9,6 +9,9 @@ members = [
     "ehuss",
     "joshtriplett",
 ]
+alumni = [
+    "nrc",
+]
 
 [permissions]
 bors.rust.review = true

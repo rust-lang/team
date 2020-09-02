@@ -5,13 +5,14 @@ kind = "working-group"
 [people]
 leads = [
     "kinnison",
-    "nrc",
     "rbtcollins",
 ]
 members = [
     "kinnison",
-    "nrc",
     "rbtcollins",
+]
+alumni = [
+    "nrc",
 ]
 
 [website]
