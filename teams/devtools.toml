@@ -3,6 +3,7 @@ name = "devtools"
 [people]
 leads = ["killercup", "Manishearth"]
 members = ["killercup", "Manishearth", "Xanewok", "fitzgen", "GuillaumeGomez", "oli-obk", "kinnison", "ehuss"]
+alumni = ["nrc"]
 
 [rfcbot]
 label = "T-dev-tools"

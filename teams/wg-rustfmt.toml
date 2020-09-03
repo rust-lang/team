@@ -9,6 +9,9 @@ members = [
     "topecongiro",
     "calebcartwright",
 ]
+alumni = [
+    "nrc",
+]
 
 [[github]]
 orgs = ["rust-lang"]

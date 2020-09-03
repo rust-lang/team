@@ -2,16 +2,18 @@ name = "ides"
 subteam-of = "devtools"
 
 [people]
-leads = ["nrc", "Xanewok"]
+leads = ["Xanewok"]
 members = [
     "alexheretic",
     "autozimu",
     "jasonwilliams",
     "LucasBullen",
     "matklad",
-    "nrc",
     "vlad20012",
     "Xanewok",
+]
+alumni = [
+    "nrc",
 ]
 
 [rfcbot]

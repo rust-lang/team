@@ -12,6 +12,7 @@ members = [
 ]
 alumni = [
     "Centril",
+    "nrc",
 ]
 
 [permissions]

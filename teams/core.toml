@@ -8,10 +8,13 @@ members = [
     "ashleygwilliams",
     "carols10cents",
     "nikomatsakis",
-    "nrc",
     "pietroalbini",
+    "skade",
     "steveklabnik",
     "Manishearth",
+]
+alumni = [
+    "nrc",
 ]
 
 [permissions]
@@ -34,14 +37,12 @@ weight = 1000
 
 [[lists]]
 address = "core@rust-lang.org"
-extra-teams = ["core-observers"]
 
 [[lists]]
 address = "core-private@rust-lang.org"
 
 [[lists]]
 address = "core-team@rust-lang.org"
-extra-teams = ["core-observers"]
 
 [[lists]]
 address = "user-logos@rust-lang.org"
@@ -62,7 +63,6 @@ extra-people = [
     "aidanhs",
     "ashleygwilliams",
     "nikomatsakis",
-    "nrc",
     "steveklabnik",
     "Manishearth",
 ]
