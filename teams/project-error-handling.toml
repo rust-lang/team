@@ -1,0 +1,18 @@
+name = "project-error-handling"
+kind = "project-group"
+subteam-of = "libs"
+
+[people]
+leads = ["yaahc"]
+members = [
+    "yaahc",
+    "BurntSushi",
+    "seanchen1991",
+]
+
+[website]
+name = "Error Handling Project Group"
+description = "Identifying error handling best practices and consolidating the ecosystem"
+
+[[github]]
+orgs = ["rust-lang"]
