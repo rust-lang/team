@@ -1,0 +1,13 @@
+name = "wg-parselib"
+subteam-of = "compiler"
+kind = "working-group"
+
+[people]
+leads = ["matklad"]
+members = ["matklad"]
+
+[website]
+name = "Parselib working group"
+description = "Sharing the parser between rustc and rust-analyzer"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/parselib/"
+zulip-stream = "t-compiler/wg-parselib"
