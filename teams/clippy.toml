@@ -26,5 +26,4 @@ orgs = ["rust-lang"]
 [website]
 name = "Clippy team"
 description = "Designing and implementing the Clippy linter"
-discord-invite = "https://discord.gg/vNNtpyD"
-discord-name = "#clippy"
+zulip-stream = "clippy"
