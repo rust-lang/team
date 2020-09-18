@@ -1,0 +1,25 @@
+name = "project-portable-simd"
+kind = "project-group"
+subteam-of = "libs"
+
+[people]
+leads = [
+    "hsivonen",
+    "KodrAus",
+    "Lokathor",
+]
+members = [
+    "BurntSushi",
+    "calebzulawski",
+    "KodrAus",
+    "hsivonen",
+    "Lokathor",
+    "workingjubilee",
+]
+
+[website]
+name = "Portable SIMD Project Group"
+description = "Adding portable SIMD to the standard library"
+
+[[github]]
+orgs = ["rust-lang"]
