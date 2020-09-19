@@ -5,11 +5,14 @@ kind = "working-group"
 [people]
 leads = ["spastorino", "wesleywiser"]
 members = [
+    "am-1t",
     "apiraino",
     "bawerd",
     "camelid",
+    "djcarpe",
     "Dylan-DPC",
     "frxstrem",
+    "hameerabbasi",
     "JamesPatrickGill",
     "jechasteen",
     "JohnTitor",
