@@ -25,7 +25,7 @@ alumni = [
 name = "Prioritization working group"
 description = "Triaging bugs, mainly deciding if bugs are critical (potential release blockers) or not"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/prioritization/"
-zulip-stream = "t-compiler/wg-polymorphization"
+zulip-stream = "t-compiler/wg-prioritization"
 
 [[github]]
 orgs = ["rust-lang"]
