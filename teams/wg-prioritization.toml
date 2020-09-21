@@ -5,16 +5,26 @@ kind = "working-group"
 [people]
 leads = ["spastorino", "wesleywiser"]
 members = [
+    "am-1t",
     "apiraino",
+    "bawerd",
+    "camelid",
+    "djcarpe",
     "Dylan-DPC",
+    "frxstrem",
+    "hameerabbasi",
+    "JamesPatrickGill",
+    "jechasteen",
     "JohnTitor",
     "jyn514",
     "lcnr",
     "LeSeulArtichaut",
     "mark-i-m",
+    "mstallmo",
     "o0Ignition0o",
     "pnkfelix",
     "spastorino",
+    "Stupremee",
     "wesleywiser",
 ]
 alumni = [
