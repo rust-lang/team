@@ -19,7 +19,6 @@ members = [
     "jyn514",
     "lcnr",
     "LeSeulArtichaut",
-    "mark-i-m",
     "mstallmo",
     "o0Ignition0o",
     "pnkfelix",
@@ -29,6 +28,7 @@ members = [
 ]
 alumni = [
     "Centril",
+    "mark-i-m",
 ]
 
 [website]
