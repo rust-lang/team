@@ -4,16 +4,19 @@ kind = "working-group"
 [people]
 leads = ["nikomatsakis", "tmandry"]
 members = [
-  "nikomatsakis",
+  "Aaron1011",
+  "betamos",
+  "bIgBV",
+  "LucioFranco",
   "cramertj",
+  "csmoe",
+  "gilescope",
+  "lbernick",
+  "nellshamrell",
+  "nikomatsakis",
+  "taiki-e",
   "tmandry",
   "withoutboats",
-  "gilescope",
-  "csmoe",
-  "Aaron1011",
-  "taiki-e",
-  "nellshamrell",
-  "LucioFranco",
   "yoshuawuyts",
 ]
 
