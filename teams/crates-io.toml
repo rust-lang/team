@@ -18,6 +18,9 @@ members = [
     "JohnTitor",
     "nellshamrell",
 ]
+alumni = [
+    "steveklabnik",
+]
 
 [permissions]
 bors.crates_io.review = true
