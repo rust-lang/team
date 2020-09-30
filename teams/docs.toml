@@ -24,8 +24,8 @@ description = "Improving and moderating the quality of Rust's documentation"
 
 [[lists]]
 address = "docs@rust-lang.org"
-extra-teams = ["reference"]
+extra-teams = ["lang-docs"]
 
 [[lists]]
 address = "doc-team@rust-lang.org"
-extra-teams = ["reference", "rust-by-example"]
+extra-teams = ["lang-docs", "rust-by-example"]
