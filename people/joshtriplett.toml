@@ -5,3 +5,6 @@ irc = "JoshTriplett"
 email = "josh@joshtriplett.org"
 discord-id = 451800670635294731
 zulip-id = 239881
+
+[permissions]
+bors.libc.review = true
