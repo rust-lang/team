@@ -3,7 +3,7 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["spastorino", "mark-i-m"]
+leads = ["spastorino", "jyn514"]
 members = ["spastorino", "mark-i-m", "amanjeev", "tshepang", "togiberlin", "JohnTitor", "chrissimpkins", "LeSeulArtichaut", "Nashenas88", "jyn514"]
 
 [[github]]
