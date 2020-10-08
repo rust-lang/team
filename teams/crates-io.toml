@@ -10,7 +10,6 @@ members = [
     "withoutboats",
     "joshtriplett",
     "ishitatsuyuki",
-    "steveklabnik",
     "pichfl",
     "pietroalbini",
     "locks",
@@ -18,6 +17,9 @@ members = [
     "smarnach",
     "JohnTitor",
     "nellshamrell",
+]
+alumni = [
+    "steveklabnik",
 ]
 
 [permissions]
