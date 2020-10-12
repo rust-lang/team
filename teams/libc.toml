@@ -1,0 +1,14 @@
+name = "libc"
+
+[people]
+leads = []
+members = [
+    "JohnTitor",
+    "joshtriplett",
+]
+
+[permissions]
+bors.libc.review = true
+
+[[github]]
+orgs = ["rust-lang"]
