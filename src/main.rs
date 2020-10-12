@@ -136,7 +136,7 @@ fn run() -> Result<(), Error> {
 
             let leads = team.leads();
             let mut members = team.members(&data)?.into_iter().collect::<Vec<_>>();
-            members.sort();
+            members.sort_unstable();
             for member in members {
                 println!(
                     "{}{}",
@@ -181,7 +181,7 @@ fn run() -> Result<(), Error> {
                 .into_iter()
                 .map(|person| person.github())
                 .collect::<Vec<_>>();
-            allowed.sort();
+            allowed.sort_unstable();
             for github_username in &allowed {
                 println!("{}", github_username);
             }

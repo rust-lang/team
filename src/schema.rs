@@ -292,7 +292,7 @@ impl Team {
                         .filter_map(|name| data.person(name).map(|p| p.github_id())),
                 );
             }
-            members.sort();
+            members.sort_unstable();
             let name = github.team_name.as_deref().unwrap_or(&self.name);
 
             for org in &github.orgs {

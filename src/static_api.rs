@@ -146,8 +146,8 @@ impl<'a> Generator<'a> {
                 .collect::<Vec<_>>();
 
             github_users.sort();
-            github_ids.sort();
-            discord_ids.sort();
+            github_ids.sort_unstable();
+            discord_ids.sort_unstable();
             self.add(
                 &format!("v1/permissions/{}.json", perm),
                 &v1::Permission {
