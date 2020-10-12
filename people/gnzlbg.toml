@@ -3,5 +3,4 @@ github = "gnzlbg"
 github-id = 904614
 
 [permissions]
-bors.libc.review = true
 bors.stdarch.review = true
