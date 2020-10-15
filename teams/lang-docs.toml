@@ -1,0 +1,22 @@
+name = "lang-docs"
+subteam-of = "lang"
+
+[people]
+leads = ["ehuss", "JohnTitor"]
+members = [
+    "ehuss",
+    "Havvy",
+    "JohnTitor",
+    "matthewjasper",
+]
+alumni = [
+    "Centril",
+]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "lang-docs team"
+description = "Developing and writing the docs related to the lang team"
+zulip-stream = "t-lang/docs"
