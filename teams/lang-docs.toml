@@ -19,4 +19,4 @@ orgs = ["rust-lang"]
 [website]
 name = "lang-docs team"
 description = "Developing and writing the docs related to the lang team"
-zulip-stream = "t-lang/docs"
+zulip-stream = "t-lang/doc"
