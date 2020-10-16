@@ -4,7 +4,14 @@ kind = "working-group"
 
 [people]
 leads = ["nagisa"]
-members = ["nagisa"]
+members = [
+    "nagisa",
+    "nikic",
+    "cuviper",
+]
+
+[[github]]
+orgs = ["rust-lang"]
 
 [website]
 name = "LLVM working group"
