@@ -1,7 +1,7 @@
 use crate::schema::{Config, List, Person, Team};
 use failure::{Error, ResultExt};
 use serde::Deserialize;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::ffi::OsStr;
 use std::path::Path;
 
@@ -83,6 +83,19 @@ impl Data {
 
     pub(crate) fn people(&self) -> impl Iterator<Item = &Person> {
         self.people.values()
+    }
+
+    pub(crate) fn active_members(&self) -> Result<HashSet<&str>, Error> {
+        let mut result = HashSet::new();
+        for team in self.teams.values() {
+            if team.is_alumni_team() {
+                continue;
+            }
+            for member in team.members(self)? {
+                result.insert(member);
+            }
+        }
+        Ok(result)
     }
 }
 

@@ -203,7 +203,7 @@ impl Team {
                 if team.kind != TeamKind::Team
                     || team.name == self.name
                     // This matches the special alumni team.
-                    || team.people.include_all_alumni
+                    || team.is_alumni_team()
                 {
                     continue;
                 }
@@ -213,8 +213,12 @@ impl Team {
             }
         }
         if self.people.include_all_alumni {
+            let active_members = data.active_members()?;
             for team in data.teams() {
                 for person in &team.people.alumni {
+                    if active_members.contains(person.as_str()) {
+                        continue;
+                    }
                     members.insert(&person);
                 }
             }
@@ -304,6 +308,10 @@ impl Team {
             }
         }
         Ok(result)
+    }
+
+    pub(crate) fn is_alumni_team(&self) -> bool {
+        self.people.include_all_alumni
     }
 }
 
