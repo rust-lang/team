@@ -6,7 +6,6 @@ members = [
     "Mark-Simulacrum",
     "aidanhs",
     "ashleygwilliams",
-    "carols10cents",
     "nikomatsakis",
     "pietroalbini",
     "skade",
@@ -15,6 +14,7 @@ members = [
 ]
 alumni = [
     "nrc",
+    "carols10cents",
 ]
 
 [permissions]
