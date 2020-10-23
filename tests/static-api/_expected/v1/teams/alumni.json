@@ -1,0 +1,22 @@
+{
+  "name": "alumni",
+  "kind": "team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Fourth user",
+      "github": "user-4",
+      "github_id": 4,
+      "is_lead": false
+    },
+    {
+      "name": "Fifth user",
+      "github": "user-5",
+      "github_id": 5,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null
+}

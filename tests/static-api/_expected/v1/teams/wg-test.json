@@ -16,6 +16,12 @@
       "github": "user-0",
       "github_id": 0,
       "is_lead": false
+    },
+    {
+      "name": "Fifth user",
+      "github": "user-5",
+      "github_id": 5,
+      "is_lead": false
     }
   ],
   "github": null,
