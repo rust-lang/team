@@ -1,5 +1,5 @@
 name = "library-reviewers"
-subteam-of = "compiler"
+subteam-of = "libs"
 
 [people]
 leads = []
@@ -24,3 +24,7 @@ orgs = ["rust-lang", "rust-lang-nursery"]
 perf = true
 crater = true
 bors.rust.review = true
+
+[website]
+name = "Library reviewers"
+description = "Developing and reviewing changes to the Rust standard library"
