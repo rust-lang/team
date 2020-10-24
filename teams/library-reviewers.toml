@@ -1,5 +1,5 @@
 name = "library-reviewers"
-subteam-of = "compiler"
+subteam-of = "libs"
 
 [people]
 leads = []
