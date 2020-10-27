@@ -5,9 +5,11 @@ subteam-of = "web-presence"
 leads = ["Manishearth", "skade"]
 members = [
     "Manishearth",
-    "XAMPPRocky",
     "pietroalbini",
     "skade",
+]
+alumni = [
+    "XAMPPRocky",
 ]
 
 [[github]]

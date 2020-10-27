@@ -6,8 +6,10 @@ leads = ["vertexclique", "Manishearth"]
 members = [
     "Manishearth",
     "JohnTitor",
-    "XAMPPRocky",
     "vertexclique"
+]
+alumni = [
+    "XAMPPRocky",
 ]
 
 [rfcbot]
