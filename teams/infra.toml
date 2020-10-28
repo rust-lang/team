@@ -9,8 +9,10 @@ members = [
     "kennytm",
     "nellshamrell",
     "pietroalbini",
-    "sgrif",
     "shepmaster",
+]
+alumni = [
+    "sgrif",
 ]
 
 [[github]]
