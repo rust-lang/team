@@ -1,5 +1,4 @@
 name = "release"
-subteam-of = "operations"
 
 [people]
 leads = ["Mark-Simulacrum"]

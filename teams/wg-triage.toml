@@ -1,5 +1,5 @@
 name = "wg-triage"
-subteam-of = "operations"
+subteam-of = "release"
 kind = "working-group"
 
 [people]
