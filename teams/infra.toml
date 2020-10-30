@@ -1,5 +1,4 @@
 name = "infra"
-subteam-of = "operations"
 
 [people]
 leads = ["aidanhs", "pietroalbini"]
