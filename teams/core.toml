@@ -52,8 +52,6 @@ address = "legal@crates.io"
 
 [[lists]]
 address = "trademark@rust-lang.org"
-include-team-members = false
-extra-people = ["nikomatsakis"]
 
 [[lists]]
 address = "mediation@rust-lang.org"
