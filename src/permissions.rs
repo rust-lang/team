@@ -182,6 +182,7 @@ permissions! {
         rust,
         rustlings,
         rustup_rs,
+        semverver,
         stdarch,
         team,
     }
