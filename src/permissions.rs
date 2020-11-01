@@ -184,6 +184,7 @@ permissions! {
         rustup_rs,
         stdarch,
         team,
+        vscode_rust,
     }
     crates_io_ops_apps {
         crates_io,
