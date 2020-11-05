@@ -3,3 +3,5 @@ github = "matklad"
 github-id = 1711539
 email = "aleksey.kladov@gmail.com"
 
+[permissions]
+bors.vscode_rust.review = true
