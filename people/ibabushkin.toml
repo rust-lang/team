@@ -1,0 +1,7 @@
+name = "Inokentiy Babushkin"
+github = "ibabushkin"
+github-id = 10811417
+email = "twk@twki.de"
+
+[permissions]
+bors.semverver.review = true
