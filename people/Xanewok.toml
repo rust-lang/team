@@ -5,3 +5,4 @@ email = "xanewok@gmail.com"
 
 [permissions]
 bors.rls.review = true
+bors.semverver.review = true
