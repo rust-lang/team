@@ -3,8 +3,14 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["nikomatsakis"]
-members = ["nikomatsakis"]
+leads = ["Mark-Simulacrum"]
+members = [
+    "wesleywiser",
+    "Mark-Simulacrum"
+]
+
+[[github]]
+orgs = ["rust-lang"]
 
 [website]
 name = "Compiler performance working group"
