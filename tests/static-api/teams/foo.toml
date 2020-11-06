@@ -6,7 +6,7 @@ members = ["user-0", "user-1"]
 
 [permissions]
 crater = true
-bors.rust.review = true
+bors.crates_io.review = true
 bors.crater.try = true
 crates-io-ops-bot.crates_io = true
 
