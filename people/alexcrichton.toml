@@ -5,5 +5,5 @@ irc = "acrichto"
 email = "acrichton@mozilla.com"
 
 [permissions]
-bors.rustup_rs.review = true
-bors.compiler_builtins.review = true
+bors.rustup-rs.review = true
+bors.compiler-builtins.review = true

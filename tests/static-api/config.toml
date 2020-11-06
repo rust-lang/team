@@ -7,7 +7,7 @@ allowed-github-orgs = [
 ]
 
 permissions-bors-repos = [
-    "crates_io",
+    "crates-io",
     "crater",
 ]
 
@@ -17,5 +17,5 @@ permissions-bools = [
 
 permissions-crates-io-ops-bot-apps = [
     "app",
-    "crates_io",
+    "crates-io",
 ]

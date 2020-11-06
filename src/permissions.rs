@@ -54,7 +54,7 @@ impl Permissions {
             result.push(format!("bors.{}.try", repo));
         }
         for app in config.permissions_crates_io_ops_bot_apps() {
-            result.push(format!("crates_io_ops_bot.{}", app));
+            result.push(format!("crates-io-ops-bot.{}", app));
         }
 
         result
@@ -64,7 +64,7 @@ impl Permissions {
         let mut result = Vec::new();
 
         for app in config.permissions_crates_io_ops_bot_apps() {
-            result.push(format!("crates_io_ops_bot.{}", app));
+            result.push(format!("crates-io-ops-bot.{}", app));
         }
 
         result
@@ -79,7 +79,7 @@ impl Permissions {
             [boolean] => self.booleans.get(*boolean).cloned(),
             ["bors", repo, "review"] => self.bors.get(*repo).map(|repo| repo.review),
             ["bors", repo, "try"] => self.bors.get(*repo).map(|repo| repo.try_),
-            ["crates_io_ops_bot", app] => self.crates_io_ops_bot.get(*app).cloned(),
+            ["crates-io-ops-bot", app] => self.crates_io_ops_bot.get(*app).cloned(),
             _ => None,
         }
         .unwrap_or(false)

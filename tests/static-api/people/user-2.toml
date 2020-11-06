@@ -7,6 +7,6 @@ zulip-id = 2
 
 [permissions]
 crater = true
-bors.crates_io.review = true
+bors.crates-io.review = true
 bors.crater.try = true
-crates-io-ops-bot.crates_io = true
+crates-io-ops-bot.crates-io = true

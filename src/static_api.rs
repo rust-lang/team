@@ -149,7 +149,7 @@ impl<'a> Generator<'a> {
             github_ids.sort_unstable();
             discord_ids.sort_unstable();
             self.add(
-                &format!("v1/permissions/{}.json", perm),
+                &format!("v1/permissions/{}.json", perm.replace('-', "_")),
                 &v1::Permission {
                     github_users,
                     github_ids,

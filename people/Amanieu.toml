@@ -4,4 +4,4 @@ github-id = 278509
 email = "amanieu@gmail.com"
 
 [permissions]
-bors.compiler_builtins.review = true
+bors.compiler-builtins.review = true

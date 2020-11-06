@@ -18,9 +18,9 @@ permissions-bors-repos = [
     "cargo",
     "chalk",
     "clippy",
-    "compiler_builtins",
+    "compiler-builtins",
     "crater",
-    "crates_io",
+    "crates-io",
     "hashbrown",
     "miri",
     "libc",
@@ -28,11 +28,11 @@ permissions-bors-repos = [
     "rls",
     "rust",
     "rustlings",
-    "rustup_rs",
+    "rustup-rs",
     "semverver",
     "stdarch",
     "team",
-    "vscode_rust",
+    "vscode-rust",
 ]
 
 permissions-bools = [
@@ -41,6 +41,6 @@ permissions-bools = [
 ]
 
 permissions-crates-io-ops-bot-apps = [
-    "crates_io",
-    "staging_crates_io",
+    "crates-io",
+    "staging-crates-io",
 ]
