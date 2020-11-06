@@ -132,7 +132,7 @@ impl<'a> Generator<'a> {
     }
 
     fn generate_permissions(&self) -> Result<(), Error> {
-        for perm in Permissions::AVAILABLE {
+        for perm in &Permissions::available(self.data.config()) {
             let allowed = crate::permissions::allowed_people(&self.data, perm)?;
             let mut github_users = allowed
                 .iter()

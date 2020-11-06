@@ -8,6 +8,9 @@ use std::collections::HashSet;
 pub(crate) struct Config {
     allowed_mailing_lists_domains: HashSet<String>,
     allowed_github_orgs: HashSet<String>,
+    permissions_bors_repos: HashSet<String>,
+    permissions_bools: HashSet<String>,
+    permissions_crates_io_ops_bot_apps: HashSet<String>,
 }
 
 impl Config {
@@ -17,6 +20,18 @@ impl Config {
 
     pub(crate) fn allowed_github_orgs(&self) -> &HashSet<String> {
         &self.allowed_github_orgs
+    }
+
+    pub(crate) fn permissions_bors_repos(&self) -> &HashSet<String> {
+        &self.permissions_bors_repos
+    }
+
+    pub(crate) fn permissions_bools(&self) -> &HashSet<String> {
+        &self.permissions_bools
+    }
+
+    pub(crate) fn permissions_crates_io_ops_bot_apps(&self) -> &HashSet<String> {
+        &self.permissions_crates_io_ops_bot_apps
     }
 }
 

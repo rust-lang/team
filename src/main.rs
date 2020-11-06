@@ -174,7 +174,7 @@ fn run() -> Result<(), Error> {
             }
         }
         Cli::DumpPermission { ref name } => {
-            if !crate::schema::Permissions::AVAILABLE.contains(&name.as_str()) {
+            if !crate::schema::Permissions::available(data.config()).contains(&name) {
                 failure::bail!("unknown permission: {}", name);
             }
             let mut allowed = crate::permissions::allowed_people(&data, name)?
