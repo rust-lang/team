@@ -32,7 +32,6 @@ ping = "rust-lang/libs"
 exclude-members = [
     "LukasKalbertodt",
     "SimonSapin",
-    "m-ou-se",
 ]
 
 [website]
