@@ -4,9 +4,8 @@ subteam-of = "libs"
 
 [people]
 leads = [
-    "hsivonen",
-    "KodrAus",
     "Lokathor",
+    "workingjubilee",
 ]
 members = [
     "BurntSushi",
