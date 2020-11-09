@@ -23,8 +23,8 @@ alumni = [
 ]
 
 [permissions]
-bors.crates_io.review = true
-crates-io-ops-bot.staging_crates_io = true
+bors.crates-io.review = true
+crates-io-ops-bot.staging-crates-io = true
 
 [[github]]
 orgs = ["rust-lang"]

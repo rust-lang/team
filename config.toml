@@ -13,3 +13,34 @@ allowed-github-orgs = [
     "rust-dev-tools",
     "rust-embedded",
 ]
+
+permissions-bors-repos = [
+    "cargo",
+    "chalk",
+    "clippy",
+    "compiler-builtins",
+    "crater",
+    "crates-io",
+    "hashbrown",
+    "miri",
+    "libc",
+    "regex",
+    "rls",
+    "rust",
+    "rustlings",
+    "rustup-rs",
+    "semverver",
+    "stdarch",
+    "team",
+    "vscode-rust",
+]
+
+permissions-bools = [
+    "perf",
+    "crater",
+]
+
+permissions-crates-io-ops-bot-apps = [
+    "crates-io",
+    "staging-crates-io",
+]

@@ -313,7 +313,7 @@ fn validate_duplicate_permissions(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
         wrapper(team.members(&data)?.iter(), errors, |member, _| {
             if let Some(person) = data.person(member) {
-                for permission in Permissions::AVAILABLE {
+                for permission in &Permissions::available(data.config()) {
                     if team.permissions().has(permission)
                         && person.permissions().has_directly(permission)
                     {
@@ -337,13 +337,13 @@ fn validate_duplicate_permissions(data: &Data, errors: &mut Vec<String>) {
 fn validate_permissions(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
         team.permissions()
-            .validate(format!("team `{}`", team.name()))?;
+            .validate(format!("team `{}`", team.name()), data.config())?;
         Ok(())
     });
     wrapper(data.people(), errors, |person, _| {
         person
             .permissions()
-            .validate(format!("user `{}`", person.github()))?;
+            .validate(format!("user `{}`", person.github()), data.config())?;
         Ok(())
     });
 }
@@ -455,7 +455,7 @@ fn validate_github_usernames(data: &Data, github: &GitHubApi, errors: &mut Vec<S
 /// Ensure all users with a Discord permission have a Discord ID.
 fn validate_discord_permissions(data: &Data, errors: &mut Vec<String>) {
     wrapper(
-        Permissions::REQUIRES_DISCORD.iter(),
+        Permissions::requires_discord(data.config()).iter(),
         errors,
         |permission, errors| {
             wrapper(data.people(), errors, |person, _| {

@@ -4,5 +4,5 @@ github-id = 5018213
 email = "jorge@japaric.io"
 
 [permissions]
-bors.compiler_builtins.review = true
+bors.compiler-builtins.review = true
 bors.rust.review = true

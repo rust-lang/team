@@ -4,5 +4,5 @@ github-id = 762626
 email = "nrc@ncameron.org"
 
 [permissions]
-bors.rustup_rs.review = true
+bors.rustup-rs.review = true
 bors.rls.review = true

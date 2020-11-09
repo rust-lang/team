@@ -5,3 +5,17 @@ allowed-mailing-lists-domains = [
 allowed-github-orgs = [
     "test-org",
 ]
+
+permissions-bors-repos = [
+    "crates-io",
+    "crater",
+]
+
+permissions-bools = [
+    "crater",
+]
+
+permissions-crates-io-ops-bot-apps = [
+    "app",
+    "crates-io",
+]
