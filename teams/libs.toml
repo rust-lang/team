@@ -10,8 +10,10 @@ members = [
     "dtolnay",
     "sfackler",
     "withoutboats",
-    "LukasKalbertodt",
     "m-ou-se",
+]
+alumni = [
+    "LukasKalbertodt",
 ]
 
 [[github]]
@@ -30,7 +32,6 @@ label = "T-libs"
 name = "Libraries"
 ping = "rust-lang/libs"
 exclude-members = [
-    "LukasKalbertodt",
     "SimonSapin",
 ]
 
