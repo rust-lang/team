@@ -16,7 +16,6 @@ members = [
 ]
 
 [website]
-page = "allocators"
 name = "Allocator working group"
 description = "Paving a path for a standard set of allocator traits to be used in collections."
 repo = "https://github.com/rust-lang/wg-allocators"
