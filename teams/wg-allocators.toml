@@ -23,4 +23,4 @@ repo = "https://github.com/rust-lang/wg-allocators"
 zulip-stream = "t-libs/wg-allocators"
 
 [[lists]]
-address = "allocators@rust-lang.org"
+address = "wg-allocators@rust-lang.org"
