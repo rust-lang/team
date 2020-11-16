@@ -1,5 +1,6 @@
 name = "wg-allocators"
 kind = "working-group"
+subteam-of = "libs"
 
 [people]
 leads = [
