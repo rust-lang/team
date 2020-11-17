@@ -1,0 +1,25 @@
+name = "wg-allocators"
+kind = "working-group"
+subteam-of = "libs"
+
+[people]
+leads = [
+    "TimDiekmann"
+]
+members = [
+    "Amanieu",
+    "CAD97",
+    "Lokathor",
+    "scottjmaddox",
+    "TimDiekmann",
+    "Wodann"
+]
+
+[website]
+name = "Allocator working group"
+description = "Paving a path for a standard set of allocator traits to be used in collections."
+repo = "https://github.com/rust-lang/wg-allocators"
+zulip-stream = "t-libs/wg-allocators"
+
+[[lists]]
+address = "wg-allocators@rust-lang.org"
