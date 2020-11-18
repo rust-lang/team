@@ -4,12 +4,8 @@ name = "crates-io"
 leads = ["jtgeibel", "sgrif"]
 members = [
     "carols10cents",
-    "ashleygwilliams",
     "sgrif",
     "jtgeibel",
-    "withoutboats",
-    "joshtriplett",
-    "ishitatsuyuki",
     "pichfl",
     "pietroalbini",
     "locks",
@@ -20,6 +16,10 @@ members = [
 ]
 alumni = [
     "steveklabnik",
+    "ashleygwilliams",
+    "withoutboats",
+    "joshtriplett",
+    "ishitatsuyuki",
 ]
 
 [permissions]
