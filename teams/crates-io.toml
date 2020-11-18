@@ -1,10 +1,9 @@
 name = "crates-io"
 
 [people]
-leads = ["jtgeibel", "sgrif"]
+leads = ["jtgeibel"]
 members = [
     "carols10cents",
-    "sgrif",
     "jtgeibel",
     "pichfl",
     "pietroalbini",
@@ -20,6 +19,7 @@ alumni = [
     "withoutboats",
     "joshtriplett",
     "ishitatsuyuki",
+    "sgrif",
 ]
 
 [permissions]
@@ -49,7 +49,6 @@ include-team-members = false
 extra-people = [
     "carols10cents",
     "ashleygwilliams",
-    "sgrif",
     "pietroalbini",
     "jtgeibel",
 ]
