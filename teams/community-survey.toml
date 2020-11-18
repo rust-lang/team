@@ -2,9 +2,11 @@ name = "community-survey"
 subteam-of = "community"
 
 [people]
-leads = ["Manishearth"]
+leads = ["nikomatsakis", "rylev"]
 members = [
     "Manishearth",
+    "nikomatsakis",
+    "rylev",
 ]
 
 [website]
