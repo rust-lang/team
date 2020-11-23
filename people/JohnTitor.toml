@@ -7,3 +7,4 @@ discord-id = 362122860673892353
 [permissions]
 # for rollup work
 bors.rust.review = true
+bors.semverver.review = true
