@@ -5,6 +5,9 @@ leads = []
 members = []
 include-all-team-members = true
 
+[[github]]
+orgs = ["rust-lang"]
+
 [[lists]]
 address = "all@rust-lang.org"
 
