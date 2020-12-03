@@ -2,7 +2,7 @@ name = "Alex Crichton"
 github = "alexcrichton"
 github-id = 64996
 irc = "acrichto"
-email = "acrichton@mozilla.com"
+email = "alex@alexcrichton.com"
 
 [permissions]
 bors.rustup-rs.review = true
