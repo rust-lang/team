@@ -1,0 +1,7 @@
+name = 'Camille Gillot'
+github = 'cjgillot'
+github-id = 1822483
+
+[permissions]
+bors.rust.try = true
+perf = true
