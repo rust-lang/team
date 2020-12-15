@@ -19,3 +19,4 @@ description = "Improving rustc compilation performance (build times)"
 
 [permissions]
 perf = true
+bors.rust.try = true
