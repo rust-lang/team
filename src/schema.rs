@@ -198,24 +198,26 @@ impl Team {
 
     pub(crate) fn members<'a>(&'a self, data: &'a Data) -> Result<HashSet<&'a str>, Error> {
         let mut members: HashSet<_> = self.people.members.iter().map(|s| s.as_str()).collect();
-        if self.people.include_team_leads
-            || self.people.include_wg_leads
-            || self.people.include_project_group_leads
-        {
+
+        let mut include_leads = |kind| {
             for team in data.teams() {
-                let should_include = match team.kind {
-                    TeamKind::Team => self.people.include_team_leads,
-                    TeamKind::WorkingGroup => self.people.include_wg_leads,
-                    TeamKind::ProjectGroup => self.people.include_project_group_leads,
-                    TeamKind::MarkerTeam => false,
-                };
-                if team.name != self.name && should_include {
+                if team.name != self.name && team.kind == kind {
                     for lead in team.leads() {
                         members.insert(lead);
                     }
                 }
             }
+        };
+        if self.people.include_team_leads {
+            include_leads(TeamKind::Team);
         }
+        if self.people.include_wg_leads {
+            include_leads(TeamKind::WorkingGroup);
+        }
+        if self.people.include_project_group_leads {
+            include_leads(TeamKind::ProjectGroup);
+        }
+
         if self.people.include_all_team_members {
             for team in data.teams() {
                 if team.kind != TeamKind::Team
