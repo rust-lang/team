@@ -149,18 +149,38 @@ fn run() -> Result<(), Error> {
             }
             println!();
 
+            let mut bors_permissions = person.permissions().bors().clone();
+
             println!("teams:");
-            let mut teams: Vec<&str> = data
+            let mut teams: Vec<_> = data
                 .teams()
                 .filter(|team| team.members(&data).unwrap().contains(person.github()))
-                .map(|team| team.name())
                 .collect();
-            teams.sort_unstable();
+            teams.sort_by_key(|team| team.name());
             if teams.is_empty() {
                 println!("  (none)");
             } else {
                 for team in teams {
-                    println!("  - {}", team);
+                    println!("  - {}", team.name());
+                    bors_permissions.extend(team.permissions().bors().clone());
+                }
+            }
+            println!();
+
+            let mut bors_permissions: Vec<_> = bors_permissions.into_iter().collect();
+            bors_permissions.sort_by_key(|(repo, _)| repo.clone());
+            println!("bors permissions:");
+            if bors_permissions.is_empty() {
+                println!("  (none)");
+            } else {
+                for (repo, perms) in bors_permissions {
+                    println!("  - {}", repo);
+                    if perms.review() {
+                        println!("    - review");
+                    }
+                    if perms.try_() {
+                        println!("    - try");
+                    }
                 }
             }
         }
