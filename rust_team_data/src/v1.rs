@@ -104,3 +104,9 @@ pub struct ZulipMapping {
     /// Zulip ID to GitHub ID
     pub users: IndexMap<usize, usize>,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DiscordMapping {
+    /// Discord ID to GitHub ID
+    pub users: IndexMap<usize, usize>,
+}
