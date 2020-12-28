@@ -3,7 +3,7 @@ use crate::schema::{Config, Person};
 use failure::{bail, Error};
 use std::collections::{HashMap, HashSet};
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde_derive::Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct BorsACL {
     #[serde(default)]
@@ -18,6 +18,16 @@ impl Default for BorsACL {
             review: false,
             try_: false,
         }
+    }
+}
+
+impl BorsACL {
+    pub(crate) fn review(&self) -> bool {
+        self.review
+    }
+
+    pub(crate) fn try_(&self) -> bool {
+        self.try_
     }
 }
 
@@ -43,6 +53,10 @@ impl Default for Permissions {
 }
 
 impl Permissions {
+    pub(crate) fn bors(&self) -> &HashMap<String, BorsACL> {
+        &self.bors
+    }
+
     pub(crate) fn available(config: &Config) -> Vec<String> {
         let mut result = Vec::new();
 

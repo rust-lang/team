@@ -8,7 +8,7 @@ mod schema;
 mod static_api;
 mod validate;
 
-use crate::data::Data;
+use crate::{data::Data, schema::Email};
 use failure::{err_msg, Error};
 use log::{error, info, warn};
 use std::path::PathBuf;
@@ -35,6 +35,8 @@ enum Cli {
     AddPerson { github_name: String },
     #[structopt(name = "static-api", help = "generate the static API")]
     StaticApi { dest: String },
+    #[structopt(name = "show-person", help = "print information about a person")]
+    ShowPerson { github_username: String },
     #[structopt(name = "dump-team", help = "print the members of a team")]
     DumpTeam { name: String },
     #[structopt(name = "dump-list", help = "print all the emails in a list")]
@@ -131,6 +133,58 @@ fn run() -> Result<(), Error> {
             let generator = crate::static_api::Generator::new(&dest, &data)?;
             generator.generate()?;
         }
+        Cli::ShowPerson {
+            ref github_username,
+        } => {
+            let person = data
+                .person(github_username)
+                .ok_or_else(|| err_msg("unknown person"))?;
+
+            println!("-- {} --", person.name());
+            println!();
+
+            println!("github: @{}", person.github());
+            if let Email::Present(email) = person.email() {
+                println!("email:  {}", email);
+            }
+            println!();
+
+            let mut bors_permissions = person.permissions().bors().clone();
+
+            println!("teams:");
+            let mut teams: Vec<_> = data
+                .teams()
+                .filter(|team| team.members(&data).unwrap().contains(person.github()))
+                .collect();
+            teams.sort_by_key(|team| team.name());
+            if teams.is_empty() {
+                println!("  (none)");
+            } else {
+                for team in teams {
+                    println!("  - {}", team.name());
+                    bors_permissions.extend(team.permissions().bors().clone());
+                }
+            }
+            println!();
+
+            let mut bors_permissions: Vec<_> = bors_permissions.into_iter().collect();
+            bors_permissions.sort_by_key(|(repo, _)| repo.clone());
+            println!("bors permissions:");
+            if bors_permissions.is_empty() {
+                println!("  (none)");
+            } else {
+                for (repo, perms) in bors_permissions {
+                    println!("  - {}", repo);
+                    if perms.review() {
+                        println!("    - review");
+                    }
+                    if perms.try_() {
+                        println!("    - try");
+                    }
+                }
+            }
+        }
+
         Cli::DumpTeam { ref name } => {
             let team = data.team(name).ok_or_else(|| err_msg("unknown team"))?;
 
