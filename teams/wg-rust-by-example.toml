@@ -1,0 +1,16 @@
+name = "wg-rust-by-example"
+kind = "working-group"
+
+[people]
+leads = ["steveklabnik"]
+members = [
+    "steveklabnik",
+    "marioidival",
+]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Rust by Example working group"
+description = "Maintaining and updating the official Rust by Example book"
