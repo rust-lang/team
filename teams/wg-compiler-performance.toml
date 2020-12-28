@@ -6,7 +6,8 @@ kind = "working-group"
 leads = ["Mark-Simulacrum"]
 members = [
     "wesleywiser",
-    "Mark-Simulacrum"
+    "Mark-Simulacrum",
+    "rylev"
 ]
 
 [[github]]
@@ -15,3 +16,7 @@ orgs = ["rust-lang"]
 [website]
 name = "Compiler performance working group"
 description = "Improving rustc compilation performance (build times)"
+
+[permissions]
+perf = true
+bors.rust.try = true
