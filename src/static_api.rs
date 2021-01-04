@@ -100,6 +100,12 @@ impl<'a> Generator<'a> {
                     zulip_stream: ws.zulip_stream().map(|s| s.into()),
                     weight: ws.weight(),
                 }),
+                discord_role: team.discord_role().map(|role| {
+                    v1::DiscordRole {
+                        name: role.name().into(),
+                        role_id: role.role_id(),
+                    }
+                }),
             };
 
             self.add(&format!("v1/teams/{}.json", team.name()), &team_data)?;

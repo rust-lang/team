@@ -169,6 +169,7 @@ pub(crate) struct Team {
     website: Option<WebsiteData>,
     #[serde(default)]
     lists: Vec<TeamList>,
+    discord_role: Option<DiscordRole>,
 }
 
 impl Team {
@@ -194,6 +195,10 @@ impl Team {
 
     pub(crate) fn website_data(&self) -> Option<&WebsiteData> {
         self.website.as_ref()
+    }
+
+    pub(crate) fn discord_role(&self) -> Option<&DiscordRole> {
+        self.discord_role.as_ref()
     }
 
     pub(crate) fn members<'a>(&'a self, data: &'a Data) -> Result<HashSet<&'a str>, Error> {
@@ -332,6 +337,23 @@ impl Team {
 
     pub(crate) fn is_alumni_team(&self) -> bool {
         self.people.include_all_alumni
+    }
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+pub(crate) struct DiscordRole {
+    name: String,
+    role_id: usize,
+}
+
+impl DiscordRole {
+    pub(crate) fn name(&self) -> &str {
+        &self.name
+    }
+
+    pub(crate) fn role_id(&self) -> usize {
+        self.role_id
     }
 }
 
