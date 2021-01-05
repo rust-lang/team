@@ -7,7 +7,8 @@ leads = ["Mark-Simulacrum"]
 members = [
     "wesleywiser",
     "Mark-Simulacrum",
-    "rylev"
+    "rylev",
+    "tgnottingham",
 ]
 
 [[github]]
