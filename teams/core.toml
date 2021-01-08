@@ -67,3 +67,10 @@ extra-people = [
 
 [[lists]]
 address = "privacy@rust-lang.org"
+
+[[lists]]
+address = "accounting@rust-lang.org"
+include-team-members = false
+extra-people = [
+    "ashleygwilliams",
+]
