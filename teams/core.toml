@@ -74,3 +74,10 @@ include-team-members = false
 extra-people = [
     "ashleygwilliams",
 ]
+
+# Temporary hacky way to create personal aliases. Ashley urgently needs an
+# alias to continue her work setting up the Rust Foundation.
+[[lists]]
+address = "ashleygwilliams@rust-lang.org"
+include-team-members = false
+extra-people = ["ashleygwilliams"]
