@@ -57,6 +57,10 @@ impl Permissions {
         &self.bors
     }
 
+    pub(crate) fn booleans(&self) -> &HashMap<String, bool> {
+        &self.booleans
+    }
+
     pub(crate) fn available(config: &Config) -> Vec<String> {
         let mut result = Vec::new();
 
