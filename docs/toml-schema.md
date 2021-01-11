@@ -54,6 +54,9 @@ members = [
 alumni = [
     "buildbot",
 ]
+# Optional, include all members of all other teams.
+# Defaults to false.
+include-all-team-members = false
 
 [permissions]
 # Optional, see the permissions documentation
@@ -104,8 +107,16 @@ permissions are available:
 
 ```toml
 [permissions]
-# Optional, grants access to the @rust-timer GitHub bot
+# All permissions are optional, including the `permissions` section
+
+# Grants access to the @rust-timer GitHub bot
 perf = true
-# Optional, grants access to the @craterbot GitHub bot
+# Grants access to the @craterbot GitHub bot
 crater = true
+# Grants `@bors r+` rights in the repo `rust-lang/some-repo`
+bors.some-repo.review = true
+# Grants `@bors try` rights in the repo `rust-lang/some-repo`.
+# This is a subset of `bors.some-repo.review`, so this shouldn't
+# be set if `review` is also set.
+bors.some-repo.try = true
 ```
