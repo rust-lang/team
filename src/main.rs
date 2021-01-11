@@ -150,6 +150,7 @@ fn run() -> Result<(), Error> {
             println!();
 
             let mut bors_permissions = person.permissions().bors().clone();
+            let mut other_permissions = person.permissions().booleans().clone();
 
             println!("teams:");
             let mut teams: Vec<_> = data
@@ -163,6 +164,7 @@ fn run() -> Result<(), Error> {
                 for team in teams {
                     println!("  - {}", team.name());
                     bors_permissions.extend(team.permissions().bors().clone());
+                    other_permissions.extend(team.permissions().booleans().clone());
                 }
             }
             println!();
@@ -181,6 +183,21 @@ fn run() -> Result<(), Error> {
                     if perms.try_() {
                         println!("    - try");
                     }
+                }
+            }
+            println!();
+
+            let mut other_permissions: Vec<_> = other_permissions
+                .into_iter()
+                .filter_map(|(key, value)| if value { Some(key) } else { None })
+                .collect();
+            other_permissions.sort();
+            println!("other permissions:");
+            if other_permissions.is_empty() {
+                println!("  (none)");
+            } else {
+                for key in other_permissions {
+                    println!("  - {}", key);
                 }
             }
         }
