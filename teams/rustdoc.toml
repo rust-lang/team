@@ -2,12 +2,14 @@ name = "rustdoc"
 subteam-of = "devtools"
 
 [people]
-leads = ["GuillaumeGomez"]
+leads = ["GuillaumeGomez", "jyn514",]
 members = [
     "GuillaumeGomez",
     "ollie27",
     "jyn514",
     "Manishearth",
+    "Nemo157",
+    "camelid",
 ]
 alumni = [
     "kinnison",
