@@ -81,7 +81,10 @@ fn app() -> Result<(), Error> {
             "mailgun" => {
                 let token = std::env::var("MAILGUN_API_TOKEN")
                     .with_context(|_| "failed to get the MAILGUN_API_TOKEN environment variable")?;
-                mailgun::run(&token, &team_api, dry_run)?;
+                let encryption_key = std::env::var("EMAIL_ENCRYPTION_KEY").with_context(|_| {
+                    "failed to get the EMAIL_ENCRYPTION_KEY environment variable"
+                })?;
+                mailgun::run(&token, &encryption_key, &team_api, dry_run)?;
             }
             _ => panic!("unknown service: {}", service),
         }

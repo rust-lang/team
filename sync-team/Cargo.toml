@@ -8,7 +8,7 @@ edition = "2018"
 reqwest = "0.9.18"
 log = "0.4.7"
 env_logger = "0.6.2"
-rust_team_data = { git = "https://github.com/rust-lang/team" }
+rust_team_data = { git = "https://github.com/rust-lang/team", features = ["email-encryption"] }
 serde = { version = "1.0.94", features = ["derive"] }
 failure = "0.1.5"
 base64 = "0.10.1"

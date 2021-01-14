@@ -8,7 +8,7 @@ privileges on our infrastructure.
 | Service name | Description | Environment variables |
 | --- | --- | --- |
 | github | Synchronize GitHub team membership | `GITHUB_TOKEN` |
-| mailgun | Synchronize mailing lists on Mailgun | `MAILGUN_API_TOKEN` |
+| mailgun | Synchronize mailing lists on Mailgun | `MAILGUN_API_TOKEN`, `EMAIL_ENCRYPTION_KEY`|
 
 The contents of this repository are available under both the MIT and Apache 2.0
 license.
