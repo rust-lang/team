@@ -7,24 +7,27 @@ use self::api::Mailgun;
 use crate::TeamApi;
 use failure::{bail, Error, ResultExt};
 use log::info;
-use rust_team_data::v1 as team_data;
+use rust_team_data::{email_encryption, v1 as team_data};
 
 const DESCRIPTION: &str = "managed by an automatic script on github";
 
 // Limit (in bytes) of the size of a Mailgun rule's actions list.
 const ACTIONS_SIZE_LIMIT_BYTES: usize = 4000;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 struct List {
     address: String,
     members: Vec<String>,
     priority: i32,
 }
 
-fn mangle_lists(lists: team_data::Lists) -> Result<Vec<List>, Error> {
+fn mangle_lists(email_encryption_key: &str, lists: team_data::Lists) -> Result<Vec<List>, Error> {
     let mut result = Vec::new();
 
-    for (_key, list) in lists.lists.into_iter() {
+    for (_key, mut list) in lists.lists.into_iter() {
+        // Handle encrypted list addresses.
+        list.address = email_encryption::try_decrypt(email_encryption_key, &list.address)?;
+
         let base_list = List {
             address: mangle_address(&list.address)?,
             members: Vec::new(),
@@ -45,7 +48,10 @@ fn mangle_lists(lists: team_data::Lists) -> Result<Vec<List>, Error> {
         let mut current_list = base_list.clone();
         let mut current_actions_len = 0;
         let mut partitions_count = 0;
-        for member in list.members {
+        for mut member in list.members {
+            // Handle encrypted member email addresses.
+            member = email_encryption::try_decrypt(email_encryption_key, &member)?;
+
             let action = build_route_action(&member);
             if current_actions_len + action.len() > ACTIONS_SIZE_LIMIT_BYTES {
                 partitions_count += 1;
@@ -80,12 +86,17 @@ fn mangle_address(addr: &str) -> Result<String, Error> {
     }
 }
 
-pub(crate) fn run(token: &str, team_api: &TeamApi, dry_run: bool) -> Result<(), Error> {
+pub(crate) fn run(
+    token: &str,
+    email_encryption_key: &str,
+    team_api: &TeamApi,
+    dry_run: bool,
+) -> Result<(), Error> {
     let mailgun = Mailgun::new(token, dry_run);
     let mailmap = team_api.get_lists()?;
 
     // Mangle all the mailing lists
-    let lists = mangle_lists(mailmap)?;
+    let lists = mangle_lists(email_encryption_key, mailmap)?;
 
     let mut routes = Vec::new();
     let mut response = mailgun.get_routes(None)?;
@@ -183,6 +194,7 @@ fn extract<'a>(s: &'a str, prefix: &str, suffix: &str) -> &'a str {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rust_team_data::email_encryption;
 
     #[test]
     fn test_build_route_actions() {
@@ -217,6 +229,13 @@ mod tests {
 
     #[test]
     fn test_mangle_lists() {
+        const ENCRYPTION_KEY: &str = "mGDTk1eIx8P2gTerzKXwvun67d41iUid";
+
+        let secret_list = email_encryption::encrypt(ENCRYPTION_KEY, "secret-list@example.com")
+            .expect("failed to encrypt list");
+        let secret_member = email_encryption::encrypt(ENCRYPTION_KEY, "secret-member@example.com")
+            .expect("failed to encrypt member");
+
         let original = rust_team_data::v1::Lists {
             lists: indexmap::indexmap![
                 "small@example.com".to_string() => rust_team_data::v1::List {
@@ -224,7 +243,12 @@ mod tests {
                     members: vec![
                         "foo@example.com".into(),
                         "bar@example.com".into(),
+                        secret_member.clone(),
                     ],
+                },
+                secret_list.clone() => rust_team_data::v1::List {
+                    address: secret_list,
+                    members: vec![secret_member, "baz@example.com".into()]
                 },
                 "big@example.com".into() => rust_team_data::v1::List {
                     address: "big@example.com".into(),
@@ -235,54 +259,46 @@ mod tests {
             ],
         };
 
-        let mangled = mangle_lists(original).unwrap();
-        assert_eq!(4, mangled.len());
-
-        let small = &mangled[0];
-        assert_eq!(small.address, mangle_address("small@example.com").unwrap());
-        assert_eq!(small.priority, 0);
-        assert_eq!(small.members, vec!["foo@example.com", "bar@example.com",]);
-
-        // With ACTIONS_SIZE_LIMIT_BYTES = 4000, each list can contain at most 137 users named
-        // `fooNNN@example.com`. If the limit is changed the numbers will need to be updated.
-
-        let big_part1 = &mangled[1];
-        assert_eq!(
-            big_part1.address,
-            mangle_address("big@example.com").unwrap()
-        );
-        assert_eq!(big_part1.priority, 0);
-        assert_eq!(
-            big_part1.members,
-            (0..137)
-                .map(|i| format!("foo{:03}@example.com", i))
-                .collect::<Vec<_>>()
-        );
-
-        let big_part2 = &mangled[2];
-        assert_eq!(
-            big_part2.address,
-            mangle_address("big@example.com").unwrap()
-        );
-        assert_eq!(big_part2.priority, 1);
-        assert_eq!(
-            big_part2.members,
-            (137..274)
-                .map(|i| format!("foo{:03}@example.com", i))
-                .collect::<Vec<_>>()
-        );
-
-        let big_part3 = &mangled[3];
-        assert_eq!(
-            big_part3.address,
-            mangle_address("big@example.com").unwrap()
-        );
-        assert_eq!(big_part3.priority, 2);
-        assert_eq!(
-            big_part3.members,
-            (274..300)
-                .map(|i| format!("foo{:03}@example.com", i))
-                .collect::<Vec<_>>()
-        );
+        let mangled = mangle_lists(ENCRYPTION_KEY, original).unwrap();
+        let expected = vec![
+            List {
+                address: mangle_address("small@example.com").unwrap(),
+                priority: 0,
+                members: vec![
+                    "foo@example.com".into(),
+                    "bar@example.com".into(),
+                    "secret-member@example.com".into(),
+                ],
+            },
+            List {
+                address: mangle_address("secret-list@example.com").unwrap(),
+                priority: 0,
+                members: vec!["secret-member@example.com".into(), "baz@example.com".into()],
+            },
+            // With ACTIONS_SIZE_LIMIT_BYTES = 4000, each list can contain at most 137 users named
+            // `fooNNN@example.com`. If the limit is changed the numbers will need to be updated.
+            List {
+                address: mangle_address("big@example.com").unwrap(),
+                priority: 0,
+                members: (0..137)
+                    .map(|i| format!("foo{:03}@example.com", i))
+                    .collect::<Vec<_>>(),
+            },
+            List {
+                address: mangle_address("big@example.com").unwrap(),
+                priority: 1,
+                members: (137..274)
+                    .map(|i| format!("foo{:03}@example.com", i))
+                    .collect::<Vec<_>>(),
+            },
+            List {
+                address: mangle_address("big@example.com").unwrap(),
+                priority: 2,
+                members: (274..300)
+                    .map(|i| format!("foo{:03}@example.com", i))
+                    .collect::<Vec<_>>(),
+            },
+        ];
+        assert_eq!(expected, mangled);
     }
 }
