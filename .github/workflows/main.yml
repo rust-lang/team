@@ -32,7 +32,7 @@ jobs:
         run: cargo clippy -- -Dwarnings
 
       - name: Run tests
-        run: cargo test
+        run: cargo test --workspace --all-features
 
       - name: Build the contents of the static API
         run: |

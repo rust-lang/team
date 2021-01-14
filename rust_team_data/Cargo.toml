@@ -7,3 +7,9 @@ edition = "2018"
 [dependencies]
 serde = { version = "1.0.85", features = ["derive"] }
 indexmap = { version = "1.0.2", features = ["serde-1"] }
+chacha20poly1305 = { version = "0.7.1", optional = true }
+getrandom = { version = "0.2.1", optional = true }
+hex = { version = "0.4.2", optional = true }
+
+[features]
+email-encryption = ["chacha20poly1305", "getrandom", "hex"]

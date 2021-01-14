@@ -51,6 +51,10 @@ enum Cli {
         help = "print all the people with a permission"
     )]
     DumpPermission { name: String },
+    #[structopt(name = "encrypt-email", help = "encrypt an email address")]
+    EncryptEmail,
+    #[structopt(name = "decrypt-email", help = "decrypt an email address")]
+    DecryptEmail,
 }
 
 fn main() {
@@ -256,6 +260,30 @@ fn run() -> Result<(), Error> {
             for github_username in &allowed {
                 println!("{}", github_username);
             }
+        }
+        Cli::EncryptEmail => {
+            let plain: String = dialoguer::Input::new()
+                .with_prompt("Plaintext address")
+                .interact_text()?;
+            let key = dialoguer::Password::new()
+                .with_prompt("Secret key")
+                .interact()?;
+            println!(
+                "{}",
+                rust_team_data::email_encryption::encrypt(&key, &plain)?
+            );
+        }
+        Cli::DecryptEmail => {
+            let encrypted: String = dialoguer::Input::new()
+                .with_prompt("Encrypted address")
+                .interact_text()?;
+            let key = dialoguer::Password::new()
+                .with_prompt("Secret key")
+                .interact()?;
+            println!(
+                "{}",
+                rust_team_data::email_encryption::try_decrypt(&key, &encrypted)?
+            );
         }
     }
 

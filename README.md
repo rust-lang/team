@@ -99,3 +99,25 @@ cargo run static-api output-dir/
 ```
 
 The content will be placed in `output-dir/`.
+
+### Encrypting email addresses
+
+If an email address in a list needs to be confidential it's possible to encrypt
+it. Encrypted email addresses look like this:
+
+```
+encrypted+3eeedb8887004d9a8266e9df1b82a2d52dcce82c4fa1d277c5f14e261e8155acc8a66344edc972fa58b678dc2bcad2e8f7c201a1eede9c16639fe07df8bac5aa1097b2ad9699a700edb32ef192eaa74bf7af0a@rust-lang.invalid
+```
+
+The production key is accessible to select Infrastructure Team members, so if
+you need to add an encrypted email address you'll need to reach out to that
+team. The key is stored in the following parameter on AWS SSM Parameter Store:
+
+```
+/prod/sync-team/email-encryption-key
+```
+
+The `cargo run encrypt-email` and `cargo run decrypt-email` interactive CLI
+commands are available for infra team members to interact with encrypted
+emails. The `rust_team_data` (with the `email-encryption` feature enabled) also
+provides a module to programmatically encrypt and decrypt.
