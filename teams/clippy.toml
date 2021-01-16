@@ -14,8 +14,8 @@ members = [
     "flip1995",
     "mcarton",
     "yaahc",
-    "ebroto",
 ]
+alumni = ["ebroto"]
 
 [permissions]
 bors.clippy.review = true
