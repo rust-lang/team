@@ -23,7 +23,7 @@ pub struct Team {
     pub alumni: Vec<TeamMember>,
     pub github: Option<TeamGitHub>,
     pub website_data: Option<TeamWebsite>,
-    pub discord_role: Option<DiscordRole>,
+    pub discord: Option<TeamDiscord>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -58,11 +58,11 @@ pub struct TeamWebsite {
     pub weight: i64,
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DiscordRole {
+pub struct TeamDiscord {
     pub name: String,
     pub role_id: usize,
+    pub members: Vec<usize>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

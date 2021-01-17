@@ -335,6 +335,15 @@ impl Team {
         Ok(result)
     }
 
+    pub(crate) fn discord_ids(&self, data: &Data) -> Result<Vec<usize>, Error> {
+        Ok(self
+            .members(data)?
+            .iter()
+            .flat_map(|name| data.person(name).map(|p| p.discord_id()))
+            .flatten()
+            .collect())
+    }
+
     pub(crate) fn is_alumni_team(&self) -> bool {
         self.people.include_all_alumni
     }
@@ -355,6 +364,11 @@ impl DiscordRole {
     pub(crate) fn role_id(&self) -> usize {
         self.role_id
     }
+}
+
+#[derive(Eq, PartialEq, Debug)]
+pub(crate) struct DiscordTeam {
+    pub(crate) members: Vec<usize>,
 }
 
 #[derive(Eq, PartialEq)]

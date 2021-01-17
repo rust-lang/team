@@ -46,3 +46,7 @@ address = "infra-team@rust-lang.org"
 
 [[lists]]
 address = "craterbot@rust-lang.org"
+
+[discord-role]
+name = "infra-team"
+role-id = 489135963319304212
