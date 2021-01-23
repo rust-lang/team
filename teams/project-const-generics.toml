@@ -1,0 +1,23 @@
+name = "project-const-generics"
+kind = "project-group"
+subteam-of = "lang"
+
+[people]
+leads = ["lcnr", "nikomatsakis"]
+members = [
+        "lcnr",
+        "nikomatsakis",
+        "varkor",
+        "davidtwco",
+        "oli-obk",
+        "withoutboats",
+]
+
+[website]
+name = "Const Generics Project Group"
+description = "Working to advance const generics support in the Rust language"
+repo = "https://github.com/rust-lang/project-const-generics"
+zulip-stream = "project-const-generics"
+
+[[github]]
+orgs = ["rust-lang"]
