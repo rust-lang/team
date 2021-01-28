@@ -16,8 +16,10 @@ members = [
   "nikomatsakis",
   "taiki-e",
   "tmandry",
-  "withoutboats",
   "yoshuawuyts",
+]
+alumni = [
+  "withoutboats",
 ]
 
 [[github]]

@@ -13,8 +13,10 @@ members = [
     "Mark-Simulacrum",
     "sfackler",
     "shepmaster",
-    "withoutboats",
     "workingjubilee",
+]
+alumni = [
+    "withoutboats",
 ]
 
 [[github]]

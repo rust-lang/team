@@ -8,11 +8,11 @@ members = [
     "nikomatsakis",
     "pnkfelix",
     "scottmcm",
-    "withoutboats",
 ]
 alumni = [
     "Centril",
     "nrc",
+    "withoutboats",
 ]
 
 [permissions]
