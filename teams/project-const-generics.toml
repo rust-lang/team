@@ -10,6 +10,8 @@ members = [
         "varkor",
         "davidtwco",
         "oli-obk",
+]
+alumni = [
         "withoutboats",
 ]
 

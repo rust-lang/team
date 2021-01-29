@@ -9,11 +9,11 @@ members = [
     "SimonSapin",
     "dtolnay",
     "sfackler",
-    "withoutboats",
     "m-ou-se",
 ]
 alumni = [
     "LukasKalbertodt",
+    "withoutboats",
 ]
 
 [[github]]
