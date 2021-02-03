@@ -19,6 +19,7 @@ alumni = ["ebroto"]
 
 [permissions]
 bors.clippy.review = true
+bors.rust.review = true
 
 [[github]]
 orgs = ["rust-lang"]
