@@ -27,6 +27,10 @@ email = "foundation@rust-lang.org"
 
 [[lists]]
 address = "foundation@rust-lang.org"
+include-team-members = false
+extra-emails = [
+    "encrypted+f1dde3df4bdeb7f371978faf7a9310b5e247fcb70c8b7fbd46979965a4241f9d82d353116ddf82e755344cbb04038159513b23c7cd3ce11a5a90773bb707bca54c189ae6cd@rust-lang.invalid",
+]
 
 [[github]]
 orgs = ["rust-lang"]
