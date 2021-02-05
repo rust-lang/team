@@ -32,5 +32,12 @@ extra-emails = [
     "encrypted+f1dde3df4bdeb7f371978faf7a9310b5e247fcb70c8b7fbd46979965a4241f9d82d353116ddf82e755344cbb04038159513b23c7cd3ce11a5a90773bb707bca54c189ae6cd@rust-lang.invalid",
 ]
 
+[[lists]]
+address = "foundation-moderation@rust-lang.org"
+include-team-members = false
+extra-emails = [
+    "encrypted+c973fe12f465d22c7391b4c666f86d98214a224d354a74631b423fadce1c2bd40cd2da1c847cf3c6ff290db7368049b58876e3655ee1db4efb1fa5185f6c07d722c921a802@rust-lang.invalid",
+]
+
 [[github]]
 orgs = ["rust-lang"]
