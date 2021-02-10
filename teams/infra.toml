@@ -6,12 +6,12 @@ members = [
     "Mark-Simulacrum",
     "aidanhs",
     "kennytm",
-    "nellshamrell",
     "pietroalbini",
     "shepmaster",
 ]
 alumni = [
     "sgrif",
+    "nellshamrell",
 ]
 
 [[github]]

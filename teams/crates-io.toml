@@ -11,7 +11,6 @@ members = [
     "Turbo87",
     "smarnach",
     "JohnTitor",
-    "nellshamrell",
 ]
 alumni = [
     "steveklabnik",
@@ -20,6 +19,7 @@ alumni = [
     "joshtriplett",
     "ishitatsuyuki",
     "sgrif",
+    "nellshamrell",
 ]
 
 [permissions]
