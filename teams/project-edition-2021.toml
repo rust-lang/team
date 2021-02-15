@@ -1,0 +1,22 @@
+name = "project-edition-2021"
+subteam-of = "lang"
+kind = "project-group"
+
+[people]
+leads = [
+    "nikomatsakis",
+    "m-ou-se"
+]
+members = [
+    "nikomatsakis",
+    "m-ou-se",
+    "rylev"
+]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Edition 2021 Project Group"
+description = "Managing the Rust 2021 edition"
+zulip-stream = "edition"
