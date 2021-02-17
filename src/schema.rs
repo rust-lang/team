@@ -354,6 +354,7 @@ impl Team {
 pub(crate) struct DiscordRole {
     name: String,
     role_id: usize,
+    color: Option<String>,
 }
 
 impl DiscordRole {
@@ -363,6 +364,10 @@ impl DiscordRole {
 
     pub(crate) fn role_id(&self) -> usize {
         self.role_id
+    }
+
+    pub(crate) fn color(&self) -> Option<&str> {
+        self.color.as_ref().map(|s| &s[..])
     }
 }
 

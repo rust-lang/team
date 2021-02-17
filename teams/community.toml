@@ -86,3 +86,4 @@ extra-people = [
 [discord-role]
 name = "community-team"
 role-id = 474953197354483714
+color = "#c27c0e"

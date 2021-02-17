@@ -27,3 +27,7 @@ include-team-members = false
 extra-emails = [
     "rust-verification@googlegroups.com",
 ]
+
+[discord-role]
+name = "WGs and Teams"
+role-id = 590248810127818752

@@ -106,6 +106,7 @@ impl<'a> Generator<'a> {
                     v1::TeamDiscord {
                         name: role.name().into(),
                         role_id: role.role_id(),
+                        color: role.color().map(String::from),
                         members: member_discord_ids,
                     }
                 }),
