@@ -19,4 +19,4 @@ orgs = ["rust-lang"]
 [website]
 name = "Edition 2021 Project Group"
 description = "Managing the Rust 2021 edition"
-zulip-stream = "edition"
+zulip-stream = "edition 2021"
