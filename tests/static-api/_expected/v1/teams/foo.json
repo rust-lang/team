@@ -50,5 +50,6 @@
     },
     "zulip_stream": "t-foo",
     "weight": 1000
-  }
+  },
+  "discord": null
 }
