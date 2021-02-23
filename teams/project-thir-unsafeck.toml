@@ -1,0 +1,14 @@
+name = "project-thir-unsafeck"
+kind = "project-group"
+subteam-of = "compiler"
+
+[people]
+leads = ["nikomatsakis"]
+members = ["LeSeulArtichaut", "nikomatsakis"]
+
+[website]
+name = "THIR Unsafety Checker Project Group"
+description = "Working on refactoring unsafety checking to operate on THIR"
+
+[[github]]
+orgs = ["rust-lang"]
