@@ -9,6 +9,8 @@ members = ["LeSeulArtichaut", "nikomatsakis"]
 [website]
 name = "THIR Unsafety Checker Project Group"
 description = "Working on refactoring unsafety checking to operate on THIR"
+repo = "https://github.com/rust-lang/project-thir-unsafeck"
+zulip-stream = "project-thir-unsafeck"
 
 [[github]]
 orgs = ["rust-lang"]
