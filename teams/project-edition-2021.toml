@@ -1,5 +1,5 @@
 name = "project-edition-2021"
-subteam-of = "lang"
+subteam-of = "core"
 kind = "project-group"
 
 [people]
