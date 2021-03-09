@@ -8,6 +8,7 @@ members = [
     "ecstatic-morse",
     "oli-obk",
     "RalfJung",
+    "lcnr",
 ]
 
 [website]
