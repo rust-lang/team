@@ -3,7 +3,7 @@ subteam-of = "devtools"
 kind = "working-group"
 
 [people]
-leads = ["topecongiro"]
+leads = ["topecongiro", "calebcartwright"]
 members = [
     "scampi",
     "topecongiro",
