@@ -5,7 +5,6 @@ leads = []
 members = [
     "Amanieu",
     "BurntSushi",
-    "KodrAus",
     "SimonSapin",
     "dtolnay",
     "sfackler",
@@ -13,6 +12,7 @@ members = [
     "joshtriplett",
 ]
 alumni = [
+    "KodrAus",
     "LukasKalbertodt",
     "withoutboats",
 ]
