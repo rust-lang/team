@@ -20,7 +20,7 @@
     "alumni": [],
     "github": null,
     "website_data": null,
-    "discord": null
+    "discord": []
   },
   "foo": {
     "name": "foo",
@@ -75,7 +75,7 @@
       "zulip_stream": "t-foo",
       "weight": 1000
     },
-    "discord": null
+    "discord": []
   },
   "leaderless": {
     "name": "leaderless",
@@ -92,7 +92,7 @@
     "alumni": [],
     "github": null,
     "website_data": null,
-    "discord": null
+    "discord": []
   },
   "wg-test": {
     "name": "wg-test",
@@ -122,6 +122,6 @@
     ],
     "github": null,
     "website_data": null,
-    "discord": null
+    "discord": []
   }
 }
