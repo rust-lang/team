@@ -23,7 +23,7 @@ pub struct Team {
     pub alumni: Vec<TeamMember>,
     pub github: Option<TeamGitHub>,
     pub website_data: Option<TeamWebsite>,
-    pub discord: Option<TeamDiscord>,
+    pub discord: Vec<TeamDiscord>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

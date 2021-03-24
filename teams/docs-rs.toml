@@ -35,6 +35,6 @@ address = "docs-rs@rust-lang.org"
 [[lists]]
 address = "help@docs.rs"
 
-[discord-role]
+[[discord-roles]]
 name = "docs-rs"
 role-id = 489135963319304212

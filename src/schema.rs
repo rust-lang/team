@@ -169,7 +169,7 @@ pub(crate) struct Team {
     website: Option<WebsiteData>,
     #[serde(default)]
     lists: Vec<TeamList>,
-    discord_role: Option<DiscordRole>,
+    discord_roles: Option<Vec<DiscordRole>>,
 }
 
 impl Team {
@@ -197,8 +197,8 @@ impl Team {
         self.website.as_ref()
     }
 
-    pub(crate) fn discord_role(&self) -> Option<&DiscordRole> {
-        self.discord_role.as_ref()
+    pub(crate) fn discord_roles(&self) -> Option<&Vec<DiscordRole>> {
+        self.discord_roles.as_ref()
     }
 
     pub(crate) fn members<'a>(&'a self, data: &'a Data) -> Result<HashSet<&'a str>, Error> {
