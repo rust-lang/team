@@ -526,14 +526,10 @@ fn validate_discord_team_members_have_discord_ids(data: &Data, errors: &mut Vec<
         if team.discord_roles().is_some() && team.name() != "all" {
             let team_members = team.members(&data)?;
             if team_members.len() != team.discord_ids(&data)?.len() {
-                let mut needs_discord_id = vec![];
-                let get_discord_id = |name| data.person(name).map(|p| p.discord_id());
-
-                for name in team_members {
-                    if get_discord_id(name) == Some(None) {
-                        needs_discord_id.push(name);
-                    }
-                }
+                let needs_discord_id = team_members
+                    .iter()
+                    .filter(|name| data.person(name).map(|p| p.discord_id()) == Some(None))
+                    .collect::<Vec<_>>();
 
                 if needs_discord_id.len() != 0 {
                     bail!(
