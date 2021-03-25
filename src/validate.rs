@@ -523,7 +523,6 @@ fn validate_project_groups_have_parent_teams(data: &Data, errors: &mut Vec<Strin
 
 fn validate_discord_team_members_have_discord_ids(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
-        
         if team.discord_roles().is_some() && team.name() != "all" {
             let team_members = team.members(&data)?;
             if team_members.len() != team.discord_ids(&data)?.len() {
