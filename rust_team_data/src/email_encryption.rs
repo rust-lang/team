@@ -55,7 +55,7 @@ pub fn try_decrypt(key: &str, email: &str) -> Result<String, Error> {
             .decrypt(&nonce, encrypted)
             .map_err(|_| Error::EncryptionFailed)?,
     )
-    .map_err(|_| Error::InvalidUTF8)
+    .map_err(|_| Error::InvalidUtf8)
 }
 
 fn init_cipher(key: &str) -> Result<XChaCha20Poly1305, Error> {
@@ -73,7 +73,7 @@ pub enum Error {
     EncryptionFailed,
     DecryptionFailed,
     WrongKeyLength,
-    InvalidUTF8,
+    InvalidUtf8,
 }
 
 impl std::fmt::Display for Error {
@@ -83,7 +83,7 @@ impl std::fmt::Display for Error {
             Error::Hex(e) => write!(f, "{}", e),
             Error::EncryptionFailed => write!(f, "encryption failed"),
             Error::DecryptionFailed => write!(f, "encryption failed"),
-            Error::InvalidUTF8 => write!(f, "invalid UTF-8"),
+            Error::InvalidUtf8 => write!(f, "invalid UTF-8"),
             Error::WrongKeyLength => write!(f, "expected 32-bytes key"),
         }
     }
