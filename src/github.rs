@@ -140,7 +140,7 @@ impl GitHubApi {
                     ids: chunk.iter().map(|id| user_node_id(*id)).collect(),
                 },
             )?;
-            for node in res.nodes.into_iter().filter_map(|n| n) {
+            for node in res.nodes.into_iter().flatten() {
                 result.insert(node.database_id, node.login);
             }
         }

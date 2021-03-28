@@ -5,23 +5,23 @@ use std::collections::{HashMap, HashSet};
 
 #[derive(serde_derive::Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields)]
-pub(crate) struct BorsACL {
+pub(crate) struct BorsAcl {
     #[serde(default)]
     review: bool,
     #[serde(rename = "try", default)]
     try_: bool,
 }
 
-impl Default for BorsACL {
+impl Default for BorsAcl {
     fn default() -> Self {
-        BorsACL {
+        BorsAcl {
             review: false,
             try_: false,
         }
     }
 }
 
-impl BorsACL {
+impl BorsAcl {
     pub(crate) fn review(&self) -> bool {
         self.review
     }
@@ -35,7 +35,7 @@ impl BorsACL {
 #[serde(rename_all = "kebab-case")]
 pub(crate) struct Permissions {
     #[serde(default)]
-    bors: HashMap<String, BorsACL>,
+    bors: HashMap<String, BorsAcl>,
     #[serde(default)]
     crates_io_ops_bot: HashMap<String, bool>,
     #[serde(flatten)]
@@ -53,7 +53,7 @@ impl Default for Permissions {
 }
 
 impl Permissions {
-    pub(crate) fn bors(&self) -> &HashMap<String, BorsACL> {
+    pub(crate) fn bors(&self) -> &HashMap<String, BorsAcl> {
         &self.bors
     }
 
