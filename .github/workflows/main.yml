@@ -4,6 +4,7 @@ jobs:
   ci:
     name: CI
     runs-on: ubuntu-latest
+    if: github.repository == 'rust-lang/team'
     steps:
 
       - uses: actions/checkout@main
