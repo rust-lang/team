@@ -6,7 +6,6 @@ members = [
     "Mark-Simulacrum",
     "aidanhs",
     "ashleygwilliams",
-    "nikomatsakis",
     "pietroalbini",
     "skade",
     "steveklabnik",
@@ -15,6 +14,7 @@ members = [
 alumni = [
     "nrc",
     "carols10cents",
+    "nikomatsakis",
 ]
 
 [permissions]
@@ -60,7 +60,6 @@ extra-people = [
     "Mark-Simulacrum",
     "aidanhs",
     "ashleygwilliams",
-    "nikomatsakis",
     "steveklabnik",
     "Manishearth",
 ]
