@@ -42,3 +42,8 @@ address = "lang@rust-lang.org"
 
 [[lists]]
 address = "language-design-team@rust-lang.org"
+
+[[discord-roles]]
+name = "lang-team"
+role-id = 474625453940932621
+color = "#2ecc71"

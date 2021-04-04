@@ -22,3 +22,8 @@ repo = "https://github.com/rust-lang/wg-security-response"
 
 [[lists]]
 address = "security@rust-lang.org"
+
+[[discord-roles]]
+name = "security"
+role-id = 780131913817129002
+color = "#e91e63"
