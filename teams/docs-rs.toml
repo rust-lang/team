@@ -5,12 +5,14 @@ subteam-of = "devtools"
 leads = ["jyn514", "pietroalbini"]
 members = [
     "GuillaumeGomez",
-    "Kixiron",
     "Nemo157",
     "jyn514",
     "onur",
     "pietroalbini",
     "syphar",
+]
+alumni = [
+    "Kixiron",
 ]
 
 [[github]]
