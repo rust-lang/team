@@ -9,6 +9,9 @@ members = [
     "matthieu-m",
 ]
 
+[[github]]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
 [rfcbot]
 label = "T-moderation"
 name = "Moderation"
