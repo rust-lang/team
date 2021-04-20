@@ -2,6 +2,7 @@ name = "Manish Goregaokar"
 github = "Manishearth"
 github-id = 1617736
 email = "manishsmail@gmail.com"
+zulip-id = 132040
 
 [permissions]
 bors.semverver.review = true
