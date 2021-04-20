@@ -30,3 +30,6 @@ orgs = ["rust-lang"]
 name = "Clippy team"
 description = "Designing and implementing the Clippy linter"
 zulip-stream = "clippy"
+
+[[lists]]
+address="clippy@rust-lang.org"
