@@ -61,7 +61,6 @@ pub struct TeamWebsite {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TeamDiscord {
     pub name: String,
-    pub role_id: usize,
     pub members: Vec<usize>,
     pub color: Option<String>,
 }

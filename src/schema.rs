@@ -353,17 +353,12 @@ impl Team {
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct DiscordRole {
     name: String,
-    role_id: usize,
     color: Option<String>,
 }
 
 impl DiscordRole {
     pub(crate) fn name(&self) -> &str {
         &self.name
-    }
-
-    pub(crate) fn role_id(&self) -> usize {
-        self.role_id
     }
 
     pub(crate) fn color(&self) -> Option<&str> {

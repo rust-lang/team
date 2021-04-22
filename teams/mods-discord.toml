@@ -21,6 +21,5 @@ description = "Moderating the Discord server"
 address = "discord-mods@rust-lang.org"
 
 [[discord-roles]]
-role-id = 447147786652221441
 name = "mods"
 color = "#e74c3c"

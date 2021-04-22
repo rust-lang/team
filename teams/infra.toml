@@ -49,5 +49,4 @@ address = "craterbot@rust-lang.org"
 
 [[discord-roles]]
 name = "infra-team"
-role-id = 489135963319304212
 color = "#ff5454"
