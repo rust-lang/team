@@ -4,6 +4,7 @@ github-id = 5047365
 zulip-id = 116122
 irc = "simulacrum"
 email = "mark.simulacrum@gmail.com"
+discord-id = 442403469580566528
 
 [permissions]
 bors.cargo.review = true

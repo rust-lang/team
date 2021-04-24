@@ -46,3 +46,7 @@ address = "infra-team@rust-lang.org"
 
 [[lists]]
 address = "craterbot@rust-lang.org"
+
+[[discord-roles]]
+name = "infra-team"
+color = "#ff5454"

@@ -81,3 +81,8 @@ extra-people = ["ashleygwilliams"]
 address = "pietroalbini@rust-lang.org"
 include-team-members = false
 extra-people = ["pietroalbini"]
+
+[[discord-roles]]
+name = "core-team"
+color = "#3498db"
+

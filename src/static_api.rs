@@ -65,6 +65,8 @@ impl<'a> Generator<'a> {
             let mut github_teams = team.github_teams(&self.data)?;
             github_teams.sort();
 
+            let member_discord_ids = team.discord_ids(&self.data)?;
+
             let team_data = v1::Team {
                 name: team.name().into(),
                 kind: match team.kind() {
@@ -100,6 +102,19 @@ impl<'a> Generator<'a> {
                     zulip_stream: ws.zulip_stream().map(|s| s.into()),
                     weight: ws.weight(),
                 }),
+                discord: team
+                    .discord_roles()
+                    .map(|roles| {
+                        roles
+                            .iter()
+                            .map(|role| v1::TeamDiscord {
+                                name: role.name().into(),
+                                color: role.color().map(String::from),
+                                members: member_discord_ids.clone(),
+                            })
+                            .collect()
+                    })
+                    .unwrap_or_else(Vec::new),
             };
 
             self.add(&format!("v1/teams/{}.json", team.name()), &team_data)?;

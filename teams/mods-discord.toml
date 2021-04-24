@@ -19,3 +19,7 @@ description = "Moderating the Discord server"
 
 [[lists]]
 address = "discord-mods@rust-lang.org"
+
+[[discord-roles]]
+name = "mods"
+color = "#e74c3c"

@@ -82,3 +82,7 @@ extra-people = [
     "spastorino",
     "skade",
 ]
+
+[[discord-roles]]
+name = "community-team"
+color = "#c27c0e"

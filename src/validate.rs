@@ -38,6 +38,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_discord_permissions,
     validate_zulip_stream_name,
     validate_project_groups_have_parent_teams,
+    validate_discord_team_members_have_discord_ids,
 ];
 
 #[allow(clippy::type_complexity)]
@@ -518,6 +519,29 @@ fn validate_project_groups_have_parent_teams(data: &Data, errors: &mut Vec<Strin
         }
         Ok(())
     })
+}
+
+fn validate_discord_team_members_have_discord_ids(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, _| {
+        if team.discord_roles().is_some() && team.name() != "all" {
+            let team_members = team.members(&data)?;
+            if team_members.len() != team.discord_ids(&data)?.len() {
+                let members: String = team_members
+                    .into_iter()
+                    .filter(|name| data.person(name).map(|p| p.discord_id()) == Some(None))
+                    .map(|name| format!("{}, ", name))
+                    .collect();
+
+                bail!(
+                    "the following members of the \"{}\" team do not have discord_ids: {}",
+                    team.name(),
+                    &members[..members.len() - 2]
+                );
+            }
+        }
+
+        Ok(())
+    });
 }
 
 fn wrapper<T, I, F>(iter: I, errors: &mut Vec<String>, mut func: F)
