@@ -3,6 +3,7 @@ name = "compiler"
 [people]
 leads = ["wesleywiser", "pnkfelix"]
 members = [
+    "Aaron1011",
     "davidtwco",
     "eddyb",
     "estebank",
