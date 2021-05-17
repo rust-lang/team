@@ -13,11 +13,10 @@ members = [
     "mikerite",
     "flip1995",
     "mcarton",
-    "yaahc",
     "camsteffen",
     "giraffate",
 ]
-alumni = ["ebroto"]
+alumni = ["ebroto", "yaahc"]
 
 [permissions]
 bors.clippy.review = true
