@@ -1,0 +1,36 @@
+# Empty marker team used to configure RustConf's mailing lists.
+
+name = "rustconf-emails"
+kind = "marker-team"
+
+[people]
+leads = []
+members = []
+
+[[lists]]
+address = "leah@rustconf.com"
+extra-emails = ["events@tilde.io"]
+
+[[lists]]
+address = "event@rustconf.com"
+extra-emails = ["events@tilde.io"]
+
+[[lists]]
+address = "sponsor@rustconf.com"
+extra-emails = ["events@tilde.io"]
+
+[[lists]]
+address = "sponsors@rustconf.com"
+extra-emails = ["events@tilde.io"]
+
+[[lists]]
+address = "sponsorship@rustconf.com"
+extra-emails = ["events@tilde.io"]
+
+[[lists]]
+address = "sponsorships@rustconf.com"
+extra-emails = ["events@tilde.io"]
+
+[[lists]]
+address = "speak@rustconf.com"
+extra-emails = ["events@tilde.io"]
