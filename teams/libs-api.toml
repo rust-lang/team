@@ -1,0 +1,45 @@
+name = "libs-api"
+subteam-of = "libs"
+
+[people]
+leads = []
+members = [
+    "Amanieu",
+    "BurntSushi",
+    "dtolnay",
+    "sfackler",
+    "m-ou-se",
+    "joshtriplett",
+    "yaahc",
+]
+alumni = [
+    "KodrAus",
+    "LukasKalbertodt",
+    "withoutboats",
+    "SimonSapin",
+]
+
+[[github]]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
+[permissions]
+perf = true
+crater = true
+bors.rust.review = true
+bors.hashbrown.review = true
+bors.libc.review = true
+bors.stdarch.review = true
+
+[rfcbot]
+label = "T-libs-api"
+name = "Library API"
+ping = "rust-lang/libs-api"
+
+[website]
+weight = 100
+name = "Library API team"
+description = "Designing and maintaining the standard library API and guarding its stability"
+zulip-stream = "t-libs-api"
+
+[[lists]]
+address = "libs-api@rust-lang.org"

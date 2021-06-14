@@ -1,4 +1,5 @@
 name = "libc"
+subteam-of = "libs"
 
 [people]
 leads = []
@@ -14,3 +15,8 @@ bors.libc.review = true
 
 [[github]]
 orgs = ["rust-lang"]
+
+[website]
+name = "Libc crate team"
+description = "Developing and maintaining the libc crate"
+repo = "https://github.com/rust-lang/libc"

@@ -1,21 +1,12 @@
 name = "libs"
 
 [people]
-leads = []
+leads = ["m-ou-se"]
 members = [
-    "Amanieu",
-    "BurntSushi",
-    "SimonSapin",
-    "dtolnay",
-    "sfackler",
-    "m-ou-se",
-    "joshtriplett",
-    "yaahc",
-]
-alumni = [
-    "KodrAus",
-    "LukasKalbertodt",
-    "withoutboats",
+  "Amanieu",
+  "m-ou-se",
+  "joshtriplett",
+  "yaahc",
 ]
 
 [[github]]
@@ -24,23 +15,20 @@ orgs = ["rust-lang", "rust-lang-nursery"]
 [permissions]
 perf = true
 crater = true
-bors.rust.review = true
 bors.hashbrown.review = true
 bors.libc.review = true
+bors.rust.review = true
 bors.stdarch.review = true
 
 [rfcbot]
 label = "T-libs"
-name = "Libraries"
+name = "Library"
 ping = "rust-lang/libs"
-exclude-members = [
-    "SimonSapin",
-]
 
 [website]
 page = "library"
 name = "Library team"
-description = "Developing and managing the Rust standard library, official rust-lang crates, code conventions, and ecosystem support"
+description = "Managing and maintaining the Rust standard library and official rust-lang crates"
 zulip-stream = "t-libs"
 
 [[lists]]
