@@ -5,12 +5,14 @@ subteam-of = "compiler"
 leads = []
 members = [
   "bjorn3",
+  "BoxyUwU",
   "cjgillot",
   "cuviper",
   "ecstatic-morse",
   "flodiebold",
   "jackh726",
   "jonas-schievink",
+  "LeSeulArtichaut",
   "lqd",
   "Mark-Simulacrum",
   "matklad",
@@ -20,6 +22,7 @@ members = [
   "RalfJung",
   "scalexm",
   "spastorino",
+  "the8472",
   "tmandry",
   "Xanewok",
   "zackmdavis",
