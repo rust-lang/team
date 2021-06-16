@@ -1,0 +1,14 @@
+name = "regex"
+subteam-of = "libs"
+
+[people]
+leads = ["BurntSushi"]
+members = ["BurntSushi"]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Regex crate team"
+description = "Developing and maintaining the regex crate"
+repo = "https://github.com/rust-lang/regex"

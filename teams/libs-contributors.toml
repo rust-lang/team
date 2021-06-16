@@ -1,0 +1,27 @@
+name = "libs-contributors"
+subteam-of = "libs"
+
+[people]
+leads = []
+members = [
+  "cramertj",
+  "dtolnay",
+  "JohnTitor",
+  "kennytm",
+  "Mark-Simulacrum",
+  "SimonSapin",
+  "workingjubilee",
+]
+
+[permissions]
+bors.rust.review = true
+crater = true
+perf = true
+
+[[github]]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
+[website]
+weight = -100
+name = "Library contributors"
+description = "Folks who contribute to the Rust standard library on a regular basis"
