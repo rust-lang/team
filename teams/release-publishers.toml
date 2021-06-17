@@ -1,0 +1,17 @@
+name = "release-publishers"
+subteam-of = "release"
+
+[people]
+leads = []
+members = [
+    "Mark-Simulacrum",
+    "pietroalbini",
+]
+alumni = []
+
+[permissions]
+# None currently, created to add this team to crates published as part of
+# release process.
+
+[[github]]
+orgs = ["rust-lang"]
