@@ -15,12 +15,12 @@ members = [
     "pnkfelix",
     "nikomatsakis",
     "matthewjasper",
-    "varkor",
     "wesleywiser",
 ]
 alumni = [
     "cramertj",
     "nrc",
+    "varkor",
     "Zoxc",
 ]
 
