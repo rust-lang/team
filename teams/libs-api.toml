@@ -39,7 +39,6 @@ ping = "rust-lang/libs-api"
 weight = 100
 name = "Library API team"
 description = "Designing and maintaining the standard library API and guarding its stability"
-zulip-stream = "t-libs-api"
 
 [[lists]]
 address = "libs-api@rust-lang.org"
