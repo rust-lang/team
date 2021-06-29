@@ -10,7 +10,7 @@ members = ["matklad", "lnicola", "Veykril", "flodiebold", "jonas-schievink"]
 name = "RLS 2.0 working group"
 description = "Experimenting with a new compiler architecture tailored for IDEs"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/rls-2.0/"
-zulip-stream = "t-compiler/wg-rls-2.0"
+zulip-stream = "t-compiler/rust-analyzer"
 
 [permissions]
 bors.rust.review = true
