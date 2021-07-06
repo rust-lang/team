@@ -50,38 +50,6 @@ address = "user-logos@rust-lang.org"
 [[lists]]
 address = "legal@crates.io"
 
-[[lists]]
-address = "trademark@rust-lang.org"
-
-[[lists]]
-address = "mediation@rust-lang.org"
-include-team-members = false
-extra-people = [
-    "Mark-Simulacrum",
-    "aidanhs",
-    "ashleygwilliams",
-    "steveklabnik",
-    "Manishearth",
-]
-
-[[lists]]
-address = "accounting@rust-lang.org"
-include-team-members = false
-extra-people = [
-    "ashleygwilliams",
-]
-
-# Temporary hacky way to create personal aliases. Ashley and Pietro urgently
-# need an alias to continue their work setting up the Rust Foundation.
-[[lists]]
-address = "ashleygwilliams@rust-lang.org"
-include-team-members = false
-extra-people = ["ashleygwilliams"]
-[[lists]]
-address = "pietroalbini@rust-lang.org"
-include-team-members = false
-extra-people = ["pietroalbini"]
-
 [[discord-roles]]
 name = "core-team"
 color = "#3498db"
