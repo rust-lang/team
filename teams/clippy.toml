@@ -19,6 +19,7 @@ members = [
 alumni = ["ebroto", "yaahc"]
 
 [permissions]
+perf = true
 bors.clippy.review = true
 bors.rust.review = true
 
