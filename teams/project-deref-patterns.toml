@@ -1,0 +1,20 @@
+name = "project-const-generics"
+kind = "project-group"
+subteam-of = "lang"
+
+[people]
+leads = ["chorman0773", "ncr","nikomatsakis"]
+members = [
+     "chorman0773",
+     "ncr",
+     "nikomatsakis"
+]
+
+[website]
+name = "Deref Patterns Project Group"
+description = "Working to design and implement Deref Patterns in the Rust Language"
+repo = "https://github.com/rust-lang/project-deref-patterns"
+zulip-stream = "project-deref-patterns"
+
+[[github]]
+orgs = ["rust-lang"]
