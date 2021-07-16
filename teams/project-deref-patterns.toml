@@ -1,4 +1,4 @@
-name = "project-const-generics"
+name = "project-deref-patterns"
 kind = "project-group"
 subteam-of = "lang"
 
