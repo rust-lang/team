@@ -9,6 +9,7 @@ members = [
     "oli-obk",
     "RalfJung",
     "lcnr",
+    "fee1-dead",
 ]
 
 [website]
