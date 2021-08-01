@@ -16,6 +16,10 @@ alumni = [
 [[github]]
 orgs = ["rust-lang"]
 
+[permissions]
+# Primarily for subtree syncs and other rustfmt-related review.
+bors.rust.review = true
+
 [website]
 name = "Rustfmt working group"
 description = "Designing and implementing rustfmt, a formatting tool for Rust code"
