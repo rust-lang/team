@@ -13,7 +13,7 @@ members = [
     "nellshamrell",
 ]
 alumni = [
-    "fmoko",
+    "diannasoriel",
 ]
 
 [website]
@@ -67,7 +67,7 @@ extra-emails = [
 address = "rustbridge@rust-lang.org"
 include-team-members = false
 extra-people = [
-    "fmoko",
+    "diannasoriel",
     "ashleygwilliams",
     "arshiamufti"
 ]
