@@ -5,7 +5,6 @@ kind = "working-group"
 [people]
 leads = ["oli-obk", "RalfJung"]
 members = [
-    "ecstatic-morse",
     "oli-obk",
     "RalfJung",
     "lcnr",
