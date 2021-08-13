@@ -7,7 +7,6 @@ members = [
     "Dylan-DPC",
     "Mark-Simulacrum",
     "pietroalbini",
-    "jonas-schievink",
     "XAMPPRocky",
     "tmandry",
 ]
@@ -15,6 +14,7 @@ alumni = [
     "BatmanAoD",
     "Centril",
     "sgrif",
+    "jonas-schievink",
 ]
 
 [permissions]
