@@ -4,6 +4,7 @@ subteam-of = "community"
 [people]
 leads = ["rylev"]
 members = [
+    "nikomatsakis",
     "nrc",
     "rylev",
 ]
