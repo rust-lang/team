@@ -4,7 +4,7 @@ subteam-of = "compiler"
 
 [people]
 leads = ["nikomatsakis"]
-members = ["LeSeulArtichaut", "nikomatsakis"]
+members = ["nikomatsakis"]
 
 [website]
 name = "THIR Unsafety Checker Project Group"
