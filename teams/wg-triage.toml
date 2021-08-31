@@ -14,7 +14,6 @@ members = [
     "bstrie",
     "crlf0710",
     "Muirrum",
-    "LeSeulArtichaut",
     "camelid",
 ]
 

@@ -12,7 +12,6 @@ members = [
   "flodiebold",
   "jackh726",
   "jonas-schievink",
-  "LeSeulArtichaut",
   "lqd",
   "Mark-Simulacrum",
   "matklad",
@@ -30,6 +29,7 @@ members = [
 ]
 alumni = [
     "Centril",
+    "LeSeulArtichaut",
 ]
 
 [permissions]
