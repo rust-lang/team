@@ -18,4 +18,4 @@ repo = "https://github.com/rust-lang/impl-trait-initiative"
 
 [[github]]
 orgs = ["rust-lang"]
-team-name = "impl-trait"
+team-name = "initiative-impl-trait"

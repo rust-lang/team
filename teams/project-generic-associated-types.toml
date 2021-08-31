@@ -18,4 +18,4 @@ repo = "https://github.com/rust-lang/generic-associated-types-initiative"
 
 [[github]]
 orgs = ["rust-lang"]
-team-name = "generic-associated-types"
+team-name = "initiative-generic-associated-types"
