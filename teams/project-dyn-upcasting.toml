@@ -1,0 +1,21 @@
+name = "project-dyn-upcasting"
+kind = "project-group"
+subteam-of = "lang"
+
+[people]
+leads = [
+    "crlf0710",
+]
+members = [
+    "crlf0710",
+    "nikomatsakis",
+]
+
+[website]
+name = "Dyn Upcasting Initiative"
+description = "Allowing Upcasting between trait objects"
+repo = "https://github.com/rust-lang/dyn-upcasting-coercion-initiative"
+
+[[github]]
+orgs = ["rust-lang"]
+team-name = "initiative-dyn-upcasting"

@@ -1,0 +1,21 @@
+name = "project-generic-associated-types"
+kind = "project-group"
+subteam-of = "lang"
+
+[people]
+leads = [
+    "jackh726",
+]
+members = [
+    "jackh726",
+    "nikomatsakis",
+]
+
+[website]
+name = "Generic Associated Types Initiative"
+description = "Extending Rust with Generic Associated Types"
+repo = "https://github.com/rust-lang/generic-associated-types-initiative"
+
+[[github]]
+orgs = ["rust-lang"]
+team-name = "initiative-generic-associated-types"
