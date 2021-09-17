@@ -23,6 +23,7 @@ permissions-bors-repos = [
     "crater",
     "crates-io",
     "hashbrown",
+    "measureme",
     "miri",
     "libc",
     "regex",
