@@ -1,0 +1,20 @@
+name = "project-async-crashdump-debugging"
+kind = "project-group"
+subteam-of = "wg-async-foundations"
+
+[people]
+leads = [
+    "michaelwoerister",
+]
+members = [
+    "michaelwoerister",
+]
+
+[website]
+name = "Async Crashdump Debugging Initiative"
+description = "Simplify crashdump debugging of async programs"
+repo = "https://github.com/rust-lang/async-crashdump-debugging-initiative"
+
+[[github]]
+orgs = ["rust-lang"]
+team-name = "initiative-async-crashdump-debugging"
