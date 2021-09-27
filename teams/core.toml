@@ -9,12 +9,15 @@ members = [
     "pietroalbini",
     "skade",
     "steveklabnik",
-    "Manishearth",
+    "rylev",
+    "badboy",
+    "jntrnr",
 ]
 alumni = [
     "nrc",
     "carols10cents",
     "nikomatsakis",
+    "Manishearth",
 ]
 
 [permissions]
