@@ -7,6 +7,7 @@ members = [
     "nikomatsakis",
     "nrc",
     "rylev",
+    "yaahc",
 ]
 
 [website]
