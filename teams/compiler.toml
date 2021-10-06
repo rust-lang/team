@@ -29,6 +29,7 @@ perf = true
 crater = true
 bors.rust.review = true
 bors.miri.review = true
+bors.measureme.review = true
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
