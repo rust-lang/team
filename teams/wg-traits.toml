@@ -17,12 +17,12 @@ members = [
     "nikomatsakis",
     "skinny121",
     "spastorino",
-    "yaahc",
     "zaharidichev",
 ]
 alumni = [
     "scalexm",
     "tmandry",
+    "yaahc",
 ]
 
 [website]
