@@ -8,7 +8,9 @@ mod schema;
 mod static_api;
 mod validate;
 
-use crate::{data::Data, schema::Email};
+use data::Data;
+use schema::{Email, Team, TeamKind};
+
 use failure::{err_msg, Error};
 use log::{error, info, warn};
 use std::path::PathBuf;
@@ -37,6 +39,26 @@ enum Cli {
     StaticApi { dest: String },
     #[structopt(name = "show-person", help = "print information about a person")]
     ShowPerson { github_username: String },
+    #[structopt(name = "dump-teams", help = "Lists all teams")]
+    DumpTeams {
+        #[structopt(
+            long = "exclude-wgs",
+            help = "whether to exclude listing working groups or not"
+        )]
+        exclude_working_groups: bool,
+        #[structopt(
+            long = "exclude-subteams",
+            help = "whether to exclude listing subteams or not"
+        )]
+        exclude_subteams: bool,
+        #[structopt(
+            long = "include-pgs",
+            help = "whether to include listing project groups or not"
+        )]
+        include_project_groups: bool,
+        #[structopt(long = "only-leads", help = "whether to list only leads of the team")]
+        only_leads: bool,
+    },
     #[structopt(name = "dump-team", help = "print the members of a team")]
     DumpTeam { name: String },
     #[structopt(name = "dump-list", help = "print all the emails in a list")]
@@ -206,23 +228,38 @@ fn run() -> Result<(), Error> {
             }
         }
 
+        Cli::DumpTeams {
+            exclude_working_groups,
+            exclude_subteams,
+            include_project_groups,
+            only_leads,
+        } => {
+            for team in data.teams() {
+                let excluded_wg = exclude_working_groups && team.kind() == TeamKind::WorkingGroup;
+                let excluded_project_group =
+                    !include_project_groups && team.kind() == TeamKind::ProjectGroup;
+                let excluded_sub_teams = exclude_subteams && team.subteam_of().is_some();
+                let excluded_marker_team = team.kind() == TeamKind::MarkerTeam;
+                if excluded_wg
+                    || excluded_project_group
+                    || excluded_sub_teams
+                    || excluded_marker_team
+                {
+                    continue;
+                }
+                println!("{} ({}):", team.name(), team.kind());
+                if let Some(parent) = team.subteam_of() {
+                    println!("  parent team: {}", parent);
+                }
+
+                println!("  members: ");
+                dump_team_members(team, &data, only_leads, 1)?;
+            }
+        }
+
         Cli::DumpTeam { ref name } => {
             let team = data.team(name).ok_or_else(|| err_msg("unknown team"))?;
-
-            let leads = team.leads();
-            let mut members = team.members(&data)?.into_iter().collect::<Vec<_>>();
-            members.sort_unstable();
-            for member in members {
-                println!(
-                    "{}{}",
-                    member,
-                    if leads.contains(member) {
-                        " (lead)"
-                    } else {
-                        ""
-                    }
-                );
-            }
+            dump_team_members(team, &data, false, 0)?;
         }
         Cli::DumpList { ref name } => {
             let list = data.list(name)?.ok_or_else(|| err_msg("unknown list"))?;
@@ -287,5 +324,32 @@ fn run() -> Result<(), Error> {
         }
     }
 
+    Ok(())
+}
+
+fn dump_team_members(
+    team: &Team,
+    data: &Data,
+    only_leads: bool,
+    tab_offset: u8,
+) -> Result<(), Error> {
+    let leads = team.leads();
+    let mut members = team.members(data)?.into_iter().collect::<Vec<_>>();
+    members.sort_unstable();
+    for member in members {
+        if only_leads && !leads.contains(member) {
+            continue;
+        }
+        println!(
+            "{}{}{}",
+            "\t".repeat(tab_offset as usize),
+            member,
+            if leads.contains(member) {
+                " (lead)"
+            } else {
+                ""
+            }
+        );
+    }
     Ok(())
 }
