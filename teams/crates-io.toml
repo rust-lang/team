@@ -28,7 +28,7 @@ bors.crates-io.review = true
 crates-io-ops-bot.staging-crates-io = true
 
 [[github]]
-orgs = ["rust-lang"]
+orgs = ["rust-lang", "conduit-rust"]
 
 [rfcbot]
 label = "T-crates-io"

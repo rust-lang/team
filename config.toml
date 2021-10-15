@@ -8,6 +8,7 @@ allowed-mailing-lists-domains = [
 
 allowed-github-orgs = [
     "bors-rs",
+    "conduit-rust",
     "rust-lang",
     "rust-lang-ci",
     "rust-lang-nursery",
