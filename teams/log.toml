@@ -6,6 +6,7 @@ leads = []
 members = [
     "KodrAus",
     "sfackler",
+    "Thomasdezeeuw",
 ]
 
 [permissions]
