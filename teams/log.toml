@@ -1,0 +1,20 @@
+name = "logs"
+subteam-of = "libs"
+
+[people]
+leads = []
+members = [
+    "KodrAus",
+    "sfackler",
+]
+
+[permissions]
+bors.libc.review = true
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Log crate team"
+description = "Developing and maintaining the log crate"
+repo = "https://github.com/rust-lang/log"
