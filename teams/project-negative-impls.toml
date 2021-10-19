@@ -1,0 +1,22 @@
+name = "project-negative-impls"
+kind = "project-group"
+subteam-of = "lang"
+
+[people]
+leads = [
+    "nikomatsakis",
+]
+members = [
+    "nikomatsakis",
+    "spastorino",
+]
+
+[website]
+name = "Negative Impls Initiative"
+description = "Extending negative impls and integrating them into coherence"
+repo = "https://github.com/rust-lang/negative-impls-initiative"
+zulip-stream = "wg-traits"
+
+[[github]]
+orgs = ["rust-lang"]
+team-name = "initiative-negative-impls"
