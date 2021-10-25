@@ -339,6 +339,8 @@ fn validate_permissions(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
         team.permissions()
             .validate(format!("team `{}`", team.name()), data.config())?;
+        team.leads_permissions()
+            .validate(format!("team `{}`", team.name()), data.config())?;
         Ok(())
     });
     wrapper(data.people(), errors, |person, _| {

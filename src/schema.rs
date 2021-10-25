@@ -164,6 +164,8 @@ pub(crate) struct Team {
     #[serde(default)]
     permissions: Permissions,
     #[serde(default)]
+    leads_permissions: Permissions,
+    #[serde(default)]
     github: Vec<GitHubData>,
     rfcbot: Option<RfcbotData>,
     website: Option<WebsiteData>,
@@ -302,6 +304,10 @@ impl Team {
 
     pub(crate) fn permissions(&self) -> &Permissions {
         &self.permissions
+    }
+
+    pub(crate) fn leads_permissions(&self) -> &Permissions {
+        &self.leads_permissions
     }
 
     pub(crate) fn github_teams<'a>(&'a self, data: &Data) -> Result<Vec<GitHubTeam<'a>>, Error> {

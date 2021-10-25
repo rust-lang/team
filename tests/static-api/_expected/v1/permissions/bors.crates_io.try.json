@@ -2,12 +2,14 @@
   "github_users": [
     "user-0",
     "user-1",
-    "user-2"
+    "user-2",
+    "user-6"
   ],
   "github_ids": [
     0,
     0,
-    2
+    2,
+    6
   ],
   "discord_ids": [
     0,
