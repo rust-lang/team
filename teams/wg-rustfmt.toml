@@ -16,7 +16,7 @@ alumni = [
 [[github]]
 orgs = ["rust-lang"]
 
-[permissions]
+[leads-permissions]
 # Primarily for subtree syncs and other rustfmt-related review.
 bors.rust.review = true
 
