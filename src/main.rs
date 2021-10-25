@@ -191,6 +191,11 @@ fn run() -> Result<(), Error> {
                     println!("  - {}", team.name());
                     bors_permissions.extend(team.permissions().bors().clone());
                     other_permissions.extend(team.permissions().booleans().clone());
+
+                    if team.leads().contains(person.github()) {
+                        bors_permissions.extend(team.leads_permissions().bors().clone());
+                        other_permissions.extend(team.leads_permissions().booleans().clone());
+                    }
                 }
             }
             println!();
