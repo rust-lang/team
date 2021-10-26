@@ -3,7 +3,7 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["apiraino", "spastorino", "wesleywiser"]
+leads = ["apiraino", "wesleywiser"]
 members = [
     "am-1t",
     "apiraino",
@@ -23,7 +23,6 @@ members = [
     "mstallmo",
     "o0Ignition0o",
     "pnkfelix",
-    "spastorino",
     "Stupremee",
     "TaKO8Ki",
     "tamuhey",
@@ -33,6 +32,7 @@ alumni = [
     "Centril",
     "LeSeulArtichaut",
     "mark-i-m",
+    "spastorino",
 ]
 
 [website]
