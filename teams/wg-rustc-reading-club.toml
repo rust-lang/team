@@ -9,7 +9,7 @@ leads = ["nikomatsakis", "doc-jones"]
 name = "Rust Code Reading Club working group"
 description = "Helping new and experienced contributors learn more about rustc."
 repo = "https://rust-lang.github.io/compiler-team/working-groups/code-reading-club/"
-zulip-stream = "t-compiler/code-reading-club"
+zulip-stream = "rustc-reading-club"
 
 [[github]]
 orgs = ["rust-lang"]
