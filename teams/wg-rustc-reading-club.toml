@@ -14,4 +14,3 @@ zulip-stream = "rustc-reading-club"
 
 [[github]]
 orgs = ["rust-lang"]
-
