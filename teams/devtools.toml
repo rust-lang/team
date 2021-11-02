@@ -16,8 +16,7 @@ name = "Dev tools team"
 email = "tools@rust-lang.org"
 description = "Contributing to and creating the Rust development tools"
 repo = "https://github.com/rust-dev-tools/dev-tools-team"
-discord-invite = "https://discord.gg/sG23nSS"
-discord-name = "#dev-tools"
+zulip-stream = "t-devtools"
 
 [[github]]
 orgs = ["rust-lang", "rust-dev-tools"]
