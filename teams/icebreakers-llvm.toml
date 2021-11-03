@@ -4,6 +4,7 @@ kind = "marker-team"
 [people]
 leads = []
 members = [
+    "ayazhafiz",
     "camelid",
     "comex",
     "cuviper",
