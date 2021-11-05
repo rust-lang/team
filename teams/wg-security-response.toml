@@ -5,7 +5,6 @@ kind = "working-group"
 leads = []
 members = [
     "cuviper",
-    "nikomatsakis",
     "pietroalbini",
     "steveklabnik",
 ]
