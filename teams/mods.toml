@@ -3,7 +3,6 @@ name = "mods"
 [people]
 leads = []
 members = [
-    "mbrubeck",
     "BurntSushi",
     "llogiq",
     "matthieu-m",
