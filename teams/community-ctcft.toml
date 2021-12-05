@@ -1,0 +1,17 @@
+name = "community-ctcft"
+subteam-of = "community"
+
+[people]
+leads = [
+    "AngelOnFira",
+    "nikomatsakis",
+]
+members = [
+    "AngelOnFira",
+    "nikomatsakis",
+    "technetos",
+    "yaahc",
+]
+
+[[github]]
+orgs = ["rust-lang"]
