@@ -6,11 +6,11 @@ leads = []
 members = [
     "adityac8",
     "nellshamrell",
-    "skade",
     "wezm",
 ]
 alumni = [
     "nasa42",
+    "skade",
 ]
 
 [website]

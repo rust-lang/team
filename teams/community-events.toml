@@ -2,15 +2,17 @@ name = "community-events"
 subteam-of = "community"
 
 [people]
-leads = ["skade"]
+leads = []
 members = [
-    "skade",
     "mattgathu",
     "celaus",
     "flaki",
     "badboy",
     "Manishearth",
     "JohnTitor",
+]
+alumni = [
+    "skade",
 ]
 
 [website]

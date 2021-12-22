@@ -2,14 +2,14 @@ name = "website"
 subteam-of = "web-presence"
 
 [people]
-leads = ["Manishearth", "skade"]
+leads = ["Manishearth"]
 members = [
     "Manishearth",
     "pietroalbini",
-    "skade",
 ]
 alumni = [
     "XAMPPRocky",
+    "skade",
 ]
 
 [[github]]

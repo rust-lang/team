@@ -7,7 +7,6 @@ members = [
     "aidanhs",
     "ashleygwilliams",
     "pietroalbini",
-    "skade",
     "steveklabnik",
     "rylev",
     "badboy",
@@ -18,6 +17,7 @@ alumni = [
     "carols10cents",
     "nikomatsakis",
     "Manishearth",
+    "skade",
 ]
 
 [permissions]
