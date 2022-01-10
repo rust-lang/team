@@ -4,6 +4,7 @@ name = "compiler"
 leads = ["wesleywiser", "pnkfelix"]
 members = [
     "Aaron1011",
+    "cjgillot",
     "davidtwco",
     "eddyb",
     "estebank",
