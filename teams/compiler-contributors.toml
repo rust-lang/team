@@ -46,4 +46,4 @@ extra-teams = ["compiler"]
 [website]
 name = "Compiler team contributors"
 repo = "http://github.com/rust-lang/compiler-team"
-description = "Folks who contribute to the Rust compiler on a regular basis"
+description = "Contributing to the Rust compiler on a regular basis"
