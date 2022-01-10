@@ -3,7 +3,6 @@ name = "community"
 [people]
 leads = []
 members = [
-    "skade",
     "Manishearth",
     "sebasmagri",
     "ashleygwilliams",
@@ -14,6 +13,7 @@ members = [
 ]
 alumni = [
     "diannasoreil",
+    "skade",
 ]
 
 [website]
