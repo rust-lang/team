@@ -11,6 +11,7 @@ members = [
     "camelid",
     "CraftSpider",
     "jsha",
+    "notriddle",
 ]
 alumni = [
     "jyn514",
