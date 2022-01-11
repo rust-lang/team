@@ -26,4 +26,4 @@ orgs = ["rust-lang", "rust-lang-nursery"]
 [website]
 weight = -100
 name = "Library contributors"
-description = "Folks who contribute to the Rust standard library on a regular basis"
+description = "Contributing to the Rust standard library on a regular basis"
