@@ -4,7 +4,6 @@ allowed-mailing-lists-domains = [
     "docs.rs",
     "rust-embedded.org",
     "rustconf.com",
-    "teams.rust-embedded.org",
 ]
 
 allowed-github-orgs = [
