@@ -1,9 +1,9 @@
 name = "devtools"
 
 [people]
-leads = ["killercup", "Manishearth"]
-members = ["killercup", "Manishearth", "Xanewok", "fitzgen", "GuillaumeGomez", "oli-obk", "kinnison", "ehuss"]
-alumni = ["nrc"]
+leads = ["Manishearth"]
+members = ["Manishearth", "Xanewok", "fitzgen", "GuillaumeGomez", "oli-obk", "kinnison", "ehuss"]
+alumni = ["nrc", "killercup"]
 
 [rfcbot]
 label = "T-dev-tools"
