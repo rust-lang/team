@@ -4,33 +4,34 @@ kind = "working-group"
 [people]
 leads = ["nikomatsakis", "tmandry"]
 members = [
-  "Aaron1011",
-  "betamos",
-  "bIgBV",
-  "LucioFranco",
-  "cramertj",
-  "csmoe",
-  "doc-jones",
   "eholk",
-  "eminence",
-  "emmanuelantony2000",
   "estebank",
-  "gilescope",
   "guswynn",
-  "lbernick",
   "michaelwoerister",
-  "nellshamrell",
   "nikomatsakis",
+  "nrc",
   "pnkfelix",
-  "rylev",
   "spastorino",
   "taiki-e",
   "tmandry",
   "yoshuawuyts",
-  "zeenix",
 ]
 alumni = [
+  "Aaron1011",
+  "LucioFranco",
+  "bIgBV",
+  "betamos",
+  "cramertj",
+  "csmoe",
+  "doc-jones",
+  "eminence",
+  "emmanuelantony2000",
+  "gilescope",
+  "lbernick",
+  "nellshamrell",
+  "rylev",
   "withoutboats",
+  "zeenix",
 ]
 
 [[github]]
