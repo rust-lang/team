@@ -11,7 +11,7 @@ members = [
 
 [website]
 name = "Embedded infrastructure team"
-description = "Managing wg-embedded domains, DNS records, e-mails aliases, etc."
+description = "Managing infrastructure for wg-embedded"
 
 [[github]]
 orgs = ["rust-embedded"]
