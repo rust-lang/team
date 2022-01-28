@@ -1,6 +1,6 @@
 name = "project-async-crashdump-debugging"
 kind = "project-group"
-subteam-of = "wg-async-foundations"
+subteam-of = "wg-async"
 
 [people]
 leads = [

@@ -1,4 +1,4 @@
-name = "wg-async-foundations"
+name = "wg-async"
 kind = "working-group"
 
 [people]
@@ -38,7 +38,7 @@ alumni = [
 orgs = ["rust-lang", "rust-lang-nursery"]
 
 [website]
-name = "Async Foundations working group"
+name = "Async working group"
 description = "Pursuing core language and library support for async-await"
-repo = "https://github.com/rust-lang/wg-async-foundations"
-zulip-stream = "wg-async-foundations"
+repo = "https://github.com/rust-lang/wg-async"
+zulip-stream = "wg-async"
