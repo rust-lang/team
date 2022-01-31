@@ -2,10 +2,13 @@ name = "wg-rust-by-example"
 kind = "working-group"
 
 [people]
-leads = ["steveklabnik"]
+leads = ["marioidival"]
 members = [
-    "steveklabnik",
     "marioidival",
+]
+
+alumni = [
+    "steveklabnik",
 ]
 
 [[github]]
