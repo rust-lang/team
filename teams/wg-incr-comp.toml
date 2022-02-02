@@ -12,7 +12,6 @@ orgs = ["rust-lang"]
 [website]
 name = "Incremental compilation working group"
 description = "Improving incremental compilation in rustc"
-repo = "https://rust-lang.github.io/compiler-team/working-groups/incr-comp/"
 zulip-stream = "t-compiler/wg-incr-comp"
 
 [permissions]
