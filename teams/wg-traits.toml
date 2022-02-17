@@ -6,29 +6,31 @@ kind = "working-group"
 leads = ["nikomatsakis", "jackh726"]
 members = [
     "Aaron1011",
-    "Areredify",
-    "detrumi",
-    "flodiebold",
     "jackh726",
-    "MarkMcCaskey",
-    "AzureMarker",
+    "lcnr",
     "matthewjasper",
-    "nathanwhit",
     "nikomatsakis",
-    "skinny121",
+    "oli-obk",
     "spastorino",
-    "zaharidichev",
 ]
 alumni = [
+    "Areredify",
+    "AzureMarker",
+    "detrumi",
+    "flodiebold",
+    "MarkMcCaskey",
+    "nathanwhit",
     "scalexm",
+    "skinny121",
     "tmandry",
     "yaahc",
+    "zaharidichev",
 ]
 
 [website]
 name = "Traits working group"
-description = "Revamping the rustc trait implementation to follow the Chalk approach"
-repo = "https://rust-lang.github.io/compiler-team/working-groups/traits/"
+description = "Improving the trait checker and related language features"
+repo = "https://github.com/rust-lang/wg-traits"
 zulip-stream = "wg-traits"
 
 [[github]]
