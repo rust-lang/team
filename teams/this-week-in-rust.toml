@@ -1,0 +1,16 @@
+name = "this-week-in-rust"
+
+[people]
+leads = ["nellshamrell"]
+members = [
+    "cdmistman",
+    "ericseppanen",
+    "extrawurst",
+    "andrewpollack"
+]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[[github]]
+team-name = "this-week-in-rust"
