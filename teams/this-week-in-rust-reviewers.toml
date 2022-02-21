@@ -1,4 +1,4 @@
-name = "this-week-in-rust-reviewers"
+name = "this-week-in-rust"
 
 [people]
 leads = ["nellshamrell"]
@@ -13,4 +13,4 @@ members = [
 orgs = ["rust-lang"]
 
 [[github]]
-team-name = "this-week-in-rust-reviewers"
+team-name = "this-week-in-rust"
