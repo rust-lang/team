@@ -1,0 +1,16 @@
+name = "twir-reviewers"
+subteam-of = "twir"
+
+[people]
+leads = ["nellshamrell"]
+members = [
+    "nellshamrell",
+    "cdmistman",
+    "ericseppanen",
+    "extrawurst",
+    "andrewpollack"
+]
+
+[[github]]
+orgs = ["rust-lang"]
+team-name = "twir-reviewers"
