@@ -1,10 +1,16 @@
 name = "twir"
 
 [people]
-leads = []
+leads = ["nellshamrell"]
 members = [
-    "llogiq",
     "nellshamrell",
+    "llogiq",
+    "cdmistman",
+    "ericseppanen",
+    "extrawurst",
+    "andrewpollack",
+    "U007D",
+    "JoelMarcey",
 ]
 alumni = [
     "nasa42",
