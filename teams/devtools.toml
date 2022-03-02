@@ -32,7 +32,6 @@ extra-teams = [
     "ides",
     "rustdoc",
     "wg-bindgen",
-    "wg-debugging",
     "wg-rustfmt",
     "wg-rustup",
     "wg-rustfix",
