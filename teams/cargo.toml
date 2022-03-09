@@ -12,6 +12,9 @@ members = [
 ]
 alumni = [
     "nrc",
+    "dwijnand",
+    "wycats",
+    "withoutboats",
 ]
 
 [permissions]
