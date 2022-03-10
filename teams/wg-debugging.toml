@@ -1,16 +1,23 @@
 name = "wg-debugging"
-subteam-of = "devtools"
+subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["Manishearth", "michaelwoerister"]
+leads = ["pnkfelix", "wesleywiser"]
 members = [
-    "Manishearth",
+    "davidtwco",
     "michaelwoerister",
+    "pnkfelix",
+    "wesleywiser"
+]
+alumni = [
+    "Manishearth"
 ]
 
 [website]
-name = "Debugging working group"
-description = "Developing and managing Rust debugging tools"
-discord-invite = "https://discord.gg/UW3rnhd"
-discord-name = "#wg-debugging"
+name = "Debugging Working Group"
+description = "Providing users with a great experience when debugging Rust code"
+zulip-stream = "t-compiler/wg-debugging"
+
+[[github]]
+orgs = ["rust-lang"]
