@@ -6,5 +6,6 @@ leads = []
 members = [
     "denisvasilik",
     "Disasm",
+    "kraj",
     "tblah",
 ]
