@@ -59,7 +59,10 @@ alumni = [
 include-all-team-members = false
 
 [permissions]
-# Optional, see the permissions documentation
+# Optional, applies to all team members. See the permissions documentation
+
+[leads-permissions]
+# Optional, applies only to team leads. See the permissions documentation
 
 # Configure the GitHub integration
 # This is optional, and if missing the team won't be synchronized with GitHub

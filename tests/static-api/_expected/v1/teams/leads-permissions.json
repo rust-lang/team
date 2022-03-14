@@ -1,0 +1,29 @@
+{
+  "name": "leads-permissions",
+  "kind": "team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Sixth user",
+      "github": "user-6",
+      "github_id": 6,
+      "is_lead": true
+    },
+    {
+      "name": "Third user",
+      "github": "user-3",
+      "github_id": 3,
+      "is_lead": false
+    },
+    {
+      "name": "Fourth user",
+      "github": "user-4",
+      "github_id": 4,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "discord": []
+}

@@ -178,6 +178,11 @@ pub(crate) fn allowed_people<'a>(
                 members_with_perms.insert(member);
             }
         }
+        if team.leads_permissions().has(permission) {
+            for lead in team.leads() {
+                members_with_perms.insert(lead);
+            }
+        }
     }
     Ok(data
         .people()
