@@ -3,7 +3,3 @@ github = "alexcrichton"
 github-id = 64996
 irc = "acrichto"
 email = "alex@alexcrichton.com"
-
-[permissions]
-bors.rustup-rs.review = true
-bors.compiler-builtins.review = true
