@@ -2,17 +2,17 @@ name = "docs-rs"
 subteam-of = "devtools"
 
 [people]
-leads = ["jyn514", "pietroalbini"]
+leads = ["jyn514"]
 members = [
     "GuillaumeGomez",
     "Nemo157",
     "jyn514",
-    "pietroalbini",
     "syphar",
 ]
 alumni = [
     "Kixiron",
     "onur",
+    "pietroalbini",
 ]
 
 [[github]]
