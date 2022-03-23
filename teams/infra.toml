@@ -24,6 +24,7 @@ orgs = ["bors-rs"]
 [permissions]
 perf = true
 crater = true
+dev-desktop = true
 bors.rust.review = true
 bors.crater.review = true
 

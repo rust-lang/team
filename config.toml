@@ -41,6 +41,7 @@ permissions-bors-repos = [
 permissions-bools = [
     "perf",
     "crater",
+    "dev-desktop",
 ]
 
 permissions-crates-io-ops-bot-apps = [
