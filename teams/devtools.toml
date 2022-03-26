@@ -31,9 +31,9 @@ extra-teams = [
     "clippy",
     "ides",
     "rustdoc",
+    "rustfmt",
+    "rustup",
     "wg-bindgen",
-    "wg-rustfmt",
-    "wg-rustup",
     "wg-rustfix",
 ]
 extra-people = ["spacekookie"]

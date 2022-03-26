@@ -1,6 +1,5 @@
-name = "wg-rustup"
+name = "rustup"
 subteam-of = "devtools"
-kind = "working-group"
 
 [people]
 leads = [
@@ -17,7 +16,7 @@ alumni = [
 ]
 
 [website]
-name = "Rustup working group"
+name = "Rustup team"
 description = "Designing and implementing rustup"
 discord-invite = "https://discord.gg/e6Q3cvu"
 discord-name = "#wg-rustup"
