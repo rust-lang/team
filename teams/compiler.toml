@@ -29,6 +29,7 @@ alumni = [
 [permissions]
 perf = true
 crater = true
+dev-desktop = true
 bors.rust.review = true
 bors.miri.review = true
 bors.measureme.review = true
