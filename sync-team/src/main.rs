@@ -1,13 +1,14 @@
 mod github;
 mod mailgun;
 mod team_api;
+mod zulip;
 
 use crate::github::SyncGitHub;
 use crate::team_api::TeamApi;
 use failure::{Error, ResultExt};
 use log::{error, info, warn};
 
-const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun"];
+const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun", "zulip"];
 const USER_AGENT: &str = "rust-lang teams sync (https://github.com/rust-lang/sync-team)";
 
 fn usage() {
@@ -85,6 +86,11 @@ fn app() -> Result<(), Error> {
                     "failed to get the EMAIL_ENCRYPTION_KEY environment variable"
                 })?;
                 mailgun::run(&token, &encryption_key, &team_api, dry_run)?;
+            }
+            "zulip" => {
+                let token = std::env::var("ZULIP_API_TOKEN")
+                    .with_context(|_| "failed to get the ZULIP_API_TOKEN environment variable")?;
+                zulip::run(token, &team_api, dry_run)?;
             }
             _ => panic!("unknown service: {}", service),
         }
