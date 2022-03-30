@@ -29,6 +29,7 @@ pub struct Team {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TeamMember {
     pub name: String,
+    pub email: Option<String>,
     pub github: String,
     pub github_id: usize,
     pub is_lead: bool,

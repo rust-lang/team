@@ -57,6 +57,15 @@ pub(crate) enum Email<'a> {
     Present(&'a str),
 }
 
+impl Email<'_> {
+    pub(crate) fn as_str(&self) -> Option<&str> {
+        match self {
+            Email::Present(e) => Some(e),
+            _ => None,
+        }
+    }
+}
+
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Person {

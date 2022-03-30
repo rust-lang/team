@@ -40,6 +40,7 @@ impl<'a> Generator<'a> {
                 if let Some(person) = self.data.person(github_name) {
                     members.push(v1::TeamMember {
                         name: person.name().into(),
+                        email: person.email().as_str().map(|e| e.to_string()),
                         github: (*github_name).into(),
                         github_id: person.github_id(),
                         is_lead: leads.contains(github_name),
@@ -54,6 +55,7 @@ impl<'a> Generator<'a> {
                 if let Some(person) = self.data.person(github_name) {
                     alumni.push(v1::TeamMember {
                         name: person.name().into(),
+                        email: person.email().as_str().map(|e| e.to_string()),
                         github: github_name.to_string(),
                         github_id: person.github_id(),
                         is_lead: false,
