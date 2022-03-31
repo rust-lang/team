@@ -15,7 +15,7 @@ pub(crate) fn run(token: String, team_api: &TeamApi, dry_run: bool) -> Result<()
     for team in team_api
         .get_teams()?
         .iter()
-        .filter(|t| matches!(t.kind, rust_team_data::v1::TeamKind::Team))
+        .filter(|t| matches!(t.kind, rust_team_data::v1::TeamKind::Team) && t.subteam_of.is_none())
     {
         let mut member_zulip_ids = vec![];
         for member in &team.members {
