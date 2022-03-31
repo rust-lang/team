@@ -5,12 +5,14 @@
   "members": [
     {
       "name": "Fourth user",
+      "email": "user4@example.com",
       "github": "user-4",
       "github_id": 4,
       "is_lead": false
     },
     {
       "name": "Fifth user",
+      "email": "user5@example.com",
       "github": "user-5",
       "github_id": 5,
       "is_lead": false

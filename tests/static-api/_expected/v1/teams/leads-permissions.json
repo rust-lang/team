@@ -5,18 +5,21 @@
   "members": [
     {
       "name": "Sixth user",
+      "email": "user6@example.com",
       "github": "user-6",
       "github_id": 6,
       "is_lead": true
     },
     {
       "name": "Third user",
+      "email": "user3@example.com",
       "github": "user-3",
       "github_id": 3,
       "is_lead": false
     },
     {
       "name": "Fourth user",
+      "email": "user4@example.com",
       "github": "user-4",
       "github_id": 4,
       "is_lead": false

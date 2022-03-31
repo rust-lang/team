@@ -5,6 +5,7 @@
   "members": [
     {
       "name": "Second user",
+      "email": "user2@example.com",
       "github": "user-2",
       "github_id": 2,
       "is_lead": true
@@ -13,12 +14,14 @@
   "alumni": [
     {
       "name": "Zeroth user",
+      "email": "user0@example.com",
       "github": "user-0",
       "github_id": 0,
       "is_lead": false
     },
     {
       "name": "Fifth user",
+      "email": "user5@example.com",
       "github": "user-5",
       "github_id": 5,
       "is_lead": false

@@ -5,12 +5,14 @@
   "members": [
     {
       "name": "Zeroth user",
+      "email": "user0@example.com",
       "github": "user-0",
       "github_id": 0,
       "is_lead": true
     },
     {
       "name": "First user",
+      "email": "user1@example.com",
       "github": "user-1",
       "github_id": 0,
       "is_lead": false
