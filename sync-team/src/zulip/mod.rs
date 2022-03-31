@@ -8,17 +8,19 @@ use crate::team_api::TeamApi;
 
 pub(crate) fn run(token: String, team_api: &TeamApi, dry_run: bool) -> Result<(), Error> {
     let zulip_api = ZulipApi::new(token, dry_run);
-    let cache = ZulipCache::new(team_api, &zulip_api)?;
-    for team in cache
-        .teams()
+    let mut cache = ZulipCache::new(team_api, zulip_api, dry_run)?;
+
+    for team in team_api
+        .get_teams()?
         .iter()
         .filter(|t| matches!(t.kind, rust_team_data::v1::TeamKind::Team))
+        .filter(|t| t.name == "test")
     {
-        let mut ids = vec![];
+        let mut member_zulip_ids = vec![];
         for member in &team.members {
-            let id = cache.zulip_id_from_member(member)?;
-            match id {
-                Some(id) => ids.push(id),
+            let member_zulip_id = cache.zulip_id_from_member(member)?;
+            match member_zulip_id {
+                Some(id) => member_zulip_ids.push(id),
                 None => log::warn!(
                     "could not find id for {} ({} {:?})",
                     member.name,
@@ -27,8 +29,10 @@ pub(crate) fn run(token: String, team_api: &TeamApi, dry_run: bool) -> Result<()
                 ),
             }
         }
-        zulip_api.create_user_group(&team.name, &ids)?;
+
+        cache.create_or_update_user_group(&team.name, &member_zulip_ids)?;
     }
+
     Ok(())
 }
 
@@ -40,15 +44,19 @@ struct ZulipCache {
     emails: BTreeMap<String, usize>,
     /// Map of GitHub ids to Zulip user ids
     github_ids: BTreeMap<usize, usize>,
-    /// Teams
-    teams: Vec<rust_team_data::v1::Team>,
+    /// User group name to user group id
+    user_groups: BTreeMap<String, ZulipUserGroup>,
+    /// The Zulip API
+    zulip_api: ZulipApi,
+    /// Whether this is a dry run or not
+    dry_run: bool,
 }
 
 impl ZulipCache {
-    fn new(team_api: &TeamApi, zulip_api: &ZulipApi) -> Result<Self, Error> {
-        let teams = team_api.get_teams()?;
+    fn new(team_api: &TeamApi, zulip_api: ZulipApi, dry_run: bool) -> Result<Self, Error> {
         let zulip_map = team_api.get_zulip_map()?;
         let members = zulip_api.get_users()?;
+        let user_groups = zulip_api.get_user_groups()?;
 
         let (names, emails) = {
             let mut names = BTreeMap::new();
@@ -66,11 +74,18 @@ impl ZulipCache {
             .map(|(zulip_id, github_id)| (*github_id, *zulip_id))
             .collect();
 
+        let user_groups = user_groups
+            .into_iter()
+            .map(|ug| (ug.name.clone(), ug))
+            .collect();
+
         Ok(Self {
-            teams,
             names,
             emails,
             github_ids,
+            user_groups,
+            zulip_api,
+            dry_run,
         })
     }
 
@@ -97,12 +112,77 @@ impl ZulipCache {
         Ok(self.emails.get(email).copied())
     }
 
-    fn teams(&self) -> &[rust_team_data::v1::Team] {
-        &self.teams[..]
+    fn user_group_id_from_name(&self, name: &str) -> Option<usize> {
+        self.user_groups.get(name).map(|u| u.id)
+    }
+
+    fn create_user_group(&mut self, team_name: &str, member_ids: &[usize]) -> Result<usize, Error> {
+        let user_group_name = format!("T-{}", team_name);
+        self.zulip_api.create_user_group(team_name, member_ids)?;
+
+        // Update the user group cache so it has the user group that was just created
+        let user_groups = self.zulip_api.get_user_groups()?;
+        let user_groups = user_groups
+            .into_iter()
+            .map(|ug| (ug.name.clone(), ug))
+            .collect();
+        self.user_groups = user_groups;
+
+        // If this is a dry run, we insert a record since it won't be on the actual API
+        if self.dry_run {
+            self.user_groups.insert(
+                user_group_name.clone(),
+                ZulipUserGroup {
+                    id: 0,
+                    name: user_group_name.clone(),
+                    members: member_ids.into(),
+                },
+            );
+        }
+
+        Ok(self
+            .user_group_id_from_name(&user_group_name)
+            .expect("user group id not found even thoough it was just created"))
+    }
+
+    fn create_or_update_user_group(
+        &mut self,
+        team_name: &str,
+        member_zulip_ids: &[usize],
+    ) -> Result<(), Error> {
+        let user_group_name = format!("T-{}", team_name);
+        let id = self.user_group_id_from_name(&user_group_name);
+        let user_group_id = match id {
+            Some(id) => id,
+            None => self.create_user_group(team_name, &member_zulip_ids)?,
+        };
+        let existing_members = self.user_group_members_from_name(&user_group_name).unwrap();
+        let add_ids = member_zulip_ids
+            .iter()
+            .filter(|i| !existing_members.contains(i))
+            .copied()
+            .collect::<Vec<_>>();
+        let remove_ids = existing_members
+            .iter()
+            .filter(|i| !member_zulip_ids.contains(i))
+            .copied()
+            .collect::<Vec<_>>();
+
+        // We don't currently update the members field of the cached user group because it's
+        // not necessary, but for correctness sake we should consider doing so
+        self.zulip_api
+            .update_user_group_members(user_group_id, &add_ids, &remove_ids)
+    }
+
+    fn user_group_members_from_name(&self, user_group_name: &str) -> Option<&[usize]> {
+        self.user_groups
+            .get(user_group_name)
+            .map(|u| &u.members[..])
     }
 }
 
 /// Access to the Zulip API
+#[derive(Clone)]
 struct ZulipApi {
     client: Client,
     token: String,
@@ -133,42 +213,55 @@ impl ZulipApi {
             user_group_name,
             member_ids
         );
-        if !self.dry_run {
-            let member_ids = format!(
-                "[{}]",
-                member_ids
-                    .into_iter()
-                    .map(|id| id.to_string())
-                    .collect::<Vec<_>>()
-                    .join(",")
-            );
-            let mut form = HashMap::new();
-            form.insert("name", user_group_name.clone());
-            form.insert("description", format!("The {} team", name));
-            form.insert("members", member_ids);
-
-            let mut r = self.req(reqwest::Method::POST, "/user_groups/create", Some(form))?;
-            if r.status() == 400 {
-                let body = r.json::<serde_json::Value>()?;
-                let err = || {
-                    failure::format_err!(
-                        "got 400 when creating user group {}: {}",
-                        user_group_name,
-                        body
-                    )
-                };
-                let error = body.get("msg").ok_or_else(err)?.as_str().ok_or_else(err)?;
-                if error.contains("already exists") {
-                    return Ok(());
-                } else {
-                    return Err(err());
-                }
-            }
-
-            r.error_for_status()?;
+        if self.dry_run {
+            return Ok(());
         }
 
+        let member_ids = format!(
+            "[{}]",
+            member_ids
+                .into_iter()
+                .map(|id| id.to_string())
+                .collect::<Vec<_>>()
+                .join(",")
+        );
+        let mut form = HashMap::new();
+        form.insert("name", user_group_name.clone());
+        form.insert("description", format!("The {} team", name));
+        form.insert("members", member_ids);
+
+        let mut r = self.req(reqwest::Method::POST, "/user_groups/create", Some(form))?;
+        if r.status() == 400 {
+            let body = r.json::<serde_json::Value>()?;
+            let err = || {
+                failure::format_err!(
+                    "got 400 when creating user group {}: {}",
+                    user_group_name,
+                    body
+                )
+            };
+            let error = body.get("msg").ok_or_else(err)?.as_str().ok_or_else(err)?;
+            if error.contains("already exists") {
+                return Ok(());
+            } else {
+                return Err(err());
+            }
+        }
+
+        r.error_for_status()?;
+
         Ok(())
+    }
+
+    /// Get all user groups of the Rust Zulip instance
+    fn get_user_groups(&self) -> Result<Vec<ZulipUserGroup>, Error> {
+        let response = self
+            .req(reqwest::Method::GET, "/user_groups", None)?
+            .error_for_status()?
+            .json::<ZulipUserGroups>()?
+            .user_groups;
+
+        Ok(response)
     }
 
     /// Get all users of the Rust Zulip instance
@@ -180,6 +273,50 @@ impl ZulipApi {
             .members;
 
         Ok(response)
+    }
+
+    fn update_user_group_members(
+        &self,
+        user_group_id: usize,
+        add_ids: &[usize],
+        remove_ids: &[usize],
+    ) -> Result<(), Error> {
+        if add_ids.is_empty() && remove_ids.is_empty() {
+            return Ok(());
+        }
+        log::info!(
+            "Updating user_group {} by adding {:?} and removing {:?}",
+            user_group_id,
+            add_ids,
+            remove_ids
+        );
+
+        if self.dry_run {
+            return Ok(());
+        }
+        let add_ids = format!(
+            "[{}]",
+            add_ids
+                .into_iter()
+                .map(|id| id.to_string())
+                .collect::<Vec<_>>()
+                .join(",")
+        );
+        let remove_ids = format!(
+            "[{}]",
+            remove_ids
+                .into_iter()
+                .map(|id| id.to_string())
+                .collect::<Vec<_>>()
+                .join(",")
+        );
+        let mut form = HashMap::new();
+        form.insert("add", add_ids);
+        form.insert("delete", remove_ids);
+
+        let path = format!("/user_groups/{}/members", user_group_id);
+        let _ = self.req(reqwest::Method::POST, &path, Some(form))?;
+        Ok(())
     }
 
     /// Perform a request against the Zulip API
@@ -215,4 +352,18 @@ struct ZulipUser {
     #[serde(rename = "delivery_email")]
     email: String,
     user_id: usize,
+}
+
+/// A collection of Zulip user groups
+#[derive(Deserialize)]
+struct ZulipUserGroups {
+    user_groups: Vec<ZulipUserGroup>,
+}
+
+/// A single Zulip user group
+#[derive(Deserialize)]
+struct ZulipUserGroup {
+    id: usize,
+    name: String,
+    members: Vec<usize>,
 }
