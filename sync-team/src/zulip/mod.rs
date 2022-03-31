@@ -30,6 +30,9 @@ pub(crate) fn run(token: String, team_api: &TeamApi, dry_run: bool) -> Result<()
             }
         }
 
+        // Sort for better diagnostics
+        member_zulip_ids.sort();
+
         cache.create_or_update_user_group(&team.name, &member_zulip_ids)?;
     }
 
@@ -76,7 +79,11 @@ impl ZulipCache {
 
         let user_groups = user_groups
             .into_iter()
-            .map(|ug| (ug.name.clone(), ug))
+            .map(|mut ug| {
+                // sort for better diagnostics
+                ug.members.sort();
+                (ug.name.clone(), ug)
+            })
             .collect();
 
         Ok(Self {
@@ -116,9 +123,14 @@ impl ZulipCache {
         self.user_groups.get(name).map(|u| u.id)
     }
 
-    fn create_user_group(&mut self, team_name: &str, member_ids: &[usize]) -> Result<usize, Error> {
-        let user_group_name = format!("T-{}", team_name);
-        self.zulip_api.create_user_group(team_name, member_ids)?;
+    fn create_user_group(
+        &mut self,
+        user_group_name: &str,
+        description: &str,
+        member_ids: &[usize],
+    ) -> Result<usize, Error> {
+        self.zulip_api
+            .create_user_group(user_group_name, description, member_ids)?;
 
         // Update the user group cache so it has the user group that was just created
         let user_groups = self.zulip_api.get_user_groups()?;
@@ -131,10 +143,10 @@ impl ZulipCache {
         // If this is a dry run, we insert a record since it won't be on the actual API
         if self.dry_run {
             self.user_groups.insert(
-                user_group_name.clone(),
+                user_group_name.to_owned(),
                 ZulipUserGroup {
                     id: 0,
-                    name: user_group_name.clone(),
+                    name: user_group_name.to_owned(),
                     members: member_ids.into(),
                 },
             );
@@ -153,10 +165,35 @@ impl ZulipCache {
         let user_group_name = format!("T-{}", team_name);
         let id = self.user_group_id_from_name(&user_group_name);
         let user_group_id = match id {
-            Some(id) => id,
-            None => self.create_user_group(team_name, &member_zulip_ids)?,
+            Some(id) => {
+                log::info!(
+                    "'{}' user group ({}) already exists on Zulip",
+                    user_group_name,
+                    id
+                );
+                id
+            }
+            None => {
+                log::info!(
+                    "no '{}' user group found on Zulip. Creating one...",
+                    user_group_name
+                );
+                self.create_user_group(
+                    &user_group_name,
+                    &format!("The {} team", team_name),
+                    &member_zulip_ids,
+                )?
+            }
         };
+
         let existing_members = self.user_group_members_from_name(&user_group_name).unwrap();
+        log::info!(
+            "'{}' user group ({}) has members on Zulip {:?} and needs to have {:?}",
+            user_group_name,
+            user_group_id,
+            existing_members,
+            member_zulip_ids
+        );
         let add_ids = member_zulip_ids
             .iter()
             .filter(|i| !existing_members.contains(i))
@@ -206,11 +243,16 @@ impl ZulipApi {
     ///
     /// The user group's name will be of the form T-$name. This is a
     /// noop if the user group already exists.
-    fn create_user_group(&self, name: &str, member_ids: &[usize]) -> Result<(), Error> {
-        let user_group_name = format!("T-{}", name);
+    fn create_user_group(
+        &self,
+        user_group_name: &str,
+        description: &str,
+        member_ids: &[usize],
+    ) -> Result<(), Error> {
         log::info!(
-            "creating Zulip user group '{}' with member ids: {:?}",
+            "creating Zulip user group '{}' with description '{}' and member ids: {:?}",
             user_group_name,
+            description,
             member_ids
         );
         if self.dry_run {
@@ -226,9 +268,9 @@ impl ZulipApi {
                 .join(",")
         );
         let mut form = HashMap::new();
-        form.insert("name", user_group_name.clone());
-        form.insert("description", format!("The {} team", name));
-        form.insert("members", member_ids);
+        form.insert("name", user_group_name);
+        form.insert("description", description);
+        form.insert("members", &member_ids);
 
         let mut r = self.req(reqwest::Method::POST, "/user_groups/create", Some(form))?;
         if r.status() == 400 {
@@ -282,10 +324,15 @@ impl ZulipApi {
         remove_ids: &[usize],
     ) -> Result<(), Error> {
         if add_ids.is_empty() && remove_ids.is_empty() {
+            log::info!(
+                "user group {} does not need to have its group members updated",
+                user_group_id
+            );
             return Ok(());
         }
+
         log::info!(
-            "Updating user_group {} by adding {:?} and removing {:?}",
+            "updating user group {} by adding {:?} and removing {:?}",
             user_group_id,
             add_ids,
             remove_ids
@@ -294,6 +341,7 @@ impl ZulipApi {
         if self.dry_run {
             return Ok(());
         }
+
         let add_ids = format!(
             "[{}]",
             add_ids
@@ -311,8 +359,8 @@ impl ZulipApi {
                 .join(",")
         );
         let mut form = HashMap::new();
-        form.insert("add", add_ids);
-        form.insert("delete", remove_ids);
+        form.insert("add", add_ids.as_str());
+        form.insert("delete", remove_ids.as_str());
 
         let path = format!("/user_groups/{}/members", user_group_id);
         let _ = self.req(reqwest::Method::POST, &path, Some(form))?;
@@ -324,7 +372,7 @@ impl ZulipApi {
         &self,
         method: reqwest::Method,
         path: &str,
-        form: Option<HashMap<&str, String>>,
+        form: Option<HashMap<&str, &str>>,
     ) -> Result<reqwest::Response, Error> {
         let mut req = self
             .client
