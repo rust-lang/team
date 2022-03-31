@@ -32,7 +32,7 @@ pub(crate) fn run(token: String, team_api: &TeamApi, dry_run: bool) -> Result<()
         }
 
         // Sort for better diagnostics
-        member_zulip_ids.sort();
+        member_zulip_ids.sort_unstable();
 
         cache.create_or_update_user_group(&team.name, &member_zulip_ids)?;
     }
@@ -83,7 +83,7 @@ impl ZulipCache {
             .into_iter()
             .map(|mut ug| {
                 // sort for better diagnostics
-                ug.members.sort();
+                ug.members.sort_unstable();
                 (ug.name.clone(), ug)
             })
             .collect();
@@ -146,7 +146,7 @@ impl ZulipCache {
                 self.create_user_group(
                     &user_group_name,
                     &format!("The {} team", team_name),
-                    &member_zulip_ids,
+                    member_zulip_ids,
                 )?;
                 return Ok(());
             }
@@ -213,7 +213,7 @@ impl ZulipCache {
         }
 
         Ok(self
-            .user_group_id_from_name(&user_group_name)
+            .user_group_id_from_name(user_group_name)
             .expect("user group id not found even thoough it was just created"))
     }
 

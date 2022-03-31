@@ -25,7 +25,7 @@ impl SyncGitHub {
         let users = teams
             .iter()
             .filter_map(|t| t.github.as_ref().map(|gh| &gh.teams))
-            .flat_map(|teams| teams)
+            .flatten()
             .flat_map(|team| &team.members)
             .copied()
             .collect::<HashSet<_>>();
@@ -40,7 +40,7 @@ impl SyncGitHub {
             .collect::<HashSet<_>>();
         let mut org_owners = HashMap::new();
         for org in &orgs {
-            org_owners.insert((*org).to_string(), github.org_owners(&org)?);
+            org_owners.insert((*org).to_string(), github.org_owners(org)?);
         }
 
         Ok(SyncGitHub {
@@ -94,7 +94,7 @@ impl SyncGitHub {
         for member in &github_team.members {
             let expected_role = self.expected_role(&github_team.org, *member);
             let username = &self.usernames_cache[member];
-            if let Some(member) = current_members.remove(&member) {
+            if let Some(member) = current_members.remove(member) {
                 if member.role != expected_role {
                     info!(
                         "{}: user {} has the role {} instead of {}, changing them...",

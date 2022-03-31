@@ -48,7 +48,7 @@ impl ZulipApi {
         let member_ids = format!(
             "[{}]",
             member_ids
-                .into_iter()
+                .iter()
                 .map(|id| id.to_string())
                 .collect::<Vec<_>>()
                 .join(",")
@@ -131,7 +131,7 @@ impl ZulipApi {
         let add_ids = format!(
             "[{}]",
             add_ids
-                .into_iter()
+                .iter()
                 .map(|id| id.to_string())
                 .collect::<Vec<_>>()
                 .join(",")
@@ -139,7 +139,7 @@ impl ZulipApi {
         let remove_ids = format!(
             "[{}]",
             remove_ids
-                .into_iter()
+                .iter()
                 .map(|id| id.to_string())
                 .collect::<Vec<_>>()
                 .join(",")
