@@ -42,8 +42,6 @@ pub(crate) fn run(token: String, team_api: &TeamApi, dry_run: bool) -> Result<()
 
 /// Caches data about teams and Zulip for easy and efficient lookup
 struct ZulipCache {
-    /// Map of Zulip user names to Zulip user ids
-    names: BTreeMap<String, usize>,
     /// Map of Zulip emails to Zulip user ids
     emails: BTreeMap<String, usize>,
     /// Map of GitHub ids to Zulip user ids
@@ -63,15 +61,10 @@ impl ZulipCache {
         let members = zulip_api.get_users()?;
         let user_groups = zulip_api.get_user_groups()?;
 
-        let (names, emails) = {
-            let mut names = BTreeMap::new();
-            let mut emails = BTreeMap::new();
-            for member in members {
-                names.insert(member.name, member.user_id);
-                emails.insert(member.email, member.user_id);
-            }
-            (names, emails)
-        };
+        let emails = members
+            .into_iter()
+            .map(|member| (member.email, member.user_id))
+            .collect();
 
         let github_ids = zulip_map
             .users
@@ -89,7 +82,6 @@ impl ZulipCache {
             .collect();
 
         Ok(Self {
-            names,
             emails,
             github_ids,
             user_groups,
@@ -104,12 +96,6 @@ impl ZulipCache {
         member: &rust_team_data::v1::TeamMember,
     ) -> Result<Option<usize>, Error> {
         if let Some(id) = self.github_ids.get(&member.github_id) {
-            return Ok(Some(*id));
-        }
-        if let Some(id) = self.names.get(&member.github) {
-            return Ok(Some(*id));
-        }
-        if let Some(id) = self.names.get(&member.name) {
             return Ok(Some(*id));
         }
 
