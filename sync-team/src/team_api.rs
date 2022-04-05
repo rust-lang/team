@@ -25,9 +25,9 @@ impl TeamApi {
         self.req::<rust_team_data::v1::Lists>("lists.json")
     }
 
-    pub(crate) fn get_zulip_map(&self) -> Result<rust_team_data::v1::ZulipMapping, Error> {
+    pub(crate) fn get_zulip_groups(&self) -> Result<rust_team_data::v1::ZulipGroups, Error> {
         debug!("loading GitHub id to Zulip id map from the Team API");
-        self.req::<rust_team_data::v1::ZulipMapping>("zulip-map.json")
+        self.req::<rust_team_data::v1::ZulipGroups>("zulip-groups.json")
     }
 
     fn req<T: serde::de::DeserializeOwned>(&self, url: &str) -> Result<T, Error> {

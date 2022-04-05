@@ -1,78 +1,73 @@
 mod api;
 
+use crate::team_api::TeamApi;
 use api::{ZulipApi, ZulipUserGroup};
 
 use std::collections::BTreeMap;
 
 use failure::Error;
 
-use crate::team_api::TeamApi;
-
 pub(crate) fn run(token: String, team_api: &TeamApi, dry_run: bool) -> Result<(), Error> {
     let zulip_api = ZulipApi::new(token, dry_run);
-    let mut cache = ZulipCache::new(team_api, zulip_api, dry_run)?;
+    let user_group_definitions = get_user_group_definitions(team_api, &zulip_api)?;
+    let mut controller = ZulipController::new(zulip_api, dry_run)?;
 
-    for team in team_api
-        .get_teams()?
-        .iter()
-        .filter(|t| matches!(t.kind, rust_team_data::v1::TeamKind::Team) && t.subteam_of.is_none())
-    {
-        let mut member_zulip_ids = vec![];
-        for member in &team.members {
-            let member_zulip_id = cache.zulip_id_from_member(member)?;
-            match member_zulip_id {
-                Some(id) => member_zulip_ids.push(id),
-                None => log::warn!(
-                    "could not find Zulip id for {} ({} {:?})",
-                    member.name,
-                    member.github,
-                    member.email
-                ),
-            }
-        }
-
-        // Sort for better diagnostics
-        member_zulip_ids.sort_unstable();
-
-        cache.create_or_update_user_group(&team.name, &member_zulip_ids)?;
+    for (name, members) in user_group_definitions {
+        controller.create_or_update_user_group(&name, &members)?;
     }
 
     Ok(())
 }
 
-/// Caches data about teams and Zulip for easy and efficient lookup
-struct ZulipCache {
-    /// Map of Zulip emails to Zulip user ids
-    emails: BTreeMap<String, usize>,
-    /// Map of GitHub ids to Zulip user ids
-    github_ids: BTreeMap<usize, usize>,
-    /// User group name to user group id
-    user_groups: BTreeMap<String, ZulipUserGroup>,
+/// Fetches the definitions of the user groups from the Team API
+fn get_user_group_definitions(
+    team_api: &TeamApi,
+    zulip_api: &ZulipApi,
+) -> Result<BTreeMap<String, Vec<usize>>, Error> {
+    let email_map = zulip_api
+        .get_users()?
+        .into_iter()
+        .map(|u| (u.email, u.user_id))
+        .collect::<BTreeMap<_, _>>();
+    let user_group_definitions = team_api
+        .get_zulip_groups()?
+        .groups
+        .into_iter()
+        .map(|(name, group)| {
+            let emails = &group.members;
+            let ids = emails
+                .iter()
+                .filter_map(|email| {
+                    let id = email_map.get(email);
+                    if id.is_none() {
+                        log::warn!("no Zulip id found for '{}'", email);
+                    }
+                    id
+                })
+                .copied()
+                .collect::<Vec<_>>();
+            (name, ids)
+        })
+        .collect();
+    Ok(user_group_definitions)
+}
+
+/// Interacts with the Zulip API
+struct ZulipController {
+    /// User group name to Zulip user group id
+    user_group_ids: BTreeMap<String, ZulipUserGroup>,
     /// The Zulip API
     zulip_api: ZulipApi,
     /// Whether this is a dry run or not
     dry_run: bool,
 }
 
-impl ZulipCache {
-    /// Create a new `ZulipCache`
-    fn new(team_api: &TeamApi, zulip_api: ZulipApi, dry_run: bool) -> Result<Self, Error> {
-        let zulip_map = team_api.get_zulip_map()?;
-        let members = zulip_api.get_users()?;
+impl ZulipController {
+    /// Create a new `ZulipController`
+    fn new(zulip_api: ZulipApi, dry_run: bool) -> Result<Self, Error> {
         let user_groups = zulip_api.get_user_groups()?;
 
-        let emails = members
-            .into_iter()
-            .map(|member| (member.email, member.user_id))
-            .collect();
-
-        let github_ids = zulip_map
-            .users
-            .iter()
-            .map(|(zulip_id, github_id)| (*github_id, *zulip_id))
-            .collect();
-
-        let user_groups = user_groups
+        let user_group_ids = user_groups
             .into_iter()
             .map(|mut ug| {
                 // sort for better diagnostics
@@ -82,38 +77,18 @@ impl ZulipCache {
             .collect();
 
         Ok(Self {
-            emails,
-            github_ids,
-            user_groups,
+            user_group_ids,
             zulip_api,
             dry_run,
         })
     }
 
-    /// Get a Zulip user id for a Team member
-    fn zulip_id_from_member(
-        &self,
-        member: &rust_team_data::v1::TeamMember,
-    ) -> Result<Option<usize>, Error> {
-        if let Some(id) = self.github_ids.get(&member.github_id) {
-            return Ok(Some(*id));
-        }
-
-        let email = match &member.email {
-            Some(e) => e,
-            None => return Ok(None),
-        };
-
-        Ok(self.emails.get(email).copied())
-    }
-
     /// Create or update a user group for the given team name and members
     fn create_or_update_user_group(
         &mut self,
-        team_name: &str,
+        user_group_name: &str,
         member_zulip_ids: &[usize],
     ) -> Result<(), Error> {
-        let user_group_name = format!("T-{}", team_name);
         let id = self.user_group_id_from_name(&user_group_name);
         let user_group_id = match id {
             Some(id) => {
@@ -131,7 +106,7 @@ impl ZulipCache {
                 );
                 self.create_user_group(
                     &user_group_name,
-                    &format!("The {} team", team_name),
+                    &format!("The {} team", user_group_name),
                     member_zulip_ids,
                 )?;
                 return Ok(());
@@ -165,7 +140,7 @@ impl ZulipCache {
 
     /// Get a user group id for the given user group name
     fn user_group_id_from_name(&self, user_group_name: &str) -> Option<usize> {
-        self.user_groups.get(user_group_name).map(|u| u.id)
+        self.user_group_ids.get(user_group_name).map(|u| u.id)
     }
 
     /// Create a user group with a certain name, description, and members
@@ -184,11 +159,11 @@ impl ZulipCache {
             .into_iter()
             .map(|ug| (ug.name.clone(), ug))
             .collect();
-        self.user_groups = user_groups;
+        self.user_group_ids = user_groups;
 
         // If this is a dry run, we insert a record since it won't be on the actual API
         if self.dry_run {
-            self.user_groups.insert(
+            self.user_group_ids.insert(
                 user_group_name.to_owned(),
                 ZulipUserGroup {
                     id: 0,
@@ -205,7 +180,7 @@ impl ZulipCache {
 
     /// Get the members of a user group given its name
     fn user_group_members_from_name(&self, user_group_name: &str) -> Option<&[usize]> {
-        self.user_groups
+        self.user_group_ids
             .get(user_group_name)
             .map(|u| &u.members[..])
     }
