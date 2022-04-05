@@ -1,4 +1,4 @@
-use crate::schema::{Config, List, Person, Team};
+use crate::schema::{Config, List, Person, Team, ZulipGroup};
 use failure::{Error, ResultExt};
 use serde::Deserialize;
 use std::collections::{HashMap, HashSet};
@@ -67,6 +67,16 @@ impl Data {
     pub(crate) fn list(&self, name: &str) -> Result<Option<List>, Error> {
         let mut lists = self.lists()?;
         Ok(lists.remove(name))
+    }
+
+    pub(crate) fn zulip_groups(&self) -> Result<HashMap<String, ZulipGroup>, Error> {
+        let mut groups = HashMap::new();
+        for team in self.teams.values() {
+            for list in team.zulip_groups(self)? {
+                groups.insert(list.name().to_string(), list);
+            }
+        }
+        Ok(groups)
     }
 
     pub(crate) fn team(&self, name: &str) -> Option<&Team> {

@@ -24,6 +24,7 @@ impl<'a> Generator<'a> {
     pub(crate) fn generate(&self) -> Result<(), Error> {
         self.generate_teams()?;
         self.generate_lists()?;
+        self.generate_zulip_groups()?;
         self.generate_permissions()?;
         self.generate_rfcbot()?;
         self.generate_zulip_map()?;
@@ -143,6 +144,26 @@ impl<'a> Generator<'a> {
 
         lists.sort_keys();
         self.add("v1/lists.json", &v1::Lists { lists })?;
+        Ok(())
+    }
+
+    fn generate_zulip_groups(&self) -> Result<(), Error> {
+        let mut groups = IndexMap::new();
+
+        for group in self.data.zulip_groups()?.values() {
+            let mut members = group.emails().to_vec();
+            members.sort();
+            groups.insert(
+                group.name().to_string(),
+                v1::ZulipGroup {
+                    name: group.name().to_string(),
+                    members,
+                },
+            );
+        }
+
+        groups.sort_keys();
+        self.add("v1/zulip-groups.json", &v1::ZulipGroups { groups })?;
         Ok(())
     }
 

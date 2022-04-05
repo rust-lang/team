@@ -89,6 +89,17 @@ pub struct Lists {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ZulipGroup {
+    pub name: String,
+    pub members: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ZulipGroups {
+    pub groups: IndexMap<String, ZulipGroup>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Permission {
     pub github_users: Vec<String>,
     pub github_ids: Vec<usize>,
