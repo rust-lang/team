@@ -1,0 +1,23 @@
+name = "project-stable-mir"
+kind = "project-group"
+subteam-of = "compiler"
+
+[people]
+leads = [
+    "celinval",
+    "pnkfelix"
+]
+members = [
+    "celinval",
+    "oli-obk",
+    "pnkfelix"
+]
+
+[website]
+name = "Stable MIR Project Group"
+description = "Define compiler intermediate representation usable by external tools"
+repo = "https://github.com/rust-lang/project-stable-mir"
+zulip-stream = "project-stable-mir"
+
+[[github]]
+orgs = ["rust-lang"]
