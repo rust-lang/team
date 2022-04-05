@@ -2,6 +2,7 @@ mod api;
 
 use crate::team_api::TeamApi;
 use api::{ZulipApi, ZulipUserGroup};
+use rust_team_data::v1::ZulipGroupMember;
 
 use std::collections::BTreeMap;
 
@@ -34,19 +35,22 @@ fn get_user_group_definitions(
         .groups
         .into_iter()
         .map(|(name, group)| {
-            let emails = &group.members;
-            let ids = emails
+            let members = &group.members;
+            let member_ids = members
                 .iter()
-                .filter_map(|email| {
-                    let id = email_map.get(email);
-                    if id.is_none() {
-                        log::warn!("no Zulip id found for '{}'", email);
+                .filter_map(|member| match member {
+                    ZulipGroupMember::Email(e) => {
+                        let id = email_map.get(e);
+                        if id.is_none() {
+                            log::warn!("no Zulip id found for '{}'", e);
+                        }
+                        id
                     }
-                    id
+                    ZulipGroupMember::Id(id) => Some(id),
                 })
                 .copied()
                 .collect::<Vec<_>>();
-            (name, ids)
+            (name, member_ids)
         })
         .collect();
     Ok(user_group_definitions)
