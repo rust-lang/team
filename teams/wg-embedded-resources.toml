@@ -18,4 +18,5 @@ name = "Embedded resources working group"
 description = "Managing various resources owned by the embedded working group"
 
 [[github]]
-orgs = ["rust-lang"]
+orgs = ["rust-embedded"]
+team-name = "resources"

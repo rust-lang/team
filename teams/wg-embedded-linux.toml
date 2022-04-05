@@ -1,0 +1,21 @@
+name = "wg-embedded-linux"
+subteam-of = "wg-embedded"
+kind = "working-group"
+
+[people]
+leads = []
+members = [
+    "eldruin",
+    "nastevens",
+    "posborne",
+    "ryankurte",
+]
+
+[website]
+name = "Embedded Linux team"
+description = "The embedded Linux team develops and maintains the core of the embedded Linux crate ecosystem."
+
+[[github]]
+orgs = ["rust-embedded"]
+team-name = "embedded-linux"
+

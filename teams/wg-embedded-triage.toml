@@ -1,0 +1,17 @@
+name = "wg-embedded-triage"
+subteam-of = "wg-embedded"
+kind = "working-group"
+
+[people]
+leads = []
+members = [
+    "mathk",
+]
+
+[website]
+name = "Embedded Triage Team"
+description = "The triage team keeps PR queues moving; they ensure no PR is left unattended"
+
+[[github]]
+orgs = ["rust-embedded"]
+team-name = "triage"

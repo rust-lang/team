@@ -1,0 +1,20 @@
+name = "wg-embedded-cortex-m"
+subteam-of = "wg-embedded"
+kind = "working-group"
+
+[people]
+leads = []
+members = [
+    "adamgreig",
+    "thejpster",
+    "therealprof",
+    "thalesfragoso",
+    "newAM",
+]
+
+[website]
+name = "Embedded Cortex-M team"
+description = "Develops and maintains the core of the Cortex-M crate ecosystem "
+
+[[github]]
+orgs = ["rust-embedded"]
