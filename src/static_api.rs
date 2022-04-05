@@ -1,5 +1,5 @@
 use crate::data::Data;
-use crate::schema::{Permissions, TeamKind};
+use crate::schema::{Permissions, TeamKind, ZulipGroupMember};
 use failure::Error;
 use indexmap::IndexMap;
 use log::info;
@@ -151,13 +151,18 @@ impl<'a> Generator<'a> {
         let mut groups = IndexMap::new();
 
         for group in self.data.zulip_groups()?.values() {
-            let mut members = group.emails().to_vec();
-            members.sort();
+            let members = group.members().to_vec();
             groups.insert(
                 group.name().to_string(),
                 v1::ZulipGroup {
                     name: group.name().to_string(),
-                    members,
+                    members: members
+                        .into_iter()
+                        .map(|m| match m {
+                            ZulipGroupMember::Email(e) => v1::ZulipGroupMember::Email(e),
+                            ZulipGroupMember::Id(i) => v1::ZulipGroupMember::Id(i),
+                        })
+                        .collect(),
                 },
             );
         }

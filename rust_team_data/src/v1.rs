@@ -91,7 +91,13 @@ pub struct Lists {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ZulipGroup {
     pub name: String,
-    pub members: Vec<String>,
+    pub members: Vec<ZulipGroupMember>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum ZulipGroupMember {
+    Email(String),
+    Id(usize),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -313,7 +313,7 @@ impl Team {
         for raw_group in zulip_groups {
             let mut list = ZulipGroup {
                 name: raw_group.name.clone(),
-                emails: Vec::new(),
+                members: Vec::new(),
             };
 
             let mut members = if raw_group.include_team_members {
@@ -337,12 +337,16 @@ impl Team {
                 let member = data
                     .person(member)
                     .ok_or_else(|| err_msg(format!("member {} is missing", member)))?;
+                if let Some(zulip_id) = member.zulip_id {
+                    list.members.push(ZulipGroupMember::Id(zulip_id));
+                }
                 if let Email::Present(email) = member.email() {
-                    list.emails.push(email.to_string());
+                    list.members
+                        .push(ZulipGroupMember::Email(email.to_string()));
                 }
             }
             for extra in &raw_group.extra_emails {
-                list.emails.push(extra.to_string());
+                list.members.push(ZulipGroupMember::Email(extra.clone()));
             }
             groups.push(list);
         }
@@ -589,7 +593,7 @@ impl List {
 #[derive(Debug)]
 pub(crate) struct ZulipGroup {
     name: String,
-    emails: Vec<String>,
+    members: Vec<ZulipGroupMember>,
 }
 
 impl ZulipGroup {
@@ -597,9 +601,15 @@ impl ZulipGroup {
         &self.name
     }
 
-    pub(crate) fn emails(&self) -> &[String] {
-        &self.emails
+    pub(crate) fn members(&self) -> &[ZulipGroupMember] {
+        &self.members
     }
+}
+
+#[derive(Debug, Clone)]
+pub(crate) enum ZulipGroupMember {
+    Email(String),
+    Id(usize),
 }
 
 fn default_true() -> bool {
