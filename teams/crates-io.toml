@@ -6,7 +6,6 @@ members = [
     "carols10cents",
     "jtgeibel",
     "pichfl",
-    "pietroalbini",
     "locks",
     "Turbo87",
     "smarnach",
@@ -21,6 +20,7 @@ alumni = [
     "sgrif",
     "nellshamrell",
     "hi-rustin",
+    "pietroalbini",
 ]
 
 [permissions]
