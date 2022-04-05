@@ -44,3 +44,6 @@ include-team-members = false
 extra-people = ["user-3"]
 extra-emails = ["bar@example.com"]
 extra-teams = ["wg-test"]
+
+[[zulip-groups]]
+name = "T-foo"
