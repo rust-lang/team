@@ -2,7 +2,7 @@ name = "wg-gamedev"
 kind = "working-group"
 
 [people]
-leads = ["AlexEne", "erlend-sh", "kvark", "ozkriff"]
+leads = ["AngelOnFira", "erlend-sh", "kvark", "ozkriff"]
 
 members = [
     "17cupsofcoffee",
