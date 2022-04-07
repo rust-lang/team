@@ -2,15 +2,15 @@ name = "rustfmt"
 subteam-of = "devtools"
 
 [people]
-leads = ["topecongiro", "calebcartwright"]
+leads = ["calebcartwright"]
 members = [
-    "scampi",
-    "topecongiro",
     "calebcartwright",
     "ytmimi",
 ]
 alumni = [
     "nrc",
+    "scampi",
+    "topecongiro",
 ]
 
 [[github]]
