@@ -95,6 +95,7 @@ pub struct ZulipGroup {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum ZulipGroupMember {
     Email(String),
     Id(usize),

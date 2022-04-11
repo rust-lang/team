@@ -337,16 +337,19 @@ impl Team {
                 let member = data
                     .person(member)
                     .ok_or_else(|| err_msg(format!("member {} is missing", member)))?;
-                if let Some(zulip_id) = member.zulip_id {
-                    list.members.push(ZulipGroupMember::Id(zulip_id));
-                }
-                if let Email::Present(email) = member.email() {
-                    list.members
-                        .push(ZulipGroupMember::Email(email.to_string()));
+                match (member.zulip_id, member.email()) {
+                    (Some(zulip_id), _) => list.members.push(ZulipGroupMember::Id(zulip_id)),
+                    (_, Email::Present(email)) => list
+                        .members
+                        .push(ZulipGroupMember::Email(email.to_string())),
+                    _ => {}
                 }
             }
             for extra in &raw_group.extra_emails {
                 list.members.push(ZulipGroupMember::Email(extra.clone()));
+            }
+            for &extra in &raw_group.extra_zulip_ids {
+                list.members.push(ZulipGroupMember::Id(extra));
             }
             groups.push(list);
         }
@@ -569,6 +572,8 @@ pub(crate) struct RawZulipGroup {
     #[serde(default)]
     pub(crate) extra_people: Vec<String>,
     #[serde(default)]
+    pub(crate) extra_zulip_ids: Vec<usize>,
+    #[serde(default)]
     pub(crate) extra_emails: Vec<String>,
     #[serde(default)]
     pub(crate) extra_teams: Vec<String>,
@@ -606,10 +611,10 @@ impl ZulipGroup {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq)]
 pub(crate) enum ZulipGroupMember {
-    Email(String),
     Id(usize),
+    Email(String),
 }
 
 fn default_true() -> bool {

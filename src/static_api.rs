@@ -151,7 +151,8 @@ impl<'a> Generator<'a> {
         let mut groups = IndexMap::new();
 
         for group in self.data.zulip_groups()?.values() {
-            let members = group.members().to_vec();
+            let mut members = group.members().to_vec();
+            members.sort();
             groups.insert(
                 group.name().to_string(),
                 v1::ZulipGroup {

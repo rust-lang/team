@@ -4,10 +4,10 @@
       "name": "T-foo",
       "members": [
         {
-          "Email": "user1@example.com"
+          "id": 1234
         },
         {
-          "Email": "user0@example.com"
+          "email": "user1@example.com"
         }
       ]
     }
