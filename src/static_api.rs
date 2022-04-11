@@ -159,9 +159,10 @@ impl<'a> Generator<'a> {
                     name: group.name().to_string(),
                     members: members
                         .into_iter()
-                        .map(|m| match m {
-                            ZulipGroupMember::Email(e) => v1::ZulipGroupMember::Email(e),
-                            ZulipGroupMember::Id(i) => v1::ZulipGroupMember::Id(i),
+                        .filter_map(|m| match m {
+                            ZulipGroupMember::Email(e) => Some(v1::ZulipGroupMember::Email(e)),
+                            ZulipGroupMember::Id(i) => Some(v1::ZulipGroupMember::Id(i)),
+                            ZulipGroupMember::Missing => None,
                         })
                         .collect(),
                 },

@@ -171,7 +171,8 @@ pub(crate) struct Team {
     website: Option<WebsiteData>,
     #[serde(default)]
     lists: Vec<TeamList>,
-    zulip_groups: Option<Vec<RawZulipGroup>>,
+    #[serde(default)]
+    zulip_groups: Vec<RawZulipGroup>,
     discord_roles: Option<Vec<DiscordRole>>,
 }
 
@@ -303,16 +304,18 @@ impl Team {
         Ok(lists)
     }
 
+    pub(crate) fn raw_zulip_groups(&self) -> &[RawZulipGroup] {
+        &self.zulip_groups
+    }
+
     pub(crate) fn zulip_groups(&self, data: &Data) -> Result<Vec<ZulipGroup>, Error> {
         let mut groups = Vec::new();
-        let zulip_groups = match &self.zulip_groups {
-            Some(zgs) => zgs,
-            None => return Ok(Vec::new()),
-        };
+        let zulip_groups = &self.zulip_groups;
 
         for raw_group in zulip_groups {
             let mut list = ZulipGroup {
                 name: raw_group.name.clone(),
+                includes_team_members: raw_group.include_team_members,
                 members: Vec::new(),
             };
 
@@ -337,13 +340,12 @@ impl Team {
                 let member = data
                     .person(member)
                     .ok_or_else(|| err_msg(format!("member {} is missing", member)))?;
-                match (member.zulip_id, member.email()) {
-                    (Some(zulip_id), _) => list.members.push(ZulipGroupMember::Id(zulip_id)),
-                    (_, Email::Present(email)) => list
-                        .members
-                        .push(ZulipGroupMember::Email(email.to_string())),
-                    _ => {}
-                }
+                let member = match (member.zulip_id, member.email()) {
+                    (Some(zulip_id), _) => ZulipGroupMember::Id(zulip_id),
+                    (_, Email::Present(email)) => ZulipGroupMember::Email(email.to_string()),
+                    _ => ZulipGroupMember::Missing,
+                };
+                list.members.push(member);
             }
             for extra in &raw_group.extra_emails {
                 list.members.push(ZulipGroupMember::Email(extra.clone()));
@@ -598,12 +600,18 @@ impl List {
 #[derive(Debug)]
 pub(crate) struct ZulipGroup {
     name: String,
+    includes_team_members: bool,
     members: Vec<ZulipGroupMember>,
 }
 
 impl ZulipGroup {
     pub(crate) fn name(&self) -> &str {
         &self.name
+    }
+
+    /// Whether the group includes the members of the team its associated
+    pub(crate) fn includes_team_members(&self) -> bool {
+        self.includes_team_members
     }
 
     pub(crate) fn members(&self) -> &[ZulipGroupMember] {
@@ -615,6 +623,7 @@ impl ZulipGroup {
 pub(crate) enum ZulipGroupMember {
     Id(usize),
     Email(String),
+    Missing,
 }
 
 fn default_true() -> bool {

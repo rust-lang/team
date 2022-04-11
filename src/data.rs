@@ -71,7 +71,7 @@ impl Data {
 
     pub(crate) fn zulip_groups(&self) -> Result<HashMap<String, ZulipGroup>, Error> {
         let mut groups = HashMap::new();
-        for team in self.teams.values() {
+        for team in self.teams() {
             for list in team.zulip_groups(self)? {
                 groups.insert(list.name().to_string(), list);
             }
