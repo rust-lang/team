@@ -9,6 +9,7 @@ privileges on our infrastructure.
 | --- | --- | --- |
 | github | Synchronize GitHub team membership | `GITHUB_TOKEN` |
 | mailgun | Synchronize mailing lists on Mailgun | `MAILGUN_API_TOKEN`, `EMAIL_ENCRYPTION_KEY`|
+| zulip | Synchronize Zulip user groups | `ZULIP_USERNAME`, `ZULIP_API_TOKEN` |
 
 The contents of this repository are available under both the MIT and Apache 2.0
 license.
