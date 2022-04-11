@@ -8,8 +8,13 @@ use std::collections::BTreeMap;
 
 use failure::Error;
 
-pub(crate) fn run(token: String, team_api: &TeamApi, dry_run: bool) -> Result<(), Error> {
-    let zulip_api = ZulipApi::new(token, dry_run);
+pub(crate) fn run(
+    username: String,
+    token: String,
+    team_api: &TeamApi,
+    dry_run: bool,
+) -> Result<(), Error> {
+    let zulip_api = ZulipApi::new(username, token, dry_run);
     let user_group_definitions = get_user_group_definitions(team_api, &zulip_api)?;
     let mut controller = ZulipController::new(zulip_api, dry_run)?;
 
@@ -96,7 +101,7 @@ impl ZulipController {
         let id = self.user_group_id_from_name(&user_group_name);
         let user_group_id = match id {
             Some(id) => {
-                log::info!(
+                log::debug!(
                     "'{}' user group ({}) already exists on Zulip",
                     user_group_name,
                     id
@@ -104,13 +109,13 @@ impl ZulipController {
                 id
             }
             None => {
-                log::info!(
+                log::debug!(
                     "no '{}' user group found on Zulip. Creating one...",
                     user_group_name
                 );
                 self.create_user_group(
                     &user_group_name,
-                    &format!("The {} team", user_group_name),
+                    &format!("The {} team (managed by the Team repo)", user_group_name),
                     member_zulip_ids,
                 )?;
                 return Ok(());
@@ -118,7 +123,7 @@ impl ZulipController {
         };
 
         let existing_members = self.user_group_members_from_name(&user_group_name).unwrap();
-        log::info!(
+        log::debug!(
             "'{}' user group ({}) has members on Zulip {:?} and needs to have {:?}",
             user_group_name,
             user_group_id,
@@ -157,16 +162,8 @@ impl ZulipController {
         self.zulip_api
             .create_user_group(user_group_name, description, member_ids)?;
 
-        // Update the user group cache so it has the user group that was just created
-        let user_groups = self.zulip_api.get_user_groups()?;
-        let user_groups = user_groups
-            .into_iter()
-            .map(|ug| (ug.name.clone(), ug))
-            .collect();
-        self.user_group_ids = user_groups;
-
-        // If this is a dry run, we insert a record since it won't be on the actual API
         if self.dry_run {
+            // If this is a dry run, we insert a record since it won't be on the actual API
             self.user_group_ids.insert(
                 user_group_name.to_owned(),
                 ZulipUserGroup {
@@ -175,6 +172,14 @@ impl ZulipController {
                     members: member_ids.into(),
                 },
             );
+        } else {
+            // Otherwise, update the user group cache so it has the user group that was just created
+            let user_groups = self.zulip_api.get_user_groups()?;
+            let user_groups = user_groups
+                .into_iter()
+                .map(|ug| (ug.name.clone(), ug))
+                .collect();
+            self.user_group_ids = user_groups;
         }
 
         Ok(self

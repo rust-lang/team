@@ -88,9 +88,11 @@ fn app() -> Result<(), Error> {
                 mailgun::run(&token, &encryption_key, &team_api, dry_run)?;
             }
             "zulip" => {
+                let username = std::env::var("ZULIP_USERNAME")
+                    .with_context(|_| "failed to get the ZULIP_API_TOKEN environment variable")?;
                 let token = std::env::var("ZULIP_API_TOKEN")
                     .with_context(|_| "failed to get the ZULIP_API_TOKEN environment variable")?;
-                zulip::run(token, &team_api, dry_run)?;
+                zulip::run(username, token, &team_api, dry_run)?;
             }
             _ => panic!("unknown service: {}", service),
         }

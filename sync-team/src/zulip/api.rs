@@ -5,30 +5,30 @@ use reqwest::Client;
 use serde::Deserialize;
 
 const ZULIP_BASE_URL: &str = "https://rust-lang.zulipchat.com/api/v1";
-const BOT_EMAIL: &str = "me@ryanlevick.com"; // TODO: Change
 
 /// Access to the Zulip API
 #[derive(Clone)]
 pub(crate) struct ZulipApi {
     client: Client,
+    username: String,
     token: String,
     dry_run: bool,
 }
 
 impl ZulipApi {
     /// Create a new `ZulipApi` instance
-    pub(crate) fn new(token: String, dry_run: bool) -> Self {
+    pub(crate) fn new(username: String, token: String, dry_run: bool) -> Self {
         Self {
             client: Client::new(),
+            username,
             token,
             dry_run,
         }
     }
 
-    /// Creates a Zulip user group with the supplied name and members
+    /// Creates a Zulip user group with the supplied name, description, and members
     ///
-    /// The user group's name will be of the form T-$name. This is a
-    /// noop if the user group already exists.
+    /// This is a noop if the user group already exists.
     pub(crate) fn create_user_group(
         &self,
         user_group_name: &str,
@@ -45,14 +45,7 @@ impl ZulipApi {
             return Ok(());
         }
 
-        let member_ids = format!(
-            "[{}]",
-            member_ids
-                .iter()
-                .map(|id| id.to_string())
-                .collect::<Vec<_>>()
-                .join(",")
-        );
+        let member_ids = serialize_as_array(member_ids);
         let mut form = HashMap::new();
         form.insert("name", user_group_name);
         form.insert("description", description);
@@ -70,6 +63,7 @@ impl ZulipApi {
             };
             let error = body.get("msg").ok_or_else(err)?.as_str().ok_or_else(err)?;
             if error.contains("already exists") {
+                log::debug!("Zulip user group '{}' already existed", user_group_name);
                 return Ok(());
             } else {
                 return Err(err());
@@ -110,7 +104,7 @@ impl ZulipApi {
         remove_ids: &[usize],
     ) -> Result<(), Error> {
         if add_ids.is_empty() && remove_ids.is_empty() {
-            log::info!(
+            log::debug!(
                 "user group {} does not need to have its group members updated",
                 user_group_id
             );
@@ -128,28 +122,16 @@ impl ZulipApi {
             return Ok(());
         }
 
-        let add_ids = format!(
-            "[{}]",
-            add_ids
-                .iter()
-                .map(|id| id.to_string())
-                .collect::<Vec<_>>()
-                .join(",")
-        );
-        let remove_ids = format!(
-            "[{}]",
-            remove_ids
-                .iter()
-                .map(|id| id.to_string())
-                .collect::<Vec<_>>()
-                .join(",")
-        );
+        let add_ids = serialize_as_array(add_ids);
+        let remove_ids = serialize_as_array(remove_ids);
         let mut form = HashMap::new();
         form.insert("add", add_ids.as_str());
         form.insert("delete", remove_ids.as_str());
 
         let path = format!("/user_groups/{}/members", user_group_id);
-        let _ = self.req(reqwest::Method::POST, &path, Some(form))?;
+        let _ = self
+            .req(reqwest::Method::POST, &path, Some(form))?
+            .error_for_status()?;
         Ok(())
     }
 
@@ -163,13 +145,23 @@ impl ZulipApi {
         let mut req = self
             .client
             .request(method, &format!("{}{}", ZULIP_BASE_URL, path))
-            .basic_auth(BOT_EMAIL, Some(&self.token));
+            .basic_auth(&self.username, Some(&self.token));
         if let Some(form) = form {
             req = req.form(&form);
         }
 
         Ok(req.send()?)
     }
+}
+
+/// Serialize a slice of numbers as a JSON array
+fn serialize_as_array(items: &[usize]) -> String {
+    let items = items
+        .iter()
+        .map(|id| id.to_string())
+        .collect::<Vec<_>>()
+        .join(",");
+    format!("[{items}]")
 }
 
 /// A collection of Zulip users
