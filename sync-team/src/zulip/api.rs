@@ -129,9 +129,19 @@ impl ZulipApi {
         form.insert("delete", remove_ids.as_str());
 
         let path = format!("/user_groups/{}/members", user_group_id);
-        let _ = self
-            .req(reqwest::Method::POST, &path, Some(form))?
-            .error_for_status()?;
+        let mut response = self.req(reqwest::Method::POST, &path, Some(form))?;
+
+        if response.status() == 400 {
+            log::warn!(
+                "failed to update group membership with a bad request: {}",
+                response
+                    .text()
+                    .unwrap_or_else(|_| String::from("<BODY NOT DECODABLE>"))
+            );
+            return Ok(());
+        }
+
+        response.error_for_status()?;
         Ok(())
     }
 
