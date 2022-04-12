@@ -98,7 +98,7 @@ impl ZulipController {
         user_group_name: &str,
         member_zulip_ids: &[usize],
     ) -> Result<(), Error> {
-        let id = self.user_group_id_from_name(&user_group_name);
+        let id = self.user_group_id_from_name(user_group_name);
         let user_group_id = match id {
             Some(id) => {
                 log::debug!(
@@ -114,7 +114,7 @@ impl ZulipController {
                     user_group_name
                 );
                 self.create_user_group(
-                    &user_group_name,
+                    user_group_name,
                     &format!("The {} team (managed by the Team repo)", user_group_name),
                     member_zulip_ids,
                 )?;
@@ -122,7 +122,7 @@ impl ZulipController {
             }
         };
 
-        let existing_members = self.user_group_members_from_name(&user_group_name).unwrap();
+        let existing_members = self.user_group_members_from_name(user_group_name).unwrap();
         log::debug!(
             "'{}' user group ({}) has members on Zulip {:?} and needs to have {:?}",
             user_group_name,

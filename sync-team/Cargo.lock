@@ -1162,6 +1162,7 @@ dependencies = [
 [[package]]
 name = "rust_team_data"
 version = "1.0.0"
+source = "git+https://github.com/rust-lang/team#49683ec8af9ca6b546b3af516ea4654424e302eb"
 dependencies = [
  "chacha20poly1305",
  "getrandom 0.2.1",
