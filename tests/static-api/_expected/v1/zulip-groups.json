@@ -1,0 +1,15 @@
+{
+  "groups": {
+    "T-foo": {
+      "name": "T-foo",
+      "members": [
+        {
+          "id": 1234
+        },
+        {
+          "email": "user1@example.com"
+        }
+      ]
+    }
+  }
+}

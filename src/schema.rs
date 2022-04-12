@@ -171,6 +171,8 @@ pub(crate) struct Team {
     website: Option<WebsiteData>,
     #[serde(default)]
     lists: Vec<TeamList>,
+    #[serde(default)]
+    zulip_groups: Vec<RawZulipGroup>,
     discord_roles: Option<Vec<DiscordRole>>,
 }
 
@@ -300,6 +302,60 @@ impl Team {
             lists.push(list);
         }
         Ok(lists)
+    }
+
+    pub(crate) fn raw_zulip_groups(&self) -> &[RawZulipGroup] {
+        &self.zulip_groups
+    }
+
+    pub(crate) fn zulip_groups(&self, data: &Data) -> Result<Vec<ZulipGroup>, Error> {
+        let mut groups = Vec::new();
+        let zulip_groups = &self.zulip_groups;
+
+        for raw_group in zulip_groups {
+            let mut list = ZulipGroup {
+                name: raw_group.name.clone(),
+                includes_team_members: raw_group.include_team_members,
+                members: Vec::new(),
+            };
+
+            let mut members = if raw_group.include_team_members {
+                self.members(data)?
+            } else {
+                HashSet::new()
+            };
+            for person in &raw_group.extra_people {
+                members.insert(person.as_str());
+            }
+            for team in &raw_group.extra_teams {
+                let team = data
+                    .team(team)
+                    .ok_or_else(|| err_msg(format!("team {} is missing", team)))?;
+                for member in team.members(data)? {
+                    members.insert(member);
+                }
+            }
+
+            for member in members.iter() {
+                let member = data
+                    .person(member)
+                    .ok_or_else(|| err_msg(format!("member {} is missing", member)))?;
+                let member = match (member.zulip_id, member.email()) {
+                    (Some(zulip_id), _) => ZulipGroupMember::Id(zulip_id),
+                    (_, Email::Present(email)) => ZulipGroupMember::Email(email.to_string()),
+                    _ => ZulipGroupMember::Missing,
+                };
+                list.members.push(member);
+            }
+            for extra in &raw_group.extra_emails {
+                list.members.push(ZulipGroupMember::Email(extra.clone()));
+            }
+            for &extra in &raw_group.extra_zulip_ids {
+                list.members.push(ZulipGroupMember::Id(extra));
+            }
+            groups.push(list);
+        }
+        Ok(groups)
     }
 
     pub(crate) fn permissions(&self) -> &Permissions {
@@ -509,6 +565,22 @@ pub(crate) struct TeamList {
     pub(crate) extra_teams: Vec<String>,
 }
 
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+pub(crate) struct RawZulipGroup {
+    pub(crate) name: String,
+    #[serde(default = "default_true")]
+    pub(crate) include_team_members: bool,
+    #[serde(default)]
+    pub(crate) extra_people: Vec<String>,
+    #[serde(default)]
+    pub(crate) extra_zulip_ids: Vec<usize>,
+    #[serde(default)]
+    pub(crate) extra_emails: Vec<String>,
+    #[serde(default)]
+    pub(crate) extra_teams: Vec<String>,
+}
+
 #[derive(Debug)]
 pub(crate) struct List {
     address: String,
@@ -523,6 +595,35 @@ impl List {
     pub(crate) fn emails(&self) -> &[String] {
         &self.emails
     }
+}
+
+#[derive(Debug)]
+pub(crate) struct ZulipGroup {
+    name: String,
+    includes_team_members: bool,
+    members: Vec<ZulipGroupMember>,
+}
+
+impl ZulipGroup {
+    pub(crate) fn name(&self) -> &str {
+        &self.name
+    }
+
+    /// Whether the group includes the members of the team its associated
+    pub(crate) fn includes_team_members(&self) -> bool {
+        self.includes_team_members
+    }
+
+    pub(crate) fn members(&self) -> &[ZulipGroupMember] {
+        &self.members
+    }
+}
+
+#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq)]
+pub(crate) enum ZulipGroupMember {
+    Id(usize),
+    Email(String),
+    Missing,
 }
 
 fn default_true() -> bool {

@@ -39,6 +39,8 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_zulip_stream_name,
     validate_project_groups_have_parent_teams,
     validate_discord_team_members_have_discord_ids,
+    validate_zulip_group_ids,
+    validate_zulip_group_extra_people,
 ];
 
 #[allow(clippy::type_complexity)]
@@ -542,6 +544,50 @@ fn validate_discord_team_members_have_discord_ids(data: &Data, errors: &mut Vec<
             }
         }
 
+        Ok(())
+    });
+}
+
+/// Ensure every member of a team that has a Zulip group either has a Zulip id or an email address
+fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, errors| {
+        let groups = team.zulip_groups(data)?;
+        // Returns if group is empty or all the groups don't include the team members
+        if groups.is_empty() || groups.iter().all(|g| !g.includes_team_members()) {
+            return Ok(());
+        }
+        wrapper(team.members(data)?.iter(), errors, |member, _| {
+            if let Some(member) = data.person(member) {
+                if member.zulip_id().is_none()
+                    && matches!(member.email(), Email::Missing | Email::Disabled)
+                {
+                    bail!(
+                        "person `{}` is a member of a Zulip user group but has no a Zulip id nor an enabled email address",
+                        member.github()
+                    );
+                }
+            }
+            Ok(())
+        });
+        Ok(())
+    });
+}
+
+/// Ensure members of extra-people in a Zulip user group are real people
+fn validate_zulip_group_extra_people(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, errors| {
+        wrapper(team.raw_zulip_groups().iter(), errors, |group, _| {
+            for person in &group.extra_people {
+                if data.person(person).is_none() {
+                    bail!(
+                        "person `{}` does not exist (in Zulip group `{}`)",
+                        person,
+                        group.name
+                    );
+                }
+            }
+            Ok(())
+        });
         Ok(())
     });
 }

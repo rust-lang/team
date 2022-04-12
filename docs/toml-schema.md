@@ -87,7 +87,7 @@ access-level = "everyone"
 # It's optional, and the default is `true`.
 include-team-members = true
 # Include the following extra people in the mailing list. Their email address
-# will be fetched from theirs TOML in people/ (optional).
+# will be fetched from their TOML in people/ (optional).
 extra-people = [
     "alexcrichton",
 ]
@@ -95,7 +95,35 @@ extra-people = [
 extra-emails = [
     "noreply@rust-lang.org",
 ]
-# Include all the memebrs of the following teams in the mailing list
+# Include all the members of the following teams in the mailing list
+# (optional).
+extra-teams = [
+    "bots-nursery",
+]
+
+# Define the Zulip groups used by the team
+# It's optional, and there can be more than one
+[[zulip-groups]]
+# The name of the Zulip group (required)
+name = "T-overlords"
+# This can be set to false to avoid including all the team members in the group
+# It's useful if you want to create the group with a different set of members
+# It's optional, and the default is `true`.
+include-team-members = true
+# Include the following extra people in the Zulip group. Their email address
+# or Zulip id will be fetched from their TOML in people/ (optional).
+extra-people = [
+    "alexcrichton",
+]
+# Include the following email addresses in the Zulip group (optional).
+extra-emails = [
+    "noreply@rust-lang.org",
+]
+# Include the following Zulip ids in the Zulip group (optional).
+extra-zulip-ids = [
+    1234
+]
+# Include all the members of the following teams in the Zulip group
 # (optional).
 extra-teams = [
     "bots-nursery",

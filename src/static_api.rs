@@ -1,5 +1,5 @@
 use crate::data::Data;
-use crate::schema::{Permissions, TeamKind};
+use crate::schema::{Permissions, TeamKind, ZulipGroupMember};
 use failure::Error;
 use indexmap::IndexMap;
 use log::info;
@@ -24,6 +24,7 @@ impl<'a> Generator<'a> {
     pub(crate) fn generate(&self) -> Result<(), Error> {
         self.generate_teams()?;
         self.generate_lists()?;
+        self.generate_zulip_groups()?;
         self.generate_permissions()?;
         self.generate_rfcbot()?;
         self.generate_zulip_map()?;
@@ -143,6 +144,33 @@ impl<'a> Generator<'a> {
 
         lists.sort_keys();
         self.add("v1/lists.json", &v1::Lists { lists })?;
+        Ok(())
+    }
+
+    fn generate_zulip_groups(&self) -> Result<(), Error> {
+        let mut groups = IndexMap::new();
+
+        for group in self.data.zulip_groups()?.values() {
+            let mut members = group.members().to_vec();
+            members.sort();
+            groups.insert(
+                group.name().to_string(),
+                v1::ZulipGroup {
+                    name: group.name().to_string(),
+                    members: members
+                        .into_iter()
+                        .filter_map(|m| match m {
+                            ZulipGroupMember::Email(e) => Some(v1::ZulipGroupMember::Email(e)),
+                            ZulipGroupMember::Id(i) => Some(v1::ZulipGroupMember::Id(i)),
+                            ZulipGroupMember::Missing => None,
+                        })
+                        .collect(),
+                },
+            );
+        }
+
+        groups.sort_keys();
+        self.add("v1/zulip-groups.json", &v1::ZulipGroups { groups })?;
         Ok(())
     }
 
