@@ -31,6 +31,7 @@ permissions-bors-repos = [
     "regex",
     "rls",
     "rust",
+    "rust-analyzer",
     "rustlings",
     "rustup-rs",
     "semverver",
