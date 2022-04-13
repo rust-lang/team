@@ -14,6 +14,7 @@ allowed-github-orgs = [
     "rust-lang-nursery",
     "rust-dev-tools",
     "rust-embedded",
+    "rust-analyzer",
 ]
 
 permissions-bors-repos = [

@@ -14,3 +14,6 @@ zulip-stream = "t-compiler/rust-analyzer"
 
 [permissions]
 bors.rust.review = true
+
+[[github]]
+orgs = ["rust-lang", "rust-analyzer"]
