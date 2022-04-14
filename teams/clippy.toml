@@ -5,18 +5,22 @@ subteam-of = "devtools"
 leads = ["Manishearth", "flip1995"]
 members = [
     "llogiq",
-    "killercup",
     "Manishearth",
     "matthiaskrgr",
-    "phansch",
-    "mikerite",
     "flip1995",
-    "mcarton",
     "camsteffen",
     "giraffate",
     "xFrednet",
 ]
-alumni = ["ebroto", "yaahc", "oli-obk"]
+alumni = [
+    "ebroto",
+    "yaahc",
+    "oli-obk",
+    "killercup",
+    "mcarton",
+    "mikerite",
+    "phansch",
+]
 
 [permissions]
 perf = true
