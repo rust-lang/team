@@ -206,7 +206,7 @@ impl GitHub {
                     ids: chunk.iter().map(|id| user_node_id(*id)).collect(),
                 },
             )?;
-            for node in res.nodes.into_iter().filter_map(|n| n) {
+            for node in res.nodes.into_iter().flatten() {
                 result.insert(node.database_id, node.login);
             }
         }
@@ -303,7 +303,6 @@ impl GitHub {
                         memberships.insert(
                             edge.node.database_id,
                             TeamMember {
-                                id: edge.node.database_id,
                                 username: edge.node.login,
                                 role: edge.role,
                             },
@@ -428,7 +427,6 @@ impl fmt::Display for TeamRole {
 
 #[derive(Debug)]
 pub(crate) struct TeamMember {
-    pub(crate) id: usize,
     pub(crate) username: String,
     pub(crate) role: TeamRole,
 }

@@ -74,7 +74,7 @@ fn mangle_lists(email_encryption_key: &str, lists: team_data::Lists) -> Result<V
 
 fn mangle_address(addr: &str) -> Result<String, Error> {
     // Escape dots since they have a special meaning in Python regexes
-    let mangled = addr.replace(".", "\\.");
+    let mangled = addr.replace('.', "\\.");
 
     // Inject (?:\+.+)? before the '@' in the address to support '+' aliases like
     // infra+botname@rust-lang.org
@@ -131,7 +131,7 @@ pub(crate) fn run(
         let address = extract(&route.expression, "match_recipient(\"", "\")");
         let key = (address.to_string(), route.priority);
         match addr2list.remove(&key) {
-            Some(new_list) => sync(&mailgun, &route, &new_list)
+            Some(new_list) => sync(&mailgun, &route, new_list)
                 .with_context(|_| format!("failed to sync {}", address))?,
             None => mailgun
                 .delete_route(&route.id)

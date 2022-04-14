@@ -1,13 +1,14 @@
 mod github;
 mod mailgun;
 mod team_api;
+mod zulip;
 
 use crate::github::SyncGitHub;
 use crate::team_api::TeamApi;
 use failure::{Error, ResultExt};
 use log::{error, info, warn};
 
-const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun"];
+const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun", "zulip"];
 const USER_AGENT: &str = "rust-lang teams sync (https://github.com/rust-lang/sync-team)";
 
 fn usage() {
@@ -72,25 +73,30 @@ fn app() -> Result<(), Error> {
         info!("synchronizing {}", service);
         match service.as_str() {
             "github" => {
-                let token = std::env::var("GITHUB_TOKEN")
-                    .with_context(|_| "failed to get the GITHUB_TOKEN environment variable")?;
-
+                let token = get_env("GITHUB_TOKEN")?;
                 let sync = SyncGitHub::new(token, &team_api, dry_run)?;
                 sync.synchronize_all()?;
             }
             "mailgun" => {
-                let token = std::env::var("MAILGUN_API_TOKEN")
-                    .with_context(|_| "failed to get the MAILGUN_API_TOKEN environment variable")?;
-                let encryption_key = std::env::var("EMAIL_ENCRYPTION_KEY").with_context(|_| {
-                    "failed to get the EMAIL_ENCRYPTION_KEY environment variable"
-                })?;
+                let token = get_env("MAILGUN_API_TOKEN")?;
+                let encryption_key = get_env("EMAIL_ENCRYPTION_KEY")?;
                 mailgun::run(&token, &encryption_key, &team_api, dry_run)?;
+            }
+            "zulip" => {
+                let username = get_env("ZULIP_USERNAME")?;
+                let token = get_env("ZULIP_API_TOKEN")?;
+                zulip::run(username, token, &team_api, dry_run)?;
             }
             _ => panic!("unknown service: {}", service),
         }
     }
 
     Ok(())
+}
+
+fn get_env(key: &str) -> Result<String, failure::Error> {
+    Ok(std::env::var(key)
+        .with_context(|_| format!("failed to get the {} environment variable", key))?)
 }
 
 fn main() {
