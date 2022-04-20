@@ -14,6 +14,6 @@ members = [
 [permissions]
 dev-desktop = true
 
-[github]
+[[github]]
 team-name = "cloud-compute-team"  # The name of the GitHub team (optional)
 orgs = ["rust-lang"]
