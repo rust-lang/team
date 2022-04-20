@@ -1,0 +1,19 @@
+name = "cloud-compute"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "Mark-Simulacrum",
+    "pietroalbini",
+    "oli-obk",
+    "JoelMarcey",
+    "yaahc",
+]
+
+[permissions]
+dev-desktop = true
+
+[[github]]
+team-name = "cloud-compute-team"  # The name of the GitHub team (optional)
+orgs = ["rust-lang"]
