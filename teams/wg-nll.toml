@@ -11,3 +11,6 @@ name = "Non-Lexical Lifetimes (NLL) working group"
 description = "Implementing the new MIR-based borrow checker and non-lexical lifetimes in Rust"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/nll/"
 zulip-stream = "t-compiler/wg-nll"
+
+[[github]]
+orgs = ["rust-lang"]
