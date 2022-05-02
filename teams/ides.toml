@@ -16,6 +16,9 @@ alumni = [
     "nrc",
 ]
 
+[[github]]
+orgs = ["rust-lang"]
+
 [rfcbot]
 label = "T-IDEs"
 name = "IDEs and editors"
