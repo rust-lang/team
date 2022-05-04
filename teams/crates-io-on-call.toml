@@ -1,0 +1,17 @@
+name = "crates-io-on-call"
+# Note: This team is composed of contractors and thus not part of the Rust project.
+# Therefore, we label this as a marker team and not a subteam of crates.io
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "skade",
+    "Xylakant",
+    "justahero",
+    "jonas-schievink",
+    "pietroalbini",
+]
+
+[[github]]
+orgs = ["rust-lang"]
