@@ -1,0 +1,15 @@
+name = "crates-io-on-call"
+subteam-of = "crates-io"
+
+[people]
+leads = []
+members = [
+    "skade",
+    "Xylakant",
+    "justahero",
+    "jonas-schievink",
+    "pietroalbini",
+]
+
+[[github]]
+orgs = ["rust-lang"]
