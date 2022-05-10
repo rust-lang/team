@@ -1,0 +1,10 @@
+name = "wg-rls-2-triage"
+subteam-of = "compiler"
+kind = "working-group"
+
+[people]
+leads = []
+members = ["bjorn3", "edwin0cheng", "SomeoneToIgnore"]
+
+[[github]]
+orgs = ["rust-lang", "rust-analyzer"]
