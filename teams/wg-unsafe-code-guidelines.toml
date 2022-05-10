@@ -4,11 +4,11 @@ kind = "working-group"
 
 [people]
 leads = ["nikomatsakis", "avadacatavra", "RalfJung"]
-members = ["nikomatsakis", "avadacatavra", "RalfJung"]
+members = ["nikomatsakis", "avadacatavra", "RalfJung", "comex"]
 
 [website]
 name = "Unsafe Code Guidelines (UCG) working group"
-description = "Working out the \"Unsafe Code Guidelines\", which define what kind of behavior unsafe code can and cannot do"
+description = "Working out the \"Unsafe Code Guidelines\", which define what unsafe code can and cannot do"
 zulip-stream = "t-lang/wg-unsafe-code-guidelines"
 
 [[github]]
