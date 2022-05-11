@@ -49,9 +49,7 @@ cargo run check
 ### Adding a person to the repository
 
 It's possible to fetch the public information present in a GitHub profile and
-store it in a person's TOML file. To do that you need to have the
-`GITHUB_TOKEN` environment variable setup with a valid personal access token,
-and you need to run the command:
+store it in a person's TOML file:
 
 ```
 cargo run add-person <username>
