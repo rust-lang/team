@@ -57,6 +57,14 @@ and you need to run the command:
 cargo run add-person <username>
 ```
 
+If you want to also add their Zulip ID, find them in the list of people on the
+right-hand side in Zulip, click the "three dots" menu, and copy the 'User ID'
+into the toml file:
+
+```
+zulip-id = <user id>
+```
+
 ### Querying information out of the repository
 
 There are a few CLI commands that allow you to get some information generated
