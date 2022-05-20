@@ -7,7 +7,6 @@ leads = ["eddyb"]
 members = [
     "eddyb",
     "CAD97",
-   
 ]
 alumni = [
     "Centril",
@@ -17,3 +16,6 @@ alumni = [
 [website]
 name = "Grammar working group"
 description = "Working out the official, formal grammar for Rust and validating it against existing implementations"
+
+[[github]]
+orgs = ["rust-lang"]
