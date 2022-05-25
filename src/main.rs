@@ -7,6 +7,7 @@ mod github;
 mod schema;
 mod static_api;
 mod validate;
+mod zulip;
 
 use data::Data;
 use schema::{Email, Team, TeamKind};
