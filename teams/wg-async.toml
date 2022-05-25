@@ -45,3 +45,6 @@ zulip-stream = "wg-async"
 
 [[zulip-groups]]
 name = "WG-async"
+
+[[zulip-groups]]
+name = "WG-async-sprint-planning"
