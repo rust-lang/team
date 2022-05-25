@@ -28,3 +28,6 @@ address = "security@rust-lang.org"
 [[discord-roles]]
 name = "security"
 color = "#e91e63"
+
+[[zulip-groups]]
+name = "WG-security-response"

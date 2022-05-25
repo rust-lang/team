@@ -17,3 +17,6 @@ zulip-stream = "t-compiler/wg-incr-comp"
 [permissions]
 perf = true
 bors.rust.try = true
+
+[[zulip-groups]]
+name = "wg-incr-comp"

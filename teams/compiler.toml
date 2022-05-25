@@ -66,3 +66,6 @@ extra-people = [
     "arielb1",
     "jseyfried",
 ]
+
+[[zulip-groups]]
+name = "T-compiler"

@@ -43,3 +43,6 @@ zulip-stream = "t-compiler/wg-prioritization"
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "WG-prioritization"

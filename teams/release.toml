@@ -38,3 +38,6 @@ zulip-stream = "t-release"
 
 [[lists]]
 address = "release@rust-lang.org"
+
+[[zulip-groups]]
+name = "T-release"

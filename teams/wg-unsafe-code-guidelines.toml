@@ -13,3 +13,6 @@ zulip-stream = "t-lang/wg-unsafe-code-guidelines"
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "WG-unsafe-code-guidelines"
