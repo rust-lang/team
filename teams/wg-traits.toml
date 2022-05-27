@@ -1,3 +1,9 @@
+# Note: this has effectively been replaced by the types team
+# This team remains until we figure out what to do with archived teams that have
+# members only on that archived team. (CI currently expects that every member be
+# on at least one non-archived team.)
+# After that, we want to archive this to recognize the various people that
+# contributed while the group was under the "wg-traits" label. Thanks!
 name = "wg-traits"
 subteam-of = "compiler"
 kind = "working-group"
@@ -27,14 +33,14 @@ alumni = [
     "zaharidichev",
 ]
 
-[website]
-name = "Traits working group"
-description = "Improving the trait checker and related language features"
-repo = "https://github.com/rust-lang/wg-traits"
-zulip-stream = "wg-traits"
+#[website]
+#name = "Traits working group"
+#description = "Improving the trait checker and related language features"
+#repo = "https://github.com/rust-lang/wg-traits"
+#zulip-stream = "wg-traits"
 
-[[github]]
-orgs = ["rust-lang", "rust-lang-nursery"]
+#[[github]]
+#orgs = ["rust-lang", "rust-lang-nursery"]
 
-[permissions]
-bors.chalk.review = true
+#[permissions]
+#bors.chalk.review = true
