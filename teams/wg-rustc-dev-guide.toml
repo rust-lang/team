@@ -12,10 +12,9 @@ members = [
     "chrissimpkins",
     "camelid",
     "igaray",
-    "rylev",
     "pierwill",
 ]
-alumni = ["LeSeulArtichaut", "jyn514", "mark-i-m", "Nashenas88"]
+alumni = ["LeSeulArtichaut", "jyn514", "mark-i-m", "Nashenas88", "rylev",]
 
 [[github]]
 orgs = ["rust-lang"]
