@@ -18,6 +18,3 @@ zulip-stream = "t-compiler/wg-mir-opt"
 [permissions]
 perf = true
 bors.rust.try = true
-
-[[zulip-groups]]
-name = "WG-mir-opt"

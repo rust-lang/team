@@ -18,6 +18,3 @@ repo = "https://github.com/rust-lang/const-eval"
 
 [[github]]
 orgs = ["rust-lang"]
-
-[[zulip-groups]]
-name = "WG-const-eval"

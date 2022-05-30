@@ -24,6 +24,3 @@ zulip-stream = "project-const-generics"
 
 [[github]]
 orgs = ["rust-lang"]
-
-[[zulip-groups]]
-name = "project-const-generics"

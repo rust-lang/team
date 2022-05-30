@@ -14,6 +14,3 @@ name = "Self-profile working group"
 description = "Improving the -Z self-profile feature of the Rust compiler"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/self-profile/"
 zulip-stream = "t-compiler/wg-self-profile"
-
-[[zulip-groups]]
-name = "WG-self-profile"

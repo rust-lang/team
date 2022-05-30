@@ -46,6 +46,3 @@ address = "language-design-team@rust-lang.org"
 [[discord-roles]]
 name = "lang-team"
 color = "#2ecc71"
-
-[[zulip-groups]]
-name = "T-lang"

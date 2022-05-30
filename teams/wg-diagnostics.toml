@@ -14,6 +14,3 @@ name = "Diagnostics working group"
 description = "Aiming to make rustc better at telling the user why the compiler isn't smart enough to understand their code yet"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/diagnostics/"
 zulip-stream = "t-compiler/wg-diagnostics"
-
-[[zulip-groups]]
-name = "WG-diagnostics"
