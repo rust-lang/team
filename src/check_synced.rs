@@ -4,6 +4,7 @@ use crate::data::Data;
 use crate::github::{self, GitHubApi};
 use crate::schema;
 use log::error;
+use rayon::prelude::*;
 use std::collections::HashMap;
 
 pub(crate) fn check(data: &Data) -> Result<(), failure::Error> {
@@ -11,7 +12,7 @@ pub(crate) fn check(data: &Data) -> Result<(), failure::Error> {
     let github = GitHubApi::new();
     let mut remote_teams = github
         .teams()?
-        .into_iter()
+        .into_par_iter()
         .filter(|t| !BOT_TEAMS.contains(&t.name.as_str()))
         .map(|team| {
             let members = github.team_members(team.id)?;
