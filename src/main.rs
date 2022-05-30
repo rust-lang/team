@@ -12,11 +12,12 @@ mod zulip;
 const USER_AGENT: &str = "https://github.com/rust-lang/team (infra@rust-lang.org)";
 
 use data::Data;
+use github::GitHubApi;
 use schema::{Email, Team, TeamKind};
 
 use failure::{err_msg, Error};
 use log::{error, info, warn};
-use std::path::PathBuf;
+use std::{collections::HashMap, path::PathBuf};
 use structopt::StructOpt;
 
 #[derive(structopt::StructOpt)]
@@ -80,6 +81,11 @@ enum Cli {
     EncryptEmail,
     #[structopt(name = "decrypt-email", help = "decrypt an email address")]
     DecryptEmail,
+    #[structopt(
+        name = "check-synced",
+        help = "checked whether a particular resource is synced"
+    )]
+    CheckSynced,
 }
 
 fn main() {
@@ -327,6 +333,46 @@ fn run() -> Result<(), Error> {
                 "{}",
                 rust_team_data::email_encryption::try_decrypt(&key, &encrypted)?
             );
+        }
+        Cli::CheckSynced => {
+            const BOT_TEAMS: &[&str] = &["bors", "bots", "rfcbot", "highfive"];
+            let github = GitHubApi::new();
+            let mut remote_teams = HashMap::new();
+            let teams_on_github = github.teams()?;
+            for team in teams_on_github
+                .iter()
+                .filter(|t| !BOT_TEAMS.contains(&t.name.as_str()))
+            {
+                let members = github.team_members(team.id)?;
+                remote_teams.insert(team.name.clone(), (team, members));
+            }
+            for team in data.teams() {
+                let local_teams = team.github_teams(&data)?;
+                for local_team in local_teams.iter().filter(|t| t.org == "rust-lang") {
+                    match remote_teams.remove(local_team.name) {
+                        Some((_, remote_members)) => {
+                            if remote_members.len() >= local_team.members.len() {
+                                for remote_member in remote_members.iter() {
+                                    if !local_team.members.contains(&remote_member.id) {
+                                        eprintln!("'{}' is on GitHub '{}' team but not in team repo definition", remote_member.name, local_team.name);
+                                    }
+                                }
+                            } else {
+                                for local_member in local_team.members.iter() {
+                                    // TODO: allow translating github id to name
+                                    if !remote_members.iter().any(|m| &m.id == local_member) {
+                                        eprintln!("GitHub id '{}' is in team repo definition for '{}' but not on GitHub", local_member, local_team.name);
+                                    }
+                                }
+                            }
+                        }
+                        None => eprintln!("No team on GitHub called '{}'", local_team.name),
+                    }
+                }
+            }
+            for (name, _) in remote_teams {
+                eprintln!("Team '{}' on GitHub but not in team repo", name)
+            }
         }
     }
 
