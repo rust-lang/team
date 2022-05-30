@@ -18,6 +18,3 @@ bors.rust-analyzer.review = true
 
 [[github]]
 orgs = ["rust-lang", "rust-analyzer"]
-
-[[zulip-groups]]
-name = "WG-rls2.0"

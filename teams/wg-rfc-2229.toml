@@ -24,6 +24,3 @@ name = "RFC 2229 working group"
 description = "Improving the behavior of closure-capture, and improving the documentation on closures"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/rfc-2229/"
 zulip-stream = "t-compiler/wg-rfc-2229"
-
-[[zulip-groups]]
-name = "WG-rfc-2229"
