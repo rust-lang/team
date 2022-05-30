@@ -85,7 +85,7 @@ impl<'a> Generator<'a> {
                         .map(|team| v1::GitHubTeam {
                             org: team.org.to_string(),
                             name: team.name.to_string(),
-                            members: team.members,
+                            members: team.members.into_iter().map(|(_, id)| id).collect(),
                         })
                         .collect::<Vec<_>>(),
                 })

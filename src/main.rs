@@ -337,41 +337,52 @@ fn run() -> Result<(), Error> {
         Cli::CheckSynced => {
             const BOT_TEAMS: &[&str] = &["bors", "bots", "rfcbot", "highfive"];
             let github = GitHubApi::new();
-            let mut remote_teams = HashMap::new();
-            let teams_on_github = github.teams()?;
-            for team in teams_on_github
-                .iter()
+            let mut remote_teams = github
+                .teams()?
+                .into_iter()
                 .filter(|t| !BOT_TEAMS.contains(&t.name.as_str()))
-            {
-                let members = github.team_members(team.id)?;
-                remote_teams.insert(team.name.clone(), (team, members));
-            }
+                .map(|team| {
+                    let members = github.team_members(team.id)?;
+                    Ok((team.name.clone(), (team, members)))
+                })
+                .collect::<Result<HashMap<_, _>, failure::Error>>()?;
+
             for team in data.teams() {
                 let local_teams = team.github_teams(&data)?;
-                for local_team in local_teams.iter().filter(|t| t.org == "rust-lang") {
-                    match remote_teams.remove(local_team.name) {
-                        Some((_, remote_members)) => {
-                            if remote_members.len() >= local_team.members.len() {
-                                for remote_member in remote_members.iter() {
-                                    if !local_team.members.contains(&remote_member.id) {
-                                        eprintln!("'{}' is on GitHub '{}' team but not in team repo definition", remote_member.name, local_team.name);
-                                    }
+                let local_team = local_teams.into_iter().find(|t| t.org == "rust-lang");
+                let local_team = match local_team {
+                    Some(t) => t,
+                    None => continue,
+                };
+                match remote_teams.remove(local_team.name) {
+                    Some((_, remote_members)) => {
+                        let mut local_members = local_team.members;
+                        for remote_member in remote_members.iter() {
+                            let pos = local_members
+                                .iter()
+                                .position(|(_, id)| id == &remote_member.id);
+                            match pos {
+                                Some(pos) => {
+                                    local_members.swap_remove(pos);
                                 }
-                            } else {
-                                for local_member in local_team.members.iter() {
-                                    // TODO: allow translating github id to name
-                                    if !remote_members.iter().any(|m| &m.id == local_member) {
-                                        eprintln!("GitHub id '{}' is in team repo definition for '{}' but not on GitHub", local_member, local_team.name);
-                                    }
-                                }
+                                None => error!(
+                                    "'{}' is on GitHub '{}' team but not in team repo definition",
+                                    remote_member.name, local_team.name
+                                ),
                             }
                         }
-                        None => eprintln!("No team on GitHub called '{}'", local_team.name),
+                        for (local_member_name, _) in local_members {
+                            error!(
+                                "'{}' is in team repo definition for '{}' but not on GitHub",
+                                local_member_name, local_team.name
+                            );
+                        }
                     }
+                    None => error!("No team on GitHub called '{}'", local_team.name),
                 }
             }
             for (name, _) in remote_teams {
-                eprintln!("Team '{}' on GitHub but not in team repo", name)
+                error!("Team '{}' on GitHub but not in team repo", name)
             }
         }
     }

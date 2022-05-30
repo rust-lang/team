@@ -151,6 +151,7 @@ impl GitHubApi {
         Ok(result)
     }
 
+    /// Get all teams for the rust-lang org
     pub(crate) fn teams(&self) -> Result<Vec<GitHubTeam>, Error> {
         Ok(self
             .prepare(true, Method::GET, "orgs/rust-lang/teams?per_page=100")?
@@ -159,16 +160,28 @@ impl GitHubApi {
             .json()?)
     }
 
+    /// Get all team members for the team with the given id
     pub(crate) fn team_members(&self, id: usize) -> Result<Vec<GitHubMember>, Error> {
-        Ok(self
-            .prepare(
-                true,
-                Method::GET,
-                &format!("teams/{}/members?per_page=100", id),
-            )?
-            .send()?
-            .error_for_status()?
-            .json()?)
+        let mut members = Vec::new();
+        let mut page_num = 1;
+        loop {
+            let page: Vec<GitHubMember> = self
+                .prepare(
+                    true,
+                    Method::GET,
+                    &format!("teams/{}/members?per_page=100&page={}", id, page_num),
+                )?
+                .send()?
+                .error_for_status()?
+                .json()?;
+            let len = page.len();
+            members.extend(page);
+            if len < 100 {
+                break;
+            }
+            page_num += 1;
+        }
+        Ok(members)
     }
 }
 

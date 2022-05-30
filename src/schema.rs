@@ -366,13 +366,13 @@ impl Team {
         &self.leads_permissions
     }
 
-    pub(crate) fn github_teams<'a>(&'a self, data: &Data) -> Result<Vec<GitHubTeam<'a>>, Error> {
+    pub(crate) fn github_teams<'a>(&'a self, data: &'a Data) -> Result<Vec<GitHubTeam<'a>>, Error> {
         let mut result = Vec::new();
         for github in &self.github {
             let mut members = self
                 .members(data)?
                 .iter()
-                .filter_map(|name| data.person(name).map(|p| p.github_id()))
+                .filter_map(|name| data.person(name).map(|p| (p.github(), p.github_id())))
                 .collect::<Vec<_>>();
             for team in &github.extra_teams {
                 members.extend(
@@ -380,7 +380,7 @@ impl Team {
                         .ok_or_else(|| failure::err_msg(format!("missing team {}", team)))?
                         .members(data)?
                         .iter()
-                        .filter_map(|name| data.person(name).map(|p| p.github_id())),
+                        .filter_map(|name| data.person(name).map(|p| (p.github(), p.github_id()))),
                 );
             }
             members.sort_unstable();
@@ -437,7 +437,7 @@ pub(crate) struct DiscordTeam {
 pub(crate) struct GitHubTeam<'a> {
     pub(crate) org: &'a str,
     pub(crate) name: &'a str,
-    pub(crate) members: Vec<usize>,
+    pub(crate) members: Vec<(&'a str, usize)>,
 }
 
 impl std::cmp::PartialOrd for GitHubTeam<'_> {
