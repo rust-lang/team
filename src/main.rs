@@ -3,6 +3,7 @@
 mod data;
 #[macro_use]
 mod permissions;
+mod check_synced;
 mod github;
 mod schema;
 mod static_api;
@@ -12,12 +13,11 @@ mod zulip;
 const USER_AGENT: &str = "https://github.com/rust-lang/team (infra@rust-lang.org)";
 
 use data::Data;
-use github::GitHubApi;
 use schema::{Email, Team, TeamKind};
 
 use failure::{err_msg, Error};
 use log::{error, info, warn};
-use std::{collections::HashMap, path::PathBuf};
+use std::path::PathBuf;
 use structopt::StructOpt;
 
 #[derive(structopt::StructOpt)]
@@ -334,57 +334,7 @@ fn run() -> Result<(), Error> {
                 rust_team_data::email_encryption::try_decrypt(&key, &encrypted)?
             );
         }
-        Cli::CheckSynced => {
-            const BOT_TEAMS: &[&str] = &["bors", "bots", "rfcbot", "highfive"];
-            let github = GitHubApi::new();
-            let mut remote_teams = github
-                .teams()?
-                .into_iter()
-                .filter(|t| !BOT_TEAMS.contains(&t.name.as_str()))
-                .map(|team| {
-                    let members = github.team_members(team.id)?;
-                    Ok((team.name.clone(), (team, members)))
-                })
-                .collect::<Result<HashMap<_, _>, failure::Error>>()?;
-
-            for team in data.teams() {
-                let local_teams = team.github_teams(&data)?;
-                let local_team = local_teams.into_iter().find(|t| t.org == "rust-lang");
-                let local_team = match local_team {
-                    Some(t) => t,
-                    None => continue,
-                };
-                match remote_teams.remove(local_team.name) {
-                    Some((_, remote_members)) => {
-                        let mut local_members = local_team.members;
-                        for remote_member in remote_members.iter() {
-                            let pos = local_members
-                                .iter()
-                                .position(|(_, id)| id == &remote_member.id);
-                            match pos {
-                                Some(pos) => {
-                                    local_members.swap_remove(pos);
-                                }
-                                None => error!(
-                                    "'{}' is on GitHub '{}' team but not in team repo definition",
-                                    remote_member.name, local_team.name
-                                ),
-                            }
-                        }
-                        for (local_member_name, _) in local_members {
-                            error!(
-                                "'{}' is in team repo definition for '{}' but not on GitHub",
-                                local_member_name, local_team.name
-                            );
-                        }
-                    }
-                    None => error!("No team on GitHub called '{}'", local_team.name),
-                }
-            }
-            for (name, _) in remote_teams {
-                error!("Team '{}' on GitHub but not in team repo", name)
-            }
-        }
+        Cli::CheckSynced => check_synced::check(&data)?,
     }
 
     Ok(())
