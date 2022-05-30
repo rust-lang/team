@@ -90,12 +90,8 @@ pub(crate) fn validate(data: &Data, strict: bool, skip: &[&str]) -> Result<(), E
 
     let zulip = ZulipApi::new();
     if let Err(err) = zulip.require_auth() {
-        if strict {
-            return Err(err);
-        } else {
-            warn!("couldn't perform checks relying on the Zulip API, some errors will not be detected");
-            warn!("cause: {}", err);
-        }
+        warn!("couldn't perform checks relying on the Zulip API, some errors will not be detected");
+        warn!("cause: {}", err);
     } else {
         for check in ZULIP_CHECKS {
             if skip.contains(&check.name) {
@@ -626,8 +622,9 @@ fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
                     && matches!(member.email(), Email::Missing | Email::Disabled)
                 {
                     bail!(
-                        "person `{}` is a member of a Zulip user group but has no a Zulip id nor an enabled email address",
-                        member.github()
+                        "person `{}` in '{}' is a member of a Zulip user group but has no a Zulip id nor an enabled email address",
+                        member.github(),
+                        team.name()
                     );
                 }
             }

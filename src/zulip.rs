@@ -33,7 +33,7 @@ impl ZulipApi {
     pub(crate) fn require_auth(&self) -> Result<(), Error> {
         if self.auth.is_none() {
             bail!(
-                "missing either {} or {} environment variables",
+                "missing {} and/or {} environment variables",
                 USER_VAR,
                 TOKEN_VAR
             );
