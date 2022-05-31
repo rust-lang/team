@@ -622,7 +622,7 @@ fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
                     && matches!(member.email(), Email::Missing | Email::Disabled)
                 {
                     bail!(
-                        "person `{}` in '{}' is a member of a Zulip user group but has no a Zulip id nor an enabled email address",
+                        "person `{}` in '{}' is a member of a Zulip user group but has no Zulip id nor an enabled email address",
                         member.github(),
                         team.name()
                     );
