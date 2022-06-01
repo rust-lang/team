@@ -24,3 +24,6 @@ zulip-stream = "t-release/triage"
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "WG-triage"

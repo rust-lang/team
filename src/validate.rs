@@ -1,6 +1,7 @@
 use crate::data::Data;
 use crate::github::GitHubApi;
-use crate::schema::{Email, Permissions, Team, TeamKind};
+use crate::schema::{Email, Permissions, Team, TeamKind, ZulipGroupMember};
+use crate::zulip::ZulipApi;
 use failure::{bail, Error};
 use log::{error, warn};
 use regex::Regex;
@@ -47,6 +48,10 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
 static GITHUB_CHECKS: &[Check<fn(&Data, &GitHubApi, &mut Vec<String>)>] =
     checks![validate_github_usernames,];
 
+#[allow(clippy::type_complexity)]
+static ZULIP_CHECKS: &[Check<fn(&Data, &ZulipApi, &mut Vec<String>)>] =
+    checks![validate_zulip_users,];
+
 struct Check<F> {
     f: F,
     name: &'static str,
@@ -80,6 +85,21 @@ pub(crate) fn validate(data: &Data, strict: bool, skip: &[&str]) -> Result<(), E
             }
 
             (check.f)(data, &github, &mut errors);
+        }
+    }
+
+    let zulip = ZulipApi::new();
+    if let Err(err) = zulip.require_auth() {
+        warn!("couldn't perform checks relying on the Zulip API, some errors will not be detected");
+        warn!("cause: {}", err);
+    } else {
+        for check in ZULIP_CHECKS {
+            if skip.contains(&check.name) {
+                warn!("skipped check: {}", check.name);
+                continue;
+            }
+
+            (check.f)(data, &zulip, &mut errors);
         }
     }
 
@@ -549,6 +569,46 @@ fn validate_discord_team_members_have_discord_ids(data: &Data, errors: &mut Vec<
 }
 
 /// Ensure every member of a team that has a Zulip group either has a Zulip id or an email address
+fn validate_zulip_users(data: &Data, zulip: &ZulipApi, errors: &mut Vec<String>) {
+    let (by_id, by_email) = match zulip.get_users() {
+        Ok(u) => (
+            u.iter().map(|u| u.user_id).collect::<HashSet<_>>(),
+            u.into_iter().map(|u| u.email).collect::<HashSet<_>>(),
+        ),
+        Err(err) => {
+            errors.push(format!("couldn't verify Zulip users: {}", err));
+            return;
+        }
+    };
+    let zulip_groups = match data.zulip_groups() {
+        Ok(zgs) => zgs,
+        Err(err) => {
+            errors.push(format!("couldn't get all the Zulip groups: {}", err));
+            return;
+        }
+    };
+    wrapper(zulip_groups.iter(), errors, |(group_name, group), _| {
+        let missing_members = group
+            .members()
+            .iter()
+            .filter_map(|m| match m {
+                ZulipGroupMember::Id(i) if !by_id.contains(i) => Some(format!("{}", i)),
+                ZulipGroupMember::Email(e) if !by_email.contains(e) => Some(e.clone()),
+                _ => None,
+            })
+            .collect::<HashSet<_>>();
+        if !missing_members.is_empty() {
+            bail!(
+                "the \"{}\" Zulip group includes members who don't appear on Zulip: {}",
+                group_name,
+                missing_members.into_iter().collect::<Vec<_>>().join(", ")
+            );
+        }
+        Ok(())
+    })
+}
+
+/// Ensure every member of a team that has a Zulip group either has a Zulip id or an email address
 fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
         let groups = team.zulip_groups(data)?;
@@ -562,8 +622,9 @@ fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
                     && matches!(member.email(), Email::Missing | Email::Disabled)
                 {
                     bail!(
-                        "person `{}` is a member of a Zulip user group but has no a Zulip id nor an enabled email address",
-                        member.github()
+                        "person `{}` in '{}' is a member of a Zulip user group but has no Zulip id nor an enabled email address",
+                        member.github(),
+                        team.name()
                     );
                 }
             }

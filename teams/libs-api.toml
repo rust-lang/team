@@ -42,3 +42,6 @@ description = "Designing and maintaining the standard library API and guarding i
 
 [[lists]]
 address = "libs-api@rust-lang.org"
+
+[[zulip-groups]]
+name = "T-libs-api"

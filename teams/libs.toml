@@ -40,3 +40,6 @@ address = "libs@rust-lang.org"
 
 [[lists]]
 address = "library-team@rust-lang.org"
+
+[[zulip-groups]]
+name = "T-libs"
