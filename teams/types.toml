@@ -21,6 +21,11 @@ description = "Working to implement and formally define the semantics of the Rus
 repo = "https://github.com/rust-lang/types-team"
 zulip-stream = "t-types"
 
+[rfcbot]
+label = "T-types"
+name = "Types"
+ping = "rust-lang/types"
+
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
 
