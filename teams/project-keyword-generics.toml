@@ -1,0 +1,27 @@
+name = "project-keyword-generics"
+kind = "project-group"
+subteam-of = "lang"
+
+[people]
+leads = [
+    "oli-obk",
+    "yoshuawuyts",
+]
+members = [
+    "oli-obk",
+    "nikomatsakis",
+    "yoshuawuyts",
+]
+
+[website]
+name = "Keyword Generics Initiative"
+description = "Extending the type system to support keyword generics"
+repo = "https://github.com/rust-lang/keyword-generics-initiative"
+zulip-stream = "t-lang/keyword-generics"
+
+[[github]]
+orgs = ["rust-lang"]
+team-name = "initiative-keyword-generics"
+
+[[zulip-groups]]
+name = "initiative-keyword-generics"
