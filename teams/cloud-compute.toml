@@ -11,6 +11,7 @@ members = [
     "yaahc",
     "ouz-a",
     "bjorn3",
+    "compiler-errors",
 ]
 
 [permissions]
