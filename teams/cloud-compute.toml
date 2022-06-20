@@ -12,6 +12,7 @@ members = [
     "ouz-a",
     "bjorn3",
     "compiler-errors",
+    "fee1-dead",
 ]
 
 [permissions]
