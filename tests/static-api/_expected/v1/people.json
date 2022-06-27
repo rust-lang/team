@@ -1,0 +1,39 @@
+{
+  "people": {
+    "user-0": {
+      "name": "Zeroth user",
+      "email": "user0@example.com",
+      "github_id": 0
+    },
+    "user-1": {
+      "name": "First user",
+      "email": "user1@example.com",
+      "github_id": 0
+    },
+    "user-2": {
+      "name": "Second user",
+      "email": "user2@example.com",
+      "github_id": 2
+    },
+    "user-3": {
+      "name": "Third user",
+      "email": "user3@example.com",
+      "github_id": 3
+    },
+    "user-4": {
+      "name": "Fourth user",
+      "email": "user4@example.com",
+      "github_id": 4
+    },
+    "user-5": {
+      "name": "Fifth user",
+      "email": "user5@example.com",
+      "github_id": 5
+    },
+    "user-6": {
+      "name": "Sixth user",
+      "email": "user6@example.com",
+      "github_id": 6
+    }
+  }
+}
