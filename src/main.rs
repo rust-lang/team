@@ -9,6 +9,8 @@ mod static_api;
 mod validate;
 mod zulip;
 
+const USER_AGENT: &str = "https://github.com/rust-lang/team (infra@rust-lang.org)";
+
 use data::Data;
 use schema::{Email, Team, TeamKind};
 

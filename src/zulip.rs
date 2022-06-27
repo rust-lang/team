@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
 use failure::{bail, Error};
-use reqwest::blocking::{Client, Response};
-use serde::Deserialize;
+use reqwest::blocking::{Client, ClientBuilder, Response};
 use reqwest::Method;
+use serde::Deserialize;
 
 const ZULIP_BASE_URL: &str = "https://rust-lang.zulipchat.com/api/v1";
 static TOKEN_VAR: &str = "ZULIP_TOKEN";
@@ -26,7 +26,10 @@ impl ZulipApi {
             _ => None,
         };
         Self {
-            client: Client::new(),
+            client: ClientBuilder::new()
+                .user_agent(crate::USER_AGENT)
+                .build()
+                .unwrap(),
             auth,
         }
     }
