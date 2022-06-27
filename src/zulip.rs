@@ -1,8 +1,9 @@
 use std::collections::HashMap;
 
 use failure::{bail, Error};
-use reqwest::Client;
+use reqwest::blocking::{Client, Response};
 use serde::Deserialize;
+use reqwest::Method;
 
 const ZULIP_BASE_URL: &str = "https://rust-lang.zulipchat.com/api/v1";
 static TOKEN_VAR: &str = "ZULIP_TOKEN";
@@ -44,7 +45,7 @@ impl ZulipApi {
     /// Get all users of the Rust Zulip instance
     pub(crate) fn get_users(&self) -> Result<Vec<ZulipUser>, Error> {
         let response = self
-            .req(reqwest::Method::GET, "/users", None)?
+            .req(Method::GET, "/users", None)?
             .error_for_status()?
             .json::<ZulipUsers>()?
             .members;
@@ -55,10 +56,10 @@ impl ZulipApi {
     /// Perform a request against the Zulip API
     fn req(
         &self,
-        method: reqwest::Method,
+        method: Method,
         path: &str,
         form: Option<HashMap<&str, &str>>,
-    ) -> Result<reqwest::Response, Error> {
+    ) -> Result<Response, Error> {
         let mut req = self
             .client
             .request(method, &format!("{}{}", ZULIP_BASE_URL, path));

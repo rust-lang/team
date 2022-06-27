@@ -11,14 +11,14 @@ serde = "1"
 serde_derive = "1"
 serde_json = "1"
 log = "0.4"
-env_logger = { version = "0.5", default-features = false }
-structopt = "0.2.13"
+env_logger = { version = "0.9.0", default-features = false }
+structopt = "0.3.26"
 regex = "1.5.5"
 rust_team_data = { path = "rust_team_data", features = ["email-encryption"] }
 indexmap = "1.0.2"
-reqwest = "0.9.18"
-base64 = "0.10.1"
-dialoguer = "0.7.1"
+reqwest = { version = "0.11.11", features = ["json", "blocking"] }
+base64 = "0.13.0"
+dialoguer = "0.10.1"
 
 [dev-dependencies]
 duct = "0.13.4"

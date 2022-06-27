@@ -1,6 +1,7 @@
 use failure::{bail, Error};
 use reqwest::header::{self, HeaderValue};
-use reqwest::{Client, Method, RequestBuilder};
+use reqwest::blocking::{Client, RequestBuilder};
+use reqwest::Method;
 use std::borrow::Cow;
 use std::collections::HashMap;
 

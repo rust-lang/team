@@ -82,15 +82,13 @@ enum Cli {
 
 fn main() {
     let mut env = env_logger::Builder::new();
-    env.default_format_timestamp(false);
-    env.default_format_module_path(false);
+    env.format_timestamp(None);
+    env.format_module_path(false);
     env.filter_module("rust_team", log::LevelFilter::Info);
     if std::env::var("RUST_TEAM_FORCE_COLORS").is_ok() {
         env.write_style(env_logger::WriteStyle::Always);
     }
-    if let Ok(content) = std::env::var("RUST_LOG") {
-        env.parse(&content);
-    }
+    env.parse_default_env();
     env.init();
 
     if let Err(e) = run() {
