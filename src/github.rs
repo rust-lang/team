@@ -1,6 +1,7 @@
 use failure::{bail, Error};
+use reqwest::blocking::{Client, ClientBuilder, RequestBuilder};
 use reqwest::header::{self, HeaderValue};
-use reqwest::{Client, Method, RequestBuilder};
+use reqwest::Method;
 use std::borrow::Cow;
 use std::collections::HashMap;
 
@@ -40,7 +41,10 @@ pub(crate) struct GitHubApi {
 impl GitHubApi {
     pub(crate) fn new() -> Self {
         GitHubApi {
-            http: Client::new(),
+            http: ClientBuilder::new()
+                .user_agent(crate::USER_AGENT)
+                .build()
+                .unwrap(),
             token: std::env::var(TOKEN_VAR).ok(),
         }
     }
