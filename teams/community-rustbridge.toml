@@ -5,12 +5,15 @@ subteam-of = "community"
 leads = ["diannasoreil"]
 members = [
     "diannasoreil",
-    "ashleygwilliams",
     "technetos",
     "arshiamufti",
     "spacekookie",
     "sebasmagri",
     "mattgathu",
+]
+
+alumni = [
+    "ashleygwilliams",
 ]
 
 [website]
