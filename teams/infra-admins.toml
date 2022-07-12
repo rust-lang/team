@@ -10,9 +10,6 @@ members = [
 
 [[lists]]
 address = "admin@rust-lang.org"
-extra-people = [
-    "ashleygwilliams",
-]
 
 [[lists]]
 address = "admin@crates.io"

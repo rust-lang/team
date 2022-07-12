@@ -5,7 +5,6 @@ leads = []
 members = [
     "Manishearth",
     "sebasmagri",
-    "ashleygwilliams",
     "badboy",
     "technetos",
     "JohnTitor",
@@ -13,6 +12,7 @@ members = [
 ]
 alumni = [
     "diannasoreil",
+    "ashleygwilliams",
     "skade",
 ]
 
@@ -55,7 +55,6 @@ extra-emails = [
 address = "reach@rust-lang.org"
 include-team-members = false
 extra-people = [
-    "ashleygwilliams",
     "carols10cents",
     "aidanhs",
 ]
@@ -68,7 +67,6 @@ address = "rustbridge@rust-lang.org"
 include-team-members = false
 extra-people = [
     "diannasoreil",
-    "ashleygwilliams",
     "arshiamufti"
 ]
 

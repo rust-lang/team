@@ -7,6 +7,10 @@ members = [
     "fitzgen",
 ]
 
+alumni = [
+    "ashleygwilliams",
+]
+
 [[lists]]
 address = "wasm@rust-lang.org"
 extra-people = [
