@@ -17,7 +17,7 @@ impl Data {
         let mut data = Data {
             people: HashMap::new(),
             teams: HashMap::new(),
-            config: load_file(&Path::new("config.toml"))?,
+            config: load_file(Path::new("config.toml"))?,
         };
 
         data.load_dir("people", |this, person: Person| {

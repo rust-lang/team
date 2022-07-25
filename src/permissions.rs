@@ -3,22 +3,13 @@ use crate::schema::{Config, Person};
 use failure::{bail, Error};
 use std::collections::{HashMap, HashSet};
 
-#[derive(serde_derive::Deserialize, Debug, Clone)]
+#[derive(serde_derive::Deserialize, Debug, Clone, Default)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct BorsAcl {
     #[serde(default)]
     review: bool,
     #[serde(rename = "try", default)]
     try_: bool,
-}
-
-impl Default for BorsAcl {
-    fn default() -> Self {
-        BorsAcl {
-            review: false,
-            try_: false,
-        }
-    }
 }
 
 impl BorsAcl {
@@ -31,7 +22,7 @@ impl BorsAcl {
     }
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde_derive::Deserialize, Debug, Default)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) struct Permissions {
     #[serde(default)]
@@ -40,16 +31,6 @@ pub(crate) struct Permissions {
     crates_io_ops_bot: HashMap<String, bool>,
     #[serde(flatten)]
     booleans: HashMap<String, bool>,
-}
-
-impl Default for Permissions {
-    fn default() -> Self {
-        Permissions {
-            bors: HashMap::new(),
-            crates_io_ops_bot: HashMap::new(),
-            booleans: HashMap::new(),
-        }
-    }
 }
 
 impl Permissions {
@@ -174,7 +155,7 @@ pub(crate) fn allowed_people<'a>(
     let mut members_with_perms = HashSet::new();
     for team in data.teams() {
         if team.permissions().has(permission) {
-            for member in team.members(&data)? {
+            for member in team.members(data)? {
                 members_with_perms.insert(member);
             }
         }

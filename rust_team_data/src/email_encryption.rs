@@ -24,7 +24,7 @@ pub fn encrypt(key: &str, email: &str) -> Result<String, Error> {
     let nonce = XNonce::from_slice(&nonce);
 
     let mut encrypted = init_cipher(key)?
-        .encrypt(&nonce, email.as_bytes())
+        .encrypt(nonce, email.as_bytes())
         .map_err(|_| Error::EncryptionFailed)?;
 
     // Concatenate both the nonce and the payload, as both will be needed for decryption.
@@ -48,11 +48,11 @@ pub fn try_decrypt(key: &str, email: &str) -> Result<String, Error> {
     };
 
     let (nonce, encrypted) = combined.split_at(NONCE_LENGTH);
-    let nonce = XNonce::from_slice(&nonce);
+    let nonce = XNonce::from_slice(nonce);
 
     String::from_utf8(
         init_cipher(key)?
-            .decrypt(&nonce, encrypted)
+            .decrypt(nonce, encrypted)
             .map_err(|_| Error::EncryptionFailed)?,
     )
     .map_err(|_| Error::InvalidUtf8)

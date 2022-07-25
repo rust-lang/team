@@ -248,7 +248,7 @@ impl Team {
                     if active_members.contains(person.as_str()) {
                         continue;
                     }
-                    members.insert(&person);
+                    members.insert(person);
                 }
             }
         }
@@ -448,7 +448,7 @@ impl std::cmp::PartialOrd for GitHubTeam<'_> {
 
 impl std::cmp::Ord for GitHubTeam<'_> {
     fn cmp(&self, other: &GitHubTeam) -> std::cmp::Ordering {
-        self.org.cmp(&other.org).then(self.name.cmp(&other.name))
+        self.org.cmp(other.org).then(self.name.cmp(other.name))
     }
 }
 

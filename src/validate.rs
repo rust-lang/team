@@ -215,11 +215,11 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
             active_members.insert(member);
         }
         for person in team.alumni() {
-            active_members.insert(&person);
+            active_members.insert(person);
         }
         for list in team.raw_lists() {
             for person in &list.extra_people {
-                active_members.insert(&person);
+                active_members.insert(person);
             }
         }
         Ok(())
@@ -334,7 +334,7 @@ fn validate_people_addresses(data: &Data, errors: &mut Vec<String>) {
 /// Ensure members of teams with permissions don't explicitly have those permissions
 fn validate_duplicate_permissions(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
-        wrapper(team.members(&data)?.iter(), errors, |member, _| {
+        wrapper(team.members(data)?.iter(), errors, |member, _| {
             if let Some(person) = data.person(member) {
                 for permission in &Permissions::available(data.config()) {
                     if team.permissions().has(permission)
@@ -548,8 +548,8 @@ fn validate_project_groups_have_parent_teams(data: &Data, errors: &mut Vec<Strin
 fn validate_discord_team_members_have_discord_ids(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
         if team.discord_roles().is_some() && team.name() != "all" {
-            let team_members = team.members(&data)?;
-            if team_members.len() != team.discord_ids(&data)?.len() {
+            let team_members = team.members(data)?;
+            if team_members.len() != team.discord_ids(data)?.len() {
                 let members: String = team_members
                     .into_iter()
                     .filter(|name| data.person(name).map(|p| p.discord_id()) == Some(None))
