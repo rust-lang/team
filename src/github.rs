@@ -150,8 +150,54 @@ impl GitHubApi {
         }
         Ok(result)
     }
+
+    /// Get all teams for the rust-lang org
+    pub(crate) fn teams(&self) -> Result<Vec<GitHubTeam>, Error> {
+        Ok(self
+            .prepare(true, Method::GET, "orgs/rust-lang/teams?per_page=100")?
+            .send()?
+            .error_for_status()?
+            .json()?)
+    }
+
+    /// Get all team members for the team with the given id
+    pub(crate) fn team_members(&self, id: usize) -> Result<Vec<GitHubMember>, Error> {
+        let mut members = Vec::new();
+        let mut page_num = 1;
+        loop {
+            let page: Vec<GitHubMember> = self
+                .prepare(
+                    true,
+                    Method::GET,
+                    &format!("teams/{}/members?per_page=100&page={}", id, page_num),
+                )?
+                .send()?
+                .error_for_status()?
+                .json()?;
+            let len = page.len();
+            members.extend(page);
+            if len < 100 {
+                break;
+            }
+            page_num += 1;
+        }
+        Ok(members)
+    }
 }
 
 fn user_node_id(id: usize) -> String {
     base64::encode(&format!("04:User{}", id))
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub(crate) struct GitHubTeam {
+    pub(crate) id: usize,
+    pub(crate) name: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub(crate) struct GitHubMember {
+    pub(crate) id: usize,
+    #[serde(rename = "login")]
+    pub(crate) name: String,
 }

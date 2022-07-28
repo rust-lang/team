@@ -3,6 +3,7 @@
 mod data;
 #[macro_use]
 mod permissions;
+mod check_synced;
 mod github;
 mod schema;
 mod static_api;
@@ -80,6 +81,11 @@ enum Cli {
     EncryptEmail,
     #[structopt(name = "decrypt-email", help = "decrypt an email address")]
     DecryptEmail,
+    #[structopt(
+        name = "check-synced",
+        help = "checked whether a particular resource is synced"
+    )]
+    CheckSynced,
 }
 
 fn main() {
@@ -328,6 +334,7 @@ fn run() -> Result<(), Error> {
                 rust_team_data::email_encryption::try_decrypt(&key, &encrypted)?
             );
         }
+        Cli::CheckSynced => check_synced::check(&data)?,
     }
 
     Ok(())
