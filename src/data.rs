@@ -23,7 +23,7 @@ impl Data {
         };
 
         data.load_dir("repos", |this, repo: Repo| {
-            // TODO: repo.validate()?;
+            repo.validate()?;
             this.repos
                 .insert((repo.org.clone(), repo.name.clone()), repo);
             Ok(())

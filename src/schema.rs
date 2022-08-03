@@ -644,6 +644,18 @@ pub(crate) struct Repo {
     pub access: RepoAccess,
 }
 
+impl Repo {
+    const VALID_ORGS: &'static [&'static str] = &["rust-lang"];
+
+    pub(crate) fn validate(&self) -> Result<(), Error> {
+        if !Self::VALID_ORGS.contains(&self.org.as_str()) {
+            bail!("{} is not a valid repo org", self.org);
+        }
+
+        Ok(())
+    }
+}
+
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct RepoAccess {

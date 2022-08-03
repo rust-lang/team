@@ -42,6 +42,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_discord_team_members_have_discord_ids,
     validate_zulip_group_ids,
     validate_zulip_group_extra_people,
+    validate_repos,
 ];
 
 #[allow(clippy::type_complexity)]
@@ -649,6 +650,23 @@ fn validate_zulip_group_extra_people(data: &Data, errors: &mut Vec<String>) {
             }
             Ok(())
         });
+        Ok(())
+    });
+}
+
+/// Ensure working group names start with `wg-`
+fn validate_repos(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.repos(), errors, |repo, _| {
+        for (team_name, _) in &repo.access.teams {
+            if data.team(team_name).is_none() {
+                bail!(
+                    "access for {}/{} is invalid: '{}' is not the name of a team",
+                    repo.org,
+                    repo.name,
+                    team_name
+                );
+            }
+        }
         Ok(())
     });
 }
