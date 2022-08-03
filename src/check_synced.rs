@@ -3,13 +3,14 @@
 use crate::data::Data;
 use crate::github::{self, GitHubApi};
 use crate::schema;
-use log::error;
+use log::{error, warn};
 use rayon::prelude::*;
 use std::collections::HashMap;
 
 pub(crate) fn check(data: &Data) -> Result<(), failure::Error> {
     const BOT_TEAMS: &[&str] = &["bors", "bots", "rfcbot", "highfive"];
     let github = GitHubApi::new();
+    let pending_invites = github.pending_org_invites()?;
     let mut remote_teams = github
         .teams()?
         .into_par_iter()
@@ -29,7 +30,7 @@ pub(crate) fn check(data: &Data) -> Result<(), failure::Error> {
         };
         match remote_teams.remove(local_team.name) {
             Some((_, remote_members)) => {
-                check_team_members_match(local_team, remote_members);
+                check_team_members_match(local_team, remote_members, &pending_invites);
             }
             None => error!("Team '{}' in team repo but not on GitHub", local_team.name),
         }
@@ -43,6 +44,7 @@ pub(crate) fn check(data: &Data) -> Result<(), failure::Error> {
 fn check_team_members_match(
     local_team: schema::GitHubTeam,
     remote_members: Vec<github::GitHubMember>,
+    pending_invites: &[github::User],
 ) {
     let mut local_members = local_team.members;
     for remote_member in remote_members.iter() {
@@ -60,9 +62,16 @@ fn check_team_members_match(
         }
     }
     for (local_member_name, _) in local_members {
-        error!(
-            "'{}' is in team repo definition for '{}' but not on GitHub",
+        if pending_invites.iter().any(|u| u.login == local_member_name) {
+            warn!(
+            "'{}' is in team repo definition for '{}' but has not yet accepted the org invite on GitHub",
             local_member_name, local_team.name
         );
+        } else {
+            error!(
+                "'{}' is in team repo definition for '{}' but not on GitHub",
+                local_member_name, local_team.name
+            );
+        }
     }
 }

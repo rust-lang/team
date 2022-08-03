@@ -160,6 +160,15 @@ impl GitHubApi {
             .json()?)
     }
 
+    /// Get all users who have not yet accepted the invitation
+    pub(crate) fn pending_org_invites(&self) -> Result<Vec<User>, Error> {
+        Ok(self
+            .prepare(true, Method::GET, "orgs/rust-lang/invitations?per_page=100")?
+            .send()?
+            .error_for_status()?
+            .json()?)
+    }
+
     /// Get all team members for the team with the given id
     pub(crate) fn team_members(&self, id: usize) -> Result<Vec<GitHubMember>, Error> {
         let mut members = Vec::new();
