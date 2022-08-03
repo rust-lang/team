@@ -1,0 +1,12 @@
+{
+  "org": "rust-lang",
+  "name": "some_repo",
+  "description": "A repo!",
+  "bots": [],
+  "teams": [
+    {
+      "name": "foo",
+      "permission": "admin"
+    }
+  ]
+}

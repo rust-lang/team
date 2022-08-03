@@ -48,7 +48,9 @@ impl Data {
         T: for<'de> Deserialize<'de>,
         F: Fn(&mut Self, T) -> Result<(), Error>,
     {
-        for entry in std::fs::read_dir(dir)? {
+        for entry in std::fs::read_dir(dir)
+            .with_context(|e| format!("`load_dir` failed to read directory '{}': {}", dir, e))?
+        {
             let path = entry?.path();
 
             if path.is_file() && path.extension() == Some(OsStr::new("toml")) {

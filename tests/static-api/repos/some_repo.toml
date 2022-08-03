@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "some_repo"
+description = "A repo!"
+bots = []
+
+[access.teams]
+foo = "admin"
