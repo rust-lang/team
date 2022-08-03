@@ -1,7 +1,7 @@
 use crate::data::Data;
 pub(crate) use crate::permissions::Permissions;
 use failure::{bail, err_msg, Error};
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
@@ -632,4 +632,28 @@ fn default_true() -> bool {
 
 fn default_false() -> bool {
     false
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub(crate) struct Repo {
+    pub org: String,
+    pub name: String,
+    pub description: String,
+    pub bots: Vec<String>, // TODO: should this be an enum?
+    pub access: RepoAccess,
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub(crate) struct RepoAccess {
+    pub teams: HashMap<String, RepoPermission>,
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub(crate) enum RepoPermission {
+    Write,
+    Maintain,
+    Admin,
 }

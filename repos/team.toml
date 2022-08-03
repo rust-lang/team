@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "team"
+description = "Rust teams structure"
+bots = ["bors", "highfive", "rustbot", "rust-timer"]
+
+[access.teams]
+core = "admin"
+mods = "maintain"

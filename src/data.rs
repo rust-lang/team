@@ -1,4 +1,4 @@
-use crate::schema::{Config, List, Person, Team, ZulipGroup};
+use crate::schema::{Config, List, Person, Repo, Team, ZulipGroup};
 use failure::{Error, ResultExt};
 use serde::Deserialize;
 use std::collections::{HashMap, HashSet};
@@ -9,6 +9,7 @@ use std::path::Path;
 pub(crate) struct Data {
     people: HashMap<String, Person>,
     teams: HashMap<String, Team>,
+    repos: HashMap<(String, String), Repo>,
     config: Config,
 }
 
@@ -17,8 +18,16 @@ impl Data {
         let mut data = Data {
             people: HashMap::new(),
             teams: HashMap::new(),
+            repos: HashMap::new(),
             config: load_file(Path::new("config.toml"))?,
         };
+
+        data.load_dir("repos", |this, repo: Repo| {
+            // TODO: repo.validate()?;
+            this.repos
+                .insert((repo.org.clone(), repo.name.clone()), repo);
+            Ok(())
+        })?;
 
         data.load_dir("people", |this, person: Person| {
             person.validate()?;
@@ -106,6 +115,10 @@ impl Data {
             }
         }
         Ok(result)
+    }
+
+    pub(crate) fn repos(&self) -> impl Iterator<Item = &Repo> {
+        self.repos.iter().map(|(_, repo)| repo)
     }
 }
 

@@ -78,6 +78,12 @@ pub struct Teams {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Repos {
+    #[serde(flatten)]
+    pub repos: IndexMap<String, Vec<Repo>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct List {
     pub address: String,
     pub members: Vec<String>,
@@ -129,4 +135,27 @@ pub struct RfcbotTeam {
 pub struct ZulipMapping {
     /// Zulip ID to GitHub ID
     pub users: IndexMap<usize, usize>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Repo {
+    pub org: String,
+    pub name: String,
+    pub description: String,
+    pub bots: Vec<String>,
+    pub teams: Vec<RepoTeam>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RepoTeam {
+    pub name: String,
+    pub permission: RepoPermission,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum RepoPermission {
+    Write,
+    Admin,
+    Maintain,
 }

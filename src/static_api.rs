@@ -1,5 +1,5 @@
 use crate::data::Data;
-use crate::schema::{Permissions, TeamKind, ZulipGroupMember};
+use crate::schema::{Permissions, RepoPermission, TeamKind, ZulipGroupMember};
 use failure::Error;
 use indexmap::IndexMap;
 use log::info;
@@ -23,11 +23,46 @@ impl<'a> Generator<'a> {
 
     pub(crate) fn generate(&self) -> Result<(), Error> {
         self.generate_teams()?;
+        self.generate_repos()?;
         self.generate_lists()?;
         self.generate_zulip_groups()?;
         self.generate_permissions()?;
         self.generate_rfcbot()?;
         self.generate_zulip_map()?;
+        Ok(())
+    }
+
+    fn generate_repos(&self) -> Result<(), Error> {
+        let mut repos: IndexMap<String, Vec<v1::Repo>> = IndexMap::new();
+        for r in self.data.repos() {
+            let repo = v1::Repo {
+                org: r.org.clone(),
+                name: r.name.clone(),
+                description: r.description.clone(),
+                bots: r.bots.clone(),
+                teams: r
+                    .access
+                    .teams
+                    .iter()
+                    .map(|(name, permission)| {
+                        let permission = match permission {
+                            RepoPermission::Admin => v1::RepoPermission::Admin,
+                            RepoPermission::Write => v1::RepoPermission::Write,
+                            RepoPermission::Maintain => v1::RepoPermission::Maintain,
+                        };
+                        v1::RepoTeam {
+                            name: name.clone(),
+                            permission,
+                        }
+                    })
+                    .collect(),
+            };
+
+            self.add(&format!("v1/repos/{}.json", r.name), &repo)?;
+            repos.entry(r.org.clone()).or_default().push(repo);
+        }
+
+        self.add("v1/repos.json", &v1::Repos { repos })?;
         Ok(())
     }
 
