@@ -142,8 +142,17 @@ pub struct Repo {
     pub org: String,
     pub name: String,
     pub description: String,
-    pub bots: Vec<String>,
+    pub bots: Vec<Bot>,
     pub teams: Vec<RepoTeam>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum Bot {
+    Bors,
+    Highfive,
+    Rustbot,
+    RustTimer,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

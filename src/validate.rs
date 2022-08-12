@@ -654,7 +654,7 @@ fn validate_zulip_group_extra_people(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
-/// Ensure working group names start with `wg-`
+/// Ensure repos reference valid teams
 fn validate_repos(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.repos(), errors, |repo, _| {
         for (team_name, _) in &repo.access.teams {

@@ -640,7 +640,7 @@ pub(crate) struct Repo {
     pub org: String,
     pub name: String,
     pub description: String,
-    pub bots: Vec<String>, // TODO: should this be an enum?
+    pub bots: Vec<Bot>,
     pub access: RepoAccess,
 }
 
@@ -654,6 +654,15 @@ impl Repo {
 
         Ok(())
     }
+}
+
+#[derive(serde_derive::Deserialize, Debug, Clone)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum Bot {
+    Bors,
+    Highfive,
+    Rustbot,
+    RustTimer,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]

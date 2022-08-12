@@ -1,5 +1,5 @@
 use crate::data::Data;
-use crate::schema::{Permissions, RepoPermission, TeamKind, ZulipGroupMember};
+use crate::schema::{Bot, Permissions, RepoPermission, TeamKind, ZulipGroupMember};
 use failure::Error;
 use indexmap::IndexMap;
 use log::info;
@@ -39,7 +39,16 @@ impl<'a> Generator<'a> {
                 org: r.org.clone(),
                 name: r.name.clone(),
                 description: r.description.clone(),
-                bots: r.bots.clone(),
+                bots: r
+                    .bots
+                    .iter()
+                    .map(|b| match b {
+                        Bot::Bors => v1::Bot::Bors,
+                        Bot::Highfive => v1::Bot::Highfive,
+                        Bot::RustTimer => v1::Bot::RustTimer,
+                        Bot::Rustbot => v1::Bot::Rustbot,
+                    })
+                    .collect(),
                 teams: r
                     .access
                     .teams
