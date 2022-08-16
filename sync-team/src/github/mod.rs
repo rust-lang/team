@@ -1,10 +1,10 @@
 mod api;
 
 use self::api::{GitHub, TeamPrivacy, TeamRole};
-use crate::TeamApi;
+use crate::{github::api::RepoPermission, TeamApi};
 use failure::Error;
 use log::{debug, info};
-use rust_team_data::v1::{Bot, RepoPermission};
+use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
 
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
@@ -178,24 +178,30 @@ impl SyncGitHub {
             .get_teams(&expected_repo.org, &expected_repo.name)?;
         // Sync team and bot permissions
         for expected_team in &expected_repo.teams {
+            use rust_team_data::v1;
+            let permission = match &expected_team.permission {
+                v1::RepoPermission::Write => RepoPermission::Write,
+                v1::RepoPermission::Admin => RepoPermission::Admin,
+                v1::RepoPermission::Maintain => RepoPermission::Maintain,
+            };
             actual_teams.remove(&expected_team.name);
             self.github.update_team_repo_permissions(
                 &expected_repo.org,
                 &expected_repo.name,
                 &expected_team.name,
-                &expected_team.permission,
+                &permission,
             )?;
         }
 
         for bot in &expected_repo.bots {
             let bot_name = match bot {
                 Bot::Bors => "bors",
-                Bot::Highfive => "highfive",
-                Bot::RustTimer => "rust_timer",
+                Bot::Highfive => "rust-highfive",
+                Bot::RustTimer => "rust-timer",
                 Bot::Rustbot => "rustbot",
             };
             actual_teams.remove(bot_name);
-            self.github.update_team_repo_permissions(
+            self.github.update_user_repo_permissions(
                 &expected_repo.org,
                 &expected_repo.name,
                 bot_name,

@@ -5,7 +5,6 @@ use reqwest::{
     header::{self, HeaderValue},
     Client, Method, RequestBuilder, Response, StatusCode,
 };
-use rust_team_data::v1::RepoPermission;
 use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
@@ -18,9 +17,6 @@ pub(crate) struct GitHub {
 
 impl GitHub {
     pub(crate) fn new(token: String, dry_run: bool) -> Self {
-        if !dry_run {
-            panic!()
-        }
         GitHub {
             token,
             dry_run,
@@ -176,6 +172,35 @@ impl GitHub {
                 .req(
                     Method::PUT,
                     &format!("orgs/{org}/teams/{team_name}/repos/{org}/{repo}"),
+                )?
+                .json(&Req { permission })
+                .send()?
+                .error_for_status()?;
+            Ok(())
+        }
+    }
+
+    pub(crate) fn update_user_repo_permissions(
+        &self,
+        org: &str,
+        repo: &str,
+        user_name: &str,
+        permission: &RepoPermission,
+    ) -> Result<(), Error> {
+        #[derive(serde::Serialize)]
+        struct Req<'a> {
+            permission: &'a RepoPermission,
+        }
+        if self.dry_run {
+            debug!(
+                "dry: updating permission for user {user_name} on {org}/{repo} to {permission:?}"
+            );
+            Ok(())
+        } else {
+            let _ = self
+                .req(
+                    Method::PUT,
+                    &format!("repos/{org}/{repo}/collaborators/{user_name}"),
                 )?
                 .json(&Req { permission })
                 .send()?
@@ -528,6 +553,16 @@ pub(crate) struct Team {
     pub(crate) name: String,
     pub(crate) description: String,
     pub(crate) privacy: TeamPrivacy,
+}
+
+#[derive(serde::Serialize, Debug)]
+#[serde(rename_all = "snake_case")]
+pub(crate) enum RepoPermission {
+    // While the GitHub UI uses the term 'write', the API still uses the older term 'push'
+    #[serde(rename = "push")]
+    Write,
+    Admin,
+    Maintain,
 }
 
 #[derive(serde::Deserialize, Debug)]
