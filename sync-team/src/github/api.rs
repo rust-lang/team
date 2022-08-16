@@ -5,6 +5,7 @@ use reqwest::{
     header::{self, HeaderValue},
     Client, Method, RequestBuilder, Response, StatusCode,
 };
+use rust_team_data::v1::RepoPermission;
 use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
@@ -151,6 +152,35 @@ impl GitHub {
                 .send()?
                 .error_for_status()?
                 .json()?)
+        }
+    }
+
+    pub(crate) fn update_team_repo_permissions(
+        &self,
+        org: &str,
+        repo: &str,
+        team_name: &str,
+        permission: &RepoPermission,
+    ) -> Result<(), Error> {
+        #[derive(serde::Serialize)]
+        struct Req<'a> {
+            permission: &'a RepoPermission,
+        }
+        if self.dry_run {
+            debug!(
+                "dry: updating permission for team {team_name} on {org}/{repo} to {permission:?}"
+            );
+            Ok(())
+        } else {
+            let _ = self
+                .req(
+                    Method::PUT,
+                    &format!("orgs/{org}/teams/{team_name}/repos/{org}/{repo}"),
+                )?
+                .json(&Req { permission })
+                .send()?
+                .error_for_status()?;
+            Ok(())
         }
     }
 
@@ -382,7 +412,7 @@ impl GitHub {
             description: &'a str,
         }
         if self.dry_run {
-            debug!("dry: created team {}/{}", org, name);
+            debug!("dry: created repo {}/{}", org, name);
             Ok(Repo {
                 name: name.to_string(),
                 org: org.to_string(),
@@ -409,7 +439,44 @@ impl GitHub {
                 .send()?
                 .error_for_status()?;
         } else {
-            debug!("dry: edit team {}", repo.name)
+            debug!("dry: editing repo {}/{}", repo.org, repo.name)
+        }
+        Ok(())
+    }
+
+    pub(crate) fn get_teams(&self, org: &str, repo: &str) -> Result<HashSet<String>, Error> {
+        let mut teams = HashSet::new();
+
+        self.rest_paginated(
+            &Method::GET,
+            format!("repos/{org}/{repo}/teams"),
+            |mut resp| {
+                let partial: Vec<Team> = resp.json()?;
+                for team in partial {
+                    teams.insert(team.name);
+                }
+                Ok(())
+            },
+        )?;
+
+        Ok(teams)
+    }
+
+    pub(crate) fn remove_team_from_repo(
+        &self,
+        org: &str,
+        repo: &str,
+        team: &str,
+    ) -> Result<(), Error> {
+        if !self.dry_run {
+            self.req(
+                Method::DELETE,
+                &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}"),
+            )?
+            .send()?
+            .error_for_status()?;
+        } else {
+            debug!("dry: removing team {team} from repo {org}/{repo}")
         }
         Ok(())
     }

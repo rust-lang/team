@@ -4,6 +4,7 @@ use self::api::{GitHub, TeamPrivacy, TeamRole};
 use crate::TeamApi;
 use failure::Error;
 use log::{debug, info};
+use rust_team_data::v1::{Bot, RepoPermission};
 use std::collections::{HashMap, HashSet};
 
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
@@ -139,16 +140,74 @@ impl SyncGitHub {
         Ok(())
     }
 
-    fn synchronize_repo(&self, expected: &rust_team_data::v1::Repo) -> Result<(), Error> {
-        let actual = match self.github.repo(&expected.org, &expected.name)? {
-            Some(r) => r,
-            None => {
+    fn synchronize_repo(&self, expected_repo: &rust_team_data::v1::Repo) -> Result<(), Error> {
+        debug!(
+            "synchronizing repo {}/{}",
+            expected_repo.org, expected_repo.name
+        );
+
+        // Ensure the repo exists or create it.
+        let (actual_repo, just_created) =
+            match self.github.repo(&expected_repo.org, &expected_repo.name)? {
+                Some(r) => {
+                    debug!("repo already exists...");
+                    (r, false)
+                }
+                None => {
+                    let repo = self.github.create_repo(
+                        &expected_repo.org,
+                        &expected_repo.name,
+                        &expected_repo.description,
+                    )?;
+                    (repo, true)
+                }
+            };
+
+        // Ensure the repo is consistent between its expected state and current state
+        if !just_created {
+            if actual_repo.description != expected_repo.description {
                 self.github
-                    .create_repo(&expected.org, &expected.name, &expected.description)?
+                    .edit_repo(actual_repo, &expected_repo.description)?;
+            } else {
+                debug!("repo is in synced state");
             }
-        };
-        if actual.description != expected.description {
-            self.github.edit_repo(actual, &expected.description)?;
+        }
+
+        let mut actual_teams = self
+            .github
+            .get_teams(&expected_repo.org, &expected_repo.name)?;
+        // Sync team and bot permissions
+        for expected_team in &expected_repo.teams {
+            actual_teams.remove(&expected_team.name);
+            self.github.update_team_repo_permissions(
+                &expected_repo.org,
+                &expected_repo.name,
+                &expected_team.name,
+                &expected_team.permission,
+            )?;
+        }
+
+        for bot in &expected_repo.bots {
+            let bot_name = match bot {
+                Bot::Bors => "bors",
+                Bot::Highfive => "highfive",
+                Bot::RustTimer => "rust_timer",
+                Bot::Rustbot => "rustbot",
+            };
+            actual_teams.remove(bot_name);
+            self.github.update_team_repo_permissions(
+                &expected_repo.org,
+                &expected_repo.name,
+                bot_name,
+                &RepoPermission::Write,
+            )?;
+        }
+
+        // `actual_teams` now contains the teams that were not expected
+        // but are still on GitHub. We now remove them.
+        for team in &actual_teams {
+            self.github
+                .remove_team_from_repo(&expected_repo.org, &expected_repo.name, team)?;
         }
         Ok(())
     }
