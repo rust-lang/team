@@ -20,6 +20,16 @@ impl TeamApi {
             .collect())
     }
 
+    pub(crate) fn get_repos(&self) -> Result<Vec<rust_team_data::v1::Repo>, Error> {
+        debug!("loading teams list from the Team API");
+        Ok(self
+            .req::<rust_team_data::v1::Repos>("repos.json")?
+            .repos
+            .into_iter()
+            .flat_map(|(_k, v)| v)
+            .collect())
+    }
+
     pub(crate) fn get_lists(&self) -> Result<rust_team_data::v1::Lists, Error> {
         debug!("loading email lists list from the Team API");
         self.req::<rust_team_data::v1::Lists>("lists.json")
