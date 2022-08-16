@@ -12,6 +12,7 @@ static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
 pub(crate) struct SyncGitHub {
     github: GitHub,
     teams: Vec<rust_team_data::v1::Team>,
+    repos: Vec<rust_team_data::v1::Repo>,
     usernames_cache: HashMap<usize, String>,
     org_owners: HashMap<String, HashSet<usize>>,
 }
@@ -20,6 +21,7 @@ impl SyncGitHub {
     pub(crate) fn new(token: String, team_api: &TeamApi, dry_run: bool) -> Result<Self, Error> {
         let github = GitHub::new(token, dry_run);
         let teams = team_api.get_teams()?;
+        let repos = team_api.get_repos()?;
 
         debug!("caching mapping between user ids and usernames");
         let users = teams
@@ -46,6 +48,7 @@ impl SyncGitHub {
         Ok(SyncGitHub {
             github,
             teams,
+            repos,
             usernames_cache,
             org_owners,
         })
@@ -55,16 +58,21 @@ impl SyncGitHub {
         for team in &self.teams {
             if let Some(gh) = &team.github {
                 for github_team in &gh.teams {
-                    self.synchronize(github_team)?;
+                    self.synchronize_team(github_team)?;
                 }
             }
         }
+
+        for repo in &self.repos {
+            self.synchronize_repo(repo)?;
+        }
+
         Ok(())
     }
 
-    fn synchronize(&self, github_team: &rust_team_data::v1::GitHubTeam) -> Result<(), Error> {
+    fn synchronize_team(&self, github_team: &rust_team_data::v1::GitHubTeam) -> Result<(), Error> {
         let slug = format!("{}/{}", github_team.org, github_team.name);
-        debug!("synchronizing {}", slug);
+        debug!("synchronizing team {}", slug);
 
         // Ensure the team exists and is consistent
         let team = match self.github.team(&github_team.org, &github_team.name)? {
@@ -128,6 +136,20 @@ impl SyncGitHub {
             self.github.remove_membership(&team, &member.username)?;
         }
 
+        Ok(())
+    }
+
+    fn synchronize_repo(&self, expected: &rust_team_data::v1::Repo) -> Result<(), Error> {
+        let actual = match self.github.repo(&expected.org, &expected.name)? {
+            Some(r) => r,
+            None => {
+                self.github
+                    .create_repo(&expected.org, &expected.name, &expected.description)?
+            }
+        };
+        if actual.description != expected.description {
+            self.github.edit_repo(actual, &expected.description)?;
+        }
         Ok(())
     }
 

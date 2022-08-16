@@ -17,6 +17,9 @@ pub(crate) struct GitHub {
 
 impl GitHub {
     pub(crate) fn new(token: String, dry_run: bool) -> Self {
+        if !dry_run {
+            panic!()
+        }
         GitHub {
             token,
             dry_run,
@@ -31,6 +34,9 @@ impl GitHub {
             Cow::Owned(format!("https://api.github.com/{}", url))
         };
         trace!("http request: {} {}", method, url);
+        if self.dry_run && method != Method::GET && !url.contains("graphql") {
+            panic!("Called a non-GET request in dry run mode: {}", method);
+        }
         Ok(self
             .client
             .request(method, url.as_ref())
@@ -352,6 +358,61 @@ impl GitHub {
         }
         Ok(())
     }
+
+    pub(crate) fn repo(&self, org: &str, repo: &str) -> Result<Option<Repo>, Error> {
+        let mut resp = self
+            .req(Method::GET, &format!("repos/{}/{}", org, repo))?
+            .send()?;
+        match resp.status() {
+            StatusCode::OK => Ok(Some(resp.json()?)),
+            StatusCode::NOT_FOUND => Ok(None),
+            _ => Err(resp.error_for_status().unwrap_err().into()),
+        }
+    }
+
+    pub(crate) fn create_repo(
+        &self,
+        org: &str,
+        name: &str,
+        description: &str,
+    ) -> Result<Repo, Error> {
+        #[derive(serde::Serialize)]
+        struct Req<'a> {
+            name: &'a str,
+            description: &'a str,
+        }
+        if self.dry_run {
+            debug!("dry: created team {}/{}", org, name);
+            Ok(Repo {
+                name: name.to_string(),
+                org: org.to_string(),
+                description: description.to_string(),
+            })
+        } else {
+            Ok(self
+                .req(Method::POST, &format!("orgs/{}/repos", org))?
+                .json(&Req { name, description })
+                .send()?
+                .error_for_status()?
+                .json()?)
+        }
+    }
+
+    pub(crate) fn edit_repo(&self, repo: Repo, description: &str) -> Result<(), Error> {
+        #[derive(serde::Serialize)]
+        struct Req<'a> {
+            description: &'a str,
+        }
+        if !self.dry_run {
+            self.req(Method::PATCH, &format!("repos/{}/{}", repo.org, repo.name))?
+                .json(&Req { description })
+                .send()?
+                .error_for_status()?;
+        } else {
+            debug!("dry: edit team {}", repo.name)
+        }
+        Ok(())
+    }
 }
 
 #[derive(serde::Deserialize)]
@@ -400,6 +461,28 @@ pub(crate) struct Team {
     pub(crate) name: String,
     pub(crate) description: String,
     pub(crate) privacy: TeamPrivacy,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct Repo {
+    pub(crate) name: String,
+    #[serde(alias = "owner", deserialize_with = "repo_owner")]
+    pub(crate) org: String,
+    pub(crate) description: String,
+}
+
+fn repo_owner<'de, D>(deserializer: D) -> Result<String, D::Error>
+where
+    D: serde::de::Deserializer<'de>,
+{
+    use serde::de::Deserialize;
+    let owner = RepoOwner::deserialize(deserializer)?;
+    Ok(owner.login)
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct RepoOwner {
+    login: String,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Debug, Eq, PartialEq, Copy, Clone)]
