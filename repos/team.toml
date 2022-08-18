@@ -6,3 +6,7 @@ bots = ["bors", "highfive", "rustbot", "rust-timer"]
 [access.teams]
 core = "admin"
 mods = "maintain"
+
+[[branch]]
+name = "master"
+ci-checks = ["CI"]

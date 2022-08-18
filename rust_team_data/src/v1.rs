@@ -144,6 +144,7 @@ pub struct Repo {
     pub description: String,
     pub bots: Vec<Bot>,
     pub teams: Vec<RepoTeam>,
+    pub branches: Vec<Branch>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -167,4 +168,11 @@ pub enum RepoPermission {
     Write,
     Admin,
     Maintain,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub struct Branch {
+    pub name: String,
+    pub ci_checks: Vec<String>,
 }
