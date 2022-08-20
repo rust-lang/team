@@ -3,7 +3,8 @@ subteam-of = "compiler"
 
 [people]
 leads = ["RalfJung", "oli-obk"]
-members = ["RalfJung", "oli-obk", "solson"]
+members = ["RalfJung", "oli-obk"]
+alumni = ["solson"]
 
 [permissions]
 bors.miri.review = true
