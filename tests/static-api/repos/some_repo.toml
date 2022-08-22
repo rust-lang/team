@@ -5,3 +5,7 @@ bots = []
 
 [access.teams]
 foo = "admin"
+
+[[branch]]
+name = "master"
+ci-checks = ["CI"]

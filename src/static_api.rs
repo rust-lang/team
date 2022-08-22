@@ -65,11 +65,22 @@ impl<'a> Generator<'a> {
                         }
                     })
                     .collect(),
+                branches: r
+                    .branch
+                    .iter()
+                    .map(|b| v1::Branch {
+                        name: b.name.clone(),
+                        ci_checks: b.ci_checks.clone(),
+                    })
+                    .collect(),
             };
 
             self.add(&format!("v1/repos/{}.json", r.name), &repo)?;
             repos.entry(r.org.clone()).or_default().push(repo);
         }
+        repos
+            .values_mut()
+            .for_each(|r| r.sort_by(|r1, r2| r1.name.cmp(&r2.name)));
 
         self.add("v1/repos.json", &v1::Repos { repos })?;
         Ok(())

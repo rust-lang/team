@@ -8,5 +8,13 @@
       "name": "foo",
       "permission": "admin"
     }
+  ],
+  "branches": [
+    {
+      "name": "master",
+      "ci_checks": [
+        "CI"
+      ]
+    }
   ]
 }

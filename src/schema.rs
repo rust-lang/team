@@ -642,6 +642,8 @@ pub(crate) struct Repo {
     pub description: String,
     pub bots: Vec<Bot>,
     pub access: RepoAccess,
+    #[serde(default)]
+    pub branch: Vec<Branch>,
 }
 
 impl Repo {
@@ -677,4 +679,12 @@ pub(crate) enum RepoPermission {
     Write,
     Maintain,
     Admin,
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub(crate) struct Branch {
+    pub name: String,
+    #[serde(default)]
+    pub ci_checks: Vec<String>,
 }
