@@ -7,11 +7,13 @@ members = [
     "Dylan-DPC",
     "codesections",
     "epage",
-    "killercup",
     "matthiasbeyer",
     "spacekookie",
     "yoshuawuyts",
     "deg4uss3r",
+]
+alumni = [
+    "killercup",
 ]
 
 [website]
