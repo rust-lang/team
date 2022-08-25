@@ -54,3 +54,6 @@ extra-people = [
     "carols10cents",
     "jtgeibel",
 ]
+
+[[zulip-groups]]
+name = "T-crates-io"

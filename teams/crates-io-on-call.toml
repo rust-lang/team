@@ -16,3 +16,6 @@ members = [
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "T-crates-io-on-call"
