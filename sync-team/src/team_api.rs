@@ -48,7 +48,7 @@ impl TeamApi {
                     .unwrap_or_else(|_| Cow::Borrowed(rust_team_data::v1::BASE_URL));
                 let url = format!("{}/{}", base, url);
                 trace!("http request: GET {}", url);
-                Ok(reqwest::get(&url)?.error_for_status()?.json()?)
+                Ok(reqwest::blocking::get(&url)?.error_for_status()?.json()?)
             }
             TeamApi::Local(ref path) => {
                 let dest = tempfile::tempdir()?;

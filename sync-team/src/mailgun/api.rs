@@ -1,8 +1,9 @@
 use failure::Error;
 use log::info;
 use reqwest::{
+    blocking::{Client, RequestBuilder},
     header::{self, HeaderValue},
-    Client, Method, RequestBuilder,
+    Method,
 };
 
 pub(super) struct Mailgun {

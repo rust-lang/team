@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use failure::Error;
-use reqwest::Client;
+use reqwest::blocking::Client;
 use serde::Deserialize;
 
 const ZULIP_BASE_URL: &str = "https://rust-lang.zulipchat.com/api/v1";
@@ -51,7 +51,7 @@ impl ZulipApi {
         form.insert("description", description);
         form.insert("members", &member_ids);
 
-        let mut r = self.req(reqwest::Method::POST, "/user_groups/create", Some(form))?;
+        let r = self.req(reqwest::Method::POST, "/user_groups/create", Some(form))?;
         if r.status() == 400 {
             let body = r.json::<serde_json::Value>()?;
             let err = || {
@@ -129,7 +129,7 @@ impl ZulipApi {
         form.insert("delete", remove_ids.as_str());
 
         let path = format!("/user_groups/{}/members", user_group_id);
-        let mut response = self.req(reqwest::Method::POST, &path, Some(form))?;
+        let response = self.req(reqwest::Method::POST, &path, Some(form))?;
 
         if response.status() == 400 {
             log::warn!(
@@ -151,7 +151,7 @@ impl ZulipApi {
         method: reqwest::Method,
         path: &str,
         form: Option<HashMap<&str, &str>>,
-    ) -> Result<reqwest::Response, Error> {
+    ) -> Result<reqwest::blocking::Response, Error> {
         let mut req = self
             .client
             .request(method, &format!("{}{}", ZULIP_BASE_URL, path))

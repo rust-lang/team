@@ -2,8 +2,9 @@ use failure::{bail, Error};
 use hyper_old_types::header::{Link, RelationType};
 use log::{debug, trace};
 use reqwest::{
+    blocking::{Client, RequestBuilder, Response},
     header::{self, HeaderValue},
-    Client, Method, RequestBuilder, Response, StatusCode,
+    Method, StatusCode,
 };
 use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
@@ -104,7 +105,7 @@ impl GitHub {
     }
 
     pub(crate) fn team(&self, org: &str, team: &str) -> Result<Option<Team>, Error> {
-        let mut resp = self
+        let resp = self
             .req(Method::GET, &format!("orgs/{}/teams/{}", org, team))?
             .send()?;
         match resp.status() {
@@ -283,7 +284,7 @@ impl GitHub {
         self.rest_paginated(
             &Method::GET,
             format!("orgs/{}/members?role=admin", org),
-            |mut resp| {
+            |resp| {
                 let partial: Vec<User> = resp.json()?;
                 for owner in partial {
                     owners.insert(owner.id);
@@ -415,7 +416,7 @@ impl GitHub {
     }
 
     pub(crate) fn repo(&self, org: &str, repo: &str) -> Result<Option<Repo>, Error> {
-        let mut resp = self
+        let resp = self
             .req(Method::GET, &format!("repos/{}/{}", org, repo))?
             .send()?;
         match resp.status() {
@@ -472,17 +473,13 @@ impl GitHub {
     pub(crate) fn get_teams(&self, org: &str, repo: &str) -> Result<HashSet<String>, Error> {
         let mut teams = HashSet::new();
 
-        self.rest_paginated(
-            &Method::GET,
-            format!("repos/{org}/{repo}/teams"),
-            |mut resp| {
-                let partial: Vec<Team> = resp.json()?;
-                for team in partial {
-                    teams.insert(team.name);
-                }
-                Ok(())
-            },
-        )?;
+        self.rest_paginated(&Method::GET, format!("repos/{org}/{repo}/teams"), |resp| {
+            let partial: Vec<Team> = resp.json()?;
+            for team in partial {
+                teams.insert(team.name);
+            }
+            Ok(())
+        })?;
 
         Ok(teams)
     }
