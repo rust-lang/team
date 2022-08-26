@@ -16,7 +16,8 @@
           "name": "master",
           "ci_checks": [
             "CI"
-          ]
+          ],
+          "dismiss_stale_review": false
         }
       ]
     }

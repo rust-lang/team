@@ -687,4 +687,6 @@ pub(crate) struct Branch {
     pub name: String,
     #[serde(default)]
     pub ci_checks: Vec<String>,
+    #[serde(default)]
+    pub dismiss_stale_review: bool,
 }

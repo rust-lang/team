@@ -171,8 +171,8 @@ pub enum RepoPermission {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
 pub struct Branch {
     pub name: String,
     pub ci_checks: Vec<String>,
+    pub dismiss_stale_review: bool,
 }
