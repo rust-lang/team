@@ -642,8 +642,8 @@ pub(crate) struct Repo {
     pub description: String,
     pub bots: Vec<Bot>,
     pub access: RepoAccess,
-    #[serde(default)]
-    pub branch: Vec<Branch>,
+    #[serde(rename = "branch", default)]
+    pub branches: Vec<Branch>,
 }
 
 impl Repo {
