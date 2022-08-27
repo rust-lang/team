@@ -5,6 +5,8 @@ jobs:
   ci:
     name: CI
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v2
 
@@ -27,12 +29,23 @@ jobs:
       - name: Build the Docker container
         run: docker build -t sync-team .
 
-      - name: Upload the container to ECR
-        uses: rust-lang/simpleinfra/github-actions/upload-docker-image@master
-        with:
-          image: sync-team
-          repository: sync-team
-          region: us-west-1
-          aws_access_key_id: "${{ secrets.AWS_ACCESS_KEY_ID }}"
-          aws_secret_access_key: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+      - name: Configure AWS credentials
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::890664054962:role/ci--rust-lang--sync-team
+          aws-region: us-west-1
+
+      - name: Login to Amazon ECR Private
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: sync-team
+        run: |
+          docker tag sync-team $REGISTRY/$REPOSITORY:latest
+          docker push $REGISTRY/$REPOSITORY:latest
