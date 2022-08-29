@@ -28,15 +28,11 @@ fn check_zulip(data: &Data) -> Result<(), failure::Error> {
         .into_iter()
         .map(|u| (u.email, u.user_id))
         .collect::<HashMap<_, _>>();
-    let mut checked = HashSet::new();
     for (_, local_group) in &data.zulip_groups()? {
         match remote_groups.remove(local_group.name()) {
             Some(rg) => {
+                let mut remote_members = rg.members.iter().collect::<HashSet<_>>();
                 for local_member in local_group.members() {
-                    if checked.contains(local_member) {
-                        continue;
-                    }
-
                     let i = match local_member {
                         ZulipGroupMember::Id(i) => *i,
                         ZulipGroupMember::Email(e) => match users.get(e) {
@@ -51,13 +47,19 @@ fn check_zulip(data: &Data) -> Result<(), failure::Error> {
                             continue;
                         }
                     };
-                    checked.insert(local_member);
-                    if !rg.members.contains(&i) {
+                    if !remote_members.remove(&i) {
                         error!(
-                            "Zulip user '{:?}' is not on the remote Zulip user group",
+                            "Zulip user '{:?}' is not in the remote Zulip user group",
                             local_member
                         )
                     }
+                }
+                for remote_memember in remote_members {
+                    error!(
+                            "Zulip user '{:?}' is in the remote Zulip user group '{}' but not in the team repo",
+                            remote_memember,
+                            local_group.name()
+                        )
                 }
             }
             None => error!(
