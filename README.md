@@ -11,6 +11,7 @@ automatically synchronized with:
 | [@rfcbot][rfcbot] | 5 minutes | [Integration source][rfcbot-src] |
 | GitHub teams membership | *Shortly after merge* | [Integration source][sync-team-src] |
 | Mailing lists and aliases (`@rust-lang.org`, `@crates.io`) | *Shortly after merge* | [Integration source][sync-team-src] |
+| Zulip user group membership | *Shortly after merge* | [Integration source][sync-team-src] |
 | [Governance section on the website][www] | 2 minutes | [Integration source][www-src] |
 
 If you need to add or remove a person from a team send a PR to this repository,
