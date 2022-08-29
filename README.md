@@ -13,10 +13,9 @@ automatically synchronized with:
 | Mailing lists and aliases (`@rust-lang.org`, `@crates.io`) | *Shortly after merge* | [Integration source][sync-team-src] |
 | [Governance section on the website][www] | 2 minutes | [Integration source][www-src] |
 
-If you need to add or remove a person from a team,
-send a PR to this repository.
-After it's merged,
-their account will be added/removed from all the supported services.
+If you need to add or remove a person from a team, send a PR to this
+repository.  After it's merged, their account will be added/removed
+from all the supported services.
 
 [bors]: https://buildbot2.rust-lang.org/homu
 [bors-src]: https://github.com/rust-lang/homu/blob/master/homu/auth.py
