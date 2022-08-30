@@ -35,9 +35,6 @@ extra-teams = [
     "community-survey",
     "community-localization",
 ]
-extra-emails = [
-    "rust-community@googlegroups.com",
-]
 
 [[lists]]
 address = "community-team@rust-lang.org"
@@ -46,9 +43,6 @@ extra-teams = [
     "community-events",
     "community-survey",
     "community-localization",
-]
-extra-emails = [
-    "rust-community@googlegroups.com",
 ]
 
 [[lists]]
