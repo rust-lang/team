@@ -38,3 +38,6 @@ zulip-stream = "rustdoc"
 
 [[lists]]
 address = "rustdoc@rust-lang.org"
+
+[[zulip-groups]]
+name = "T-rustdoc"
