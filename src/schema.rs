@@ -619,7 +619,7 @@ impl ZulipGroup {
     }
 }
 
-#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub(crate) enum ZulipGroupMember {
     Id(usize),
     Email(String),

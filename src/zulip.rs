@@ -56,6 +56,17 @@ impl ZulipApi {
         Ok(response)
     }
 
+    /// Get all user groups of the Rust Zulip instance
+    pub(crate) fn get_user_groups(&self) -> Result<Vec<ZulipUserGroup>, Error> {
+        let response = self
+            .req(Method::GET, "/user_groups", None)?
+            .error_for_status()?
+            .json::<ZulipUserGroups>()?
+            .user_groups;
+
+        Ok(response)
+    }
+
     /// Perform a request against the Zulip API
     fn req(
         &self,
@@ -90,4 +101,18 @@ pub(crate) struct ZulipUser {
     #[serde(rename = "delivery_email")]
     pub(crate) email: String,
     pub(crate) user_id: usize,
+}
+
+/// A collection of Zulip user groups
+#[derive(Deserialize)]
+struct ZulipUserGroups {
+    user_groups: Vec<ZulipUserGroup>,
+}
+
+/// A single Zulip user group
+#[derive(Deserialize)]
+pub(crate) struct ZulipUserGroup {
+    pub(crate) name: String,
+    pub(crate) members: Vec<usize>,
+    pub(crate) is_system_group: bool,
 }

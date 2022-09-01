@@ -2,12 +2,83 @@
 
 use crate::data::Data;
 use crate::github::{self, GitHubApi};
-use crate::schema;
+use crate::schema::{self, ZulipGroupMember};
+use crate::zulip::ZulipApi;
 use log::{error, warn};
 use rayon::prelude::*;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 pub(crate) fn check(data: &Data) -> Result<(), failure::Error> {
+    check_github(data)?;
+    check_zulip(data)?;
+    Ok(())
+}
+
+fn check_zulip(data: &Data) -> Result<(), failure::Error> {
+    let zulip = ZulipApi::new();
+    zulip.require_auth()?;
+    let mut remote_groups = zulip
+        .get_user_groups()?
+        .into_iter()
+        .filter(|g| !g.is_system_group)
+        .map(|g| (g.name.clone(), g))
+        .collect::<HashMap<_, _>>();
+    let users = zulip
+        .get_users()?
+        .into_iter()
+        .map(|u| (u.email, u.user_id))
+        .collect::<HashMap<_, _>>();
+    for (_, local_group) in &data.zulip_groups()? {
+        match remote_groups.remove(local_group.name()) {
+            Some(rg) => {
+                let mut remote_members = rg.members.iter().collect::<HashSet<_>>();
+                for local_member in local_group.members() {
+                    let i = match local_member {
+                        ZulipGroupMember::Id(i) => *i,
+                        ZulipGroupMember::Email(e) => match users.get(e) {
+                            Some(i) => *i,
+                            None => {
+                                error!("User email '{e}' is not on Zulip");
+                                continue;
+                            }
+                        },
+                        ZulipGroupMember::Missing => {
+                            error!("Member of Zulip user group '{}' does not have an email or Zulip id", local_group.name());
+                            continue;
+                        }
+                    };
+                    if !remote_members.remove(&i) {
+                        error!(
+                            "Zulip user '{:?}' is not in the remote Zulip user group",
+                            local_member
+                        )
+                    }
+                }
+                for remote_memember in remote_members {
+                    error!(
+                            "Zulip user '{:?}' is in the remote Zulip user group '{}' but not in the team repo",
+                            remote_memember,
+                            local_group.name()
+                        )
+                }
+            }
+            None => error!(
+                "User group '{}' is in the team repo but not on Zulip",
+                local_group.name()
+            ),
+        }
+    }
+
+    for (_, remote_group) in remote_groups {
+        error!(
+            "Zulip group '{}' is on Zulip but not in team repo",
+            remote_group.name
+        )
+    }
+    Ok(())
+}
+
+pub(crate) fn check_github(data: &Data) -> Result<(), failure::Error> {
     const BOT_TEAMS: &[&str] = &["bors", "bots", "rfcbot", "highfive"];
     let github = GitHubApi::new();
     let pending_invites = github.pending_org_invites()?;
