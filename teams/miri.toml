@@ -16,3 +16,6 @@ repo = "https://github.com/rust-lang/miri"
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "T-miri"
