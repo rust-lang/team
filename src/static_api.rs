@@ -66,11 +66,12 @@ impl<'a> Generator<'a> {
                     })
                     .collect(),
                 branches: r
-                    .branch
+                    .branches
                     .iter()
                     .map(|b| v1::Branch {
                         name: b.name.clone(),
                         ci_checks: b.ci_checks.clone(),
+                        dismiss_stale_review: b.dismiss_stale_review,
                     })
                     .collect(),
             };

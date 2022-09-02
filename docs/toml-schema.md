@@ -151,3 +151,36 @@ bors.some-repo.review = true
 # be set if `review` is also set.
 bors.some-repo.try = true
 ```
+
+## Repos
+
+Repos are configured by creating a file in the `repos` folder.
+The following configuration options are available:
+
+```toml
+# The org this repo belongs to (required)
+org = "rust-lang"
+# The name of the repo (required)
+name = "my-repo"
+# A description of the repo (required)
+description = "A repo for awesome things!"
+# The bots that this repo requires (required)
+bots = ["bors", "highfive", "rustbot", "rust-timer"]
+
+# The teams that have access to this repo along
+# with the access level. (required)
+[access.teams]
+compiler = "write"
+mods = "maintain"
+
+# The protected branches (optional)
+[[branch]]
+# The name of the branch (required)
+name = "master"
+# Which CI checks to are required for merging into (optional)
+ci-checks = ["CI"]
+# Whether new commits after a reviewer's approval of a PR 
+# merging into this branch require another review. 
+# (optional - default `false`)
+dismiss-stale-review = false
+```

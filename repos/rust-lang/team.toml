@@ -10,3 +10,4 @@ mods = "maintain"
 [[branch]]
 name = "master"
 ci-checks = ["CI"]
+dismiss-stale-review = true

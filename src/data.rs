@@ -1,9 +1,9 @@
 use crate::schema::{Config, List, Person, Repo, Team, ZulipGroup};
-use failure::{Error, ResultExt};
+use failure::{bail, Error, ResultExt};
 use serde::Deserialize;
 use std::collections::{HashMap, HashSet};
 use std::ffi::OsStr;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 #[derive(Debug)]
 pub(crate) struct Data {
@@ -22,20 +22,29 @@ impl Data {
             config: load_file(Path::new("config.toml"))?,
         };
 
-        data.load_dir("repos", |this, repo: Repo| {
+        data.load_dir("repos", true, |this, org, repo: Repo| {
             repo.validate()?;
+            if &repo.org != org {
+                bail!(
+                    "repo '{}' is located in the '{}' org directory but its org is '{}'",
+                    repo.name,
+                    org,
+                    repo.org
+                )
+            }
+
             this.repos
                 .insert((repo.org.clone(), repo.name.clone()), repo);
             Ok(())
         })?;
 
-        data.load_dir("people", |this, person: Person| {
+        data.load_dir("people", false, |this, _dir, person: Person| {
             person.validate()?;
             this.people.insert(person.github().to_string(), person);
             Ok(())
         })?;
 
-        data.load_dir("teams", |this, team: Team| {
+        data.load_dir("teams", false, |this, _dir, team: Team| {
             this.teams.insert(team.name().to_string(), team);
             Ok(())
         })?;
@@ -43,18 +52,25 @@ impl Data {
         Ok(data)
     }
 
-    fn load_dir<T, F>(&mut self, dir: &str, f: F) -> Result<(), Error>
+    fn load_dir<P, T, F>(&mut self, dir: P, nested: bool, f: F) -> Result<(), Error>
     where
+        P: AsRef<Path>,
         T: for<'de> Deserialize<'de>,
-        F: Fn(&mut Self, T) -> Result<(), Error>,
+        F: Fn(&mut Self, &str, T) -> Result<(), Error>,
+        F: Clone,
     {
-        for entry in std::fs::read_dir(dir)
-            .with_context(|e| format!("`load_dir` failed to read directory '{}': {}", dir, e))?
-        {
+        for entry in std::fs::read_dir(&dir).with_context(|e| {
+            let dir = dir.as_ref().display();
+            format!("`load_dir` failed to read directory '{}': {}", dir, e)
+        })? {
             let path = entry?.path();
-
-            if path.is_file() && path.extension() == Some(OsStr::new("toml")) {
-                f(self, load_file(&path)?)?;
+            if nested && path.is_dir() {
+                self.load_dir(&path, false, f.clone())?;
+            } else if !nested && path.is_file() && path.extension() == Some(OsStr::new("toml")) {
+                fn dir(path: &PathBuf) -> Option<&str> {
+                    Some(path.parent()?.file_name()?.to_str()?)
+                }
+                f(self, dir(&path).unwrap(), load_file(&path)?)?;
             }
         }
 
