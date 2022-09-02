@@ -32,5 +32,9 @@ orgs = ["rust-lang", "rust-lang-nursery"]
 [[zulip-groups]] 
 name = "T-types"
 
+[[zulip-groups]]
+name = "T-types/meetings"
+extra-people = ["eholk"]
+
 [permissions]
 bors.chalk.review = true
