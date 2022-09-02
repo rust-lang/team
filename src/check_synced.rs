@@ -54,10 +54,10 @@ fn check_zulip(data: &Data) -> Result<(), failure::Error> {
                         )
                     }
                 }
-                for remote_memember in remote_members {
+                for remote_member in remote_members {
                     error!(
                             "Zulip user '{:?}' is in the remote Zulip user group '{}' but not in the team repo",
-                            remote_memember,
+                            remote_member,
                             local_group.name()
                         )
                 }
