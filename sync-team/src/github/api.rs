@@ -506,7 +506,7 @@ impl GitHub {
 
     /// Get the head commit of the supplied branch
     pub(crate) fn branch(&self, repo: &Repo, name: &str) -> Result<Option<String>, Error> {
-        let mut resp = self
+        let resp = self
             .req(
                 Method::GET,
                 &format!("repos/{}/{}/branches/{}", repo.org, repo.name, name),
