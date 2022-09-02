@@ -154,7 +154,9 @@ bors.some-repo.try = true
 
 ## Repos
 
-Repos are configured by creating a file in the `repos` folder.
+Repos are configured by creating a file in the `repos` folder
+under the corresponding org directory. For example, the `rust-lang/rust`
+repository is managed by the file "repos/rust-lang/rust.toml".
 The following configuration options are available:
 
 ```toml
