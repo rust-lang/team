@@ -167,15 +167,13 @@ impl SyncGitHub {
         if !just_created {
             if actual_repo.description != expected_repo.description {
                 self.github
-                    .edit_repo(actual_repo, &expected_repo.description)?;
+                    .edit_repo(&actual_repo, &expected_repo.description)?;
             } else {
                 debug!("repo is in synced state");
             }
         }
 
-        let mut actual_teams = self
-            .github
-            .get_teams(&expected_repo.org, &expected_repo.name)?;
+        let mut actual_teams = self.github.teams(&expected_repo.org, &expected_repo.name)?;
         // Sync team and bot permissions
         for expected_team in &expected_repo.teams {
             use rust_team_data::v1;
@@ -214,6 +212,50 @@ impl SyncGitHub {
         for team in &actual_teams {
             self.github
                 .remove_team_from_repo(&expected_repo.org, &expected_repo.name, team)?;
+        }
+
+        let mut main_branch_commit = None;
+        let mut actual_branch_protections = self.github.protected_branches(&actual_repo)?;
+
+        for branch in &expected_repo.branches {
+            actual_branch_protections.remove(&branch.name);
+
+            // if the branch does not already exist, create it
+            if self.github.branch(&actual_repo, &branch.name)?.is_none() {
+                // First, we need the sha of the head of the main branch
+                let main_branch_commit = match main_branch_commit.as_ref() {
+                    Some(s) => s,
+                    None => {
+                        let head = self
+                            .github
+                            .branch(&actual_repo, &actual_repo.default_branch)?
+                            .ok_or_else(|| failure::format_err!("could not find default branch"))?;
+                        // cache the main branch head so we only need to get it once
+                        main_branch_commit.get_or_insert(head)
+                    }
+                };
+
+                self.github
+                    .create_branch(&actual_repo, &branch.name, main_branch_commit)?;
+            };
+
+            // Update the protection of the branch
+            self.github.update_branch_protection(
+                &actual_repo,
+                &branch.name,
+                api::BranchProtection {
+                    required_approving_review_count: 1,
+                    dismiss_stale_reviews: branch.dismiss_stale_review,
+                    required_checks: branch.ci_checks.clone(),
+                },
+            )?;
+        }
+
+        // `actual_branch_protections` now contains the branch protections that were not expected
+        // but are still on GitHub. We now remove them.
+        for branch_protection in actual_branch_protections {
+            self.github
+                .delete_branch_protection(&actual_repo, &branch_protection)?;
         }
         Ok(())
     }

@@ -443,6 +443,7 @@ impl GitHub {
                 name: name.to_string(),
                 org: org.to_string(),
                 description: description.to_string(),
+                default_branch: "master".to_string(),
             })
         } else {
             Ok(self
@@ -454,7 +455,7 @@ impl GitHub {
         }
     }
 
-    pub(crate) fn edit_repo(&self, repo: Repo, description: &str) -> Result<(), Error> {
+    pub(crate) fn edit_repo(&self, repo: &Repo, description: &str) -> Result<(), Error> {
         #[derive(serde::Serialize)]
         struct Req<'a> {
             description: &'a str,
@@ -470,7 +471,7 @@ impl GitHub {
         Ok(())
     }
 
-    pub(crate) fn get_teams(&self, org: &str, repo: &str) -> Result<HashSet<String>, Error> {
+    pub(crate) fn teams(&self, org: &str, repo: &str) -> Result<HashSet<String>, Error> {
         let mut teams = HashSet::new();
 
         self.rest_paginated(&Method::GET, format!("repos/{org}/{repo}/teams"), |resp| {
@@ -499,6 +500,160 @@ impl GitHub {
             .error_for_status()?;
         } else {
             debug!("dry: removing team {team} from repo {org}/{repo}")
+        }
+        Ok(())
+    }
+
+    /// Get the head commit of the supplied branch
+    pub(crate) fn branch(&self, repo: &Repo, name: &str) -> Result<Option<String>, Error> {
+        let resp = self
+            .req(
+                Method::GET,
+                &format!("repos/{}/{}/branches/{}", repo.org, repo.name, name),
+            )?
+            .send()?;
+        match resp.status() {
+            StatusCode::OK => Ok(Some(resp.json::<Branch>()?.commit.sha)),
+            StatusCode::NOT_FOUND => Ok(None),
+            _ => Err(resp.error_for_status().unwrap_err().into()),
+        }
+    }
+
+    pub(crate) fn create_branch(&self, repo: &Repo, name: &str, commit: &str) -> Result<(), Error> {
+        #[derive(serde::Serialize)]
+        struct Req<'a> {
+            r#ref: &'a str,
+            sha: &'a str,
+        }
+        if self.dry_run {
+            debug!(
+                "dry: created branch in {}/{}: {} with commit {}",
+                repo.org, repo.name, name, commit
+            );
+            Ok(())
+        } else {
+            Ok(self
+                .req(
+                    Method::POST,
+                    &format!("repos/{}/{}/git/refs", repo.org, repo.name),
+                )?
+                .json(&Req {
+                    r#ref: &format!("refs/heads/{}", name),
+                    sha: commit,
+                })
+                .send()?
+                .error_for_status()?
+                .json()?)
+        }
+    }
+
+    pub(crate) fn update_branch_protection(
+        &self,
+        repo: &Repo,
+        branch_name: &str,
+        branch_protection: BranchProtection,
+    ) -> Result<(), Error> {
+        #[derive(serde::Serialize)]
+        struct Req<'a> {
+            required_status_checks: Req1<'a>,
+            enforce_admins: bool,
+            required_pull_request_reviews: Req2,
+            restrictions: HashMap<String, Vec<()>>,
+        }
+        #[derive(serde::Serialize)]
+        struct Req1<'a> {
+            strict: bool,
+            checks: Vec<Check<'a>>,
+        }
+        #[derive(serde::Serialize)]
+        struct Check<'a> {
+            context: &'a str,
+        }
+        #[derive(serde::Serialize)]
+        struct Req2 {
+            // Even though we don't want dismissal restrictions, it cannot be ommited
+            dismissal_restrictions: HashMap<(), ()>,
+            dismiss_stale_reviews: bool,
+            required_approving_review_count: u8,
+        }
+        let req = Req {
+            required_status_checks: Req1 {
+                strict: false,
+                checks: branch_protection
+                    .required_checks
+                    .iter()
+                    .map(|c| Check {
+                        context: c.as_str(),
+                    })
+                    .collect(),
+            },
+            enforce_admins: true,
+            required_pull_request_reviews: Req2 {
+                dismissal_restrictions: HashMap::new(),
+                dismiss_stale_reviews: branch_protection.dismiss_stale_reviews,
+                required_approving_review_count: branch_protection.required_approving_review_count,
+            },
+            restrictions: vec![
+                ("users".to_string(), Vec::new()),
+                ("teams".to_string(), Vec::new()),
+            ]
+            .into_iter()
+            .collect(),
+        };
+        if !self.dry_run {
+            self.req(
+                Method::PUT,
+                &format!(
+                    "repos/{}/{}/branches/{}/protection",
+                    repo.org, repo.name, branch_name
+                ),
+            )?
+            .json(&req)
+            .send()?
+            .error_for_status()?;
+        } else {
+            debug!(
+                "dry: updating branch protection on repo {}/{} for {}: {}",
+                repo.org,
+                repo.name,
+                branch_name,
+                serde_json::to_string_pretty(&req).unwrap_or_else(|_| "<invalid json>".to_string())
+            );
+        }
+        Ok(())
+    }
+
+    pub(crate) fn protected_branches(&self, repo: &Repo) -> Result<HashSet<String>, Error> {
+        let mut names = HashSet::new();
+        self.rest_paginated(
+            &Method::GET,
+            format!("repos/{}/{}/branches?protected=true", repo.org, repo.name),
+            |resp| {
+                let resp = resp.error_for_status()?.json::<Vec<Branch>>()?;
+                names.extend(resp.into_iter().map(|b| b.name));
+
+                Ok(())
+            },
+        )?;
+        Ok(names)
+    }
+
+    pub(crate) fn delete_branch_protection(&self, repo: &Repo, branch: &str) -> Result<(), Error> {
+        if !self.dry_run {
+            self.req(
+                Method::DELETE,
+                &format!(
+                    "repos/{}/{}/branches/{}/protection",
+                    repo.org, repo.name, branch
+                ),
+            )?
+            .send()?
+            .error_for_status()?;
+        } else {
+            debug!(
+                "dry: removing branch protection in {}/{} from {} branch",
+                repo.org, repo.name, branch
+            );
         }
         Ok(())
     }
@@ -568,6 +723,7 @@ pub(crate) struct Repo {
     #[serde(alias = "owner", deserialize_with = "repo_owner")]
     pub(crate) org: String,
     pub(crate) description: String,
+    pub(crate) default_branch: String,
 }
 
 fn repo_owner<'de, D>(deserializer: D) -> Result<String, D::Error>
@@ -619,4 +775,21 @@ fn user_node_id(id: usize) -> String {
 
 fn team_node_id(id: usize) -> String {
     base64::encode(&format!("04:Team{}", id))
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct Branch {
+    pub(crate) name: String,
+    pub(crate) commit: Commit,
+}
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct Commit {
+    pub(crate) sha: String,
+}
+
+#[derive(Debug)]
+pub(crate) struct BranchProtection {
+    pub(crate) dismiss_stale_reviews: bool,
+    pub(crate) required_approving_review_count: u8,
+    pub(crate) required_checks: Vec<String>,
 }
