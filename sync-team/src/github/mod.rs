@@ -245,7 +245,7 @@ impl SyncGitHub {
                 &branch.name,
                 api::BranchProtection {
                     required_approving_review_count: 1,
-                    dismiss_stale_reviews: false,
+                    dismiss_stale_reviews: branch.dismiss_stale_review,
                     required_checks: branch.ci_checks.clone(),
                 },
             )?;
