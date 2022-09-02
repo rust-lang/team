@@ -2,6 +2,7 @@ name = "Igor Matuszewski"
 github = "Xanewok"
 github-id = 3093213
 email = "xanewok@gmail.com"
+zulip-id = 153740
 
 [permissions]
 bors.rls.review = true
