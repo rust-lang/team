@@ -41,6 +41,9 @@ address = "lang-private@rust-lang.org"
 address = "lang@rust-lang.org"
 
 [[lists]]
+address = "lang-team@rust-lang.org"
+
+[[lists]]
 address = "language-design-team@rust-lang.org"
 
 [[discord-roles]]
