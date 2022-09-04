@@ -176,3 +176,16 @@ pub struct Branch {
     pub ci_checks: Vec<String>,
     pub dismiss_stale_review: bool,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Person {
+    pub name: String,
+    pub email: Option<String>,
+    pub github_id: usize,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct People {
+    /// GitHub name as key.
+    pub people: IndexMap<String, Person>,
+}

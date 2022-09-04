@@ -1,5 +1,5 @@
 use crate::data::Data;
-use crate::schema::{Bot, Permissions, RepoPermission, TeamKind, ZulipGroupMember};
+use crate::schema::{Bot, Email, Permissions, RepoPermission, TeamKind, ZulipGroupMember};
 use failure::Error;
 use indexmap::IndexMap;
 use log::info;
@@ -29,6 +29,7 @@ impl<'a> Generator<'a> {
         self.generate_permissions()?;
         self.generate_rfcbot()?;
         self.generate_zulip_map()?;
+        self.generate_people()?;
         Ok(())
     }
 
@@ -303,6 +304,30 @@ impl<'a> Generator<'a> {
                 users: zulip_people,
             },
         )?;
+        Ok(())
+    }
+
+    fn generate_people(&self) -> Result<(), Error> {
+        let mut people = IndexMap::new();
+
+        for person in self.data.people() {
+            people.insert(
+                person.github().into(),
+                v1::Person {
+                    name: person.name().into(),
+                    email: match person.email() {
+                        Email::Missing | Email::Disabled => None,
+                        Email::Present(s) => Some(s.into()),
+                    },
+                    github_id: person.github_id(),
+                },
+            );
+        }
+
+        people.sort_keys();
+
+        self.add("v1/people.json", &v1::People { people })?;
+
         Ok(())
     }
 
