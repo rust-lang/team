@@ -48,6 +48,7 @@ jobs:
 
       - name: Start the synchronization tool
         run: |
+          sleep 5 # give GitHub pages enough time to fully deploy
           aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
           cat output.json | python3 -m json.tool
         env:
