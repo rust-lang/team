@@ -214,30 +214,10 @@ impl SyncGitHub {
                 .remove_team_from_repo(&expected_repo.org, &expected_repo.name, team)?;
         }
 
-        let mut main_branch_commit = None;
         let mut actual_branch_protections = self.github.protected_branches(&actual_repo)?;
 
         for branch in &expected_repo.branches {
             actual_branch_protections.remove(&branch.name);
-
-            // if the branch does not already exist, create it
-            if self.github.branch(&actual_repo, &branch.name)?.is_none() {
-                // First, we need the sha of the head of the main branch
-                let main_branch_commit = match main_branch_commit.as_ref() {
-                    Some(s) => s,
-                    None => {
-                        let head = self
-                            .github
-                            .branch(&actual_repo, &actual_repo.default_branch)?
-                            .ok_or_else(|| failure::format_err!("could not find default branch"))?;
-                        // cache the main branch head so we only need to get it once
-                        main_branch_commit.get_or_insert(head)
-                    }
-                };
-
-                self.github
-                    .create_branch(&actual_repo, &branch.name, main_branch_commit)?;
-            };
 
             // Update the protection of the branch
             self.github.update_branch_protection(

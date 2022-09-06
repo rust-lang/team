@@ -443,7 +443,6 @@ impl GitHub {
                 name: name.to_string(),
                 org: org.to_string(),
                 description: description.to_string(),
-                default_branch: "master".to_string(),
             })
         } else {
             Ok(self
@@ -502,49 +501,6 @@ impl GitHub {
             debug!("dry: removing team {team} from repo {org}/{repo}")
         }
         Ok(())
-    }
-
-    /// Get the head commit of the supplied branch
-    pub(crate) fn branch(&self, repo: &Repo, name: &str) -> Result<Option<String>, Error> {
-        let resp = self
-            .req(
-                Method::GET,
-                &format!("repos/{}/{}/branches/{}", repo.org, repo.name, name),
-            )?
-            .send()?;
-        match resp.status() {
-            StatusCode::OK => Ok(Some(resp.json::<Branch>()?.commit.sha)),
-            StatusCode::NOT_FOUND => Ok(None),
-            _ => Err(resp.error_for_status().unwrap_err().into()),
-        }
-    }
-
-    pub(crate) fn create_branch(&self, repo: &Repo, name: &str, commit: &str) -> Result<(), Error> {
-        #[derive(serde::Serialize)]
-        struct Req<'a> {
-            r#ref: &'a str,
-            sha: &'a str,
-        }
-        if self.dry_run {
-            debug!(
-                "dry: created branch in {}/{}: {} with commit {}",
-                repo.org, repo.name, name, commit
-            );
-            Ok(())
-        } else {
-            Ok(self
-                .req(
-                    Method::POST,
-                    &format!("repos/{}/{}/git/refs", repo.org, repo.name),
-                )?
-                .json(&Req {
-                    r#ref: &format!("refs/heads/{}", name),
-                    sha: commit,
-                })
-                .send()?
-                .error_for_status()?
-                .json()?)
-        }
     }
 
     pub(crate) fn update_branch_protection(
@@ -723,7 +679,6 @@ pub(crate) struct Repo {
     #[serde(alias = "owner", deserialize_with = "repo_owner")]
     pub(crate) org: String,
     pub(crate) description: String,
-    pub(crate) default_branch: String,
 }
 
 fn repo_owner<'de, D>(deserializer: D) -> Result<String, D::Error>
@@ -780,11 +735,6 @@ fn team_node_id(id: usize) -> String {
 #[derive(serde::Deserialize, Debug)]
 pub(crate) struct Branch {
     pub(crate) name: String,
-    pub(crate) commit: Commit,
-}
-#[derive(serde::Deserialize, Debug)]
-pub(crate) struct Commit {
-    pub(crate) sha: String,
 }
 
 #[derive(Debug)]
