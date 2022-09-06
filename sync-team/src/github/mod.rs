@@ -220,7 +220,7 @@ impl SyncGitHub {
             actual_branch_protections.remove(&branch.name);
 
             // Update the protection of the branch
-            self.github.update_branch_protection(
+            let protection_result = self.github.update_branch_protection(
                 &actual_repo,
                 &branch.name,
                 api::BranchProtection {
@@ -229,11 +229,23 @@ impl SyncGitHub {
                     required_checks: branch.ci_checks.clone(),
                 },
             )?;
+            if !protection_result {
+                debug!(
+                    "Did not update branch protection for \
+                    '{}' on '{}/{}' as the branch does not exist.",
+                    branch.name, actual_repo.org, actual_repo.name
+                );
+            }
         }
 
         // `actual_branch_protections` now contains the branch protections that were not expected
         // but are still on GitHub. We now remove them.
         for branch_protection in actual_branch_protections {
+            debug!(
+                "Deleting branch protection for '{}' on '{}/{}' as \
+                the protection is not in the team repo",
+                branch_protection, actual_repo.org, actual_repo.name
+            );
             self.github
                 .delete_branch_protection(&actual_repo, &branch_protection)?;
         }

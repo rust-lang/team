@@ -503,12 +503,15 @@ impl GitHub {
         Ok(())
     }
 
+    /// Update the given branch's permissions.
+    ///
+    /// Returns `Ok(true)` on success, `Ok(false)` if the branch doesn't exist, and `Err(_)` otherwise.
     pub(crate) fn update_branch_protection(
         &self,
         repo: &Repo,
         branch_name: &str,
         branch_protection: BranchProtection,
-    ) -> Result<(), Error> {
+    ) -> Result<bool, Error> {
         #[derive(serde::Serialize)]
         struct Req<'a> {
             required_status_checks: Req1<'a>,
@@ -557,16 +560,22 @@ impl GitHub {
             .collect(),
         };
         if !self.dry_run {
-            self.req(
-                Method::PUT,
-                &format!(
-                    "repos/{}/{}/branches/{}/protection",
-                    repo.org, repo.name, branch_name
-                ),
-            )?
-            .json(&req)
-            .send()?
-            .error_for_status()?;
+            let resp = self
+                .req(
+                    Method::PUT,
+                    &format!(
+                        "repos/{}/{}/branches/{}/protection",
+                        repo.org, repo.name, branch_name
+                    ),
+                )?
+                .json(&req)
+                .send()?;
+
+            match resp.status() {
+                StatusCode::OK => Ok(true),
+                StatusCode::NOT_FOUND => Ok(false),
+                _ => Err(resp.error_for_status().unwrap_err().into()),
+            }
         } else {
             debug!(
                 "dry: updating branch protection on repo {}/{} for {}: {}",
@@ -575,8 +584,8 @@ impl GitHub {
                 branch_name,
                 serde_json::to_string_pretty(&req).unwrap_or_else(|_| "<invalid json>".to_string())
             );
+            Ok(true)
         }
-        Ok(())
     }
 
     pub(crate) fn protected_branches(&self, repo: &Repo) -> Result<HashSet<String>, Error> {
