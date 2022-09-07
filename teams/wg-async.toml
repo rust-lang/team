@@ -42,3 +42,12 @@ name = "Async working group"
 description = "Pursuing core language and library support for async-await"
 repo = "https://github.com/rust-lang/wg-async"
 zulip-stream = "wg-async"
+
+[[zulip-groups]]
+name = "WG-async"
+
+[[zulip-groups]]
+name = "WG-async-sprint-planning"
+extra-people = [
+  "hawkw"
+]
