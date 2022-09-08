@@ -23,11 +23,21 @@ fn check_zulip(data: &Data) -> Result<(), failure::Error> {
         .filter(|g| !g.is_system_group)
         .map(|g| (g.name.clone(), g))
         .collect::<HashMap<_, _>>();
-    let users = zulip
-        .get_users()?
-        .into_iter()
+    let remote_users = zulip.get_users()?;
+    let email_to_zulip_id = remote_users
+        .iter()
+        .cloned()
         .map(|u| (u.email, u.user_id))
         .collect::<HashMap<_, _>>();
+    let zulip_id_to_name = remote_users
+        .into_iter()
+        .map(|u| (u.user_id, u.name))
+        .collect::<HashMap<_, _>>();
+    let name_from_id = |id| {
+        zulip_id_to_name
+            .get(&id)
+            .unwrap_or_else(|| panic!("Zulip ID {} was not present in /users", id))
+    };
     for (_, local_group) in &data.zulip_groups()? {
         match remote_groups.remove(local_group.name()) {
             Some(rg) => {
@@ -35,10 +45,10 @@ fn check_zulip(data: &Data) -> Result<(), failure::Error> {
                 for local_member in local_group.members() {
                     let i = match local_member {
                         ZulipGroupMember::Id(i) => *i,
-                        ZulipGroupMember::Email(e) => match users.get(e) {
+                        ZulipGroupMember::Email(e) => match email_to_zulip_id.get(e) {
                             Some(i) => *i,
                             None => {
-                                error!("User email '{e}' is not on Zulip");
+                                error!("No user on Zulip uses the email '{e}'");
                                 continue;
                             }
                         },
@@ -49,17 +59,18 @@ fn check_zulip(data: &Data) -> Result<(), failure::Error> {
                     };
                     if !remote_members.remove(&i) {
                         error!(
-                            "Zulip user '{:?}' is not in the remote Zulip user group",
-                            local_member
+                            "Zulip user '{:?}' is in the team repo for '{}' but not in the remote Zulip user group",
+                            name_from_id(i),
+                            local_group.name()
                         )
                     }
                 }
-                for remote_member in remote_members {
+                for remote_member_id in remote_members {
                     error!(
-                            "Zulip user '{:?}' is in the remote Zulip user group '{}' but not in the team repo",
-                            remote_member,
-                            local_group.name()
-                        )
+                        "Zulip user '{:?}' is in the remote Zulip user group '{}' but not in the team repo",
+                        name_from_id(*remote_member_id),
+                        local_group.name()
+                    )
                 }
             }
             None => error!(
