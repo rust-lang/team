@@ -48,6 +48,3 @@ name = "WG-async"
 
 [[zulip-groups]]
 name = "WG-async-sprint-planning"
-extra-people = [
-  "hawkw"
-]
