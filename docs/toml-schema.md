@@ -115,10 +115,6 @@ include-team-members = true
 extra-people = [
     "alexcrichton",
 ]
-# Include the following email addresses in the Zulip group (optional).
-extra-emails = [
-    "noreply@rust-lang.org",
-]
 # Include the following Zulip ids in the Zulip group (optional).
 extra-zulip-ids = [
     1234
@@ -127,6 +123,10 @@ extra-zulip-ids = [
 # (optional).
 extra-teams = [
     "bots-nursery",
+]
+# Exclude the following people in the Zulip group (optional).
+excluded-people = [
+    "rylev",
 ]
 ```
 

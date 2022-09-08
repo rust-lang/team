@@ -313,7 +313,7 @@ impl Team {
         let zulip_groups = &self.zulip_groups;
 
         for raw_group in zulip_groups {
-            let mut list = ZulipGroup {
+            let mut group = ZulipGroup {
                 name: raw_group.name.clone(),
                 includes_team_members: raw_group.include_team_members,
                 members: Vec::new(),
@@ -335,25 +335,27 @@ impl Team {
                     members.insert(member);
                 }
             }
+            for excluded in &raw_group.excluded_people {
+                if !members.remove(excluded.as_str()) {
+                    bail!("'{excluded}' was specifically excluded from the Zulip group '{}' but they were already not included", raw_group.name);
+                }
+            }
 
             for member in members.iter() {
-                let member = data
-                    .person(member)
-                    .ok_or_else(|| err_msg(format!("member {} is missing", member)))?;
+                let member = data.person(member).ok_or_else(|| {
+                    err_msg(format!("{} does not have a person configuration", member))
+                })?;
                 let member = match (member.zulip_id, member.email()) {
                     (Some(zulip_id), _) => ZulipGroupMember::Id(zulip_id),
                     (_, Email::Present(email)) => ZulipGroupMember::Email(email.to_string()),
                     _ => ZulipGroupMember::Missing,
                 };
-                list.members.push(member);
-            }
-            for extra in &raw_group.extra_emails {
-                list.members.push(ZulipGroupMember::Email(extra.clone()));
+                group.members.push(member);
             }
             for &extra in &raw_group.extra_zulip_ids {
-                list.members.push(ZulipGroupMember::Id(extra));
+                group.members.push(ZulipGroupMember::Id(extra));
             }
-            groups.push(list);
+            groups.push(group);
         }
         Ok(groups)
     }
@@ -576,9 +578,9 @@ pub(crate) struct RawZulipGroup {
     #[serde(default)]
     pub(crate) extra_zulip_ids: Vec<usize>,
     #[serde(default)]
-    pub(crate) extra_emails: Vec<String>,
-    #[serde(default)]
     pub(crate) extra_teams: Vec<String>,
+    #[serde(default)]
+    pub(crate) excluded_people: Vec<String>,
 }
 
 #[derive(Debug)]
