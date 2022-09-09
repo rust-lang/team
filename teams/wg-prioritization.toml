@@ -46,3 +46,6 @@ orgs = ["rust-lang"]
 
 [[zulip-groups]]
 name = "WG-prioritization"
+
+[[zulip-groups]]
+name = "WG-prioritization/alerts"
