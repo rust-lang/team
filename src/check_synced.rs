@@ -59,7 +59,7 @@ fn check_zulip(data: &Data) -> Result<(), failure::Error> {
                     };
                     if !remote_members.remove(&i) {
                         error!(
-                            "Zulip user '{:?}' is in the team repo for '{}' but not in the remote Zulip user group",
+                            "Zulip user '{}' is in the team repo for '{}' but not in the remote Zulip user group",
                             name_from_id(i),
                             local_group.name()
                         )
@@ -67,7 +67,7 @@ fn check_zulip(data: &Data) -> Result<(), failure::Error> {
                 }
                 for remote_member_id in remote_members {
                     error!(
-                        "Zulip user '{:?}' is in the remote Zulip user group '{}' but not in the team repo",
+                        "Zulip user '{}' is in the remote Zulip user group '{}' but not in the team repo",
                         name_from_id(*remote_member_id),
                         local_group.name()
                     )
