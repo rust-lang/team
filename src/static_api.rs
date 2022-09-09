@@ -59,6 +59,7 @@ impl<'a> Generator<'a> {
                             RepoPermission::Admin => v1::RepoPermission::Admin,
                             RepoPermission::Write => v1::RepoPermission::Write,
                             RepoPermission::Maintain => v1::RepoPermission::Maintain,
+                            RepoPermission::Triage => v1::RepoPermission::Triage,
                         };
                         v1::RepoTeam {
                             name: name.clone(),
