@@ -3,19 +3,17 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["spastorino", "JohnTitor"]
+leads = ["JohnTitor", "spastorino"]
 members = [
-    "spastorino",
-    "amanjeev",
-    "togiberlin",
     "JohnTitor",
-    "chrissimpkins",
     "camelid",
     "igaray",
     "pierwill",
+    "spastorino",
     "tshepang",
 ]
-alumni = ["LeSeulArtichaut", "jyn514", "mark-i-m", "Nashenas88", "rylev",]
+alumni = ["LeSeulArtichaut", "Nashenas88", "amanjeev", "chrissimpkins", "jyn514", "mark-i-m", "rylev", "togiberlin"]
+    
 
 [[github]]
 orgs = ["rust-lang"]
@@ -25,3 +23,6 @@ name = "Rustc Dev Guide working group"
 description = "Making the compiler easier to learn by maintaining and improving the Rustc Dev Guide"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/rustc-dev-guide/"
 zulip-stream = "t-compiler/wg-rustc-dev-guide"
+
+[[zulip-groups]]
+name = "WG-rustc-dev-guide"
