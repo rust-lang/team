@@ -20,3 +20,6 @@ zulip-stream = "project-ffi-unwind"
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "WG-ffi-unwind"
