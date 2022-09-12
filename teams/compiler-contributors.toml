@@ -9,6 +9,7 @@ members = [
   "compiler-errors",
   "cuviper",
   "ecstatic-morse",
+  "eholk",
   "fee1-dead",
   "flodiebold",
   "jackh726",
