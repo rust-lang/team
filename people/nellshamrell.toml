@@ -3,3 +3,6 @@ github = "nellshamrell"
 github-id = 813007
 email = "nellshamrell@gmail.com"
 discord-id = 244302461718757376
+
+[permissions]
+dev-desktop = true
