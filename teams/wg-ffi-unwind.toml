@@ -29,6 +29,3 @@ orgs = ["rust-lang"]
 
 [[zulip-groups]]
 name = "WG-ffi-unwind"
-
-# Katelynn Martin has two Zulip accounts.
-extra-zulip-ids = [ 327458 ]
