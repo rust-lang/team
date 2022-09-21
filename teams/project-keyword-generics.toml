@@ -11,6 +11,7 @@ members = [
     "oli-obk",
     "nikomatsakis",
     "yoshuawuyts",
+    "lcnr",
 ]
 
 [website]
