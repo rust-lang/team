@@ -5,6 +5,8 @@ jobs:
     name: CI
     runs-on: ubuntu-latest
     if: github.repository == 'rust-lang/team'
+    permissions:
+      id-token: write
     steps:
 
       - uses: actions/checkout@main
@@ -46,11 +48,17 @@ jobs:
           GITHUB_DEPLOY_KEY: ${{ secrets.GITHUB_DEPLOY_KEY }}
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
 
+      - name: Configure AWS credentials
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::890664054962:role/ci--rust-lang--team
+          aws-region: us-west-1
+
       - name: Start the synchronization tool
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
+          # Introduce some artifical delay to help github pages propagate.
+          sleep 60
           aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
           cat output.json | python3 -m json.tool
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
