@@ -2,7 +2,7 @@ name = "docs-rs"
 subteam-of = "devtools"
 
 [people]
-leads = ["jyn514"]
+leads = ["syphar"]
 members = [
     "GuillaumeGomez",
     "Nemo157",
