@@ -2,18 +2,19 @@ name = "wg-cli"
 kind = "working-group"
 
 [people]
-leads = ["spacekookie"]
+leads = ["epage"]
 members = [
     "Dylan-DPC",
     "codesections",
     "epage",
     "matthiasbeyer",
-    "spacekookie",
-    "yoshuawuyts",
     "deg4uss3r",
+    "pksunkara",
 ]
 alumni = [
     "killercup",
+    "spacekookie",
+    "yoshuawuyts",
 ]
 
 [website]
@@ -28,7 +29,6 @@ address = "cli-wg@rust-lang.org"
 extra-emails = [
     "mail@r0tty.org",
     "msarfati@protonmail.com",
-    "mail+rust-wg-cli@pksunkara.com",
     "Ricky@Hosfe.lt",
     "mail@beyermatthias.de",
 ]
