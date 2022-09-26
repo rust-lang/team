@@ -7,11 +7,18 @@ members = [
     "Shnatsel",
     "tarcieri",
     "alex",
+    "pinkforest",
+    "amousset",
+]
+alumni = [
     "danielhenrymantilla",
     "stusmall",
     "xacrimon",
-    "pinkforest",
 ]
+
+[[github]]
+team-name = "wg-secure-code"
+orgs = ["rust-lang"]
 
 [website]
 name = "Secure Code working group"
@@ -21,3 +28,6 @@ zulip-stream = "wg-secure-code"
 
 [[lists]]
 address = "secure-code-wg@rust-lang.org"
+
+[[zulip-groups]]
+name = "WG-secure-code"
