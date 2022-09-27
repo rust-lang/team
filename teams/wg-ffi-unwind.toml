@@ -5,12 +5,17 @@ kind = "working-group"
 [people]
 leads = ["nikomatsakis", "acfoltzer", "BatmanAoD"]
 members = [
-    "acfoltzer",
     "Amanieu",
     "BatmanAoD",
+    "CAD97",
+    "acfoltzer",
+    "bjorn3",
+    "chorman0773",
+    "cratelyn",
     "gnzlbg",
-    "nikomatsakis",
     "nbdd0121",
+    "nikomatsakis",
+    "joshtriplett",
 ]
 
 [website]
@@ -21,3 +26,6 @@ zulip-stream = "project-ffi-unwind"
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "WG-ffi-unwind"
