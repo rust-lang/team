@@ -46,3 +46,15 @@ orgs = ["rust-lang"]
 
 [[zulip-groups]]
 name = "WG-prioritization"
+
+[[zulip-groups]]
+name = "WG-prioritization/alerts"
+excluded-people = [
+    "lcnr",
+    "Dylan-DPC",
+    "camelid",
+    "pnkfelix",
+    "hkmatsumoto",
+    "inquisitivecrystal",
+    "TaKO8Ki",
+]
