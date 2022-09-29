@@ -9,6 +9,7 @@ use std::path::{Path, PathBuf};
 pub(crate) struct Data {
     people: HashMap<String, Person>,
     teams: HashMap<String, Team>,
+    archived_teams: Vec<Team>,
     repos: HashMap<(String, String), Repo>,
     config: Config,
 }
@@ -18,6 +19,7 @@ impl Data {
         let mut data = Data {
             people: HashMap::new(),
             teams: HashMap::new(),
+            archived_teams: Vec::new(),
             repos: HashMap::new(),
             config: load_file(Path::new("config.toml"))?,
         };
@@ -46,6 +48,11 @@ impl Data {
 
         data.load_dir("teams", false, |this, _dir, team: Team| {
             this.teams.insert(team.name().to_string(), team);
+            Ok(())
+        })?;
+
+        data.load_dir("teams/archive", false, |this, _dir, team: Team| {
+            this.archived_teams.push(team);
             Ok(())
         })?;
 
@@ -137,6 +144,10 @@ impl Data {
 
     pub(crate) fn repos(&self) -> impl Iterator<Item = &Repo> {
         self.repos.iter().map(|(_, repo)| repo)
+    }
+
+    pub(crate) fn archived_teams(&self) -> impl Iterator<Item = &Team> {
+        self.archived_teams.iter()
     }
 }
 
