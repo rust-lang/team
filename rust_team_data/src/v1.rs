@@ -168,6 +168,7 @@ pub enum RepoPermission {
     Write,
     Admin,
     Maintain,
+    Triage,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
