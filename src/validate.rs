@@ -207,33 +207,37 @@ fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
-/// Ensure every person is part of at least a team
+/// Ensure every person is part of at least one team (active or archived)
 fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
-    let mut active_members = HashSet::new();
-    wrapper(data.teams(), errors, |team, _| {
-        let members = team.members(data)?;
-        for member in members {
-            active_members.insert(member);
-        }
-        for person in team.alumni() {
-            active_members.insert(person);
-        }
-        for list in team.raw_lists() {
-            for person in &list.extra_people {
-                active_members.insert(person);
+    let mut referenced_members = HashSet::new();
+    wrapper(
+        data.teams().chain(data.archived_teams()),
+        errors,
+        |team, _| {
+            let members = team.members(data)?;
+            for member in members {
+                referenced_members.insert(member);
             }
-        }
-        Ok(())
-    });
+            for person in team.alumni() {
+                referenced_members.insert(person);
+            }
+            for list in team.raw_lists() {
+                for person in &list.extra_people {
+                    referenced_members.insert(person);
+                }
+            }
+            Ok(())
+        },
+    );
 
     let all_members = data.people().map(|p| p.github()).collect::<HashSet<_>>();
     wrapper(
-        all_members.difference(&active_members),
+        all_members.difference(&referenced_members),
         errors,
         |person, _| {
             if !data.person(person).unwrap().permissions().has_any() {
                 bail!(
-                    "person `{}` is not a member of any team and has no permissions",
+                    "person `{}` is not a member of any team (active or archived) and has no permissions",
                     person
                 );
             }
