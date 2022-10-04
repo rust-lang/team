@@ -95,7 +95,7 @@ impl<'a> Generator<'a> {
         for team in self.data.teams() {
             let leads = team.leads();
             let mut members = Vec::new();
-            for github_name in &team.members(self.data)? {
+            for github_name in &team.members(self.data) {
                 if let Some(person) = self.data.person(github_name) {
                     members.push(v1::TeamMember {
                         name: person.name().into(),
@@ -234,7 +234,7 @@ impl<'a> Generator<'a> {
 
     fn generate_permissions(&self) -> Result<(), Error> {
         for perm in &Permissions::available(self.data.config()) {
-            let allowed = crate::permissions::allowed_people(self.data, perm)?;
+            let allowed = crate::permissions::allowed_people(self.data, perm);
             let mut github_users = allowed
                 .iter()
                 .map(|p| p.github().to_string())
@@ -267,7 +267,7 @@ impl<'a> Generator<'a> {
         for team in self.data.teams() {
             if let Some(rfcbot) = team.rfcbot_data() {
                 let mut members = team
-                    .members(self.data)?
+                    .members(self.data)
                     .into_iter()
                     .map(|s| s.to_string())
                     .filter(|member| !rfcbot.exclude_members.contains(member))

@@ -176,7 +176,7 @@ fn validate_subteam_of(data: &Data, errors: &mut Vec<String>) {
 /// Ensure team leaders are part of the teams they lead
 fn validate_team_leads(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
-        let members = team.members(data)?;
+        let members = team.members(data);
         wrapper(team.leads().iter(), errors, |lead, _| {
             if !members.contains(lead) {
                 bail!(
@@ -194,7 +194,7 @@ fn validate_team_leads(data: &Data, errors: &mut Vec<String>) {
 /// Ensure team members are people
 fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
-        wrapper(team.members(data)?.iter(), errors, |member, _| {
+        wrapper(team.members(data).iter(), errors, |member, _| {
             if data.person(member).is_none() {
                 bail!(
                     "person `{}` is member of team `{}` but doesn't exist",
@@ -210,17 +210,11 @@ fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
 
 /// Ensure alumni are not active
 fn validate_alumni(data: &Data, errors: &mut Vec<String>) {
-    let active_members = match data.active_members() {
-        Ok(a) => a,
-        Err(e) => {
-            errors.push(e.to_string());
-            return;
-        }
-    };
+    let active_members = data.active_members();
     wrapper(data.team("alumni").iter(), errors, |alumni_team, errors| {
         let mut explicit_members: HashSet<_> = alumni_team.explicit_members().iter().collect();
         // Ensure alumni team members are not active
-        wrapper(alumni_team.members(data)?.iter(), errors, |member, _| {
+        wrapper(alumni_team.members(data).iter(), errors, |member, _| {
             if active_members.contains(member) {
                 bail!("alumni team includes active member '{}'", member)
             }
@@ -249,7 +243,7 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
         data.teams().chain(data.archived_teams()),
         errors,
         |team, _| {
-            let members = team.members(data)?;
+            let members = team.members(data);
             for member in members {
                 referenced_members.insert(member);
             }
@@ -287,7 +281,7 @@ fn validate_list_email_addresses(data: &Data, errors: &mut Vec<String>) {
         if team.lists(data)?.is_empty() {
             return Ok(());
         }
-        wrapper(team.members(data)?.iter(), errors, |member, _| {
+        wrapper(team.members(data).iter(), errors, |member, _| {
             if let Some(member) = data.person(member) {
                 if let Email::Missing = member.email() {
                     bail!(
@@ -374,7 +368,7 @@ fn validate_people_addresses(data: &Data, errors: &mut Vec<String>) {
 /// Ensure members of teams with permissions don't explicitly have those permissions
 fn validate_duplicate_permissions(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
-        wrapper(team.members(data)?.iter(), errors, |member, _| {
+        wrapper(team.members(data).iter(), errors, |member, _| {
             if let Some(person) = data.person(member) {
                 for permission in &Permissions::available(data.config()) {
                     if team.permissions().has(permission)
@@ -431,7 +425,7 @@ fn validate_rfcbot_exclude_members(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, move |team, errors| {
         if let Some(rfcbot) = team.rfcbot_data() {
             let mut exclude = HashSet::new();
-            let members = team.members(data)?;
+            let members = team.members(data);
             wrapper(rfcbot.exclude_members.iter(), errors, move |member, _| {
                 if !exclude.insert(member) {
                     bail!(
@@ -537,7 +531,7 @@ fn validate_discord_permissions(data: &Data, errors: &mut Vec<String>) {
                 if !team.permissions().has(permission) {
                     return Ok(());
                 }
-                wrapper(team.members(data)?.iter(), errors, |member, _| {
+                wrapper(team.members(data).iter(), errors, |member, _| {
                     let person = data
                         .person(member)
                         .ok_or_else(|| failure::format_err!("missing person {}", member))?;
@@ -588,7 +582,7 @@ fn validate_project_groups_have_parent_teams(data: &Data, errors: &mut Vec<Strin
 fn validate_discord_team_members_have_discord_ids(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
         if team.discord_roles().is_some() && team.name() != "all" {
-            let team_members = team.members(data)?;
+            let team_members = team.members(data);
             if team_members.len() != team.discord_ids(data)?.len() {
                 let members: String = team_members
                     .into_iter()
@@ -656,7 +650,7 @@ fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
         if groups.is_empty() || groups.iter().all(|g| !g.includes_team_members()) {
             return Ok(());
         }
-        wrapper(team.members(data)?.iter(), errors, |member, _| {
+        wrapper(team.members(data).iter(), errors, |member, _| {
             if let Some(member) = data.person(member) {
                 if member.zulip_id().is_none()
                     && matches!(member.email(), Email::Missing | Email::Disabled)

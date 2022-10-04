@@ -205,7 +205,7 @@ impl Team {
         self.discord_roles.as_ref()
     }
 
-    pub(crate) fn members<'a>(&'a self, data: &'a Data) -> Result<HashSet<&'a str>, Error> {
+    pub(crate) fn members<'a>(&'a self, data: &'a Data) -> HashSet<&'a str> {
         let mut members: HashSet<_> = self.people.members.iter().map(|s| s.as_str()).collect();
 
         let mut include_leads = |kind| {
@@ -236,22 +236,18 @@ impl Team {
                 {
                     continue;
                 }
-                for member in team.members(data)? {
-                    members.insert(member);
-                }
+                members.extend(team.members(data));
             }
         }
         if self.is_alumni_team() {
-            let active_members = data.active_members()?;
+            let active_members = data.active_members();
             let alumni = data
                 .teams()
                 .chain(data.archived_teams())
                 .flat_map(|t| t.alumni())
                 .map(|a| a.as_str());
-            let members_of_archived_teams = data
-                .archived_teams()
-                .filter_map(|t| t.members(data).ok())
-                .flat_map(|members| members);
+            let members_of_archived_teams =
+                data.archived_teams().flat_map(|team| team.members(data));
 
             members.extend(
                 alumni
@@ -259,7 +255,7 @@ impl Team {
                     .filter(|person| !active_members.contains(person)),
             )
         }
-        Ok(members)
+        members
     }
 
     pub(crate) fn alumni(&self) -> &[String] {
@@ -279,7 +275,7 @@ impl Team {
             };
 
             let mut members = if raw_list.include_team_members {
-                self.members(data)?
+                self.members(data)
             } else {
                 HashSet::new()
             };
@@ -290,9 +286,7 @@ impl Team {
                 let team = data
                     .team(team)
                     .ok_or_else(|| err_msg(format!("team {} is missing", team)))?;
-                for member in team.members(data)? {
-                    members.insert(member);
-                }
+                members.extend(team.members(data));
             }
 
             for member in members.iter() {
@@ -327,7 +321,7 @@ impl Team {
             };
 
             let mut members = if raw_group.include_team_members {
-                self.members(data)?
+                self.members(data)
             } else {
                 HashSet::new()
             };
@@ -338,9 +332,7 @@ impl Team {
                 let team = data
                     .team(team)
                     .ok_or_else(|| err_msg(format!("team {} is missing", team)))?;
-                for member in team.members(data)? {
-                    members.insert(member);
-                }
+                members.extend(team.members(data));
             }
             for excluded in &raw_group.excluded_people {
                 if !members.remove(excluded.as_str()) {
@@ -379,7 +371,7 @@ impl Team {
         let mut result = Vec::new();
         for github in &self.github {
             let mut members = self
-                .members(data)?
+                .members(data)
                 .iter()
                 .filter_map(|name| data.person(name).map(|p| (p.github(), p.github_id())))
                 .collect::<Vec<_>>();
@@ -387,7 +379,7 @@ impl Team {
                 members.extend(
                     data.team(team)
                         .ok_or_else(|| failure::err_msg(format!("missing team {}", team)))?
-                        .members(data)?
+                        .members(data)
                         .iter()
                         .filter_map(|name| data.person(name).map(|p| (p.github(), p.github_id()))),
                 );
@@ -408,7 +400,7 @@ impl Team {
 
     pub(crate) fn discord_ids(&self, data: &Data) -> Result<Vec<usize>, Error> {
         Ok(self
-            .members(data)?
+            .members(data)
             .iter()
             .flat_map(|name| data.person(name).map(|p| p.discord_id()))
             .flatten()
