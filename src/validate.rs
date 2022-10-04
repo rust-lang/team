@@ -24,6 +24,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_subteam_of,
     validate_team_leads,
     validate_team_members,
+    validate_alumni,
     validate_inactive_members,
     validate_list_email_addresses,
     validate_list_extra_people,
@@ -190,7 +191,7 @@ fn validate_team_leads(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
-/// Ensure t_eam members are people
+/// Ensure team members are people
 fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
         wrapper(team.members(data)?.iter(), errors, |member, _| {
@@ -207,6 +208,40 @@ fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
+/// Ensure alumni are not active
+fn validate_alumni(data: &Data, errors: &mut Vec<String>) {
+    let active_members = match data.active_members() {
+        Ok(a) => a,
+        Err(e) => {
+            errors.push(e.to_string());
+            return;
+        }
+    };
+    wrapper(data.team("alumni").iter(), errors, |alumni_team, errors| {
+        let mut explicit_members: HashSet<_> = alumni_team.explicit_members().iter().collect();
+        // Ensure alumni team members are not active
+        wrapper(alumni_team.members(data)?.iter(), errors, |member, _| {
+            if active_members.contains(member) {
+                bail!("alumni team includes active member '{}'", member)
+            }
+            Ok(())
+        });
+        // Ensure all explicitly named members of the alumni team are not also implicitly members
+        wrapper(
+            data.teams()
+                .filter(|t| t.name() != "alumni")
+                .flat_map(|t| t.alumni().iter().map(move |m| (t.name(), m))),
+            errors,
+            |(team, member), _| {
+                if explicit_members.remove(member) {
+                    bail!("alumni team explicitly includes member '{}' who was specified as an alumni already in '{}'", member, team)
+                }
+                Ok(())
+            },
+        );
+        Ok(())
+    });
+}
 /// Ensure every person is part of at least one team (active or archived)
 fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
     let mut referenced_members = HashSet::new();
