@@ -251,7 +251,7 @@ impl Team {
             let members_of_archived_teams = data
                 .archived_teams()
                 .filter_map(|t| t.members(data).ok())
-                .flat_map(|members| members.into_iter());
+                .flat_map(|members| members);
 
             members.extend(
                 alumni
