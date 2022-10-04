@@ -7,7 +7,6 @@ name = "alumni"
 leads = []
 members = [
     "Aatch",
-    "Gankra",
     "Kimundi",
     "MajorBreakfast",
     "QuietMisdreavus",
@@ -19,14 +18,11 @@ members = [
     "bkoropoff",
     "booyaa",
     "brson",
-    "dotdash",
-    "dwijnand",
     "edunham",
     "erickt",
     "frewsxcv",
     "gnunicorn",
     "huonw",
-    "jntrnr",
     "jseyfried",
     "levex",
     "niconii",
@@ -36,7 +32,6 @@ members = [
     "tomprince",
     "valgrimm",
     "whitequark",
-    "wycats",
 ]
 # Temporary key that includes all members listed as alumni in the individual
 # teams. This is needed while we migrate away from the alumni team.

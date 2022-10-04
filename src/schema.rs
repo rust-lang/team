@@ -241,16 +241,23 @@ impl Team {
                 }
             }
         }
-        if self.people.include_all_alumni {
+        if self.is_alumni_team() {
             let active_members = data.active_members()?;
-            for team in data.teams() {
-                for person in &team.people.alumni {
-                    if active_members.contains(person.as_str()) {
-                        continue;
-                    }
-                    members.insert(person);
-                }
-            }
+            let alumni = data
+                .teams()
+                .chain(data.archived_teams())
+                .flat_map(|t| t.alumni())
+                .map(|a| a.as_str());
+            let members_of_archived_teams = data
+                .archived_teams()
+                .filter_map(|t| t.members(data).ok())
+                .flat_map(|members| members.into_iter());
+
+            members.extend(
+                alumni
+                    .chain(members_of_archived_teams)
+                    .filter(|person| !active_members.contains(person)),
+            )
         }
         Ok(members)
     }
@@ -410,6 +417,11 @@ impl Team {
 
     pub(crate) fn is_alumni_team(&self) -> bool {
         self.people.include_all_alumni
+    }
+
+    // People explicitly set as members
+    pub(crate) fn explicit_members(&self) -> &Vec<String> {
+        &self.people.members
     }
 }
 
