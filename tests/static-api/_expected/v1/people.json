@@ -34,6 +34,11 @@
       "name": "Sixth user",
       "email": "user6@example.com",
       "github_id": 6
+    },
+    "user-7": {
+      "name": "Seventh user",
+      "email": "user7@example.com",
+      "github_id": 7
     }
   }
 }

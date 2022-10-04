@@ -3,6 +3,6 @@ name = "alumni"
 [people]
 leads = []
 members = [
-    "user-4",
+    "user-7",
 ]
 include-all-alumni = true
