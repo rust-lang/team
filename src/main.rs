@@ -188,7 +188,7 @@ fn run() -> Result<(), Error> {
             println!("teams:");
             let mut teams: Vec<_> = data
                 .teams()
-                .filter(|team| team.members(&data).unwrap().contains(person.github()))
+                .filter(|team| team.members(&data).contains(person.github()))
                 .collect();
             teams.sort_by_key(|team| team.name());
             if teams.is_empty() {
@@ -301,7 +301,7 @@ fn run() -> Result<(), Error> {
             if !crate::schema::Permissions::available(data.config()).contains(name) {
                 failure::bail!("unknown permission: {}", name);
             }
-            let mut allowed = crate::permissions::allowed_people(&data, name)?
+            let mut allowed = crate::permissions::allowed_people(&data, name)
                 .into_iter()
                 .map(|person| person.github())
                 .collect::<Vec<_>>();
@@ -347,7 +347,7 @@ fn dump_team_members(
     tab_offset: u8,
 ) -> Result<(), Error> {
     let leads = team.leads();
-    let mut members = team.members(data)?.into_iter().collect::<Vec<_>>();
+    let mut members = team.members(data).into_iter().collect::<Vec<_>>();
     members.sort_unstable();
     for member in members {
         if only_leads && !leads.contains(member) {
