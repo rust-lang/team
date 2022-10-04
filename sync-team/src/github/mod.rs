@@ -181,6 +181,7 @@ impl SyncGitHub {
                 v1::RepoPermission::Write => RepoPermission::Write,
                 v1::RepoPermission::Admin => RepoPermission::Admin,
                 v1::RepoPermission::Maintain => RepoPermission::Maintain,
+                v1::RepoPermission::Triage => RepoPermission::Triage,
             };
             actual_teams.remove(&expected_team.name);
             self.github.update_team_repo_permissions(

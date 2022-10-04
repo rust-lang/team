@@ -724,6 +724,7 @@ pub(crate) enum RepoPermission {
     Write,
     Admin,
     Maintain,
+    Triage,
 }
 
 #[derive(serde::Deserialize, Debug)]
