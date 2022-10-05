@@ -3,6 +3,3 @@ github = "Amanieu"
 github-id = 278509
 email = "amanieu@gmail.com"
 zulip-id = 143274
-
-[permissions]
-bors.compiler-builtins.review = true

@@ -1,0 +1,27 @@
+name = "crate-maintainers"
+subteam-of = "libs"
+
+[people]
+leads = []
+members = [
+  "Amanieu",
+  "JohnTitor",
+  "KodrAus",
+  "joshtriplett",
+  "the8472",
+  "thomcc",
+  "workingjubilee",
+]
+
+[permissions]
+bors.libc.review = true
+bors.stdarch.review = true
+bors.compiler-builtins.review = true
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+weight = -200
+name = "Crate maintainers"
+description = "Maintaining official rust-lang crates such as log, libc, cc, and more."
