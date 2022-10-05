@@ -561,7 +561,7 @@ impl GitHub {
             required_status_checks: Req1<'a>,
             enforce_admins: bool,
             required_pull_request_reviews: Req2,
-            restrictions: HashMap<String, Vec<()>>,
+            restrictions: HashMap<String, Vec<String>>,
         }
         #[derive(serde::Serialize)]
         struct Req1<'a> {
@@ -597,7 +597,7 @@ impl GitHub {
                 required_approving_review_count: branch_protection.required_approving_review_count,
             },
             restrictions: vec![
-                ("users".to_string(), Vec::new()),
+                ("users".to_string(), branch_protection.allowed_users),
                 ("teams".to_string(), Vec::new()),
             ]
             .into_iter()
@@ -803,4 +803,5 @@ pub(crate) struct BranchProtection {
     pub(crate) dismiss_stale_reviews: bool,
     pub(crate) required_approving_review_count: u8,
     pub(crate) required_checks: Vec<String>,
+    pub(crate) allowed_users: Vec<String>,
 }
