@@ -1,4 +1,4 @@
-use failure::{bail, Error};
+use anyhow::bail;
 use hyper_old_types::header::{Link, RelationType};
 use log::{debug, trace};
 use reqwest::{
@@ -25,7 +25,7 @@ impl GitHub {
         }
     }
 
-    fn req(&self, method: Method, url: &str) -> Result<RequestBuilder, Error> {
+    fn req(&self, method: Method, url: &str) -> anyhow::Result<RequestBuilder> {
         let url = if url.starts_with("https://") {
             Cow::Borrowed(url)
         } else {
@@ -48,7 +48,7 @@ impl GitHub {
             ))
     }
 
-    fn graphql<R, V>(&self, query: &str, variables: V) -> Result<R, Error>
+    fn graphql<R, V>(&self, query: &str, variables: V) -> anyhow::Result<R>
     where
         R: serde::de::DeserializeOwned,
         V: serde::Serialize,
@@ -73,9 +73,9 @@ impl GitHub {
         }
     }
 
-    fn rest_paginated<F>(&self, method: &Method, url: String, mut f: F) -> Result<(), Error>
+    fn rest_paginated<F>(&self, method: &Method, url: String, mut f: F) -> anyhow::Result<()>
     where
-        F: FnMut(Response) -> Result<(), Error>,
+        F: FnMut(Response) -> anyhow::Result<()>,
     {
         let mut next = Some(url);
         while let Some(next_url) = next.take() {
@@ -104,7 +104,7 @@ impl GitHub {
         Ok(())
     }
 
-    pub(crate) fn team(&self, org: &str, team: &str) -> Result<Option<Team>, Error> {
+    pub(crate) fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
         let resp = self
             .req(Method::GET, &format!("orgs/{}/teams/{}", org, team))?
             .send()?;
@@ -121,7 +121,7 @@ impl GitHub {
         name: &str,
         description: &str,
         privacy: TeamPrivacy,
-    ) -> Result<Team, Error> {
+    ) -> anyhow::Result<Team> {
         #[derive(serde::Serialize)]
         struct Req<'a> {
             name: &'a str,
@@ -158,7 +158,7 @@ impl GitHub {
         repo: &str,
         team_name: &str,
         permission: &RepoPermission,
-    ) -> Result<(), Error> {
+    ) -> anyhow::Result<()> {
         #[derive(serde::Serialize)]
         struct Req<'a> {
             permission: &'a RepoPermission,
@@ -187,7 +187,7 @@ impl GitHub {
         repo: &str,
         user_name: &str,
         permission: &RepoPermission,
-    ) -> Result<(), Error> {
+    ) -> anyhow::Result<()> {
         #[derive(serde::Serialize)]
         struct Req<'a> {
             permission: &'a RepoPermission,
@@ -216,7 +216,7 @@ impl GitHub {
         name: &str,
         description: &str,
         privacy: TeamPrivacy,
-    ) -> Result<(), Error> {
+    ) -> anyhow::Result<()> {
         #[derive(serde::Serialize)]
         struct Req<'a> {
             name: &'a str,
@@ -238,7 +238,7 @@ impl GitHub {
         Ok(())
     }
 
-    pub(crate) fn usernames(&self, ids: &[usize]) -> Result<HashMap<usize, String>, Error> {
+    pub(crate) fn usernames(&self, ids: &[usize]) -> anyhow::Result<HashMap<usize, String>> {
         #[derive(serde::Deserialize)]
         #[serde(rename_all = "camelCase")]
         struct Usernames {
@@ -275,7 +275,7 @@ impl GitHub {
         Ok(result)
     }
 
-    pub(crate) fn org_owners(&self, org: &str) -> Result<HashSet<usize>, Error> {
+    pub(crate) fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<usize>> {
         #[derive(serde::Deserialize, Eq, PartialEq, Hash)]
         struct User {
             id: usize,
@@ -298,7 +298,7 @@ impl GitHub {
     pub(crate) fn team_memberships(
         &self,
         team: &Team,
-    ) -> Result<HashMap<usize, TeamMember>, Error> {
+    ) -> anyhow::Result<HashMap<usize, TeamMember>> {
         #[derive(serde::Deserialize)]
         struct RespTeam {
             members: RespMembers,
@@ -382,7 +382,7 @@ impl GitHub {
         team: &Team,
         username: &str,
         role: TeamRole,
-    ) -> Result<(), Error> {
+    ) -> anyhow::Result<()> {
         #[derive(serde::Serialize)]
         struct Req {
             role: TeamRole,
@@ -401,7 +401,7 @@ impl GitHub {
         Ok(())
     }
 
-    pub(crate) fn remove_membership(&self, team: &Team, username: &str) -> Result<(), Error> {
+    pub(crate) fn remove_membership(&self, team: &Team, username: &str) -> anyhow::Result<()> {
         if let (false, Some(id)) = (self.dry_run, team.id) {
             self.req(
                 Method::DELETE,
@@ -415,7 +415,7 @@ impl GitHub {
         Ok(())
     }
 
-    pub(crate) fn repo(&self, org: &str, repo: &str) -> Result<Option<Repo>, Error> {
+    pub(crate) fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
         let resp = self
             .req(Method::GET, &format!("repos/{}/{}", org, repo))?
             .send()?;
@@ -431,7 +431,7 @@ impl GitHub {
         org: &str,
         name: &str,
         description: &str,
-    ) -> Result<Repo, Error> {
+    ) -> anyhow::Result<Repo> {
         #[derive(serde::Serialize)]
         struct Req<'a> {
             name: &'a str,
@@ -455,7 +455,7 @@ impl GitHub {
         }
     }
 
-    pub(crate) fn edit_repo(&self, repo: &Repo, description: &str) -> Result<(), Error> {
+    pub(crate) fn edit_repo(&self, repo: &Repo, description: &str) -> anyhow::Result<()> {
         #[derive(serde::Serialize)]
         struct Req<'a> {
             description: &'a str,
@@ -471,7 +471,7 @@ impl GitHub {
         Ok(())
     }
 
-    pub(crate) fn teams(&self, org: &str, repo: &str) -> Result<HashSet<String>, Error> {
+    pub(crate) fn teams(&self, org: &str, repo: &str) -> anyhow::Result<HashSet<String>> {
         let mut teams = HashSet::new();
 
         self.rest_paginated(&Method::GET, format!("repos/{org}/{repo}/teams"), |resp| {
@@ -490,7 +490,7 @@ impl GitHub {
         org: &str,
         repo: &str,
         team: &str,
-    ) -> Result<(), Error> {
+    ) -> anyhow::Result<()> {
         if !self.dry_run {
             self.req(
                 Method::DELETE,
@@ -505,7 +505,7 @@ impl GitHub {
     }
 
     /// Get the head commit of the supplied branch
-    pub(crate) fn branch(&self, repo: &Repo, name: &str) -> Result<Option<String>, Error> {
+    pub(crate) fn branch(&self, repo: &Repo, name: &str) -> anyhow::Result<Option<String>> {
         let resp = self
             .req(
                 Method::GET,
@@ -519,7 +519,12 @@ impl GitHub {
         }
     }
 
-    pub(crate) fn create_branch(&self, repo: &Repo, name: &str, commit: &str) -> Result<(), Error> {
+    pub(crate) fn create_branch(
+        &self,
+        repo: &Repo,
+        name: &str,
+        commit: &str,
+    ) -> anyhow::Result<()> {
         #[derive(serde::Serialize)]
         struct Req<'a> {
             r#ref: &'a str,
@@ -555,7 +560,7 @@ impl GitHub {
         repo: &Repo,
         branch_name: &str,
         branch_protection: BranchProtection,
-    ) -> Result<bool, Error> {
+    ) -> anyhow::Result<bool> {
         #[derive(serde::Serialize)]
         struct Req<'a> {
             required_status_checks: Req1<'a>,
@@ -632,7 +637,7 @@ impl GitHub {
         }
     }
 
-    pub(crate) fn protected_branches(&self, repo: &Repo) -> Result<HashSet<String>, Error> {
+    pub(crate) fn protected_branches(&self, repo: &Repo) -> anyhow::Result<HashSet<String>> {
         let mut names = HashSet::new();
         self.rest_paginated(
             &Method::GET,
@@ -647,7 +652,7 @@ impl GitHub {
         Ok(names)
     }
 
-    pub(crate) fn delete_branch_protection(&self, repo: &Repo, branch: &str) -> Result<(), Error> {
+    pub(crate) fn delete_branch_protection(&self, repo: &Repo, branch: &str) -> anyhow::Result<()> {
         if !self.dry_run {
             self.req(
                 Method::DELETE,

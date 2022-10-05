@@ -1,4 +1,4 @@
-use failure::Error;
+use anyhow::Error;
 use log::info;
 use reqwest::{
     blocking::{Client, RequestBuilder},

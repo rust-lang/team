@@ -10,7 +10,7 @@ log = "0.4"
 env_logger = "0.9"
 rust_team_data = { git = "https://github.com/rust-lang/team", features = ["email-encryption"] }
 serde = { version = "1.0", features = ["derive"] }
-failure = "0.1"
+anyhow = "1.0"
 base64 = "0.13"
 hyper-old-types = "0.11"
 tempfile = "3.3"

@@ -5,7 +5,7 @@ use std::str;
 
 use self::api::Mailgun;
 use crate::TeamApi;
-use failure::{bail, Error, ResultExt};
+use anyhow::{bail, Context};
 use log::info;
 use rust_team_data::{email_encryption, v1 as team_data};
 
@@ -21,7 +21,7 @@ struct List {
     priority: i32,
 }
 
-fn mangle_lists(email_encryption_key: &str, lists: team_data::Lists) -> Result<Vec<List>, Error> {
+fn mangle_lists(email_encryption_key: &str, lists: team_data::Lists) -> anyhow::Result<Vec<List>> {
     let mut result = Vec::new();
 
     for (_key, mut list) in lists.lists.into_iter() {
@@ -72,7 +72,7 @@ fn mangle_lists(email_encryption_key: &str, lists: team_data::Lists) -> Result<V
     Ok(result)
 }
 
-fn mangle_address(addr: &str) -> Result<String, Error> {
+fn mangle_address(addr: &str) -> anyhow::Result<String> {
     // Escape dots since they have a special meaning in Python regexes
     let mangled = addr.replace('.', "\\.");
 
@@ -91,7 +91,7 @@ pub(crate) fn run(
     email_encryption_key: &str,
     team_api: &TeamApi,
     dry_run: bool,
-) -> Result<(), Error> {
+) -> anyhow::Result<()> {
     let mailgun = Mailgun::new(token, dry_run);
     let mailmap = team_api.get_lists()?;
 
@@ -132,15 +132,15 @@ pub(crate) fn run(
         let key = (address.to_string(), route.priority);
         match addr2list.remove(&key) {
             Some(new_list) => sync(&mailgun, &route, new_list)
-                .with_context(|_| format!("failed to sync {}", address))?,
+                .with_context(|| format!("failed to sync {}", address))?,
             None => mailgun
                 .delete_route(&route.id)
-                .with_context(|_| format!("failed to delete {}", address))?,
+                .with_context(|| format!("failed to delete {}", address))?,
         }
     }
 
     for (_, list) in addr2list.iter() {
-        create(&mailgun, list).with_context(|_| format!("failed to create {}", list.address))?;
+        create(&mailgun, list).with_context(|| format!("failed to create {}", list.address))?;
     }
 
     Ok(())
@@ -154,7 +154,7 @@ fn build_route_actions(list: &List) -> impl Iterator<Item = String> + '_ {
     list.members.iter().map(|member| build_route_action(member))
 }
 
-fn create(mailgun: &Mailgun, list: &List) -> Result<(), Error> {
+fn create(mailgun: &Mailgun, list: &List) -> anyhow::Result<()> {
     info!("creating list {}", list.address);
 
     let expr = format!("match_recipient(\"{}\")", list.address);
@@ -163,7 +163,7 @@ fn create(mailgun: &Mailgun, list: &List) -> Result<(), Error> {
     Ok(())
 }
 
-fn sync(mailgun: &Mailgun, route: &api::Route, list: &List) -> Result<(), Error> {
+fn sync(mailgun: &Mailgun, route: &api::Route, list: &List) -> anyhow::Result<()> {
     let before = route
         .actions
         .iter()

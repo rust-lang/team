@@ -1,4 +1,3 @@
-use failure::Error;
 use log::{debug, info, trace};
 use std::borrow::Cow;
 use std::path::PathBuf;
@@ -10,7 +9,7 @@ pub(crate) enum TeamApi {
 }
 
 impl TeamApi {
-    pub(crate) fn get_teams(&self) -> Result<Vec<rust_team_data::v1::Team>, Error> {
+    pub(crate) fn get_teams(&self) -> anyhow::Result<Vec<rust_team_data::v1::Team>> {
         debug!("loading teams list from the Team API");
         Ok(self
             .req::<rust_team_data::v1::Teams>("teams.json")?
@@ -20,7 +19,7 @@ impl TeamApi {
             .collect())
     }
 
-    pub(crate) fn get_repos(&self) -> Result<Vec<rust_team_data::v1::Repo>, Error> {
+    pub(crate) fn get_repos(&self) -> anyhow::Result<Vec<rust_team_data::v1::Repo>> {
         debug!("loading teams list from the Team API");
         Ok(self
             .req::<rust_team_data::v1::Repos>("repos.json")?
@@ -30,17 +29,17 @@ impl TeamApi {
             .collect())
     }
 
-    pub(crate) fn get_lists(&self) -> Result<rust_team_data::v1::Lists, Error> {
+    pub(crate) fn get_lists(&self) -> anyhow::Result<rust_team_data::v1::Lists> {
         debug!("loading email lists list from the Team API");
         self.req::<rust_team_data::v1::Lists>("lists.json")
     }
 
-    pub(crate) fn get_zulip_groups(&self) -> Result<rust_team_data::v1::ZulipGroups, Error> {
+    pub(crate) fn get_zulip_groups(&self) -> anyhow::Result<rust_team_data::v1::ZulipGroups> {
         debug!("loading GitHub id to Zulip id map from the Team API");
         self.req::<rust_team_data::v1::ZulipGroups>("zulip-groups.json")
     }
 
-    fn req<T: serde::de::DeserializeOwned>(&self, url: &str) -> Result<T, Error> {
+    fn req<T: serde::de::DeserializeOwned>(&self, url: &str) -> anyhow::Result<T> {
         match self {
             TeamApi::Production => {
                 let base = std::env::var("TEAM_DATA_BASE_URL")
@@ -69,7 +68,7 @@ impl TeamApi {
                     let contents = std::fs::read(dest.path().join("v1").join(url))?;
                     Ok(serde_json::from_slice(&contents)?)
                 } else {
-                    failure::bail!("failed to generate the contents of the Team API");
+                    anyhow::bail!("failed to generate the contents of the Team API");
                 }
             }
         }

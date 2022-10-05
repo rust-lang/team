@@ -5,7 +5,7 @@ mod zulip;
 
 use crate::github::SyncGitHub;
 use crate::team_api::TeamApi;
-use failure::{Error, ResultExt};
+use anyhow::Context;
 use log::{error, info, warn};
 
 const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun", "zulip"];
@@ -25,7 +25,7 @@ fn usage() {
     eprintln!("  MAILGUN_API_TOKEN  Authentication token with Mailgun");
 }
 
-fn app() -> Result<(), Error> {
+fn app() -> anyhow::Result<()> {
     let mut dry_run = true;
     let mut next_team_repo = false;
     let mut team_repo = None;
@@ -94,16 +94,16 @@ fn app() -> Result<(), Error> {
     Ok(())
 }
 
-fn get_env(key: &str) -> Result<String, failure::Error> {
+fn get_env(key: &str) -> anyhow::Result<String> {
     Ok(std::env::var(key)
-        .with_context(|_| format!("failed to get the {} environment variable", key))?)
+        .with_context(|| format!("failed to get the {} environment variable", key))?)
 }
 
 fn main() {
     init_log();
     if let Err(err) = app() {
         error!("{}", err);
-        for cause in err.iter_causes() {
+        for cause in err.chain() {
             error!("caused by: {}", cause);
         }
         std::process::exit(1);

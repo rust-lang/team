@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 
-use failure::Error;
 use reqwest::blocking::Client;
 use serde::Deserialize;
 
@@ -34,7 +33,7 @@ impl ZulipApi {
         user_group_name: &str,
         description: &str,
         member_ids: &[usize],
-    ) -> Result<(), Error> {
+    ) -> anyhow::Result<()> {
         log::info!(
             "creating Zulip user group '{}' with description '{}' and member ids: {:?}",
             user_group_name,
@@ -55,7 +54,7 @@ impl ZulipApi {
         if r.status() == 400 {
             let body = r.json::<serde_json::Value>()?;
             let err = || {
-                failure::format_err!(
+                anyhow::format_err!(
                     "got 400 when creating user group {}: {}",
                     user_group_name,
                     body
@@ -76,7 +75,7 @@ impl ZulipApi {
     }
 
     /// Get all user groups of the Rust Zulip instance
-    pub(crate) fn get_user_groups(&self) -> Result<Vec<ZulipUserGroup>, Error> {
+    pub(crate) fn get_user_groups(&self) -> anyhow::Result<Vec<ZulipUserGroup>> {
         let response = self
             .req(reqwest::Method::GET, "/user_groups", None)?
             .error_for_status()?
@@ -87,7 +86,7 @@ impl ZulipApi {
     }
 
     /// Get all users of the Rust Zulip instance
-    pub(crate) fn get_users(&self) -> Result<Vec<ZulipUser>, Error> {
+    pub(crate) fn get_users(&self) -> anyhow::Result<Vec<ZulipUser>> {
         let response = self
             .req(reqwest::Method::GET, "/users", None)?
             .error_for_status()?
@@ -102,7 +101,7 @@ impl ZulipApi {
         user_group_id: usize,
         add_ids: &[usize],
         remove_ids: &[usize],
-    ) -> Result<(), Error> {
+    ) -> anyhow::Result<()> {
         if add_ids.is_empty() && remove_ids.is_empty() {
             log::debug!(
                 "user group {} does not need to have its group members updated",
@@ -151,7 +150,7 @@ impl ZulipApi {
         method: reqwest::Method,
         path: &str,
         form: Option<HashMap<&str, &str>>,
-    ) -> Result<reqwest::blocking::Response, Error> {
+    ) -> anyhow::Result<reqwest::blocking::Response> {
         let mut req = self
             .client
             .request(method, &format!("{}{}", ZULIP_BASE_URL, path))

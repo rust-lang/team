@@ -6,14 +6,12 @@ use rust_team_data::v1::ZulipGroupMember;
 
 use std::collections::BTreeMap;
 
-use failure::Error;
-
 pub(crate) fn run(
     username: String,
     token: String,
     team_api: &TeamApi,
     dry_run: bool,
-) -> Result<(), Error> {
+) -> anyhow::Result<()> {
     let zulip_api = ZulipApi::new(username, token, dry_run);
     let user_group_definitions = get_user_group_definitions(team_api, &zulip_api)?;
     let mut controller = ZulipController::new(zulip_api, dry_run)?;
@@ -29,7 +27,7 @@ pub(crate) fn run(
 fn get_user_group_definitions(
     team_api: &TeamApi,
     zulip_api: &ZulipApi,
-) -> Result<BTreeMap<String, Vec<usize>>, Error> {
+) -> anyhow::Result<BTreeMap<String, Vec<usize>>> {
     let email_map = zulip_api
         .get_users()?
         .into_iter()
@@ -73,7 +71,7 @@ struct ZulipController {
 
 impl ZulipController {
     /// Create a new `ZulipController`
-    fn new(zulip_api: ZulipApi, dry_run: bool) -> Result<Self, Error> {
+    fn new(zulip_api: ZulipApi, dry_run: bool) -> anyhow::Result<Self> {
         let user_groups = zulip_api.get_user_groups()?;
 
         let user_group_ids = user_groups
@@ -97,7 +95,7 @@ impl ZulipController {
         &mut self,
         user_group_name: &str,
         member_zulip_ids: &[usize],
-    ) -> Result<(), Error> {
+    ) -> anyhow::Result<()> {
         let id = self.user_group_id_from_name(user_group_name);
         let user_group_id = match id {
             Some(id) => {
@@ -158,7 +156,7 @@ impl ZulipController {
         user_group_name: &str,
         description: &str,
         member_ids: &[usize],
-    ) -> Result<usize, Error> {
+    ) -> anyhow::Result<usize> {
         self.zulip_api
             .create_user_group(user_group_name, description, member_ids)?;
 

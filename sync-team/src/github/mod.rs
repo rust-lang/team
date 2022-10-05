@@ -2,7 +2,7 @@ mod api;
 
 use self::api::{GitHub, TeamPrivacy, TeamRole};
 use crate::{github::api::RepoPermission, TeamApi};
-use failure::Error;
+use anyhow::Error;
 use log::{debug, info};
 use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
