@@ -95,8 +95,7 @@ fn app() -> anyhow::Result<()> {
 }
 
 fn get_env(key: &str) -> anyhow::Result<String> {
-    Ok(std::env::var(key)
-        .with_context(|| format!("failed to get the {} environment variable", key))?)
+    std::env::var(key).with_context(|| format!("failed to get the {} environment variable", key))
 }
 
 fn main() {
