@@ -147,7 +147,7 @@ pub struct Repo {
     pub branches: Vec<Branch>,
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub enum Bot {
     Bors,
