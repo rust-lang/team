@@ -49,3 +49,9 @@ jobs:
         run: |
           docker tag sync-team $REGISTRY/$REPOSITORY:latest
           docker push $REGISTRY/$REPOSITORY:latest
+
+      - name: Start the synchronization tool
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
+          cat output.json | python3 -m json.tool
