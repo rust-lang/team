@@ -247,7 +247,11 @@ impl SyncGitHub {
                 &actual_repo,
                 &branch.name,
                 api::BranchProtection {
-                    required_approving_review_count: 1,
+                    required_approving_review_count: if expected_repo.bots.contains(&Bot::Bors) {
+                        0
+                    } else {
+                        1
+                    },
                     dismiss_stale_reviews: branch.dismiss_stale_review,
                     required_checks: branch.ci_checks.clone(),
                     allowed_users: expected_repo
