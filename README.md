@@ -47,16 +47,20 @@ data. You can run the checks locally with the `check` command:
 cargo run check
 ```
 
+Note that, if you're using this for the first time, some of these checks will fail due to missing API tokens.
+
 ### Adding a person to the repository
 
 It's possible to fetch the public information present in a GitHub profile and
 store it in a person's TOML file:
 
 ```
-cargo run add-person <username>
+cargo run add-person <github-username>
 ```
 
-If you want to also add their Zulip ID, find them in the list of people on the
+You can also add additional information, such as someone's DIscord or Zulip ID by adding additional fields to their `.toml` file.
+
+To determine someone's Zulip ID, find them in the list of people on the
 right-hand side in Zulip, click the "three dots" menu, and copy the 'User ID'
 into the toml file:
 
