@@ -3,6 +3,9 @@ kind = "marker-team"
 
 [people]
 leads = []
+# Note: if you are a member of a Rust team that has permissions.dev-desktop set
+# to true in its team toml file, then you do not need to be added to this list.
+# For example, T-compiler and T-infra both have `dev-desktop = true`
 members = [
     "Mark-Simulacrum",
     "pietroalbini",
