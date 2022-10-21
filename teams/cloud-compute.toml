@@ -4,15 +4,9 @@ kind = "marker-team"
 [people]
 leads = []
 members = [
-    "Mark-Simulacrum",
-    "pietroalbini",
-    "oli-obk",
     "JoelMarcey",
     "yaahc",
     "ouz-a",
-    "bjorn3",
-    "compiler-errors",
-    "fee1-dead",
     "Dajamante",
     "nellshamrell",
 ]
