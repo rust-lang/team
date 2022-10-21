@@ -4,11 +4,11 @@ kind = "marker-team"
 [people]
 leads = []
 members = [
-    "JoelMarcey",
-    "yaahc",
-    "ouz-a",
     "Dajamante",
+    "JoelMarcey",
     "nellshamrell",
+    "ouz-a",
+    "yaahc",
 ]
 
 [permissions]
