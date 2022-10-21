@@ -58,7 +58,7 @@ store it in a person's TOML file:
 cargo run add-person <github-username>
 ```
 
-You can also add additional information, such as someone's DIscord or Zulip ID by adding additional fields to their `.toml` file.
+You can also add additional information, such as someone's Discord or Zulip ID by adding additional fields to their `.toml` file.
 
 To determine someone's Zulip ID, find them in the list of people on the
 right-hand side in Zulip, click the "three dots" menu, and copy the 'User ID'
