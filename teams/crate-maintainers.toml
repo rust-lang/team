@@ -25,3 +25,7 @@ orgs = ["rust-lang"]
 weight = -200
 name = "Crate maintainers"
 description = "Maintaining official rust-lang crates such as log, libc, cc, and more."
+zulip-stream = "t-libs/crates"
+
+[[zulip-groups]]
+name = "T-crate-maintainers"
