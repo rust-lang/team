@@ -671,6 +671,33 @@ impl GitHub {
         }
         Ok(())
     }
+
+    /// Get all teams associated with a given org
+    pub(crate) fn org_teams(&self, org: &str) -> anyhow::Result<HashSet<String>> {
+        let mut teams = HashSet::new();
+
+        self.rest_paginated(&Method::GET, format!("orgs/{org}/teams"), |resp| {
+            let partial: Vec<Team> = resp.json()?;
+            for team in partial {
+                teams.insert(team.name);
+            }
+            Ok(())
+        })?;
+
+        Ok(teams)
+    }
+
+    /// Delete a team with the given name from inside the given org
+    pub(crate) fn delete_team(&self, org: &str, team: &str) -> anyhow::Result<()> {
+        if !self.dry_run {
+            self.req(Method::DELETE, &format!("orgs/{}/teams/{}", org, team))?
+                .send()?
+                .error_for_status()?;
+        } else {
+            debug!("dry: deleting team '{}' from org '{}'", team, org);
+        }
+        Ok(())
+    }
 }
 
 #[derive(serde::Deserialize)]
