@@ -47,7 +47,7 @@ data. You can run the checks locally with the `check` command:
 cargo run check
 ```
 
-Note that, if you're using this for the first time, some of these checks will be skipped due to missing API tokens.
+Note that some of these checks will be skipped due to missing API tokens.
 
 ### Adding a person to the repository
 
