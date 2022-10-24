@@ -3,7 +3,7 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["matklad"]
+leads = ["Veykril"]
 members = ["matklad", "lnicola", "Veykril", "flodiebold", "jonas-schievink"]
 
 [website]
