@@ -673,6 +673,8 @@ pub(crate) enum Bot {
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct RepoAccess {
     pub teams: HashMap<String, RepoPermission>,
+    #[serde(default)]
+    pub individuals: HashMap<String, RepoPermission>,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]

@@ -67,6 +67,23 @@ impl<'a> Generator<'a> {
                         }
                     })
                     .collect(),
+                members: r
+                    .access
+                    .individuals
+                    .iter()
+                    .map(|(name, permission)| {
+                        let permission = match permission {
+                            RepoPermission::Admin => v1::RepoPermission::Admin,
+                            RepoPermission::Write => v1::RepoPermission::Write,
+                            RepoPermission::Maintain => v1::RepoPermission::Maintain,
+                            RepoPermission::Triage => v1::RepoPermission::Triage,
+                        };
+                        v1::RepoMember {
+                            name: name.clone(),
+                            permission,
+                        }
+                    })
+                    .collect(),
                 branches: r
                     .branches
                     .iter()
