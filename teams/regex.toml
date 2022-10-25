@@ -10,5 +10,6 @@ orgs = ["rust-lang"]
 
 [website]
 name = "Regex crate team"
+weight = -250
 description = "Developing and maintaining the regex crate"
 repo = "https://github.com/rust-lang/regex"
