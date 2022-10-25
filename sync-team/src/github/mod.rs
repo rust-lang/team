@@ -104,8 +104,6 @@ impl SyncGitHub {
     }
 
     fn diff_team(&self, github_team: &rust_team_data::v1::GitHubTeam) -> anyhow::Result<TeamDiff> {
-        let slug = format!("{}/{}", github_team.org, github_team.name);
-
         // Ensure the team exists and is consistent
         let team = match self.github.team(&github_team.org, &github_team.name)? {
             Some(team) => team,
@@ -169,13 +167,73 @@ impl SyncGitHub {
         }
 
         Ok(TeamDiff::Edit(EditTeamDiff {
-            id: team.id.unwrap(),
+            org: github_team.org.clone(),
             name: team.name.clone(),
             name_diff,
             description_diff,
             privacy_diff,
             member_diffs,
         }))
+    }
+
+    pub(crate) fn apply_team_diff(&self, diff: Vec<TeamDiff>) -> anyhow::Result<()> {
+        let mut all_member_diffs = Vec::new();
+        for team_diff in diff {
+            match team_diff {
+                TeamDiff::Create(CreateTeamDiff {
+                    org,
+                    name: team_name,
+                    description,
+                    privacy,
+                    members,
+                }) => {
+                    self.github
+                        .create_team(&org, &team_name, &description, privacy)?;
+                    all_member_diffs.extend(members.into_iter().map(|(member_name, role)| {
+                        (
+                            org.clone(),
+                            team_name.clone(),
+                            member_name,
+                            MemberDiff::Create(role),
+                        )
+                    }));
+                }
+                TeamDiff::Edit(EditTeamDiff {
+                    org,
+                    name: team_name,
+                    name_diff,
+                    description_diff,
+                    privacy_diff,
+                    member_diffs,
+                }) => {
+                    self.github.edit_team2(
+                        &org,
+                        &team_name,
+                        name_diff.as_deref(),
+                        description_diff.as_ref().map(|(_, d)| d.as_str()),
+                        privacy_diff.map(|(_, p)| p),
+                    )?;
+                    all_member_diffs.extend(member_diffs.into_iter().map(|(member_name, diff)| {
+                        (org.clone(), team_name.clone(), member_name, diff)
+                    }));
+                }
+                TeamDiff::Delete(DeleteTeamDiff { org, name }) => {
+                    self.github.delete_team(&org, &name)?;
+                }
+            }
+        }
+
+        for (org, team, member, member_diff) in all_member_diffs {
+            match member_diff {
+                MemberDiff::Create(role) | MemberDiff::ChangeRole((_, role)) => {
+                    self.github.set_membership2(&org, &team, &member, role)?;
+                }
+                MemberDiff::Delete => self.github.remove_membership2(&org, &team, &member)?,
+                MemberDiff::Noop => {}
+            }
+        }
+
+        Ok(())
     }
 
     pub(crate) fn synchronize_all(&self) -> Result<(), Error> {
@@ -522,7 +580,7 @@ impl CreateTeamDiff {
 }
 
 pub(crate) struct EditTeamDiff {
-    id: usize,
+    org: String,
     name: String,
     name_diff: Option<String>,
     description_diff: Option<(String, String)>,

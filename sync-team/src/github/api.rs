@@ -1,6 +1,6 @@
 use anyhow::bail;
 use hyper_old_types::header::{Link, RelationType};
-use log::{debug, trace};
+use log::{debug, info, trace};
 use reqwest::{
     blocking::{Client, RequestBuilder, Response},
     header::{self, HeaderValue},
@@ -128,8 +128,8 @@ impl GitHub {
             description: &'a str,
             privacy: TeamPrivacy,
         }
+        debug!("Creating team {}/{}", org, name);
         if self.dry_run {
-            debug!("dry: created team {}/{}", org, name);
             Ok(Team {
                 // The None marks that the team is "created" by the dry run and doesn't actually
                 // exists on GitHub
@@ -235,6 +235,38 @@ impl GitHub {
         } else {
             debug!("dry: edit team {}", name)
         }
+        Ok(())
+    }
+
+    pub(crate) fn edit_team2(
+        &self,
+        org: &str,
+        name: &str,
+        new_name: Option<&str>,
+        new_description: Option<&str>,
+        new_privacy: Option<TeamPrivacy>,
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize)]
+        struct Req<'a> {
+            #[serde(skip_serializing_if = "Option::is_none")]
+            name: Option<&'a str>,
+            #[serde(skip_serializing_if = "Option::is_none")]
+            description: Option<&'a str>,
+            #[serde(skip_serializing_if = "Option::is_none")]
+            privacy: Option<TeamPrivacy>,
+        }
+        debug!("Editing team {}/{}", org, name);
+        if !self.dry_run {
+            self.req(Method::PATCH, &format!("orgs/{org}/teams/{name}"))?
+                .json(&Req {
+                    name: new_name,
+                    description: new_description,
+                    privacy: new_privacy,
+                })
+                .send()?
+                .error_for_status()?;
+        }
+
         Ok(())
     }
 
@@ -401,6 +433,34 @@ impl GitHub {
         Ok(())
     }
 
+    pub(crate) fn set_membership2(
+        &self,
+        org: &str,
+        team: &str,
+        username: &str,
+        role: TeamRole,
+    ) -> anyhow::Result<()> {
+        debug!(
+            "Set membership of {} to {} in {}/{}",
+            username, role, org, team
+        );
+        #[derive(serde::Serialize)]
+        struct Req {
+            role: TeamRole,
+        }
+        if !self.dry_run {
+            self.req(
+                Method::PUT,
+                &format!("/orgs/{}/teams/{}/memberships/{}", org, team, username),
+            )?
+            .json(&Req { role })
+            .send()?
+            .error_for_status()?;
+        }
+
+        Ok(())
+    }
+
     pub(crate) fn remove_membership(&self, team: &Team, username: &str) -> anyhow::Result<()> {
         if let (false, Some(id)) = (self.dry_run, team.id) {
             self.req(
@@ -412,6 +472,25 @@ impl GitHub {
         } else {
             debug!("dry: remove membership of {}", username);
         }
+        Ok(())
+    }
+
+    pub(crate) fn remove_membership2(
+        &self,
+        org: &str,
+        team: &str,
+        username: &str,
+    ) -> anyhow::Result<()> {
+        debug!("Removing membership of {} from {}/{}", username, org, team);
+        if !self.dry_run {
+            self.req(
+                Method::DELETE,
+                &format!("orgs/{}/teams/{}/memberships/{}", org, team, username),
+            )?
+            .send()?
+            .error_for_status()?;
+        }
+
         Ok(())
     }
 
@@ -732,12 +811,11 @@ impl GitHub {
 
     /// Delete a team with the given name from inside the given org
     pub(crate) fn delete_team(&self, org: &str, team: &str) -> anyhow::Result<()> {
+        debug!("Deleting team {}/{}", org, team);
         if !self.dry_run {
             self.req(Method::DELETE, &format!("orgs/{}/teams/{}", org, team))?
                 .send()?
                 .error_for_status()?;
-        } else {
-            debug!("dry: deleting team '{}' from org '{}'", team, org);
         }
         Ok(())
     }
