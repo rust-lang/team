@@ -151,6 +151,17 @@ impl GitHubApi {
         Ok(result)
     }
 
+    pub(crate) fn repo(&self, org: &str, repo: &str) -> Result<Option<Repo>, Error> {
+        let resp = self
+            .prepare(true, Method::GET, &format!("repos/{}/{}", org, repo))?
+            .send()?;
+        match resp.status() {
+            reqwest::StatusCode::OK => Ok(Some(resp.json()?)),
+            reqwest::StatusCode::NOT_FOUND => Ok(None),
+            _ => Err(resp.error_for_status().unwrap_err().into()),
+        }
+    }
+
     /// Get all teams for the rust-lang org
     pub(crate) fn teams(&self) -> Result<Vec<GitHubTeam>, Error> {
         Ok(self
@@ -192,6 +203,40 @@ impl GitHubApi {
         }
         Ok(members)
     }
+
+    pub(crate) fn repo_teams(&self, org: &str, repo: &str) -> Result<Vec<Team>, Error> {
+        let resp = self
+            .prepare(true, Method::GET, &format!("repos/{}/{}/teams", org, repo))?
+            .send()?;
+        Ok(resp.error_for_status()?.json()?)
+    }
+
+    pub(crate) fn protected_branches(&self, org: &str, repo: &str) -> Result<Vec<Branch>, Error> {
+        let resp = self
+            .prepare(
+                true,
+                Method::GET,
+                &format!("repos/{}/{}/branches?protected=true", org, repo),
+            )?
+            .send()?;
+        Ok(resp.error_for_status()?.json()?)
+    }
+
+    pub(crate) fn branch_protection(
+        &self,
+        org: &str,
+        repo: &str,
+        branch: &str,
+    ) -> Result<BranchProtection, Error> {
+        let resp = self
+            .prepare(
+                true,
+                Method::GET,
+                &format!("repos/{}/{}/branches/{}/protection", org, repo, branch),
+            )?
+            .send()?;
+        Ok(resp.error_for_status()?.json()?)
+    }
 }
 
 fn user_node_id(id: usize) -> String {
@@ -209,4 +254,55 @@ pub(crate) struct GitHubMember {
     pub(crate) id: usize,
     #[serde(rename = "login")]
     pub(crate) name: String,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct Repo {
+    pub(crate) description: String,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct Team {
+    pub(crate) name: String,
+    pub(crate) permission: Permission,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct Permission(String);
+
+impl Permission {
+    pub(crate) fn as_toml(&self) -> &str {
+        match self.0.as_str() {
+            "push" => "write",
+            s => s,
+        }
+    }
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Eq, PartialEq, Copy, Clone)]
+#[serde(rename_all = "snake_case")]
+pub(crate) enum TeamPrivacy {
+    Closed,
+    Secret,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct Branch {
+    pub(crate) name: String,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct BranchProtection {
+    pub(crate) required_status_checks: Option<StatusChecks>,
+    pub(crate) required_pull_request_reviews: Option<RequiredReviews>,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct StatusChecks {
+    pub(crate) contexts: Vec<String>,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct RequiredReviews {
+    pub(crate) dismiss_stale_reviews: bool,
 }
