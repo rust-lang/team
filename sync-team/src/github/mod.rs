@@ -205,16 +205,23 @@ impl SyncGitHub {
             }
         }
 
+        let permission = |p| {
+            use rust_team_data::v1;
+            match p {
+                &v1::RepoPermission::Write => RepoPermission::Write,
+                &v1::RepoPermission::Admin => RepoPermission::Admin,
+                &v1::RepoPermission::Maintain => RepoPermission::Maintain,
+                &v1::RepoPermission::Triage => RepoPermission::Triage,
+            }
+        };
         let mut actual_teams = self.github.teams(&expected_repo.org, &expected_repo.name)?;
+        let mut actual_collaborators = self
+            .github
+            .collaborators(&expected_repo.org, &expected_repo.name)?;
+
         // Sync team and bot permissions
         for expected_team in &expected_repo.teams {
-            use rust_team_data::v1;
-            let permission = match &expected_team.permission {
-                v1::RepoPermission::Write => RepoPermission::Write,
-                v1::RepoPermission::Admin => RepoPermission::Admin,
-                v1::RepoPermission::Maintain => RepoPermission::Maintain,
-                v1::RepoPermission::Triage => RepoPermission::Triage,
-            };
+            let permission = permission(&expected_team.permission);
             actual_teams.remove(&expected_team.name);
             self.github.update_team_repo_permissions(
                 &expected_repo.org,
@@ -232,6 +239,7 @@ impl SyncGitHub {
                 Bot::Rustbot => "rustbot",
             };
             actual_teams.remove(bot_name);
+            actual_collaborators.remove(bot_name);
             self.github.update_user_repo_permissions(
                 &expected_repo.org,
                 &expected_repo.name,
@@ -240,11 +248,30 @@ impl SyncGitHub {
             )?;
         }
 
+        for member in &expected_repo.members {
+            actual_collaborators.remove(&member.name);
+            self.github.update_user_repo_permissions(
+                &expected_repo.org,
+                &expected_repo.name,
+                &member.name,
+                &permission(&member.permission),
+            )?;
+        }
+
         // `actual_teams` now contains the teams that were not expected
         // but are still on GitHub. We now remove them.
         for team in &actual_teams {
             self.github
                 .remove_team_from_repo(&expected_repo.org, &expected_repo.name, team)?;
+        }
+        // `actual_collaborators` now contains the collaborators that were not expected
+        // but are still on GitHub. We now remove them.
+        for collaborator in &actual_collaborators {
+            self.github.remove_collaborator_from_repo(
+                &expected_repo.org,
+                &expected_repo.name,
+                collaborator,
+            )?;
         }
 
         let mut main_branch_commit = None;

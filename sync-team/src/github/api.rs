@@ -485,6 +485,30 @@ impl GitHub {
         Ok(teams)
     }
 
+    pub(crate) fn collaborators(&self, org: &str, repo: &str) -> anyhow::Result<HashSet<String>> {
+        let mut users = HashSet::new();
+
+        #[derive(serde::Deserialize)]
+        struct User {
+            #[serde(alias = "login")]
+            name: String,
+        }
+
+        self.rest_paginated(
+            &Method::GET,
+            format!("repos/{org}/{repo}/collaborators?affiliation=direct"),
+            |resp| {
+                let partial: Vec<User> = resp.json()?;
+                for user in partial {
+                    users.insert(user.name);
+                }
+                Ok(())
+            },
+        )?;
+
+        Ok(users)
+    }
+
     pub(crate) fn remove_team_from_repo(
         &self,
         org: &str,
@@ -500,6 +524,25 @@ impl GitHub {
             .error_for_status()?;
         } else {
             debug!("dry: removing team {team} from repo {org}/{repo}")
+        }
+        Ok(())
+    }
+
+    pub(crate) fn remove_collaborator_from_repo(
+        &self,
+        org: &str,
+        repo: &str,
+        collaborator: &str,
+    ) -> anyhow::Result<()> {
+        if !self.dry_run {
+            self.req(
+                Method::DELETE,
+                &format!("repos/{org}/{repo}/collaborators/{collaborator}"),
+            )?
+            .send()?
+            .error_for_status()?;
+        } else {
+            debug!("dry: removing collaborator {collaborator} from repo {org}/{repo}")
         }
         Ok(())
     }
