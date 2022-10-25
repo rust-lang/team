@@ -55,10 +55,10 @@ impl SyncGitHub {
         })
     }
 
-    pub(crate) fn diff_all(&self) -> anyhow::Result<Vec<TeamDiff>> {
-        let diff = self.diff_teams()?;
+    pub(crate) fn diff_all(&self) -> anyhow::Result<Diff> {
+        let team_diffs = self.diff_teams()?;
 
-        Ok(diff)
+        Ok(Diff { team_diffs })
     }
 
     fn diff_teams(&self) -> anyhow::Result<Vec<TeamDiff>> {
@@ -67,9 +67,6 @@ impl SyncGitHub {
         for team in &self.teams {
             if let Some(gh) = &team.github {
                 for github_team in &gh.teams {
-                    if github_team.org != "rust-lang" {
-                        continue;
-                    }
                     // Get existing teams we haven't seen yet
                     let unseen_github_teams = match unseen_github_teams.get_mut(&github_team.org) {
                         Some(ts) => ts,
@@ -174,6 +171,11 @@ impl SyncGitHub {
             privacy_diff,
             member_diffs,
         }))
+    }
+
+    pub(crate) fn apply_diff(&self, diff: Diff) -> anyhow::Result<()> {
+        self.apply_team_diff(diff.team_diffs)?;
+        Ok(())
     }
 
     pub(crate) fn apply_team_diff(&self, diff: Vec<TeamDiff>) -> anyhow::Result<()> {
@@ -531,6 +533,18 @@ impl SyncGitHub {
             TeamRole::Maintainer
         } else {
             TeamRole::Member
+        }
+    }
+}
+
+pub(crate) struct Diff {
+    team_diffs: Vec<TeamDiff>,
+}
+
+impl Diff {
+    pub(crate) fn print_diff(&self) {
+        for team_diff in &self.team_diffs {
+            team_diff.print_diff()
         }
     }
 }

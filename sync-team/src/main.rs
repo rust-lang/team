@@ -76,9 +76,8 @@ fn app() -> anyhow::Result<()> {
                 let token = get_env("GITHUB_TOKEN")?;
                 let sync = SyncGitHub::new(token, &team_api, dry_run)?;
                 let diff = sync.diff_all()?;
-                for diff in diff {
-                    diff.print_diff();
-                }
+                diff.print_diff();
+                sync.apply_diff(diff)?;
                 sync.synchronize_all()?;
             }
             "mailgun" => {

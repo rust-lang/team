@@ -1,6 +1,6 @@
 use anyhow::bail;
 use hyper_old_types::header::{Link, RelationType};
-use log::{debug, info, trace};
+use log::{debug, trace};
 use reqwest::{
     blocking::{Client, RequestBuilder, Response},
     header::{self, HeaderValue},
