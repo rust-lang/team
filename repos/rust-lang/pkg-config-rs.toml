@@ -1,5 +1,5 @@
 org = "rust-lang"
-name = "pkg-config"
+name = "pkg-config-rs"
 description = "Build library for invoking pkg-config for Rust"
 bots = []
 
