@@ -785,7 +785,7 @@ impl GraphPageInfo {
 pub(crate) struct Team {
     /// The ID returned by the GitHub API can't be empty, but the None marks teams "created" during
     /// a dry run and not actually present on GitHub, so other methods can avoid acting on them.
-    id: Option<usize>,
+    pub(crate) id: Option<usize>,
     pub(crate) name: String,
     pub(crate) description: String,
     pub(crate) privacy: TeamPrivacy,
