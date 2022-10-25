@@ -144,6 +144,7 @@ pub struct Repo {
     pub description: String,
     pub bots: Vec<Bot>,
     pub teams: Vec<RepoTeam>,
+    pub members: Vec<RepoMember>,
     pub branches: Vec<Branch>,
 }
 
@@ -158,6 +159,12 @@ pub enum Bot {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RepoTeam {
+    pub name: String,
+    pub permission: RepoPermission,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RepoMember {
     pub name: String,
     pub permission: RepoPermission,
 }

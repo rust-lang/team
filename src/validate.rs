@@ -260,13 +260,19 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
     );
 
     let all_members = data.people().map(|p| p.github()).collect::<HashSet<_>>();
+    // All the individual contributors to any Rust controlled repos
+    let all_ics = data
+        .repos()
+        .flat_map(|r| r.access.individuals.keys())
+        .map(|n| n.as_str())
+        .collect::<HashSet<_>>();
     wrapper(
         all_members.difference(&referenced_members),
         errors,
         |person, _| {
-            if !data.person(person).unwrap().permissions().has_any() {
+            if !data.person(person).unwrap().permissions().has_any() && !all_ics.contains(person) {
                 bail!(
-                    "person `{}` is not a member of any team (active or archived) and has no permissions",
+                    "person `{}` is not a member of any team (active or archived), has no permissions, and is not an individual contributor to any repo",
                     person
                 );
             }
@@ -697,6 +703,17 @@ fn validate_repos(data: &Data, errors: &mut Vec<String>) {
                     repo.org,
                     repo.name,
                     team_name
+                );
+            }
+        }
+
+        for (name, _) in &repo.access.individuals {
+            if data.person(name).is_none() {
+                bail!(
+                    "access for {}/{} is invalid: '{}' is not the name of a person in the team repo",
+                    repo.org,
+                    repo.name,
+                    name
                 );
             }
         }
