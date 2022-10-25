@@ -165,7 +165,7 @@ impl SyncGitHub {
 
         Ok(TeamDiff::Edit(EditTeamDiff {
             org: github_team.org.clone(),
-            name: team.name.clone(),
+            name: team.name,
             name_diff,
             description_diff,
             privacy_diff,
@@ -178,7 +178,7 @@ impl SyncGitHub {
         Ok(())
     }
 
-    pub(crate) fn apply_team_diff(&self, diff: Vec<TeamDiff>) -> anyhow::Result<()> {
+    fn apply_team_diff(&self, diff: Vec<TeamDiff>) -> anyhow::Result<()> {
         let mut all_member_diffs = Vec::new();
         for team_diff in diff {
             match team_diff {
@@ -537,11 +537,13 @@ impl SyncGitHub {
     }
 }
 
+/// A diff between the team repo and the state on GitHub
 pub(crate) struct Diff {
     team_diffs: Vec<TeamDiff>,
 }
 
 impl Diff {
+    /// Print out the diff to the logs
     pub(crate) fn print_diff(&self) {
         for team_diff in &self.team_diffs {
             team_diff.print_diff()
@@ -549,14 +551,14 @@ impl Diff {
     }
 }
 
-pub(crate) enum TeamDiff {
+enum TeamDiff {
     Create(CreateTeamDiff),
     Edit(EditTeamDiff),
     Delete(DeleteTeamDiff),
 }
 
 impl TeamDiff {
-    pub(crate) fn print_diff(&self) {
+    fn print_diff(&self) {
         match self {
             TeamDiff::Create(c) => c.print_diff(),
             TeamDiff::Edit(e) => e.print_diff(),
@@ -565,7 +567,7 @@ impl TeamDiff {
     }
 }
 
-pub(crate) struct CreateTeamDiff {
+struct CreateTeamDiff {
     org: String,
     name: String,
     description: String,
@@ -593,7 +595,7 @@ impl CreateTeamDiff {
     }
 }
 
-pub(crate) struct EditTeamDiff {
+struct EditTeamDiff {
     org: String,
     name: String,
     name_diff: Option<String>,
@@ -601,6 +603,7 @@ pub(crate) struct EditTeamDiff {
     privacy_diff: Option<(TeamPrivacy, TeamPrivacy)>,
     member_diffs: Vec<(String, MemberDiff)>,
 }
+
 impl EditTeamDiff {
     fn print_diff(&self) {
         if self.noop() {
@@ -633,7 +636,7 @@ impl EditTeamDiff {
         }
     }
 
-    pub(crate) fn noop(&self) -> bool {
+    fn noop(&self) -> bool {
         self.name_diff.is_none()
             && self.description_diff.is_none()
             && self.privacy_diff.is_none()
@@ -654,10 +657,11 @@ impl MemberDiff {
     }
 }
 
-pub(crate) struct DeleteTeamDiff {
+struct DeleteTeamDiff {
     org: String,
     name: String,
 }
+
 impl DeleteTeamDiff {
     fn print_diff(&self) {
         info!("❌ Deleting team:");
