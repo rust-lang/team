@@ -70,20 +70,14 @@ impl SyncGitHub {
         for team in &self.teams {
             if let Some(gh) = &team.github {
                 for github_team in &gh.teams {
-                    if github_team.org != "rust-lang" {
-                        continue;
-                    }
                     // Get existing teams we haven't seen yet
                     let unseen_github_teams = match unseen_github_teams.get_mut(&github_team.org) {
                         Some(ts) => ts,
-                        None => {
-                            let ts = self.github.org_teams(&github_team.org)?;
-                            unseen_github_teams
-                                .entry(github_team.org.clone())
-                                .or_insert(ts)
-                        }
+                        None => unseen_github_teams
+                            .entry(github_team.org.clone())
+                            .or_insert(self.github.org_teams(&github_team.org)?),
                     };
-                    // Remove the current team from the collection of unseen GitHub kteams
+                    // Remove the current team from the collection of unseen GitHub teams
                     unseen_github_teams.remove(&github_team.name);
 
                     self.synchronize_team(github_team)?;
@@ -92,13 +86,15 @@ impl SyncGitHub {
         }
 
         const BOTS_TEAMS: &[&str] = &["bors", "highfive", "rfcbot", "bots"];
-        for (org, remaining_github_teams) in unseen_github_teams {
-            for remaining_github_team in remaining_github_teams {
-                if !BOTS_TEAMS.contains(&remaining_github_team.as_str()) {
-                    info!("Deleting team {} from {}", remaining_github_team, org);
-                    self.github.delete_team(&org, &remaining_github_team)?;
-                }
-            }
+        for (org, remaining_github_team) in unseen_github_teams
+            .iter()
+            .filter(|(org, _)| *org == "rust-lang") // Only delete unmanaged teams in `rust-lang` for now
+            .flat_map(|(org, teams)| teams.iter().map(move |t| (org, t)))
+            // Don't delete the special bot teams
+            .filter(|(_, team)| !BOTS_TEAMS.contains(&team.as_str()))
+        {
+            info!("Deleting team {} from {}", remaining_github_team, org);
+            self.github.delete_team(org, remaining_github_team)?;
         }
 
         Ok(())
