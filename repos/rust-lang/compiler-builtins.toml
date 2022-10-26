@@ -1,0 +1,10 @@
+org = 'rust-lang'
+name = 'compiler-builtins'
+description = 'Porting `compiler-rt` intrinsics to Rust'
+bots = []
+
+[access.teams]
+crate-maintainers = 'maintain'
+
+[[branch]]
+name = 'master'

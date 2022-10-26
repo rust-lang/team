@@ -167,21 +167,21 @@ fn run() -> Result<(), Error> {
             info!("written data to {}", file);
         }
         Cli::AddRepo { org, name } => {
-            #[derive(serde::Serialize)]
+            #[derive(serde::Serialize, Debug)]
             #[serde(rename_all = "kebab-case")]
             struct AccessToAdd {
                 teams: HashMap<String, String>,
             }
-            #[derive(serde::Serialize)]
+            #[derive(serde::Serialize, Debug)]
             #[serde(rename_all = "kebab-case")]
             struct BranchToAdd {
                 name: String,
                 #[serde(skip_serializing_if = "Option::is_none")]
-                ci_checks: Option<Vec<String>>,
-                #[serde(skip_serializing_if = "Option::is_none")]
                 dismiss_stale_review: Option<bool>,
+                #[serde(skip_serializing_if = "Option::is_none")]
+                ci_checks: Option<Vec<String>>,
             }
-            #[derive(serde::Serialize)]
+            #[derive(serde::Serialize, Debug)]
             #[serde(rename_all = "kebab-case")]
             struct RepoToAdd<'a> {
                 org: &'a str,
@@ -189,6 +189,7 @@ fn run() -> Result<(), Error> {
                 description: &'a str,
                 bots: Vec<String>,
                 access: AccessToAdd,
+                #[serde(skip_serializing_if = "Vec::is_empty")]
                 branch: Vec<BranchToAdd>,
             }
             let github = github::GitHubApi::new();

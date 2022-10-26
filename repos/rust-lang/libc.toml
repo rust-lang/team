@@ -1,0 +1,14 @@
+org = 'rust-lang'
+name = 'libc'
+description = 'Raw bindings to platform APIs for Rust'
+bots = [
+    'bors',
+    'highfive',
+    'rustbot',
+]
+
+[access.teams]
+crate-maintainers = 'maintain'
+
+[[branch]]
+name = 'master'

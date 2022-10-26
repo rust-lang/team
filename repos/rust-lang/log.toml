@@ -1,0 +1,7 @@
+org = 'rust-lang'
+name = 'log'
+description = 'Logging implementation for Rust'
+bots = []
+
+[access.teams]
+crate-maintainers = 'maintain'
