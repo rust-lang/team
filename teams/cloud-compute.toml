@@ -8,6 +8,7 @@ leads = []
 # For example, T-compiler and T-infra both have `dev-desktop = true`
 members = [
     "Dajamante",
+    "jhpratt",
     "JoelMarcey",
     "nellshamrell",
     "ouz-a",
