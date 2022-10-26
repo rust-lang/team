@@ -208,7 +208,7 @@ impl SyncGitHub {
                     privacy_diff,
                     member_diffs,
                 }) => {
-                    self.github.edit_team2(
+                    self.github.edit_team(
                         &org,
                         &team_name,
                         name_diff.as_deref(),
@@ -228,9 +228,9 @@ impl SyncGitHub {
         for (org, team, member, member_diff) in all_member_diffs {
             match member_diff {
                 MemberDiff::Create(role) | MemberDiff::ChangeRole((_, role)) => {
-                    self.github.set_membership2(&org, &team, &member, role)?;
+                    self.github.set_membership(&org, &team, &member, role)?;
                 }
-                MemberDiff::Delete => self.github.remove_membership2(&org, &team, &member)?,
+                MemberDiff::Delete => self.github.remove_membership(&org, &team, &member)?,
                 MemberDiff::Noop => {}
             }
         }
@@ -302,10 +302,11 @@ impl SyncGitHub {
             || team.privacy != DEFAULT_PRIVACY
         {
             self.github.edit_team(
-                &team,
-                &github_team.name,
-                DEFAULT_DESCRIPTION,
-                DEFAULT_PRIVACY,
+                &github_team.org,
+                &team.name,
+                Some(&github_team.name),
+                Some(DEFAULT_DESCRIPTION),
+                Some(DEFAULT_PRIVACY),
             )?;
         }
 
@@ -321,7 +322,12 @@ impl SyncGitHub {
                         "{}: user {} has the role {} instead of {}, changing them...",
                         slug, username, member.role, expected_role
                     );
-                    self.github.set_membership(&team, username, expected_role)?;
+                    self.github.set_membership(
+                        &github_team.org,
+                        &github_team.name,
+                        username,
+                        expected_role,
+                    )?;
                 } else {
                     debug!("{}: user {} is in the correct state", slug, username);
                 }
@@ -338,7 +344,12 @@ impl SyncGitHub {
                 // method will be called again. Thankfully though in that case GitHub doesn't send
                 // yet another invitation email to the user, but treats the API call as a noop, so
                 // it's safe to do it multiple times.
-                self.github.set_membership(&team, username, expected_role)?;
+                self.github.set_membership(
+                    &github_team.org,
+                    &github_team.name,
+                    username,
+                    expected_role,
+                )?;
             }
         }
 
@@ -349,7 +360,8 @@ impl SyncGitHub {
                 "{}: user {} is not in the team anymore, removing them...",
                 slug, member.username
             );
-            self.github.remove_membership(&team, &member.username)?;
+            self.github
+                .remove_membership(&github_team.org, &github_team.name, &member.username)?;
         }
 
         Ok(())

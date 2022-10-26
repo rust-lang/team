@@ -212,34 +212,6 @@ impl GitHub {
 
     pub(crate) fn edit_team(
         &self,
-        team: &Team,
-        name: &str,
-        description: &str,
-        privacy: TeamPrivacy,
-    ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize)]
-        struct Req<'a> {
-            name: &'a str,
-            description: &'a str,
-            privacy: TeamPrivacy,
-        }
-        if let (false, Some(id)) = (self.dry_run, team.id) {
-            self.req(Method::PATCH, &format!("teams/{}", id))?
-                .json(&Req {
-                    name,
-                    description,
-                    privacy,
-                })
-                .send()?
-                .error_for_status()?;
-        } else {
-            debug!("dry: edit team {}", name)
-        }
-        Ok(())
-    }
-
-    pub(crate) fn edit_team2(
-        &self,
         org: &str,
         name: &str,
         new_name: Option<&str>,
@@ -411,30 +383,6 @@ impl GitHub {
 
     pub(crate) fn set_membership(
         &self,
-        team: &Team,
-        username: &str,
-        role: TeamRole,
-    ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize)]
-        struct Req {
-            role: TeamRole,
-        }
-        if let (false, Some(id)) = (self.dry_run, team.id) {
-            self.req(
-                Method::PUT,
-                &format!("teams/{}/memberships/{}", id, username),
-            )?
-            .json(&Req { role })
-            .send()?
-            .error_for_status()?;
-        } else {
-            debug!("dry: set membership of {} to {}", username, role);
-        }
-        Ok(())
-    }
-
-    pub(crate) fn set_membership2(
-        &self,
         org: &str,
         team: &str,
         username: &str,
@@ -461,21 +409,7 @@ impl GitHub {
         Ok(())
     }
 
-    pub(crate) fn remove_membership(&self, team: &Team, username: &str) -> anyhow::Result<()> {
-        if let (false, Some(id)) = (self.dry_run, team.id) {
-            self.req(
-                Method::DELETE,
-                &format!("teams/{}/memberships/{}", id, username),
-            )?
-            .send()?
-            .error_for_status()?;
-        } else {
-            debug!("dry: remove membership of {}", username);
-        }
-        Ok(())
-    }
-
-    pub(crate) fn remove_membership2(
+    pub(crate) fn remove_membership(
         &self,
         org: &str,
         team: &str,
