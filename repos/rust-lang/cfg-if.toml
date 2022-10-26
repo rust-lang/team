@@ -1,0 +1,7 @@
+org = 'rust-lang'
+name = 'cfg-if'
+description = 'A if/elif-like macro for Rust #[cfg] statements'
+bots = []
+
+[access.teams]
+crate-maintainers = 'maintain'

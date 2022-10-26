@@ -1,0 +1,7 @@
+org = 'rust-lang'
+name = 'libz-sys'
+description = 'Rust crate package to link to a system libz (zlib)'
+bots = []
+
+[access.teams]
+crate-maintainers = 'maintain'

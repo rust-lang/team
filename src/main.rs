@@ -195,7 +195,7 @@ fn run() -> Result<(), Error> {
             let github = github::GitHubApi::new();
             let repo = match github.repo(&org, &name)? {
                 Some(r) => r,
-                None => failure::bail!("The repo '{org}/{name}' was not found on GitHub"),
+                None => failure::bail!("The repo '{}/{}' was not found on GitHub", org, name),
             };
             let mut teams = HashMap::new();
             let mut bots = Vec::new();
