@@ -56,16 +56,45 @@ impl SyncGitHub {
     }
 
     pub(crate) fn synchronize_all(&self) -> Result<(), Error> {
+        self.syncronize_teams()?;
+
+        for repo in &self.repos {
+            self.synchronize_repo(repo)?;
+        }
+
+        Ok(())
+    }
+
+    fn syncronize_teams(&self) -> Result<(), Error> {
+        let mut unseen_github_teams = HashMap::new();
         for team in &self.teams {
             if let Some(gh) = &team.github {
                 for github_team in &gh.teams {
+                    // Get existing teams we haven't seen yet
+                    let unseen_github_teams = match unseen_github_teams.get_mut(&github_team.org) {
+                        Some(ts) => ts,
+                        None => unseen_github_teams
+                            .entry(github_team.org.clone())
+                            .or_insert(self.github.org_teams(&github_team.org)?),
+                    };
+                    // Remove the current team from the collection of unseen GitHub teams
+                    unseen_github_teams.remove(&github_team.name);
+
                     self.synchronize_team(github_team)?;
                 }
             }
         }
 
-        for repo in &self.repos {
-            self.synchronize_repo(repo)?;
+        const BOTS_TEAMS: &[&str] = &["bors", "highfive", "rfcbot", "bots"];
+        for (org, remaining_github_team) in unseen_github_teams
+            .iter()
+            .filter(|(org, _)| *org == "rust-lang") // Only delete unmanaged teams in `rust-lang` for now
+            .flat_map(|(org, teams)| teams.iter().map(move |t| (org, t)))
+            // Don't delete the special bot teams
+            .filter(|(_, team)| !BOTS_TEAMS.contains(&team.as_str()))
+        {
+            info!("Deleting team {} from {}", remaining_github_team, org);
+            self.github.delete_team(org, remaining_github_team)?;
         }
 
         Ok(())
@@ -114,7 +143,10 @@ impl SyncGitHub {
                     debug!("{}: user {} is in the correct state", slug, username);
                 }
             } else {
-                info!("{}: user {} is missing, adding them...", slug, username);
+                info!(
+                    "{}: user {} is missing from team, adding them...",
+                    slug, username
+                );
                 // If the user is not a member of the org and they *don't* have a pending
                 // invitation this will send the invite email and add the membership in a "pending"
                 // state.
