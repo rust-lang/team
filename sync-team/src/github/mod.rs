@@ -205,14 +205,12 @@ impl SyncGitHub {
             }
         }
 
-        let permission = |p| {
-            use rust_team_data::v1;
-            match p {
-                &v1::RepoPermission::Write => RepoPermission::Write,
-                &v1::RepoPermission::Admin => RepoPermission::Admin,
-                &v1::RepoPermission::Maintain => RepoPermission::Maintain,
-                &v1::RepoPermission::Triage => RepoPermission::Triage,
-            }
+        use rust_team_data::v1;
+        let permission = |p: &v1::RepoPermission| match *p {
+            v1::RepoPermission::Write => RepoPermission::Write,
+            v1::RepoPermission::Admin => RepoPermission::Admin,
+            v1::RepoPermission::Maintain => RepoPermission::Maintain,
+            v1::RepoPermission::Triage => RepoPermission::Triage,
         };
         let mut actual_teams = self.github.teams(&expected_repo.org, &expected_repo.name)?;
         let mut actual_collaborators = self
