@@ -4,4 +4,4 @@ description = 'Support for matching file paths against Unix shell style patterns
 bots = []
 
 [access.teams]
-libs = 'write'
+crate-maintainers = 'maintain'

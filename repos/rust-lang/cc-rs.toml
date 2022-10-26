@@ -4,7 +4,7 @@ description = 'Rust library for build scripts to compile C/C++ code into a Rust 
 bots = []
 
 [access.teams]
-crate-maintainers = 'write'
+crate-maintainers = 'maintain'
 
 [[branch]]
 name = 'main'
