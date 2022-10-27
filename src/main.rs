@@ -171,6 +171,7 @@ fn run() -> Result<(), Error> {
             #[serde(rename_all = "kebab-case")]
             struct AccessToAdd {
                 teams: HashMap<String, String>,
+                individuals: HashMap<String, String>,
             }
             #[derive(serde::Serialize, Debug)]
             #[serde(rename_all = "kebab-case")]
@@ -219,6 +220,12 @@ fn run() -> Result<(), Error> {
                 }
             }
 
+            let individuals = github
+                .repo_collaborators(&org, &name)?
+                .into_iter()
+                .map(|c| (c.name, c.permissions.highest().to_owned()))
+                .collect();
+
             let mut branches = Vec::new();
             for branch in github.protected_branches(&org, &name)? {
                 let protection = github.branch_protection(&org, &name, &branch.name)?;
@@ -236,7 +243,7 @@ fn run() -> Result<(), Error> {
                 name: &name,
                 description: &repo.description,
                 bots,
-                access: AccessToAdd { teams },
+                access: AccessToAdd { teams, individuals },
                 branch: branches,
             };
             let file = format!("repos/{org}/{name}.toml");
