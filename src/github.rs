@@ -274,7 +274,7 @@ pub(crate) struct GitHubMember {
 
 #[derive(serde::Deserialize, Debug)]
 pub(crate) struct Repo {
-    pub(crate) description: String,
+    pub(crate) description: Option<String>,
 }
 
 #[derive(serde::Deserialize, Debug)]
