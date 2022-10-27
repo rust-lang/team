@@ -1,0 +1,25 @@
+org = 'rust-lang'
+name = 'socket2'
+description = 'Advanced configuration options for sockets.'
+bots = []
+
+[access.teams]
+libs-contributors = 'maintain'
+
+[access.individuals]
+chansuke = 'triage'
+sfackler = 'maintain'
+Thomasdezeeuw = 'maintain'
+carllerche = 'maintain'
+Darksonn = 'maintain'
+
+[[branch]]
+name = 'master'
+ci-checks = [
+    'Rustfmt',
+    'Test (beta)',
+    'Test (macos)',
+    'Test (nightly)',
+    'Test (stable)',
+    'Test (windows)',
+]

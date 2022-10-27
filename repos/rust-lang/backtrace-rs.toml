@@ -4,7 +4,7 @@ description = 'Backtraces in Rust'
 bots = []
 
 [access.teams]
-libs-contributors = 'write'
+libs-contributors = 'maintain'
 
 [access.individuals]
 alexcrichton = 'write'
