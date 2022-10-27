@@ -1,0 +1,10 @@
+org = 'rust-lang'
+name = 'cc-rs'
+description = 'Rust library for build scripts to compile C/C++ code into a Rust library'
+bots = []
+
+[access.teams]
+crate-maintainers = 'maintain'
+
+[[branch]]
+name = 'main'

@@ -1,0 +1,7 @@
+org = 'rust-lang'
+name = 'libm'
+description = "A port of MUSL's libm to Rust."
+bots = []
+
+[access.teams]
+crate-maintainers = 'maintain'
