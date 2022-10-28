@@ -499,9 +499,9 @@ impl Diff {
     }
 
     /// Print out the diff to the logs
-    pub(crate) fn print_diff(&self) {
+    pub(crate) fn log(&self) {
         for team_diff in &self.team_diffs {
-            team_diff.print_diff()
+            team_diff.log()
         }
     }
 }
@@ -523,11 +523,11 @@ impl TeamDiff {
         Ok(())
     }
 
-    fn print_diff(&self) {
+    fn log(&self) {
         match self {
-            TeamDiff::Create(c) => c.print_diff(),
-            TeamDiff::Edit(e) => e.print_diff(),
-            TeamDiff::Delete(d) => d.print_diff(),
+            TeamDiff::Create(c) => c.log(),
+            TeamDiff::Edit(e) => e.log(),
+            TeamDiff::Delete(d) => d.log(),
         }
     }
 }
@@ -551,7 +551,7 @@ impl CreateTeamDiff {
         Ok(())
     }
 
-    fn print_diff(&self) {
+    fn log(&self) {
         info!("➕ Creating team:");
         info!("  Org: {}", self.org);
         info!("  Name: {}", self.name);
@@ -596,7 +596,7 @@ impl EditTeamDiff {
         Ok(())
     }
 
-    fn print_diff(&self) {
+    fn log(&self) {
         if self.noop() {
             debug!("✅ Team '{}' stays the same...", self.name);
             return;
@@ -670,7 +670,7 @@ impl DeleteTeamDiff {
         Ok(())
     }
 
-    fn print_diff(&self) {
+    fn log(&self) {
         info!("❌ Deleting team:");
         info!("  Org: {}", self.org);
         info!("  Name: {}", self.name);
