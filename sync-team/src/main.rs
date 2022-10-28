@@ -77,7 +77,7 @@ fn app() -> anyhow::Result<()> {
                 let sync = SyncGitHub::new(token, &team_api, dry_run)?;
                 let diff = sync.diff_all()?;
                 diff.print_diff();
-                sync.apply_diff(diff)?;
+                diff.apply(&sync)?;
                 sync.synchronize_all()?;
             }
             "mailgun" => {
