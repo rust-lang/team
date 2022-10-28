@@ -4,7 +4,7 @@ description = 'Advanced configuration options for sockets.'
 bots = []
 
 [access.teams]
-libs-contributors = 'maintain'
+crate-maintainers = 'maintain'
 
 [access.individuals]
 chansuke = 'triage'

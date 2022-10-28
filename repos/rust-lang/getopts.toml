@@ -4,4 +4,4 @@ description = 'The getopts repo maintained by the rust-lang project'
 bots = []
 
 [access.teams]
-libs-contributors = 'maintain'
+crate-maintainers = 'maintain'

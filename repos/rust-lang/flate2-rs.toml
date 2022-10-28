@@ -4,7 +4,7 @@ description = 'DEFLATE, gzip, and zlib bindings for Rust'
 bots = []
 
 [access.teams]
-libs-contributors = 'maintain'
+crate-maintainers = 'maintain'
 
 [access.individuals]
 alexcrichton = 'maintain'
