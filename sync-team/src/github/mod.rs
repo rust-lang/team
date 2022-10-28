@@ -490,6 +490,7 @@ pub(crate) struct Diff {
 }
 
 impl Diff {
+    /// Apply the diff to GitHub
     pub(crate) fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
         for team_diff in self.team_diffs {
             team_diff.apply(sync)?;
@@ -646,14 +647,15 @@ impl MemberDiff {
     fn apply(self, org: &str, team: &str, member: &str, sync: &SyncGitHub) -> anyhow::Result<()> {
         match self {
             MemberDiff::Create(role) | MemberDiff::ChangeRole((_, role)) => {
-                sync.github.set_membership(&org, &team, &member, role)?;
+                sync.github.set_membership(org, team, member, role)?;
             }
-            MemberDiff::Delete => sync.github.remove_membership(&org, &team, &member)?,
+            MemberDiff::Delete => sync.github.remove_membership(org, team, member)?,
             MemberDiff::Noop => {}
         }
 
         Ok(())
     }
+
     fn is_noop(&self) -> bool {
         matches!(self, Self::Noop)
     }
