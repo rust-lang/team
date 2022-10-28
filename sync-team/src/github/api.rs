@@ -6,6 +6,7 @@ use reqwest::{
     header::{self, HeaderValue},
     Method, StatusCode,
 };
+use serde::de::DeserializeOwned;
 use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
@@ -23,85 +24,6 @@ impl GitHub {
             dry_run,
             client: Client::new(),
         }
-    }
-
-    fn req(&self, method: Method, url: &str) -> anyhow::Result<RequestBuilder> {
-        let url = if url.starts_with("https://") {
-            Cow::Borrowed(url)
-        } else {
-            Cow::Owned(format!("https://api.github.com/{}", url))
-        };
-        trace!("http request: {} {}", method, url);
-        if self.dry_run && method != Method::GET && !url.contains("graphql") {
-            panic!("Called a non-GET request in dry run mode: {}", method);
-        }
-        Ok(self
-            .client
-            .request(method, url.as_ref())
-            .header(
-                header::AUTHORIZATION,
-                HeaderValue::from_str(&format!("token {}", self.token))?,
-            )
-            .header(
-                header::USER_AGENT,
-                HeaderValue::from_static(crate::USER_AGENT),
-            ))
-    }
-
-    fn graphql<R, V>(&self, query: &str, variables: V) -> anyhow::Result<R>
-    where
-        R: serde::de::DeserializeOwned,
-        V: serde::Serialize,
-    {
-        #[derive(serde::Serialize)]
-        struct Request<'a, V> {
-            query: &'a str,
-            variables: V,
-        }
-        let res: GraphResult<R> = self
-            .req(Method::POST, "graphql")?
-            .json(&Request { query, variables })
-            .send()?
-            .error_for_status()?
-            .json()?;
-        if let Some(error) = res.errors.get(0) {
-            bail!("graphql error: {}", error.message);
-        } else if let Some(data) = res.data {
-            Ok(data)
-        } else {
-            bail!("missing graphql data");
-        }
-    }
-
-    fn rest_paginated<F>(&self, method: &Method, url: String, mut f: F) -> anyhow::Result<()>
-    where
-        F: FnMut(Response) -> anyhow::Result<()>,
-    {
-        let mut next = Some(url);
-        while let Some(next_url) = next.take() {
-            let resp = self
-                .req(method.clone(), &next_url)?
-                .send()?
-                .error_for_status()?;
-
-            // Extract the next page
-            if let Some(links) = resp.headers().get(header::LINK) {
-                let links: Link = links.to_str()?.parse()?;
-                for link in links.values() {
-                    if link
-                        .rel()
-                        .map(|r| r.iter().any(|r| *r == RelationType::Next))
-                        .unwrap_or(false)
-                    {
-                        next = Some(link.link().to_string());
-                        break;
-                    }
-                }
-            }
-
-            f(resp)?;
-        }
-        Ok(())
     }
 
     pub(crate) fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
@@ -139,16 +61,12 @@ impl GitHub {
                 privacy,
             })
         } else {
-            Ok(self
-                .req(Method::POST, &format!("orgs/{}/teams", org))?
-                .json(&Req {
-                    name,
-                    description,
-                    privacy,
-                })
-                .send()?
-                .error_for_status()?
-                .json()?)
+            let body = &Req {
+                name,
+                description,
+                privacy,
+            };
+            Ok(self.send(Method::POST, &format!("orgs/{}/teams", org), body)?)
         }
     }
 
@@ -163,22 +81,16 @@ impl GitHub {
         struct Req<'a> {
             permission: &'a RepoPermission,
         }
-        if self.dry_run {
-            debug!(
-                "dry: updating permission for team {team_name} on {org}/{repo} to {permission:?}"
-            );
-            Ok(())
-        } else {
-            let _ = self
-                .req(
-                    Method::PUT,
-                    &format!("orgs/{org}/teams/{team_name}/repos/{org}/{repo}"),
-                )?
-                .json(&Req { permission })
-                .send()?
-                .error_for_status()?;
-            Ok(())
+        debug!("Updating permission for team {team_name} on {org}/{repo} to {permission:?}");
+        if !self.dry_run {
+            let _ = self.send(
+                Method::PUT,
+                &format!("orgs/{org}/teams/{team_name}/repos/{org}/{repo}"),
+                &Req { permission },
+            )?;
         }
+
+        Ok(())
     }
 
     pub(crate) fn update_user_repo_permissions(
@@ -192,22 +104,15 @@ impl GitHub {
         struct Req<'a> {
             permission: &'a RepoPermission,
         }
-        if self.dry_run {
-            debug!(
-                "dry: updating permission for user {user_name} on {org}/{repo} to {permission:?}"
-            );
-            Ok(())
-        } else {
-            let _ = self
-                .req(
-                    Method::PUT,
-                    &format!("repos/{org}/{repo}/collaborators/{user_name}"),
-                )?
-                .json(&Req { permission })
-                .send()?
-                .error_for_status()?;
-            Ok(())
+        debug!("Updating permission for user {user_name} on {org}/{repo} to {permission:?}");
+        if !self.dry_run {
+            let _ = self.send(
+                Method::PUT,
+                &format!("repos/{org}/{repo}/collaborators/{user_name}"),
+                &Req { permission },
+            )?;
         }
+        Ok(())
     }
 
     pub(crate) fn edit_team(
@@ -234,10 +139,7 @@ impl GitHub {
         };
         debug!("Editing team '{name}' in '{org}' with request: {req:?}");
         if !self.dry_run {
-            self.req(Method::PATCH, &format!("orgs/{org}/teams/{name}"))?
-                .json(&req)
-                .send()?
-                .error_for_status()?;
+            self.send(Method::PATCH, &format!("orgs/{org}/teams/{name}"), &req)?;
         }
 
         Ok(())
@@ -395,13 +297,11 @@ impl GitHub {
             role: TeamRole,
         }
         if !self.dry_run {
-            self.req(
+            let _ = self.send(
                 Method::PUT,
                 &format!("orgs/{}/teams/{}/memberships/{}", org, team, username),
-            )?
-            .json(&Req { role })
-            .send()?
-            .error_for_status()?;
+                &Req { role },
+            )?;
         }
 
         Ok(())
@@ -448,8 +348,8 @@ impl GitHub {
             name: &'a str,
             description: &'a str,
         }
+        debug!("Creating repo {}/{}", org, name);
         if self.dry_run {
-            debug!("dry: created repo {}/{}", org, name);
             Ok(Repo {
                 name: name.to_string(),
                 org: org.to_string(),
@@ -457,27 +357,27 @@ impl GitHub {
                 default_branch: String::from("main"),
             })
         } else {
-            Ok(self
-                .req(Method::POST, &format!("orgs/{}/repos", org))?
-                .json(&Req { name, description })
-                .send()?
-                .error_for_status()?
-                .json()?)
+            Ok(self.send(
+                Method::POST,
+                &format!("orgs/{}/repos", org),
+                &Req { name, description },
+            )?)
         }
     }
 
     pub(crate) fn edit_repo(&self, repo: &Repo, description: &str) -> anyhow::Result<()> {
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, Debug)]
         struct Req<'a> {
             description: &'a str,
         }
+        let req = Req { description };
+        debug!("Editing repo {}/{} with {:?}", repo.org, repo.name, req);
         if !self.dry_run {
-            self.req(Method::PATCH, &format!("repos/{}/{}", repo.org, repo.name))?
-                .json(&Req { description })
-                .send()?
-                .error_for_status()?;
-        } else {
-            debug!("dry: editing repo {}/{}", repo.org, repo.name)
+            self.send(
+                Method::PATCH,
+                &format!("repos/{}/{}", repo.org, repo.name),
+                &req,
+            )?;
         }
         Ok(())
     }
@@ -526,6 +426,7 @@ impl GitHub {
         repo: &str,
         team: &str,
     ) -> anyhow::Result<()> {
+        debug!("Removing team {team} from repo {org}/{repo}");
         if !self.dry_run {
             self.req(
                 Method::DELETE,
@@ -533,9 +434,8 @@ impl GitHub {
             )?
             .send()?
             .error_for_status()?;
-        } else {
-            debug!("dry: removing team {team} from repo {org}/{repo}")
         }
+
         Ok(())
     }
 
@@ -545,6 +445,7 @@ impl GitHub {
         repo: &str,
         collaborator: &str,
     ) -> anyhow::Result<()> {
+        debug!("Removing collaborator {collaborator} from repo {org}/{repo}");
         if !self.dry_run {
             self.req(
                 Method::DELETE,
@@ -552,8 +453,6 @@ impl GitHub {
             )?
             .send()?
             .error_for_status()?;
-        } else {
-            debug!("dry: removing collaborator {collaborator} from repo {org}/{repo}")
         }
         Ok(())
     }
@@ -584,26 +483,21 @@ impl GitHub {
             r#ref: &'a str,
             sha: &'a str,
         }
-        if self.dry_run {
-            debug!(
-                "dry: created branch in {}/{}: {} with commit {}",
-                repo.org, repo.name, name, commit
-            );
-            Ok(())
-        } else {
-            Ok(self
-                .req(
-                    Method::POST,
-                    &format!("repos/{}/{}/git/refs", repo.org, repo.name),
-                )?
-                .json(&Req {
+        debug!(
+            "Creating branch in {}/{}: {} with commit {}",
+            repo.org, repo.name, name, commit
+        );
+        if !self.dry_run {
+            self.send(
+                Method::POST,
+                &format!("repos/{}/{}/git/refs", repo.org, repo.name),
+                &Req {
                     r#ref: &format!("refs/heads/{}", name),
                     sha: commit,
-                })
-                .send()?
-                .error_for_status()?
-                .json()?)
+                },
+            )?;
         }
+        Ok(())
     }
 
     /// Update the given branch's permissions.
@@ -662,6 +556,13 @@ impl GitHub {
             .into_iter()
             .collect(),
         };
+        debug!(
+            "Updating branch protection on repo {}/{} for {}: {}",
+            repo.org,
+            repo.name,
+            branch_name,
+            serde_json::to_string_pretty(&req).unwrap_or_else(|_| "<invalid json>".to_string())
+        );
         if !self.dry_run {
             let resp = self
                 .req(
@@ -680,13 +581,6 @@ impl GitHub {
                 _ => Err(resp.error_for_status().unwrap_err().into()),
             }
         } else {
-            debug!(
-                "dry: updating branch protection on repo {}/{} for {}: {}",
-                repo.org,
-                repo.name,
-                branch_name,
-                serde_json::to_string_pretty(&req).unwrap_or_else(|_| "<invalid json>".to_string())
-            );
             Ok(true)
         }
     }
@@ -748,6 +642,99 @@ impl GitHub {
             self.req(Method::DELETE, &format!("orgs/{}/teams/{}", org, team))?
                 .send()?
                 .error_for_status()?;
+        }
+        Ok(())
+    }
+
+    fn req(&self, method: Method, url: &str) -> anyhow::Result<RequestBuilder> {
+        let url = if url.starts_with("https://") {
+            Cow::Borrowed(url)
+        } else {
+            Cow::Owned(format!("https://api.github.com/{}", url))
+        };
+        trace!("http request: {} {}", method, url);
+        if self.dry_run && method != Method::GET && !url.contains("graphql") {
+            panic!("Called a non-GET request in dry run mode: {}", method);
+        }
+        Ok(self
+            .client
+            .request(method, url.as_ref())
+            .header(
+                header::AUTHORIZATION,
+                HeaderValue::from_str(&format!("token {}", self.token))?,
+            )
+            .header(
+                header::USER_AGENT,
+                HeaderValue::from_static(crate::USER_AGENT),
+            ))
+    }
+
+    fn send<T: serde::Serialize, U: DeserializeOwned>(
+        &self,
+        method: Method,
+        url: &str,
+        body: &T,
+    ) -> Result<U, anyhow::Error> {
+        Ok(self
+            .req(method, url)?
+            .json(body)
+            .send()?
+            .error_for_status()?
+            .json()?)
+    }
+
+    fn graphql<R, V>(&self, query: &str, variables: V) -> anyhow::Result<R>
+    where
+        R: serde::de::DeserializeOwned,
+        V: serde::Serialize,
+    {
+        #[derive(serde::Serialize)]
+        struct Request<'a, V> {
+            query: &'a str,
+            variables: V,
+        }
+        let res: GraphResult<R> = self
+            .req(Method::POST, "graphql")?
+            .json(&Request { query, variables })
+            .send()?
+            .error_for_status()?
+            .json()?;
+        if let Some(error) = res.errors.get(0) {
+            bail!("graphql error: {}", error.message);
+        } else if let Some(data) = res.data {
+            Ok(data)
+        } else {
+            bail!("missing graphql data");
+        }
+    }
+
+    fn rest_paginated<F>(&self, method: &Method, url: String, mut f: F) -> anyhow::Result<()>
+    where
+        F: FnMut(Response) -> anyhow::Result<()>,
+    {
+        let mut next = Some(url);
+        while let Some(next_url) = next.take() {
+            let resp = self
+                .req(method.clone(), &next_url)?
+                .send()?
+                .error_for_status()?;
+
+            // Extract the next page
+            if let Some(links) = resp.headers().get(header::LINK) {
+                let links: Link = links.to_str()?.parse()?;
+                for link in links.values() {
+                    if link
+                        .rel()
+                        .map(|r| r.iter().any(|r| *r == RelationType::Next))
+                        .unwrap_or(false)
+                    {
+                        next = Some(link.link().to_string());
+                        break;
+                    }
+                }
+            }
+
+            f(resp)?;
         }
         Ok(())
     }
