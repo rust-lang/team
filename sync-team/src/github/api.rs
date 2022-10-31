@@ -1,6 +1,6 @@
 use anyhow::bail;
 use hyper_old_types::header::{Link, RelationType};
-use log::{debug, error, trace};
+use log::{debug, trace};
 use reqwest::{
     blocking::{Client, RequestBuilder, Response},
     header::{self, HeaderValue},
@@ -668,17 +668,10 @@ impl GitHub {
         body: &T,
     ) -> Result<U, anyhow::Error> {
         Ok(self
-            .req(method.clone(), url)?
+            .req(method, url)?
             .json(body)
             .send()?
-            .error_for_status()
-            .map(move |e| {
-                error!(
-                    "Error status '{}' on request {method} {url} with body {body:?}",
-                    e.status()
-                );
-                e
-            })?
+            .error_for_status()?
             .json()?)
     }
 
