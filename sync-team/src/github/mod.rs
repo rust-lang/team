@@ -350,10 +350,12 @@ impl SyncGitHub {
             v1::RepoPermission::Maintain => RepoPermission::Maintain,
             v1::RepoPermission::Triage => RepoPermission::Triage,
         };
-        let mut actual_teams = self.github.teams(&expected_repo.org, &expected_repo.name)?;
+        let mut actual_teams = self
+            .github
+            .repo_teams(&expected_repo.org, &expected_repo.name)?;
         let mut actual_collaborators = self
             .github
-            .collaborators(&expected_repo.org, &expected_repo.name)?;
+            .repo_collaborators(&expected_repo.org, &expected_repo.name)?;
 
         // Sync team and bot permissions
         for expected_team in &expected_repo.teams {
