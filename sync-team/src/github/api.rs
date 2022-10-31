@@ -26,6 +26,80 @@ impl GitHub {
         }
     }
 
+    /// Get user names by user ids
+    pub(crate) fn usernames(&self, ids: &[usize]) -> anyhow::Result<HashMap<usize, String>> {
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct Usernames {
+            database_id: usize,
+            login: String,
+        }
+        #[derive(serde::Serialize)]
+        struct Params {
+            ids: Vec<String>,
+        }
+        static QUERY: &str = "
+            query($ids: [ID!]!) {
+                nodes(ids: $ids) {
+                    ... on User {
+                        databaseId
+                        login
+                    }
+                }
+            }
+        ";
+
+        let mut result = HashMap::new();
+        for chunk in ids.chunks(100) {
+            let res: GraphNodes<Usernames> = self.graphql(
+                QUERY,
+                Params {
+                    ids: chunk.iter().map(|id| user_node_id(*id)).collect(),
+                },
+            )?;
+            for node in res.nodes.into_iter().flatten() {
+                result.insert(node.database_id, node.login);
+            }
+        }
+        Ok(result)
+    }
+
+    /// Get the owners of an org
+    pub(crate) fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<usize>> {
+        #[derive(serde::Deserialize, Eq, PartialEq, Hash)]
+        struct User {
+            id: usize,
+        }
+        let mut owners = HashSet::new();
+        self.rest_paginated(
+            &Method::GET,
+            format!("orgs/{org}/members?role=admin"),
+            |resp| {
+                let partial: Vec<User> = resp.json()?;
+                for owner in partial {
+                    owners.insert(owner.id);
+                }
+                Ok(())
+            },
+        )?;
+        Ok(owners)
+    }
+
+    /// Get all teams associated with a org
+    pub(crate) fn org_teams(&self, org: &str) -> anyhow::Result<HashSet<String>> {
+        let mut teams = HashSet::new();
+
+        self.rest_paginated(&Method::GET, format!("orgs/{org}/teams"), |resp| {
+            let partial: Vec<Team> = resp.json()?;
+            for team in partial {
+                teams.insert(team.name);
+            }
+            Ok(())
+        })?;
+
+        Ok(teams)
+    }
+
     /// Get the team by name and org
     pub(crate) fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
         self.send_option(Method::GET, &format!("orgs/{}/teams/{}", org, team))
@@ -105,112 +179,6 @@ impl GitHub {
                 .error_for_status()?;
         }
         Ok(())
-    }
-
-    /// Update a team's permissions to a repo
-    pub(crate) fn update_team_repo_permissions(
-        &self,
-        org: &str,
-        repo: &str,
-        team: &str,
-        permission: &RepoPermission,
-    ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize, Debug)]
-        struct Req<'a> {
-            permission: &'a RepoPermission,
-        }
-        debug!("Updating permission for team {team} on {org}/{repo} to {permission:?}");
-        if !self.dry_run {
-            self.send(
-                Method::PUT,
-                &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}"),
-                &Req { permission },
-            )?;
-        }
-
-        Ok(())
-    }
-
-    /// Update a user's permissions to a repo
-    pub(crate) fn update_user_repo_permissions(
-        &self,
-        org: &str,
-        repo: &str,
-        user: &str,
-        permission: &RepoPermission,
-    ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize, Debug)]
-        struct Req<'a> {
-            permission: &'a RepoPermission,
-        }
-        debug!("Updating permission for user {user} on {org}/{repo} to {permission:?}");
-        if !self.dry_run {
-            self.send(
-                Method::PUT,
-                &format!("repos/{org}/{repo}/collaborators/{user}"),
-                &Req { permission },
-            )?;
-        }
-        Ok(())
-    }
-
-    /// Get user names by user ids
-    pub(crate) fn usernames(&self, ids: &[usize]) -> anyhow::Result<HashMap<usize, String>> {
-        #[derive(serde::Deserialize)]
-        #[serde(rename_all = "camelCase")]
-        struct Usernames {
-            database_id: usize,
-            login: String,
-        }
-        #[derive(serde::Serialize)]
-        struct Params {
-            ids: Vec<String>,
-        }
-        static QUERY: &str = "
-            query($ids: [ID!]!) {
-                nodes(ids: $ids) {
-                    ... on User {
-                        databaseId
-                        login
-                    }
-                }
-            }
-        ";
-
-        let mut result = HashMap::new();
-        for chunk in ids.chunks(100) {
-            let res: GraphNodes<Usernames> = self.graphql(
-                QUERY,
-                Params {
-                    ids: chunk.iter().map(|id| user_node_id(*id)).collect(),
-                },
-            )?;
-            for node in res.nodes.into_iter().flatten() {
-                result.insert(node.database_id, node.login);
-            }
-        }
-        Ok(result)
-    }
-
-    /// Get the owners of an org
-    pub(crate) fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<usize>> {
-        #[derive(serde::Deserialize, Eq, PartialEq, Hash)]
-        struct User {
-            id: usize,
-        }
-        let mut owners = HashSet::new();
-        self.rest_paginated(
-            &Method::GET,
-            format!("orgs/{org}/members?role=admin"),
-            |resp| {
-                let partial: Vec<User> = resp.json()?;
-                for owner in partial {
-                    owners.insert(owner.id);
-                }
-                Ok(())
-            },
-        )?;
-        Ok(owners)
     }
 
     pub(crate) fn team_memberships(
@@ -296,7 +264,7 @@ impl GitHub {
     }
 
     /// Set a user's membership in a team to a role
-    pub(crate) fn set_membership(
+    pub(crate) fn set_team_membership(
         &self,
         org: &str,
         team: &str,
@@ -320,7 +288,7 @@ impl GitHub {
     }
 
     /// Remove a user from a team
-    pub(crate) fn remove_membership(
+    pub(crate) fn remove_team_membership(
         &self,
         org: &str,
         team: &str,
@@ -433,6 +401,53 @@ impl GitHub {
         Ok(users)
     }
 
+    /// Update a team's permissions to a repo
+    pub(crate) fn update_team_repo_permissions(
+        &self,
+        org: &str,
+        repo: &str,
+        team: &str,
+        permission: &RepoPermission,
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize, Debug)]
+        struct Req<'a> {
+            permission: &'a RepoPermission,
+        }
+        debug!("Updating permission for team {team} on {org}/{repo} to {permission:?}");
+        if !self.dry_run {
+            self.send(
+                Method::PUT,
+                &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}"),
+                &Req { permission },
+            )?;
+        }
+
+        Ok(())
+    }
+
+    /// Update a user's permissions to a repo
+    pub(crate) fn update_user_repo_permissions(
+        &self,
+        org: &str,
+        repo: &str,
+        user: &str,
+        permission: &RepoPermission,
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize, Debug)]
+        struct Req<'a> {
+            permission: &'a RepoPermission,
+        }
+        debug!("Updating permission for user {user} on {org}/{repo} to {permission:?}");
+        if !self.dry_run {
+            self.send(
+                Method::PUT,
+                &format!("repos/{org}/{repo}/collaborators/{user}"),
+                &Req { permission },
+            )?;
+        }
+        Ok(())
+    }
+
     /// Remove a team from a repo
     pub(crate) fn remove_team_from_repo(
         &self,
@@ -508,6 +523,22 @@ impl GitHub {
             )?;
         }
         Ok(())
+    }
+
+    /// Get protected branches from a repo
+    pub(crate) fn protected_branches(&self, repo: &Repo) -> anyhow::Result<HashSet<String>> {
+        let mut names = HashSet::new();
+        self.rest_paginated(
+            &Method::GET,
+            format!("repos/{}/{}/branches?protected=true", repo.org, repo.name),
+            |resp| {
+                let resp = resp.json::<Vec<Branch>>()?;
+                names.extend(resp.into_iter().map(|b| b.name));
+
+                Ok(())
+            },
+        )?;
+        Ok(names)
     }
 
     /// Update a branch's permissions.
@@ -587,22 +618,6 @@ impl GitHub {
         }
     }
 
-    /// Get protected branches from a repo
-    pub(crate) fn protected_branches(&self, repo: &Repo) -> anyhow::Result<HashSet<String>> {
-        let mut names = HashSet::new();
-        self.rest_paginated(
-            &Method::GET,
-            format!("repos/{}/{}/branches?protected=true", repo.org, repo.name),
-            |resp| {
-                let resp = resp.json::<Vec<Branch>>()?;
-                names.extend(resp.into_iter().map(|b| b.name));
-
-                Ok(())
-            },
-        )?;
-        Ok(names)
-    }
-
     /// Delete a branch protection
     pub(crate) fn delete_branch_protection(&self, repo: &Repo, branch: &str) -> anyhow::Result<()> {
         debug!(
@@ -621,21 +636,6 @@ impl GitHub {
             .error_for_status()?;
         }
         Ok(())
-    }
-
-    /// Get all teams associated with a org
-    pub(crate) fn org_teams(&self, org: &str) -> anyhow::Result<HashSet<String>> {
-        let mut teams = HashSet::new();
-
-        self.rest_paginated(&Method::GET, format!("orgs/{org}/teams"), |resp| {
-            let partial: Vec<Team> = resp.json()?;
-            for team in partial {
-                teams.insert(team.name);
-            }
-            Ok(())
-        })?;
-
-        Ok(teams)
     }
 
     fn req(&self, method: Method, url: &str) -> anyhow::Result<RequestBuilder> {
