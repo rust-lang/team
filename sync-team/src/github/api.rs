@@ -121,7 +121,7 @@ impl GitHub {
         }
         debug!("Updating permission for team {team} on {org}/{repo} to {permission:?}");
         if !self.dry_run {
-            let _ = self.send(
+            self.send(
                 Method::PUT,
                 &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}"),
                 &Req { permission },
@@ -145,7 +145,7 @@ impl GitHub {
         }
         debug!("Updating permission for user {user} on {org}/{repo} to {permission:?}");
         if !self.dry_run {
-            let _ = self.send(
+            self.send(
                 Method::PUT,
                 &format!("repos/{org}/{repo}/collaborators/{user}"),
                 &Req { permission },
@@ -309,7 +309,7 @@ impl GitHub {
             role: TeamRole,
         }
         if !self.dry_run {
-            let _ = self.send(
+            self.send(
                 Method::PUT,
                 &format!("orgs/{org}/teams/{team}/memberships/{user}"),
                 &Req { role },
@@ -685,7 +685,7 @@ impl GitHub {
     fn send_option<T: DeserializeOwned>(
         &self,
         method: Method,
-        url: &String,
+        url: &str,
     ) -> Result<Option<T>, anyhow::Error> {
         let resp = self.req(method, url)?.send()?;
         match resp.status() {
