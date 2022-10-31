@@ -397,7 +397,7 @@ impl GitHub {
         if !self.dry_run {
             self.req(
                 Method::PUT,
-                &format!("/orgs/{}/teams/{}/memberships/{}", org, team, username),
+                &format!("orgs/{}/teams/{}/memberships/{}", org, team, username),
             )?
             .json(&Req { role })
             .send()?
