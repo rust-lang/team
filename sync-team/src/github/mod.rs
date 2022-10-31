@@ -85,17 +85,26 @@ impl SyncGitHub {
             }
         }
 
-        const BOTS_TEAMS: &[&str] = &["bors", "highfive", "rfcbot", "bots"];
-        for (org, remaining_github_teams) in unseen_github_teams {
-            for remaining_github_team in remaining_github_teams {
-                if !BOTS_TEAMS.contains(&remaining_github_team.as_str()) {
-                    diffs.push(TeamDiff::Delete(DeleteTeamDiff {
-                        org: org.clone(),
-                        name: remaining_github_team,
-                    }))
-                }
-            }
-        }
+        let delete_diffs = unseen_github_teams
+            .into_iter()
+            .filter(|(org, _)| org == "rust-lang") // Only delete unmanaged teams in `rust-lang` for now
+            .flat_map(|(org, remaining_github_teams)| {
+                remaining_github_teams
+                    .into_iter()
+                    .map(move |t| (org.clone(), t))
+            })
+            // Don't delete the special bot teams
+            .filter(|(_, remaining_github_team)| {
+                !BOTS_TEAMS.contains(&remaining_github_team.as_str())
+            })
+            .map(|(org, remaining_github_team)| {
+                TeamDiff::Delete(DeleteTeamDiff {
+                    org,
+                    name: remaining_github_team,
+                })
+            });
+
+        diffs.extend(delete_diffs);
 
         Ok(diffs)
     }
@@ -203,7 +212,6 @@ impl SyncGitHub {
             }
         }
 
-        const BOTS_TEAMS: &[&str] = &["bors", "highfive", "rfcbot", "bots"];
         for (org, remaining_github_team) in unseen_github_teams
             .iter()
             .filter(|(org, _)| *org == "rust-lang") // Only delete unmanaged teams in `rust-lang` for now
@@ -483,6 +491,9 @@ impl SyncGitHub {
         }
     }
 }
+
+/// The special bot teams
+const BOTS_TEAMS: &[&str] = &["bors", "highfive", "rfcbot", "bots"];
 
 /// A diff between the team repo and the state on GitHub
 pub(crate) struct Diff {
