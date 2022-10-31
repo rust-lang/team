@@ -55,6 +55,124 @@ impl SyncGitHub {
         })
     }
 
+    pub(crate) fn diff_all(&self) -> anyhow::Result<Diff> {
+        let team_diffs = self.diff_teams()?;
+
+        Ok(Diff { team_diffs })
+    }
+
+    fn diff_teams(&self) -> anyhow::Result<Vec<TeamDiff>> {
+        let mut diffs = Vec::new();
+        let mut unseen_github_teams = HashMap::new();
+        for team in &self.teams {
+            if let Some(gh) = &team.github {
+                for github_team in &gh.teams {
+                    // Get existing teams we haven't seen yet
+                    let unseen_github_teams = match unseen_github_teams.get_mut(&github_team.org) {
+                        Some(ts) => ts,
+                        None => {
+                            let ts = self.github.org_teams(&github_team.org)?;
+                            unseen_github_teams
+                                .entry(github_team.org.clone())
+                                .or_insert(ts)
+                        }
+                    };
+                    // Remove the current team from the collection of unseen GitHub kteams
+                    unseen_github_teams.remove(&github_team.name);
+
+                    diffs.push(self.diff_team(github_team)?);
+                }
+            }
+        }
+
+        const BOTS_TEAMS: &[&str] = &["bors", "highfive", "rfcbot", "bots"];
+        for (org, remaining_github_teams) in unseen_github_teams {
+            for remaining_github_team in remaining_github_teams {
+                if !BOTS_TEAMS.contains(&remaining_github_team.as_str()) {
+                    diffs.push(TeamDiff::Delete(DeleteTeamDiff {
+                        org: org.clone(),
+                        name: remaining_github_team,
+                    }))
+                }
+            }
+        }
+
+        Ok(diffs)
+    }
+
+    fn diff_team(&self, github_team: &rust_team_data::v1::GitHubTeam) -> anyhow::Result<TeamDiff> {
+        // Ensure the team exists and is consistent
+        let team = match self.github.team(&github_team.org, &github_team.name)? {
+            Some(team) => team,
+            None => {
+                let members = github_team
+                    .members
+                    .iter()
+                    .map(|member| {
+                        let expected_role = self.expected_role(&github_team.org, *member);
+                        (self.usernames_cache[member].clone(), expected_role)
+                    })
+                    .collect();
+                return Ok(TeamDiff::Create(CreateTeamDiff {
+                    org: github_team.org.clone(),
+                    name: github_team.name.clone(),
+                    description: DEFAULT_DESCRIPTION.to_owned(),
+                    privacy: DEFAULT_PRIVACY,
+                    members,
+                }));
+            }
+        };
+        let mut name_diff = None;
+        if team.name != github_team.name {
+            name_diff = Some(github_team.name.clone())
+        }
+        let mut description_diff = None;
+        if team.description != DEFAULT_DESCRIPTION {
+            description_diff = Some((team.description.clone(), DEFAULT_DESCRIPTION.to_owned()));
+        }
+        let mut privacy_diff = None;
+        if team.privacy != DEFAULT_PRIVACY {
+            privacy_diff = Some((team.privacy, DEFAULT_PRIVACY))
+        }
+
+        let mut member_diffs = Vec::new();
+
+        let mut current_members = self.github.team_memberships(&team)?;
+
+        // Ensure all expected members are in the team
+        for member in &github_team.members {
+            let expected_role = self.expected_role(&github_team.org, *member);
+            let username = &self.usernames_cache[member];
+            if let Some(member) = current_members.remove(member) {
+                if member.role != expected_role {
+                    member_diffs.push((
+                        username.clone(),
+                        MemberDiff::ChangeRole((member.role, expected_role)),
+                    ));
+                } else {
+                    member_diffs.push((username.clone(), MemberDiff::Noop));
+                }
+            } else {
+                member_diffs.push((username.clone(), MemberDiff::Create(expected_role)));
+            }
+        }
+
+        // The previous cycle removed expected members from current_members, so it only contains
+        // members to delete now.
+        for member in current_members.values() {
+            member_diffs.push((member.username.clone(), MemberDiff::Delete));
+        }
+
+        Ok(TeamDiff::Edit(EditTeamDiff {
+            org: github_team.org.clone(),
+            name: team.name,
+            name_diff,
+            description_diff,
+            privacy_diff,
+            member_diffs,
+        }))
+    }
+
     pub(crate) fn synchronize_all(&self) -> Result<(), Error> {
         self.syncronize_teams()?;
 
@@ -119,10 +237,11 @@ impl SyncGitHub {
             || team.privacy != DEFAULT_PRIVACY
         {
             self.github.edit_team(
-                &team,
-                &github_team.name,
-                DEFAULT_DESCRIPTION,
-                DEFAULT_PRIVACY,
+                &github_team.org,
+                &team.name,
+                Some(&github_team.name),
+                Some(DEFAULT_DESCRIPTION),
+                Some(DEFAULT_PRIVACY),
             )?;
         }
 
@@ -138,7 +257,12 @@ impl SyncGitHub {
                         "{}: user {} has the role {} instead of {}, changing them...",
                         slug, username, member.role, expected_role
                     );
-                    self.github.set_membership(&team, username, expected_role)?;
+                    self.github.set_membership(
+                        &github_team.org,
+                        &github_team.name,
+                        username,
+                        expected_role,
+                    )?;
                 } else {
                     debug!("{}: user {} is in the correct state", slug, username);
                 }
@@ -155,7 +279,12 @@ impl SyncGitHub {
                 // method will be called again. Thankfully though in that case GitHub doesn't send
                 // yet another invitation email to the user, but treats the API call as a noop, so
                 // it's safe to do it multiple times.
-                self.github.set_membership(&team, username, expected_role)?;
+                self.github.set_membership(
+                    &github_team.org,
+                    &github_team.name,
+                    username,
+                    expected_role,
+                )?;
             }
         }
 
@@ -166,7 +295,8 @@ impl SyncGitHub {
                 "{}: user {} is not in the team anymore, removing them...",
                 slug, member.username
             );
-            self.github.remove_membership(&team, &member.username)?;
+            self.github
+                .remove_membership(&github_team.org, &github_team.name, &member.username)?;
         }
 
         Ok(())
@@ -351,5 +481,200 @@ impl SyncGitHub {
         } else {
             TeamRole::Member
         }
+    }
+}
+
+/// A diff between the team repo and the state on GitHub
+pub(crate) struct Diff {
+    team_diffs: Vec<TeamDiff>,
+}
+
+impl Diff {
+    /// Apply the diff to GitHub
+    pub(crate) fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
+        for team_diff in self.team_diffs {
+            team_diff.apply(sync)?;
+        }
+
+        Ok(())
+    }
+
+    /// Print out the diff to the logs
+    pub(crate) fn log(&self) {
+        for team_diff in &self.team_diffs {
+            team_diff.log()
+        }
+    }
+}
+
+enum TeamDiff {
+    Create(CreateTeamDiff),
+    Edit(EditTeamDiff),
+    Delete(DeleteTeamDiff),
+}
+
+impl TeamDiff {
+    fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
+        match self {
+            TeamDiff::Create(c) => c.apply(sync)?,
+            TeamDiff::Edit(e) => e.apply(sync)?,
+            TeamDiff::Delete(d) => d.apply(sync)?,
+        }
+
+        Ok(())
+    }
+
+    fn log(&self) {
+        match self {
+            TeamDiff::Create(c) => c.log(),
+            TeamDiff::Edit(e) => e.log(),
+            TeamDiff::Delete(d) => d.log(),
+        }
+    }
+}
+
+struct CreateTeamDiff {
+    org: String,
+    name: String,
+    description: String,
+    privacy: TeamPrivacy,
+    members: Vec<(String, TeamRole)>,
+}
+
+impl CreateTeamDiff {
+    fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
+        sync.github
+            .create_team(&self.org, &self.name, &self.description, self.privacy)?;
+        for (member_name, role) in self.members {
+            MemberDiff::Create(role).apply(&self.org, &self.name, &member_name, sync)?;
+        }
+
+        Ok(())
+    }
+
+    fn log(&self) {
+        info!("➕ Creating team:");
+        info!("  Org: {}", self.org);
+        info!("  Name: {}", self.name);
+        info!("  Description: {}", self.description);
+        info!(
+            "  Privacy: {}",
+            match self.privacy {
+                TeamPrivacy::Secret => "secret",
+                TeamPrivacy::Closed => "closed",
+            }
+        );
+        info!("  Members:");
+        for (name, role) in &self.members {
+            info!("    {}: {}", name, role);
+        }
+    }
+}
+
+struct EditTeamDiff {
+    org: String,
+    name: String,
+    name_diff: Option<String>,
+    description_diff: Option<(String, String)>,
+    privacy_diff: Option<(TeamPrivacy, TeamPrivacy)>,
+    member_diffs: Vec<(String, MemberDiff)>,
+}
+
+impl EditTeamDiff {
+    fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
+        sync.github.edit_team(
+            &self.org,
+            &self.name,
+            self.name_diff.as_deref(),
+            self.description_diff.as_ref().map(|(_, d)| d.as_str()),
+            self.privacy_diff.map(|(_, p)| p),
+        )?;
+
+        for (member_name, member_diff) in self.member_diffs {
+            member_diff.apply(&self.org, &self.name, &member_name, sync)?;
+        }
+
+        Ok(())
+    }
+
+    fn log(&self) {
+        if self.noop() {
+            debug!("✅ Team '{}' stays the same...", self.name);
+            return;
+        }
+        info!("📝 Editing team '{}':", self.name);
+        if let Some(n) = &self.name_diff {
+            info!("  New name: {}", n);
+        }
+        if let Some((old, new)) = &self.description_diff {
+            info!("  New description: '{}' => '{}'", old, new);
+        }
+        if let Some((old, new)) = &self.privacy_diff {
+            let display = |privacy: &TeamPrivacy| match privacy {
+                TeamPrivacy::Secret => "secret",
+                TeamPrivacy::Closed => "closed",
+            };
+            info!("  New privacy: '{}' => '{}'", display(old), display(new));
+        }
+        for (member, diff) in &self.member_diffs {
+            match diff {
+                MemberDiff::Create(r) => info!("  Adding member '{member}' with {r} role"),
+                MemberDiff::ChangeRole((o, n)) => {
+                    info!("  Changing '{member}' role from {o} to {n}")
+                }
+                MemberDiff::Delete => info!("  Deleting member '{member}'"),
+                MemberDiff::Noop => debug!("  Member '{member}' stays the same"),
+            }
+        }
+    }
+
+    fn noop(&self) -> bool {
+        self.name_diff.is_none()
+            && self.description_diff.is_none()
+            && self.privacy_diff.is_none()
+            && self.member_diffs.iter().all(|(_, d)| d.is_noop())
+    }
+}
+
+enum MemberDiff {
+    Create(TeamRole),
+    ChangeRole((TeamRole, TeamRole)),
+    Delete,
+    Noop,
+}
+
+impl MemberDiff {
+    fn apply(self, org: &str, team: &str, member: &str, sync: &SyncGitHub) -> anyhow::Result<()> {
+        match self {
+            MemberDiff::Create(role) | MemberDiff::ChangeRole((_, role)) => {
+                sync.github.set_membership(org, team, member, role)?;
+            }
+            MemberDiff::Delete => sync.github.remove_membership(org, team, member)?,
+            MemberDiff::Noop => {}
+        }
+
+        Ok(())
+    }
+
+    fn is_noop(&self) -> bool {
+        matches!(self, Self::Noop)
+    }
+}
+
+struct DeleteTeamDiff {
+    org: String,
+    name: String,
+}
+
+impl DeleteTeamDiff {
+    fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
+        sync.github.delete_team(&self.org, &self.name)?;
+        Ok(())
+    }
+
+    fn log(&self) {
+        info!("❌ Deleting team:");
+        info!("  Org: {}", self.org);
+        info!("  Name: {}", self.name);
     }
 }
