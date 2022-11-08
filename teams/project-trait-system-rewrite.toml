@@ -1,0 +1,24 @@
+name = "project-trait-system-rewrite"
+kind = "project-group"
+subteam-of = "types"
+
+[people]
+leads = [
+    "lcnr",
+]
+members = [
+    "BoxyUwU",
+    "cjgillot",
+    "compiler-errors",
+    "spastorino",
+    "lcnr",
+]
+
+[website]
+name = "Rustc Trait System Rewrite Initiative"
+description = "Rewriting the trait system of rustc"
+repo = "https://github.com/rust-lang/types-team"
+
+[[github]]
+orgs = ["rust-lang"]
+team-name = "initiative-trait-system-rewrite"
