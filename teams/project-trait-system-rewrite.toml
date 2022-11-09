@@ -1,6 +1,8 @@
 name = "project-trait-system-rewrite"
 kind = "project-group"
-subteam-of = "types"
+# Really should be types, but types is already a subteam,
+# so that's not allowed for now.
+subteam-of = "compiler"
 
 [people]
 leads = [
