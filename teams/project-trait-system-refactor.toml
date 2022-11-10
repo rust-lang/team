@@ -1,4 +1,4 @@
-name = "project-trait-system-rewrite"
+name = "project-trait-system-refactor"
 kind = "project-group"
 # Really should be types, but types is already a subteam,
 # so that's not allowed for now.
@@ -17,10 +17,10 @@ members = [
 ]
 
 [website]
-name = "Rustc Trait System Rewrite Initiative"
-description = "Rewriting the trait system of rustc"
+name = "Rustc Trait System Refactor Initiative"
+description = "Refactoring the trait system of rustc"
 repo = "https://github.com/rust-lang/types-team"
 
 [[github]]
 orgs = ["rust-lang"]
-team-name = "initiative-trait-system-rewrite"
+team-name = "initiative-trait-system-refactor"
