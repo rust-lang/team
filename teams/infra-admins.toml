@@ -4,7 +4,6 @@ name = "infra-admins"
 leads = []
 members = [
     "Mark-Simulacrum",
-    "aidanhs",
     "pietroalbini",
     "jdno",
 ]
