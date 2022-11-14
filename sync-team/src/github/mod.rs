@@ -335,7 +335,7 @@ impl SyncGitHub {
 
         // Ensure the repo is consistent between its expected state and current state
         if !just_created {
-            if actual_repo.description != expected_repo.description {
+            if actual_repo.description.as_ref() != Some(&expected_repo.description) {
                 self.github
                     .edit_repo(&actual_repo, &expected_repo.description)?;
             } else {

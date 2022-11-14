@@ -453,7 +453,7 @@ impl GitHub {
             Ok(Repo {
                 name: name.to_string(),
                 org: org.to_string(),
-                description: description.to_string(),
+                description: Some(description.to_string()),
                 default_branch: String::from("main"),
             })
         } else {
@@ -817,7 +817,7 @@ pub(crate) struct Repo {
     pub(crate) name: String,
     #[serde(alias = "owner", deserialize_with = "repo_owner")]
     pub(crate) org: String,
-    pub(crate) description: String,
+    pub(crate) description: Option<String>,
     pub(crate) default_branch: String,
 }
 
