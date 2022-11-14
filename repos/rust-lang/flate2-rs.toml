@@ -1,0 +1,14 @@
+org = 'rust-lang'
+name = 'flate2-rs'
+description = 'DEFLATE, gzip, and zlib bindings for Rust'
+bots = []
+
+[access.teams]
+crate-maintainers = 'maintain'
+
+[access.individuals]
+alexcrichton = 'maintain'
+brson = 'write'
+
+[[branch]]
+name = 'main'

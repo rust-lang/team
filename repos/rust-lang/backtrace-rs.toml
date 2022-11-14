@@ -1,0 +1,13 @@
+org = 'rust-lang'
+name = 'backtrace-rs'
+description = 'Backtraces in Rust'
+bots = []
+
+[access.teams]
+crate-maintainers = 'maintain'
+
+[access.individuals]
+alexcrichton = 'write'
+
+[[branch]]
+name = 'master'

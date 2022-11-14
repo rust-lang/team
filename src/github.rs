@@ -211,6 +211,22 @@ impl GitHubApi {
         Ok(resp.error_for_status()?.json()?)
     }
 
+    pub(crate) fn repo_collaborators(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> Result<Vec<RepoCollaborator>, Error> {
+        let resp = self
+            .prepare(
+                true,
+                Method::GET,
+                &format!("repos/{org}/{repo}/collaborators?affiliation=direct"),
+            )?
+            .send()?;
+
+        Ok(resp.error_for_status()?.json()?)
+    }
+
     pub(crate) fn protected_branches(&self, org: &str, repo: &str) -> Result<Vec<Branch>, Error> {
         let resp = self
             .prepare(
@@ -258,7 +274,7 @@ pub(crate) struct GitHubMember {
 
 #[derive(serde::Deserialize, Debug)]
 pub(crate) struct Repo {
-    pub(crate) description: String,
+    pub(crate) description: Option<String>,
 }
 
 #[derive(serde::Deserialize, Debug)]
@@ -305,4 +321,35 @@ pub(crate) struct StatusChecks {
 #[derive(serde::Deserialize, Debug)]
 pub(crate) struct RequiredReviews {
     pub(crate) dismiss_stale_reviews: bool,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct RepoCollaborator {
+    #[serde(alias = "login")]
+    pub(crate) name: String,
+    pub(crate) permissions: Permissions,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct Permissions {
+    triage: bool,
+    push: bool,
+    maintain: bool,
+    admin: bool,
+}
+
+impl Permissions {
+    pub(crate) fn highest(&self) -> &str {
+        if self.admin {
+            "admin"
+        } else if self.maintain {
+            "maintain"
+        } else if self.push {
+            "write"
+        } else if self.triage {
+            "triage"
+        } else {
+            "read"
+        }
+    }
 }

@@ -170,7 +170,10 @@ fn run() -> Result<(), Error> {
             #[derive(serde::Serialize, Debug)]
             #[serde(rename_all = "kebab-case")]
             struct AccessToAdd {
+                #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
                 teams: HashMap<String, String>,
+                #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
+                individuals: HashMap<String, String>,
             }
             #[derive(serde::Serialize, Debug)]
             #[serde(rename_all = "kebab-case")]
@@ -219,6 +222,12 @@ fn run() -> Result<(), Error> {
                 }
             }
 
+            let individuals = github
+                .repo_collaborators(&org, &name)?
+                .into_iter()
+                .map(|c| (c.name, c.permissions.highest().to_owned()))
+                .collect();
+
             let mut branches = Vec::new();
             for branch in github.protected_branches(&org, &name)? {
                 let protection = github.branch_protection(&org, &name, &branch.name)?;
@@ -234,9 +243,11 @@ fn run() -> Result<(), Error> {
             let repo = RepoToAdd {
                 org: &org,
                 name: &name,
-                description: &repo.description,
+                description: &repo.description.unwrap_or_else(|| {
+                    format!("The {name} repo maintained by the rust-lang project")
+                }),
                 bots,
-                access: AccessToAdd { teams },
+                access: AccessToAdd { teams, individuals },
                 branch: branches,
             };
             let file = format!("repos/{org}/{name}.toml");

@@ -1,0 +1,7 @@
+org = 'rust-lang'
+name = 'getopts'
+description = 'The getopts repo maintained by the rust-lang project'
+bots = []
+
+[access.teams]
+crate-maintainers = 'maintain'
