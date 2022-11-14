@@ -59,7 +59,7 @@ impl TeamApi {
                     .arg("run")
                     .arg("--")
                     .arg("static-api")
-                    .arg(&dest.path())
+                    .arg(dest.path())
                     .env("RUST_LOG", "rust_team=warn")
                     .current_dir(path)
                     .status()?;
