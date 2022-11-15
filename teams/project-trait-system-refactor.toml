@@ -1,0 +1,26 @@
+name = "project-trait-system-refactor"
+kind = "project-group"
+# Really should be types, but types is already a subteam,
+# so that's not allowed for now.
+subteam-of = "compiler"
+
+[people]
+leads = [
+    "lcnr",
+]
+members = [
+    "BoxyUwU",
+    "cjgillot",
+    "compiler-errors",
+    "spastorino",
+    "lcnr",
+]
+
+[website]
+name = "Rustc Trait System Refactor Initiative"
+description = "Refactoring the trait system of rustc"
+repo = "https://github.com/rust-lang/types-team"
+
+[[github]]
+orgs = ["rust-lang"]
+team-name = "initiative-trait-system-refactor"
