@@ -265,7 +265,7 @@ impl SyncGitHub {
                         "{}: user {} has the role {} instead of {}, changing them...",
                         slug, username, member.role, expected_role
                     );
-                    self.github.set_membership(
+                    self.github.set_team_membership(
                         &github_team.org,
                         &github_team.name,
                         username,
@@ -287,7 +287,7 @@ impl SyncGitHub {
                 // method will be called again. Thankfully though in that case GitHub doesn't send
                 // yet another invitation email to the user, but treats the API call as a noop, so
                 // it's safe to do it multiple times.
-                self.github.set_membership(
+                self.github.set_team_membership(
                     &github_team.org,
                     &github_team.name,
                     username,
@@ -303,8 +303,11 @@ impl SyncGitHub {
                 "{}: user {} is not in the team anymore, removing them...",
                 slug, member.username
             );
-            self.github
-                .remove_membership(&github_team.org, &github_team.name, &member.username)?;
+            self.github.remove_team_membership(
+                &github_team.org,
+                &github_team.name,
+                &member.username,
+            )?;
         }
 
         Ok(())
@@ -350,10 +353,12 @@ impl SyncGitHub {
             v1::RepoPermission::Maintain => RepoPermission::Maintain,
             v1::RepoPermission::Triage => RepoPermission::Triage,
         };
-        let mut actual_teams = self.github.teams(&expected_repo.org, &expected_repo.name)?;
+        let mut actual_teams = self
+            .github
+            .repo_teams(&expected_repo.org, &expected_repo.name)?;
         let mut actual_collaborators = self
             .github
-            .collaborators(&expected_repo.org, &expected_repo.name)?;
+            .repo_collaborators(&expected_repo.org, &expected_repo.name)?;
 
         // Sync team and bot permissions
         for expected_team in &expected_repo.teams {
@@ -658,9 +663,9 @@ impl MemberDiff {
     fn apply(self, org: &str, team: &str, member: &str, sync: &SyncGitHub) -> anyhow::Result<()> {
         match self {
             MemberDiff::Create(role) | MemberDiff::ChangeRole((_, role)) => {
-                sync.github.set_membership(org, team, member, role)?;
+                sync.github.set_team_membership(org, team, member, role)?;
             }
-            MemberDiff::Delete => sync.github.remove_membership(org, team, member)?,
+            MemberDiff::Delete => sync.github.remove_team_membership(org, team, member)?,
             MemberDiff::Noop => {}
         }
 

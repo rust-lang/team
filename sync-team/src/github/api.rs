@@ -6,6 +6,7 @@ use reqwest::{
     header::{self, HeaderValue},
     Method, StatusCode,
 };
+use serde::de::DeserializeOwned;
 use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
@@ -25,224 +26,7 @@ impl GitHub {
         }
     }
 
-    fn req(&self, method: Method, url: &str) -> anyhow::Result<RequestBuilder> {
-        let url = if url.starts_with("https://") {
-            Cow::Borrowed(url)
-        } else {
-            Cow::Owned(format!("https://api.github.com/{}", url))
-        };
-        trace!("http request: {} {}", method, url);
-        if self.dry_run && method != Method::GET && !url.contains("graphql") {
-            panic!("Called a non-GET request in dry run mode: {}", method);
-        }
-        Ok(self
-            .client
-            .request(method, url.as_ref())
-            .header(
-                header::AUTHORIZATION,
-                HeaderValue::from_str(&format!("token {}", self.token))?,
-            )
-            .header(
-                header::USER_AGENT,
-                HeaderValue::from_static(crate::USER_AGENT),
-            ))
-    }
-
-    fn graphql<R, V>(&self, query: &str, variables: V) -> anyhow::Result<R>
-    where
-        R: serde::de::DeserializeOwned,
-        V: serde::Serialize,
-    {
-        #[derive(serde::Serialize)]
-        struct Request<'a, V> {
-            query: &'a str,
-            variables: V,
-        }
-        let res: GraphResult<R> = self
-            .req(Method::POST, "graphql")?
-            .json(&Request { query, variables })
-            .send()?
-            .error_for_status()?
-            .json()?;
-        if let Some(error) = res.errors.get(0) {
-            bail!("graphql error: {}", error.message);
-        } else if let Some(data) = res.data {
-            Ok(data)
-        } else {
-            bail!("missing graphql data");
-        }
-    }
-
-    fn rest_paginated<F>(&self, method: &Method, url: String, mut f: F) -> anyhow::Result<()>
-    where
-        F: FnMut(Response) -> anyhow::Result<()>,
-    {
-        let mut next = Some(url);
-        while let Some(next_url) = next.take() {
-            let resp = self
-                .req(method.clone(), &next_url)?
-                .send()?
-                .error_for_status()?;
-
-            // Extract the next page
-            if let Some(links) = resp.headers().get(header::LINK) {
-                let links: Link = links.to_str()?.parse()?;
-                for link in links.values() {
-                    if link
-                        .rel()
-                        .map(|r| r.iter().any(|r| *r == RelationType::Next))
-                        .unwrap_or(false)
-                    {
-                        next = Some(link.link().to_string());
-                        break;
-                    }
-                }
-            }
-
-            f(resp)?;
-        }
-        Ok(())
-    }
-
-    pub(crate) fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
-        let resp = self
-            .req(Method::GET, &format!("orgs/{}/teams/{}", org, team))?
-            .send()?;
-        match resp.status() {
-            StatusCode::OK => Ok(Some(resp.json()?)),
-            StatusCode::NOT_FOUND => Ok(None),
-            _ => Err(resp.error_for_status().unwrap_err().into()),
-        }
-    }
-
-    pub(crate) fn create_team(
-        &self,
-        org: &str,
-        name: &str,
-        description: &str,
-        privacy: TeamPrivacy,
-    ) -> anyhow::Result<Team> {
-        #[derive(serde::Serialize)]
-        struct Req<'a> {
-            name: &'a str,
-            description: &'a str,
-            privacy: TeamPrivacy,
-        }
-        debug!("Creating team '{name}' in '{org}'");
-        if self.dry_run {
-            Ok(Team {
-                // The None marks that the team is "created" by the dry run and doesn't actually
-                // exists on GitHub
-                id: None,
-                name: name.to_string(),
-                description: description.to_string(),
-                privacy,
-            })
-        } else {
-            Ok(self
-                .req(Method::POST, &format!("orgs/{}/teams", org))?
-                .json(&Req {
-                    name,
-                    description,
-                    privacy,
-                })
-                .send()?
-                .error_for_status()?
-                .json()?)
-        }
-    }
-
-    pub(crate) fn update_team_repo_permissions(
-        &self,
-        org: &str,
-        repo: &str,
-        team_name: &str,
-        permission: &RepoPermission,
-    ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize)]
-        struct Req<'a> {
-            permission: &'a RepoPermission,
-        }
-        if self.dry_run {
-            debug!(
-                "dry: updating permission for team {team_name} on {org}/{repo} to {permission:?}"
-            );
-            Ok(())
-        } else {
-            let _ = self
-                .req(
-                    Method::PUT,
-                    &format!("orgs/{org}/teams/{team_name}/repos/{org}/{repo}"),
-                )?
-                .json(&Req { permission })
-                .send()?
-                .error_for_status()?;
-            Ok(())
-        }
-    }
-
-    pub(crate) fn update_user_repo_permissions(
-        &self,
-        org: &str,
-        repo: &str,
-        user_name: &str,
-        permission: &RepoPermission,
-    ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize)]
-        struct Req<'a> {
-            permission: &'a RepoPermission,
-        }
-        if self.dry_run {
-            debug!(
-                "dry: updating permission for user {user_name} on {org}/{repo} to {permission:?}"
-            );
-            Ok(())
-        } else {
-            let _ = self
-                .req(
-                    Method::PUT,
-                    &format!("repos/{org}/{repo}/collaborators/{user_name}"),
-                )?
-                .json(&Req { permission })
-                .send()?
-                .error_for_status()?;
-            Ok(())
-        }
-    }
-
-    pub(crate) fn edit_team(
-        &self,
-        org: &str,
-        name: &str,
-        new_name: Option<&str>,
-        new_description: Option<&str>,
-        new_privacy: Option<TeamPrivacy>,
-    ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize, Debug)]
-        struct Req<'a> {
-            #[serde(skip_serializing_if = "Option::is_none")]
-            name: Option<&'a str>,
-            #[serde(skip_serializing_if = "Option::is_none")]
-            description: Option<&'a str>,
-            #[serde(skip_serializing_if = "Option::is_none")]
-            privacy: Option<TeamPrivacy>,
-        }
-        let req = Req {
-            name: new_name,
-            description: new_description,
-            privacy: new_privacy,
-        };
-        debug!("Editing team '{name}' in '{org}' with request: {req:?}");
-        if !self.dry_run {
-            self.req(Method::PATCH, &format!("orgs/{org}/teams/{name}"))?
-                .json(&req)
-                .send()?
-                .error_for_status()?;
-        }
-
-        Ok(())
-    }
-
+    /// Get user names by user ids
     pub(crate) fn usernames(&self, ids: &[usize]) -> anyhow::Result<HashMap<usize, String>> {
         #[derive(serde::Deserialize)]
         #[serde(rename_all = "camelCase")]
@@ -280,6 +64,7 @@ impl GitHub {
         Ok(result)
     }
 
+    /// Get the owners of an org
     pub(crate) fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<usize>> {
         #[derive(serde::Deserialize, Eq, PartialEq, Hash)]
         struct User {
@@ -288,7 +73,7 @@ impl GitHub {
         let mut owners = HashSet::new();
         self.rest_paginated(
             &Method::GET,
-            format!("orgs/{}/members?role=admin", org),
+            format!("orgs/{org}/members?role=admin"),
             |resp| {
                 let partial: Vec<User> = resp.json()?;
                 for owner in partial {
@@ -298,6 +83,102 @@ impl GitHub {
             },
         )?;
         Ok(owners)
+    }
+
+    /// Get all teams associated with a org
+    pub(crate) fn org_teams(&self, org: &str) -> anyhow::Result<HashSet<String>> {
+        let mut teams = HashSet::new();
+
+        self.rest_paginated(&Method::GET, format!("orgs/{org}/teams"), |resp| {
+            let partial: Vec<Team> = resp.json()?;
+            for team in partial {
+                teams.insert(team.name);
+            }
+            Ok(())
+        })?;
+
+        Ok(teams)
+    }
+
+    /// Get the team by name and org
+    pub(crate) fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
+        self.send_option(Method::GET, &format!("orgs/{}/teams/{}", org, team))
+    }
+
+    /// Create a team in a org
+    pub(crate) fn create_team(
+        &self,
+        org: &str,
+        name: &str,
+        description: &str,
+        privacy: TeamPrivacy,
+    ) -> anyhow::Result<Team> {
+        #[derive(serde::Serialize, Debug)]
+        struct Req<'a> {
+            name: &'a str,
+            description: &'a str,
+            privacy: TeamPrivacy,
+        }
+        debug!("Creating team '{name}' in '{org}'");
+        if self.dry_run {
+            Ok(Team {
+                // The `None` marks that the team is "created" by the dry run and
+                // doesn't actually exist on GitHub
+                id: None,
+                name: name.to_string(),
+                description: description.to_string(),
+                privacy,
+            })
+        } else {
+            let body = &Req {
+                name,
+                description,
+                privacy,
+            };
+            Ok(self.send(Method::POST, &format!("orgs/{}/teams", org), body)?)
+        }
+    }
+
+    /// Edit a team
+    pub(crate) fn edit_team(
+        &self,
+        org: &str,
+        name: &str,
+        new_name: Option<&str>,
+        new_description: Option<&str>,
+        new_privacy: Option<TeamPrivacy>,
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize, Debug)]
+        struct Req<'a> {
+            #[serde(skip_serializing_if = "Option::is_none")]
+            name: Option<&'a str>,
+            #[serde(skip_serializing_if = "Option::is_none")]
+            description: Option<&'a str>,
+            #[serde(skip_serializing_if = "Option::is_none")]
+            privacy: Option<TeamPrivacy>,
+        }
+        let req = Req {
+            name: new_name,
+            description: new_description,
+            privacy: new_privacy,
+        };
+        debug!("Editing team '{name}' in '{org}' with request: {req:?}");
+        if !self.dry_run {
+            self.send(Method::PATCH, &format!("orgs/{org}/teams/{name}"), &req)?;
+        }
+
+        Ok(())
+    }
+
+    /// Delete a team by name and org
+    pub(crate) fn delete_team(&self, org: &str, team: &str) -> anyhow::Result<()> {
+        debug!("Deleting team '{team}' in '{org}'");
+        if !self.dry_run {
+            self.req(Method::DELETE, &format!("orgs/{}/teams/{}", org, team))?
+                .send()?
+                .error_for_status()?;
+        }
+        Ok(())
     }
 
     pub(crate) fn team_memberships(
@@ -382,42 +263,42 @@ impl GitHub {
         Ok(memberships)
     }
 
-    pub(crate) fn set_membership(
+    /// Set a user's membership in a team to a role
+    pub(crate) fn set_team_membership(
         &self,
         org: &str,
         team: &str,
-        username: &str,
+        user: &str,
         role: TeamRole,
     ) -> anyhow::Result<()> {
-        debug!("Setting membership of '{username}' in team '{team}' to {role} in '{org}'");
-        #[derive(serde::Serialize)]
+        debug!("Setting membership of '{user}' in team '{team}' to {role} in '{org}'");
+        #[derive(serde::Serialize, Debug)]
         struct Req {
             role: TeamRole,
         }
         if !self.dry_run {
-            self.req(
+            self.send(
                 Method::PUT,
-                &format!("orgs/{}/teams/{}/memberships/{}", org, team, username),
-            )?
-            .json(&Req { role })
-            .send()?
-            .error_for_status()?;
+                &format!("orgs/{org}/teams/{team}/memberships/{user}"),
+                &Req { role },
+            )?;
         }
 
         Ok(())
     }
 
-    pub(crate) fn remove_membership(
+    /// Remove a user from a team
+    pub(crate) fn remove_team_membership(
         &self,
         org: &str,
         team: &str,
-        username: &str,
+        user: &str,
     ) -> anyhow::Result<()> {
-        debug!("Removing membership of '{username}' from team '{team}' in '{org}'");
+        debug!("Removing membership of '{user}' from team '{team}' in '{org}'");
         if !self.dry_run {
             self.req(
                 Method::DELETE,
-                &format!("orgs/{}/teams/{}/memberships/{}", org, team, username),
+                &format!("orgs/{org}/teams/{team}/memberships/{user}"),
             )?
             .send()?
             .error_for_status()?;
@@ -426,30 +307,26 @@ impl GitHub {
         Ok(())
     }
 
+    /// Get a repo by org and name
     pub(crate) fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
-        let resp = self
-            .req(Method::GET, &format!("repos/{}/{}", org, repo))?
-            .send()?;
-        match resp.status() {
-            StatusCode::OK => Ok(Some(resp.json()?)),
-            StatusCode::NOT_FOUND => Ok(None),
-            _ => Err(resp.error_for_status().unwrap_err().into()),
-        }
+        self.send_option(Method::GET, &format!("repos/{org}/{repo}"))
     }
 
+    /// Create a repo
     pub(crate) fn create_repo(
         &self,
         org: &str,
         name: &str,
         description: &str,
     ) -> anyhow::Result<Repo> {
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, Debug)]
         struct Req<'a> {
             name: &'a str,
             description: &'a str,
         }
+        let req = &Req { name, description };
+        debug!("Creating the repo {org}/{name} with {req:?}");
         if self.dry_run {
-            debug!("dry: created repo {}/{}", org, name);
             Ok(Repo {
                 name: name.to_string(),
                 org: org.to_string(),
@@ -457,32 +334,29 @@ impl GitHub {
                 default_branch: String::from("main"),
             })
         } else {
-            Ok(self
-                .req(Method::POST, &format!("orgs/{}/repos", org))?
-                .json(&Req { name, description })
-                .send()?
-                .error_for_status()?
-                .json()?)
+            Ok(self.send(Method::POST, &format!("orgs/{org}/repos"), req)?)
         }
     }
 
     pub(crate) fn edit_repo(&self, repo: &Repo, description: &str) -> anyhow::Result<()> {
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, Debug)]
         struct Req<'a> {
             description: &'a str,
         }
+        let req = Req { description };
+        debug!("Editing repo {}/{} with {:?}", repo.org, repo.name, req);
         if !self.dry_run {
-            self.req(Method::PATCH, &format!("repos/{}/{}", repo.org, repo.name))?
-                .json(&Req { description })
-                .send()?
-                .error_for_status()?;
-        } else {
-            debug!("dry: editing repo {}/{}", repo.org, repo.name)
+            self.send(
+                Method::PATCH,
+                &format!("repos/{}/{}", repo.org, repo.name),
+                &req,
+            )?;
         }
         Ok(())
     }
 
-    pub(crate) fn teams(&self, org: &str, repo: &str) -> anyhow::Result<HashSet<String>> {
+    /// Get teams in a repo
+    pub(crate) fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<HashSet<String>> {
         let mut teams = HashSet::new();
 
         self.rest_paginated(&Method::GET, format!("repos/{org}/{repo}/teams"), |resp| {
@@ -496,7 +370,14 @@ impl GitHub {
         Ok(teams)
     }
 
-    pub(crate) fn collaborators(&self, org: &str, repo: &str) -> anyhow::Result<HashSet<String>> {
+    /// Get collaborators in a repo
+    ///
+    /// Only fetches those who are direct collaborators (i.e., not a collaborator through a repo team)
+    pub(crate) fn repo_collaborators(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<HashSet<String>> {
         let mut users = HashSet::new();
 
         #[derive(serde::Deserialize)]
@@ -520,12 +401,61 @@ impl GitHub {
         Ok(users)
     }
 
+    /// Update a team's permissions to a repo
+    pub(crate) fn update_team_repo_permissions(
+        &self,
+        org: &str,
+        repo: &str,
+        team: &str,
+        permission: &RepoPermission,
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize, Debug)]
+        struct Req<'a> {
+            permission: &'a RepoPermission,
+        }
+        debug!("Updating permission for team {team} on {org}/{repo} to {permission:?}");
+        if !self.dry_run {
+            self.send(
+                Method::PUT,
+                &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}"),
+                &Req { permission },
+            )?;
+        }
+
+        Ok(())
+    }
+
+    /// Update a user's permissions to a repo
+    pub(crate) fn update_user_repo_permissions(
+        &self,
+        org: &str,
+        repo: &str,
+        user: &str,
+        permission: &RepoPermission,
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize, Debug)]
+        struct Req<'a> {
+            permission: &'a RepoPermission,
+        }
+        debug!("Updating permission for user {user} on {org}/{repo} to {permission:?}");
+        if !self.dry_run {
+            self.send(
+                Method::PUT,
+                &format!("repos/{org}/{repo}/collaborators/{user}"),
+                &Req { permission },
+            )?;
+        }
+        Ok(())
+    }
+
+    /// Remove a team from a repo
     pub(crate) fn remove_team_from_repo(
         &self,
         org: &str,
         repo: &str,
         team: &str,
     ) -> anyhow::Result<()> {
+        debug!("Removing team {team} from repo {org}/{repo}");
         if !self.dry_run {
             self.req(
                 Method::DELETE,
@@ -533,18 +463,19 @@ impl GitHub {
             )?
             .send()?
             .error_for_status()?;
-        } else {
-            debug!("dry: removing team {team} from repo {org}/{repo}")
         }
+
         Ok(())
     }
 
+    /// Remove a collaborator from a repo
     pub(crate) fn remove_collaborator_from_repo(
         &self,
         org: &str,
         repo: &str,
         collaborator: &str,
     ) -> anyhow::Result<()> {
+        debug!("Removing collaborator {collaborator} from repo {org}/{repo}");
         if !self.dry_run {
             self.req(
                 Method::DELETE,
@@ -552,61 +483,65 @@ impl GitHub {
             )?
             .send()?
             .error_for_status()?;
-        } else {
-            debug!("dry: removing collaborator {collaborator} from repo {org}/{repo}")
         }
         Ok(())
     }
 
     /// Get the head commit of the supplied branch
     pub(crate) fn branch(&self, repo: &Repo, name: &str) -> anyhow::Result<Option<String>> {
-        let resp = self
-            .req(
-                Method::GET,
-                &format!("repos/{}/{}/branches/{}", repo.org, repo.name, name),
-            )?
-            .send()?;
-        match resp.status() {
-            StatusCode::OK => Ok(Some(resp.json::<Branch>()?.commit.sha)),
-            StatusCode::NOT_FOUND => Ok(None),
-            _ => Err(resp.error_for_status().unwrap_err().into()),
-        }
+        let branch = self.send_option::<Branch>(
+            Method::GET,
+            &format!("repos/{}/{}/branches/{}", repo.org, repo.name, name),
+        )?;
+        Ok(branch.map(|b| b.commit.sha))
     }
 
+    /// Create a branch
     pub(crate) fn create_branch(
         &self,
         repo: &Repo,
         name: &str,
         commit: &str,
     ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize)]
+        #[derive(serde::Serialize, Debug)]
         struct Req<'a> {
             r#ref: &'a str,
             sha: &'a str,
         }
-        if self.dry_run {
-            debug!(
-                "dry: created branch in {}/{}: {} with commit {}",
-                repo.org, repo.name, name, commit
-            );
-            Ok(())
-        } else {
-            Ok(self
-                .req(
-                    Method::POST,
-                    &format!("repos/{}/{}/git/refs", repo.org, repo.name),
-                )?
-                .json(&Req {
+        debug!(
+            "Creating branch in {}/{}: {} with commit {}",
+            repo.org, repo.name, name, commit
+        );
+        if !self.dry_run {
+            self.send(
+                Method::POST,
+                &format!("repos/{}/{}/git/refs", repo.org, repo.name),
+                &Req {
                     r#ref: &format!("refs/heads/{}", name),
                     sha: commit,
-                })
-                .send()?
-                .error_for_status()?
-                .json()?)
+                },
+            )?;
         }
+        Ok(())
     }
 
-    /// Update the given branch's permissions.
+    /// Get protected branches from a repo
+    pub(crate) fn protected_branches(&self, repo: &Repo) -> anyhow::Result<HashSet<String>> {
+        let mut names = HashSet::new();
+        self.rest_paginated(
+            &Method::GET,
+            format!("repos/{}/{}/branches?protected=true", repo.org, repo.name),
+            |resp| {
+                let resp = resp.json::<Vec<Branch>>()?;
+                names.extend(resp.into_iter().map(|b| b.name));
+
+                Ok(())
+            },
+        )?;
+        Ok(names)
+    }
+
+    /// Update a branch's permissions.
     ///
     /// Returns `Ok(true)` on success, `Ok(false)` if the branch doesn't exist, and `Err(_)` otherwise.
     pub(crate) fn update_branch_protection(
@@ -662,51 +597,33 @@ impl GitHub {
             .into_iter()
             .collect(),
         };
+        debug!(
+            "Updating branch protection on repo {}/{} for {}: {}",
+            repo.org,
+            repo.name,
+            branch_name,
+            serde_json::to_string_pretty(&req).unwrap_or_else(|_| "<invalid json>".to_string())
+        );
         if !self.dry_run {
-            let resp = self
-                .req(
-                    Method::PUT,
-                    &format!(
-                        "repos/{}/{}/branches/{}/protection",
-                        repo.org, repo.name, branch_name
-                    ),
-                )?
-                .json(&req)
-                .send()?;
-
-            match resp.status() {
-                StatusCode::OK => Ok(true),
-                StatusCode::NOT_FOUND => Ok(false),
-                _ => Err(resp.error_for_status().unwrap_err().into()),
-            }
+            let resp = self.send_option::<()>(
+                Method::PUT,
+                &format!(
+                    "repos/{}/{}/branches/{}/protection",
+                    repo.org, repo.name, branch_name
+                ),
+            )?;
+            Ok(resp.is_some())
         } else {
-            debug!(
-                "dry: updating branch protection on repo {}/{} for {}: {}",
-                repo.org,
-                repo.name,
-                branch_name,
-                serde_json::to_string_pretty(&req).unwrap_or_else(|_| "<invalid json>".to_string())
-            );
             Ok(true)
         }
     }
 
-    pub(crate) fn protected_branches(&self, repo: &Repo) -> anyhow::Result<HashSet<String>> {
-        let mut names = HashSet::new();
-        self.rest_paginated(
-            &Method::GET,
-            format!("repos/{}/{}/branches?protected=true", repo.org, repo.name),
-            |resp| {
-                let resp = resp.error_for_status()?.json::<Vec<Branch>>()?;
-                names.extend(resp.into_iter().map(|b| b.name));
-
-                Ok(())
-            },
-        )?;
-        Ok(names)
-    }
-
+    /// Delete a branch protection
     pub(crate) fn delete_branch_protection(&self, repo: &Repo, branch: &str) -> anyhow::Result<()> {
+        debug!(
+            "Removing protection in {}/{} from {} branch",
+            repo.org, repo.name, branch
+        );
         if !self.dry_run {
             self.req(
                 Method::DELETE,
@@ -717,37 +634,112 @@ impl GitHub {
             )?
             .send()?
             .error_for_status()?;
-        } else {
-            debug!(
-                "dry: removing branch protection in {}/{} from {} branch",
-                repo.org, repo.name, branch
-            );
         }
         Ok(())
     }
 
-    /// Get all teams associated with a given org
-    pub(crate) fn org_teams(&self, org: &str) -> anyhow::Result<HashSet<String>> {
-        let mut teams = HashSet::new();
-
-        self.rest_paginated(&Method::GET, format!("orgs/{org}/teams"), |resp| {
-            let partial: Vec<Team> = resp.json()?;
-            for team in partial {
-                teams.insert(team.name);
-            }
-            Ok(())
-        })?;
-
-        Ok(teams)
+    fn req(&self, method: Method, url: &str) -> anyhow::Result<RequestBuilder> {
+        let url = if url.starts_with("https://") {
+            Cow::Borrowed(url)
+        } else {
+            Cow::Owned(format!("https://api.github.com/{}", url))
+        };
+        trace!("http request: {} {}", method, url);
+        if self.dry_run && method != Method::GET && !url.contains("graphql") {
+            panic!("Called a non-GET request in dry run mode: {}", method);
+        }
+        Ok(self
+            .client
+            .request(method, url.as_ref())
+            .header(
+                header::AUTHORIZATION,
+                HeaderValue::from_str(&format!("token {}", self.token))?,
+            )
+            .header(
+                header::USER_AGENT,
+                HeaderValue::from_static(crate::USER_AGENT),
+            ))
     }
 
-    /// Delete a team with the given name from inside the given org
-    pub(crate) fn delete_team(&self, org: &str, team: &str) -> anyhow::Result<()> {
-        debug!("Deleting team '{team}' in '{org}'");
-        if !self.dry_run {
-            self.req(Method::DELETE, &format!("orgs/{}/teams/{}", org, team))?
+    fn send<T: serde::Serialize + std::fmt::Debug, U: DeserializeOwned>(
+        &self,
+        method: Method,
+        url: &str,
+        body: &T,
+    ) -> Result<U, anyhow::Error> {
+        Ok(self
+            .req(method, url)?
+            .json(body)
+            .send()?
+            .error_for_status()?
+            .json()?)
+    }
+
+    fn send_option<T: DeserializeOwned>(
+        &self,
+        method: Method,
+        url: &str,
+    ) -> Result<Option<T>, anyhow::Error> {
+        let resp = self.req(method, url)?.send()?;
+        match resp.status() {
+            StatusCode::OK => Ok(Some(resp.json()?)),
+            StatusCode::NOT_FOUND => Ok(None),
+            _ => Err(resp.error_for_status().unwrap_err().into()),
+        }
+    }
+
+    fn graphql<R, V>(&self, query: &str, variables: V) -> anyhow::Result<R>
+    where
+        R: serde::de::DeserializeOwned,
+        V: serde::Serialize,
+    {
+        #[derive(serde::Serialize)]
+        struct Request<'a, V> {
+            query: &'a str,
+            variables: V,
+        }
+        let res: GraphResult<R> = self
+            .req(Method::POST, "graphql")?
+            .json(&Request { query, variables })
+            .send()?
+            .error_for_status()?
+            .json()?;
+        if let Some(error) = res.errors.get(0) {
+            bail!("graphql error: {}", error.message);
+        } else if let Some(data) = res.data {
+            Ok(data)
+        } else {
+            bail!("missing graphql data");
+        }
+    }
+
+    fn rest_paginated<F>(&self, method: &Method, url: String, mut f: F) -> anyhow::Result<()>
+    where
+        F: FnMut(Response) -> anyhow::Result<()>,
+    {
+        let mut next = Some(url);
+        while let Some(next_url) = next.take() {
+            let resp = self
+                .req(method.clone(), &next_url)?
                 .send()?
                 .error_for_status()?;
+
+            // Extract the next page
+            if let Some(links) = resp.headers().get(header::LINK) {
+                let links: Link = links.to_str()?.parse()?;
+                for link in links.values() {
+                    if link
+                        .rel()
+                        .map(|r| r.iter().any(|r| *r == RelationType::Next))
+                        .unwrap_or(false)
+                    {
+                        next = Some(link.link().to_string());
+                        break;
+                    }
+                }
+            }
+
+            f(resp)?;
         }
         Ok(())
     }
