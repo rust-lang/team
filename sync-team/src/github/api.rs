@@ -135,7 +135,9 @@ impl GitHub {
                 description,
                 privacy,
             };
-            Ok(self.send(Method::POST, &format!("orgs/{}/teams", org), body)?)
+            Ok(self
+                .send(Method::POST, &format!("orgs/{}/teams", org), body)?
+                .json()?)
         }
     }
 
@@ -334,7 +336,9 @@ impl GitHub {
                 default_branch: String::from("main"),
             })
         } else {
-            Ok(self.send(Method::POST, &format!("orgs/{org}/repos"), req)?)
+            Ok(self
+                .send(Method::POST, &format!("orgs/{org}/repos"), req)?
+                .json()?)
         }
     }
 
@@ -661,18 +665,17 @@ impl GitHub {
             ))
     }
 
-    fn send<T: serde::Serialize + std::fmt::Debug, U: DeserializeOwned>(
+    fn send<T: serde::Serialize + std::fmt::Debug>(
         &self,
         method: Method,
         url: &str,
         body: &T,
-    ) -> Result<U, anyhow::Error> {
+    ) -> Result<Response, anyhow::Error> {
         Ok(self
             .req(method, url)?
             .json(body)
             .send()?
-            .error_for_status()?
-            .json()?)
+            .error_for_status()?)
     }
 
     fn send_option<T: DeserializeOwned>(
