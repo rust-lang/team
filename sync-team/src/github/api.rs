@@ -609,14 +609,24 @@ impl GitHub {
             serde_json::to_string_pretty(&req).unwrap_or_else(|_| "<invalid json>".to_string())
         );
         if !self.dry_run {
-            let resp = self.send_option::<()>(
-                Method::PUT,
-                &format!(
-                    "repos/{}/{}/branches/{}/protection",
-                    repo.org, repo.name, branch_name
-                ),
-            )?;
-            Ok(resp.is_some())
+            let resp = self
+                .req(
+                    Method::PUT,
+                    &format!(
+                        "repos/{}/{}/branches/{}/protection",
+                        repo.org, repo.name, branch_name
+                    ),
+                )?
+                .json(&req)
+                .send()?;
+            match resp.status() {
+                StatusCode::OK => Ok(true),
+                StatusCode::NOT_FOUND => Ok(false),
+                _ => {
+                    resp.error_for_status()?;
+                    Ok(false)
+                }
+            }
         } else {
             Ok(true)
         }
