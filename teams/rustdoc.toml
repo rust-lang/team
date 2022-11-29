@@ -8,7 +8,6 @@ members = [
     "Manishearth",
     "Nemo157",
     "camelid",
-    "CraftSpider",
     "jsha",
     "notriddle",
     "aDotInTheVoid",
@@ -17,6 +16,7 @@ alumni = [
     "jyn514",
     "kinnison",
     "ollie27",
+    "CraftSpider",
 ]
 
 [[github]]
