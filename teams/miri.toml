@@ -8,6 +8,8 @@ alumni = ["solson"]
 
 [permissions]
 bors.miri.review = true
+bors.rust.try = true
+perf = true
 
 [website]
 name = "Miri"
