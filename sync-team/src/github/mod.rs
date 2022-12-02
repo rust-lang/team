@@ -199,29 +199,16 @@ impl SyncGitHub {
             Some(r) => r,
             None => {
                 let mut permissions = Vec::new();
-                use rust_team_data::v1;
-                let permission = |p: &v1::RepoPermission| match *p {
-                    v1::RepoPermission::Write => RepoPermission::Write,
-                    v1::RepoPermission::Admin => RepoPermission::Admin,
-                    v1::RepoPermission::Maintain => RepoPermission::Maintain,
-                    v1::RepoPermission::Triage => RepoPermission::Triage,
-                };
                 for expected_team in &expected_repo.teams {
                     permissions.push(RepoPermissionAssignment::Team {
                         team_name: expected_team.name.clone(),
-                        permission: permission(&expected_team.permission),
+                        permission: convert_permission(&expected_team.permission),
                     });
                 }
 
                 for bot in &expected_repo.bots {
-                    let bot_name = match bot {
-                        Bot::Bors => "bors",
-                        Bot::Highfive => "rust-highfive",
-                        Bot::RustTimer => "rust-timer",
-                        Bot::Rustbot => "rustbot",
-                    };
                     permissions.push(RepoPermissionAssignment::User {
-                        user_name: bot_name.to_owned(),
+                        user_name: bot_name(bot).to_owned(),
                         permission: RepoPermission::Write,
                     });
                 }
@@ -229,33 +216,19 @@ impl SyncGitHub {
                 for member in &expected_repo.members {
                     permissions.push(RepoPermissionAssignment::User {
                         user_name: member.name.clone(),
-                        permission: permission(&member.permission),
+                        permission: convert_permission(&member.permission),
                     });
                 }
 
                 let mut branch_protections = Vec::new();
                 for branch in &expected_repo.branches {
-                    let branch_protection = api::BranchProtection {
-                        required_approving_review_count: if expected_repo.bots.contains(&Bot::Bors)
-                        {
-                            0
-                        } else {
-                            1
-                        },
-                        dismiss_stale_reviews: branch.dismiss_stale_review,
-                        required_checks: branch.ci_checks.clone(),
-                        allowed_users: expected_repo
-                            .bots
-                            .contains(&Bot::Bors)
-                            .then(|| vec!["bors".to_owned()])
-                            .unwrap_or_default(),
-                    };
                     branch_protections.push(BranchProtection {
                         name: branch.name.clone(),
                         already_exists: false,
-                        branch_protection,
+                        branch_protection: branch_protection(expected_repo, branch),
                     });
                 }
+
                 return Ok(RepoDiff::Create(CreateRepoDiff {
                     org: expected_repo.org.clone(),
                     name: expected_repo.name.clone(),
@@ -282,13 +255,6 @@ impl SyncGitHub {
         &self,
         expected_repo: &rust_team_data::v1::Repo,
     ) -> Result<Vec<RepoPermissionAssignmentDiff>, Error> {
-        use rust_team_data::v1;
-        let permission = |p: &v1::RepoPermission| match *p {
-            v1::RepoPermission::Write => RepoPermission::Write,
-            v1::RepoPermission::Admin => RepoPermission::Admin,
-            v1::RepoPermission::Maintain => RepoPermission::Maintain,
-            v1::RepoPermission::Triage => RepoPermission::Triage,
-        };
         let mut actual_teams = self
             .github
             .repo_teams(&expected_repo.org, &expected_repo.name)?;
@@ -299,7 +265,7 @@ impl SyncGitHub {
         let mut permissions = Vec::new();
         // Sync team and bot permissions
         for expected_team in &expected_repo.teams {
-            let permission = permission(&expected_team.permission);
+            let permission = convert_permission(&expected_team.permission);
             actual_teams.remove(&expected_team.name);
             permissions.push(RepoPermissionAssignmentDiff::Create(
                 RepoPermissionAssignment::Team {
@@ -310,12 +276,7 @@ impl SyncGitHub {
         }
 
         for bot in &expected_repo.bots {
-            let bot_name = match bot {
-                Bot::Bors => "bors",
-                Bot::Highfive => "rust-highfive",
-                Bot::RustTimer => "rust-timer",
-                Bot::Rustbot => "rustbot",
-            };
+            let bot_name = bot_name(bot);
             actual_teams.remove(bot_name);
             actual_collaborators.remove(bot_name);
             permissions.push(RepoPermissionAssignmentDiff::Create(
@@ -331,7 +292,7 @@ impl SyncGitHub {
             permissions.push(RepoPermissionAssignmentDiff::Create(
                 RepoPermissionAssignment::User {
                     user_name: member.name.clone(),
-                    permission: permission(&member.permission),
+                    permission: convert_permission(&member.permission),
                 },
             ));
         }
@@ -366,20 +327,7 @@ impl SyncGitHub {
             actual_protected_branches.remove(&branch.name);
 
             let already_exists = self.github.branch(&actual_repo, &branch.name)?.is_some();
-            let branch_protection = api::BranchProtection {
-                required_approving_review_count: if expected_repo.bots.contains(&Bot::Bors) {
-                    0
-                } else {
-                    1
-                },
-                dismiss_stale_reviews: branch.dismiss_stale_review,
-                required_checks: branch.ci_checks.clone(),
-                allowed_users: expected_repo
-                    .bots
-                    .contains(&Bot::Bors)
-                    .then(|| vec!["bors".to_owned()])
-                    .unwrap_or_default(),
-            };
+            let branch_protection = branch_protection(expected_repo, branch);
             branch_protection_diffs.push(BranchProtectionDiff::Create(BranchProtection {
                 name: branch.name.clone(),
                 already_exists,
@@ -439,13 +387,6 @@ impl SyncGitHub {
             }
         }
 
-        use rust_team_data::v1;
-        let permission = |p: &v1::RepoPermission| match *p {
-            v1::RepoPermission::Write => RepoPermission::Write,
-            v1::RepoPermission::Admin => RepoPermission::Admin,
-            v1::RepoPermission::Maintain => RepoPermission::Maintain,
-            v1::RepoPermission::Triage => RepoPermission::Triage,
-        };
         let mut actual_teams = self
             .github
             .repo_teams(&expected_repo.org, &expected_repo.name)?;
@@ -455,7 +396,7 @@ impl SyncGitHub {
 
         // Sync team and bot permissions
         for expected_team in &expected_repo.teams {
-            let permission = permission(&expected_team.permission);
+            let permission = convert_permission(&expected_team.permission);
             actual_teams.remove(&expected_team.name);
             self.github.update_team_repo_permissions(
                 &expected_repo.org,
@@ -466,12 +407,7 @@ impl SyncGitHub {
         }
 
         for bot in &expected_repo.bots {
-            let bot_name = match bot {
-                Bot::Bors => "bors",
-                Bot::Highfive => "rust-highfive",
-                Bot::RustTimer => "rust-timer",
-                Bot::Rustbot => "rustbot",
-            };
+            let bot_name = bot_name(bot);
             actual_teams.remove(bot_name);
             actual_collaborators.remove(bot_name);
             self.github.update_user_repo_permissions(
@@ -488,7 +424,7 @@ impl SyncGitHub {
                 &expected_repo.org,
                 &expected_repo.name,
                 &member.name,
-                &permission(&member.permission),
+                &convert_permission(&member.permission),
             )?;
         }
 
@@ -539,20 +475,7 @@ impl SyncGitHub {
             let protection_result = self.github.update_branch_protection(
                 &actual_repo,
                 &branch.name,
-                api::BranchProtection {
-                    required_approving_review_count: if expected_repo.bots.contains(&Bot::Bors) {
-                        0
-                    } else {
-                        1
-                    },
-                    dismiss_stale_reviews: branch.dismiss_stale_review,
-                    required_checks: branch.ci_checks.clone(),
-                    allowed_users: expected_repo
-                        .bots
-                        .contains(&Bot::Bors)
-                        .then(|| vec!["bors".to_owned()])
-                        .unwrap_or_default(),
-                },
+                branch_protection(expected_repo, branch),
             )?;
             if !protection_result {
                 debug!(
@@ -588,6 +511,46 @@ impl SyncGitHub {
             TeamRole::Member
         }
     }
+}
+
+fn bot_name(bot: &Bot) -> &str {
+    match bot {
+        Bot::Bors => "bors",
+        Bot::Highfive => "rust-highfive",
+        Bot::RustTimer => "rust-timer",
+        Bot::Rustbot => "rustbot",
+    }
+}
+
+fn convert_permission(p: &rust_team_data::v1::RepoPermission) -> RepoPermission {
+    use rust_team_data::v1;
+    match *p {
+        v1::RepoPermission::Write => RepoPermission::Write,
+        v1::RepoPermission::Admin => RepoPermission::Admin,
+        v1::RepoPermission::Maintain => RepoPermission::Maintain,
+        v1::RepoPermission::Triage => RepoPermission::Triage,
+    }
+}
+
+fn branch_protection(
+    expected_repo: &rust_team_data::v1::Repo,
+    branch: &rust_team_data::v1::Branch,
+) -> api::BranchProtection {
+    let branch_protection = api::BranchProtection {
+        required_approving_review_count: if expected_repo.bots.contains(&Bot::Bors) {
+            0
+        } else {
+            1
+        },
+        dismiss_stale_reviews: branch.dismiss_stale_review,
+        required_checks: branch.ci_checks.clone(),
+        allowed_users: expected_repo
+            .bots
+            .contains(&Bot::Bors)
+            .then(|| vec!["bors".to_owned()])
+            .unwrap_or_default(),
+    };
+    branch_protection
 }
 
 /// The special bot teams
