@@ -360,13 +360,13 @@ impl GitHub {
     }
 
     /// Get teams in a repo
-    pub(crate) fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<HashSet<String>> {
-        let mut teams = HashSet::new();
+    pub(crate) fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
+        let mut teams = Vec::new();
 
         self.rest_paginated(&Method::GET, format!("repos/{org}/{repo}/teams"), |resp| {
-            let partial: Vec<Team> = resp.json()?;
+            let partial: Vec<RepoTeam> = resp.json()?;
             for team in partial {
-                teams.insert(team.name);
+                teams.push(team);
             }
             Ok(())
         })?;
@@ -381,22 +381,16 @@ impl GitHub {
         &self,
         org: &str,
         repo: &str,
-    ) -> anyhow::Result<HashSet<String>> {
-        let mut users = HashSet::new();
-
-        #[derive(serde::Deserialize)]
-        struct User {
-            #[serde(alias = "login")]
-            name: String,
-        }
+    ) -> anyhow::Result<Vec<RepoUser>> {
+        let mut users = Vec::new();
 
         self.rest_paginated(
             &Method::GET,
             format!("repos/{org}/{repo}/collaborators?affiliation=direct"),
             |resp| {
-                let partial: Vec<User> = resp.json()?;
+                let partial: Vec<RepoUser> = resp.json()?;
                 for user in partial {
-                    users.insert(user.name);
+                    users.push(user);
                 }
                 Ok(())
             },
@@ -806,7 +800,20 @@ pub(crate) struct Team {
     pub(crate) privacy: TeamPrivacy,
 }
 
-#[derive(serde::Serialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct RepoTeam {
+    pub(crate) name: String,
+    pub(crate) permission: RepoPermission,
+}
+
+#[derive(serde::Deserialize)]
+pub(crate) struct RepoUser {
+    #[serde(alias = "login")]
+    pub(crate) name: String,
+    pub(crate) permission: RepoPermission,
+}
+
+#[derive(Copy, Clone, serde::Serialize, serde::Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum RepoPermission {
     // While the GitHub UI uses the term 'write', the API still uses the older term 'push'

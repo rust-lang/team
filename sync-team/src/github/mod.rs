@@ -255,36 +255,62 @@ impl SyncGitHub {
         &self,
         expected_repo: &rust_team_data::v1::Repo,
     ) -> Result<Vec<RepoPermissionAssignmentDiff>, Error> {
-        let mut actual_teams = self
+        let mut actual_teams: HashMap<_, _> = self
             .github
-            .repo_teams(&expected_repo.org, &expected_repo.name)?;
-        let mut actual_collaborators = self
+            .repo_teams(&expected_repo.org, &expected_repo.name)?
+            .into_iter()
+            .map(|t| (t.name.clone(), t))
+            .collect();
+        let mut actual_collaborators: HashMap<_, _> = self
             .github
-            .repo_collaborators(&expected_repo.org, &expected_repo.name)?;
+            .repo_collaborators(&expected_repo.org, &expected_repo.name)?
+            .into_iter()
+            .map(|u| (u.name.clone(), u))
+            .collect();
 
         let mut permissions = Vec::new();
         // Sync team and bot permissions
         for expected_team in &expected_repo.teams {
             let permission = convert_permission(&expected_team.permission);
-            actual_teams.remove(&expected_team.name);
-            permissions.push(RepoPermissionAssignmentDiff::Create(
-                RepoPermissionAssignment::Team {
-                    team_name: expected_team.name.clone(),
-                    permission,
-                },
-            ));
+            let removed = actual_teams.remove(&expected_team.name);
+            let team_permission = RepoPermissionAssignment::Team {
+                team_name: expected_team.name.clone(),
+                permission,
+            };
+            let diff = match removed {
+                Some(t) if t.permission != permission => {
+                    RepoPermissionAssignmentDiff::Update(team_permission)
+                }
+                Some(_) => continue,
+                None => RepoPermissionAssignmentDiff::Create(team_permission),
+            };
+            permissions.push(diff);
         }
 
-        for bot in &expected_repo.bots {
-            let bot_name = bot_name(bot);
+        let bots = expected_repo.bots.iter().map(|b| {
+            let bot_name = bot_name(b);
             actual_teams.remove(bot_name);
-            actual_collaborators.remove(bot_name);
-            permissions.push(RepoPermissionAssignmentDiff::Create(
-                RepoPermissionAssignment::User {
-                    user_name: bot_name.to_owned(),
-                    permission: RepoPermission::Write,
-                },
-            ));
+            (bot_name, RepoPermission::Write)
+        });
+        let members = expected_repo
+            .members
+            .iter()
+            .map(|m| (m.name.as_str(), convert_permission(&m.permission)));
+
+        for (name, permission) in bots.chain(members) {
+            let removed = actual_collaborators.remove(name);
+            let user_permission = RepoPermissionAssignment::User {
+                user_name: name.to_owned(),
+                permission,
+            };
+            let diff = match removed {
+                Some(t) if t.permission != permission => {
+                    RepoPermissionAssignmentDiff::Update(user_permission)
+                }
+                Some(_) => continue,
+                None => RepoPermissionAssignmentDiff::Create(user_permission),
+            };
+            permissions.push(diff);
         }
 
         for member in &expected_repo.members {
@@ -299,14 +325,14 @@ impl SyncGitHub {
 
         // `actual_teams` now contains the teams that were not expected
         // but are still on GitHub. We now remove them.
-        for team in actual_teams {
+        for (team, _) in actual_teams {
             permissions.push(RepoPermissionAssignmentDiff::Delete(
                 RepoCollaborator::Team(team),
             ));
         }
         // `actual_collaborators` now contains the collaborators that were not expected
         // but are still on GitHub. We now remove them.
-        for collaborator in actual_collaborators {
+        for (collaborator, _) in actual_collaborators {
             permissions.push(RepoPermissionAssignmentDiff::Delete(
                 RepoCollaborator::User(collaborator),
             ));
@@ -387,12 +413,18 @@ impl SyncGitHub {
             }
         }
 
-        let mut actual_teams = self
+        let mut actual_teams: HashMap<_, _> = self
             .github
-            .repo_teams(&expected_repo.org, &expected_repo.name)?;
-        let mut actual_collaborators = self
+            .repo_teams(&expected_repo.org, &expected_repo.name)?
+            .into_iter()
+            .map(|t| (t.name.clone(), t))
+            .collect();
+        let mut actual_collaborators: HashMap<_, _> = self
             .github
-            .repo_collaborators(&expected_repo.org, &expected_repo.name)?;
+            .repo_collaborators(&expected_repo.org, &expected_repo.name)?
+            .into_iter()
+            .map(|u| (u.name.clone(), u))
+            .collect();
 
         // Sync team and bot permissions
         for expected_team in &expected_repo.teams {
@@ -430,13 +462,13 @@ impl SyncGitHub {
 
         // `actual_teams` now contains the teams that were not expected
         // but are still on GitHub. We now remove them.
-        for team in &actual_teams {
+        for (team, _) in &actual_teams {
             self.github
                 .remove_team_from_repo(&expected_repo.org, &expected_repo.name, team)?;
         }
         // `actual_collaborators` now contains the collaborators that were not expected
         // but are still on GitHub. We now remove them.
-        for collaborator in &actual_collaborators {
+        for (collaborator, _) in &actual_collaborators {
             self.github.remove_collaborator_from_repo(
                 &expected_repo.org,
                 &expected_repo.name,
