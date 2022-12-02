@@ -224,7 +224,7 @@ impl SyncGitHub {
                 for branch in &expected_repo.branches {
                     branch_protections.push(BranchProtection {
                         name: branch.name.clone(),
-                        already_exists: false,
+                        branch_already_exists: false,
                         branch_protection: branch_protection(expected_repo, branch),
                     });
                 }
@@ -352,13 +352,22 @@ impl SyncGitHub {
         for branch in &expected_repo.branches {
             actual_protected_branches.remove(&branch.name);
 
-            let already_exists = self.github.branch(actual_repo, &branch.name)?.is_some();
-            let branch_protection = branch_protection(expected_repo, branch);
-            branch_protection_diffs.push(BranchProtectionDiff::Create(BranchProtection {
+            let branch_already_exists = self.github.branch(actual_repo, &branch.name)?.is_some();
+            let expected_branch_protection = branch_protection(expected_repo, branch);
+            let actual_branch_protection =
+                self.github.branch_protection(actual_repo, &branch.name)?;
+            let protection = BranchProtection {
                 name: branch.name.clone(),
-                already_exists,
-                branch_protection,
-            }));
+                branch_already_exists,
+                branch_protection: expected_branch_protection,
+            };
+            match actual_branch_protection {
+                Some(a) if a != expected_branch_protection => {
+                    branch_protection_diffs.push(BranchProtectionDiff::Update(protection))
+                }
+                None => branch_protection_diffs.push(BranchProtectionDiff::Create(protection)),
+                Some(_) => {}
+            };
         }
 
         // `actual_branch_protections` now contains the branch protections that were not expected
@@ -567,8 +576,8 @@ fn convert_permission(p: &rust_team_data::v1::RepoPermission) -> RepoPermission 
 fn branch_protection(
     expected_repo: &rust_team_data::v1::Repo,
     branch: &rust_team_data::v1::Branch,
-) -> api::BranchProtection {
-    api::BranchProtection {
+) -> api::BranchProtectionRequest {
+    api::BranchProtectionRequest {
         required_approving_review_count: if expected_repo.bots.contains(&Bot::Bors) {
             0
         } else {
@@ -656,13 +665,14 @@ enum RepoPermissionAssignment {
 
 enum BranchProtectionDiff {
     Create(BranchProtection),
+    Update(BranchProtection),
     Delete(String),
 }
 
 struct BranchProtection {
     name: String,
-    already_exists: bool,
-    branch_protection: api::BranchProtection,
+    branch_already_exists: bool,
+    branch_protection: api::BranchProtectionRequest,
 }
 
 enum TeamDiff {

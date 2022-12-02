@@ -539,6 +539,20 @@ impl GitHub {
         Ok(names)
     }
 
+    pub(crate) fn branch_protection(
+        &self,
+        repo: &Repo,
+        name: &str,
+    ) -> anyhow::Result<Option<BranchProtection>> {
+        self.send_option::<BranchProtection>(
+            Method::GET,
+            &format!(
+                "repos/{}/{}/branches/{}/protection",
+                repo.org, repo.name, name
+            ),
+        )
+    }
+
     /// Update a branch's permissions.
     ///
     /// Returns `Ok(true)` on success, `Ok(false)` if the branch doesn't exist, and `Err(_)` otherwise.
@@ -546,7 +560,7 @@ impl GitHub {
         &self,
         repo: &Repo,
         branch_name: &str,
-        branch_protection: BranchProtection,
+        branch_protection: BranchProtectionRequest,
     ) -> anyhow::Result<bool> {
         #[derive(serde::Serialize)]
         struct Req<'a> {
@@ -566,7 +580,7 @@ impl GitHub {
         }
         #[derive(serde::Serialize)]
         struct Req2 {
-            // Even though we don't want dismissal restrictions, it cannot be ommited
+            // Even though we don't want dismissal restrictions, it cannot be omitted
             dismissal_restrictions: HashMap<(), ()>,
             dismiss_stale_reviews: bool,
             required_approving_review_count: u8,
@@ -896,9 +910,12 @@ pub(crate) struct Commit {
 }
 
 #[derive(Debug)]
-pub(crate) struct BranchProtection {
+pub(crate) struct BranchProtectionRequest {
     pub(crate) dismiss_stale_reviews: bool,
     pub(crate) required_approving_review_count: u8,
     pub(crate) required_checks: Vec<String>,
     pub(crate) allowed_users: Vec<String>,
 }
+
+#[derive(Debug, serde::Deserialize)]
+pub(crate) struct BranchProtection {}
