@@ -347,12 +347,12 @@ impl SyncGitHub {
         expected_repo: &rust_team_data::v1::Repo,
     ) -> Result<Vec<BranchProtectionDiff>, Error> {
         let mut branch_protection_diffs = Vec::new();
-        let mut actual_protected_branches = self.github.protected_branches(&actual_repo)?;
+        let mut actual_protected_branches = self.github.protected_branches(actual_repo)?;
 
         for branch in &expected_repo.branches {
             actual_protected_branches.remove(&branch.name);
 
-            let already_exists = self.github.branch(&actual_repo, &branch.name)?.is_some();
+            let already_exists = self.github.branch(actual_repo, &branch.name)?.is_some();
             let branch_protection = branch_protection(expected_repo, branch);
             branch_protection_diffs.push(BranchProtectionDiff::Create(BranchProtection {
                 name: branch.name.clone(),
@@ -366,7 +366,7 @@ impl SyncGitHub {
         branch_protection_diffs.extend(
             actual_protected_branches
                 .into_iter()
-                .map(|b| BranchProtectionDiff::Delete(b)),
+                .map(BranchProtectionDiff::Delete),
         );
 
         Ok(branch_protection_diffs)
@@ -462,13 +462,13 @@ impl SyncGitHub {
 
         // `actual_teams` now contains the teams that were not expected
         // but are still on GitHub. We now remove them.
-        for (team, _) in &actual_teams {
+        for team in actual_teams.keys() {
             self.github
                 .remove_team_from_repo(&expected_repo.org, &expected_repo.name, team)?;
         }
         // `actual_collaborators` now contains the collaborators that were not expected
         // but are still on GitHub. We now remove them.
-        for (collaborator, _) in &actual_collaborators {
+        for collaborator in actual_collaborators.keys() {
             self.github.remove_collaborator_from_repo(
                 &expected_repo.org,
                 &expected_repo.name,
@@ -568,7 +568,7 @@ fn branch_protection(
     expected_repo: &rust_team_data::v1::Repo,
     branch: &rust_team_data::v1::Branch,
 ) -> api::BranchProtection {
-    let branch_protection = api::BranchProtection {
+    api::BranchProtection {
         required_approving_review_count: if expected_repo.bots.contains(&Bot::Bors) {
             0
         } else {
@@ -581,8 +581,7 @@ fn branch_protection(
             .contains(&Bot::Bors)
             .then(|| vec!["bors".to_owned()])
             .unwrap_or_default(),
-    };
-    branch_protection
+    }
 }
 
 /// The special bot teams
