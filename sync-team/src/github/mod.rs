@@ -57,8 +57,12 @@ impl SyncGitHub {
 
     pub(crate) fn diff_all(&self) -> anyhow::Result<Diff> {
         let team_diffs = self.diff_teams()?;
+        let repo_diffs = self.diff_repos()?;
 
-        Ok(Diff { team_diffs })
+        Ok(Diff {
+            team_diffs,
+            repo_diffs,
+        })
     }
 
     fn diff_teams(&self) -> anyhow::Result<Vec<TeamDiff>> {
@@ -180,6 +184,218 @@ impl SyncGitHub {
             privacy_diff,
             member_diffs,
         }))
+    }
+
+    fn diff_repos(&self) -> Result<Vec<RepoDiff>, Error> {
+        let mut diffs = Vec::new();
+        for repo in &self.repos {
+            diffs.push(self.diff_repo(repo)?);
+        }
+        Ok(diffs)
+    }
+
+    fn diff_repo(&self, expected_repo: &rust_team_data::v1::Repo) -> Result<RepoDiff, Error> {
+        let actual_repo = match self.github.repo(&expected_repo.org, &expected_repo.name)? {
+            Some(r) => r,
+            None => {
+                let mut permissions = Vec::new();
+                use rust_team_data::v1;
+                let permission = |p: &v1::RepoPermission| match *p {
+                    v1::RepoPermission::Write => RepoPermission::Write,
+                    v1::RepoPermission::Admin => RepoPermission::Admin,
+                    v1::RepoPermission::Maintain => RepoPermission::Maintain,
+                    v1::RepoPermission::Triage => RepoPermission::Triage,
+                };
+                for expected_team in &expected_repo.teams {
+                    permissions.push(RepoPermissionAssignment::Team {
+                        team_name: expected_team.name.clone(),
+                        permission: permission(&expected_team.permission),
+                    });
+                }
+
+                for bot in &expected_repo.bots {
+                    let bot_name = match bot {
+                        Bot::Bors => "bors",
+                        Bot::Highfive => "rust-highfive",
+                        Bot::RustTimer => "rust-timer",
+                        Bot::Rustbot => "rustbot",
+                    };
+                    permissions.push(RepoPermissionAssignment::User {
+                        user_name: bot_name.to_owned(),
+                        permission: RepoPermission::Write,
+                    });
+                }
+
+                for member in &expected_repo.members {
+                    permissions.push(RepoPermissionAssignment::User {
+                        user_name: member.name.clone(),
+                        permission: permission(&member.permission),
+                    });
+                }
+
+                let mut branch_protections = Vec::new();
+                for branch in &expected_repo.branches {
+                    let branch_protection = api::BranchProtection {
+                        required_approving_review_count: if expected_repo.bots.contains(&Bot::Bors)
+                        {
+                            0
+                        } else {
+                            1
+                        },
+                        dismiss_stale_reviews: branch.dismiss_stale_review,
+                        required_checks: branch.ci_checks.clone(),
+                        allowed_users: expected_repo
+                            .bots
+                            .contains(&Bot::Bors)
+                            .then(|| vec!["bors".to_owned()])
+                            .unwrap_or_default(),
+                    };
+                    branch_protections.push(BranchProtection {
+                        name: branch.name.clone(),
+                        already_exists: false,
+                        branch_protection,
+                    });
+                }
+                return Ok(RepoDiff::Create(CreateRepoDiff {
+                    org: expected_repo.org.clone(),
+                    name: expected_repo.name.clone(),
+                    description: expected_repo.description.clone(),
+                    permissions,
+                    branch_protections,
+                }));
+            }
+        };
+
+        let permissions = self.diff_permissions(expected_repo)?;
+        let branch_protections = self.diff_branch_protections(&actual_repo, expected_repo)?;
+
+        Ok(RepoDiff::Update(UpdateRepoDiff {
+            org: expected_repo.org.clone(),
+            name: expected_repo.name.clone(),
+            description: expected_repo.description.clone(),
+            permissions,
+            branch_protections,
+        }))
+    }
+
+    fn diff_permissions(
+        &self,
+        expected_repo: &rust_team_data::v1::Repo,
+    ) -> Result<Vec<RepoPermissionAssignmentDiff>, Error> {
+        use rust_team_data::v1;
+        let permission = |p: &v1::RepoPermission| match *p {
+            v1::RepoPermission::Write => RepoPermission::Write,
+            v1::RepoPermission::Admin => RepoPermission::Admin,
+            v1::RepoPermission::Maintain => RepoPermission::Maintain,
+            v1::RepoPermission::Triage => RepoPermission::Triage,
+        };
+        let mut actual_teams = self
+            .github
+            .repo_teams(&expected_repo.org, &expected_repo.name)?;
+        let mut actual_collaborators = self
+            .github
+            .repo_collaborators(&expected_repo.org, &expected_repo.name)?;
+
+        let mut permissions = Vec::new();
+        // Sync team and bot permissions
+        for expected_team in &expected_repo.teams {
+            let permission = permission(&expected_team.permission);
+            actual_teams.remove(&expected_team.name);
+            permissions.push(RepoPermissionAssignmentDiff::Create(
+                RepoPermissionAssignment::Team {
+                    team_name: expected_team.name.clone(),
+                    permission,
+                },
+            ));
+        }
+
+        for bot in &expected_repo.bots {
+            let bot_name = match bot {
+                Bot::Bors => "bors",
+                Bot::Highfive => "rust-highfive",
+                Bot::RustTimer => "rust-timer",
+                Bot::Rustbot => "rustbot",
+            };
+            actual_teams.remove(bot_name);
+            actual_collaborators.remove(bot_name);
+            permissions.push(RepoPermissionAssignmentDiff::Create(
+                RepoPermissionAssignment::User {
+                    user_name: bot_name.to_owned(),
+                    permission: RepoPermission::Write,
+                },
+            ));
+        }
+
+        for member in &expected_repo.members {
+            actual_collaborators.remove(&member.name);
+            permissions.push(RepoPermissionAssignmentDiff::Create(
+                RepoPermissionAssignment::User {
+                    user_name: member.name.clone(),
+                    permission: permission(&member.permission),
+                },
+            ));
+        }
+
+        // `actual_teams` now contains the teams that were not expected
+        // but are still on GitHub. We now remove them.
+        for team in actual_teams {
+            permissions.push(RepoPermissionAssignmentDiff::Delete(
+                RepoCollaborator::Team(team),
+            ));
+        }
+        // `actual_collaborators` now contains the collaborators that were not expected
+        // but are still on GitHub. We now remove them.
+        for collaborator in actual_collaborators {
+            permissions.push(RepoPermissionAssignmentDiff::Delete(
+                RepoCollaborator::User(collaborator),
+            ));
+        }
+
+        Ok(permissions)
+    }
+
+    fn diff_branch_protections(
+        &self,
+        actual_repo: &api::Repo,
+        expected_repo: &rust_team_data::v1::Repo,
+    ) -> Result<Vec<BranchProtectionDiff>, Error> {
+        let mut branch_protection_diffs = Vec::new();
+        let mut actual_protected_branches = self.github.protected_branches(&actual_repo)?;
+
+        for branch in &expected_repo.branches {
+            actual_protected_branches.remove(&branch.name);
+
+            let already_exists = self.github.branch(&actual_repo, &branch.name)?.is_some();
+            let branch_protection = api::BranchProtection {
+                required_approving_review_count: if expected_repo.bots.contains(&Bot::Bors) {
+                    0
+                } else {
+                    1
+                },
+                dismiss_stale_reviews: branch.dismiss_stale_review,
+                required_checks: branch.ci_checks.clone(),
+                allowed_users: expected_repo
+                    .bots
+                    .contains(&Bot::Bors)
+                    .then(|| vec!["bors".to_owned()])
+                    .unwrap_or_default(),
+            };
+            branch_protection_diffs.push(BranchProtectionDiff::Create(BranchProtection {
+                name: branch.name.clone(),
+                already_exists,
+                branch_protection,
+            }));
+        }
+
+        // `actual_branch_protections` now contains the branch protections that were not expected
+        // but are still on GitHub. We want to delete them.
+        branch_protection_diffs.extend(
+            actual_protected_branches
+                .into_iter()
+                .map(|b| BranchProtectionDiff::Delete(b)),
+        );
+
+        Ok(branch_protection_diffs)
     }
 
     pub(crate) fn synchronize_all(&self) -> Result<(), Error> {
@@ -380,6 +596,7 @@ const BOTS_TEAMS: &[&str] = &["bors", "highfive", "rfcbot", "bots"];
 /// A diff between the team repo and the state on GitHub
 pub(crate) struct Diff {
     team_diffs: Vec<TeamDiff>,
+    repo_diffs: Vec<RepoDiff>,
 }
 
 impl Diff {
@@ -398,6 +615,60 @@ impl Diff {
             team_diff.log()
         }
     }
+}
+
+enum RepoDiff {
+    Create(CreateRepoDiff),
+    Update(UpdateRepoDiff),
+}
+
+struct CreateRepoDiff {
+    org: String,
+    name: String,
+    description: String,
+    permissions: Vec<RepoPermissionAssignment>,
+    branch_protections: Vec<BranchProtection>,
+}
+
+struct UpdateRepoDiff {
+    org: String,
+    name: String,
+    description: String,
+    permissions: Vec<RepoPermissionAssignmentDiff>,
+    branch_protections: Vec<BranchProtectionDiff>,
+}
+
+enum RepoPermissionAssignmentDiff {
+    Create(RepoPermissionAssignment),
+    Update(RepoPermissionAssignment),
+    Delete(RepoCollaborator),
+}
+
+enum RepoCollaborator {
+    Team(String),
+    User(String),
+}
+
+enum RepoPermissionAssignment {
+    Team {
+        team_name: String,
+        permission: RepoPermission,
+    },
+    User {
+        user_name: String,
+        permission: RepoPermission,
+    },
+}
+
+enum BranchProtectionDiff {
+    Create(BranchProtection),
+    Delete(String),
+}
+
+struct BranchProtection {
+    name: String,
+    already_exists: bool,
+    branch_protection: api::BranchProtection,
 }
 
 enum TeamDiff {
