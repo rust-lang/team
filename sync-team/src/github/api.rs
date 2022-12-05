@@ -560,61 +560,15 @@ impl GitHub {
         &self,
         repo: &Repo,
         branch_name: &str,
-        branch_protection: BranchProtectionRequest,
+        branch_protection: BranchProtection,
     ) -> anyhow::Result<bool> {
-        #[derive(serde::Serialize)]
-        struct Req<'a> {
-            required_status_checks: Req1<'a>,
-            enforce_admins: bool,
-            required_pull_request_reviews: Req2,
-            restrictions: HashMap<String, Vec<String>>,
-        }
-        #[derive(serde::Serialize)]
-        struct Req1<'a> {
-            strict: bool,
-            checks: Vec<Check<'a>>,
-        }
-        #[derive(serde::Serialize)]
-        struct Check<'a> {
-            context: &'a str,
-        }
-        #[derive(serde::Serialize)]
-        struct Req2 {
-            // Even though we don't want dismissal restrictions, it cannot be omitted
-            dismissal_restrictions: HashMap<(), ()>,
-            dismiss_stale_reviews: bool,
-            required_approving_review_count: u8,
-        }
-        let req = Req {
-            required_status_checks: Req1 {
-                strict: false,
-                checks: branch_protection
-                    .required_checks
-                    .iter()
-                    .map(|c| Check {
-                        context: c.as_str(),
-                    })
-                    .collect(),
-            },
-            enforce_admins: true,
-            required_pull_request_reviews: Req2 {
-                dismissal_restrictions: HashMap::new(),
-                dismiss_stale_reviews: branch_protection.dismiss_stale_reviews,
-                required_approving_review_count: branch_protection.required_approving_review_count,
-            },
-            restrictions: vec![
-                ("users".to_string(), branch_protection.allowed_users),
-                ("teams".to_string(), Vec::new()),
-            ]
-            .into_iter()
-            .collect(),
-        };
         debug!(
             "Updating branch protection on repo {}/{} for {}: {}",
             repo.org,
             repo.name,
             branch_name,
-            serde_json::to_string_pretty(&req).unwrap_or_else(|_| "<invalid json>".to_string())
+            serde_json::to_string_pretty(&branch_protection)
+                .unwrap_or_else(|_| "<invalid json>".to_string())
         );
         if !self.dry_run {
             let resp = self
@@ -625,7 +579,7 @@ impl GitHub {
                         repo.org, repo.name, branch_name
                     ),
                 )?
-                .json(&req)
+                .json(&branch_protection)
                 .send()?;
             match resp.status() {
                 StatusCode::OK => Ok(true),
@@ -917,5 +871,65 @@ pub(crate) struct BranchProtectionRequest {
     pub(crate) allowed_users: Vec<String>,
 }
 
-#[derive(Debug, serde::Deserialize)]
-pub(crate) struct BranchProtection {}
+pub(crate) mod branch_protection {
+    use super::*;
+
+    #[derive(PartialEq, serde::Serialize, serde::Deserialize)]
+    pub(crate) struct BranchProtection {
+        pub(crate) required_status_checks: RequiredStatusChecks,
+        pub(crate) enforce_admins: EnforceAdmins,
+        pub(crate) required_pull_request_reviews: PullRequestReviews,
+        pub(crate) restrictions: Restrictions,
+    }
+
+    #[derive(PartialEq, serde::Serialize, serde::Deserialize)]
+    pub(crate) struct RequiredStatusChecks {
+        pub(crate) strict: bool,
+        pub(crate) checks: Vec<Check>,
+    }
+
+    #[derive(PartialEq, serde::Serialize, serde::Deserialize)]
+    pub(crate) struct Check {
+        pub(crate) context: String,
+    }
+
+    #[derive(PartialEq, serde::Serialize, serde::Deserialize)]
+    pub(crate) struct PullRequestReviews {
+        // Even though we don't want dismissal restrictions, it cannot be omitted
+        #[serde(default)]
+        pub(crate) dismissal_restrictions: HashMap<(), ()>,
+        pub(crate) dismiss_stale_reviews: bool,
+        pub(crate) required_approving_review_count: u8,
+    }
+
+    #[derive(PartialEq, serde::Serialize, serde::Deserialize)]
+    pub(crate) struct Restrictions {
+        pub(crate) users: Vec<String>,
+        pub(crate) teams: Vec<String>,
+    }
+
+    #[derive(serde::Serialize, serde::Deserialize)]
+    pub(crate) enum EnforceAdmins {
+        // Used for serialization
+        Bool(bool),
+        // Used for deserialization
+        Object { enabled: bool },
+    }
+
+    impl EnforceAdmins {
+        fn enabled(&self) -> bool {
+            match *self {
+                EnforceAdmins::Bool(e) => e,
+                EnforceAdmins::Object { enabled } => enabled,
+            }
+        }
+    }
+
+    impl PartialEq for EnforceAdmins {
+        fn eq(&self, other: &Self) -> bool {
+            self.enabled() == other.enabled()
+        }
+    }
+}
+
+pub(crate) use branch_protection::BranchProtection;

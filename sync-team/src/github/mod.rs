@@ -356,16 +356,17 @@ impl SyncGitHub {
             let expected_branch_protection = branch_protection(expected_repo, branch);
             let actual_branch_protection =
                 self.github.branch_protection(actual_repo, &branch.name)?;
-            let protection = BranchProtection {
+            let protection_diff = BranchProtection {
                 name: branch.name.clone(),
                 branch_already_exists,
                 branch_protection: expected_branch_protection,
             };
             match actual_branch_protection {
-                Some(a) if a != expected_branch_protection => {
-                    branch_protection_diffs.push(BranchProtectionDiff::Update(protection))
+                Some(a) if a != protection_diff.branch_protection => {
+                    branch_protection_diffs.push(BranchProtectionDiff::Update(protection_diff))
                 }
-                None => branch_protection_diffs.push(BranchProtectionDiff::Create(protection)),
+                None => branch_protection_diffs.push(BranchProtectionDiff::Create(protection_diff)),
+                // The branch protection doesn't need to change
                 Some(_) => {}
             };
         }
@@ -576,20 +577,37 @@ fn convert_permission(p: &rust_team_data::v1::RepoPermission) -> RepoPermission 
 fn branch_protection(
     expected_repo: &rust_team_data::v1::Repo,
     branch: &rust_team_data::v1::Branch,
-) -> api::BranchProtectionRequest {
-    api::BranchProtectionRequest {
-        required_approving_review_count: if expected_repo.bots.contains(&Bot::Bors) {
-            0
-        } else {
-            1
+) -> api::BranchProtection {
+    let required_approving_review_count = if expected_repo.bots.contains(&Bot::Bors) {
+        0
+    } else {
+        1
+    };
+    let allowed_users = expected_repo
+        .bots
+        .contains(&Bot::Bors)
+        .then(|| vec!["bors".to_owned()])
+        .unwrap_or_default();
+    api::BranchProtection {
+        required_status_checks: api::branch_protection::RequiredStatusChecks {
+            strict: false,
+            checks: branch
+                .ci_checks
+                .clone()
+                .into_iter()
+                .map(|c| api::branch_protection::Check { context: c })
+                .collect(),
         },
-        dismiss_stale_reviews: branch.dismiss_stale_review,
-        required_checks: branch.ci_checks.clone(),
-        allowed_users: expected_repo
-            .bots
-            .contains(&Bot::Bors)
-            .then(|| vec!["bors".to_owned()])
-            .unwrap_or_default(),
+        enforce_admins: api::branch_protection::EnforceAdmins::Bool(true),
+        required_pull_request_reviews: api::branch_protection::PullRequestReviews {
+            dismissal_restrictions: HashMap::new(),
+            dismiss_stale_reviews: branch.dismiss_stale_review,
+            required_approving_review_count,
+        },
+        restrictions: api::branch_protection::Restrictions {
+            users: allowed_users,
+            teams: Vec::new(),
+        },
     }
 }
 
@@ -672,7 +690,7 @@ enum BranchProtectionDiff {
 struct BranchProtection {
     name: String,
     branch_already_exists: bool,
-    branch_protection: api::BranchProtectionRequest,
+    branch_protection: api::BranchProtection,
 }
 
 enum TeamDiff {
