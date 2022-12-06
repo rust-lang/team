@@ -340,19 +340,20 @@ impl GitHub {
         }
     }
 
-    pub(crate) fn edit_repo(&self, repo: &Repo, description: &str) -> anyhow::Result<()> {
+    pub(crate) fn edit_repo(
+        &self,
+        org: &str,
+        repo_name: &str,
+        description: &str,
+    ) -> anyhow::Result<()> {
         #[derive(serde::Serialize, Debug)]
         struct Req<'a> {
             description: &'a str,
         }
         let req = Req { description };
-        debug!("Editing repo {}/{} with {:?}", repo.org, repo.name, req);
+        debug!("Editing repo {}/{} with {:?}", org, repo_name, req);
         if !self.dry_run {
-            self.send(
-                Method::PATCH,
-                &format!("repos/{}/{}", repo.org, repo.name),
-                &req,
-            )?;
+            self.send(Method::PATCH, &format!("repos/{}/{}", org, repo_name), &req)?;
         }
         Ok(())
     }
@@ -482,10 +483,15 @@ impl GitHub {
     }
 
     /// Get the head commit of the supplied branch
-    pub(crate) fn branch(&self, repo: &Repo, name: &str) -> anyhow::Result<Option<String>> {
+    pub(crate) fn branch(
+        &self,
+        org: &str,
+        repo_name: &str,
+        branch_name: &str,
+    ) -> anyhow::Result<Option<String>> {
         let branch = self.send_option::<Branch>(
             Method::GET,
-            &format!("repos/{}/{}/branches/{}", repo.org, repo.name, name),
+            &format!("repos/{}/{}/branches/{}", org, repo_name, branch_name),
         )?;
         Ok(branch.map(|b| b.commit.sha))
     }
@@ -493,8 +499,9 @@ impl GitHub {
     /// Create a branch
     pub(crate) fn create_branch(
         &self,
-        repo: &Repo,
-        name: &str,
+        org: &str,
+        repo_name: &str,
+        branch_name: &str,
         commit: &str,
     ) -> anyhow::Result<()> {
         #[derive(serde::Serialize, Debug)]
@@ -504,14 +511,14 @@ impl GitHub {
         }
         debug!(
             "Creating branch in {}/{}: {} with commit {}",
-            repo.org, repo.name, name, commit
+            org, repo_name, branch_name, commit
         );
         if !self.dry_run {
             self.send(
                 Method::POST,
-                &format!("repos/{}/{}/git/refs", repo.org, repo.name),
+                &format!("repos/{}/{}/git/refs", org, repo_name),
                 &Req {
-                    r#ref: &format!("refs/heads/{}", name),
+                    r#ref: &format!("refs/heads/{}", branch_name),
                     sha: commit,
                 },
             )?;
@@ -553,14 +560,15 @@ impl GitHub {
     /// Returns `Ok(true)` on success, `Ok(false)` if the branch doesn't exist, and `Err(_)` otherwise.
     pub(crate) fn update_branch_protection(
         &self,
-        repo: &Repo,
+        org: &str,
+        repo_name: &str,
         branch_name: &str,
-        branch_protection: BranchProtection,
+        branch_protection: &BranchProtection,
     ) -> anyhow::Result<bool> {
         debug!(
             "Updating branch protection on repo {}/{} for {}: {}",
-            repo.org,
-            repo.name,
+            org,
+            repo_name,
             branch_name,
             serde_json::to_string_pretty(&branch_protection)
                 .unwrap_or_else(|_| "<invalid json>".to_string())
@@ -571,10 +579,10 @@ impl GitHub {
                     Method::PUT,
                     &format!(
                         "repos/{}/{}/branches/{}/protection",
-                        repo.org, repo.name, branch_name
+                        org, repo_name, branch_name
                     ),
                 )?
-                .json(&branch_protection)
+                .json(branch_protection)
                 .send()?;
             match resp.status() {
                 StatusCode::OK => Ok(true),
@@ -590,18 +598,20 @@ impl GitHub {
     }
 
     /// Delete a branch protection
-    pub(crate) fn delete_branch_protection(&self, repo: &Repo, branch: &str) -> anyhow::Result<()> {
+    pub(crate) fn delete_branch_protection(
+        &self,
+        org: &str,
+        repo_name: &str,
+        branch: &str,
+    ) -> anyhow::Result<()> {
         debug!(
             "Removing protection in {}/{} from {} branch",
-            repo.org, repo.name, branch
+            org, repo_name, branch
         );
         if !self.dry_run {
             self.req(
                 Method::DELETE,
-                &format!(
-                    "repos/{}/{}/branches/{}/protection",
-                    repo.org, repo.name, branch
-                ),
+                &format!("repos/{}/{}/branches/{}/protection", org, repo_name, branch),
             )?
             .send()?
             .error_for_status()?;

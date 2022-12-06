@@ -1,10 +1,7 @@
 mod api;
 
-use self::api::{GitHub, TeamPrivacy, TeamRole};
-use crate::{
-    github::api::{branch_protection, RepoPermission},
-    TeamApi,
-};
+use self::api::{GitHub, Repo, TeamPrivacy, TeamRole};
+use crate::{github::api::RepoPermission, TeamApi};
 use anyhow::Error;
 use log::{debug, info};
 use rust_team_data::v1::Bot;
@@ -366,12 +363,11 @@ impl SyncGitHub {
                     BranchProtectionDiffOperation::Update(a, expected_branch_protection)
                 }
                 None => {
-                    let branch_already_exists =
-                        self.github.branch(actual_repo, &branch.name)?.is_some();
-                    BranchProtectionDiffOperation::Create(
-                        expected_branch_protection,
-                        branch_already_exists,
-                    )
+                    // TODO: don't set if the branch doesn't exist yet
+                    let head_commit =
+                        self.github
+                            .branch(&actual_repo.org, &actual_repo.name, &branch.name)?;
+                    BranchProtectionDiffOperation::Create(expected_branch_protection, head_commit)
                 }
                 // The branch protection doesn't need to change
                 Some(_) => continue,
@@ -428,8 +424,11 @@ impl SyncGitHub {
         // Ensure the repo is consistent between its expected state and current state
         if !just_created {
             if actual_repo.description.as_ref() != Some(&expected_repo.description) {
-                self.github
-                    .edit_repo(&actual_repo, &expected_repo.description)?;
+                self.github.edit_repo(
+                    &actual_repo.org,
+                    &actual_repo.name,
+                    &expected_repo.description,
+                )?;
             } else {
                 debug!("repo is in synced state");
             }
@@ -505,14 +504,20 @@ impl SyncGitHub {
             actual_branch_protections.remove(&branch.name);
 
             // if the branch does not already exist, create it
-            if self.github.branch(&actual_repo, &branch.name)?.is_none() {
+            if self
+                .github
+                .branch(&actual_repo.org, &actual_repo.name, &branch.name)?
+                .is_none()
+            {
                 // First, we need the sha of the head of the main branch
                 let main_branch_commit = match main_branch_commit.as_ref() {
                     Some(s) => s,
                     None => {
-                        let head = self
-                            .github
-                            .branch(&actual_repo, &actual_repo.default_branch)?;
+                        let head = self.github.branch(
+                            &actual_repo.org,
+                            &actual_repo.name,
+                            &actual_repo.default_branch,
+                        )?;
                         // cache the main branch head so we only need to get it once
                         main_branch_commit.get_or_insert(head)
                     }
@@ -520,16 +525,21 @@ impl SyncGitHub {
 
                 // If there is a main branch commit, create the new branch
                 if let Some(main_branch_commit) = main_branch_commit {
-                    self.github
-                        .create_branch(&actual_repo, &branch.name, main_branch_commit)?;
+                    self.github.create_branch(
+                        &actual_repo.org,
+                        &actual_repo.name,
+                        &branch.name,
+                        main_branch_commit,
+                    )?;
                 }
             }
 
             // Update the protection of the branch
             let protection_result = self.github.update_branch_protection(
-                &actual_repo,
+                &actual_repo.org,
+                &actual_repo.name,
                 &branch.name,
-                branch_protection(expected_repo, branch),
+                &branch_protection(expected_repo, branch),
             )?;
             if !protection_result {
                 debug!(
@@ -548,8 +558,11 @@ impl SyncGitHub {
                 the protection is not in the team repo",
                 branch_protection, actual_repo.org, actual_repo.name
             );
-            self.github
-                .delete_branch_protection(&actual_repo, &branch_protection)?;
+            self.github.delete_branch_protection(
+                &actual_repo.org,
+                &actual_repo.name,
+                &branch_protection,
+            )?;
         }
         Ok(())
     }
@@ -642,6 +655,9 @@ impl Diff {
         for team_diff in self.team_diffs {
             team_diff.apply(sync)?;
         }
+        for repo_diff in self.repo_diffs {
+            repo_diff.apply(sync)?;
+        }
 
         Ok(())
     }
@@ -675,6 +691,13 @@ impl RepoDiff {
             Self::Update(u) => u.log(),
         }
     }
+
+    fn apply(&self, sync: &SyncGitHub) -> anyhow::Result<()> {
+        match self {
+            RepoDiff::Create(c) => c.apply(sync),
+            RepoDiff::Update(u) => u.apply(sync),
+        }
+    }
 }
 
 struct CreateRepoDiff {
@@ -703,6 +726,54 @@ impl CreateRepoDiff {
         for (branch_name, branch_protection) in &self.branch_protections {
             log_branch_protection(branch_name, branch_protection)
         }
+    }
+
+    fn apply(&self, sync: &SyncGitHub) -> anyhow::Result<()> {
+        let repo = sync
+            .github
+            .create_repo(&self.org, &self.name, &self.description)?;
+        for (collaborator, permission) in &self.permissions {
+            RepoPermissionAssignmentDiff {
+                collaborator: collaborator.clone(),
+                diff: RepoPermissionDiff::Create(*permission),
+            }
+            .apply(sync, &self.org, &self.name)?;
+        }
+
+        let mut main_branch_commit = None;
+        for (branch, protectiton) in &self.branch_protections {
+            // Create the branch, otherwise creating a protection will fail
+            let main_branch_commit = match main_branch_commit.as_ref() {
+                Some(s) => s,
+                None => {
+                    // First, we need the sha of the head of the main branch
+                    let head = sync
+                        .github
+                        .branch(&self.org, &self.name, &repo.default_branch)?;
+                    // cache the main branch head so we only need to get it once
+                    main_branch_commit.get_or_insert(head)
+                }
+            };
+
+            // If there is a main branch commit, create the new branch
+            if let Some(main_branch_commit) = main_branch_commit {
+                // TODO: is it possible for there not be a main branch?
+                sync.github
+                    .create_branch(&self.org, &self.name, branch, main_branch_commit)?;
+            }
+            // Update the protection of the branch
+            let protection_result =
+                sync.github
+                    .update_branch_protection(&repo.org, &repo.name, branch, protectiton)?;
+            if !protection_result {
+                debug!(
+                    "Did not update branch protection for \
+                    '{}' on '{}/{}' as the branch does not exist.",
+                    branch, repo.org, repo.name
+                );
+            }
+        }
+        Ok(())
     }
 }
 
@@ -748,6 +819,17 @@ impl UpdateRepoDiff {
             && self.permission_diffs.is_empty()
             && self.branch_protection_diffs.is_empty()
     }
+
+    fn apply(&self, sync: &SyncGitHub) -> anyhow::Result<()> {
+        // TODO: name diff?
+        if let Some((_, description)) = &self.description_diff {
+            sync.github.edit_repo(&self.org, &self.name, description)?;
+        }
+        for permission in &self.permission_diffs {
+            permission.apply(sync, &self.org, &self.name)?;
+        }
+        Ok(())
+    }
 }
 
 struct RepoPermissionAssignmentDiff {
@@ -772,6 +854,30 @@ impl RepoPermissionAssignmentDiff {
                 info!("Removing {name}'s {p} permission ")
             }
         }
+    }
+
+    fn apply(&self, sync: &SyncGitHub, org: &str, repo_name: &str) -> anyhow::Result<()> {
+        match &self.diff {
+            RepoPermissionDiff::Create(p) | RepoPermissionDiff::Update(_, p) => {
+                match &self.collaborator {
+                    RepoCollaborator::Team(team_name) => sync
+                        .github
+                        .update_team_repo_permissions(org, repo_name, team_name, p)?,
+                    RepoCollaborator::User(user_name) => sync
+                        .github
+                        .update_user_repo_permissions(org, repo_name, user_name, p)?,
+                }
+            }
+            RepoPermissionDiff::Delete(_) => match &self.collaborator {
+                RepoCollaborator::Team(team_name) => sync
+                    .github
+                    .remove_team_from_repo(org, repo_name, team_name)?,
+                RepoCollaborator::User(user_name) => sync
+                    .github
+                    .remove_collaborator_from_repo(org, repo_name, user_name)?,
+            },
+        }
+        Ok(())
     }
 }
 
@@ -838,6 +944,41 @@ impl BranchProtectionDiff {
             }
         }
     }
+
+    fn apply(&self, sync: &SyncGitHub, org: &str, repo_name: &str) -> anyhow::Result<()> {
+        if let BranchProtectionDiffOperation::Create(_, Some(main_branch_commit)) = &self.operation
+        {
+            sync.github
+                .create_branch(org, repo_name, &self.name, main_branch_commit)?;
+        }
+        match &self.operation {
+            BranchProtectionDiffOperation::Create(bp, _)
+            | BranchProtectionDiffOperation::Update(_, bp) => {
+                // Update the protection of the branch
+                let protection_result = sync
+                    .github
+                    .update_branch_protection(org, repo_name, &self.name, bp)?;
+                if !protection_result {
+                    debug!(
+                        "Did not update branch protection for \
+                    '{}' on '{}/{}' as the branch does not exist.",
+                        self.name, org, repo_name
+                    );
+                }
+            }
+            BranchProtectionDiffOperation::Delete => {
+                debug!(
+                    "Deleting branch protection for '{}' on '{}/{}' as \
+                the protection is not in the team repo",
+                    self.name, org, repo_name
+                );
+                sync.github
+                    .delete_branch_protection(org, repo_name, &self.name)?;
+            }
+        }
+
+        Ok(())
+    }
 }
 
 fn log_branch_protection(branch_name: &str, branch_protection: &api::BranchProtection) {
@@ -869,7 +1010,7 @@ fn log_branch_protection(branch_name: &str, branch_protection: &api::BranchProte
 }
 
 enum BranchProtectionDiffOperation {
-    Create(api::BranchProtection, bool),
+    Create(api::BranchProtection, Option<String>),
     Update(api::BranchProtection, api::BranchProtection),
     Delete,
 }
