@@ -200,24 +200,24 @@ impl SyncGitHub {
             None => {
                 let mut permissions = Vec::new();
                 for expected_team in &expected_repo.teams {
-                    permissions.push(RepoPermissionAssignment::Team {
-                        team_name: expected_team.name.clone(),
-                        permission: convert_permission(&expected_team.permission),
-                    });
+                    permissions.push((
+                        RepoCollaborator::Team(expected_team.name.clone()),
+                        convert_permission(&expected_team.permission),
+                    ));
                 }
 
                 for bot in &expected_repo.bots {
-                    permissions.push(RepoPermissionAssignment::User {
-                        user_name: bot_name(bot).to_owned(),
-                        permission: RepoPermission::Write,
-                    });
+                    permissions.push((
+                        RepoCollaborator::User(bot_name(bot).to_owned()),
+                        RepoPermission::Write,
+                    ));
                 }
 
                 for member in &expected_repo.members {
-                    permissions.push(RepoPermissionAssignment::User {
-                        user_name: member.name.clone(),
-                        permission: convert_permission(&member.permission),
-                    });
+                    permissions.push((
+                        RepoCollaborator::User(member.name.clone()),
+                        convert_permission(&member.permission),
+                    ));
                 }
 
                 let mut branch_protections = Vec::new();
@@ -239,15 +239,24 @@ impl SyncGitHub {
             }
         };
 
-        let permissions = self.diff_permissions(expected_repo)?;
-        let branch_protections = self.diff_branch_protections(&actual_repo, expected_repo)?;
-
+        let permission_diffs = self.diff_permissions(expected_repo)?;
+        let branch_protection_diffs = self.diff_branch_protections(&actual_repo, expected_repo)?;
+        let name_diff =
+            (actual_repo.name != expected_repo.name).then(|| expected_repo.name.clone());
+        let description_diff =
+            (actual_repo.description.as_ref() != Some(&expected_repo.description)).then(|| {
+                (
+                    actual_repo.description.clone(),
+                    expected_repo.description.clone(),
+                )
+            });
         Ok(RepoDiff::Update(UpdateRepoDiff {
             org: expected_repo.org.clone(),
-            name: expected_repo.name.clone(),
-            description: expected_repo.description.clone(),
-            permissions,
-            branch_protections,
+            name: actual_repo.name,
+            name_diff,
+            description_diff,
+            permission_diffs,
+            branch_protection_diffs,
         }))
     }
 
@@ -273,16 +282,17 @@ impl SyncGitHub {
         for expected_team in &expected_repo.teams {
             let permission = convert_permission(&expected_team.permission);
             let removed = actual_teams.remove(&expected_team.name);
-            let team_permission = RepoPermissionAssignment::Team {
-                team_name: expected_team.name.clone(),
-                permission,
-            };
+            let collaborator = RepoCollaborator::Team(expected_team.name.clone());
             let diff = match removed {
-                Some(t) if t.permission != permission => {
-                    RepoPermissionAssignmentDiff::Update(team_permission)
-                }
+                Some(t) if t.permission != permission => RepoPermissionAssignmentDiff {
+                    collaborator,
+                    diff: RepoPermissionDiff::Update(t.permission, permission),
+                },
                 Some(_) => continue,
-                None => RepoPermissionAssignmentDiff::Create(team_permission),
+                None => RepoPermissionAssignmentDiff {
+                    collaborator,
+                    diff: RepoPermissionDiff::Create(permission),
+                },
             };
             permissions.push(diff);
         }
@@ -299,43 +309,37 @@ impl SyncGitHub {
 
         for (name, permission) in bots.chain(members) {
             let removed = actual_collaborators.remove(name);
-            let user_permission = RepoPermissionAssignment::User {
-                user_name: name.to_owned(),
-                permission,
-            };
+            let collaborator = RepoCollaborator::User(name.to_owned());
             let diff = match removed {
-                Some(t) if t.permission != permission => {
-                    RepoPermissionAssignmentDiff::Update(user_permission)
-                }
+                Some(t) if t.permission != permission => RepoPermissionAssignmentDiff {
+                    collaborator,
+                    diff: RepoPermissionDiff::Update(t.permission, permission),
+                },
                 Some(_) => continue,
-                None => RepoPermissionAssignmentDiff::Create(user_permission),
+                None => RepoPermissionAssignmentDiff {
+                    collaborator,
+                    diff: RepoPermissionDiff::Create(permission),
+                },
             };
             permissions.push(diff);
         }
 
-        for member in &expected_repo.members {
-            actual_collaborators.remove(&member.name);
-            permissions.push(RepoPermissionAssignmentDiff::Create(
-                RepoPermissionAssignment::User {
-                    user_name: member.name.clone(),
-                    permission: convert_permission(&member.permission),
-                },
-            ));
-        }
-
         // `actual_teams` now contains the teams that were not expected
         // but are still on GitHub. We now remove them.
-        for (team, _) in actual_teams {
-            permissions.push(RepoPermissionAssignmentDiff::Delete(
-                RepoCollaborator::Team(team),
-            ));
+        for (team, t) in actual_teams {
+            permissions.push(RepoPermissionAssignmentDiff {
+                collaborator: RepoCollaborator::Team(team),
+                diff: RepoPermissionDiff::Delete(t.permission),
+            });
         }
+
         // `actual_collaborators` now contains the collaborators that were not expected
         // but are still on GitHub. We now remove them.
-        for (collaborator, _) in actual_collaborators {
-            permissions.push(RepoPermissionAssignmentDiff::Delete(
-                RepoCollaborator::User(collaborator),
-            ));
+        for (collaborator, u) in actual_collaborators {
+            permissions.push(RepoPermissionAssignmentDiff {
+                collaborator: RepoCollaborator::User(collaborator),
+                diff: RepoPermissionDiff::Delete(u.permission),
+            });
         }
 
         Ok(permissions)
@@ -586,7 +590,11 @@ fn branch_protection(
     let allowed_users = expected_repo
         .bots
         .contains(&Bot::Bors)
-        .then(|| vec!["bors".to_owned()])
+        .then(|| {
+            vec![api::branch_protection::UserRestriction::Name(
+                "bors".to_owned(),
+            )]
+        })
         .unwrap_or_default();
     api::BranchProtection {
         required_status_checks: api::branch_protection::RequiredStatusChecks {
@@ -632,8 +640,13 @@ impl Diff {
 
     /// Print out the diff to the logs
     pub(crate) fn log(&self) {
+        info!("💻 Team Diffs:");
         for team_diff in &self.team_diffs {
-            team_diff.log()
+            team_diff.log();
+        }
+        info!("💻 Repo Diffs:");
+        for repo_diff in &self.repo_diffs {
+            repo_diff.log();
         }
     }
 }
@@ -643,42 +656,146 @@ enum RepoDiff {
     Update(UpdateRepoDiff),
 }
 
+impl RepoDiff {
+    pub(crate) fn log(&self) {
+        match self {
+            Self::Create(c) => c.log(),
+            Self::Update(u) => u.log(),
+        }
+    }
+}
+
 struct CreateRepoDiff {
     org: String,
     name: String,
     description: String,
-    permissions: Vec<RepoPermissionAssignment>,
+    permissions: Vec<(RepoCollaborator, RepoPermission)>,
     branch_protections: Vec<BranchProtection>,
+}
+
+impl CreateRepoDiff {
+    fn log(&self) {
+        info!("➕ Creating repo:");
+        info!("  Org: {}", self.org);
+        info!("  Name: {}", self.name);
+        info!("  Description: {}", self.description);
+        info!("  Permissions:");
+        for (collaborator, permission) in &self.permissions {
+            RepoPermissionAssignmentDiff {
+                collaborator: collaborator.clone(),
+                diff: RepoPermissionDiff::Create(*permission),
+            }
+            .log()
+        }
+        info!("  Branch Protections:");
+        for protection in &self.branch_protections {
+            info!("     {}", protection.name);
+            info!(
+                "         Dismiss Stale Reviews: {}",
+                protection
+                    .branch_protection
+                    .required_pull_request_reviews
+                    .dismiss_stale_reviews
+            );
+            info!(
+                "         Required Approving Review Count: {}",
+                protection
+                    .branch_protection
+                    .required_pull_request_reviews
+                    .required_approving_review_count
+            );
+            info!(
+                "         Checks: {:?}",
+                protection.branch_protection.required_status_checks.checks
+            );
+            info!(
+                "         User Overrides: {:?}",
+                protection.branch_protection.restrictions.users
+            );
+            info!(
+                "         Team Overrides: {:?}",
+                protection.branch_protection.restrictions.teams
+            );
+        }
+    }
 }
 
 struct UpdateRepoDiff {
     org: String,
     name: String,
-    description: String,
-    permissions: Vec<RepoPermissionAssignmentDiff>,
-    branch_protections: Vec<BranchProtectionDiff>,
+    name_diff: Option<String>,
+    description_diff: Option<(Option<String>, String)>,
+    permission_diffs: Vec<RepoPermissionAssignmentDiff>,
+    branch_protection_diffs: Vec<BranchProtectionDiff>,
 }
 
-enum RepoPermissionAssignmentDiff {
-    Create(RepoPermissionAssignment),
-    Update(RepoPermissionAssignment),
-    Delete(RepoCollaborator),
+impl UpdateRepoDiff {
+    fn log(&self) {
+        if self.noop() {
+            return;
+        }
+        info!("📝 Editing repo '{}/{}':", self.org, self.name);
+        if let Some(n) = &self.name_diff {
+            info!("  Changing name to: {}", n);
+        }
+        if let Some((old, new)) = &self.description_diff {
+            if let Some(old) = old {
+                info!("  New description: '{}' => '{}'", old, new);
+            } else {
+                info!("  Set description: '{}'", new);
+            }
+        }
+        if !self.permission_diffs.is_empty() {
+            info!("  Permission Changes:");
+        }
+        for permission_diff in &self.permission_diffs {
+            permission_diff.log();
+        }
+    }
+
+    pub(crate) fn noop(&self) -> bool {
+        self.name_diff.is_none()
+            && self.description_diff.is_none()
+            && self.permission_diffs.is_empty()
+            && self.branch_protection_diffs.is_empty()
+    }
 }
 
+struct RepoPermissionAssignmentDiff {
+    collaborator: RepoCollaborator,
+    diff: RepoPermissionDiff,
+}
+
+impl RepoPermissionAssignmentDiff {
+    pub(crate) fn log(&self) {
+        let name = match &self.collaborator {
+            RepoCollaborator::Team(name) => format!("team '{name}'"),
+            RepoCollaborator::User(name) => format!("user '{name}'"),
+        };
+        match &self.diff {
+            RepoPermissionDiff::Create(p) => {
+                info!("Giving {name} {p} permission");
+            }
+            RepoPermissionDiff::Update(old, new) => {
+                info!("Changing {name}'s permission from {old} to {new}");
+            }
+            RepoPermissionDiff::Delete(p) => {
+                info!("Removing {name}'s {p} permission ")
+            }
+        }
+    }
+}
+
+enum RepoPermissionDiff {
+    Create(RepoPermission),
+    Update(RepoPermission, RepoPermission),
+    Delete(RepoPermission),
+}
+
+#[derive(Clone)]
 enum RepoCollaborator {
     Team(String),
     User(String),
-}
-
-enum RepoPermissionAssignment {
-    Team {
-        team_name: String,
-        permission: RepoPermission,
-    },
-    User {
-        user_name: String,
-        permission: RepoPermission,
-    },
 }
 
 enum BranchProtectionDiff {
@@ -785,7 +902,6 @@ impl EditTeamDiff {
 
     fn log(&self) {
         if self.noop() {
-            debug!("✅ Team '{}' stays the same...", self.name);
             return;
         }
         info!("📝 Editing team '{}':", self.name);

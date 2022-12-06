@@ -28,6 +28,7 @@ fn usage() {
 fn app() -> anyhow::Result<()> {
     let mut dry_run = true;
     let mut next_team_repo = false;
+    let mut only_print_plan = false;
     let mut team_repo = None;
     let mut services = Vec::new();
     for arg in std::env::args().skip(1) {
@@ -43,6 +44,7 @@ fn app() -> anyhow::Result<()> {
                 usage();
                 return Ok(());
             }
+            "--only-print-plan" => only_print_plan = true,
             service if AVAILABLE_SERVICES.contains(&service) => services.push(service.to_string()),
             _ => {
                 eprintln!("unknown argument: {}", arg);
@@ -77,8 +79,10 @@ fn app() -> anyhow::Result<()> {
                 let sync = SyncGitHub::new(token, &team_api, dry_run)?;
                 let diff = sync.diff_all()?;
                 diff.log();
-                diff.apply(&sync)?;
-                sync.synchronize_all()?;
+                if !only_print_plan {
+                    diff.apply(&sync)?;
+                    sync.synchronize_all()?;
+                }
             }
             "mailgun" => {
                 let token = get_env("MAILGUN_API_TOKEN")?;

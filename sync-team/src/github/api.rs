@@ -1,4 +1,4 @@
-use anyhow::bail;
+use anyhow::{bail, Context};
 use hyper_old_types::header::{Link, RelationType};
 use log::{debug, trace};
 use reqwest::{
@@ -74,11 +74,8 @@ impl GitHub {
         self.rest_paginated(
             &Method::GET,
             format!("orgs/{org}/members?role=admin"),
-            |resp| {
-                let partial: Vec<User> = resp.json()?;
-                for owner in partial {
-                    owners.insert(owner.id);
-                }
+            |resp: Vec<User>| {
+                owners.extend(resp.into_iter().map(|u| u.id));
                 Ok(())
             },
         )?;
@@ -89,13 +86,14 @@ impl GitHub {
     pub(crate) fn org_teams(&self, org: &str) -> anyhow::Result<HashSet<String>> {
         let mut teams = HashSet::new();
 
-        self.rest_paginated(&Method::GET, format!("orgs/{org}/teams"), |resp| {
-            let partial: Vec<Team> = resp.json()?;
-            for team in partial {
-                teams.insert(team.name);
-            }
-            Ok(())
-        })?;
+        self.rest_paginated(
+            &Method::GET,
+            format!("orgs/{org}/teams"),
+            |resp: Vec<Team>| {
+                teams.extend(resp.into_iter().map(|t| t.name));
+                Ok(())
+            },
+        )?;
 
         Ok(teams)
     }
@@ -363,13 +361,14 @@ impl GitHub {
     pub(crate) fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
         let mut teams = Vec::new();
 
-        self.rest_paginated(&Method::GET, format!("repos/{org}/{repo}/teams"), |resp| {
-            let partial: Vec<RepoTeam> = resp.json()?;
-            for team in partial {
-                teams.push(team);
-            }
-            Ok(())
-        })?;
+        self.rest_paginated(
+            &Method::GET,
+            format!("repos/{org}/{repo}/teams"),
+            |resp: Vec<RepoTeam>| {
+                teams.extend(resp);
+                Ok(())
+            },
+        )?;
 
         Ok(teams)
     }
@@ -387,11 +386,8 @@ impl GitHub {
         self.rest_paginated(
             &Method::GET,
             format!("repos/{org}/{repo}/collaborators?affiliation=direct"),
-            |resp| {
-                let partial: Vec<RepoUser> = resp.json()?;
-                for user in partial {
-                    users.push(user);
-                }
+            |resp: Vec<RepoUser>| {
+                users.extend(resp);
                 Ok(())
             },
         )?;
@@ -529,8 +525,7 @@ impl GitHub {
         self.rest_paginated(
             &Method::GET,
             format!("repos/{}/{}/branches?protected=true", repo.org, repo.name),
-            |resp| {
-                let resp = resp.json::<Vec<Branch>>()?;
+            |resp: Vec<Branch>| {
                 names.extend(resp.into_iter().map(|b| b.name));
 
                 Ok(())
@@ -655,9 +650,12 @@ impl GitHub {
         method: Method,
         url: &str,
     ) -> Result<Option<T>, anyhow::Error> {
-        let resp = self.req(method, url)?.send()?;
+        use anyhow::Context;
+        let resp = self.req(method.clone(), url)?.send()?;
         match resp.status() {
-            StatusCode::OK => Ok(Some(resp.json()?)),
+            StatusCode::OK => Ok(Some(resp.json().with_context(|| {
+                format!("Failed to decode response body on {method} request to '{url}'")
+            })?)),
             StatusCode::NOT_FOUND => Ok(None),
             _ => Err(resp.error_for_status().unwrap_err().into()),
         }
@@ -688,9 +686,10 @@ impl GitHub {
         }
     }
 
-    fn rest_paginated<F>(&self, method: &Method, url: String, mut f: F) -> anyhow::Result<()>
+    fn rest_paginated<F, T>(&self, method: &Method, url: String, mut f: F) -> anyhow::Result<()>
     where
-        F: FnMut(Response) -> anyhow::Result<()>,
+        F: FnMut(Vec<T>) -> anyhow::Result<()>,
+        T: DeserializeOwned,
     {
         let mut next = Some(url);
         while let Some(next_url) = next.take() {
@@ -714,7 +713,9 @@ impl GitHub {
                 }
             }
 
-            f(resp)?;
+            f(resp.json().with_context(|| {
+                format!("Failed to deserialize response body for {method} request to '{next_url}'")
+            })?)?;
         }
         Ok(())
     }
@@ -778,6 +779,7 @@ pub(crate) struct RepoTeam {
 pub(crate) struct RepoUser {
     #[serde(alias = "login")]
     pub(crate) name: String,
+    #[serde(rename = "role_name")]
     pub(crate) permission: RepoPermission,
 }
 
@@ -785,11 +787,22 @@ pub(crate) struct RepoUser {
 #[serde(rename_all = "snake_case")]
 pub(crate) enum RepoPermission {
     // While the GitHub UI uses the term 'write', the API still uses the older term 'push'
-    #[serde(rename = "push")]
+    #[serde(rename(serialize = "push"), alias = "push")]
     Write,
     Admin,
     Maintain,
     Triage,
+}
+
+impl fmt::Display for RepoPermission {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::Write => write!(f, "write"),
+            Self::Admin => write!(f, "admin"),
+            Self::Maintain => write!(f, "maintain"),
+            Self::Triage => write!(f, "triage"),
+        }
+    }
 }
 
 #[derive(serde::Deserialize, Debug)]
@@ -893,6 +906,12 @@ pub(crate) mod branch_protection {
         pub(crate) context: String,
     }
 
+    impl std::fmt::Debug for Check {
+        fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+            f.write_str(&self.context)
+        }
+    }
+
     #[derive(PartialEq, serde::Serialize, serde::Deserialize)]
     pub(crate) struct PullRequestReviews {
         // Even though we don't want dismissal restrictions, it cannot be omitted
@@ -904,11 +923,12 @@ pub(crate) mod branch_protection {
 
     #[derive(PartialEq, serde::Serialize, serde::Deserialize)]
     pub(crate) struct Restrictions {
-        pub(crate) users: Vec<String>,
+        pub(crate) users: Vec<UserRestriction>,
         pub(crate) teams: Vec<String>,
     }
 
     #[derive(serde::Serialize, serde::Deserialize)]
+    #[serde(untagged)]
     pub(crate) enum EnforceAdmins {
         // Used for serialization
         Bool(bool),
@@ -928,6 +948,39 @@ pub(crate) mod branch_protection {
     impl PartialEq for EnforceAdmins {
         fn eq(&self, other: &Self) -> bool {
             self.enabled() == other.enabled()
+        }
+    }
+
+    #[derive(serde::Serialize, serde::Deserialize)]
+    #[serde(untagged)]
+    pub(crate) enum UserRestriction {
+        // Used for serialization
+        Name(String),
+        // Used for deserialization
+        Object {
+            #[serde(rename = "login")]
+            name: String,
+        },
+    }
+
+    impl UserRestriction {
+        fn name(&self) -> &str {
+            match self {
+                Self::Name(n) => n,
+                Self::Object { name } => name,
+            }
+        }
+    }
+
+    impl std::fmt::Debug for UserRestriction {
+        fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+            f.write_str(self.name())
+        }
+    }
+
+    impl PartialEq for UserRestriction {
+        fn eq(&self, other: &Self) -> bool {
+            self.name() == other.name()
         }
     }
 }
