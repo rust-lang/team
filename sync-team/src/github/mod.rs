@@ -1,7 +1,10 @@
 mod api;
 
 use self::api::{GitHub, TeamPrivacy, TeamRole};
-use crate::{github::api::RepoPermission, TeamApi};
+use crate::{
+    github::api::{branch_protection, RepoPermission},
+    TeamApi,
+};
 use anyhow::Error;
 use log::{debug, info};
 use rust_team_data::v1::Bot;
@@ -222,11 +225,10 @@ impl SyncGitHub {
 
                 let mut branch_protections = Vec::new();
                 for branch in &expected_repo.branches {
-                    branch_protections.push(BranchProtection {
-                        name: branch.name.clone(),
-                        branch_already_exists: false,
-                        branch_protection: branch_protection(expected_repo, branch),
-                    });
+                    branch_protections.push((
+                        branch.name.clone(),
+                        branch_protection(expected_repo, branch),
+                    ));
                 }
 
                 return Ok(RepoDiff::Create(CreateRepoDiff {
@@ -356,32 +358,38 @@ impl SyncGitHub {
         for branch in &expected_repo.branches {
             actual_protected_branches.remove(&branch.name);
 
-            let branch_already_exists = self.github.branch(actual_repo, &branch.name)?.is_some();
             let expected_branch_protection = branch_protection(expected_repo, branch);
             let actual_branch_protection =
                 self.github.branch_protection(actual_repo, &branch.name)?;
-            let protection_diff = BranchProtection {
-                name: branch.name.clone(),
-                branch_already_exists,
-                branch_protection: expected_branch_protection,
-            };
-            match actual_branch_protection {
-                Some(a) if a != protection_diff.branch_protection => {
-                    branch_protection_diffs.push(BranchProtectionDiff::Update(protection_diff))
+            let operation = match actual_branch_protection {
+                Some(a) if a != expected_branch_protection => {
+                    BranchProtectionDiffOperation::Update(a, expected_branch_protection)
                 }
-                None => branch_protection_diffs.push(BranchProtectionDiff::Create(protection_diff)),
+                None => {
+                    let branch_already_exists =
+                        self.github.branch(actual_repo, &branch.name)?.is_some();
+                    BranchProtectionDiffOperation::Create(
+                        expected_branch_protection,
+                        branch_already_exists,
+                    )
+                }
                 // The branch protection doesn't need to change
-                Some(_) => {}
+                Some(_) => continue,
             };
+            branch_protection_diffs.push(BranchProtectionDiff {
+                name: branch.name.clone(),
+                operation,
+            })
         }
 
         // `actual_branch_protections` now contains the branch protections that were not expected
         // but are still on GitHub. We want to delete them.
-        branch_protection_diffs.extend(
-            actual_protected_branches
-                .into_iter()
-                .map(BranchProtectionDiff::Delete),
-        );
+        branch_protection_diffs.extend(actual_protected_branches.into_iter().map(|name| {
+            BranchProtectionDiff {
+                name,
+                operation: BranchProtectionDiffOperation::Delete,
+            }
+        }));
 
         Ok(branch_protection_diffs)
     }
@@ -640,11 +648,15 @@ impl Diff {
 
     /// Print out the diff to the logs
     pub(crate) fn log(&self) {
-        info!("💻 Team Diffs:");
+        if !self.team_diffs.is_empty() {
+            info!("💻 Team Diffs:");
+        }
         for team_diff in &self.team_diffs {
             team_diff.log();
         }
-        info!("💻 Repo Diffs:");
+        if !self.repo_diffs.is_empty() {
+            info!("💻 Repo Diffs:");
+        }
         for repo_diff in &self.repo_diffs {
             repo_diff.log();
         }
@@ -670,7 +682,7 @@ struct CreateRepoDiff {
     name: String,
     description: String,
     permissions: Vec<(RepoCollaborator, RepoPermission)>,
-    branch_protections: Vec<BranchProtection>,
+    branch_protections: Vec<(String, api::BranchProtection)>,
 }
 
 impl CreateRepoDiff {
@@ -688,34 +700,8 @@ impl CreateRepoDiff {
             .log()
         }
         info!("  Branch Protections:");
-        for protection in &self.branch_protections {
-            info!("     {}", protection.name);
-            info!(
-                "         Dismiss Stale Reviews: {}",
-                protection
-                    .branch_protection
-                    .required_pull_request_reviews
-                    .dismiss_stale_reviews
-            );
-            info!(
-                "         Required Approving Review Count: {}",
-                protection
-                    .branch_protection
-                    .required_pull_request_reviews
-                    .required_approving_review_count
-            );
-            info!(
-                "         Checks: {:?}",
-                protection.branch_protection.required_status_checks.checks
-            );
-            info!(
-                "         User Overrides: {:?}",
-                protection.branch_protection.restrictions.users
-            );
-            info!(
-                "         Team Overrides: {:?}",
-                protection.branch_protection.restrictions.teams
-            );
+        for (branch_name, branch_protection) in &self.branch_protections {
+            log_branch_protection(branch_name, branch_protection)
         }
     }
 }
@@ -750,6 +736,9 @@ impl UpdateRepoDiff {
         }
         for permission_diff in &self.permission_diffs {
             permission_diff.log();
+        }
+        for branch_protection_diff in &self.branch_protection_diffs {
+            branch_protection_diff.log()
         }
     }
 
@@ -798,16 +787,91 @@ enum RepoCollaborator {
     User(String),
 }
 
-enum BranchProtectionDiff {
-    Create(BranchProtection),
-    Update(BranchProtection),
-    Delete(String),
+struct BranchProtectionDiff {
+    name: String,
+    operation: BranchProtectionDiffOperation,
 }
 
-struct BranchProtection {
-    name: String,
-    branch_already_exists: bool,
-    branch_protection: api::BranchProtection,
+impl BranchProtectionDiff {
+    pub(crate) fn log(&self) {
+        match &self.operation {
+            BranchProtectionDiffOperation::Create(bp, _) => log_branch_protection(&self.name, bp),
+            BranchProtectionDiffOperation::Update(old, new) => {
+                macro_rules! log {
+                    ($str:literal, $old:expr, $new:expr) => {
+                        if $old != $new {
+                            info!($str, $old, $new);
+                        }
+                    };
+                }
+                info!("     {}", self.name);
+                log!(
+                    "         Dismiss Stale Reviews: {} => {}",
+                    old.required_pull_request_reviews.dismiss_stale_reviews,
+                    new.required_pull_request_reviews.dismiss_stale_reviews
+                );
+                log!(
+                    "         Required Approving Review Count: {} => {}",
+                    old.required_pull_request_reviews
+                        .required_approving_review_count,
+                    new.required_pull_request_reviews
+                        .required_approving_review_count
+                );
+                log!(
+                    "         Checks: {:?} => {:?}",
+                    old.required_status_checks.checks,
+                    new.required_status_checks.checks
+                );
+                log!(
+                    "         User Overrides: {:?} => {:?}",
+                    old.restrictions.users,
+                    new.restrictions.users
+                );
+                log!(
+                    "         Team Overrides: {:?} => {:?}",
+                    old.restrictions.teams,
+                    new.restrictions.teams
+                );
+            }
+            BranchProtectionDiffOperation::Delete => {
+                info!("Deleting branch protection for branch '{}'", self.name)
+            }
+        }
+    }
+}
+
+fn log_branch_protection(branch_name: &str, branch_protection: &api::BranchProtection) {
+    info!("     {}", branch_name);
+    info!(
+        "         Dismiss Stale Reviews: {}",
+        branch_protection
+            .required_pull_request_reviews
+            .dismiss_stale_reviews
+    );
+    info!(
+        "         Required Approving Review Count: {}",
+        branch_protection
+            .required_pull_request_reviews
+            .required_approving_review_count
+    );
+    info!(
+        "         Checks: {:?}",
+        branch_protection.required_status_checks.checks
+    );
+    info!(
+        "         User Overrides: {:?}",
+        branch_protection.restrictions.users
+    );
+    info!(
+        "         Team Overrides: {:?}",
+        branch_protection.restrictions.teams
+    );
+}
+
+enum BranchProtectionDiffOperation {
+    Create(api::BranchProtection, bool),
+    Update(api::BranchProtection, api::BranchProtection),
+    Delete,
 }
 
 enum TeamDiff {
