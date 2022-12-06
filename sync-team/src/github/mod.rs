@@ -1,6 +1,6 @@
 mod api;
 
-use self::api::{GitHub, Repo, TeamPrivacy, TeamRole};
+use self::api::{GitHub, TeamPrivacy, TeamRole};
 use crate::{github::api::RepoPermission, TeamApi};
 use anyhow::Error;
 use log::{debug, info};
@@ -351,26 +351,46 @@ impl SyncGitHub {
     ) -> Result<Vec<BranchProtectionDiff>, Error> {
         let mut branch_protection_diffs = Vec::new();
         let mut actual_protected_branches = self.github.protected_branches(actual_repo)?;
+        let mut main_branch_commit = None;
 
         for branch in &expected_repo.branches {
             actual_protected_branches.remove(&branch.name);
-
             let expected_branch_protection = branch_protection(expected_repo, branch);
-            let actual_branch_protection =
-                self.github.branch_protection(actual_repo, &branch.name)?;
-            let operation = match actual_branch_protection {
-                Some(a) if a != expected_branch_protection => {
-                    BranchProtectionDiffOperation::Update(a, expected_branch_protection)
+            let actual_branch =
+                self.github
+                    .branch(&expected_repo.org, &expected_repo.name, &branch.name)?;
+            let operation = if actual_branch.is_none() {
+                let main_branch_commit = match main_branch_commit.as_ref() {
+                    Some(s) => s,
+                    None => {
+                        let head = self
+                            .github
+                            .branch(
+                                &actual_repo.org,
+                                &actual_repo.name,
+                                &actual_repo.default_branch,
+                            )?
+                            .unwrap();
+
+                        // cache the main branch head so we only need to get it once
+                        main_branch_commit.get_or_insert(head)
+                    }
+                };
+                BranchProtectionDiffOperation::CreateWithBranch(
+                    expected_branch_protection,
+                    main_branch_commit.clone(),
+                )
+            } else {
+                let actual_branch_protection =
+                    self.github.branch_protection(actual_repo, &branch.name)?;
+                match actual_branch_protection {
+                    Some(a) if a != expected_branch_protection => {
+                        BranchProtectionDiffOperation::Update(a, expected_branch_protection)
+                    }
+                    None => BranchProtectionDiffOperation::Create(expected_branch_protection),
+                    // The branch protection doesn't need to change
+                    Some(_) => continue,
                 }
-                None => {
-                    // TODO: don't set if the branch doesn't exist yet
-                    let head_commit =
-                        self.github
-                            .branch(&actual_repo.org, &actual_repo.name, &branch.name)?;
-                    BranchProtectionDiffOperation::Create(expected_branch_protection, head_commit)
-                }
-                // The branch protection doesn't need to change
-                Some(_) => continue,
             };
             branch_protection_diffs.push(BranchProtectionDiff {
                 name: branch.name.clone(),
@@ -828,6 +848,9 @@ impl UpdateRepoDiff {
         for permission in &self.permission_diffs {
             permission.apply(sync, &self.org, &self.name)?;
         }
+        for branch_protection in &self.branch_protection_diffs {
+            branch_protection.apply(sync, &self.org, &self.name)?;
+        }
         Ok(())
     }
 }
@@ -901,7 +924,11 @@ struct BranchProtectionDiff {
 impl BranchProtectionDiff {
     pub(crate) fn log(&self) {
         match &self.operation {
-            BranchProtectionDiffOperation::Create(bp, _) => log_branch_protection(&self.name, bp),
+            BranchProtectionDiffOperation::CreateWithBranch(bp, _) => {
+                info!("      Creating branch {}", self.name);
+                log_branch_protection(&self.name, bp);
+            }
+            BranchProtectionDiffOperation::Create(bp) => log_branch_protection(&self.name, bp),
             BranchProtectionDiffOperation::Update(old, new) => {
                 macro_rules! log {
                     ($str:literal, $old:expr, $new:expr) => {
@@ -910,31 +937,31 @@ impl BranchProtectionDiff {
                         }
                     };
                 }
-                info!("     {}", self.name);
+                info!("      {} protection:", self.name);
                 log!(
-                    "         Dismiss Stale Reviews: {} => {}",
+                    "        Dismiss Stale Reviews: {} => {}",
                     old.required_pull_request_reviews.dismiss_stale_reviews,
                     new.required_pull_request_reviews.dismiss_stale_reviews
                 );
                 log!(
-                    "         Required Approving Review Count: {} => {}",
+                    "        Required Approving Review Count: {} => {}",
                     old.required_pull_request_reviews
                         .required_approving_review_count,
                     new.required_pull_request_reviews
                         .required_approving_review_count
                 );
                 log!(
-                    "         Checks: {:?} => {:?}",
+                    "        Checks: {:?} => {:?}",
                     old.required_status_checks.checks,
                     new.required_status_checks.checks
                 );
                 log!(
-                    "         User Overrides: {:?} => {:?}",
+                    "        User Overrides: {:?} => {:?}",
                     old.restrictions.users,
                     new.restrictions.users
                 );
                 log!(
-                    "         Team Overrides: {:?} => {:?}",
+                    "        Team Overrides: {:?} => {:?}",
                     old.restrictions.teams,
                     new.restrictions.teams
                 );
@@ -946,13 +973,15 @@ impl BranchProtectionDiff {
     }
 
     fn apply(&self, sync: &SyncGitHub, org: &str, repo_name: &str) -> anyhow::Result<()> {
-        if let BranchProtectionDiffOperation::Create(_, Some(main_branch_commit)) = &self.operation
+        if let BranchProtectionDiffOperation::CreateWithBranch(_, main_branch_commit) =
+            &self.operation
         {
             sync.github
                 .create_branch(org, repo_name, &self.name, main_branch_commit)?;
         }
         match &self.operation {
-            BranchProtectionDiffOperation::Create(bp, _)
+            BranchProtectionDiffOperation::CreateWithBranch(bp, _)
+            | BranchProtectionDiffOperation::Create(bp)
             | BranchProtectionDiffOperation::Update(_, bp) => {
                 // Update the protection of the branch
                 let protection_result = sync
@@ -1010,7 +1039,11 @@ fn log_branch_protection(branch_name: &str, branch_protection: &api::BranchProte
 }
 
 enum BranchProtectionDiffOperation {
-    Create(api::BranchProtection, Option<String>),
+    CreateWithBranch(
+        api::BranchProtection,
+        String, /* main branch HEAD commit */
+    ),
+    Create(api::BranchProtection),
     Update(api::BranchProtection, api::BranchProtection),
     Delete,
 }

@@ -660,7 +660,6 @@ impl GitHub {
         method: Method,
         url: &str,
     ) -> Result<Option<T>, anyhow::Error> {
-        use anyhow::Context;
         let resp = self.req(method.clone(), url)?.send()?;
         match resp.status() {
             StatusCode::OK => Ok(Some(resp.json().with_context(|| {
@@ -884,14 +883,6 @@ pub(crate) struct Branch {
 #[derive(serde::Deserialize, Debug)]
 pub(crate) struct Commit {
     pub(crate) sha: String,
-}
-
-#[derive(Debug)]
-pub(crate) struct BranchProtectionRequest {
-    pub(crate) dismiss_stale_reviews: bool,
-    pub(crate) required_approving_review_count: u8,
-    pub(crate) required_checks: Vec<String>,
-    pub(crate) allowed_users: Vec<String>,
 }
 
 pub(crate) mod branch_protection {
