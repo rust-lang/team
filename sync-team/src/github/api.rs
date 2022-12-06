@@ -888,7 +888,7 @@ pub(crate) struct Commit {
 pub(crate) mod branch_protection {
     use super::*;
 
-    #[derive(PartialEq, serde::Serialize, serde::Deserialize)]
+    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
     pub(crate) struct BranchProtection {
         pub(crate) required_status_checks: RequiredStatusChecks,
         pub(crate) enforce_admins: EnforceAdmins,
@@ -896,13 +896,13 @@ pub(crate) mod branch_protection {
         pub(crate) restrictions: Restrictions,
     }
 
-    #[derive(PartialEq, serde::Serialize, serde::Deserialize)]
+    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
     pub(crate) struct RequiredStatusChecks {
         pub(crate) strict: bool,
         pub(crate) checks: Vec<Check>,
     }
 
-    #[derive(PartialEq, serde::Serialize, serde::Deserialize)]
+    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
     pub(crate) struct Check {
         pub(crate) context: String,
     }
@@ -913,7 +913,7 @@ pub(crate) mod branch_protection {
         }
     }
 
-    #[derive(PartialEq, serde::Serialize, serde::Deserialize)]
+    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
     pub(crate) struct PullRequestReviews {
         // Even though we don't want dismissal restrictions, it cannot be omitted
         #[serde(default)]
@@ -922,13 +922,13 @@ pub(crate) mod branch_protection {
         pub(crate) required_approving_review_count: u8,
     }
 
-    #[derive(PartialEq, serde::Serialize, serde::Deserialize)]
+    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
     pub(crate) struct Restrictions {
         pub(crate) users: Vec<UserRestriction>,
         pub(crate) teams: Vec<String>,
     }
 
-    #[derive(serde::Serialize, serde::Deserialize)]
+    #[derive(Clone, serde::Serialize, serde::Deserialize)]
     #[serde(untagged)]
     pub(crate) enum EnforceAdmins {
         // Used for serialization
@@ -952,7 +952,7 @@ pub(crate) mod branch_protection {
         }
     }
 
-    #[derive(serde::Serialize, serde::Deserialize)]
+    #[derive(Clone, serde::Serialize, serde::Deserialize)]
     #[serde(untagged)]
     pub(crate) enum UserRestriction {
         // Used for serialization

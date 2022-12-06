@@ -760,38 +760,19 @@ impl CreateRepoDiff {
             .apply(sync, &self.org, &self.name)?;
         }
 
-        let mut main_branch_commit = None;
-        for (branch, protectiton) in &self.branch_protections {
-            // Create the branch, otherwise creating a protection will fail
-            let main_branch_commit = match main_branch_commit.as_ref() {
-                Some(s) => s,
-                None => {
-                    // First, we need the sha of the head of the main branch
-                    let head = sync
-                        .github
-                        .branch(&self.org, &self.name, &repo.default_branch)?;
-                    // cache the main branch head so we only need to get it once
-                    main_branch_commit.get_or_insert(head)
-                }
-            };
-
-            // If there is a main branch commit, create the new branch
-            if let Some(main_branch_commit) = main_branch_commit {
-                // TODO: is it possible for there not be a main branch?
-                sync.github
-                    .create_branch(&self.org, &self.name, branch, main_branch_commit)?;
+        let main_branch_commit = sync
+            .github
+            .branch(&self.org, &self.name, &repo.default_branch)?
+            .unwrap();
+        for (branch, protection) in &self.branch_protections {
+            BranchProtectionDiff {
+                name: branch.clone(),
+                operation: BranchProtectionDiffOperation::CreateWithBranch(
+                    protection.clone(),
+                    main_branch_commit.clone(),
+                ),
             }
-            // Update the protection of the branch
-            let protection_result =
-                sync.github
-                    .update_branch_protection(&repo.org, &repo.name, branch, protectiton)?;
-            if !protection_result {
-                debug!(
-                    "Did not update branch protection for \
-                    '{}' on '{}/{}' as the branch does not exist.",
-                    branch, repo.org, repo.name
-                );
-            }
+            .apply(sync, &self.org, &self.name)?;
         }
         Ok(())
     }
