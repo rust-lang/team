@@ -381,11 +381,14 @@ impl SyncGitHub {
                     main_branch_commit.clone(),
                 )
             } else {
-                let actual_branch_protection =
-                    self.github.branch_protection(actual_repo, &branch.name)?;
+                let actual_branch_protection = self.github.branch_protection(
+                    &actual_repo.org,
+                    &actual_repo.name,
+                    &branch.name,
+                )?;
                 match actual_branch_protection {
-                    Some(a) if a != expected_branch_protection => {
-                        BranchProtectionDiffOperation::Update(a, expected_branch_protection)
+                    Some(bp) if bp != expected_branch_protection => {
+                        BranchProtectionDiffOperation::Update(bp, expected_branch_protection)
                     }
                     None => BranchProtectionDiffOperation::Create(expected_branch_protection),
                     // The branch protection doesn't need to change

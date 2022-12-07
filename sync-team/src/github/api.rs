@@ -543,14 +543,15 @@ impl GitHub {
 
     pub(crate) fn branch_protection(
         &self,
-        repo: &Repo,
-        name: &str,
+        org: &str,
+        repo_name: &str,
+        branch_name: &str,
     ) -> anyhow::Result<Option<BranchProtection>> {
         self.send_option::<BranchProtection>(
             Method::GET,
             &format!(
                 "repos/{}/{}/branches/{}/protection",
-                repo.org, repo.name, name
+                org, repo_name, branch_name
             ),
         )
     }
