@@ -77,7 +77,7 @@ impl SyncGitHub {
                                 .or_insert(ts)
                         }
                     };
-                    // Remove the current team from the collection of unseen GitHub kteams
+                    // Remove the current team from the collection of unseen GitHub teams
                     unseen_github_teams.remove(&github_team.name);
 
                     diffs.push(self.diff_team(github_team)?);
@@ -183,131 +183,8 @@ impl SyncGitHub {
     }
 
     pub(crate) fn synchronize_all(&self) -> Result<(), Error> {
-        self.syncronize_teams()?;
-
         for repo in &self.repos {
             self.synchronize_repo(repo)?;
-        }
-
-        Ok(())
-    }
-
-    fn syncronize_teams(&self) -> Result<(), Error> {
-        let mut unseen_github_teams = HashMap::new();
-        for team in &self.teams {
-            if let Some(gh) = &team.github {
-                for github_team in &gh.teams {
-                    // Get existing teams we haven't seen yet
-                    let unseen_github_teams = match unseen_github_teams.get_mut(&github_team.org) {
-                        Some(ts) => ts,
-                        None => unseen_github_teams
-                            .entry(github_team.org.clone())
-                            .or_insert(self.github.org_teams(&github_team.org)?),
-                    };
-                    // Remove the current team from the collection of unseen GitHub teams
-                    unseen_github_teams.remove(&github_team.name);
-
-                    self.synchronize_team(github_team)?;
-                }
-            }
-        }
-
-        for (org, remaining_github_team) in unseen_github_teams
-            .iter()
-            .filter(|(org, _)| *org == "rust-lang") // Only delete unmanaged teams in `rust-lang` for now
-            .flat_map(|(org, teams)| teams.iter().map(move |t| (org, t)))
-            // Don't delete the special bot teams
-            .filter(|(_, team)| !BOTS_TEAMS.contains(&team.as_str()))
-        {
-            info!("Deleting team {} from {}", remaining_github_team, org);
-            self.github.delete_team(org, remaining_github_team)?;
-        }
-
-        Ok(())
-    }
-
-    fn synchronize_team(&self, github_team: &rust_team_data::v1::GitHubTeam) -> Result<(), Error> {
-        let slug = format!("{}/{}", github_team.org, github_team.name);
-        debug!("synchronizing team {}", slug);
-
-        // Ensure the team exists and is consistent
-        let team = match self.github.team(&github_team.org, &github_team.name)? {
-            Some(team) => team,
-            None => self.github.create_team(
-                &github_team.org,
-                &github_team.name,
-                DEFAULT_DESCRIPTION,
-                DEFAULT_PRIVACY,
-            )?,
-        };
-        if team.name != github_team.name
-            || team.description != DEFAULT_DESCRIPTION
-            || team.privacy != DEFAULT_PRIVACY
-        {
-            self.github.edit_team(
-                &github_team.org,
-                &team.name,
-                Some(&github_team.name),
-                Some(DEFAULT_DESCRIPTION),
-                Some(DEFAULT_PRIVACY),
-            )?;
-        }
-
-        let mut current_members = self.github.team_memberships(&team)?;
-
-        // Ensure all expected members are in the team
-        for member in &github_team.members {
-            let expected_role = self.expected_role(&github_team.org, *member);
-            let username = &self.usernames_cache[member];
-            if let Some(member) = current_members.remove(member) {
-                if member.role != expected_role {
-                    info!(
-                        "{}: user {} has the role {} instead of {}, changing them...",
-                        slug, username, member.role, expected_role
-                    );
-                    self.github.set_team_membership(
-                        &github_team.org,
-                        &github_team.name,
-                        username,
-                        expected_role,
-                    )?;
-                } else {
-                    debug!("{}: user {} is in the correct state", slug, username);
-                }
-            } else {
-                info!(
-                    "{}: user {} is missing from team, adding them...",
-                    slug, username
-                );
-                // If the user is not a member of the org and they *don't* have a pending
-                // invitation this will send the invite email and add the membership in a "pending"
-                // state.
-                //
-                // If the user didn't accept the invitation yet the next time the tool runs, the
-                // method will be called again. Thankfully though in that case GitHub doesn't send
-                // yet another invitation email to the user, but treats the API call as a noop, so
-                // it's safe to do it multiple times.
-                self.github.set_team_membership(
-                    &github_team.org,
-                    &github_team.name,
-                    username,
-                    expected_role,
-                )?;
-            }
-        }
-
-        // The previous cycle removed expected members from current_members, so it only contains
-        // members to delete now.
-        for member in current_members.values() {
-            info!(
-                "{}: user {} is not in the team anymore, removing them...",
-                slug, member.username
-            );
-            self.github.remove_team_membership(
-                &github_team.org,
-                &github_team.name,
-                &member.username,
-            )?;
         }
 
         Ok(())
