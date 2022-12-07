@@ -1,0 +1,30 @@
+name = "lang-advisors"
+subteam-of = "lang"
+
+[people]
+members = [
+    "alexcrichton",
+    "Amanieu",
+    "cramertj",
+    "jackh726",
+    "JakobDegen",
+    "RalfJung",
+    "simulacrum",
+    "wesleywiser",
+]
+
+# Granting these permissions because an advisor can use these to help when
+# reviewing a proposed change.
+[permissions]
+perf = true
+crater = true
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Language Advisors team"
+description = "Advising on the development of the Rust language"
+
+[[zulip-groups]]
+name = "T-lang-advisors"
