@@ -277,16 +277,18 @@ impl SyncGitHub {
             .collect();
 
         let mut permissions = Vec::new();
-        // Sync team and bot permissions
+
+        // Team permissions
         for expected_team in &expected_repo.teams {
             let permission = convert_permission(&expected_team.permission);
-            let removed = actual_teams.remove(&expected_team.name);
+            let actual_team = actual_teams.remove(&expected_team.name);
             let collaborator = RepoCollaborator::Team(expected_team.name.clone());
-            let diff = match removed {
+            let diff = match actual_team {
                 Some(t) if t.permission != permission => RepoPermissionAssignmentDiff {
                     collaborator,
                     diff: RepoPermissionDiff::Update(t.permission, permission),
                 },
+                // Team permission does not need to change
                 Some(_) => continue,
                 None => RepoPermissionAssignmentDiff {
                     collaborator,
@@ -296,24 +298,28 @@ impl SyncGitHub {
             permissions.push(diff);
         }
 
+        // Bot permissions
         let bots = expected_repo.bots.iter().map(|b| {
             let bot_name = bot_name(b);
             actual_teams.remove(bot_name);
             (bot_name, RepoPermission::Write)
         });
+
+        // Member permissions
         let members = expected_repo
             .members
             .iter()
             .map(|m| (m.name.as_str(), convert_permission(&m.permission)));
 
         for (name, permission) in bots.chain(members) {
-            let removed = actual_collaborators.remove(name);
+            let actual_collaborator = actual_collaborators.remove(name);
             let collaborator = RepoCollaborator::User(name.to_owned());
-            let diff = match removed {
+            let diff = match actual_collaborator {
                 Some(t) if t.permission != permission => RepoPermissionAssignmentDiff {
                     collaborator,
                     diff: RepoPermissionDiff::Update(t.permission, permission),
                 },
+                // Collaborator permission does not need to change
                 Some(_) => continue,
                 None => RepoPermissionAssignmentDiff {
                     collaborator,
@@ -360,9 +366,11 @@ impl SyncGitHub {
                 self.github
                     .branch(&expected_repo.org, &expected_repo.name, &branch.name)?;
             let operation = if actual_branch.is_none() {
+                // Branch does not yet exist, get the main branch's HEAD commit which is needed to create the branch
                 let main_branch_commit = match main_branch_commit.as_ref() {
                     Some(s) => s,
                     None => {
+                        // HEAD commit isn't in cache yet - fill the cache
                         let head = self
                             .github
                             .branch(
@@ -370,7 +378,7 @@ impl SyncGitHub {
                                 &actual_repo.name,
                                 &actual_repo.default_branch,
                             )?
-                            .unwrap();
+                            .unwrap(); // TODO: main branch doesn't exist yet?
 
                         // cache the main branch head so we only need to get it once
                         main_branch_commit.get_or_insert(head)
@@ -747,7 +755,7 @@ impl CreateRepoDiff {
         }
         info!("  Branch Protections:");
         for (branch_name, branch_protection) in &self.branch_protections {
-            log_branch_protection(branch_name, branch_protection)
+            log_branch_protection(branch_name, branch_protection, None)
         }
     }
 
@@ -909,46 +917,14 @@ impl BranchProtectionDiff {
     pub(crate) fn log(&self) {
         match &self.operation {
             BranchProtectionDiffOperation::CreateWithBranch(bp, _) => {
-                info!("      Creating branch {}", self.name);
-                log_branch_protection(&self.name, bp);
+                info!("      Creating branch '{}'", self.name);
+                log_branch_protection(&self.name, bp, None);
             }
-            BranchProtectionDiffOperation::Create(bp) => log_branch_protection(&self.name, bp),
+            BranchProtectionDiffOperation::Create(bp) => {
+                log_branch_protection(&self.name, bp, None)
+            }
             BranchProtectionDiffOperation::Update(old, new) => {
-                macro_rules! log {
-                    ($str:literal, $old:expr, $new:expr) => {
-                        if $old != $new {
-                            info!($str, $old, $new);
-                        }
-                    };
-                }
-                info!("      {} protection:", self.name);
-                log!(
-                    "        Dismiss Stale Reviews: {} => {}",
-                    old.required_pull_request_reviews.dismiss_stale_reviews,
-                    new.required_pull_request_reviews.dismiss_stale_reviews
-                );
-                log!(
-                    "        Required Approving Review Count: {} => {}",
-                    old.required_pull_request_reviews
-                        .required_approving_review_count,
-                    new.required_pull_request_reviews
-                        .required_approving_review_count
-                );
-                log!(
-                    "        Checks: {:?} => {:?}",
-                    old.required_status_checks.checks,
-                    new.required_status_checks.checks
-                );
-                log!(
-                    "        User Overrides: {:?} => {:?}",
-                    old.restrictions.users,
-                    new.restrictions.users
-                );
-                log!(
-                    "        Team Overrides: {:?} => {:?}",
-                    old.restrictions.teams,
-                    new.restrictions.teams
-                );
+                log_branch_protection(&self.name, old, Some(new));
             }
             BranchProtectionDiffOperation::Delete => {
                 info!("Deleting branch protection for branch '{}'", self.name)
@@ -994,31 +970,55 @@ impl BranchProtectionDiff {
     }
 }
 
-fn log_branch_protection(branch_name: &str, branch_protection: &api::BranchProtection) {
-    info!("     {}", branch_name);
-    info!(
-        "         Dismiss Stale Reviews: {}",
-        branch_protection
-            .required_pull_request_reviews
-            .dismiss_stale_reviews
+fn log_branch_protection(
+    branch_name: &str,
+    branch_protection: &api::BranchProtection,
+    other: Option<&api::BranchProtection>,
+) {
+    macro_rules! log {
+        ($str:literal, $old:ident, $new:ident, $($method:ident).+) => {
+            let new = $new.map(|n| &n.$($method).*);
+            let old = &$old.$($method).*;
+            if Some(old) != new {
+                if let Some(n) = new.as_ref() {
+                    info!("        {}: {:?} => {:?}", $str, old, n);
+                } else {
+                    info!("        {}: {:?}", $str, old);
+                };
+            }
+        };
+    }
+
+    info!("      Branch protection for '{}'", branch_name);
+    log!(
+        "Dismiss Stale Reviews",
+        branch_protection,
+        other,
+        required_pull_request_reviews.dismiss_stale_reviews
     );
-    info!(
-        "         Required Approving Review Count: {}",
-        branch_protection
-            .required_pull_request_reviews
-            .required_approving_review_count
+    log!(
+        "Required Approving Review Count",
+        branch_protection,
+        other,
+        required_pull_request_reviews.required_approving_review_count
     );
-    info!(
-        "         Checks: {:?}",
-        branch_protection.required_status_checks.checks
+    log!(
+        "Checks",
+        branch_protection,
+        other,
+        required_status_checks.checks
     );
-    info!(
-        "         User Overrides: {:?}",
-        branch_protection.restrictions.users
+    log!(
+        "User Overrides",
+        branch_protection,
+        other,
+        restrictions.users
     );
-    info!(
-        "         Team Overrides: {:?}",
-        branch_protection.restrictions.teams
+    log!(
+        "Team Overrides",
+        branch_protection,
+        other,
+        restrictions.teams
     );
 }
 
