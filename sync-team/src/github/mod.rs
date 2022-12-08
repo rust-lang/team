@@ -199,28 +199,11 @@ impl SyncGitHub {
         let actual_repo = match self.github.repo(&expected_repo.org, &expected_repo.name)? {
             Some(r) => r,
             None => {
-                let mut permissions = Vec::new();
-                for expected_team in &expected_repo.teams {
-                    permissions.push((
-                        RepoCollaborator::Team(expected_team.name.clone()),
-                        convert_permission(&expected_team.permission),
-                    ));
-                }
-
-                for bot in &expected_repo.bots {
-                    permissions.push((
-                        RepoCollaborator::User(bot_name(bot).to_owned()),
-                        RepoPermission::Write,
-                    ));
-                }
-
-                for member in &expected_repo.members {
-                    permissions.push((
-                        RepoCollaborator::User(member.name.clone()),
-                        convert_permission(&member.permission),
-                    ));
-                }
-
+                let permissions = calculate_permission_diffs(
+                    expected_repo,
+                    Default::default(),
+                    Default::default(),
+                )?;
                 let mut branch_protections = Vec::new();
                 for branch in &expected_repo.branches {
                     branch_protections.push((
@@ -261,91 +244,20 @@ impl SyncGitHub {
         &self,
         expected_repo: &rust_team_data::v1::Repo,
     ) -> Result<Vec<RepoPermissionAssignmentDiff>, Error> {
-        let mut actual_teams: HashMap<_, _> = self
+        let actual_teams: HashMap<_, _> = self
             .github
             .repo_teams(&expected_repo.org, &expected_repo.name)?
             .into_iter()
             .map(|t| (t.name.clone(), t))
             .collect();
-        let mut actual_collaborators: HashMap<_, _> = self
+        let actual_collaborators: HashMap<_, _> = self
             .github
             .repo_collaborators(&expected_repo.org, &expected_repo.name)?
             .into_iter()
             .map(|u| (u.name.clone(), u))
             .collect();
 
-        let mut permissions = Vec::new();
-
-        // Team permissions
-        for expected_team in &expected_repo.teams {
-            let permission = convert_permission(&expected_team.permission);
-            let actual_team = actual_teams.remove(&expected_team.name);
-            let collaborator = RepoCollaborator::Team(expected_team.name.clone());
-            let diff = match actual_team {
-                Some(t) if t.permission != permission => RepoPermissionAssignmentDiff {
-                    collaborator,
-                    diff: RepoPermissionDiff::Update(t.permission, permission),
-                },
-                // Team permission does not need to change
-                Some(_) => continue,
-                None => RepoPermissionAssignmentDiff {
-                    collaborator,
-                    diff: RepoPermissionDiff::Create(permission),
-                },
-            };
-            permissions.push(diff);
-        }
-
-        // Bot permissions
-        let bots = expected_repo.bots.iter().map(|b| {
-            let bot_name = bot_name(b);
-            actual_teams.remove(bot_name);
-            (bot_name, RepoPermission::Write)
-        });
-
-        // Member permissions
-        let members = expected_repo
-            .members
-            .iter()
-            .map(|m| (m.name.as_str(), convert_permission(&m.permission)));
-
-        for (name, permission) in bots.chain(members) {
-            let actual_collaborator = actual_collaborators.remove(name);
-            let collaborator = RepoCollaborator::User(name.to_owned());
-            let diff = match actual_collaborator {
-                Some(t) if t.permission != permission => RepoPermissionAssignmentDiff {
-                    collaborator,
-                    diff: RepoPermissionDiff::Update(t.permission, permission),
-                },
-                // Collaborator permission does not need to change
-                Some(_) => continue,
-                None => RepoPermissionAssignmentDiff {
-                    collaborator,
-                    diff: RepoPermissionDiff::Create(permission),
-                },
-            };
-            permissions.push(diff);
-        }
-
-        // `actual_teams` now contains the teams that were not expected
-        // but are still on GitHub. We now remove them.
-        for (team, t) in actual_teams {
-            permissions.push(RepoPermissionAssignmentDiff {
-                collaborator: RepoCollaborator::Team(team),
-                diff: RepoPermissionDiff::Delete(t.permission),
-            });
-        }
-
-        // `actual_collaborators` now contains the collaborators that were not expected
-        // but are still on GitHub. We now remove them.
-        for (collaborator, u) in actual_collaborators {
-            permissions.push(RepoPermissionAssignmentDiff {
-                collaborator: RepoCollaborator::User(collaborator),
-                diff: RepoPermissionDiff::Delete(u.permission),
-            });
-        }
-
-        Ok(permissions)
+        calculate_permission_diffs(expected_repo, actual_teams, actual_collaborators)
     }
 
     fn diff_branch_protections(
@@ -609,6 +521,78 @@ impl SyncGitHub {
     }
 }
 
+fn calculate_permission_diffs(
+    expected_repo: &rust_team_data::v1::Repo,
+    mut actual_teams: HashMap<String, api::RepoTeam>,
+    mut actual_collaborators: HashMap<String, api::RepoUser>,
+) -> Result<Vec<RepoPermissionAssignmentDiff>, Error> {
+    let mut permissions = Vec::new();
+    // Team permissions
+    for expected_team in &expected_repo.teams {
+        let permission = convert_permission(&expected_team.permission);
+        let actual_team = actual_teams.remove(&expected_team.name);
+        let collaborator = RepoCollaborator::Team(expected_team.name.clone());
+        let diff = match actual_team {
+            Some(t) if t.permission != permission => RepoPermissionAssignmentDiff {
+                collaborator,
+                diff: RepoPermissionDiff::Update(t.permission, permission),
+            },
+            // Team permission does not need to change
+            Some(_) => continue,
+            None => RepoPermissionAssignmentDiff {
+                collaborator,
+                diff: RepoPermissionDiff::Create(permission),
+            },
+        };
+        permissions.push(diff);
+    }
+    // Bot permissions
+    let bots = expected_repo.bots.iter().map(|b| {
+        let bot_name = bot_name(b);
+        actual_teams.remove(bot_name);
+        (bot_name, RepoPermission::Write)
+    });
+    // Member permissions
+    let members = expected_repo
+        .members
+        .iter()
+        .map(|m| (m.name.as_str(), convert_permission(&m.permission)));
+    for (name, permission) in bots.chain(members) {
+        let actual_collaborator = actual_collaborators.remove(name);
+        let collaborator = RepoCollaborator::User(name.to_owned());
+        let diff = match actual_collaborator {
+            Some(t) if t.permission != permission => RepoPermissionAssignmentDiff {
+                collaborator,
+                diff: RepoPermissionDiff::Update(t.permission, permission),
+            },
+            // Collaborator permission does not need to change
+            Some(_) => continue,
+            None => RepoPermissionAssignmentDiff {
+                collaborator,
+                diff: RepoPermissionDiff::Create(permission),
+            },
+        };
+        permissions.push(diff);
+    }
+    // `actual_teams` now contains the teams that were not expected
+    // but are still on GitHub. We now remove them.
+    for (team, t) in actual_teams {
+        permissions.push(RepoPermissionAssignmentDiff {
+            collaborator: RepoCollaborator::Team(team),
+            diff: RepoPermissionDiff::Delete(t.permission),
+        });
+    }
+    // `actual_collaborators` now contains the collaborators that were not expected
+    // but are still on GitHub. We now remove them.
+    for (collaborator, u) in actual_collaborators {
+        permissions.push(RepoPermissionAssignmentDiff {
+            collaborator: RepoCollaborator::User(collaborator),
+            diff: RepoPermissionDiff::Delete(u.permission),
+        });
+    }
+    Ok(permissions)
+}
+
 fn bot_name(bot: &Bot) -> &str {
     match bot {
         Bot::Bors => "bors",
@@ -733,7 +717,7 @@ struct CreateRepoDiff {
     org: String,
     name: String,
     description: String,
-    permissions: Vec<(RepoCollaborator, RepoPermission)>,
+    permissions: Vec<RepoPermissionAssignmentDiff>,
     branch_protections: Vec<(String, api::BranchProtection)>,
 }
 
@@ -742,12 +726,9 @@ impl CreateRepoDiff {
         let repo = sync
             .github
             .create_repo(&self.org, &self.name, &self.description)?;
-        for (collaborator, permission) in &self.permissions {
-            RepoPermissionAssignmentDiff {
-                collaborator: collaborator.clone(),
-                diff: RepoPermissionDiff::Create(*permission),
-            }
-            .apply(sync, &self.org, &self.name)?;
+
+        for permission in &self.permissions {
+            permission.apply(sync, &self.org, &self.name)?;
         }
 
         let main_branch_commit = sync
@@ -775,11 +756,7 @@ impl std::fmt::Display for CreateRepoDiff {
         writeln!(f, "  Name: {}", self.name)?;
         writeln!(f, "  Description: {}", self.description)?;
         writeln!(f, "  Permissions:")?;
-        for (collaborator, permission) in &self.permissions {
-            let diff = RepoPermissionAssignmentDiff {
-                collaborator: collaborator.clone(),
-                diff: RepoPermissionDiff::Create(*permission),
-            };
+        for diff in &self.permissions {
             write!(f, "{}", diff)?;
         }
         writeln!(f, "  Branch Protections:")?;
