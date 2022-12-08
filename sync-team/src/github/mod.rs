@@ -3,9 +3,10 @@ mod api;
 use self::api::{GitHub, TeamPrivacy, TeamRole};
 use crate::{github::api::RepoPermission, TeamApi};
 use anyhow::Error;
-use log::{debug, info};
+use log::debug;
 use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
+use std::fmt::Write;
 
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
 static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
@@ -689,21 +690,19 @@ impl Diff {
 
         Ok(())
     }
+}
 
-    /// Print out the diff to the logs
-    pub(crate) fn log(&self) {
-        if !self.team_diffs.is_empty() {
-            info!("💻 Team Diffs:");
-        }
+impl std::fmt::Display for Diff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "💻 Team Diffs:")?;
         for team_diff in &self.team_diffs {
-            team_diff.log();
+            write!(f, "{}", team_diff)?;
         }
-        if !self.repo_diffs.is_empty() {
-            info!("💻 Repo Diffs:");
-        }
+        writeln!(f, "💻 Repo Diffs:")?;
         for repo_diff in &self.repo_diffs {
-            repo_diff.log();
+            write!(f, "{}", repo_diff)?;
         }
+        Ok(())
     }
 }
 
@@ -713,17 +712,19 @@ enum RepoDiff {
 }
 
 impl RepoDiff {
-    pub(crate) fn log(&self) {
-        match self {
-            Self::Create(c) => c.log(),
-            Self::Update(u) => u.log(),
-        }
-    }
-
     fn apply(&self, sync: &SyncGitHub) -> anyhow::Result<()> {
         match self {
             RepoDiff::Create(c) => c.apply(sync),
             RepoDiff::Update(u) => u.apply(sync),
+        }
+    }
+}
+
+impl std::fmt::Display for RepoDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Create(c) => write!(f, "{}", c),
+            Self::Update(u) => write!(f, "{}", u),
         }
     }
 }
@@ -737,26 +738,6 @@ struct CreateRepoDiff {
 }
 
 impl CreateRepoDiff {
-    fn log(&self) {
-        info!("➕ Creating repo:");
-        info!("  Org: {}", self.org);
-        info!("  Name: {}", self.name);
-        info!("  Description: {}", self.description);
-        info!("  Permissions:");
-        for (collaborator, permission) in &self.permissions {
-            RepoPermissionAssignmentDiff {
-                collaborator: collaborator.clone(),
-                diff: RepoPermissionDiff::Create(*permission),
-            }
-            .log()
-        }
-        info!("  Branch Protections:");
-        for (branch_name, branch_protection) in &self.branch_protections {
-            info!("    {}", branch_name);
-            log_branch_protection(branch_protection, None)
-        }
-    }
-
     fn apply(&self, sync: &SyncGitHub) -> anyhow::Result<()> {
         let repo = sync
             .github
@@ -787,6 +768,29 @@ impl CreateRepoDiff {
     }
 }
 
+impl std::fmt::Display for CreateRepoDiff {
+    fn fmt(&self, mut f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "➕ Creating repo:")?;
+        writeln!(f, "  Org: {}", self.org)?;
+        writeln!(f, "  Name: {}", self.name)?;
+        writeln!(f, "  Description: {}", self.description)?;
+        writeln!(f, "  Permissions:")?;
+        for (collaborator, permission) in &self.permissions {
+            let diff = RepoPermissionAssignmentDiff {
+                collaborator: collaborator.clone(),
+                diff: RepoPermissionDiff::Create(*permission),
+            };
+            write!(f, "{}", diff)?;
+        }
+        writeln!(f, "  Branch Protections:")?;
+        for (branch_name, branch_protection) in &self.branch_protections {
+            writeln!(&mut f, "    {}", branch_name)?;
+            log_branch_protection(branch_protection, None, &mut f)?;
+        }
+        Ok(())
+    }
+}
+
 struct UpdateRepoDiff {
     org: String,
     name: String,
@@ -796,30 +800,6 @@ struct UpdateRepoDiff {
 }
 
 impl UpdateRepoDiff {
-    fn log(&self) {
-        if self.noop() {
-            return;
-        }
-        info!("📝 Editing repo '{}/{}':", self.org, self.name);
-        if let Some((old, new)) = &self.description_diff {
-            if let Some(old) = old {
-                info!("  New description: '{}' => '{}'", old, new);
-            } else {
-                info!("  Set description: '{}'", new);
-            }
-        }
-        if !self.permission_diffs.is_empty() {
-            info!("  Permission Changes:");
-        }
-        for permission_diff in &self.permission_diffs {
-            permission_diff.log();
-        }
-        info!("  Branch Protections:");
-        for branch_protection_diff in &self.branch_protection_diffs {
-            branch_protection_diff.log()
-        }
-    }
-
     pub(crate) fn noop(&self) -> bool {
         self.description_diff.is_none()
             && self.permission_diffs.is_empty()
@@ -840,30 +820,40 @@ impl UpdateRepoDiff {
     }
 }
 
+impl std::fmt::Display for UpdateRepoDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if self.noop() {
+            return Ok(());
+        }
+        writeln!(f, "📝 Editing repo '{}/{}':", self.org, self.name)?;
+        if let Some((old, new)) = &self.description_diff {
+            if let Some(old) = old {
+                writeln!(f, "  New description: '{}' => '{}'", old, new)?;
+            } else {
+                writeln!(f, "  Set description: '{}'", new)?;
+            }
+        }
+        if !self.permission_diffs.is_empty() {
+            writeln!(f, "  Permission Changes:")?;
+        }
+        for permission_diff in &self.permission_diffs {
+            write!(f, "{}", permission_diff)?;
+        }
+        writeln!(f, "  Branch Protections:")?;
+        for branch_protection_diff in &self.branch_protection_diffs {
+            write!(f, "{}", branch_protection_diff)?;
+        }
+
+        Ok(())
+    }
+}
+
 struct RepoPermissionAssignmentDiff {
     collaborator: RepoCollaborator,
     diff: RepoPermissionDiff,
 }
 
 impl RepoPermissionAssignmentDiff {
-    pub(crate) fn log(&self) {
-        let name = match &self.collaborator {
-            RepoCollaborator::Team(name) => format!("team '{name}'"),
-            RepoCollaborator::User(name) => format!("user '{name}'"),
-        };
-        match &self.diff {
-            RepoPermissionDiff::Create(p) => {
-                info!("    Giving {name} {p} permission");
-            }
-            RepoPermissionDiff::Update(old, new) => {
-                info!("    Changing {name}'s permission from {old} to {new}");
-            }
-            RepoPermissionDiff::Delete(p) => {
-                info!("    Removing {name}'s {p} permission ")
-            }
-        }
-    }
-
     fn apply(&self, sync: &SyncGitHub, org: &str, repo_name: &str) -> anyhow::Result<()> {
         match &self.diff {
             RepoPermissionDiff::Create(p) | RepoPermissionDiff::Update(_, p) => {
@@ -889,6 +879,26 @@ impl RepoPermissionAssignmentDiff {
     }
 }
 
+impl std::fmt::Display for RepoPermissionAssignmentDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let name = match &self.collaborator {
+            RepoCollaborator::Team(name) => format!("team '{name}'"),
+            RepoCollaborator::User(name) => format!("user '{name}'"),
+        };
+        match &self.diff {
+            RepoPermissionDiff::Create(p) => {
+                writeln!(f, "    Giving {name} {p} permission")
+            }
+            RepoPermissionDiff::Update(old, new) => {
+                writeln!(f, "    Changing {name}'s permission from {old} to {new}")
+            }
+            RepoPermissionDiff::Delete(p) => {
+                writeln!(f, "    Removing {name}'s {p} permission ")
+            }
+        }
+    }
+}
+
 enum RepoPermissionDiff {
     Create(RepoPermission),
     Update(RepoPermission, RepoPermission),
@@ -907,23 +917,6 @@ struct BranchProtectionDiff {
 }
 
 impl BranchProtectionDiff {
-    pub(crate) fn log(&self) {
-        info!("      {}", self.name);
-        match &self.operation {
-            BranchProtectionDiffOperation::CreateWithBranch(bp, _) => {
-                info!("        Creating branch");
-                log_branch_protection(bp, None);
-            }
-            BranchProtectionDiffOperation::Create(bp) => log_branch_protection(bp, None),
-            BranchProtectionDiffOperation::Update(old, new) => {
-                log_branch_protection(old, Some(new));
-            }
-            BranchProtectionDiffOperation::Delete => {
-                info!("        Deleting branch protection")
-            }
-        }
-    }
-
     fn apply(&self, sync: &SyncGitHub, org: &str, repo_name: &str) -> anyhow::Result<()> {
         if let BranchProtectionDiffOperation::CreateWithBranch(_, main_branch_commit) =
             &self.operation
@@ -962,19 +955,39 @@ impl BranchProtectionDiff {
     }
 }
 
+impl std::fmt::Display for BranchProtectionDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "      {}", self.name)?;
+        match &self.operation {
+            BranchProtectionDiffOperation::CreateWithBranch(bp, _) => {
+                let _ = writeln!(f, "        Creating branch");
+                log_branch_protection(bp, None, f)
+            }
+            BranchProtectionDiffOperation::Create(bp) => log_branch_protection(bp, None, f),
+            BranchProtectionDiffOperation::Update(old, new) => {
+                log_branch_protection(old, Some(new), f)
+            }
+            BranchProtectionDiffOperation::Delete => {
+                writeln!(f, "        Deleting branch protection")
+            }
+        }
+    }
+}
+
 fn log_branch_protection(
     branch_protection: &api::BranchProtection,
     other: Option<&api::BranchProtection>,
-) {
+    mut result: impl Write,
+) -> std::fmt::Result {
     macro_rules! log {
-        ($str:literal, $old:ident, $new:ident, $($method:ident).+) => {
-            let new = $new.map(|n| &n.$($method).*);
-            let old = &$old.$($method).*;
+        ($str:literal, $($method:ident).+) => {
+            let new = other.map(|n| &n.$($method).*);
+            let old = &branch_protection.$($method).*;
             if Some(old) != new {
                 if let Some(n) = new.as_ref() {
-                    info!("        {}: {:?} => {:?}", $str, old, n);
+                    writeln!(result, "        {}: {:?} => {:?}", $str, old, n)?;
                 } else {
-                    info!("        {}: {:?}", $str, old);
+                    writeln!(result, "        {}: {:?}", $str, old)?;
                 };
             }
         };
@@ -982,34 +995,16 @@ fn log_branch_protection(
 
     log!(
         "Dismiss Stale Reviews",
-        branch_protection,
-        other,
         required_pull_request_reviews.dismiss_stale_reviews
     );
     log!(
         "Required Approving Review Count",
-        branch_protection,
-        other,
         required_pull_request_reviews.required_approving_review_count
     );
-    log!(
-        "Checks",
-        branch_protection,
-        other,
-        required_status_checks.checks
-    );
-    log!(
-        "User Overrides",
-        branch_protection,
-        other,
-        restrictions.users
-    );
-    log!(
-        "Team Overrides",
-        branch_protection,
-        other,
-        restrictions.teams
-    );
+    log!("Checks", required_status_checks.checks);
+    log!("User Overrides", restrictions.users);
+    log!("Team Overrides", restrictions.teams);
+    Ok(())
 }
 
 enum BranchProtectionDiffOperation {
@@ -1038,12 +1033,14 @@ impl TeamDiff {
 
         Ok(())
     }
+}
 
-    fn log(&self) {
+impl std::fmt::Display for TeamDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            TeamDiff::Create(c) => c.log(),
-            TeamDiff::Edit(e) => e.log(),
-            TeamDiff::Delete(d) => d.log(),
+            TeamDiff::Create(c) => write!(f, "{}", c),
+            TeamDiff::Edit(e) => write!(f, "{}", e),
+            TeamDiff::Delete(d) => write!(f, "{}", d),
         }
     }
 }
@@ -1066,23 +1063,27 @@ impl CreateTeamDiff {
 
         Ok(())
     }
+}
 
-    fn log(&self) {
-        info!("➕ Creating team:");
-        info!("  Org: {}", self.org);
-        info!("  Name: {}", self.name);
-        info!("  Description: {}", self.description);
-        info!(
+impl std::fmt::Display for CreateTeamDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "➕ Creating team:")?;
+        writeln!(f, "  Org: {}", self.org)?;
+        writeln!(f, "  Name: {}", self.name)?;
+        writeln!(f, "  Description: {}", self.description)?;
+        writeln!(
+            f,
             "  Privacy: {}",
             match self.privacy {
                 TeamPrivacy::Secret => "secret",
                 TeamPrivacy::Closed => "closed",
             }
-        );
-        info!("  Members:");
+        )?;
+        writeln!(f, "  Members:")?;
         for (name, role) in &self.members {
-            info!("    {}: {}", name, role);
+            writeln!(f, "    {}: {}", name, role)?;
         }
+        Ok(())
     }
 }
 
@@ -1112,41 +1113,48 @@ impl EditTeamDiff {
         Ok(())
     }
 
-    fn log(&self) {
+    fn noop(&self) -> bool {
+        self.name_diff.is_none()
+            && self.description_diff.is_none()
+            && self.privacy_diff.is_none()
+            && self.member_diffs.iter().all(|(_, d)| d.is_noop())
+    }
+}
+
+impl std::fmt::Display for EditTeamDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         if self.noop() {
-            return;
+            return Ok(());
         }
-        info!("📝 Editing team '{}':", self.name);
+        writeln!(f, "📝 Editing team '{}':", self.name)?;
         if let Some(n) = &self.name_diff {
-            info!("  New name: {}", n);
+            writeln!(f, "  New name: {}", n)?;
         }
         if let Some((old, new)) = &self.description_diff {
-            info!("  New description: '{}' => '{}'", old, new);
+            writeln!(f, "  New description: '{}' => '{}'", old, new)?;
         }
         if let Some((old, new)) = &self.privacy_diff {
             let display = |privacy: &TeamPrivacy| match privacy {
                 TeamPrivacy::Secret => "secret",
                 TeamPrivacy::Closed => "closed",
             };
-            info!("  New privacy: '{}' => '{}'", display(old), display(new));
+            writeln!(f, "  New privacy: '{}' => '{}'", display(old), display(new))?;
         }
         for (member, diff) in &self.member_diffs {
             match diff {
-                MemberDiff::Create(r) => info!("  Adding member '{member}' with {r} role"),
-                MemberDiff::ChangeRole((o, n)) => {
-                    info!("  Changing '{member}' role from {o} to {n}")
+                MemberDiff::Create(r) => {
+                    writeln!(f, "  Adding member '{member}' with {r} role")?;
                 }
-                MemberDiff::Delete => info!("  Deleting member '{member}'"),
-                MemberDiff::Noop => debug!("  Member '{member}' stays the same"),
+                MemberDiff::ChangeRole((o, n)) => {
+                    writeln!(f, "  Changing '{member}' role from {o} to {n}")?;
+                }
+                MemberDiff::Delete => {
+                    writeln!(f, "  Deleting member '{member}'")?;
+                }
+                MemberDiff::Noop => {}
             }
         }
-    }
-
-    fn noop(&self) -> bool {
-        self.name_diff.is_none()
-            && self.description_diff.is_none()
-            && self.privacy_diff.is_none()
-            && self.member_diffs.iter().all(|(_, d)| d.is_noop())
+        Ok(())
     }
 }
 
@@ -1185,10 +1193,13 @@ impl DeleteTeamDiff {
         sync.github.delete_team(&self.org, &self.name)?;
         Ok(())
     }
+}
 
-    fn log(&self) {
-        info!("❌ Deleting team:");
-        info!("  Org: {}", self.org);
-        info!("  Name: {}", self.name);
+impl std::fmt::Display for DeleteTeamDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "❌ Deleting team:")?;
+        writeln!(f, "  Org: {}", self.org)?;
+        writeln!(f, "  Name: {}", self.name)?;
+        Ok(())
     }
 }
