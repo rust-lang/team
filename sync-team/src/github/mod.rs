@@ -755,7 +755,8 @@ impl CreateRepoDiff {
         }
         info!("  Branch Protections:");
         for (branch_name, branch_protection) in &self.branch_protections {
-            log_branch_protection(branch_name, branch_protection, None)
+            info!("    {}", branch_name);
+            log_branch_protection(branch_protection, None)
         }
     }
 
@@ -805,7 +806,7 @@ impl UpdateRepoDiff {
         }
         info!("📝 Editing repo '{}/{}':", self.org, self.name);
         if let Some(n) = &self.name_diff {
-            info!("  Changing name to: {}", n);
+            info!("  New name: {}", n);
         }
         if let Some((old, new)) = &self.description_diff {
             if let Some(old) = old {
@@ -820,6 +821,7 @@ impl UpdateRepoDiff {
         for permission_diff in &self.permission_diffs {
             permission_diff.log();
         }
+        info!("  Branch Protections:");
         for branch_protection_diff in &self.branch_protection_diffs {
             branch_protection_diff.log()
         }
@@ -860,13 +862,13 @@ impl RepoPermissionAssignmentDiff {
         };
         match &self.diff {
             RepoPermissionDiff::Create(p) => {
-                info!("Giving {name} {p} permission");
+                info!("    Giving {name} {p} permission");
             }
             RepoPermissionDiff::Update(old, new) => {
-                info!("Changing {name}'s permission from {old} to {new}");
+                info!("    Changing {name}'s permission from {old} to {new}");
             }
             RepoPermissionDiff::Delete(p) => {
-                info!("Removing {name}'s {p} permission ")
+                info!("    Removing {name}'s {p} permission ")
             }
         }
     }
@@ -915,19 +917,18 @@ struct BranchProtectionDiff {
 
 impl BranchProtectionDiff {
     pub(crate) fn log(&self) {
+        info!("      {}", self.name);
         match &self.operation {
             BranchProtectionDiffOperation::CreateWithBranch(bp, _) => {
-                info!("      Creating branch '{}'", self.name);
-                log_branch_protection(&self.name, bp, None);
+                info!("        Creating branch");
+                log_branch_protection(bp, None);
             }
-            BranchProtectionDiffOperation::Create(bp) => {
-                log_branch_protection(&self.name, bp, None)
-            }
+            BranchProtectionDiffOperation::Create(bp) => log_branch_protection(bp, None),
             BranchProtectionDiffOperation::Update(old, new) => {
-                log_branch_protection(&self.name, old, Some(new));
+                log_branch_protection(old, Some(new));
             }
             BranchProtectionDiffOperation::Delete => {
-                info!("Deleting branch protection for branch '{}'", self.name)
+                info!("        Deleting branch protection")
             }
         }
     }
@@ -971,7 +972,6 @@ impl BranchProtectionDiff {
 }
 
 fn log_branch_protection(
-    branch_name: &str,
     branch_protection: &api::BranchProtection,
     other: Option<&api::BranchProtection>,
 ) {
@@ -989,7 +989,6 @@ fn log_branch_protection(
         };
     }
 
-    info!("      Branch protection for '{}'", branch_name);
     log!(
         "Dismiss Stale Reviews",
         branch_protection,
