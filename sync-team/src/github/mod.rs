@@ -87,7 +87,7 @@ impl SyncGitHub {
 
         let delete_diffs = unseen_github_teams
             .into_iter()
-            .filter(|(org, _)| org == "rust-lang") // Only delete unmanaged teams in `rust-lang` for now
+            .filter(|(org, _)| matches!(org.as_str(), "rust-lang" | "rust-lang-nursery")) // Only delete unmanaged teams in `rust-lang` and `rust-lang-nursery` for now
             .flat_map(|(org, remaining_github_teams)| {
                 remaining_github_teams
                     .into_iter()
