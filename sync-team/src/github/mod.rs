@@ -240,8 +240,6 @@ impl SyncGitHub {
 
         let permission_diffs = self.diff_permissions(expected_repo)?;
         let branch_protection_diffs = self.diff_branch_protections(&actual_repo, expected_repo)?;
-        let name_diff =
-            (actual_repo.name != expected_repo.name).then(|| expected_repo.name.clone());
         let description_diff =
             (actual_repo.description.as_ref() != Some(&expected_repo.description)).then(|| {
                 (
@@ -252,7 +250,6 @@ impl SyncGitHub {
         Ok(RepoDiff::Update(UpdateRepoDiff {
             org: expected_repo.org.clone(),
             name: actual_repo.name,
-            name_diff,
             description_diff,
             permission_diffs,
             branch_protection_diffs,
@@ -793,7 +790,6 @@ impl CreateRepoDiff {
 struct UpdateRepoDiff {
     org: String,
     name: String,
-    name_diff: Option<String>,
     description_diff: Option<(Option<String>, String)>,
     permission_diffs: Vec<RepoPermissionAssignmentDiff>,
     branch_protection_diffs: Vec<BranchProtectionDiff>,
@@ -805,9 +801,6 @@ impl UpdateRepoDiff {
             return;
         }
         info!("📝 Editing repo '{}/{}':", self.org, self.name);
-        if let Some(n) = &self.name_diff {
-            info!("  New name: {}", n);
-        }
         if let Some((old, new)) = &self.description_diff {
             if let Some(old) = old {
                 info!("  New description: '{}' => '{}'", old, new);
@@ -828,14 +821,12 @@ impl UpdateRepoDiff {
     }
 
     pub(crate) fn noop(&self) -> bool {
-        self.name_diff.is_none()
-            && self.description_diff.is_none()
+        self.description_diff.is_none()
             && self.permission_diffs.is_empty()
             && self.branch_protection_diffs.is_empty()
     }
 
     fn apply(&self, sync: &SyncGitHub) -> anyhow::Result<()> {
-        // TODO: name diff?
         if let Some((_, description)) = &self.description_diff {
             sync.github.edit_repo(&self.org, &self.name, description)?;
         }
