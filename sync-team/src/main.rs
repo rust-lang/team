@@ -81,7 +81,6 @@ fn app() -> anyhow::Result<()> {
                 info!("{}", diff);
                 if !only_print_plan {
                     diff.apply(&sync)?;
-                    sync.synchronize_all()?;
                 }
             }
             "mailgun" => {
