@@ -1,4 +1,4 @@
-use anyhow::bail;
+use anyhow::{bail, Context};
 use hyper_old_types::header::{Link, RelationType};
 use log::{debug, trace};
 use reqwest::{
@@ -74,11 +74,8 @@ impl GitHub {
         self.rest_paginated(
             &Method::GET,
             format!("orgs/{org}/members?role=admin"),
-            |resp| {
-                let partial: Vec<User> = resp.json()?;
-                for owner in partial {
-                    owners.insert(owner.id);
-                }
+            |resp: Vec<User>| {
+                owners.extend(resp.into_iter().map(|u| u.id));
                 Ok(())
             },
         )?;
@@ -89,13 +86,14 @@ impl GitHub {
     pub(crate) fn org_teams(&self, org: &str) -> anyhow::Result<HashSet<String>> {
         let mut teams = HashSet::new();
 
-        self.rest_paginated(&Method::GET, format!("orgs/{org}/teams"), |resp| {
-            let partial: Vec<Team> = resp.json()?;
-            for team in partial {
-                teams.insert(team.name);
-            }
-            Ok(())
-        })?;
+        self.rest_paginated(
+            &Method::GET,
+            format!("orgs/{org}/teams"),
+            |resp: Vec<Team>| {
+                teams.extend(resp.into_iter().map(|t| t.name));
+                Ok(())
+            },
+        )?;
 
         Ok(teams)
     }
@@ -164,7 +162,10 @@ impl GitHub {
             description: new_description,
             privacy: new_privacy,
         };
-        debug!("Editing team '{name}' in '{org}' with request: {req:?}");
+        debug!(
+            "Editing team '{name}' in '{org}' with request: {}",
+            serde_json::to_string(&req).unwrap_or_else(|_| "INVALID_REQUEST".to_string())
+        );
         if !self.dry_run {
             self.send(Method::PATCH, &format!("orgs/{org}/teams/{name}"), &req)?;
         }
@@ -273,7 +274,7 @@ impl GitHub {
         user: &str,
         role: TeamRole,
     ) -> anyhow::Result<()> {
-        debug!("Setting membership of '{user}' in team '{team}' to {role} in '{org}'");
+        debug!("Setting membership of '{user}' in team '{team}' in org '{org}' to role '{role}'");
         #[derive(serde::Serialize, Debug)]
         struct Req {
             role: TeamRole,
@@ -296,7 +297,7 @@ impl GitHub {
         team: &str,
         user: &str,
     ) -> anyhow::Result<()> {
-        debug!("Removing membership of '{user}' from team '{team}' in '{org}'");
+        debug!("Removing membership of '{user}' from team '{team}' in org '{org}'");
         if !self.dry_run {
             self.req(
                 Method::DELETE,
@@ -342,34 +343,36 @@ impl GitHub {
         }
     }
 
-    pub(crate) fn edit_repo(&self, repo: &Repo, description: &str) -> anyhow::Result<()> {
+    pub(crate) fn edit_repo(
+        &self,
+        org: &str,
+        repo_name: &str,
+        description: &str,
+    ) -> anyhow::Result<()> {
         #[derive(serde::Serialize, Debug)]
         struct Req<'a> {
             description: &'a str,
         }
         let req = Req { description };
-        debug!("Editing repo {}/{} with {:?}", repo.org, repo.name, req);
+        debug!("Editing repo {}/{} with {:?}", org, repo_name, req);
         if !self.dry_run {
-            self.send(
-                Method::PATCH,
-                &format!("repos/{}/{}", repo.org, repo.name),
-                &req,
-            )?;
+            self.send(Method::PATCH, &format!("repos/{}/{}", org, repo_name), &req)?;
         }
         Ok(())
     }
 
     /// Get teams in a repo
-    pub(crate) fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<HashSet<String>> {
-        let mut teams = HashSet::new();
+    pub(crate) fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
+        let mut teams = Vec::new();
 
-        self.rest_paginated(&Method::GET, format!("repos/{org}/{repo}/teams"), |resp| {
-            let partial: Vec<Team> = resp.json()?;
-            for team in partial {
-                teams.insert(team.name);
-            }
-            Ok(())
-        })?;
+        self.rest_paginated(
+            &Method::GET,
+            format!("repos/{org}/{repo}/teams"),
+            |resp: Vec<RepoTeam>| {
+                teams.extend(resp);
+                Ok(())
+            },
+        )?;
 
         Ok(teams)
     }
@@ -381,23 +384,14 @@ impl GitHub {
         &self,
         org: &str,
         repo: &str,
-    ) -> anyhow::Result<HashSet<String>> {
-        let mut users = HashSet::new();
-
-        #[derive(serde::Deserialize)]
-        struct User {
-            #[serde(alias = "login")]
-            name: String,
-        }
+    ) -> anyhow::Result<Vec<RepoUser>> {
+        let mut users = Vec::new();
 
         self.rest_paginated(
             &Method::GET,
             format!("repos/{org}/{repo}/collaborators?affiliation=direct"),
-            |resp| {
-                let partial: Vec<User> = resp.json()?;
-                for user in partial {
-                    users.insert(user.name);
-                }
+            |resp: Vec<RepoUser>| {
+                users.extend(resp);
                 Ok(())
             },
         )?;
@@ -492,10 +486,15 @@ impl GitHub {
     }
 
     /// Get the head commit of the supplied branch
-    pub(crate) fn branch(&self, repo: &Repo, name: &str) -> anyhow::Result<Option<String>> {
+    pub(crate) fn branch(
+        &self,
+        org: &str,
+        repo_name: &str,
+        branch_name: &str,
+    ) -> anyhow::Result<Option<String>> {
         let branch = self.send_option::<Branch>(
             Method::GET,
-            &format!("repos/{}/{}/branches/{}", repo.org, repo.name, name),
+            &format!("repos/{}/{}/branches/{}", org, repo_name, branch_name),
         )?;
         Ok(branch.map(|b| b.commit.sha))
     }
@@ -503,8 +502,9 @@ impl GitHub {
     /// Create a branch
     pub(crate) fn create_branch(
         &self,
-        repo: &Repo,
-        name: &str,
+        org: &str,
+        repo_name: &str,
+        branch_name: &str,
         commit: &str,
     ) -> anyhow::Result<()> {
         #[derive(serde::Serialize, Debug)]
@@ -514,14 +514,14 @@ impl GitHub {
         }
         debug!(
             "Creating branch in {}/{}: {} with commit {}",
-            repo.org, repo.name, name, commit
+            org, repo_name, branch_name, commit
         );
         if !self.dry_run {
             self.send(
                 Method::POST,
-                &format!("repos/{}/{}/git/refs", repo.org, repo.name),
+                &format!("repos/{}/{}/git/refs", org, repo_name),
                 &Req {
-                    r#ref: &format!("refs/heads/{}", name),
+                    r#ref: &format!("refs/heads/{}", branch_name),
                     sha: commit,
                 },
             )?;
@@ -535,8 +535,7 @@ impl GitHub {
         self.rest_paginated(
             &Method::GET,
             format!("repos/{}/{}/branches?protected=true", repo.org, repo.name),
-            |resp| {
-                let resp = resp.json::<Vec<Branch>>()?;
+            |resp: Vec<Branch>| {
                 names.extend(resp.into_iter().map(|b| b.name));
 
                 Ok(())
@@ -545,68 +544,38 @@ impl GitHub {
         Ok(names)
     }
 
+    pub(crate) fn branch_protection(
+        &self,
+        org: &str,
+        repo_name: &str,
+        branch_name: &str,
+    ) -> anyhow::Result<Option<BranchProtection>> {
+        self.send_option::<BranchProtection>(
+            Method::GET,
+            &format!(
+                "repos/{}/{}/branches/{}/protection",
+                org, repo_name, branch_name
+            ),
+        )
+    }
+
     /// Update a branch's permissions.
     ///
     /// Returns `Ok(true)` on success, `Ok(false)` if the branch doesn't exist, and `Err(_)` otherwise.
     pub(crate) fn update_branch_protection(
         &self,
-        repo: &Repo,
+        org: &str,
+        repo_name: &str,
         branch_name: &str,
-        branch_protection: BranchProtection,
+        branch_protection: &BranchProtection,
     ) -> anyhow::Result<bool> {
-        #[derive(serde::Serialize)]
-        struct Req<'a> {
-            required_status_checks: Req1<'a>,
-            enforce_admins: bool,
-            required_pull_request_reviews: Req2,
-            restrictions: HashMap<String, Vec<String>>,
-        }
-        #[derive(serde::Serialize)]
-        struct Req1<'a> {
-            strict: bool,
-            checks: Vec<Check<'a>>,
-        }
-        #[derive(serde::Serialize)]
-        struct Check<'a> {
-            context: &'a str,
-        }
-        #[derive(serde::Serialize)]
-        struct Req2 {
-            // Even though we don't want dismissal restrictions, it cannot be ommited
-            dismissal_restrictions: HashMap<(), ()>,
-            dismiss_stale_reviews: bool,
-            required_approving_review_count: u8,
-        }
-        let req = Req {
-            required_status_checks: Req1 {
-                strict: false,
-                checks: branch_protection
-                    .required_checks
-                    .iter()
-                    .map(|c| Check {
-                        context: c.as_str(),
-                    })
-                    .collect(),
-            },
-            enforce_admins: true,
-            required_pull_request_reviews: Req2 {
-                dismissal_restrictions: HashMap::new(),
-                dismiss_stale_reviews: branch_protection.dismiss_stale_reviews,
-                required_approving_review_count: branch_protection.required_approving_review_count,
-            },
-            restrictions: vec![
-                ("users".to_string(), branch_protection.allowed_users),
-                ("teams".to_string(), Vec::new()),
-            ]
-            .into_iter()
-            .collect(),
-        };
         debug!(
             "Updating branch protection on repo {}/{} for {}: {}",
-            repo.org,
-            repo.name,
+            org,
+            repo_name,
             branch_name,
-            serde_json::to_string_pretty(&req).unwrap_or_else(|_| "<invalid json>".to_string())
+            serde_json::to_string_pretty(&branch_protection)
+                .unwrap_or_else(|_| "<invalid json>".to_string())
         );
         if !self.dry_run {
             let resp = self
@@ -614,10 +583,10 @@ impl GitHub {
                     Method::PUT,
                     &format!(
                         "repos/{}/{}/branches/{}/protection",
-                        repo.org, repo.name, branch_name
+                        org, repo_name, branch_name
                     ),
                 )?
-                .json(&req)
+                .json(branch_protection)
                 .send()?;
             match resp.status() {
                 StatusCode::OK => Ok(true),
@@ -633,18 +602,20 @@ impl GitHub {
     }
 
     /// Delete a branch protection
-    pub(crate) fn delete_branch_protection(&self, repo: &Repo, branch: &str) -> anyhow::Result<()> {
+    pub(crate) fn delete_branch_protection(
+        &self,
+        org: &str,
+        repo_name: &str,
+        branch: &str,
+    ) -> anyhow::Result<()> {
         debug!(
             "Removing protection in {}/{} from {} branch",
-            repo.org, repo.name, branch
+            org, repo_name, branch
         );
         if !self.dry_run {
             self.req(
                 Method::DELETE,
-                &format!(
-                    "repos/{}/{}/branches/{}/protection",
-                    repo.org, repo.name, branch
-                ),
+                &format!("repos/{}/{}/branches/{}/protection", org, repo_name, branch),
             )?
             .send()?
             .error_for_status()?;
@@ -693,9 +664,11 @@ impl GitHub {
         method: Method,
         url: &str,
     ) -> Result<Option<T>, anyhow::Error> {
-        let resp = self.req(method, url)?.send()?;
+        let resp = self.req(method.clone(), url)?.send()?;
         match resp.status() {
-            StatusCode::OK => Ok(Some(resp.json()?)),
+            StatusCode::OK => Ok(Some(resp.json().with_context(|| {
+                format!("Failed to decode response body on {method} request to '{url}'")
+            })?)),
             StatusCode::NOT_FOUND => Ok(None),
             _ => Err(resp.error_for_status().unwrap_err().into()),
         }
@@ -726,9 +699,10 @@ impl GitHub {
         }
     }
 
-    fn rest_paginated<F>(&self, method: &Method, url: String, mut f: F) -> anyhow::Result<()>
+    fn rest_paginated<F, T>(&self, method: &Method, url: String, mut f: F) -> anyhow::Result<()>
     where
-        F: FnMut(Response) -> anyhow::Result<()>,
+        F: FnMut(Vec<T>) -> anyhow::Result<()>,
+        T: DeserializeOwned,
     {
         let mut next = Some(url);
         while let Some(next_url) = next.take() {
@@ -752,7 +726,9 @@ impl GitHub {
                 }
             }
 
-            f(resp)?;
+            f(resp.json().with_context(|| {
+                format!("Failed to deserialize response body for {method} request to '{next_url}'")
+            })?)?;
         }
         Ok(())
     }
@@ -806,15 +782,40 @@ pub(crate) struct Team {
     pub(crate) privacy: TeamPrivacy,
 }
 
-#[derive(serde::Serialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct RepoTeam {
+    pub(crate) name: String,
+    pub(crate) permission: RepoPermission,
+}
+
+#[derive(serde::Deserialize)]
+pub(crate) struct RepoUser {
+    #[serde(alias = "login")]
+    pub(crate) name: String,
+    #[serde(rename = "role_name")]
+    pub(crate) permission: RepoPermission,
+}
+
+#[derive(Copy, Clone, serde::Serialize, serde::Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum RepoPermission {
     // While the GitHub UI uses the term 'write', the API still uses the older term 'push'
-    #[serde(rename = "push")]
+    #[serde(rename(serialize = "push"), alias = "push")]
     Write,
     Admin,
     Maintain,
     Triage,
+}
+
+impl fmt::Display for RepoPermission {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::Write => write!(f, "write"),
+            Self::Admin => write!(f, "admin"),
+            Self::Maintain => write!(f, "maintain"),
+            Self::Triage => write!(f, "triage"),
+        }
+    }
 }
 
 #[derive(serde::Deserialize, Debug)]
@@ -888,10 +889,105 @@ pub(crate) struct Commit {
     pub(crate) sha: String,
 }
 
-#[derive(Debug)]
-pub(crate) struct BranchProtection {
-    pub(crate) dismiss_stale_reviews: bool,
-    pub(crate) required_approving_review_count: u8,
-    pub(crate) required_checks: Vec<String>,
-    pub(crate) allowed_users: Vec<String>,
+pub(crate) mod branch_protection {
+    use super::*;
+
+    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+    pub(crate) struct BranchProtection {
+        pub(crate) required_status_checks: RequiredStatusChecks,
+        pub(crate) enforce_admins: EnforceAdmins,
+        pub(crate) required_pull_request_reviews: PullRequestReviews,
+        pub(crate) restrictions: Restrictions,
+    }
+
+    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+    pub(crate) struct RequiredStatusChecks {
+        pub(crate) strict: bool,
+        pub(crate) checks: Vec<Check>,
+    }
+
+    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+    pub(crate) struct Check {
+        pub(crate) context: String,
+    }
+
+    impl std::fmt::Debug for Check {
+        fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+            f.write_str(&self.context)
+        }
+    }
+
+    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+    pub(crate) struct PullRequestReviews {
+        // Even though we don't want dismissal restrictions, it cannot be omitted
+        #[serde(default)]
+        pub(crate) dismissal_restrictions: HashMap<(), ()>,
+        pub(crate) dismiss_stale_reviews: bool,
+        pub(crate) required_approving_review_count: u8,
+    }
+
+    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+    pub(crate) struct Restrictions {
+        pub(crate) users: Vec<UserRestriction>,
+        pub(crate) teams: Vec<String>,
+    }
+
+    #[derive(Clone, serde::Serialize, serde::Deserialize)]
+    #[serde(untagged)]
+    pub(crate) enum EnforceAdmins {
+        // Used for serialization
+        Bool(bool),
+        // Used for deserialization
+        Object { enabled: bool },
+    }
+
+    impl EnforceAdmins {
+        fn enabled(&self) -> bool {
+            match *self {
+                EnforceAdmins::Bool(e) => e,
+                EnforceAdmins::Object { enabled } => enabled,
+            }
+        }
+    }
+
+    impl PartialEq for EnforceAdmins {
+        fn eq(&self, other: &Self) -> bool {
+            self.enabled() == other.enabled()
+        }
+    }
+
+    #[derive(Clone, serde::Serialize, serde::Deserialize)]
+    #[serde(untagged)]
+    pub(crate) enum UserRestriction {
+        // Used for serialization
+        Name(String),
+        // Used for deserialization
+        Object {
+            #[serde(rename = "login")]
+            name: String,
+        },
+    }
+
+    impl UserRestriction {
+        fn name(&self) -> &str {
+            match self {
+                Self::Name(n) => n,
+                Self::Object { name } => name,
+            }
+        }
+    }
+
+    impl std::fmt::Debug for UserRestriction {
+        fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+            f.write_str(self.name())
+        }
+    }
+
+    impl PartialEq for UserRestriction {
+        fn eq(&self, other: &Self) -> bool {
+            self.name() == other.name()
+        }
+    }
 }
+
+pub(crate) use branch_protection::BranchProtection;
