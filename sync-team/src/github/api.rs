@@ -162,7 +162,10 @@ impl GitHub {
             description: new_description,
             privacy: new_privacy,
         };
-        debug!("Editing team '{name}' in '{org}' with request: {req:?}");
+        debug!(
+            "Editing team '{name}' in '{org}' with request: {}",
+            serde_json::to_string(&req).unwrap_or_else(|_| "INVALID_REQUEST".to_string())
+        );
         if !self.dry_run {
             self.send(Method::PATCH, &format!("orgs/{org}/teams/{name}"), &req)?;
         }
@@ -271,7 +274,7 @@ impl GitHub {
         user: &str,
         role: TeamRole,
     ) -> anyhow::Result<()> {
-        debug!("Setting membership of '{user}' in team '{team}' to {role} in '{org}'");
+        debug!("Setting membership of '{user}' in team '{team}' in org '{org}' to role '{role}'");
         #[derive(serde::Serialize, Debug)]
         struct Req {
             role: TeamRole,
@@ -294,7 +297,7 @@ impl GitHub {
         team: &str,
         user: &str,
     ) -> anyhow::Result<()> {
-        debug!("Removing membership of '{user}' from team '{team}' in '{org}'");
+        debug!("Removing membership of '{user}' from team '{team}' in org '{org}'");
         if !self.dry_run {
             self.req(
                 Method::DELETE,

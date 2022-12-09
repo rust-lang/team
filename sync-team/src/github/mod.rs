@@ -898,13 +898,18 @@ struct EditTeamDiff {
 
 impl EditTeamDiff {
     fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
-        sync.github.edit_team(
-            &self.org,
-            &self.name,
-            self.name_diff.as_deref(),
-            self.description_diff.as_ref().map(|(_, d)| d.as_str()),
-            self.privacy_diff.map(|(_, p)| p),
-        )?;
+        if self.name_diff.is_some()
+            || self.description_diff.is_some()
+            || self.privacy_diff.is_some()
+        {
+            sync.github.edit_team(
+                &self.org,
+                &self.name,
+                self.name_diff.as_deref(),
+                self.description_diff.as_ref().map(|(_, d)| d.as_str()),
+                self.privacy_diff.map(|(_, p)| p),
+            )?;
+        }
 
         for (member_name, member_diff) in self.member_diffs {
             member_diff.apply(&self.org, &self.name, &member_name, sync)?;
