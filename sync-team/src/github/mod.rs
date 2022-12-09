@@ -2,7 +2,6 @@ mod api;
 
 use self::api::{GitHub, TeamPrivacy, TeamRole};
 use crate::{github::api::RepoPermission, TeamApi};
-use anyhow::Error;
 use log::debug;
 use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
@@ -20,7 +19,7 @@ pub(crate) struct SyncGitHub {
 }
 
 impl SyncGitHub {
-    pub(crate) fn new(token: String, team_api: &TeamApi, dry_run: bool) -> Result<Self, Error> {
+    pub(crate) fn new(token: String, team_api: &TeamApi, dry_run: bool) -> anyhow::Result<Self> {
         let github = GitHub::new(token, dry_run);
         let teams = team_api.get_teams()?;
         let repos = team_api.get_repos()?;
@@ -187,7 +186,7 @@ impl SyncGitHub {
         }))
     }
 
-    fn diff_repos(&self) -> Result<Vec<RepoDiff>, Error> {
+    fn diff_repos(&self) -> anyhow::Result<Vec<RepoDiff>> {
         let mut diffs = Vec::new();
         for repo in &self.repos {
             diffs.push(self.diff_repo(repo)?);
@@ -195,7 +194,7 @@ impl SyncGitHub {
         Ok(diffs)
     }
 
-    fn diff_repo(&self, expected_repo: &rust_team_data::v1::Repo) -> Result<RepoDiff, Error> {
+    fn diff_repo(&self, expected_repo: &rust_team_data::v1::Repo) -> anyhow::Result<RepoDiff> {
         let actual_repo = match self.github.repo(&expected_repo.org, &expected_repo.name)? {
             Some(r) => r,
             None => {
@@ -243,7 +242,7 @@ impl SyncGitHub {
     fn diff_permissions(
         &self,
         expected_repo: &rust_team_data::v1::Repo,
-    ) -> Result<Vec<RepoPermissionAssignmentDiff>, Error> {
+    ) -> anyhow::Result<Vec<RepoPermissionAssignmentDiff>> {
         let actual_teams: HashMap<_, _> = self
             .github
             .repo_teams(&expected_repo.org, &expected_repo.name)?
@@ -264,7 +263,7 @@ impl SyncGitHub {
         &self,
         actual_repo: &api::Repo,
         expected_repo: &rust_team_data::v1::Repo,
-    ) -> Result<Vec<BranchProtectionDiff>, Error> {
+    ) -> anyhow::Result<Vec<BranchProtectionDiff>> {
         let mut branch_protection_diffs = Vec::new();
         let mut actual_protected_branches = self.github.protected_branches(actual_repo)?;
         let mut main_branch_commit = None;
@@ -348,7 +347,7 @@ fn calculate_permission_diffs(
     expected_repo: &rust_team_data::v1::Repo,
     mut actual_teams: HashMap<String, api::RepoTeam>,
     mut actual_collaborators: HashMap<String, api::RepoUser>,
-) -> Result<Vec<RepoPermissionAssignmentDiff>, Error> {
+) -> anyhow::Result<Vec<RepoPermissionAssignmentDiff>> {
     let mut permissions = Vec::new();
     // Team permissions
     for expected_team in &expected_repo.teams {
