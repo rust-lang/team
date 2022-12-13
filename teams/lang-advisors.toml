@@ -26,5 +26,9 @@ orgs = ["rust-lang"]
 name = "Language Advisors team"
 description = "Advising on the development of the Rust language"
 
+[[lists]]
+address = "lang-advisors@rust-lang.org"
+extra-teams = ["lang"]
+
 [[zulip-groups]]
 name = "T-lang-advisors"
