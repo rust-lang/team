@@ -2,6 +2,7 @@ name = "lang-advisors"
 subteam-of = "lang"
 
 [people]
+leads = []
 members = [
     "alexcrichton",
     "Amanieu",
