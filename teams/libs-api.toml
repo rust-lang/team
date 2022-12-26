@@ -9,7 +9,6 @@ members = [
     "dtolnay",
     "m-ou-se",
     "joshtriplett",
-    "yaahc",
 ]
 alumni = [
     "KodrAus",
@@ -17,6 +16,7 @@ alumni = [
     "sfackler",
     "withoutboats",
     "SimonSapin",
+    "yaahc",
 ]
 
 [[github]]
