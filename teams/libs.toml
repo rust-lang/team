@@ -6,9 +6,11 @@ members = [
   "Amanieu",
   "m-ou-se",
   "joshtriplett",
-  "yaahc",
   "cuviper",
   "the8472",
+]
+alumni = [
+  "yaahc",
 ]
 
 [[github]]
