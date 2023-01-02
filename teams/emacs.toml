@@ -8,7 +8,8 @@ members = [
     "MicahChalmer",
     "tromey",
     "brotzeit",
-    "jimblandy"
+    "jimblandy",
+    "psibi",
 ]
 
 [[github]]
