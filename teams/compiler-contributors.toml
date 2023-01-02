@@ -31,11 +31,11 @@ members = [
   "varkor",
   "WaffleLapkin",
   "Xanewok",
-  "zackmdavis",
 ]
 alumni = [
     "Centril",
     "LeSeulArtichaut",
+    "zackmdavis",
 ]
 
 [permissions]
