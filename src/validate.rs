@@ -696,7 +696,15 @@ fn validate_zulip_group_extra_people(data: &Data, errors: &mut Vec<String>) {
 
 /// Ensure repos reference valid teams
 fn validate_repos(data: &Data, errors: &mut Vec<String>) {
+    let allowed_orgs = data.config().allowed_github_orgs();
     wrapper(data.repos(), errors, |repo, _| {
+        if !allowed_orgs.contains(&repo.org) {
+            bail!(
+                "The repo '{}' is in an invalid org '{}'",
+                repo.name,
+                repo.org
+            );
+        }
         for (team_name, _) in &repo.access.teams {
             match data.team(team_name) {
                 Some(t)

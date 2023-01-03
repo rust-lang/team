@@ -1,5 +1,5 @@
 {
-  "org": "rust-lang",
+  "org": "test-org",
   "name": "some_repo",
   "description": "A repo!",
   "bots": [],
