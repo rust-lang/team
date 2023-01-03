@@ -6,8 +6,9 @@ bots = ["bors", "highfive"]
 
 [access.teams]
 infra = "write"
+infra-bors = "write"
 mods = "maintain"
 
 [[branch]]
 name = "main"
-ci-checks = ["CI"]
+ci-checks = ["Test"]
