@@ -236,6 +236,7 @@ fn validate_alumni(data: &Data, errors: &mut Vec<String>) {
         Ok(())
     });
 }
+
 /// Ensure every person is part of at least one team (active or archived)
 fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
     let mut referenced_members = HashSet::new();
@@ -697,13 +698,30 @@ fn validate_zulip_group_extra_people(data: &Data, errors: &mut Vec<String>) {
 fn validate_repos(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.repos(), errors, |repo, _| {
         for (team_name, _) in &repo.access.teams {
-            if data.team(team_name).is_none() {
-                bail!(
-                    "access for {}/{} is invalid: '{}' is not the name of a team",
-                    repo.org,
-                    repo.name,
-                    team_name
-                );
+            match data.team(team_name) {
+                Some(t)
+                    if !t
+                        .github_teams(data)?
+                        .iter()
+                        .any(|t| t.name == team_name && t.org == repo.org) =>
+                {
+                    bail!(
+                        "access for {}/{} is invalid: '{}' is not configured as a GitHub team for the '{}' org",
+                        repo.org,
+                        repo.name,
+                        team_name,
+                        repo.org
+                    )
+                }
+                None => {
+                    bail!(
+                        "access for {}/{} is invalid: '{}' is not the name of a team",
+                        repo.org,
+                        repo.name,
+                        team_name
+                    );
+                }
+                Some(_) => {}
             }
         }
 
