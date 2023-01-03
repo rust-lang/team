@@ -652,18 +652,6 @@ pub(crate) struct Repo {
     pub branches: Vec<Branch>,
 }
 
-impl Repo {
-    const VALID_ORGS: &'static [&'static str] = &["rust-lang"];
-
-    pub(crate) fn validate(&self) -> Result<(), Error> {
-        if !Self::VALID_ORGS.contains(&self.org.as_str()) {
-            bail!("{} is not a valid repo org", self.org);
-        }
-
-        Ok(())
-    }
-}
-
 #[derive(serde_derive::Deserialize, Debug, Clone)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum Bot {
