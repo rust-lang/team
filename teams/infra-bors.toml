@@ -8,3 +8,6 @@ members = [
     "pietroalbini",
     "Kobzol",
 ]
+
+[[github]]
+orgs = ["rust-lang"]
