@@ -897,7 +897,7 @@ pub(crate) mod branch_protection {
         pub(crate) required_status_checks: RequiredStatusChecks,
         pub(crate) enforce_admins: EnforceAdmins,
         pub(crate) required_pull_request_reviews: PullRequestReviews,
-        pub(crate) restrictions: Restrictions,
+        pub(crate) restrictions: Option<Restrictions>,
     }
 
     #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]

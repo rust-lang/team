@@ -452,6 +452,10 @@ fn branch_protection(
             )]
         })
         .unwrap_or_default();
+    let restrictions = (!allowed_users.is_empty()).then(|| api::branch_protection::Restrictions {
+        users: allowed_users,
+        teams: Vec::new(),
+    });
     api::BranchProtection {
         required_status_checks: api::branch_protection::RequiredStatusChecks {
             strict: false,
@@ -468,10 +472,7 @@ fn branch_protection(
             dismiss_stale_reviews: branch.dismiss_stale_review,
             required_approving_review_count,
         },
-        restrictions: api::branch_protection::Restrictions {
-            users: allowed_users,
-            teams: Vec::new(),
-        },
+        restrictions,
     }
 }
 
@@ -782,14 +783,17 @@ fn log_branch_protection(
         ($str:literal, $($method:ident).+) => {
             let new = other.map(|n| &n.$($method).*);
             let old = &branch_protection.$($method).*;
-            if Some(old) != new {
-                if let Some(n) = new.as_ref() {
-                    writeln!(result, "        {}: {:?} => {:?}", $str, old, n)?;
+            log!($str, Some(old), new);
+        };
+        ($str:literal, $old:expr, $new:expr) => {
+            if $old != $new {
+                if let Some(n) = $new.as_ref() {
+                    writeln!(result, "        {}: {:?} => {:?}", $str, $old, n)?;
                 } else {
-                    writeln!(result, "        {}: {:?}", $str, old)?;
+                    writeln!(result, "        {}: {:?}", $str, $old)?;
                 };
             }
-        };
+        }
     }
 
     log!(
@@ -801,8 +805,20 @@ fn log_branch_protection(
         required_pull_request_reviews.required_approving_review_count
     );
     log!("Checks", required_status_checks.checks);
-    log!("User Overrides", restrictions.users);
-    log!("Team Overrides", restrictions.teams);
+    log!(
+        "User Overrides",
+        other
+            .as_ref()
+            .and_then(|o| o.restrictions.as_ref().map(|o| &o.users)),
+        branch_protection.restrictions.as_ref().map(|r| &r.users)
+    );
+    log!(
+        "Team Overrides",
+        other
+            .as_ref()
+            .and_then(|o| o.restrictions.as_ref().map(|o| &o.teams)),
+        branch_protection.restrictions.as_ref().map(|r| &r.teams)
+    );
     Ok(())
 }
 
