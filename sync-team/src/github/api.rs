@@ -871,11 +871,11 @@ pub(crate) struct TeamMember {
 }
 
 fn user_node_id(id: usize) -> String {
-    base64::encode(&format!("04:User{}", id))
+    base64::encode(format!("04:User{}", id))
 }
 
 fn team_node_id(id: usize) -> String {
-    base64::encode(&format!("04:Team{}", id))
+    base64::encode(format!("04:Team{}", id))
 }
 
 #[derive(serde::Deserialize, Debug)]

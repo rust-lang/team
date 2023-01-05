@@ -153,7 +153,7 @@ impl ZulipApi {
     ) -> anyhow::Result<reqwest::blocking::Response> {
         let mut req = self
             .client
-            .request(method, &format!("{}{}", ZULIP_BASE_URL, path))
+            .request(method, format!("{}{}", ZULIP_BASE_URL, path))
             .basic_auth(&self.username, Some(&self.token));
         if let Some(form) = form {
             req = req.form(&form);

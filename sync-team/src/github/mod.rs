@@ -438,11 +438,7 @@ fn branch_protection(
     expected_repo: &rust_team_data::v1::Repo,
     branch: &rust_team_data::v1::Branch,
 ) -> api::BranchProtection {
-    let required_approving_review_count = if expected_repo.bots.contains(&Bot::Bors) {
-        0
-    } else {
-        1
-    };
+    let required_approving_review_count = u8::from(!expected_repo.bots.contains(&Bot::Bors));
     let allowed_users = expected_repo
         .bots
         .contains(&Bot::Bors)

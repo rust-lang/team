@@ -107,7 +107,7 @@ impl Mailgun {
         };
 
         self.client
-            .request(method, &url)
+            .request(method, url)
             .basic_auth("api", Some(&self.token))
             .header(
                 header::USER_AGENT,
