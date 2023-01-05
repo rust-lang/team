@@ -871,11 +871,11 @@ pub(crate) struct TeamMember {
 }
 
 fn user_node_id(id: usize) -> String {
-    base64::encode(&format!("04:User{}", id))
+    base64::encode(format!("04:User{}", id))
 }
 
 fn team_node_id(id: usize) -> String {
-    base64::encode(&format!("04:Team{}", id))
+    base64::encode(format!("04:Team{}", id))
 }
 
 #[derive(serde::Deserialize, Debug)]
@@ -897,7 +897,7 @@ pub(crate) mod branch_protection {
         pub(crate) required_status_checks: RequiredStatusChecks,
         pub(crate) enforce_admins: EnforceAdmins,
         pub(crate) required_pull_request_reviews: PullRequestReviews,
-        pub(crate) restrictions: Restrictions,
+        pub(crate) restrictions: Option<Restrictions>,
     }
 
     #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
