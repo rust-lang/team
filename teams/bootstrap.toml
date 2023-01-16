@@ -1,0 +1,30 @@
+name = "bootstrap"
+subteam-of = "infra"
+
+[people]
+leads = ["jyn514", "Mark-Simulacrum"]
+members = [
+    "Mark-Simulacrum",
+    "jyn514",
+    "ozkanonur",
+]
+
+[permissions]
+perf = true
+dev-desktop = true
+bors.rust.review = true
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Bootstrap team"
+description = "Maintaining and improving the build system for rust-lang/rust"
+email = "bootstrap@rust-lang.org"
+zulip-stream = "t-infra/bootstrap"
+
+[[lists]]
+address = "bootstrap@rust-lang.org"
+
+[[zulip-groups]]
+name = "T-bootstrap"
