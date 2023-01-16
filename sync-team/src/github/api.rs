@@ -177,9 +177,15 @@ impl GitHub {
     pub(crate) fn delete_team(&self, org: &str, team: &str) -> anyhow::Result<()> {
         debug!("Deleting team '{team}' in '{org}'");
         if !self.dry_run {
-            self.req(Method::DELETE, &format!("orgs/{}/teams/{}", org, team))?
-                .send()?
-                .error_for_status()?;
+            let resp = self
+                .req(Method::DELETE, &format!("orgs/{}/teams/{}", org, team))?
+                .send()?;
+            match resp.status() {
+                StatusCode::OK | StatusCode::NOT_FOUND => {}
+                _ => {
+                    resp.error_for_status()?;
+                }
+            }
         }
         Ok(())
     }
