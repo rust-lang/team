@@ -16,6 +16,7 @@ members = [
     "yaahc",
     "WaffleLapkin",
     "JulianKnodt",
+    "vincenzopalazzo",
 ]
 
 [permissions]
