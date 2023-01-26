@@ -16,14 +16,6 @@ alumni = [
     "skade",
 ]
 
-[website]
-name = "Community team"
-description = "Coordinating and supporting events, content creation, and the RustBridge program, as well as conducting community surveys"
-email = "community@rust-lang.org"
-repo = "https://github.com/rust-community/team"
-discord-invite = "https://discord.gg/KskHZGT"
-discord-name = "#community-team"
-
 [[github]]
 orgs = ["rust-lang"]
 
