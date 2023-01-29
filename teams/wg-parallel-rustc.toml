@@ -19,6 +19,9 @@ alumni = [
     "spastorino",
 ]
 
+[permissions]
+perf = true
+
 [website]
 name = "Parallel rustc working group"
 description = "Making parallel compilation the default for rustc"
