@@ -2,9 +2,9 @@ name = "community-rustbridge"
 subteam-of = "community"
 
 [people]
-leads = ["diannasoreil"]
+leads = ["shadows-withal"]
 members = [
-    "diannasoreil",
+    "shadows-withal",
     "technetos",
     "arshiamufti",
     "spacekookie",
