@@ -4,7 +4,8 @@ kind = "working-group"
 
 [people]
 leads = ["Veykril"]
-members = ["matklad", "lnicola", "Veykril", "flodiebold", "jonas-schievink"]
+members = ["matklad", "lnicola", "Veykril", "flodiebold"]
+alumni = ["jonas-schievink"]
 
 [website]
 name = "RLS 2.0 working group"
