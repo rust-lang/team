@@ -13,7 +13,6 @@ members = [
   "fee1-dead",
   "flodiebold",
   "jackh726",
-  "jonas-schievink",
   "lqd",
   "Mark-Simulacrum",
   "matklad",
@@ -35,6 +34,7 @@ members = [
 alumni = [
     "Centril",
     "LeSeulArtichaut",
+    "jonas-schievink",
     "zackmdavis",
 ]
 
