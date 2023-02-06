@@ -1,0 +1,7 @@
+org = 'rust-lang'
+name = 'opsem-team'
+description = 'Home of the operational semantics team, used primarily for procedural items'
+bots = []
+
+[access.teams]
+opsem = 'maintain'

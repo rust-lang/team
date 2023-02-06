@@ -1,0 +1,33 @@
+name = "opsem"
+subteam-of = "lang"
+
+[people]
+leads = ["JakobDegen", "RalfJung"]
+members = [
+    "CAD97",
+    "digama0",
+    "JakobDegen",
+    "RalfJung",
+    "saethlin",
+]
+alumni = []
+
+[website]
+name = "Operational Semantics team"
+description = "Working on deciding and specifying the semantics of Rust around unsafe code"
+repo = "https://github.com/rust-lang/opsem-team"
+zulip-stream = "t-opsem"
+
+[rfcbot]
+label = "T-opsem"
+name = "Opsem"
+ping = "rust-lang/opsem"
+
+[[github]]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
+[[zulip-groups]] 
+name = "T-opsem"
+
+[[zulip-groups]]
+name = "T-opsem/meetings"
