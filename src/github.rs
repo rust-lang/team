@@ -136,14 +136,49 @@ impl GitHubApi {
             }
         ";
 
+        let cant_resolve = |e: &Error| e.to_string().contains("Could not resolve to a node");
+
         let mut result = HashMap::new();
         for chunk in ids.chunks(100) {
-            let res: GraphNodes<Usernames> = self.graphql(
+            let res: GraphNodes<Usernames> = match self.graphql(
                 QUERY,
                 Params {
                     ids: chunk.iter().map(|id| user_node_id(*id)).collect(),
                 },
-            )?;
+            ) {
+                Ok(res) => res,
+                Err(e) => {
+                    if cant_resolve(&e) {
+                        // This error happens when a user is deleted. Provide
+                        // a more helpful error message to pinpoint it:
+                        for id in chunk {
+                            if let Err(inner_e) = self.graphql::<GraphNodes<Usernames>, Params>(
+                                QUERY,
+                                Params {
+                                    ids: vec![user_node_id(*id)],
+                                },
+                            ) {
+                                if cant_resolve(&inner_e) {
+                                    bail!(
+                                        "failed to resolve user id {}: {}\n\
+                                        Check if the user has possibly deleted their account.",
+                                        id,
+                                        e
+                                    );
+                                } else {
+                                    bail!(
+                                        "failed to check resolve error: {}\n\
+                                        Original error: {}",
+                                        inner_e,
+                                        e
+                                    );
+                                }
+                            }
+                        }
+                    }
+                    return Err(e);
+                }
+            };
             for node in res.nodes.into_iter().flatten() {
                 result.insert(node.database_id, node.login);
             }
