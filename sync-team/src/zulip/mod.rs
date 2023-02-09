@@ -113,7 +113,7 @@ impl ZulipController {
                 );
                 self.create_user_group(
                     user_group_name,
-                    &format!("The {} team (managed by the Team repo)", user_group_name),
+                    &format!("The {user_group_name} team (managed by the Team repo)"),
                     member_zulip_ids,
                 )?;
                 return Ok(());

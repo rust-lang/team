@@ -2,7 +2,7 @@
 name = "sync-team"
 version = "0.1.0"
 authors = ["Pietro Albini <pietro@pietroalbini.org>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 reqwest = { version = "0.11", features = ["blocking", "json"] }

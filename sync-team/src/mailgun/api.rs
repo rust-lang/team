@@ -23,7 +23,7 @@ impl Mailgun {
 
     pub(super) fn get_routes(&self, skip: Option<usize>) -> Result<RoutesResponse, Error> {
         let url = if let Some(skip) = skip {
-            format!("routes?skip={}", skip)
+            format!("routes?skip={skip}")
         } else {
             "routes".into()
         };
@@ -79,7 +79,7 @@ impl Mailgun {
             form.push(("action", action.as_str()));
         }
 
-        self.request(Method::PUT, &format!("routes/{}", id))
+        self.request(Method::PUT, &format!("routes/{id}"))
             .form(&form)
             .send()?
             .error_for_status()?;
@@ -93,7 +93,7 @@ impl Mailgun {
             return Ok(());
         }
 
-        self.request(Method::DELETE, &format!("routes/{}", id))
+        self.request(Method::DELETE, &format!("routes/{id}"))
             .send()?
             .error_for_status()?;
         Ok(())
@@ -103,7 +103,7 @@ impl Mailgun {
         let url = if url.starts_with("https://") {
             url.into()
         } else {
-            format!("https://api.mailgun.net/v3/{}", url)
+            format!("https://api.mailgun.net/v3/{url}")
         };
 
         self.client

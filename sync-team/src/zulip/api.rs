@@ -127,7 +127,7 @@ impl ZulipApi {
         form.insert("add", add_ids.as_str());
         form.insert("delete", remove_ids.as_str());
 
-        let path = format!("/user_groups/{}/members", user_group_id);
+        let path = format!("/user_groups/{user_group_id}/members");
         let response = self.req(reqwest::Method::POST, &path, Some(form))?;
 
         if response.status() == 400 {
@@ -153,7 +153,7 @@ impl ZulipApi {
     ) -> anyhow::Result<reqwest::blocking::Response> {
         let mut req = self
             .client
-            .request(method, format!("{}{}", ZULIP_BASE_URL, path))
+            .request(method, format!("{ZULIP_BASE_URL}{path}"))
             .basic_auth(&self.username, Some(&self.token));
         if let Some(form) = form {
             req = req.form(&form);

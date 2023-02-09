@@ -14,7 +14,7 @@ const USER_AGENT: &str = "rust-lang teams sync (https://github.com/rust-lang/syn
 fn usage() {
     eprintln!("available services:");
     for service in AVAILABLE_SERVICES {
-        eprintln!("  {}", service);
+        eprintln!("  {service}");
     }
     eprintln!("available flags:");
     eprintln!("  --help              Show this help message");
@@ -47,7 +47,7 @@ fn app() -> anyhow::Result<()> {
             "--only-print-plan" => only_print_plan = true,
             service if AVAILABLE_SERVICES.contains(&service) => services.push(service.to_string()),
             _ => {
-                eprintln!("unknown argument: {}", arg);
+                eprintln!("unknown argument: {arg}");
                 usage();
                 std::process::exit(1);
             }
@@ -93,7 +93,7 @@ fn app() -> anyhow::Result<()> {
                 let token = get_env("ZULIP_API_TOKEN")?;
                 zulip::run(username, token, &team_api, dry_run)?;
             }
-            _ => panic!("unknown service: {}", service),
+            _ => panic!("unknown service: {service}"),
         }
     }
 
@@ -101,7 +101,7 @@ fn app() -> anyhow::Result<()> {
 }
 
 fn get_env(key: &str) -> anyhow::Result<String> {
-    std::env::var(key).with_context(|| format!("failed to get the {} environment variable", key))
+    std::env::var(key).with_context(|| format!("failed to get the {key} environment variable"))
 }
 
 fn main() {

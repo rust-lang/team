@@ -100,7 +100,7 @@ impl GitHub {
 
     /// Get the team by name and org
     pub(crate) fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
-        self.send_option(Method::GET, &format!("orgs/{}/teams/{}", org, team))
+        self.send_option(Method::GET, &format!("orgs/{org}/teams/{team}"))
     }
 
     /// Create a team in a org
@@ -134,7 +134,7 @@ impl GitHub {
                 privacy,
             };
             Ok(self
-                .send(Method::POST, &format!("orgs/{}/teams", org), body)?
+                .send(Method::POST, &format!("orgs/{org}/teams"), body)?
                 .json()?)
         }
     }
@@ -178,7 +178,7 @@ impl GitHub {
         debug!("Deleting team '{team}' in '{org}'");
         if !self.dry_run {
             let resp = self
-                .req(Method::DELETE, &format!("orgs/{}/teams/{}", org, team))?
+                .req(Method::DELETE, &format!("orgs/{org}/teams/{team}"))?
                 .send()?;
             match resp.status() {
                 StatusCode::OK | StatusCode::NOT_FOUND => {}
@@ -362,7 +362,7 @@ impl GitHub {
         let req = Req { description };
         debug!("Editing repo {}/{} with {:?}", org, repo_name, req);
         if !self.dry_run {
-            self.send(Method::PATCH, &format!("repos/{}/{}", org, repo_name), &req)?;
+            self.send(Method::PATCH, &format!("repos/{org}/{repo_name}"), &req)?;
         }
         Ok(())
     }
@@ -500,7 +500,7 @@ impl GitHub {
     ) -> anyhow::Result<Option<String>> {
         let branch = self.send_option::<Branch>(
             Method::GET,
-            &format!("repos/{}/{}/branches/{}", org, repo_name, branch_name),
+            &format!("repos/{org}/{repo_name}/branches/{branch_name}"),
         )?;
         Ok(branch.map(|b| b.commit.sha))
     }
@@ -525,9 +525,9 @@ impl GitHub {
         if !self.dry_run {
             self.send(
                 Method::POST,
-                &format!("repos/{}/{}/git/refs", org, repo_name),
+                &format!("repos/{org}/{repo_name}/git/refs"),
                 &Req {
-                    r#ref: &format!("refs/heads/{}", branch_name),
+                    r#ref: &format!("refs/heads/{branch_name}"),
                     sha: commit,
                 },
             )?;
@@ -558,10 +558,7 @@ impl GitHub {
     ) -> anyhow::Result<Option<BranchProtection>> {
         self.send_option::<BranchProtection>(
             Method::GET,
-            &format!(
-                "repos/{}/{}/branches/{}/protection",
-                org, repo_name, branch_name
-            ),
+            &format!("repos/{org}/{repo_name}/branches/{branch_name}/protection"),
         )
     }
 
@@ -587,10 +584,7 @@ impl GitHub {
             let resp = self
                 .req(
                     Method::PUT,
-                    &format!(
-                        "repos/{}/{}/branches/{}/protection",
-                        org, repo_name, branch_name
-                    ),
+                    &format!("repos/{org}/{repo_name}/branches/{branch_name}/protection"),
                 )?
                 .json(branch_protection)
                 .send()?;
@@ -621,7 +615,7 @@ impl GitHub {
         if !self.dry_run {
             self.req(
                 Method::DELETE,
-                &format!("repos/{}/{}/branches/{}/protection", org, repo_name, branch),
+                &format!("repos/{org}/{repo_name}/branches/{branch}/protection"),
             )?
             .send()?
             .error_for_status()?;
@@ -633,11 +627,11 @@ impl GitHub {
         let url = if url.starts_with("https://") {
             Cow::Borrowed(url)
         } else {
-            Cow::Owned(format!("https://api.github.com/{}", url))
+            Cow::Owned(format!("https://api.github.com/{url}"))
         };
         trace!("http request: {} {}", method, url);
         if self.dry_run && method != Method::GET && !url.contains("graphql") {
-            panic!("Called a non-GET request in dry run mode: {}", method);
+            panic!("Called a non-GET request in dry run mode: {method}");
         }
         Ok(self
             .client
@@ -877,11 +871,11 @@ pub(crate) struct TeamMember {
 }
 
 fn user_node_id(id: usize) -> String {
-    base64::encode(format!("04:User{}", id))
+    base64::encode(format!("04:User{id}"))
 }
 
 fn team_node_id(id: usize) -> String {
-    base64::encode(format!("04:Team{}", id))
+    base64::encode(format!("04:Team{id}"))
 }
 
 #[derive(serde::Deserialize, Debug)]

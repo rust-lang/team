@@ -499,11 +499,11 @@ impl std::fmt::Display for Diff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "💻 Team Diffs:")?;
         for team_diff in &self.team_diffs {
-            write!(f, "{}", team_diff)?;
+            write!(f, "{team_diff}")?;
         }
         writeln!(f, "💻 Repo Diffs:")?;
         for repo_diff in &self.repo_diffs {
-            write!(f, "{}", repo_diff)?;
+            write!(f, "{repo_diff}")?;
         }
         Ok(())
     }
@@ -526,8 +526,8 @@ impl RepoDiff {
 impl std::fmt::Display for RepoDiff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Create(c) => write!(f, "{}", c),
-            Self::Update(u) => write!(f, "{}", u),
+            Self::Create(c) => write!(f, "{c}"),
+            Self::Update(u) => write!(f, "{u}"),
         }
     }
 }
@@ -576,11 +576,11 @@ impl std::fmt::Display for CreateRepoDiff {
         writeln!(f, "  Description: {}", self.description)?;
         writeln!(f, "  Permissions:")?;
         for diff in &self.permissions {
-            write!(f, "{}", diff)?;
+            write!(f, "{diff}")?;
         }
         writeln!(f, "  Branch Protections:")?;
         for (branch_name, branch_protection) in &self.branch_protections {
-            writeln!(&mut f, "    {}", branch_name)?;
+            writeln!(&mut f, "    {branch_name}")?;
             log_branch_protection(branch_protection, None, &mut f)?;
         }
         Ok(())
@@ -624,20 +624,20 @@ impl std::fmt::Display for UpdateRepoDiff {
         writeln!(f, "📝 Editing repo '{}/{}':", self.org, self.name)?;
         if let Some((old, new)) = &self.description_diff {
             if let Some(old) = old {
-                writeln!(f, "  New description: '{}' => '{}'", old, new)?;
+                writeln!(f, "  New description: '{old}' => '{new}'")?;
             } else {
-                writeln!(f, "  Set description: '{}'", new)?;
+                writeln!(f, "  Set description: '{new}'")?;
             }
         }
         if !self.permission_diffs.is_empty() {
             writeln!(f, "  Permission Changes:")?;
         }
         for permission_diff in &self.permission_diffs {
-            write!(f, "{}", permission_diff)?;
+            write!(f, "{permission_diff}")?;
         }
         writeln!(f, "  Branch Protections:")?;
         for branch_protection_diff in &self.branch_protection_diffs {
-            write!(f, "{}", branch_protection_diff)?;
+            write!(f, "{branch_protection_diff}")?;
         }
 
         Ok(())
@@ -849,9 +849,9 @@ impl TeamDiff {
 impl std::fmt::Display for TeamDiff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            TeamDiff::Create(c) => write!(f, "{}", c),
-            TeamDiff::Edit(e) => write!(f, "{}", e),
-            TeamDiff::Delete(d) => write!(f, "{}", d),
+            TeamDiff::Create(c) => write!(f, "{c}"),
+            TeamDiff::Edit(e) => write!(f, "{e}"),
+            TeamDiff::Delete(d) => write!(f, "{d}"),
         }
     }
 }
@@ -892,7 +892,7 @@ impl std::fmt::Display for CreateTeamDiff {
         )?;
         writeln!(f, "  Members:")?;
         for (name, role) in &self.members {
-            writeln!(f, "    {}: {}", name, role)?;
+            writeln!(f, "    {name}: {role}")?;
         }
         Ok(())
     }
@@ -944,10 +944,10 @@ impl std::fmt::Display for EditTeamDiff {
         }
         writeln!(f, "📝 Editing team '{}':", self.name)?;
         if let Some(n) = &self.name_diff {
-            writeln!(f, "  New name: {}", n)?;
+            writeln!(f, "  New name: {n}")?;
         }
         if let Some((old, new)) = &self.description_diff {
-            writeln!(f, "  New description: '{}' => '{}'", old, new)?;
+            writeln!(f, "  New description: '{old}' => '{new}'")?;
         }
         if let Some((old, new)) = &self.privacy_diff {
             let display = |privacy: &TeamPrivacy| match privacy {

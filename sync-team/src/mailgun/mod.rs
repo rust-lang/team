@@ -80,7 +80,7 @@ fn mangle_address(addr: &str) -> anyhow::Result<String> {
     // infra+botname@rust-lang.org
     if let Some(at_pos) = mangled.find('@') {
         let (user, domain) = mangled.split_at(at_pos);
-        Ok(format!("^{}(?:\\+.+)?{}$", user, domain))
+        Ok(format!("^{user}(?:\\+.+)?{domain}$"))
     } else {
         bail!("the address `{}` doesn't have any '@'", addr);
     }
@@ -132,10 +132,10 @@ pub(crate) fn run(
         let key = (address.to_string(), route.priority);
         match addr2list.remove(&key) {
             Some(new_list) => sync(&mailgun, &route, new_list)
-                .with_context(|| format!("failed to sync {}", address))?,
+                .with_context(|| format!("failed to sync {address}"))?,
             None => mailgun
                 .delete_route(&route.id)
-                .with_context(|| format!("failed to delete {}", address))?,
+                .with_context(|| format!("failed to delete {address}"))?,
         }
     }
 
@@ -147,7 +147,7 @@ pub(crate) fn run(
 }
 
 fn build_route_action(member: &str) -> String {
-    format!("forward(\"{}\")", member)
+    format!("forward(\"{member}\")")
 }
 
 fn build_route_actions(list: &List) -> impl Iterator<Item = String> + '_ {
@@ -181,13 +181,8 @@ fn sync(mailgun: &Mailgun, route: &api::Route, list: &List) -> anyhow::Result<()
 }
 
 fn extract<'a>(s: &'a str, prefix: &str, suffix: &str) -> &'a str {
-    assert!(
-        s.starts_with(prefix),
-        "`{}` didn't start with `{}`",
-        s,
-        prefix
-    );
-    assert!(s.ends_with(suffix), "`{}` didn't end with `{}`", s, suffix);
+    assert!(s.starts_with(prefix), "`{s}` didn't start with `{prefix}`");
+    assert!(s.ends_with(suffix), "`{s}` didn't end with `{suffix}`");
     &s[prefix.len()..s.len() - suffix.len()]
 }
 
@@ -254,7 +249,7 @@ mod tests {
                     address: "big@example.com".into(),
                     // Generate 300 members automatically to simulate a big list, and test whether the
                     // partitioning mechanism works.
-                    members: (0..300).map(|i| format!("foo{:03}@example.com", i)).collect(),
+                    members: (0..300).map(|i| format!("foo{i:03}@example.com")).collect(),
                 },
             ],
         };
@@ -281,21 +276,21 @@ mod tests {
                 address: mangle_address("big@example.com").unwrap(),
                 priority: 0,
                 members: (0..137)
-                    .map(|i| format!("foo{:03}@example.com", i))
+                    .map(|i| format!("foo{i:03}@example.com"))
                     .collect::<Vec<_>>(),
             },
             List {
                 address: mangle_address("big@example.com").unwrap(),
                 priority: 1,
                 members: (137..274)
-                    .map(|i| format!("foo{:03}@example.com", i))
+                    .map(|i| format!("foo{i:03}@example.com"))
                     .collect::<Vec<_>>(),
             },
             List {
                 address: mangle_address("big@example.com").unwrap(),
                 priority: 2,
                 members: (274..300)
-                    .map(|i| format!("foo{:03}@example.com", i))
+                    .map(|i| format!("foo{i:03}@example.com"))
                     .collect::<Vec<_>>(),
             },
         ];
