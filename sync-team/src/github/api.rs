@@ -655,7 +655,7 @@ impl GitHub {
             id: String,
         }
 
-        let data: Data = self.graphql(&query, Params { name })?;
+        let data: Data = self.graphql(query, Params { name })?;
         Ok(data.user.id)
     }
 
@@ -681,7 +681,7 @@ impl GitHub {
                     }
                 }
             ";
-            self.graphql(&query, Params { id })?;
+            self.graphql(query, Params { id })?;
         }
         Ok(())
     }
