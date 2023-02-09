@@ -332,8 +332,13 @@ impl GitHub {
         struct Req<'a> {
             name: &'a str,
             description: &'a str,
+            auto_init: bool,
         }
-        let req = &Req { name, description };
+        let req = &Req {
+            name,
+            description,
+            auto_init: true,
+        };
         debug!("Creating the repo {org}/{name} with {req:?}");
         if self.dry_run {
             Ok(Repo {
