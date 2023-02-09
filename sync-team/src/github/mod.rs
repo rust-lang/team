@@ -1,6 +1,6 @@
 mod api;
 
-use self::api::{BranchProtection, BranchProtectionOp, GitHub, TeamPrivacy, TeamRole};
+use self::api::{BranchProtectionOp, GitHub, TeamPrivacy, TeamRole};
 use crate::{github::api::RepoPermission, TeamApi};
 use log::debug;
 use rust_team_data::v1::Bot;
@@ -56,11 +56,11 @@ impl SyncGitHub {
     }
 
     pub(crate) fn diff_all(&self) -> anyhow::Result<Diff> {
-        // let team_diffs = self.diff_teams()?;
+        let team_diffs = self.diff_teams()?;
         let repo_diffs = self.diff_repos()?;
 
         Ok(Diff {
-            team_diffs: Default::default(),
+            team_diffs,
             repo_diffs,
         })
     }
@@ -294,10 +294,10 @@ impl SyncGitHub {
 
         // `actual_branch_protections` now contains the branch protections that were not expected
         // but are still on GitHub. We want to delete them.
-        branch_protection_diffs.extend(actual_protections.into_iter().map(|(name, _)| {
+        branch_protection_diffs.extend(actual_protections.into_iter().map(|(name, (id, _))| {
             BranchProtectionDiff {
                 pattern: name,
-                operation: BranchProtectionDiffOperation::Delete,
+                operation: BranchProtectionDiffOperation::Delete(id),
             }
         }));
 
@@ -413,21 +413,18 @@ fn construct_branch_protection(
     branch: &rust_team_data::v1::Branch,
 ) -> api::BranchProtection {
     let required_approving_review_count = u8::from(!expected_repo.bots.contains(&Bot::Bors));
-    // let allowed_users = expected_repo
-    //     .bots
-    //     .contains(&Bot::Bors)
-    //     .then(|| {
-    //         vec![api::branch_protection::UserRestriction::Name(
-    //             "bors".to_owned(),
-    //         )]
-    //     })
-    //     .unwrap_or_default();
+    let push_allowances = expected_repo
+        .bots
+        .contains(&Bot::Bors)
+        .then(|| vec!["bors".to_owned()])
+        .unwrap_or_default();
     api::BranchProtection {
         pattern: branch.name.clone(),
         is_admin_enforced: true,
         dismisses_stale_reviews: branch.dismiss_stale_review,
         required_approving_review_count,
         required_status_check_contexts: branch.ci_checks.clone(),
+        push_allowances,
     }
 }
 
@@ -501,7 +498,7 @@ struct CreateRepoDiff {
 
 impl CreateRepoDiff {
     fn apply(&self, sync: &SyncGitHub) -> anyhow::Result<()> {
-        let repo = sync
+        let _ = sync
             .github
             .create_repo(&self.org, &self.name, &self.description)?;
 
@@ -682,14 +679,13 @@ impl BranchProtectionDiff {
                     bp,
                 )?;
             }
-            BranchProtectionDiffOperation::Delete => {
+            BranchProtectionDiffOperation::Delete(id) => {
                 debug!(
                     "Deleting branch protection '{}' on '{}/{}' as \
                 the protection is not in the team repo",
                     self.pattern, org, repo_name
                 );
-                sync.github
-                    .delete_branch_protection(org, repo_name, &self.pattern)?;
+                sync.github.delete_branch_protection(org, repo_name, id)?;
             }
         }
 
@@ -705,7 +701,7 @@ impl std::fmt::Display for BranchProtectionDiff {
             BranchProtectionDiffOperation::Update(_, old, new) => {
                 log_branch_protection(old, Some(new), f)
             }
-            BranchProtectionDiffOperation::Delete => {
+            BranchProtectionDiffOperation::Delete(_) => {
                 writeln!(f, "        Deleting branch protection")
             }
         }
@@ -740,14 +736,14 @@ fn log_branch_protection(
         required_approving_review_count
     );
     log!("Required Checks", required_status_check_contexts);
-    // log!("Restrictions", restrictions);
+    log!("Allowances", push_allowances);
     Ok(())
 }
 
 enum BranchProtectionDiffOperation {
     Create(api::BranchProtection),
     Update(String, api::BranchProtection, api::BranchProtection),
-    Delete,
+    Delete(String),
 }
 
 enum TeamDiff {

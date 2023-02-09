@@ -6,7 +6,7 @@ use reqwest::{
     header::{self, HeaderValue},
     Method, StatusCode,
 };
-use serde::de::DeserializeOwned;
+use serde::{de::DeserializeOwned, Deserialize};
 use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
@@ -518,6 +518,15 @@ impl GitHub {
                             dismissesStaleReviews,
                             requiredStatusCheckContexts,
                             requiredApprovingReviewCount
+                            pushAllowances(first: 100) {
+                                nodes {
+                                    actor {
+                                        ... on Actor {
+                                            login
+                                        }
+                                    }
+                                }
+                            }
                          }
                     }
                 }
@@ -555,7 +564,7 @@ impl GitHub {
         Ok(result)
     }
 
-    /// Update a branch's permissions.
+    /// Create or update a branch protection.
     pub(crate) fn upsert_branch_protection(
         &self,
         op: BranchProtectionOp,
@@ -563,7 +572,7 @@ impl GitHub {
         branch_protection: &BranchProtection,
     ) -> anyhow::Result<()> {
         debug!("Updating '{}' branch protection", pattern);
-        #[derive(serde::Serialize)]
+        #[derive(Debug, serde::Serialize)]
         #[serde(rename_all = "camelCase")]
         struct Params<'a> {
             id: &'a str,
@@ -571,6 +580,7 @@ impl GitHub {
             contexts: &'a [String],
             dismiss_stale: bool,
             review_count: u8,
+            push_actor_ids: &'a [String],
         }
         let mutation_name = match op {
             BranchProtectionOp::CreateForRepo(_) => "createBranchProtectionRule",
@@ -585,7 +595,7 @@ impl GitHub {
             BranchProtectionOp::UpdateBranchProtection(id) => id,
         };
         let query = format!("
-        mutation($id: String!, $pattern:String!, $contexts: [String!], $dismissStale: bool, $reviewCount: int) {{
+        mutation($id: String!, $pattern:String!, $contexts: [String!], $dismissStale: bool, $reviewCount: int, $pushActorIds: [ID!]) {{
             {mutation_name}(input: {{
                 {id_field}: $id, 
                 pattern: $pattern, 
@@ -595,6 +605,7 @@ impl GitHub {
                 requiredApprovingReviewCount: $reviewCount, 
                 dismissesStaleReviews: $dismissStale, 
                 requiresApprovingReviews:true
+                pushActorIds: $pushActorIds
             }}) {{
               branchProtectionRule {{
                 id
@@ -602,6 +613,11 @@ impl GitHub {
             }}
           }}
         ");
+        let mut push_actor_ids = vec![];
+        for name in &branch_protection.push_allowances {
+            push_actor_ids.push(self.user_id(name)?);
+        }
+
         if !self.dry_run {
             self.graphql(
                 &query,
@@ -611,10 +627,36 @@ impl GitHub {
                     contexts: &branch_protection.required_status_check_contexts,
                     dismiss_stale: branch_protection.dismisses_stale_reviews,
                     review_count: branch_protection.required_approving_review_count,
+                    push_actor_ids: &push_actor_ids,
                 },
             )?;
         }
         Ok(())
+    }
+
+    fn user_id(&self, name: &str) -> anyhow::Result<String> {
+        #[derive(serde::Serialize)]
+        struct Params<'a> {
+            name: &'a str,
+        }
+        let query = "
+            query($name: String!) {
+                user(login: $name) {
+                    id
+                }
+            }
+        ";
+        #[derive(serde::Deserialize)]
+        struct Data {
+            user: User,
+        }
+        #[derive(serde::Deserialize)]
+        struct User {
+            id: String,
+        }
+
+        let data: Data = self.graphql(&query, Params { name })?;
+        Ok(data.user.id)
     }
 
     /// Delete a branch protection
@@ -625,6 +667,7 @@ impl GitHub {
         id: &str,
     ) -> anyhow::Result<()> {
         debug!("Removing protection in {}/{}", org, repo_name);
+        println!("Remove protection {id}");
         if !self.dry_run {
             #[derive(serde::Serialize)]
             #[serde(rename_all = "camelCase")]
@@ -633,7 +676,9 @@ impl GitHub {
             }
             let query = "
                 mutation($id: String!) {
-                    deleteBranchProtectionRule(input: { branchProtectionRuleId: $id }) {}
+                    deleteBranchProtectionRule(input: { branchProtectionRuleId: $id }) {
+                        clientMutationId
+                    }
                 }
             ";
             self.graphql(&query, Params { id })?;
@@ -853,7 +898,6 @@ fn repo_owner<'de, D>(deserializer: D) -> Result<String, D::Error>
 where
     D: serde::de::Deserializer<'de>,
 {
-    use serde::de::Deserialize;
     let owner = RepoOwner::deserialize(deserializer)?;
     Ok(owner.login)
 }
@@ -900,17 +944,6 @@ fn team_node_id(id: usize) -> String {
     base64::encode(format!("04:Team{id}"))
 }
 
-#[derive(serde::Deserialize, Debug)]
-pub(crate) struct Branch {
-    pub(crate) name: String,
-    pub(crate) commit: Commit,
-}
-
-#[derive(serde::Deserialize, Debug)]
-pub(crate) struct Commit {
-    pub(crate) sha: String,
-}
-
 #[derive(Clone, Debug, PartialEq, Eq, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct BranchProtection {
@@ -921,6 +954,8 @@ pub(crate) struct BranchProtection {
     pub(crate) required_approving_review_count: u8,
     #[serde(default, deserialize_with = "nullable")]
     pub(crate) required_status_check_contexts: Vec<String>,
+    #[serde(deserialize_with = "allowances")]
+    pub(crate) push_allowances: Vec<String>,
 }
 
 fn nullable<'de, D, T>(deserializer: D) -> Result<T, D::Error>
@@ -928,9 +963,33 @@ where
     D: serde::de::Deserializer<'de>,
     T: Default + DeserializeOwned,
 {
-    use serde::Deserialize;
     let opt = Option::deserialize(deserializer)?;
     Ok(opt.unwrap_or_default())
+}
+
+fn allowances<'de, D>(deserializer: D) -> Result<Vec<String>, D::Error>
+where
+    D: serde::de::Deserializer<'de>,
+{
+    #[derive(Deserialize)]
+    struct Allowances {
+        nodes: Vec<Actor>,
+    }
+    #[derive(Deserialize)]
+    struct Actor {
+        actor: Login,
+    }
+    #[derive(Deserialize)]
+    struct Login {
+        login: String,
+    }
+
+    let allowances = Allowances::deserialize(deserializer)?;
+    Ok(allowances
+        .nodes
+        .into_iter()
+        .map(|a| a.actor.login)
+        .collect())
 }
 
 pub(crate) enum BranchProtectionOp {
