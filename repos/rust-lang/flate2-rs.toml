@@ -10,5 +10,5 @@ crate-maintainers = 'maintain'
 alexcrichton = 'maintain'
 brson = 'write'
 
-[[branch]]
-name = 'main'
+[[branch-protections]]
+pattern = 'main'

@@ -13,8 +13,8 @@ Thomasdezeeuw = 'maintain'
 carllerche = 'maintain'
 Darksonn = 'maintain'
 
-[[branch]]
-name = 'master'
+[[branch-protections]]
+pattern = 'master'
 ci-checks = [
     'Rustfmt',
     'Test (beta)',

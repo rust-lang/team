@@ -9,6 +9,6 @@ infra = "write"
 infra-bors = "write"
 mods = "maintain"
 
-[[branch]]
-name = "main"
+[[branch-protections]]
+pattern = "main"
 ci-checks = ["Test"]

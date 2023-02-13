@@ -176,11 +176,11 @@ bots = ["bors", "highfive", "rustbot", "rust-timer"]
 compiler = "write"
 mods = "maintain"
 
-# The protected branches (optional)
-[[branch]]
-# The name of the branch (required)
-name = "master"
-# Which CI checks to are required for merging into (optional)
+# The branch protections (optional)
+[[branch-protections]]
+# The pattern matching the branches to be protected (required)
+pattern = "master"
+# Which CI checks to are required for merging (optional)
 ci-checks = ["CI"]
 # Whether new commits after a reviewer's approval of a PR 
 # merging into this branch require another review. 

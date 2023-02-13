@@ -7,5 +7,5 @@ bots = ["bors", "rustbot"]
 wg-rls-2 = "write"
 wg-rls-2-triage = "triage"
 
-[[branch]]
-name = "master"
+[[branch-protections]]
+pattern = "master"

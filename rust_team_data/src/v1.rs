@@ -145,7 +145,9 @@ pub struct Repo {
     pub bots: Vec<Bot>,
     pub teams: Vec<RepoTeam>,
     pub members: Vec<RepoMember>,
-    pub branches: Vec<Branch>,
+    pub branch_protections: Vec<BranchProtection>,
+    #[serde(skip_deserializing)]
+    pub branches: Vec<BranchProtection>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
@@ -179,7 +181,9 @@ pub enum RepoPermission {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Branch {
+pub struct BranchProtection {
+    pub pattern: String,
+    #[serde(skip_deserializing)]
     pub name: String,
     pub ci_checks: Vec<String>,
     pub dismiss_stale_review: bool,
