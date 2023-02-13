@@ -280,14 +280,17 @@ impl SyncGitHub {
                     Some(s) => s,
                     None => {
                         // HEAD commit isn't in cache yet - fill the cache
-                        let head = self
-                            .github
-                            .branch(
-                                &actual_repo.org,
-                                &actual_repo.name,
-                                &actual_repo.default_branch,
-                            )?
-                            .unwrap(); // TODO: main branch doesn't exist yet?
+                        let head = match self.github.branch(
+                            &actual_repo.org,
+                            &actual_repo.name,
+                            &actual_repo.default_branch,
+                        )? {
+                            Some(commit) => commit,
+                            None => {
+                                log::warn!("{}/{} main branch does not yet exist so cannot create branch protections", expected_repo.org, expected_repo.name);
+                                continue;
+                            }
+                        };
 
                         // cache the main branch head so we only need to get it once
                         main_branch_commit.get_or_insert(head)
@@ -463,11 +466,11 @@ fn branch_protection(
                 .collect(),
         },
         enforce_admins: api::branch_protection::EnforceAdmins::Bool(true),
-        required_pull_request_reviews: api::branch_protection::PullRequestReviews {
+        required_pull_request_reviews: Some(api::branch_protection::PullRequestReviews {
             dismissal_restrictions: HashMap::new(),
             dismiss_stale_reviews: branch.dismiss_stale_review,
             required_approving_review_count,
-        },
+        }),
         restrictions,
     }
 }
@@ -550,19 +553,20 @@ impl CreateRepoDiff {
             permission.apply(sync, &self.org, &self.name)?;
         }
 
-        let main_branch_commit = sync
-            .github
-            .branch(&self.org, &self.name, &repo.default_branch)?
-            .unwrap();
-        for (branch, protection) in &self.branch_protections {
-            BranchProtectionDiff {
-                name: branch.clone(),
-                operation: BranchProtectionDiffOperation::CreateWithBranch(
-                    protection.clone(),
-                    main_branch_commit.clone(),
-                ),
+        if let Some(main_branch_commit) =
+            sync.github
+                .branch(&self.org, &self.name, &repo.default_branch)?
+        {
+            for (branch, protection) in &self.branch_protections {
+                BranchProtectionDiff {
+                    name: branch.clone(),
+                    operation: BranchProtectionDiffOperation::CreateWithBranch(
+                        protection.clone(),
+                        main_branch_commit.clone(),
+                    ),
+                }
+                .apply(sync, &self.org, &self.name)?;
             }
-            .apply(sync, &self.org, &self.name)?;
         }
         Ok(())
     }
@@ -776,10 +780,20 @@ fn log_branch_protection(
     mut result: impl Write,
 ) -> std::fmt::Result {
     macro_rules! log {
-        ($str:literal, $($method:ident).+) => {
-            let new = other.map(|n| &n.$($method).*);
-            let old = &branch_protection.$($method).*;
+        ($str:literal, $field1:ident?$field2:ident) => {
+            let new = other.and_then(|n| n.$field1.as_ref().map(|n| n.$field2));
+            let old = branch_protection.$field1.as_ref().map(|bp| bp.$field2);
+            log!($str, old, new);
+        };
+        ($str:literal, $field1:ident.$field2:ident) => {
+            let new = other.map(|n| &n.$field1.$field2);
+            let old = &branch_protection.$field1.$field2;
             log!($str, Some(old), new);
+        };
+        ($str:literal, $field1:ident) => {
+            let new = other.and_then(|n| n.$field1.as_ref());
+            let old = branch_protection.$field1.as_ref();
+            log!($str, old, new);
         };
         ($str:literal, $old:expr, $new:expr) => {
             if $old != $new {
@@ -789,32 +803,19 @@ fn log_branch_protection(
                     writeln!(result, "        {}: {:?}", $str, $old)?;
                 };
             }
-        }
+        };
     }
 
     log!(
         "Dismiss Stale Reviews",
-        required_pull_request_reviews.dismiss_stale_reviews
+        required_pull_request_reviews?dismiss_stale_reviews
     );
     log!(
         "Required Approving Review Count",
-        required_pull_request_reviews.required_approving_review_count
+        required_pull_request_reviews?required_approving_review_count
     );
     log!("Checks", required_status_checks.checks);
-    log!(
-        "User Overrides",
-        other
-            .as_ref()
-            .and_then(|o| o.restrictions.as_ref().map(|o| &o.users)),
-        branch_protection.restrictions.as_ref().map(|r| &r.users)
-    );
-    log!(
-        "Team Overrides",
-        other
-            .as_ref()
-            .and_then(|o| o.restrictions.as_ref().map(|o| &o.teams)),
-        branch_protection.restrictions.as_ref().map(|r| &r.teams)
-    );
+    log!("Restrictions", restrictions);
     Ok(())
 }
 

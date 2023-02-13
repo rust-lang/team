@@ -332,8 +332,13 @@ impl GitHub {
         struct Req<'a> {
             name: &'a str,
             description: &'a str,
+            auto_init: bool,
         }
-        let req = &Req { name, description };
+        let req = &Req {
+            name,
+            description,
+            auto_init: true,
+        };
         debug!("Creating the repo {org}/{name} with {req:?}");
         if self.dry_run {
             Ok(Repo {
@@ -805,6 +810,8 @@ pub(crate) enum RepoPermission {
     Admin,
     Maintain,
     Triage,
+    #[serde(alias = "pull")]
+    Read,
 }
 
 impl fmt::Display for RepoPermission {
@@ -814,6 +821,7 @@ impl fmt::Display for RepoPermission {
             Self::Admin => write!(f, "admin"),
             Self::Maintain => write!(f, "maintain"),
             Self::Triage => write!(f, "triage"),
+            Self::Read => write!(f, "read"),
         }
     }
 }
@@ -896,7 +904,7 @@ pub(crate) mod branch_protection {
     pub(crate) struct BranchProtection {
         pub(crate) required_status_checks: RequiredStatusChecks,
         pub(crate) enforce_admins: EnforceAdmins,
-        pub(crate) required_pull_request_reviews: PullRequestReviews,
+        pub(crate) required_pull_request_reviews: Option<PullRequestReviews>,
         pub(crate) restrictions: Option<Restrictions>,
     }
 
@@ -926,7 +934,7 @@ pub(crate) mod branch_protection {
         pub(crate) required_approving_review_count: u8,
     }
 
-    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+    #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
     pub(crate) struct Restrictions {
         pub(crate) users: Vec<UserRestriction>,
         pub(crate) teams: Vec<String>,
