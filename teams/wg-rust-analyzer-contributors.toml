@@ -1,4 +1,4 @@
-name = "wg-rls-2-triage"
+name = "wg-rust-analyzer-contributors"
 subteam-of = "compiler"
 kind = "working-group"
 

@@ -1,4 +1,4 @@
-name = "wg-rls-2"
+name = "wg-rust-analyzer"
 subteam-of = "compiler"
 kind = "working-group"
 
@@ -8,9 +8,9 @@ members = ["matklad", "lnicola", "Veykril", "flodiebold"]
 alumni = ["jonas-schievink"]
 
 [website]
-name = "RLS 2.0 working group"
+name = "rust-analyzer working group"
 description = "Experimenting with a new compiler architecture tailored for IDEs"
-repo = "https://rust-lang.github.io/compiler-team/working-groups/rls-2.0/"
+repo = "https://rust-lang.github.io/compiler-team/working-groups/rust-analyzer/"
 zulip-stream = "t-compiler/rust-analyzer"
 
 [permissions]
