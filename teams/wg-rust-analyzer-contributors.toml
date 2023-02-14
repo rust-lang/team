@@ -12,5 +12,8 @@ members = [
     "HKalbasi",
 ]
 
+[permissions]
+bors.rust-analyzer.review = true
+
 [[github]]
 orgs = ["rust-lang", "rust-analyzer"]
