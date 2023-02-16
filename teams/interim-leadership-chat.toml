@@ -1,0 +1,34 @@
+# Temporary, for the purposes of using rfcbot to ratify one RFC
+
+name = "interim-leadership-chat"
+
+[people]
+leads = []
+members = [
+    "badboy",
+    "cuviper",
+    "jntrnr",
+    "joshtriplett",
+    "jtgeibel",
+    "khionu",
+    "m-ou-se",
+    "Manishearth",
+    "Mark-Simulacrum",
+    "nikomatsakis",
+    "pietroalbini",
+    "pnkfelix",
+    "rylev",
+    "technetos",
+    "tmandry",
+    "Turbo87",
+    "yaahc",
+]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[rfcbot]
+label = "T-interim-leadership-chat"
+name = "Interim Leadership Chat"
+ping = "rust-lang/interim-leadership-chat"
+
