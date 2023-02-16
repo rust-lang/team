@@ -1,6 +1,5 @@
-name = "wg-rust-analyzer-contributors"
+name = "rust-analyzer-contributors"
 subteam-of = "compiler"
-kind = "working-group"
 
 [people]
 leads = []

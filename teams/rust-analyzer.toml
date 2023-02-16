@@ -1,6 +1,5 @@
-name = "wg-rust-analyzer"
+name = "rust-analyzer"
 subteam-of = "compiler"
-kind = "working-group"
 
 [people]
 leads = ["Veykril"]
@@ -8,9 +7,8 @@ members = ["matklad", "lnicola", "Veykril", "flodiebold"]
 alumni = ["jonas-schievink"]
 
 [website]
-name = "rust-analyzer working group"
+name = "rust-analyzer team"
 description = "Experimenting with a new compiler architecture tailored for IDEs"
-repo = "https://rust-lang.github.io/compiler-team/working-groups/rust-analyzer/"
 zulip-stream = "t-compiler/rust-analyzer"
 
 [permissions]
