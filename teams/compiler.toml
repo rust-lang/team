@@ -67,6 +67,10 @@ extra-people = [
     "jseyfried",
 ]
 
+[[lists]]
+address = "all-compiler-teams@rust-lang.org"
+include-subteam-members = true
+
 [[zulip-groups]]
 name = "T-compiler"
 

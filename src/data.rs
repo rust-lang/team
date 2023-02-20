@@ -120,6 +120,14 @@ impl Data {
         self.teams.values()
     }
 
+    pub(crate) fn subteams_of<'a>(
+        &'a self,
+        team_name: &'a str,
+    ) -> impl Iterator<Item = &Team> + 'a {
+        self.teams()
+            .filter(move |t| t.subteam_of().map(|t| t == team_name).unwrap_or_default())
+    }
+
     pub(crate) fn person(&self, name: &str) -> Option<&Person> {
         self.people.get(name)
     }

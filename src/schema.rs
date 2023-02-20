@@ -279,6 +279,11 @@ impl Team {
             } else {
                 HashSet::new()
             };
+            if raw_list.include_subteam_members {
+                for subteam in data.subteams_of(&self.name) {
+                    members.extend(subteam.members(data));
+                }
+            }
             for person in &raw_list.extra_people {
                 members.insert(person.as_str());
             }
@@ -563,6 +568,8 @@ pub(crate) struct TeamList {
     pub(crate) address: String,
     #[serde(default = "default_true")]
     pub(crate) include_team_members: bool,
+    #[serde(default)]
+    pub(crate) include_subteam_members: bool,
     #[serde(default)]
     pub(crate) extra_people: Vec<String>,
     #[serde(default)]
