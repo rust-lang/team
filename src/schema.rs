@@ -189,6 +189,20 @@ impl Team {
         self.subteam_of.as_deref()
     }
 
+    // The team's top-level team.
+    //
+    // Return's `None` if the team is itself a top-level team
+    pub(crate) fn top_level_team<'a>(&'a self, data: &'a Data) -> Option<&str> {
+        let parent = data.team(self.subteam_of()?)?;
+        if parent.subteam_of().is_some() {
+            // If the parent is itself a subteam, recurse
+            parent.top_level_team(data)
+        } else {
+            // Else the parent is the top-level team
+            Some(&parent.name)
+        }
+    }
+
     pub(crate) fn leads(&self) -> HashSet<&str> {
         self.people.leads.iter().map(|s| s.as_str()).collect()
     }

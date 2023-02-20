@@ -124,8 +124,11 @@ impl Data {
         &'a self,
         team_name: &'a str,
     ) -> impl Iterator<Item = &Team> + 'a {
-        self.teams()
-            .filter(move |t| t.subteam_of().map(|t| t == team_name).unwrap_or_default())
+        self.teams().filter(move |t| {
+            t.top_level_team(self)
+                .map(|t| t == team_name)
+                .unwrap_or_default()
+        })
     }
 
     pub(crate) fn person(&self, name: &str) -> Option<&Person> {
