@@ -68,7 +68,7 @@ extra-people = [
 ]
 
 [[lists]]
-address = "all-compiler-teams@rust-lang.org"
+address = "compiler-and-subteams@rust-lang.org"
 include-subteam-members = true
 
 [[zulip-groups]]
