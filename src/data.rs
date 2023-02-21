@@ -124,10 +124,9 @@ impl Data {
         &'a self,
         team_name: &'a str,
     ) -> impl Iterator<Item = &Team> + 'a {
-        self.teams().filter(move |t| {
-            t.top_level_team(self)
-                .map(|t| t == team_name)
-                .unwrap_or_default()
+        self.team(team_name).into_iter().flat_map(move |team| {
+            self.teams()
+                .filter(move |maybe_subteam| team.is_parent_of(self, maybe_subteam))
         })
     }
 

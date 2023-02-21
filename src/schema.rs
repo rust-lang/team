@@ -189,18 +189,24 @@ impl Team {
         self.subteam_of.as_deref()
     }
 
-    // The team's top-level team.
-    //
-    // Return's `None` if the team is itself a top-level team
-    pub(crate) fn top_level_team<'a>(&'a self, data: &'a Data) -> Option<&str> {
-        let parent = data.team(self.subteam_of()?)?;
-        if parent.subteam_of().is_some() {
-            // If the parent is itself a subteam, recurse
-            parent.top_level_team(data)
-        } else {
-            // Else the parent is the top-level team
-            Some(&parent.name)
+    // Return's whether the provided team is a subteam of this team
+    pub(crate) fn is_parent_of<'a>(&'a self, data: &'a Data, subteam: &Team) -> bool {
+        let mut subteam = Some(subteam);
+        while let Some(s) = subteam {
+            // Get subteam's parent
+            let Some(parent) = s.subteam_of() else {
+                // The current subteam is a top level team.
+                // Therefore this team cannot be its parent.
+                return false;
+            };
+            // If the parent is this team, return true
+            if parent == self.name {
+                return true;
+            }
+            // Otherwise try the test again with the parent
+            subteam = data.team(parent);
         }
+        false
     }
 
     pub(crate) fn leads(&self) -> HashSet<&str> {
