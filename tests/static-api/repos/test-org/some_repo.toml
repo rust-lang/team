@@ -6,6 +6,6 @@ bots = []
 [access.teams]
 foo = "admin"
 
-[[branch]]
-name = "master"
+[[branch-protections]]
+pattern = "master"
 ci-checks = ["CI"]

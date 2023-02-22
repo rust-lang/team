@@ -9,5 +9,5 @@ crate-maintainers = 'maintain'
 [access.individuals]
 alexcrichton = 'write'
 
-[[branch]]
-name = 'master'
+[[branch-protections]]
+pattern = 'master'

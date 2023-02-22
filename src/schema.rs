@@ -648,8 +648,8 @@ pub(crate) struct Repo {
     pub description: String,
     pub bots: Vec<Bot>,
     pub access: RepoAccess,
-    #[serde(rename = "branch", default)]
-    pub branches: Vec<Branch>,
+    #[serde(default)]
+    pub branch_protections: Vec<BranchProtection>,
 }
 
 #[derive(serde_derive::Deserialize, Debug, Clone)]
@@ -680,8 +680,8 @@ pub(crate) enum RepoPermission {
 
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
-pub(crate) struct Branch {
-    pub name: String,
+pub(crate) struct BranchProtection {
+    pub pattern: String,
     #[serde(default)]
     pub ci_checks: Vec<String>,
     #[serde(default)]

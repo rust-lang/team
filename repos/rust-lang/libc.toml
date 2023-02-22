@@ -10,5 +10,5 @@ bots = [
 [access.teams]
 crate-maintainers = 'maintain'
 
-[[branch]]
-name = 'master'
+[[branch-protections]]
+pattern = 'master'

@@ -7,7 +7,7 @@ bots = []
 core = "admin"
 mods = "maintain"
 
-[[branch]]
-name = "master"
+[[branch-protections]]
+pattern = "master"
 ci-checks = ["CI"]
 dismiss-stale-review = true
