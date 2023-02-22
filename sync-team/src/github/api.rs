@@ -675,7 +675,7 @@ impl GitHub {
                 id: &'a str,
             }
             let query = "
-                mutation($id: String!) {
+                mutation($id: ID!) {
                     deleteBranchProtectionRule(input: { branchProtectionRuleId: $id }) {
                         clientMutationId
                     }
