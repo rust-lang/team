@@ -6,7 +6,7 @@ use reqwest::{
     header::{self, HeaderValue},
     Method, StatusCode,
 };
-use serde::de::DeserializeOwned;
+use serde::{de::DeserializeOwned, Deserialize};
 use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
@@ -342,10 +342,10 @@ impl GitHub {
         debug!("Creating the repo {org}/{name} with {req:?}");
         if self.dry_run {
             Ok(Repo {
+                id: String::from("ID"),
                 name: name.to_string(),
                 org: org.to_string(),
                 description: Some(description.to_string()),
-                default_branch: String::from("main"),
             })
         } else {
             Ok(self
@@ -496,114 +496,167 @@ impl GitHub {
         Ok(())
     }
 
-    /// Get the head commit of the supplied branch
-    pub(crate) fn branch(
+    /// Get branch_protections
+    pub(crate) fn branch_protections(
         &self,
         org: &str,
-        repo_name: &str,
-        branch_name: &str,
-    ) -> anyhow::Result<Option<String>> {
-        let branch = self.send_option::<Branch>(
-            Method::GET,
-            &format!("repos/{org}/{repo_name}/branches/{branch_name}"),
-        )?;
-        Ok(branch.map(|b| b.commit.sha))
+        repo: &str,
+    ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>> {
+        #[derive(serde::Serialize)]
+        struct Params<'a> {
+            org: &'a str,
+            repo: &'a str,
+        }
+        static QUERY: &str = "
+            query($org:String!,$repo:String!) {
+                repository(owner:$org, name:$repo) {
+                    branchProtectionRules(first:100) {
+                        nodes { 
+                            id,
+                            pattern,
+                            isAdminEnforced,
+                            dismissesStaleReviews,
+                            requiredStatusCheckContexts,
+                            requiredApprovingReviewCount
+                            pushAllowances(first: 100) {
+                                nodes {
+                                    actor {
+                                        ... on Actor {
+                                            login
+                                        }
+                                    }
+                                }
+                            }
+                         }
+                    }
+                }
+            }
+        ";
+
+        #[derive(serde::Deserialize)]
+        struct Wrapper {
+            repository: Respository,
+        }
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct Respository {
+            branch_protection_rules: GraphNodes<BranchProtectionWrapper>,
+        }
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct BranchProtectionWrapper {
+            id: String,
+            #[serde(flatten)]
+            protection: BranchProtection,
+        }
+
+        let mut result = HashMap::new();
+        let res: Wrapper = self.graphql(QUERY, Params { org, repo })?;
+        for node in res
+            .repository
+            .branch_protection_rules
+            .nodes
+            .into_iter()
+            .flatten()
+        {
+            result.insert(node.protection.pattern.clone(), (node.id, node.protection));
+        }
+        Ok(result)
     }
 
-    /// Create a branch
-    pub(crate) fn create_branch(
+    /// Create or update a branch protection.
+    pub(crate) fn upsert_branch_protection(
         &self,
-        org: &str,
-        repo_name: &str,
-        branch_name: &str,
-        commit: &str,
+        op: BranchProtectionOp,
+        pattern: &str,
+        branch_protection: &BranchProtection,
     ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize, Debug)]
-        struct Req<'a> {
-            r#ref: &'a str,
-            sha: &'a str,
+        debug!("Updating '{}' branch protection", pattern);
+        #[derive(Debug, serde::Serialize)]
+        #[serde(rename_all = "camelCase")]
+        struct Params<'a> {
+            id: &'a str,
+            pattern: &'a str,
+            contexts: &'a [String],
+            dismiss_stale: bool,
+            review_count: u8,
+            push_actor_ids: &'a [String],
         }
-        debug!(
-            "Creating branch in {}/{}: {} with commit {}",
-            org, repo_name, branch_name, commit
-        );
+        let mutation_name = match op {
+            BranchProtectionOp::CreateForRepo(_) => "createBranchProtectionRule",
+            BranchProtectionOp::UpdateBranchProtection(_) => "updateBranchProtectionRule",
+        };
+        let id_field = match op {
+            BranchProtectionOp::CreateForRepo(_) => "repositoryId",
+            BranchProtectionOp::UpdateBranchProtection(_) => "branchProtectionRuleId",
+        };
+        let id = &match op {
+            BranchProtectionOp::CreateForRepo(id) => id,
+            BranchProtectionOp::UpdateBranchProtection(id) => id,
+        };
+        let query = format!("
+        mutation($id: String!, $pattern:String!, $contexts: [String!], $dismissStale: bool, $reviewCount: int, $pushActorIds: [ID!]) {{
+            {mutation_name}(input: {{
+                {id_field}: $id, 
+                pattern: $pattern, 
+                requiresStatusChecks: true, 
+                requiredStatusCheckContexts: $contexts, 
+                isAdminEnforced: true, 
+                requiredApprovingReviewCount: $reviewCount, 
+                dismissesStaleReviews: $dismissStale, 
+                requiresApprovingReviews:true
+                pushActorIds: $pushActorIds
+            }}) {{
+              branchProtectionRule {{
+                id
+              }}
+            }}
+          }}
+        ");
+        let mut push_actor_ids = vec![];
+        for name in &branch_protection.push_allowances {
+            push_actor_ids.push(self.user_id(name)?);
+        }
+
         if !self.dry_run {
-            self.send(
-                Method::POST,
-                &format!("repos/{org}/{repo_name}/git/refs"),
-                &Req {
-                    r#ref: &format!("refs/heads/{branch_name}"),
-                    sha: commit,
+            self.graphql(
+                &query,
+                Params {
+                    id,
+                    pattern,
+                    contexts: &branch_protection.required_status_check_contexts,
+                    dismiss_stale: branch_protection.dismisses_stale_reviews,
+                    review_count: branch_protection.required_approving_review_count,
+                    push_actor_ids: &push_actor_ids,
                 },
             )?;
         }
         Ok(())
     }
 
-    /// Get protected branches from a repo
-    pub(crate) fn protected_branches(&self, repo: &Repo) -> anyhow::Result<HashSet<String>> {
-        let mut names = HashSet::new();
-        self.rest_paginated(
-            &Method::GET,
-            format!("repos/{}/{}/branches?protected=true", repo.org, repo.name),
-            |resp: Vec<Branch>| {
-                names.extend(resp.into_iter().map(|b| b.name));
-
-                Ok(())
-            },
-        )?;
-        Ok(names)
-    }
-
-    pub(crate) fn branch_protection(
-        &self,
-        org: &str,
-        repo_name: &str,
-        branch_name: &str,
-    ) -> anyhow::Result<Option<BranchProtection>> {
-        self.send_option::<BranchProtection>(
-            Method::GET,
-            &format!("repos/{org}/{repo_name}/branches/{branch_name}/protection"),
-        )
-    }
-
-    /// Update a branch's permissions.
-    ///
-    /// Returns `Ok(true)` on success, `Ok(false)` if the branch doesn't exist, and `Err(_)` otherwise.
-    pub(crate) fn update_branch_protection(
-        &self,
-        org: &str,
-        repo_name: &str,
-        branch_name: &str,
-        branch_protection: &BranchProtection,
-    ) -> anyhow::Result<bool> {
-        debug!(
-            "Updating branch protection on repo {}/{} for {}: {}",
-            org,
-            repo_name,
-            branch_name,
-            serde_json::to_string_pretty(&branch_protection)
-                .unwrap_or_else(|_| "<invalid json>".to_string())
-        );
-        if !self.dry_run {
-            let resp = self
-                .req(
-                    Method::PUT,
-                    &format!("repos/{org}/{repo_name}/branches/{branch_name}/protection"),
-                )?
-                .json(branch_protection)
-                .send()?;
-            match resp.status() {
-                StatusCode::OK => Ok(true),
-                StatusCode::NOT_FOUND => Ok(false),
-                _ => {
-                    resp.error_for_status()?;
-                    Ok(false)
+    fn user_id(&self, name: &str) -> anyhow::Result<String> {
+        #[derive(serde::Serialize)]
+        struct Params<'a> {
+            name: &'a str,
+        }
+        let query = "
+            query($name: String!) {
+                user(login: $name) {
+                    id
                 }
             }
-        } else {
-            Ok(true)
+        ";
+        #[derive(serde::Deserialize)]
+        struct Data {
+            user: User,
         }
+        #[derive(serde::Deserialize)]
+        struct User {
+            id: String,
+        }
+
+        let data: Data = self.graphql(query, Params { name })?;
+        Ok(data.user.id)
     }
 
     /// Delete a branch protection
@@ -611,19 +664,24 @@ impl GitHub {
         &self,
         org: &str,
         repo_name: &str,
-        branch: &str,
+        id: &str,
     ) -> anyhow::Result<()> {
-        debug!(
-            "Removing protection in {}/{} from {} branch",
-            org, repo_name, branch
-        );
+        debug!("Removing protection in {}/{}", org, repo_name);
+        println!("Remove protection {id}");
         if !self.dry_run {
-            self.req(
-                Method::DELETE,
-                &format!("repos/{org}/{repo_name}/branches/{branch}/protection"),
-            )?
-            .send()?
-            .error_for_status()?;
+            #[derive(serde::Serialize)]
+            #[serde(rename_all = "camelCase")]
+            struct Params<'a> {
+                id: &'a str,
+            }
+            let query = "
+                mutation($id: String!) {
+                    deleteBranchProtectionRule(input: { branchProtectionRuleId: $id }) {
+                        clientMutationId
+                    }
+                }
+            ";
+            self.graphql(query, Params { id })?;
         }
         Ok(())
     }
@@ -828,18 +886,18 @@ impl fmt::Display for RepoPermission {
 
 #[derive(serde::Deserialize, Debug)]
 pub(crate) struct Repo {
+    #[serde(rename = "node_id")]
+    pub(crate) id: String,
     pub(crate) name: String,
     #[serde(alias = "owner", deserialize_with = "repo_owner")]
     pub(crate) org: String,
     pub(crate) description: Option<String>,
-    pub(crate) default_branch: String,
 }
 
 fn repo_owner<'de, D>(deserializer: D) -> Result<String, D::Error>
 where
     D: serde::de::Deserializer<'de>,
 {
-    use serde::de::Deserialize;
     let owner = RepoOwner::deserialize(deserializer)?;
     Ok(owner.login)
 }
@@ -886,116 +944,55 @@ fn team_node_id(id: usize) -> String {
     base64::encode(format!("04:Team{id}"))
 }
 
-#[derive(serde::Deserialize, Debug)]
-pub(crate) struct Branch {
-    pub(crate) name: String,
-    pub(crate) commit: Commit,
+#[derive(Clone, Debug, PartialEq, Eq, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct BranchProtection {
+    pub(crate) pattern: String,
+    pub(crate) is_admin_enforced: bool,
+    pub(crate) dismisses_stale_reviews: bool,
+    #[serde(default, deserialize_with = "nullable")]
+    pub(crate) required_approving_review_count: u8,
+    #[serde(default, deserialize_with = "nullable")]
+    pub(crate) required_status_check_contexts: Vec<String>,
+    #[serde(deserialize_with = "allowances")]
+    pub(crate) push_allowances: Vec<String>,
 }
 
-#[derive(serde::Deserialize, Debug)]
-pub(crate) struct Commit {
-    pub(crate) sha: String,
+fn nullable<'de, D, T>(deserializer: D) -> Result<T, D::Error>
+where
+    D: serde::de::Deserializer<'de>,
+    T: Default + DeserializeOwned,
+{
+    let opt = Option::deserialize(deserializer)?;
+    Ok(opt.unwrap_or_default())
 }
 
-pub(crate) mod branch_protection {
-    use super::*;
-
-    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
-    pub(crate) struct BranchProtection {
-        pub(crate) required_status_checks: RequiredStatusChecks,
-        pub(crate) enforce_admins: EnforceAdmins,
-        pub(crate) required_pull_request_reviews: Option<PullRequestReviews>,
-        pub(crate) restrictions: Option<Restrictions>,
+fn allowances<'de, D>(deserializer: D) -> Result<Vec<String>, D::Error>
+where
+    D: serde::de::Deserializer<'de>,
+{
+    #[derive(Deserialize)]
+    struct Allowances {
+        nodes: Vec<Actor>,
+    }
+    #[derive(Deserialize)]
+    struct Actor {
+        actor: Login,
+    }
+    #[derive(Deserialize)]
+    struct Login {
+        login: String,
     }
 
-    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
-    pub(crate) struct RequiredStatusChecks {
-        pub(crate) strict: bool,
-        pub(crate) checks: Vec<Check>,
-    }
-
-    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
-    pub(crate) struct Check {
-        pub(crate) context: String,
-    }
-
-    impl std::fmt::Debug for Check {
-        fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-            f.write_str(&self.context)
-        }
-    }
-
-    #[derive(Clone, PartialEq, serde::Serialize, serde::Deserialize)]
-    pub(crate) struct PullRequestReviews {
-        // Even though we don't want dismissal restrictions, it cannot be omitted
-        #[serde(default)]
-        pub(crate) dismissal_restrictions: HashMap<(), ()>,
-        pub(crate) dismiss_stale_reviews: bool,
-        pub(crate) required_approving_review_count: u8,
-    }
-
-    #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
-    pub(crate) struct Restrictions {
-        pub(crate) users: Vec<UserRestriction>,
-        pub(crate) teams: Vec<String>,
-    }
-
-    #[derive(Clone, serde::Serialize, serde::Deserialize)]
-    #[serde(untagged)]
-    pub(crate) enum EnforceAdmins {
-        // Used for serialization
-        Bool(bool),
-        // Used for deserialization
-        Object { enabled: bool },
-    }
-
-    impl EnforceAdmins {
-        fn enabled(&self) -> bool {
-            match *self {
-                EnforceAdmins::Bool(e) => e,
-                EnforceAdmins::Object { enabled } => enabled,
-            }
-        }
-    }
-
-    impl PartialEq for EnforceAdmins {
-        fn eq(&self, other: &Self) -> bool {
-            self.enabled() == other.enabled()
-        }
-    }
-
-    #[derive(Clone, serde::Serialize, serde::Deserialize)]
-    #[serde(untagged)]
-    pub(crate) enum UserRestriction {
-        // Used for serialization
-        Name(String),
-        // Used for deserialization
-        Object {
-            #[serde(rename = "login")]
-            name: String,
-        },
-    }
-
-    impl UserRestriction {
-        fn name(&self) -> &str {
-            match self {
-                Self::Name(n) => n,
-                Self::Object { name } => name,
-            }
-        }
-    }
-
-    impl std::fmt::Debug for UserRestriction {
-        fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-            f.write_str(self.name())
-        }
-    }
-
-    impl PartialEq for UserRestriction {
-        fn eq(&self, other: &Self) -> bool {
-            self.name() == other.name()
-        }
-    }
+    let allowances = Allowances::deserialize(deserializer)?;
+    Ok(allowances
+        .nodes
+        .into_iter()
+        .map(|a| a.actor.login)
+        .collect())
 }
 
-pub(crate) use branch_protection::BranchProtection;
+pub(crate) enum BranchProtectionOp {
+    CreateForRepo(String),
+    UpdateBranchProtection(String),
+}
