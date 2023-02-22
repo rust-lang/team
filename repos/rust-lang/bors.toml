@@ -1,6 +1,5 @@
 org = "rust-lang"
 name = "bors"
-
 description = "Rust implementation of bors used for various Rust components (e.g. the compiler)."
 bots = ["rustbot"]
 
@@ -8,7 +7,3 @@ bots = ["rustbot"]
 infra = "write"
 infra-bors = "write"
 mods = "maintain"
-
-[[branch-protections]]
-pattern = "main"
-ci-checks = ["Test"]
