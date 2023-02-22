@@ -13,17 +13,6 @@
   "branch_protections": [
     {
       "pattern": "master",
-      "name": "master",
-      "ci_checks": [
-        "CI"
-      ],
-      "dismiss_stale_review": false
-    }
-  ],
-  "branches": [
-    {
-      "pattern": "master",
-      "name": "master",
       "ci_checks": [
         "CI"
       ],

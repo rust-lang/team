@@ -41,7 +41,6 @@ impl<'a> Generator<'a> {
                 .iter()
                 .map(|b| v1::BranchProtection {
                     pattern: b.pattern.clone(),
-                    name: b.pattern.clone(),
                     ci_checks: b.ci_checks.clone(),
                     dismiss_stale_review: b.dismiss_stale_review,
                 })
@@ -94,8 +93,7 @@ impl<'a> Generator<'a> {
                         }
                     })
                     .collect(),
-                branch_protections: branch_protections.clone(),
-                branches: branch_protections,
+                branch_protections: branch_protections,
             };
 
             self.add(&format!("v1/repos/{}.json", r.name), &repo)?;
