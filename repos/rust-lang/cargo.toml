@@ -1,0 +1,10 @@
+org = "rust-lang"
+name = "cargo"
+description = "The Rust package manager"
+bots = ["bors", "rustbot"]
+
+[access.teams]
+cargo = "write"
+
+[[branch]]
+name = "master"
