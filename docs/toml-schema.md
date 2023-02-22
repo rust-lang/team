@@ -87,6 +87,8 @@ access-level = "everyone"
 # It's useful if you want to create the list with a different set of members
 # It's optional, and the default is `true`.
 include-team-members = true
+# Include all members of the team's subteams (optional - default `false`)
+include-subteam-members = false
 # Include the following extra people in the mailing list. Their email address
 # will be fetched from their TOML in people/ (optional).
 extra-people = [

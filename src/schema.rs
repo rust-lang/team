@@ -189,6 +189,26 @@ impl Team {
         self.subteam_of.as_deref()
     }
 
+    // Return's whether the provided team is a subteam of this team
+    pub(crate) fn is_parent_of<'a>(&'a self, data: &'a Data, subteam: &Team) -> bool {
+        let mut subteam = Some(subteam);
+        while let Some(s) = subteam {
+            // Get subteam's parent
+            let Some(parent) = s.subteam_of() else {
+                // The current subteam is a top level team.
+                // Therefore this team cannot be its parent.
+                return false;
+            };
+            // If the parent is this team, return true
+            if parent == self.name {
+                return true;
+            }
+            // Otherwise try the test again with the parent
+            subteam = data.team(parent);
+        }
+        false
+    }
+
     pub(crate) fn leads(&self) -> HashSet<&str> {
         self.people.leads.iter().map(|s| s.as_str()).collect()
     }
@@ -279,6 +299,11 @@ impl Team {
             } else {
                 HashSet::new()
             };
+            if raw_list.include_subteam_members {
+                for subteam in data.subteams_of(&self.name) {
+                    members.extend(subteam.members(data));
+                }
+            }
             for person in &raw_list.extra_people {
                 members.insert(person.as_str());
             }
@@ -563,6 +588,8 @@ pub(crate) struct TeamList {
     pub(crate) address: String,
     #[serde(default = "default_true")]
     pub(crate) include_team_members: bool,
+    #[serde(default)]
+    pub(crate) include_subteam_members: bool,
     #[serde(default)]
     pub(crate) extra_people: Vec<String>,
     #[serde(default)]
