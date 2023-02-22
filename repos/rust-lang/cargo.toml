@@ -6,5 +6,8 @@ bots = ["bors", "rustbot"]
 [access.teams]
 cargo = "write"
 
-[[branch]]
-name = "master"
+[[branch-protections]]
+pattern = "master"
+
+[[branch-protections]]
+pattern = "rust-1.*"
