@@ -204,10 +204,10 @@ impl SyncGitHub {
                     Default::default(),
                 )?;
                 let mut branch_protections = Vec::new();
-                for branch in &expected_repo.branches {
+                for branch_protection in &expected_repo.branch_protections {
                     branch_protections.push((
-                        branch.name.clone(),
-                        construct_branch_protection(expected_repo, branch),
+                        branch_protection.pattern.clone(),
+                        construct_branch_protection(expected_repo, branch_protection),
                     ));
                 }
 
@@ -268,8 +268,8 @@ impl SyncGitHub {
         let mut actual_protections = self
             .github
             .branch_protections(&actual_repo.org, &actual_repo.name)?;
-        for branch_protection in &expected_repo.branches {
-            let actual_branch_protection = actual_protections.remove(&branch_protection.name);
+        for branch_protection in &expected_repo.branch_protections {
+            let actual_branch_protection = actual_protections.remove(&branch_protection.pattern);
             let expected_branch_protection =
                 construct_branch_protection(expected_repo, branch_protection);
             let operation = {
@@ -287,7 +287,7 @@ impl SyncGitHub {
                 }
             };
             branch_protection_diffs.push(BranchProtectionDiff {
-                pattern: branch_protection.name.clone(),
+                pattern: branch_protection.pattern.clone(),
                 operation,
             })
         }
@@ -410,7 +410,7 @@ fn convert_permission(p: &rust_team_data::v1::RepoPermission) -> RepoPermission 
 
 fn construct_branch_protection(
     expected_repo: &rust_team_data::v1::Repo,
-    branch: &rust_team_data::v1::Branch,
+    branch_protection: &rust_team_data::v1::BranchProtection,
 ) -> api::BranchProtection {
     let required_approving_review_count = u8::from(!expected_repo.bots.contains(&Bot::Bors));
     let push_allowances = expected_repo
@@ -419,11 +419,11 @@ fn construct_branch_protection(
         .then(|| vec!["bors".to_owned()])
         .unwrap_or_default();
     api::BranchProtection {
-        pattern: branch.name.clone(),
+        pattern: branch_protection.pattern.clone(),
         is_admin_enforced: true,
-        dismisses_stale_reviews: branch.dismiss_stale_review,
+        dismisses_stale_reviews: branch_protection.dismiss_stale_review,
         required_approving_review_count,
-        required_status_check_contexts: branch.ci_checks.clone(),
+        required_status_check_contexts: branch_protection.ci_checks.clone(),
         push_allowances,
     }
 }
