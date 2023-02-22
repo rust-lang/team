@@ -595,7 +595,7 @@ impl GitHub {
             BranchProtectionOp::UpdateBranchProtection(id) => id,
         };
         let query = format!("
-        mutation($id: String!, $pattern:String!, $contexts: [String!], $dismissStale: Boolean, $reviewCount: Int, $pushActorIds: [ID!]) {{
+        mutation($id: ID!, $pattern:String!, $contexts: [String!], $dismissStale: Boolean, $reviewCount: Int, $pushActorIds: [ID!]) {{
             {mutation_name}(input: {{
                 {id_field}: $id, 
                 pattern: $pattern, 
