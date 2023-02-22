@@ -619,7 +619,7 @@ impl GitHub {
         }
 
         if !self.dry_run {
-            self.graphql(
+            let _: serde_json::Value = self.graphql(
                 &query,
                 Params {
                     id,
@@ -681,7 +681,7 @@ impl GitHub {
                     }
                 }
             ";
-            self.graphql(query, Params { id })?;
+            let _: serde_json::Value = self.graphql(query, Params { id })?;
         }
         Ok(())
     }
