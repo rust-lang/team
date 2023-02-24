@@ -1,6 +1,5 @@
-name = "wg-rls-2-triage"
+name = "rust-analyzer-contributors"
 subteam-of = "compiler"
-kind = "working-group"
 
 [people]
 leads = []
@@ -11,6 +10,9 @@ members = [
     "lowr",
     "HKalbasi",
 ]
+
+[permissions]
+bors.rust-analyzer.review = true
 
 [[github]]
 orgs = ["rust-lang", "rust-analyzer"]

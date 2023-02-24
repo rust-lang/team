@@ -4,8 +4,8 @@ description = "A Rust compiler front-end for IDEs"
 bots = ["bors", "rustbot"]
 
 [access.teams]
-wg-rls-2 = "write"
-wg-rls-2-triage = "triage"
+rust-analyzer = "write"
+rust-analyzer-contributors = "triage"
 
 [[branch-protections]]
 pattern = "master"
