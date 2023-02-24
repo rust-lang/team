@@ -8,7 +8,7 @@ alumni = ["jonas-schievink"]
 
 [website]
 name = "rust-analyzer team"
-description = "Experimenting with a new compiler architecture tailored for IDEs"
+description = "Rust IDE support and error-resilient compiler front-end"
 zulip-stream = "t-compiler/rust-analyzer"
 
 [permissions]
