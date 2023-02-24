@@ -580,6 +580,7 @@ impl GitHub {
             contexts: &'a [String],
             dismiss_stale: bool,
             review_count: u8,
+            restricts_pushes: bool,
             push_actor_ids: &'a [String],
         }
         let mutation_name = match op {
@@ -595,7 +596,7 @@ impl GitHub {
             BranchProtectionOp::UpdateBranchProtection(id) => id,
         };
         let query = format!("
-        mutation($id: ID!, $pattern:String!, $contexts: [String!], $dismissStale: Boolean, $reviewCount: Int, $pushActorIds: [ID!]) {{
+        mutation($id: ID!, $pattern:String!, $contexts: [String!], $dismissStale: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean) {{
             {mutation_name}(input: {{
                 {id_field}: $id, 
                 pattern: $pattern, 
@@ -604,7 +605,8 @@ impl GitHub {
                 isAdminEnforced: true, 
                 requiredApprovingReviewCount: $reviewCount, 
                 dismissesStaleReviews: $dismissStale, 
-                requiresApprovingReviews:true
+                requiresApprovingReviews:true,
+                restrictsPushes: $restrictsPushes,
                 pushActorIds: $pushActorIds
             }}) {{
               branchProtectionRule {{
@@ -627,6 +629,10 @@ impl GitHub {
                     contexts: &branch_protection.required_status_check_contexts,
                     dismiss_stale: branch_protection.dismisses_stale_reviews,
                     review_count: branch_protection.required_approving_review_count,
+                    // We restrict merges, if we have explicitly set some actors to be
+                    // able to merge (i.e., we allow allow those with write permissions
+                    // to merge *or* we only allow those in `push_actor_ids`)
+                    restricts_pushes: push_actor_ids.is_empty(),
                     push_actor_ids: &push_actor_ids,
                 },
             )?;
