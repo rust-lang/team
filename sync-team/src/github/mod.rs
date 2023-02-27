@@ -75,7 +75,11 @@ impl SyncGitHub {
                     let unseen_github_teams = match unseen_github_teams.get_mut(&github_team.org) {
                         Some(ts) => ts,
                         None => {
-                            let ts = self.github.org_teams(&github_team.org)?;
+                            let ts: HashMap<_, _> = self
+                                .github
+                                .org_teams(&github_team.org)?
+                                .into_iter()
+                                .collect();
                             unseen_github_teams
                                 .entry(github_team.org.clone())
                                 .or_insert(ts)
@@ -98,15 +102,10 @@ impl SyncGitHub {
                     .map(move |t| (org.clone(), t))
             })
             // Don't delete the special bot teams
-            .filter(|(_, remaining_github_team)| {
+            .filter(|(_, (remaining_github_team, _))| {
                 !BOTS_TEAMS.contains(&remaining_github_team.as_str())
             })
-            .map(|(org, remaining_github_team)| {
-                TeamDiff::Delete(DeleteTeamDiff {
-                    org,
-                    name: remaining_github_team,
-                })
-            });
+            .map(|(org, (name, slug))| TeamDiff::Delete(DeleteTeamDiff { org, name, slug }));
 
         diffs.extend(delete_diffs);
 
@@ -920,11 +919,12 @@ impl MemberDiff {
 struct DeleteTeamDiff {
     org: String,
     name: String,
+    slug: String,
 }
 
 impl DeleteTeamDiff {
     fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
-        sync.github.delete_team(&self.org, &self.name)?;
+        sync.github.delete_team(&self.org, &self.slug)?;
         Ok(())
     }
 }
