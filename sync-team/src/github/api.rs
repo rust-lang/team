@@ -180,15 +180,10 @@ impl GitHub {
     pub(crate) fn delete_team(&self, org: &str, slug: &str) -> anyhow::Result<()> {
         debug!("Deleting team with slug '{slug}' in '{org}'");
         if !self.dry_run {
-            let resp = self
-                .req(Method::DELETE, &format!("orgs/{org}/teams/{slug}"))?
-                .send()?;
-            match resp.status() {
-                StatusCode::OK | StatusCode::NOT_FOUND => {}
-                _ => {
-                    resp.error_for_status()?;
-                }
-            }
+            let method = Method::DELETE;
+            let url = &format!("orgs/{org}/teams/{slug}");
+            let resp = self.req(method.clone(), url)?.send()?;
+            allow_not_found(resp, method, url)?;
         }
         Ok(())
     }
@@ -328,12 +323,10 @@ impl GitHub {
     ) -> anyhow::Result<()> {
         debug!("Removing membership of '{user}' from team '{team}' in org '{org}'");
         if !self.dry_run {
-            self.req(
-                Method::DELETE,
-                &format!("orgs/{org}/teams/{team}/memberships/{user}"),
-            )?
-            .send()?
-            .error_for_status()?;
+            let url = &format!("orgs/{org}/teams/{team}/memberships/{user}");
+            let method = Method::DELETE;
+            let resp = self.req(method.clone(), url)?.send()?;
+            allow_not_found(resp, method, url)?;
         }
 
         Ok(())
@@ -489,12 +482,10 @@ impl GitHub {
     ) -> anyhow::Result<()> {
         debug!("Removing team {team} from repo {org}/{repo}");
         if !self.dry_run {
-            self.req(
-                Method::DELETE,
-                &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}"),
-            )?
-            .send()?
-            .error_for_status()?;
+            let method = Method::DELETE;
+            let url = &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}");
+            let resp = self.req(method.clone(), url)?.send()?;
+            allow_not_found(resp, method, url)?;
         }
 
         Ok(())
@@ -509,12 +500,10 @@ impl GitHub {
     ) -> anyhow::Result<()> {
         debug!("Removing collaborator {collaborator} from repo {org}/{repo}");
         if !self.dry_run {
-            self.req(
-                Method::DELETE,
-                &format!("repos/{org}/{repo}/collaborators/{collaborator}"),
-            )?
-            .send()?
-            .error_for_status()?;
+            let method = Method::DELETE;
+            let url = &format!("repos/{org}/{repo}/collaborators/{collaborator}");
+            let resp = self.req(method.clone(), url)?.send()?;
+            allow_not_found(resp, method, url)?;
         }
         Ok(())
     }
@@ -824,6 +813,18 @@ impl GitHub {
         }
         Ok(())
     }
+}
+
+fn allow_not_found(resp: Response, method: Method, url: &str) -> Result<(), anyhow::Error> {
+    match resp.status() {
+        StatusCode::NOT_FOUND => {
+            debug!("Response from {method} {url} returned 404 which is treated as success");
+        }
+        _ => {
+            resp.error_for_status()?;
+        }
+    }
+    Ok(())
 }
 
 #[derive(serde::Deserialize)]
