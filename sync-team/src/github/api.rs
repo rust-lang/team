@@ -83,14 +83,16 @@ impl GitHub {
     }
 
     /// Get all teams associated with a org
-    pub(crate) fn org_teams(&self, org: &str) -> anyhow::Result<HashSet<String>> {
-        let mut teams = HashSet::new();
+    ///
+    /// Returns a list of tuples of team name and slug
+    pub(crate) fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
+        let mut teams = Vec::new();
 
         self.rest_paginated(
             &Method::GET,
             format!("orgs/{org}/teams"),
             |resp: Vec<Team>| {
-                teams.extend(resp.into_iter().map(|t| t.name));
+                teams.extend(resp.into_iter().map(|t| (t.name, t.slug)));
                 Ok(())
             },
         )?;
@@ -126,6 +128,7 @@ impl GitHub {
                 name: name.to_string(),
                 description: description.to_string(),
                 privacy,
+                slug: name.to_string(),
             })
         } else {
             let body = &Req {
@@ -174,11 +177,11 @@ impl GitHub {
     }
 
     /// Delete a team by name and org
-    pub(crate) fn delete_team(&self, org: &str, team: &str) -> anyhow::Result<()> {
-        debug!("Deleting team '{team}' in '{org}'");
+    pub(crate) fn delete_team(&self, org: &str, slug: &str) -> anyhow::Result<()> {
+        debug!("Deleting team with slug '{slug}' in '{org}'");
         if !self.dry_run {
             let resp = self
-                .req(Method::DELETE, &format!("orgs/{org}/teams/{team}"))?
+                .req(Method::DELETE, &format!("orgs/{org}/teams/{slug}"))?
                 .send()?;
             match resp.status() {
                 StatusCode::OK | StatusCode::NOT_FOUND => {}
@@ -869,6 +872,9 @@ pub(crate) struct Team {
     pub(crate) name: String,
     pub(crate) description: String,
     pub(crate) privacy: TeamPrivacy,
+    /// The slug usually matches the name but can differ.
+    /// For example, a team named rustup.rs would have a slug rustup-rs.
+    pub(crate) slug: String,
 }
 
 #[derive(serde::Deserialize, Debug)]
