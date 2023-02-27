@@ -151,6 +151,9 @@ impl SyncGitHub {
         let mut member_diffs = Vec::new();
 
         let mut current_members = self.github.team_memberships(&team)?;
+        let invites = self
+            .github
+            .team_membership_invitations(&github_team.org, &github_team.name)?;
 
         // Ensure all expected members are in the team
         for member in &github_team.members {
@@ -166,7 +169,12 @@ impl SyncGitHub {
                     member_diffs.push((username.clone(), MemberDiff::Noop));
                 }
             } else {
-                member_diffs.push((username.clone(), MemberDiff::Create(expected_role)));
+                // Check if the user has been invited already
+                if invites.contains(username) {
+                    member_diffs.push((username.clone(), MemberDiff::Noop));
+                } else {
+                    member_diffs.push((username.clone(), MemberDiff::Create(expected_role)));
+                }
             }
         }
 
@@ -860,7 +868,7 @@ impl std::fmt::Display for EditTeamDiff {
         if self.noop() {
             return Ok(());
         }
-        writeln!(f, "📝 Editing team '{}':", self.name)?;
+        writeln!(f, "📝 Editing team '{}/{}':", self.org, self.name)?;
         if let Some(n) = &self.name_diff {
             writeln!(f, "  New name: {n}")?;
         }
@@ -931,9 +939,7 @@ impl DeleteTeamDiff {
 
 impl std::fmt::Display for DeleteTeamDiff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "❌ Deleting team:")?;
-        writeln!(f, "  Org: {}", self.org)?;
-        writeln!(f, "  Name: {}", self.name)?;
+        writeln!(f, "❌ Deleting team '{}/{}'", self.org, self.name)?;
         Ok(())
     }
 }
