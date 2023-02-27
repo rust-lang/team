@@ -272,6 +272,26 @@ impl GitHub {
         Ok(memberships)
     }
 
+    /// The GitHub names of users invited to the given team
+    pub(crate) fn team_membership_invitations(
+        &self,
+        org: &str,
+        team: &str,
+    ) -> anyhow::Result<HashSet<String>> {
+        let mut invites = HashSet::new();
+
+        self.rest_paginated(
+            &Method::GET,
+            format!("orgs/{org}/teams/{team}/invitations"),
+            |resp: Vec<Login>| {
+                invites.extend(resp.into_iter().map(|l| l.login));
+                Ok(())
+            },
+        )?;
+
+        Ok(invites)
+    }
+
     /// Set a user's membership in a team to a role
     pub(crate) fn set_team_membership(
         &self,
@@ -904,12 +924,13 @@ fn repo_owner<'de, D>(deserializer: D) -> Result<String, D::Error>
 where
     D: serde::de::Deserializer<'de>,
 {
-    let owner = RepoOwner::deserialize(deserializer)?;
+    let owner = Login::deserialize(deserializer)?;
     Ok(owner.login)
 }
 
-#[derive(serde::Deserialize, Debug)]
-pub(crate) struct RepoOwner {
+/// An object with a `login` field
+#[derive(Deserialize, Debug)]
+struct Login {
     login: String,
 }
 
@@ -985,11 +1006,6 @@ where
     struct Actor {
         actor: Login,
     }
-    #[derive(Deserialize)]
-    struct Login {
-        login: String,
-    }
-
     let allowances = Allowances::deserialize(deserializer)?;
     Ok(allowances
         .nodes
