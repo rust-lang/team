@@ -57,6 +57,7 @@ impl<'a> Generator<'a> {
                         Bot::Highfive => v1::Bot::Highfive,
                         Bot::RustTimer => v1::Bot::RustTimer,
                         Bot::Rustbot => v1::Bot::Rustbot,
+                        Bot::Rfcbot => v1::Bot::Rfcbot,
                     })
                     .collect(),
                 teams: r

@@ -203,7 +203,7 @@ fn run() -> Result<(), Error> {
             let mut teams = HashMap::new();
             let mut bots = Vec::new();
 
-            const BOTS: &[&str] = &["bors", "rust-highfive", "rust-timer", "rustbot"];
+            const BOTS: &[&str] = &["bors", "rust-highfive", "rust-timer", "rustbot", "rfcbot"];
             let switch = |bot| {
                 if bot == "rust-highfive" {
                     "highfive".to_owned()
