@@ -402,6 +402,7 @@ fn bot_name(bot: &Bot) -> &str {
         Bot::Highfive => "rust-highfive",
         Bot::RustTimer => "rust-timer",
         Bot::Rustbot => "rustbot",
+        Bot::Rfcbot => "rfcbot",
     }
 }
 
