@@ -686,6 +686,7 @@ pub(crate) enum Bot {
     Highfive,
     Rustbot,
     RustTimer,
+    Rfcbot,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]

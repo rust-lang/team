@@ -155,6 +155,7 @@ pub enum Bot {
     Highfive,
     Rustbot,
     RustTimer,
+    Rfcbot,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
