@@ -477,7 +477,7 @@ fn validate_github_teams(data: &Data, errors: &mut Vec<String>) {
             team.github_teams(data)?.into_iter(),
             errors,
             |gh_team, _| {
-                if !allowed.contains(&*gh_team.org) {
+                if !allowed.contains(gh_team.org) {
                     bail!(
                         "GitHub organization `{}` isn't allowed (in team `{}`)",
                         gh_team.org,

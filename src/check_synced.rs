@@ -104,7 +104,7 @@ pub(crate) fn check_github(data: &Data) -> Result<(), failure::Error> {
         .collect::<Result<HashMap<_, _>, failure::Error>>()?;
 
     for team in data.teams() {
-        let local_teams = team.github_teams(&data)?;
+        let local_teams = team.github_teams(data)?;
         let local_team = local_teams.into_iter().find(|t| t.org == "rust-lang");
         let local_team = match local_team {
             Some(t) => t,

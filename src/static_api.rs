@@ -14,9 +14,9 @@ pub(crate) struct Generator<'a> {
 impl<'a> Generator<'a> {
     pub(crate) fn new(dest: &'a Path, data: &'a Data) -> Result<Generator<'a>, Error> {
         if dest.is_dir() {
-            std::fs::remove_dir_all(&dest)?;
+            std::fs::remove_dir_all(dest)?;
         }
-        std::fs::create_dir_all(&dest)?;
+        std::fs::create_dir_all(dest)?;
 
         Ok(Generator { dest, data })
     }
@@ -94,7 +94,7 @@ impl<'a> Generator<'a> {
                         }
                     })
                     .collect(),
-                branch_protections: branch_protections,
+                branch_protections,
             };
 
             self.add(&format!("v1/repos/{}.json", r.name), &repo)?;

@@ -291,7 +291,7 @@ impl GitHubApi {
 }
 
 fn user_node_id(id: usize) -> String {
-    base64::encode(&format!("04:User{}", id))
+    base64::encode(format!("04:User{}", id))
 }
 
 #[derive(Debug, serde::Deserialize)]
