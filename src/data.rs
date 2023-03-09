@@ -74,7 +74,7 @@ impl Data {
                 self.load_dir(&path, false, f.clone())?;
             } else if !nested && path.is_file() && path.extension() == Some(OsStr::new("toml")) {
                 fn dir(path: &PathBuf) -> Option<&str> {
-                    Some(path.parent()?.file_name()?.to_str()?)
+                    path.parent()?.file_name()?.to_str()
                 }
                 f(self, dir(&path).unwrap(), load_file(&path)?)?;
             }
@@ -147,7 +147,7 @@ impl Data {
     }
 
     pub(crate) fn repos(&self) -> impl Iterator<Item = &Repo> {
-        self.repos.iter().map(|(_, repo)| repo)
+        self.repos.values()
     }
 
     pub(crate) fn archived_teams(&self) -> impl Iterator<Item = &Team> {
@@ -157,7 +157,7 @@ impl Data {
 
 fn load_file<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T, Error> {
     let content =
-        std::fs::read(&path).with_context(|_| format!("failed to read {}", path.display()))?;
+        std::fs::read(path).with_context(|_| format!("failed to read {}", path.display()))?;
     let parsed = toml::from_slice(&content)
         .with_context(|_| format!("failed to parse {}", path.display()))?;
     Ok(parsed)

@@ -216,7 +216,7 @@ fn run() -> Result<(), Error> {
                     let name = switch(team.name);
                     bots.push(name.to_owned());
                 } else if team.name == "bots" {
-                    bots.extend(BOTS.into_iter().map(|&s| switch(s.to_owned())));
+                    bots.extend(BOTS.iter().map(|&s| switch(s.to_owned())));
                 } else {
                     teams.insert(team.name, team.permission.as_toml().to_owned());
                 }
@@ -251,7 +251,7 @@ fn run() -> Result<(), Error> {
                 branch: branches,
             };
             let file = format!("repos/{org}/{name}.toml");
-            std::fs::write(&file, toml::to_string_pretty(&repo)?.as_bytes())?;
+            std::fs::write(file, toml::to_string_pretty(&repo)?.as_bytes())?;
         }
         Cli::StaticApi { ref dest } => {
             let dest = PathBuf::from(dest);
