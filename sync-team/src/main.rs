@@ -20,9 +20,13 @@ fn usage() {
     eprintln!("  --help              Show this help message");
     eprintln!("  --live              Apply the proposed changes to the services");
     eprintln!("  --team-repo <path>  Path to the local team repo to use");
+    eprintln!("  --only-print-plan   Print the execution plan without executing it");
     eprintln!("environment variables:");
-    eprintln!("  GITHUB_TOKEN       Authentication token with GitHub");
-    eprintln!("  MAILGUN_API_TOKEN  Authentication token with Mailgun");
+    eprintln!("  GITHUB_TOKEN          Authentication token with GitHub");
+    eprintln!("  MAILGUN_API_TOKEN     Authentication token with Mailgun");
+    eprintln!("  EMAIL_ENCRYPTION_KEY  Key used to decrypt encrypted emails in the team repo");
+    eprintln!("  ZULIP_USERNAME        Username of the Zulip bot");
+    eprintln!("  ZULIP_API_TOKEN       Autnentication token of the Zulip bot");
 }
 
 fn app() -> anyhow::Result<()> {
