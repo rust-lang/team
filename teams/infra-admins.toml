@@ -8,6 +8,9 @@ members = [
     "jdno",
 ]
 
+[permissions]
+sync-team-confirmation = true
+
 [[lists]]
 address = "admin@rust-lang.org"
 
