@@ -39,5 +39,9 @@ zulip-stream = "t-release"
 [[lists]]
 address = "release@rust-lang.org"
 
+[[lists]]
+address = "release-and-subteams@rust-lang.org"
+include-subteam-members = true
+
 [[zulip-groups]]
 name = "T-release"
