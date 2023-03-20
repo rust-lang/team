@@ -39,3 +39,7 @@ extra-people = ["eholk"]
 
 [permissions]
 bors.chalk.review = true
+bors.rust.try = true
+perf = true
+crater = true
+dev-desktop = true
