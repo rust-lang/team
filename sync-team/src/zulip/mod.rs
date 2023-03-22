@@ -31,7 +31,7 @@ fn get_user_group_definitions(
     let email_map = zulip_api
         .get_users()?
         .into_iter()
-        .map(|u| (u.email, u.user_id))
+        .filter_map(|u| u.email.map(|e| (e, u.user_id)))
         .collect::<BTreeMap<_, _>>();
     let user_group_definitions = team_api
         .get_zulip_groups()?
