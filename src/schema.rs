@@ -369,15 +369,14 @@ impl Team {
                 let member = data.person(member).ok_or_else(|| {
                     err_msg(format!("{} does not have a person configuration", member))
                 })?;
-                let member = match (member.zulip_id, member.email()) {
-                    (Some(zulip_id), _) => ZulipGroupMember::Id(zulip_id),
-                    (_, Email::Present(email)) => ZulipGroupMember::Email(email.to_string()),
-                    _ => ZulipGroupMember::Missing,
+                let member = match (member.github.clone(), member.zulip_id) {
+                    (github, Some(zulip_id)) => ZulipGroupMember::MemberWithId { github, zulip_id },
+                    (github, _) => ZulipGroupMember::MemberWithoutId { github },
                 };
                 group.members.push(member);
             }
             for &extra in &raw_group.extra_zulip_ids {
-                group.members.push(ZulipGroupMember::Id(extra));
+                group.members.push(ZulipGroupMember::JustId(extra));
             }
             groups.push(group);
         }
@@ -654,9 +653,9 @@ impl ZulipGroup {
 
 #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub(crate) enum ZulipGroupMember {
-    Id(usize),
-    Email(String),
-    Missing,
+    MemberWithId { github: String, zulip_id: usize },
+    JustId(usize),
+    MemberWithoutId { github: String },
 }
 
 fn default_true() -> bool {
