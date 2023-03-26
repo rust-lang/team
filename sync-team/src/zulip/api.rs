@@ -182,8 +182,9 @@ struct ZulipUsers {
 /// A single Zulip user
 #[derive(Deserialize)]
 pub(crate) struct ZulipUser {
+    // Note: users may hide their emails
     #[serde(rename = "delivery_email")]
-    pub(crate) email: String,
+    pub(crate) email: Option<String>,
     pub(crate) user_id: usize,
 }
 
