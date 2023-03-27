@@ -1,0 +1,11 @@
+name = "arewewebyet"
+
+[people]
+leads = []
+members = [
+    "ibraheemdev",
+    "giraffate",
+]
+
+[[github]]
+orgs = ["rust-lang"]
