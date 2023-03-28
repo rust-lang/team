@@ -103,6 +103,8 @@ pub struct ZulipGroup {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ZulipGroupMember {
+    // TODO(rylev): this variant can be removed once
+    // it is verified that noone is relying on it
     Email(String),
     Id(usize),
 }

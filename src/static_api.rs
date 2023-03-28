@@ -237,9 +237,13 @@ impl<'a> Generator<'a> {
                     members: members
                         .into_iter()
                         .filter_map(|m| match m {
-                            ZulipGroupMember::Email(e) => Some(v1::ZulipGroupMember::Email(e)),
-                            ZulipGroupMember::Id(i) => Some(v1::ZulipGroupMember::Id(i)),
-                            ZulipGroupMember::Missing => None,
+                            ZulipGroupMember::MemberWithId { zulip_id, .. } => {
+                                Some(v1::ZulipGroupMember::Id(zulip_id))
+                            }
+                            ZulipGroupMember::JustId(zulip_id) => {
+                                Some(v1::ZulipGroupMember::Id(zulip_id))
+                            }
+                            ZulipGroupMember::MemberWithoutId { .. } => None,
                         })
                         .collect(),
                 },

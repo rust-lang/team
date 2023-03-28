@@ -24,11 +24,6 @@ fn check_zulip(data: &Data) -> Result<(), failure::Error> {
         .map(|g| (g.name.clone(), g))
         .collect::<HashMap<_, _>>();
     let remote_users = zulip.get_users()?;
-    let email_to_zulip_id = remote_users
-        .iter()
-        .cloned()
-        .map(|u| (u.email, u.user_id))
-        .collect::<HashMap<_, _>>();
     let zulip_id_to_name = remote_users
         .into_iter()
         .map(|u| (u.user_id, u.name))
@@ -44,16 +39,10 @@ fn check_zulip(data: &Data) -> Result<(), failure::Error> {
                 let mut remote_members = rg.members.iter().collect::<HashSet<_>>();
                 for local_member in local_group.members() {
                     let i = match local_member {
-                        ZulipGroupMember::Id(i) => *i,
-                        ZulipGroupMember::Email(e) => match email_to_zulip_id.get(e) {
-                            Some(i) => *i,
-                            None => {
-                                error!("No user on Zulip uses the email '{e}'");
-                                continue;
-                            }
-                        },
-                        ZulipGroupMember::Missing => {
-                            error!("Member of Zulip user group '{}' does not have an email or Zulip id", local_group.name());
+                        ZulipGroupMember::MemberWithId { zulip_id, .. } => *zulip_id,
+                        ZulipGroupMember::JustId(zulip_id) => *zulip_id,
+                        ZulipGroupMember::MemberWithoutId { github } => {
+                            error!("Member '{github}' of Zulip user group '{}' does not have a Zulip id", local_group.name());
                             continue;
                         }
                     };

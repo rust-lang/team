@@ -609,13 +609,10 @@ fn validate_discord_team_members_have_discord_ids(data: &Data, errors: &mut Vec<
     });
 }
 
-/// Ensure every member of a team that has a Zulip group either has a Zulip id or an email address
+/// Ensure every member of a team that has a Zulip group has a Zulip id
 fn validate_zulip_users(data: &Data, zulip: &ZulipApi, errors: &mut Vec<String>) {
-    let (by_id, by_email) = match zulip.get_users() {
-        Ok(u) => (
-            u.iter().map(|u| u.user_id).collect::<HashSet<_>>(),
-            u.into_iter().map(|u| u.email).collect::<HashSet<_>>(),
-        ),
+    let by_id = match zulip.get_users() {
+        Ok(u) => u.iter().map(|u| u.user_id).collect::<HashSet<_>>(),
         Err(err) => {
             errors.push(format!("couldn't verify Zulip users: {}", err));
             return;
@@ -633,8 +630,15 @@ fn validate_zulip_users(data: &Data, zulip: &ZulipApi, errors: &mut Vec<String>)
             .members()
             .iter()
             .filter_map(|m| match m {
-                ZulipGroupMember::Id(i) if !by_id.contains(i) => Some(format!("{}", i)),
-                ZulipGroupMember::Email(e) if !by_email.contains(e) => Some(e.clone()),
+                ZulipGroupMember::MemberWithId { github, zulip_id }
+                    if !by_id.contains(zulip_id) =>
+                {
+                    Some(github.clone())
+                }
+                ZulipGroupMember::JustId(zulip_id) if !by_id.contains(zulip_id) => {
+                    Some(format!("ID: {zulip_id}"))
+                }
+                ZulipGroupMember::MemberWithoutId { github } => Some(github.clone()),
                 _ => None,
             })
             .collect::<HashSet<_>>();
@@ -649,7 +653,7 @@ fn validate_zulip_users(data: &Data, zulip: &ZulipApi, errors: &mut Vec<String>)
     })
 }
 
-/// Ensure every member of a team that has a Zulip group either has a Zulip id or an email address
+/// Ensure every member of a team that has a Zulip group either has a Zulip id
 fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
         let groups = team.zulip_groups(data)?;
@@ -659,11 +663,9 @@ fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
         }
         wrapper(team.members(data).iter(), errors, |member, _| {
             if let Some(member) = data.person(member) {
-                if member.zulip_id().is_none()
-                    && matches!(member.email(), Email::Missing | Email::Disabled)
-                {
+                if member.zulip_id().is_none() {
                     bail!(
-                        "person `{}` in '{}' is a member of a Zulip user group but has no Zulip id nor an enabled email address",
+                        "person `{}` in '{}' is a member of a Zulip user group but has no Zulip id",
                         member.github(),
                         team.name()
                     );
