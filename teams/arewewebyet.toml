@@ -1,4 +1,5 @@
 name = "arewewebyet"
+kind = "marker-team"
 
 [people]
 leads = []
