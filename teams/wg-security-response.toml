@@ -6,6 +6,7 @@ leads = []
 members = [
     "cuviper",
     "pietroalbini",
+    "Manishearth",
 ]
 alumni = [
     "nikomatsakis",
