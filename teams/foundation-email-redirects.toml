@@ -1,0 +1,22 @@
+# In the beginning the foundation hosted their emails on the rust-lang.org
+# domain name, and shortly after they migrated over to the rustfoundation.org
+# domain. This marker team serves to configure some compatibility email
+# forwarding rules to ensure critical foundation addresses continue to be
+# reachable on the rust-lang.org domain.
+
+kind = "marker-team"
+name = "foundation-email-redirecs"
+
+[people]
+leads = []
+members = []
+
+[[lists]]
+address = "foundation@rust-lang.org"
+extra-emails = ["foundation@rustfoundation.org"]
+include-team-members = false
+
+[[lists]]
+address = "accounting@rust-lang.org"
+extra-emails = ["accounting@rustfoundation.org"]
+include-team-members = false
