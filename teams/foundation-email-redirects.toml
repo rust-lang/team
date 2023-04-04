@@ -5,7 +5,7 @@
 # reachable on the rust-lang.org domain.
 
 kind = "marker-team"
-name = "foundation-email-redirecs"
+name = "foundation-email-redirects"
 
 [people]
 leads = []
