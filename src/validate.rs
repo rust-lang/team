@@ -699,6 +699,7 @@ fn validate_zulip_group_extra_people(data: &Data, errors: &mut Vec<String>) {
 /// Ensure repos reference valid teams
 fn validate_repos(data: &Data, errors: &mut Vec<String>) {
     let allowed_orgs = data.config().allowed_github_orgs();
+    let github_teams = data.github_teams();
     wrapper(data.repos(), errors, |repo, _| {
         if !allowed_orgs.contains(&repo.org) {
             bail!(
@@ -708,30 +709,14 @@ fn validate_repos(data: &Data, errors: &mut Vec<String>) {
             );
         }
         for (team_name, _) in &repo.access.teams {
-            match data.team(team_name) {
-                Some(t)
-                    if !t
-                        .github_teams(data)?
-                        .iter()
-                        .any(|t| t.name == team_name && t.org == repo.org) =>
-                {
-                    bail!(
+            if !github_teams.contains(&(repo.org.clone(), team_name.clone())) {
+                bail!(
                         "access for {}/{} is invalid: '{}' is not configured as a GitHub team for the '{}' org",
                         repo.org,
                         repo.name,
                         team_name,
                         repo.org
                     )
-                }
-                None => {
-                    bail!(
-                        "access for {}/{} is invalid: '{}' is not the name of a team",
-                        repo.org,
-                        repo.name,
-                        team_name
-                    );
-                }
-                Some(_) => {}
             }
         }
 
