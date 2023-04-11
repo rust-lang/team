@@ -733,11 +733,8 @@ impl GitHub {
         url: &str,
         body: &T,
     ) -> Result<Response, anyhow::Error> {
-        Ok(self
-            .req(method, url)?
-            .json(body)
-            .send()?
-            .error_for_status()?)
+        let resp = self.req(method, url)?.json(body).send()?;
+        resp.custom_error_for_status()
     }
 
     fn send_option<T: DeserializeOwned>(
@@ -751,7 +748,7 @@ impl GitHub {
                 format!("Failed to decode response body on {method} request to '{url}'")
             })?)),
             StatusCode::NOT_FOUND => Ok(None),
-            _ => Err(resp.error_for_status().unwrap_err().into()),
+            _ => Err(resp.custom_error_for_status().unwrap_err()),
         }
     }
 
@@ -765,12 +762,13 @@ impl GitHub {
             query: &'a str,
             variables: V,
         }
-        let res: GraphResult<R> = self
+        let resp = self
             .req(Method::POST, "graphql")?
             .json(&Request { query, variables })
             .send()?
-            .error_for_status()?
-            .json()?;
+            .custom_error_for_status()?;
+
+        let res: GraphResult<R> = resp.json()?;
         if let Some(error) = res.errors.get(0) {
             bail!("graphql error: {}", error.message);
         } else if let Some(data) = res.data {
@@ -790,7 +788,7 @@ impl GitHub {
             let resp = self
                 .req(method.clone(), &next_url)?
                 .send()?
-                .error_for_status()?;
+                .custom_error_for_status()?;
 
             // Extract the next page
             if let Some(links) = resp.headers().get(header::LINK) {
@@ -821,7 +819,7 @@ fn allow_not_found(resp: Response, method: Method, url: &str) -> Result<(), anyh
             debug!("Response from {method} {url} returned 404 which is treated as success");
         }
         _ => {
-            resp.error_for_status()?;
+            resp.custom_error_for_status()?;
         }
     }
     Ok(())
@@ -1024,4 +1022,20 @@ where
 pub(crate) enum BranchProtectionOp {
     CreateForRepo(String),
     UpdateBranchProtection(String),
+}
+
+trait ResponseExt {
+    fn custom_error_for_status(self) -> anyhow::Result<Response>;
+}
+
+impl ResponseExt for Response {
+    fn custom_error_for_status(self) -> anyhow::Result<Response> {
+        match self.error_for_status_ref() {
+            Ok(_) => Ok(self),
+            Err(err) => {
+                let body = self.text()?;
+                Err(err).context(format!("Body: {:?}", body))
+            }
+        }
+    }
 }
