@@ -1,8 +1,0 @@
-org = "rust-lang"
-name = "trait-solver-refactor-initiative"
-description = "The Rustc Trait Solver Refactor Initiative"
-bots = []
-
-[access.teams]
-project-trait-system-refactor = "maintain"
-
