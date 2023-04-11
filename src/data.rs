@@ -153,6 +153,17 @@ impl Data {
     pub(crate) fn archived_teams(&self) -> impl Iterator<Item = &Team> {
         self.archived_teams.iter()
     }
+
+    /// All the configured GitHub teams in the a hashset of (org, team_name) tuples.
+    pub(crate) fn github_teams(&self) -> HashSet<(String, String)> {
+        let mut result = HashSet::new();
+        for team in self.teams() {
+            for github_team in team.github_teams(self).unwrap_or_default() {
+                result.insert((github_team.org.to_owned(), github_team.name.to_owned()));
+            }
+        }
+        result
+    }
 }
 
 fn load_file<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T, Error> {
