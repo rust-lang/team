@@ -111,8 +111,10 @@ fn get_env(key: &str) -> anyhow::Result<String> {
 fn main() {
     init_log();
     if let Err(err) = app() {
-        error!("{}", err);
-        for cause in err.chain() {
+        // Pull off the first element of the chain as the first element. The chain contains all the
+        // elements, not just the causes.
+        error!("failed: {}", err.chain().next().unwrap());
+        for cause in err.chain().skip(1) {
             error!("caused by: {}", cause);
         }
         std::process::exit(1);
