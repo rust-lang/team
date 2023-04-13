@@ -335,6 +335,7 @@ fn calculate_permission_diffs(
         let permission = convert_permission(&expected_team.permission);
         let actual_team = actual_teams.remove(&expected_team.name);
         let collaborator = RepoCollaborator::Team(expected_team.name.clone());
+
         let diff = match actual_team {
             Some(t) if t.permission != permission => RepoPermissionAssignmentDiff {
                 collaborator,
@@ -380,6 +381,17 @@ fn calculate_permission_diffs(
     // `actual_teams` now contains the teams that were not expected
     // but are still on GitHub. We now remove them.
     for (team, t) in actual_teams {
+        if t.name == "security" && expected_repo.org == "rust-lang" {
+            // Skip removing access permissions from security.
+            // If we're in this branch we know that the team repo doesn't mention this team at all,
+            // so this shouldn't remove intentionally granted non-read access.  Security is granted
+            // read access to all repositories in the org by GitHub (via a "security manager"
+            // role), and we can't remove that access.
+            //
+            // (FIXME: If we find security with non-read access, *that* probably should get dropped
+            // to read access. But not worth doing in this commit, want to get us unblocked first).
+            continue;
+        }
         permissions.push(RepoPermissionAssignmentDiff {
             collaborator: RepoCollaborator::Team(team),
             diff: RepoPermissionDiff::Delete(t.permission),
