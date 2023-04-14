@@ -25,6 +25,7 @@ orgs = ["rust-lang", "rust-lang-nursery"]
 [permissions]
 crater = true
 bors.rust.review = true
+dev-desktop = true
 perf = true
 
 [rfcbot]
