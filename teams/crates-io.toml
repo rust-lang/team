@@ -25,7 +25,6 @@ alumni = [
 
 [permissions]
 bors.crates-io.review = true
-crates-io-ops-bot.staging-crates-io = true
 
 [[github]]
 orgs = ["rust-lang", "conduit-rust"]
