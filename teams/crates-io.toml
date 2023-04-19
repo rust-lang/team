@@ -9,6 +9,7 @@ members = [
     "locks",
     "Turbo87",
     "JohnTitor",
+    "LawnGnome",
 ]
 alumni = [
     "steveklabnik",
