@@ -37,3 +37,6 @@ address = "dmarc-rua@rust-lang.org"
 
 [[lists]]
 address = "docker-hub-rustci@rust-lang.org"
+
+[[lists]]
+address = "google-admin@rust-lang.org"
