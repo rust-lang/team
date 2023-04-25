@@ -37,7 +37,6 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_rfcbot_exclude_members,
     validate_team_names,
     validate_github_teams,
-    validate_discord_permissions,
     validate_zulip_stream_name,
     validate_project_groups_have_parent_teams,
     validate_discord_team_members_have_discord_ids,
@@ -516,46 +515,6 @@ fn validate_github_usernames(data: &Data, github: &GitHubApi, errors: &mut Vec<S
         }),
         Err(err) => errors.push(format!("couldn't verify GitHub usernames: {}", err)),
     }
-}
-
-/// Ensure all users with a Discord permission have a Discord ID.
-fn validate_discord_permissions(data: &Data, errors: &mut Vec<String>) {
-    wrapper(
-        Permissions::requires_discord(data.config()).iter(),
-        errors,
-        |permission, errors| {
-            wrapper(data.people(), errors, |person, _| {
-                if person.permissions().has(permission) && person.discord_id().is_none() {
-                    bail!(
-                        "person `{}` has a Discord permission (`{}`) but no Discord ID",
-                        person.github(),
-                        permission
-                    );
-                }
-                Ok(())
-            });
-            wrapper(data.teams(), errors, |team, errors| {
-                if !team.permissions().has(permission) {
-                    return Ok(());
-                }
-                wrapper(team.members(data).iter(), errors, |member, _| {
-                    let person = data
-                        .person(member)
-                        .ok_or_else(|| failure::format_err!("missing person {}", member))?;
-                    if person.discord_id().is_none() {
-                        bail!(
-                            "person `{}` has a Discord permission (`{}`) but no Discord ID",
-                            person.github(),
-                            permission
-                        );
-                    }
-                    Ok(())
-                });
-                Ok(())
-            });
-            Ok(())
-        },
-    );
 }
 
 /// Ensure the user doens't put an URL as the Zulip stream name.

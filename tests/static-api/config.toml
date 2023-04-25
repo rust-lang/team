@@ -14,8 +14,3 @@ permissions-bors-repos = [
 permissions-bools = [
     "crater",
 ]
-
-permissions-crates-io-ops-bot-apps = [
-    "app",
-    "crates-io",
-]

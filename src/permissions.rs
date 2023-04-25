@@ -27,8 +27,6 @@ impl BorsAcl {
 pub(crate) struct Permissions {
     #[serde(default)]
     bors: HashMap<String, BorsAcl>,
-    #[serde(default)]
-    crates_io_ops_bot: HashMap<String, bool>,
     #[serde(flatten)]
     booleans: HashMap<String, bool>,
 }
@@ -52,19 +50,6 @@ impl Permissions {
             result.push(format!("bors.{}.review", repo));
             result.push(format!("bors.{}.try", repo));
         }
-        for app in config.permissions_crates_io_ops_bot_apps() {
-            result.push(format!("crates-io-ops-bot.{}", app));
-        }
-
-        result
-    }
-
-    pub(crate) fn requires_discord(config: &Config) -> Vec<String> {
-        let mut result = Vec::new();
-
-        for app in config.permissions_crates_io_ops_bot_apps() {
-            result.push(format!("crates-io-ops-bot.{}", app));
-        }
 
         result
     }
@@ -78,7 +63,6 @@ impl Permissions {
             [boolean] => self.booleans.get(*boolean).cloned(),
             ["bors", repo, "review"] => self.bors.get(*repo).map(|repo| repo.review),
             ["bors", repo, "try"] => self.bors.get(*repo).map(|repo| repo.try_),
-            ["crates-io-ops-bot", app] => self.crates_io_ops_bot.get(*app).cloned(),
             _ => None,
         }
         .unwrap_or(false)
@@ -100,11 +84,6 @@ impl Permissions {
         }
         for repo in self.bors.values() {
             if repo.review || repo.try_ {
-                return true;
-            }
-        }
-        for app in self.crates_io_ops_bot.values() {
-            if *app {
                 return true;
             }
         }
@@ -133,14 +112,6 @@ impl Permissions {
                     what,
                     repo,
                     repo,
-                );
-            }
-        }
-        for app in self.crates_io_ops_bot.keys() {
-            if !config.permissions_crates_io_ops_bot_apps().contains(app) {
-                bail!(
-                    "unknown crates-io-ops-bot app: {} (maybe add it to config.toml?)",
-                    app
                 );
             }
         }
