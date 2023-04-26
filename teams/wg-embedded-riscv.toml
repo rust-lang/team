@@ -5,9 +5,10 @@ kind = "working-group"
 [people]
 leads = []
 members = [
-    "almindor",
     "Disasm",
+    "almindor",
     "dkhayes117",
+    "romancardenas",
 ]
 
 [website]

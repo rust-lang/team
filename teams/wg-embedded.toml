@@ -4,6 +4,7 @@ kind = "working-group"
 [people]
 leads = ["adamgreig", "japaric", "therealprof"]
 members = [
+    "Dirbaio",
     "Disasm",
     "Emilgardis",
     "adamgreig",
@@ -21,6 +22,7 @@ members = [
     "posborne",
     "raw-bin",
     "reitermarkus",
+    "romancardenas",
     "ryankurte",
     "thalesfragoso",
     "thejpster",
