@@ -46,8 +46,3 @@ permissions-bools = [
     "dev-desktop",
     "sync-team-confirmation",
 ]
-
-permissions-crates-io-ops-bot-apps = [
-    "crates-io",
-    "staging-crates-io",
-]

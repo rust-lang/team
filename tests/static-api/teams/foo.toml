@@ -8,7 +8,6 @@ members = ["user-0", "user-1"]
 crater = true
 bors.crates-io.review = true
 bors.crater.try = true
-crates-io-ops-bot.crates-io = true
 
 [rfcbot]
 label = "T-foo"
