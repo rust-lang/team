@@ -5,8 +5,6 @@ leads = ["jtgeibel", "Turbo87"]
 members = [
     "carols10cents",
     "jtgeibel",
-    "pichfl",
-    "locks",
     "Turbo87",
     "JohnTitor",
 ]
@@ -21,6 +19,8 @@ alumni = [
     "hi-rustin",
     "pietroalbini",
     "smarnach",
+    "pichfl",
+    "locks",
 ]
 
 [permissions]
