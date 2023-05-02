@@ -5,34 +5,33 @@ kind = "working-group"
 [people]
 leads = ["apiraino", "wesleywiser"]
 members = [
-    "am-1t",
-    "apiraino",
-    "bawerd",
-    "camelid",
-    "djcarpe",
     "Dylan-DPC",
-    "frxstrem",
+    "apiraino",
+    "camelid",
     "hameerabbasi",
     "hkmatsumoto",
     "inquisitivecrystal",
-    "JamesPatrickGill",
-    "jechasteen",
-    "JohnTitor",
     "lcnr",
-    "mstallmo",
-    "o0Ignition0o",
     "pnkfelix",
-    "Stupremee",
-    "TaKO8Ki",
-    "tamuhey",
     "wesleywiser",
 ]
 alumni = [
     "Centril",
-    "jyn514",
+    "JohnTitor",
     "LeSeulArtichaut",
+    "Stupremee",
+    "jyn514",
     "mark-i-m",
+    "o0Ignition0o",
     "spastorino",
+    # The following nicknames listed here to pass validation
+    # see https://github.com/rust-lang/team/pull/992
+    "am-1t",
+    "bawerd",
+    "djcarpe",
+    "frxstrem",
+    "jechasteen",
+    "mstallmo"
 ]
 
 [website]
@@ -55,6 +54,5 @@ excluded-people = [
     "camelid",
     "pnkfelix",
     "hkmatsumoto",
-    "inquisitivecrystal",
-    "TaKO8Ki",
+    "inquisitivecrystal"
 ]
