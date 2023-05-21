@@ -21,6 +21,7 @@ alumni = [
 [website]
 name = "Portable SIMD Project Group"
 description = "Adding portable SIMD to the standard library"
+zulip-stream = "project-portable-simd"
 
 [[github]]
 orgs = ["rust-lang"]
