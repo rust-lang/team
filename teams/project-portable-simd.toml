@@ -5,17 +5,18 @@ subteam-of = "libs"
 [people]
 leads = [
     "workingjubilee",
+    "calebzulawski",
 ]
 members = [
-    "BurntSushi",
     "calebzulawski",
-    "hsivonen",
     "programmerjake",
     "thomcc",
-    "vertexclique",
     "workingjubilee",
 ]
-alumni = ["Lokathor"]
+alumni = [
+    "Lokathor",
+    "hsivonen",
+]
 
 [website]
 name = "Portable SIMD Project Group"
