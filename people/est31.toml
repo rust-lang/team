@@ -1,6 +1,5 @@
 name = "est31"
 github = "est31"
 github-id = 8872119
-
-[permissions]
-bors.rust.try = true
+zulip-id = 120096
+email = 'est31@protonmail.com'
