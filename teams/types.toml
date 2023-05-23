@@ -7,6 +7,7 @@ subteam-of = "compiler"
 leads = ["nikomatsakis", "jackh726"]
 members = [
     "aliemjay",
+    "BoxyUwU",
     "compiler-errors",
     "jackh726",
     "lcnr",
