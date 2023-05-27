@@ -9,6 +9,7 @@ leads = [
 ]
 members = [
     "calebzulawski",
+    "miguelraz",
     "programmerjake",
     "thomcc",
     "workingjubilee",
@@ -16,7 +17,6 @@ members = [
 alumni = [
     "Lokathor",
     "hsivonen",
-    "miguelraz",
 ]
 
 [website]
