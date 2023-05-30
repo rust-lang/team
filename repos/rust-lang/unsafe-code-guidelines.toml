@@ -1,7 +1,7 @@
 org = 'rust-lang'
 name = 'unsafe-code-guidelines'
 description = "Forum for discussion about what unsafe code can and can't do"
-bots = []
+bots = ["rustbot"]
 
 [access.teams]
 opsem = 'maintain'
