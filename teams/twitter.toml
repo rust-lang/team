@@ -5,7 +5,6 @@ kind = "marker-team"
 leads = []
 members = [
     "m-ou-se",
-    "joshtriplett",
     "rylev",
     "badboy",
     "pietroalbini",
