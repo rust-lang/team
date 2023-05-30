@@ -6,7 +6,6 @@ members = [
     "Mark-Simulacrum",
     "rylev",
     "badboy",
-    "jntrnr",
 ]
 alumni = [
     "nrc",
@@ -18,6 +17,7 @@ alumni = [
     "pietroalbini",
     "ashleygwilliams",
     "aidanhs",
+    "jntrnr",
 ]
 
 [permissions]
