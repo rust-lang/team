@@ -3,16 +3,15 @@ subteam-of = "devtools"
 
 [people]
 leads = [
-    "kinnison",
     "rbtcollins",
 ]
 members = [
-    "kinnison",
     "rbtcollins",
     "hi-rustin",
 ]
 alumni = [
     "nrc",
+    "kinnison",
 ]
 
 [website]
