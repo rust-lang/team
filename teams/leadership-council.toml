@@ -1,0 +1,40 @@
+name = "leadership-council"
+
+[people]
+leads = []
+members = [
+    "carols10cents",
+    "eholk",
+    "ehuss",
+    "jackh726",
+    "jonathanpallant",
+    "khionu",
+    "Mark-Simulacrum",
+    "m-ou-se",
+    "rylev",
+]
+alumni = []
+
+[permissions]
+bors.rust.review = true
+bors.team.review = true
+
+[[github]]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
+[rfcbot]
+label = "T-leadership-council"
+name = "Leadership Council"
+ping = "rust-lang/leadership-council"
+
+[website]
+name = "Leadership council"
+description = "Charged with the success of the Rust Project as whole, consisting of representatives from top-level teams"
+email = "council@rust-lang.org"
+weight = 1000
+
+[[lists]]
+address = "council@rust-lang.org"
+
+[[lists]]
+address = "council-private@rust-lang.org"
