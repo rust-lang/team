@@ -15,10 +15,6 @@ members = [
 ]
 alumni = []
 
-[permissions]
-bors.rust.review = true
-bors.team.review = true
-
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
 
@@ -36,5 +32,5 @@ weight = 1000
 [[lists]]
 address = "council@rust-lang.org"
 
-[[lists]]
-address = "council-private@rust-lang.org"
+[[zulip-groups]]
+name = "council"
