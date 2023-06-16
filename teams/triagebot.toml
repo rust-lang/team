@@ -1,0 +1,25 @@
+name = "triagebot"
+subteam-of = "infra"
+
+[people]
+leads = ["Mark-Simulacrum"]
+members = [
+    "Mark-Simulacrum",
+    "ehuss",
+    "spastorino",
+]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Triagebot team"
+description = "Maintaining and improving the rust-lang/triagebot tooling"
+email = "triagebot@rust-lang.org"
+zulip-stream = "triagebot"
+
+[[lists]]
+address = "triagebot@rust-lang.org"
+
+[[zulip-groups]]
+name = "T-triagebot"

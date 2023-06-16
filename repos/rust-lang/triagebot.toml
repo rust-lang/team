@@ -1,0 +1,11 @@
+org = 'rust-lang'
+name = 'triagebot'
+description = 'Automation/tooling for Rust spaces'
+bots = ["rustbot"]
+
+[access.teams]
+infra = "write"
+triagebot = "write"
+
+[[branch-protections]]
+pattern = "master"
