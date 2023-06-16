@@ -32,12 +32,6 @@ label = "T-core"
 name = "Core"
 ping = "rust-lang/core"
 
-[website]
-name = "Core team"
-description = "Managing the overall direction of Rust, subteam leadership, and any cross-cutting issues"
-email = "core@rust-lang.org"
-weight = 1000
-
 [[lists]]
 address = "core@rust-lang.org"
 
