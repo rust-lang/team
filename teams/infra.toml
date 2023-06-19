@@ -55,7 +55,3 @@ address = "craterbot@rust-lang.org"
 
 [[zulip-groups]]
 name = "T-infra"
-
-[[discord-roles]]
-name = "infra-team"
-color = "#ff5454"
