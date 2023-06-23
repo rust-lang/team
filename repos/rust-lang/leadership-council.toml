@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "leadership-council"
+description = "Home of the Rust Leadership Council"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+leadership-council = "maintain"
