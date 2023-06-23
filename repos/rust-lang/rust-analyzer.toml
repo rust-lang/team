@@ -5,7 +5,6 @@ bots = ["bors", "rustbot"]
 
 [access.teams]
 rust-analyzer = "write"
-rust-analyzer-contributors = "triage"
 
 [[branch-protections]]
 pattern = "master"
