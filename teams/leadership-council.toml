@@ -27,6 +27,7 @@ ping = "rust-lang/leadership-council"
 name = "Leadership council"
 description = "Charged with the success of the Rust Project as whole, consisting of representatives from top-level teams"
 email = "council@rust-lang.org"
+zulip-stream = "council"
 weight = 1000
 
 [[lists]]
