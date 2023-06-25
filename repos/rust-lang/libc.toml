@@ -11,4 +11,4 @@ bots = [
 crate-maintainers = 'maintain'
 
 [[branch-protections]]
-pattern = 'master'
+pattern = 'main'
