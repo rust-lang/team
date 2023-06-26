@@ -1,7 +1,10 @@
 name = "libs"
 
 [people]
-leads = ["m-ou-se"]
+leads = [
+  "m-ou-se",
+  "Amanieu",
+]
 members = [
   "Amanieu",
   "m-ou-se",
