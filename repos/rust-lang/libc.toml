@@ -3,7 +3,6 @@ name = 'libc'
 description = 'Raw bindings to platform APIs for Rust'
 bots = [
     'bors',
-    'highfive',
     'rustbot',
 ]
 
@@ -11,4 +10,4 @@ bots = [
 crate-maintainers = 'maintain'
 
 [[branch-protections]]
-pattern = 'master'
+pattern = 'main'
