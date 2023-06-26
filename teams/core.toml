@@ -1,3 +1,7 @@
+# Core has been replaced by the leadership council with RFC#3392
+# While we untangle the remaining parts of infrastructure that are
+# tied to core, we'll leave the team here with just the members of
+# the council that were previously core team members.
 name = "core"
 
 [people]
@@ -5,7 +9,6 @@ leads = []
 members = [
     "Mark-Simulacrum",
     "rylev",
-    "badboy",
 ]
 alumni = [
     "nrc",
@@ -18,19 +21,11 @@ alumni = [
     "ashleygwilliams",
     "aidanhs",
     "jntrnr",
+    "badboy",
 ]
-
-[permissions]
-bors.rust.review = true
-bors.team.review = true
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
-
-[rfcbot]
-label = "T-core"
-name = "Core"
-ping = "rust-lang/core"
 
 [[lists]]
 address = "core@rust-lang.org"
@@ -46,8 +41,3 @@ address = "user-logos@rust-lang.org"
 
 [[lists]]
 address = "legal@crates.io"
-
-[[discord-roles]]
-name = "core-team"
-color = "#3498db"
-
