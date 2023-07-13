@@ -1,0 +1,19 @@
+org = 'rust-lang'
+name = 'rustc-apfloat'
+description = 'Rust port of C++ llvm::APFloat library'
+
+# For the initial setup, we are not including bors in our list of bots, because
+# we do not have any Continuous Integration setup yet for the rustc-apfloat
+# crate. We will tackle that later.
+bots = ["rustbot", "rfcbot"]
+
+# For the initial setup, we are just giving {eddyb, wesleywiser, pnkfelix}
+# maintainer permissions. Later we will figure out what permissions to give to
+# the rest of T-compiler, compiler-contributors, et cetera.
+[access.individuals]
+eddyb = 'maintain'
+pnkfelix = 'maintain'
+wesleywiser = 'maintain'
+
+# Likewise, eventually we may want a branch protections section, but we will
+# tackle that later.
