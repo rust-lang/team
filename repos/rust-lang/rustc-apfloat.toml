@@ -15,5 +15,12 @@ eddyb = 'maintain'
 pnkfelix = 'maintain'
 wesleywiser = 'maintain'
 
+# ... however, the CI for the teams repo will not accept this config without
+# *some* access.teams section. So we'll give compiler/compiler-contributors
+# the least-privileged access for the short term, solely to placate the CI.
+[access.teams]
+compiler = 'read'
+compiler-contributors = 'read'
+
 # Likewise, eventually we may want a branch protections section, but we will
 # tackle that later.
