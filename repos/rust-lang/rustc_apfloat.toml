@@ -1,9 +1,9 @@
 org = 'rust-lang'
-name = 'rustc-apfloat'
+name = 'rustc_apfloat'
 description = 'Rust port of C++ llvm::APFloat library'
 
 # For the initial setup, we are not including bors in our list of bots, because
-# we do not have any Continuous Integration setup yet for the rustc-apfloat
+# we do not have any Continuous Integration setup yet for the rustc_apfloat
 # crate. We will tackle that later.
 bots = ["rustbot", "rfcbot"]
 
