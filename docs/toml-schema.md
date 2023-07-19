@@ -55,6 +55,9 @@ members = [
 alumni = [
     "buildbot",
 ]
+# Optional, name of other teams whose members will be included as members of this team.
+# Defaults to empty.
+included-teams = []
 # Optional, include all members of all other teams.
 # Defaults to false.
 include-all-team-members = false

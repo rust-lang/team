@@ -138,12 +138,12 @@ impl Data {
         self.people.values()
     }
 
-    pub(crate) fn active_members(&self) -> HashSet<&str> {
-        self.teams
-            .values()
-            .filter(|team| !team.is_alumni_team())
-            .flat_map(|team| team.members(self))
-            .collect()
+    pub(crate) fn active_members(&self) -> Result<HashSet<&str>, Error> {
+        let mut active = HashSet::new();
+        for team in self.teams.values().filter(|team| !team.is_alumni_team()) {
+            active.extend(team.members(self)?)
+        }
+        Ok(active)
     }
 
     pub(crate) fn repos(&self) -> impl Iterator<Item = &Repo> {
