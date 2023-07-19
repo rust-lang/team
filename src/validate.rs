@@ -120,7 +120,15 @@ pub(crate) fn validate(data: &Data, strict: bool, skip: &[&str]) -> Result<(), E
 
 /// Ensure working group names start with `wg-`
 fn validate_name_prefixes(data: &Data, errors: &mut Vec<String>) {
-    fn ensure_prefix(team: &Team, kind: TeamKind, prefix: &str) -> Result<(), Error> {
+    fn ensure_prefix(
+        team: &Team,
+        kind: TeamKind,
+        prefix: &str,
+        exceptions: &[&str],
+    ) -> Result<(), Error> {
+        if exceptions.contains(&team.name()) {
+            return Ok(());
+        }
         if team.kind() == kind && !team.name().starts_with(prefix) {
             bail!(
                 "{} `{}`'s name doesn't start with `{}`",
@@ -140,8 +148,13 @@ fn validate_name_prefixes(data: &Data, errors: &mut Vec<String>) {
         Ok(())
     }
     wrapper(data.teams(), errors, |team, _| {
-        ensure_prefix(team, TeamKind::WorkingGroup, "wg-")?;
-        ensure_prefix(team, TeamKind::ProjectGroup, "project-")?;
+        ensure_prefix(team, TeamKind::WorkingGroup, "wg-", &["wg-leads"])?;
+        ensure_prefix(
+            team,
+            TeamKind::ProjectGroup,
+            "project-",
+            &["project-group-leads"],
+        )?;
         Ok(())
     });
 }
