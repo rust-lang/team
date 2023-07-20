@@ -1,0 +1,10 @@
+name = "project-group-leads"
+kind = "marker-team"
+
+[people]
+leads = []
+members = []
+include-project-group-leads = true
+
+[[github]]
+orgs = ["rust-lang"]

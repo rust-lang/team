@@ -1,11 +1,11 @@
 name = "wg-leads"
-kind = "working-group"
+kind = "marker-team"
 
 [people]
 leads = []
 members = []
+included-teams = ["project-group-leads"]
 include-wg-leads = true
-include-project-group-leads = true
 
 [[lists]]
 address = "wg-leads@rust-lang.org"

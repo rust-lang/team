@@ -119,17 +119,21 @@ impl Permissions {
     }
 }
 
-pub(crate) fn allowed_people<'a>(data: &'a Data, permission: &str) -> Vec<&'a Person> {
+pub(crate) fn allowed_people<'a>(
+    data: &'a Data,
+    permission: &str,
+) -> Result<Vec<&'a Person>, Error> {
     let mut members_with_perms = HashSet::new();
     for team in data.teams() {
         if team.permissions().has(permission) {
-            members_with_perms.extend(team.members(data));
+            members_with_perms.extend(team.members(data)?);
         }
         if team.leads_permissions().has(permission) {
             members_with_perms.extend(team.leads());
         }
     }
-    data.people()
+    Ok(data
+        .people()
         .filter(|p| members_with_perms.contains(p.github()) || p.permissions().has(permission))
-        .collect()
+        .collect())
 }

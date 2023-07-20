@@ -220,9 +220,19 @@ impl Team {
         self.discord_roles.as_ref()
     }
 
-    pub(crate) fn members<'a>(&'a self, data: &'a Data) -> HashSet<&'a str> {
+    pub(crate) fn members<'a>(&'a self, data: &'a Data) -> Result<HashSet<&'a str>, Error> {
         let mut members: HashSet<_> = self.people.members.iter().map(|s| s.as_str()).collect();
 
+        for team in &self.people.included_teams {
+            let team = data.team(team).ok_or_else(|| {
+                err_msg(format!(
+                    "team '{}' includes members from non-existent team '{}'",
+                    self.name(),
+                    team
+                ))
+            })?;
+            members.extend(team.members(data)?);
+        }
         let mut include_leads = |kind| {
             for team in data.teams() {
                 if team.name != self.name && team.kind == kind {
@@ -251,18 +261,21 @@ impl Team {
                 {
                     continue;
                 }
-                members.extend(team.members(data));
+                members.extend(team.members(data)?);
             }
         }
         if self.is_alumni_team() {
-            let active_members = data.active_members();
+            let active_members = data.active_members()?;
             let alumni = data
                 .teams()
                 .chain(data.archived_teams())
                 .flat_map(|t| t.alumni())
                 .map(|a| a.as_str());
-            let members_of_archived_teams =
-                data.archived_teams().flat_map(|team| team.members(data));
+            let mut members_of_archived_teams = HashSet::new();
+
+            for t in data.archived_teams() {
+                members_of_archived_teams.extend(t.members(data)?);
+            }
 
             members.extend(
                 alumni
@@ -270,7 +283,7 @@ impl Team {
                     .filter(|person| !active_members.contains(person)),
             )
         }
-        members
+        Ok(members)
     }
 
     pub(crate) fn alumni(&self) -> &[String] {
@@ -290,13 +303,13 @@ impl Team {
             };
 
             let mut members = if raw_list.include_team_members {
-                self.members(data)
+                self.members(data)?
             } else {
                 HashSet::new()
             };
             if raw_list.include_subteam_members {
                 for subteam in data.subteams_of(&self.name) {
-                    members.extend(subteam.members(data));
+                    members.extend(subteam.members(data)?);
                 }
             }
             for person in &raw_list.extra_people {
@@ -306,7 +319,7 @@ impl Team {
                 let team = data
                     .team(team)
                     .ok_or_else(|| err_msg(format!("team {} is missing", team)))?;
-                members.extend(team.members(data));
+                members.extend(team.members(data)?);
             }
 
             for member in members.iter() {
@@ -341,7 +354,7 @@ impl Team {
             };
 
             let mut members = if raw_group.include_team_members {
-                self.members(data)
+                self.members(data)?
             } else {
                 HashSet::new()
             };
@@ -352,7 +365,7 @@ impl Team {
                 let team = data
                     .team(team)
                     .ok_or_else(|| err_msg(format!("team {} is missing", team)))?;
-                members.extend(team.members(data));
+                members.extend(team.members(data)?);
             }
             for excluded in &raw_group.excluded_people {
                 if !members.remove(excluded.as_str()) {
@@ -390,7 +403,7 @@ impl Team {
         let mut result = Vec::new();
         for github in &self.github {
             let mut members = self
-                .members(data)
+                .members(data)?
                 .iter()
                 .filter_map(|name| data.person(name).map(|p| (p.github(), p.github_id())))
                 .collect::<Vec<_>>();
@@ -398,7 +411,7 @@ impl Team {
                 members.extend(
                     data.team(team)
                         .ok_or_else(|| failure::err_msg(format!("missing team {}", team)))?
-                        .members(data)
+                        .members(data)?
                         .iter()
                         .filter_map(|name| data.person(name).map(|p| (p.github(), p.github_id()))),
                 );
@@ -419,7 +432,7 @@ impl Team {
 
     pub(crate) fn discord_ids(&self, data: &Data) -> Result<Vec<usize>, Error> {
         Ok(self
-            .members(data)
+            .members(data)?
             .iter()
             .flat_map(|name| data.person(name).map(|p| p.discord_id()))
             .flatten()
@@ -433,6 +446,11 @@ impl Team {
     // People explicitly set as members
     pub(crate) fn explicit_members(&self) -> &Vec<String> {
         &self.people.members
+    }
+
+    pub(crate) fn contains_person(&self, data: &Data, person: &Person) -> Result<bool, Error> {
+        let members = self.members(data)?;
+        Ok(members.contains(person.github()))
     }
 }
 
@@ -484,6 +502,8 @@ struct TeamPeople {
     members: Vec<String>,
     #[serde(default)]
     alumni: Vec<String>,
+    #[serde(default)]
+    included_teams: Vec<String>,
     #[serde(default = "default_false")]
     include_team_leads: bool,
     #[serde(default = "default_false")]
