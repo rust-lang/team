@@ -1,0 +1,9 @@
+org = "rust-lang"
+name = "bors-kindergarten"
+description = "Experimental repository for testing the behavior of the new bors implementation."
+bots = ["rustbot"]
+
+[access.teams]
+infra = "write"
+infra-bors = "write"
+mods = "maintain"
