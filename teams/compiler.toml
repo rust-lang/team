@@ -1,7 +1,7 @@
 name = "compiler"
 
 [people]
-leads = ["wesleywiser", "pnkfelix"]
+leads = ["davidtwco", "wesleywiser"]
 members = [
     "Aaron1011",
     "cjgillot",
