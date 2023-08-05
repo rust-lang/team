@@ -714,13 +714,12 @@ impl GitHub {
         if self.dry_run && method != Method::GET && !url.contains("graphql") {
             panic!("Called a non-GET request in dry run mode: {method}");
         }
+        let mut auth = HeaderValue::from_str(&format!("token {}", self.token))?;
+        auth.set_sensitive(true);
         Ok(self
             .client
             .request(method, url.as_ref())
-            .header(
-                header::AUTHORIZATION,
-                HeaderValue::from_str(&format!("token {}", self.token))?,
-            )
+            .header(header::AUTHORIZATION, auth)
             .header(
                 header::USER_AGENT,
                 HeaderValue::from_static(crate::USER_AGENT),
