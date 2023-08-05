@@ -767,7 +767,9 @@ impl GitHub {
             .send()?
             .custom_error_for_status()?;
 
-        let res: GraphResult<R> = resp.json()?;
+        let res: GraphResult<R> = resp.json().with_context(|| {
+            format!("Failed to decode response body on graphql request with query '{query}'")
+        })?;
         if let Some(error) = res.errors.get(0) {
             bail!("graphql error: {}", error.message);
         } else if let Some(data) = res.data {
