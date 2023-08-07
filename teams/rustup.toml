@@ -7,11 +7,11 @@ leads = [
 ]
 members = [
     "rbtcollins",
-    "hi-rustin",
 ]
 alumni = [
     "nrc",
     "kinnison",
+    "hi-rustin",
 ]
 
 [website]
