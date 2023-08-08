@@ -12,6 +12,7 @@ members = [
     "Kobzol",
 ]
 alumni = [
+    "Zoxc",
     "nikomatsakis",
     "Mark-Simulacrum",
     "alexcrichton",
