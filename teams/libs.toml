@@ -38,6 +38,7 @@ page = "library"
 name = "Library team"
 description = "Managing and maintaining the Rust standard library and official rust-lang crates"
 zulip-stream = "t-libs"
+repo = "https://github.com/rust-lang/libs-team"
 
 [[lists]]
 address = "libs-private@rust-lang.org"

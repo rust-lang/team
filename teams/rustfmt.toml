@@ -25,6 +25,7 @@ name = "Rustfmt team"
 description = "Designing and implementing rustfmt, a formatting tool for Rust code"
 discord-invite = "https://discord.gg/e6Q3cvu"
 discord-name = "#wg-rustfmt"
+repo = "https://github.com/rust-lang/rustfmt"
 
 [[zulip-groups]]
 name = "T-rustfmt"

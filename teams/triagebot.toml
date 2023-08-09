@@ -17,6 +17,7 @@ name = "Triagebot team"
 description = "Maintaining and improving the rust-lang/triagebot tooling"
 email = "triagebot@rust-lang.org"
 zulip-stream = "triagebot"
+repo = "https://github.com/rust-lang/triagebot"
 
 [[lists]]
 address = "triagebot@rust-lang.org"

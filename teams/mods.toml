@@ -25,6 +25,7 @@ page = "moderation"
 name = "Moderation team"
 description = "Helping uphold the code of conduct and community standards"
 email = "rust-mods@rust-lang.org"
+repo = "https://github.com/rust-lang/moderation-team"
 
 [[lists]]
 address = "rust-mods@rust-lang.org"

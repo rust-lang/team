@@ -24,6 +24,7 @@ name = "Bootstrap team"
 description = "Maintaining and improving the build system for rust-lang/rust"
 email = "bootstrap@rust-lang.org"
 zulip-stream = "t-infra/bootstrap"
+repo = "https://github.com/rust-lang/rust"
 
 [[lists]]
 address = "bootstrap@rust-lang.org"

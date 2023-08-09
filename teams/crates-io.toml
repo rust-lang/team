@@ -40,6 +40,7 @@ ping = "rust-lang/crates-io"
 name = "Crates.io team"
 description = "Managing operations, development, and official policies for crates.io"
 zulip-stream = "t-crates-io"
+repo = "https://github.com/rust-lang/crates.io"
 
 [[lists]]
 address = "crates-io@rust-lang.org"

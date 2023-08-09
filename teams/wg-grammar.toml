@@ -16,6 +16,7 @@ alumni = [
 [website]
 name = "Grammar working group"
 description = "Working out the official, formal grammar for Rust and validating it against existing implementations"
+repo = "https://github.com/rust-lang/wg-grammar"
 
 [[github]]
 orgs = ["rust-lang"]

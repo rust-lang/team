@@ -29,6 +29,7 @@ ping = "rust-lang/docs-rs"
 name = "Docs.rs team"
 description = "Docs.rs, the documentation hosting service for crates"
 zulip-stream = "t-docs-rs"
+repo = "https://github.com/rust-lang/docs.rs"
 
 [[lists]]
 address = "docs-rs@rust-lang.org"

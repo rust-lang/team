@@ -43,6 +43,7 @@ name = "Infrastructure team"
 description = "Managing the infrastructure supporting the Rust project itself, including CI, releases, bots, and metrics"
 email = "infra@rust-lang.org"
 zulip-stream = "t-infra"
+repo = "https://github.com/rust-lang/infra-team"
 
 [[lists]]
 address = "infra@rust-lang.org"

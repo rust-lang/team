@@ -17,3 +17,4 @@ orgs = ["rust-lang"]
 [website]
 name = "Rust by Example working group"
 description = "Maintaining and updating the official Rust by Example book"
+repo = "https://github.com/rust-lang/rust-by-example"

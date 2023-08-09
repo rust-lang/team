@@ -22,6 +22,7 @@ orgs = ["rust-lang"]
 [website]
 name = "Compiler performance working group"
 description = "Improving rustc compilation performance (build times)"
+repo = "https://github.com/rust-lang/rustc-perf"
 
 [permissions]
 perf = true
