@@ -26,6 +26,7 @@ ping = "rust-lang/style"
 name = "Style team"
 description = "Defining and evolving the default Rust coding style"
 zulip-stream = "t-style"
+repo = "https://github.com/rust-lang/style-team"
 
 [[zulip-groups]]
 name = "T-style"

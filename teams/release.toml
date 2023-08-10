@@ -35,6 +35,7 @@ name = "Release team"
 description = "Tracking regressions and stabilizations, and producing Rust releases"
 email = "release@rust-lang.org"
 zulip-stream = "t-release"
+repo = "https://github.com/rust-lang/release-team"
 
 [[lists]]
 address = "release@rust-lang.org"

@@ -22,6 +22,7 @@ alumni = [
 name = "rust-analyzer team"
 description = "Rust IDE support and error-resilient compiler front-end"
 zulip-stream = "t-compiler/rust-analyzer"
+repo = "https://github.com/rust-lang/rust-analyzer"
 
 [permissions]
 bors.rust.review = true

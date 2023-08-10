@@ -35,6 +35,7 @@ ping = "rust-lang/cargo"
 [website]
 name = "Cargo team"
 description = "Designing and implementing the official Rust package manager, Cargo"
+repo = "https://github.com/rust-lang/cargo"
 zulip-stream = "t-cargo"
 
 [[lists]]

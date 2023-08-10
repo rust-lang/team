@@ -29,6 +29,7 @@ description = "Charged with the success of the Rust Project as whole, consisting
 email = "council@rust-lang.org"
 zulip-stream = "council"
 weight = 1000
+repo = "https://github.com/rust-lang/leadership-council"
 
 [[lists]]
 address = "council@rust-lang.org"
