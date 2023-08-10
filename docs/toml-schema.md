@@ -58,15 +58,26 @@ alumni = [
 # Optional, name of other teams whose members will be included as members of this team.
 # Defaults to empty.
 included-teams = []
+
 # Include all members of all other teams. Optional, defaults to false.
+# DO NOT USE, this is intended only for the `all` team.
+# Include "all" in `included-teams` instead.
 include-all-team-members = false
 # Include all team leads. Optional, defaults to false.
+# DO NOT USE, this is intended only for the `leads` team.
+# Include "leads" in `included-teams` instead.
 include-team-leads = false
 # Include all working group leads. Optional, defaults to false.
+# DO NOT USE, this is intended only for the `wg-leads` team.
+# Include "wg-leads" in `included-teams` instead.
 include-wg-leads = false
 # Include all project group leads. Optional, defaults to false.
+# DO NOT USE, this is intended only for the `project-group-leads` team.
+# Include "project-group-leads" in `included-teams` instead.
 include-project-group-leads = false
 # Include all alumni. Optional, defaults to false.
+# DO NOT USE, this is intended only for the `alumni` team.
+# Include "alumni" in `included-teams` instead.
 include-all-alumni = false
 
 [permissions]
