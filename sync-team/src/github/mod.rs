@@ -436,7 +436,11 @@ fn construct_branch_protection(
     let push_allowances = expected_repo
         .bots
         .contains(&Bot::Bors)
-        .then(|| vec!["bors".to_owned()])
+        .then(|| {
+            vec![api::PushAllowanceActor::User(api::UserPushAllowanceActor {
+                login: "bors".to_owned(),
+            })]
+        })
         .unwrap_or_default();
     api::BranchProtection {
         pattern: branch_protection.pattern.clone(),

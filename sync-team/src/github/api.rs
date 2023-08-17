@@ -536,6 +536,12 @@ impl GitHub {
                                         ... on Actor {
                                             login
                                         }
+                                        ... on Team {
+                                            organization {
+                                                login
+                                            },
+                                            name
+                                        }
                                     }
                                 }
                             }
@@ -628,8 +634,20 @@ impl GitHub {
           }}
         ");
         let mut push_actor_ids = vec![];
-        for name in &branch_protection.push_allowances {
-            push_actor_ids.push(self.user_id(name)?);
+        for actor in &branch_protection.push_allowances {
+            match actor {
+                PushAllowanceActor::User(UserPushAllowanceActor { login: name }) => {
+                    push_actor_ids.push(self.user_id(name)?);
+                }
+                PushAllowanceActor::Team(TeamPushAllowanceActor {
+                    organization: Login { login: org },
+                    name,
+                }) => push_actor_ids.push(
+                    self.team(org, name)?
+                        .with_context(|| format!("could not find team: {org}/{name}"))?
+                        .name,
+                ),
+            }
         }
 
         if !self.dry_run {
@@ -826,14 +844,14 @@ fn allow_not_found(resp: Response, method: Method, url: &str) -> Result<(), anyh
     Ok(())
 }
 
-#[derive(serde::Deserialize)]
+#[derive(Debug, serde::Deserialize)]
 struct GraphResult<T> {
     data: Option<T>,
     #[serde(default)]
     errors: Vec<GraphError>,
 }
 
-#[derive(serde::Deserialize)]
+#[derive(Debug, serde::Deserialize)]
 struct GraphError {
     message: String,
 }
@@ -935,7 +953,7 @@ where
 }
 
 /// An object with a `login` field
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
 struct Login {
     login: String,
 }
@@ -988,7 +1006,7 @@ pub(crate) struct BranchProtection {
     #[serde(default, deserialize_with = "nullable")]
     pub(crate) required_status_check_contexts: Vec<String>,
     #[serde(deserialize_with = "allowances")]
-    pub(crate) push_allowances: Vec<String>,
+    pub(crate) push_allowances: Vec<PushAllowanceActor>,
 }
 
 fn nullable<'de, D, T>(deserializer: D) -> Result<T, D::Error>
@@ -1000,7 +1018,7 @@ where
     Ok(opt.unwrap_or_default())
 }
 
-fn allowances<'de, D>(deserializer: D) -> Result<Vec<String>, D::Error>
+fn allowances<'de, D>(deserializer: D) -> Result<Vec<PushAllowanceActor>, D::Error>
 where
     D: serde::de::Deserializer<'de>,
 {
@@ -1010,14 +1028,31 @@ where
     }
     #[derive(Deserialize)]
     struct Actor {
-        actor: Login,
+        actor: PushAllowanceActor,
     }
     let allowances = Allowances::deserialize(deserializer)?;
-    Ok(allowances
-        .nodes
-        .into_iter()
-        .map(|a| a.actor.login)
-        .collect())
+    Ok(allowances.nodes.into_iter().map(|a| a.actor).collect())
+}
+
+/// Entities that can be allowed to push to a branch in a repo
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
+#[serde(untagged)]
+pub(crate) enum PushAllowanceActor {
+    User(UserPushAllowanceActor),
+    Team(TeamPushAllowanceActor),
+}
+
+/// User who can be allowed to push to a branch in a repo
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
+pub(crate) struct UserPushAllowanceActor {
+    pub(crate) login: String,
+}
+
+/// Team that can be allowed to push to a branch in a repo
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
+pub(crate) struct TeamPushAllowanceActor {
+    organization: Login,
+    name: String,
 }
 
 pub(crate) enum BranchProtectionOp {
