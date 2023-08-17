@@ -8,12 +8,12 @@ members = [
     "autozimu",
     "jasonwilliams",
     "LucasBullen",
-    "matklad",
     "vlad20012",
     "Xanewok",
 ]
 alumni = [
     "nrc",
+    "matklad",
 ]
 
 [[github]]
