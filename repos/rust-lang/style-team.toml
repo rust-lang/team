@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "style-team"
+description = "Home of the Rust style team"
+bots = ["rustbot"]
+
+[access.teams]
+style = "maintain"
