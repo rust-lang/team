@@ -14,7 +14,7 @@ discord-id = 123456 # Discord ID of the person (optional)
 # You can also set `email = false` to explicitly disable the email for the user.
 # This will, for example, avoid adding the person to the mailing lists.
 email = "john@doe.com"  # Email address used for mailing lists (optional)
-irc-nickname = "jdoe"  # Nickname of the person on IRC, if different than the GitHub one (optional)
+irc = "jdoe"  # Nickname of the person on IRC, if different than the GitHub one (optional)
 
 [permissions]
 # Optional, see the permissions documentation
@@ -58,9 +58,27 @@ alumni = [
 # Optional, name of other teams whose members will be included as members of this team.
 # Defaults to empty.
 included-teams = []
-# Optional, include all members of all other teams.
-# Defaults to false.
+
+# Include all members of all other teams. Optional, defaults to false.
+# DO NOT USE, this is intended only for the `all` team.
+# Include "all" in `included-teams` instead.
 include-all-team-members = false
+# Include all team leads. Optional, defaults to false.
+# DO NOT USE, this is intended only for the `leads` team.
+# Include "leads" in `included-teams` instead.
+include-team-leads = false
+# Include all working group leads. Optional, defaults to false.
+# DO NOT USE, this is intended only for the `wg-leads` team.
+# Include "wg-leads" in `included-teams` instead.
+include-wg-leads = false
+# Include all project group leads. Optional, defaults to false.
+# DO NOT USE, this is intended only for the `project-group-leads` team.
+# Include "project-group-leads" in `included-teams` instead.
+include-project-group-leads = false
+# Include all alumni. Optional, defaults to false.
+# DO NOT USE, this is intended only for the `alumni` team.
+# Include "alumni" in `included-teams` instead.
+include-all-alumni = false
 
 [permissions]
 # Optional, applies to all team members. See the permissions documentation
@@ -75,6 +93,41 @@ team-name = "overlords-team"  # The name of the GitHub team (optional)
 orgs = ["rust-lang"]  # Organizations to create the team in (required)
 # Include members of these Rust teams in this GitHub team (optional)
 extra-teams = ["bots-nursery"]
+
+# Configures integration with rfcbot.
+[rfcbot]
+# The GitHub label to use for the team.
+label = "T-cargo"
+# The name of the team to be displayed by rfcbot.
+name = "Cargo"
+# The GitHub team to tag in a GitHub comment.
+ping = "rust-lang/cargo"
+
+# Information about the team to display on the www.rust-lang.org website.
+[website]
+# The name of the team to display on the website (required).
+name = "Language team"
+# A short description of the team (required).
+description = "Designing and helping to implement new language features"
+# The web page where this will appear, for example https://www.rust-lang.org/governance/teams/lang
+# Defaults to the name of the team (defined at the top of this file).
+# Subteams do not get a separate page. Only teams and working groups have pages.
+page = "lang"
+# The email address to contact the team.
+email = "example@rust-lang.org"
+# The GitHub repository where this team does their work.
+repo = "http://github.com/rust-lang/lang-team"
+# A link to access the team's Discord channel.
+discord-invite = "https://discord.gg/e6Q3cvu"
+# The name of the team's channel on Discord.
+discord-name = "#wg-rustup"
+# The name of the team's stream on Zulip.
+zulip-stream = "t-lang"
+# An integer to influence the sort order of team in the teams list.
+# They are sorted in descending order, so very large positive values are
+# first, and very negative values are last.
+# Default is 0.
+weight = -100
 
 # Define the mailing lists used by the team
 # It's optional, and there can be more than one
@@ -134,6 +187,13 @@ extra-teams = [
 excluded-people = [
     "rylev",
 ]
+
+# Roles to define in Discord.
+[[discord-roles]]
+# The name of the role.
+name = "security"
+# The color for the role.
+color = "#e91e63"
 ```
 
 ## Permissions
@@ -156,6 +216,10 @@ bors.some-repo.review = true
 # This is a subset of `bors.some-repo.review`, so this shouldn't
 # be set if `review` is also set.
 bors.some-repo.try = true
+
+# Access to the dev-desktop program.
+# See https://forge.rust-lang.org/infra/docs/dev-desktop.html
+dev-desktop = true
 ```
 
 ## Repos
@@ -177,11 +241,26 @@ bots = ["bors", "highfive", "rustbot", "rust-timer"]
 
 # The teams that have access to this repo along
 # with the access level. (required)
+# The key is the team name, and the value is either:
+# - "triage"
+# - "write"
+# - "maintain"
+# - "admin"
+# Refer to https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization
+# for information on permissions.
 [access.teams]
 compiler = "write"
 mods = "maintain"
 
+# Access granted to individuals. This should be avoided if possible, access
+# should only be given to teams.
+# The key is the GitHub username, and the value is the permission level (same as teams).
+[access.individuals]
+octocat = "write"
+
 # The branch protections (optional)
+# Refer to https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
+# for information on how branch protections work.
 [[branch-protections]]
 # The pattern matching the branches to be protected (required)
 pattern = "master"
