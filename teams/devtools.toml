@@ -30,7 +30,6 @@ extra-teams = [
     "cargo",
     "clippy",
     "docs-rs",
-    "ides",
     "rustdoc",
     "rustfmt",
     "rustup",
