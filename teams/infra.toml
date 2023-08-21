@@ -4,7 +4,6 @@ name = "infra"
 leads = ["pietroalbini"]
 members = [
     "Mark-Simulacrum",
-    "jyn514",
     "kennytm",
     "pietroalbini",
     "shepmaster",
@@ -17,6 +16,7 @@ alumni = [
     "nellshamrell",
     "ashleygwilliams",
     "aidanhs",
+    "jyn514",
 ]
 
 [[github]]

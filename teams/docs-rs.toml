@@ -6,7 +6,6 @@ leads = ["syphar"]
 members = [
     "GuillaumeGomez",
     "Nemo157",
-    "jyn514",
     "syphar",
     "Byron",
     "jsha",
@@ -15,6 +14,7 @@ alumni = [
     "Kixiron",
     "onur",
     "pietroalbini",
+    "jyn514",
 ]
 
 [[github]]
