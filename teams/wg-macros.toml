@@ -1,0 +1,28 @@
+name = "wg-macros"
+kind = "working-group"
+subteam-of = "compiler"
+
+[people]
+leads = ["vincenzopalazzo", "eholk"]
+members = [
+  "jhpratt",
+  "Veykril",
+  "CohenArthur",
+  "danielhenrymantilla",
+  "vincenzopalazzo",
+  "eholk",
+]
+alumni = [
+]
+
+[[github]]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
+[website]
+name = "Macros working group"
+description = "Revival and Improving the Rust Macros"
+repo = "https://github.com/rust-lang/wg-macros"
+zulip-stream = "wg-macros"
+
+[[zulip-groups]]
+name = "wg-macros"
