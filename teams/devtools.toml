@@ -2,7 +2,7 @@ name = "devtools"
 
 [people]
 leads = ["Manishearth"]
-members = ["Manishearth", "Xanewok", "fitzgen", "GuillaumeGomez", "oli-obk", "kinnison", "ehuss"]
+members = ["Manishearth", "fitzgen", "GuillaumeGomez", "oli-obk", "rbtcollins", "ehuss", "calebcartwright"]
 alumni = ["nrc", "killercup"]
 
 [rfcbot]
