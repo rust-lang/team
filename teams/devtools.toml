@@ -35,7 +35,6 @@ extra-teams = [
     "rustfmt",
     "rustup",
     "wg-bindgen",
-    "wg-rustfix",
 ]
 extra-people = ["spacekookie"]
 
