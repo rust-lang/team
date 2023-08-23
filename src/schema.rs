@@ -186,10 +186,11 @@ impl Team {
 
     // Return's whether the provided team is a subteam of this team
     pub(crate) fn is_parent_of<'a>(&'a self, data: &'a Data, subteam: &Team) -> bool {
+        let mut visited = Vec::new();
         let mut subteam = Some(subteam);
-        while let Some(s) = subteam {
+        while let Some(team) = subteam {
             // Get subteam's parent
-            let Some(parent) = s.subteam_of() else {
+            let Some(parent) = team.subteam_of() else {
                 // The current subteam is a top level team.
                 // Therefore this team cannot be its parent.
                 return false;
@@ -198,7 +199,16 @@ impl Team {
             if parent == self.name {
                 return true;
             }
+
+            visited.push(team.name.as_str());
+
             // Otherwise try the test again with the parent
+            // unless we have already visited it.
+
+            if visited.contains(&parent) {
+                // We have found a cycle, give up.
+                return false;
+            }
             subteam = data.team(parent);
         }
         false
