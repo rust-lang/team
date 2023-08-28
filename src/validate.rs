@@ -161,25 +161,36 @@ fn validate_name_prefixes(data: &Data, errors: &mut Vec<String>) {
 
 /// Ensure `subteam-of` points to an existing team
 fn validate_subteam_of(data: &Data, errors: &mut Vec<String>) {
-    let teams: HashMap<_, _> = data
-        .teams()
-        .map(|t| (t.name(), t.subteam_of().is_some()))
-        .collect();
-    wrapper(data.teams(), errors, |team, _| {
-        if let Some(subteam_of) = team.subteam_of() {
-            match teams.get(subteam_of) {
-                Some(false) => {}
-                Some(true) => bail!(
-                    "team `{}` can't be a subteam of a subteam (`{}`)",
-                    team.name(),
-                    subteam_of
-                ),
-                None => bail!(
+    wrapper(data.teams(), errors, |mut team, _| {
+        let mut visited = Vec::new();
+        while let Some(parent) = team.subteam_of() {
+            visited.push(team.name());
+
+            if visited.contains(&parent) {
+                bail!(
+                    "team `{parent}` is a subteam of itself: {} => {parent}",
+                    visited.join(" => "),
+                );
+            }
+
+            let Some(parent) = data.team(parent) else {
+                bail!(
                     "the parent of team `{}` doesn't exist: `{}`",
                     team.name(),
-                    subteam_of
-                ),
+                    parent,
+                );
+            };
+
+            if !matches!(team.kind(), TeamKind::Team) && parent.subteam_of().is_some() {
+                bail!(
+                    "{} `{}` can't be a subteam of a subteam (`{}`)",
+                    team.kind(),
+                    team.name(),
+                    parent.name(),
+                );
             }
+
+            team = parent;
         }
         Ok(())
     });
