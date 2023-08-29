@@ -8,12 +8,13 @@ members = [
     "ehuss",
     "jackh726",
     "jonathanpallant",
-    "khionu",
     "Mark-Simulacrum",
     "m-ou-se",
     "rylev",
 ]
-alumni = []
+alumni = [
+    "khionu",
+]
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
