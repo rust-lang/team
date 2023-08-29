@@ -1,0 +1,22 @@
+name = "rustdoc-contributors"
+subteam-of = "rustdoc"
+
+[people]
+leads = []
+members = [
+    "fmease"
+]
+
+[permissions]
+bors.rust.review = true
+dev-desktop = true
+perf = true
+
+[[github]]
+orgs = ["rust-lang", "rust-lang-nursery"]
+extra-teams = ["rustdoc"]
+
+[website]
+name = "Rustdoc team contributors"
+description = "Contributing to Rustdoc on a regular basis"
+zulip-stream = "rustdoc"
