@@ -11,10 +11,9 @@ members = [
     "Mark-Simulacrum",
     "m-ou-se",
     "rylev",
+    "technetos",
 ]
-alumni = [
-    "khionu",
-]
+alumni = ["khionu"]
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
