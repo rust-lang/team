@@ -5,12 +5,12 @@ subteam-of = "mods"
 leads = []
 members = [
     "technetos",
-    "khionu",
     "notriddle",
     "steffahn",
 ]
 alumni = [
     "mbrubeck",
+    "khionu",
 ]
 
 [website]
