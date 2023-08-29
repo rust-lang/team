@@ -1,0 +1,10 @@
+org = "rust-lang"
+name = "project-stable-mir"
+description = "Define compiler intermediate representation usable by external tools"
+bots = ["rustbot"]
+
+[access.teams]
+project-stable-mir = "write"
+
+[[branch-protections]]
+pattern = "main"
