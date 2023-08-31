@@ -2,7 +2,7 @@ name = "bootstrap"
 subteam-of = "infra"
 
 [people]
-leads = ["Mark-Simulacrum"]
+leads = ["Mark-Simulacrum", "onur-ozkan"]
 members = [
     "Mark-Simulacrum",
     "onur-ozkan",
