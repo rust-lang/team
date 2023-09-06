@@ -39,7 +39,6 @@ members = [
 alumni = [
     "Centril",
     "LeSeulArtichaut",
-    "jonas-schievink",
     "zackmdavis",
     "matklad",
 ]
