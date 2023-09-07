@@ -1,0 +1,22 @@
+name = "test-tools"
+subteam-of = "devtools"
+
+[people]
+leads = ["calebcartwright"]
+members = [
+    "calebcartwright",
+    "epage",
+    "Muscraft",
+    "thomcc",
+    "weihanglo",
+]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Test tools team"
+description = "Defining strategy and associated tooling for supporting automated testing activities in the development workflow"
+
+[[zulip-groups]]
+name = "T-test-tools"
