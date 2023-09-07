@@ -1,7 +1,7 @@
 name = "infra"
 
 [people]
-leads = ["pietroalbini"]
+leads = ["shepmaster", "jdno"]
 members = [
     "Mark-Simulacrum",
     "kennytm",
