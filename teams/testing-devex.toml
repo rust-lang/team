@@ -1,0 +1,22 @@
+name = "testing-devex"
+subteam-of = "devtools"
+
+[people]
+leads = ["calebcartwright"]
+members = [
+    "calebcartwright",
+    "epage",
+    "Muscraft",
+    "thomcc",
+    "weihanglo",
+]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Testing DevEx team"
+description = "Working on the associated libraries, tooling, strategy, and integration points that support the developer experience with writing, executing, and analyzing tests"
+
+[[zulip-groups]]
+name = "T-testing-devex"
