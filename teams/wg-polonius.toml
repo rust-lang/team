@@ -1,4 +1,5 @@
 name = "wg-polonius"
+# Really should be "types", but the team repo doesn't handle that right now
 subteam-of = "compiler"
 kind = "working-group"
 
@@ -10,7 +11,7 @@ members = ["lqd", "nikomatsakis", "amandasystems", "matthewjasper", "ecstatic-mo
 name = "Polonius working group"
 description = "Working on an experimental new borrow-checker implementation"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/polonius/"
-zulip-stream = "t-compiler/wg-polonius"
+zulip-stream = "t-types/polonius"
 
 [[github]]
 orgs = ["rust-lang"]
