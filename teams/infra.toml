@@ -32,6 +32,7 @@ crater = true
 dev-desktop = true
 bors.rust.review = true
 bors.crater.review = true
+bors.bors-kindergarten.review = true
 
 [rfcbot]
 label = "T-infra"
