@@ -18,6 +18,7 @@ allowed-github-orgs = [
 ]
 
 permissions-bors-repos = [
+    "bors-kindergarten",
     "cargo",
     "chalk",
     "clippy",
