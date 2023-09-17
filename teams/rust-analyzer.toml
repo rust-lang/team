@@ -12,7 +12,6 @@ members = [
     "HKalbasi",
 ]
 alumni = [
-    "jonas-schievink",
     "edwin0cheng",
     "SomeoneToIgnore",
     "matklad",
