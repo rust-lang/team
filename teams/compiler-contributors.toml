@@ -11,7 +11,6 @@ members = [
   "chenyukang",
   "cuviper",
   "durin42",
-  "ecstatic-morse",
   "eholk",
   "est31",
   "fee1-dead",
@@ -24,7 +23,6 @@ members = [
   "nikomatsakis",
   "nnethercote",
   "RalfJung",
-  "scalexm",
   "saethlin",
   "SparrowLii",
   "spastorino",
@@ -32,15 +30,17 @@ members = [
   "tmandry",
   "tmiasko",
   "TaKO8Ki",
-  "varkor",
   "WaffleLapkin",
-  "Xanewok",
 ]
 alumni = [
     "Centril",
     "LeSeulArtichaut",
     "zackmdavis",
     "matklad",
+    "ecstatic-morse",
+    "scalexm",
+    "varkor",
+    "Xanewok",
 ]
 
 [permissions]
