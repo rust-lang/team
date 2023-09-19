@@ -1,0 +1,28 @@
+name = "spec"
+subteam-of = "lang"
+
+[people]
+leads = ["pnkfelix", "m-ou-se"]
+members = [
+    "pnkfelix",
+    "m-ou-se",
+    "JoelMarcey",
+    "ehuss",
+]
+alumni = []
+
+[website]
+name = "Specification team"
+description = "Creating and maintaining the specification for the Rust language"
+zulip-stream = "t-spec"
+
+[rfcbot]
+label = "T-spec"
+name = "Spec"
+ping = "rust-lang/spec"
+
+[[github]]
+orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "T-spec"
