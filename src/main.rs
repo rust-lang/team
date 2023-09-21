@@ -13,6 +13,7 @@ const USER_AGENT: &str = "https://github.com/rust-lang/team (infra@rust-lang.org
 
 use data::Data;
 use schema::{Email, Team, TeamKind};
+use zulip::ZulipApi;
 
 use crate::schema::RepoPermission;
 use anyhow::{bail, format_err, Error};
@@ -292,8 +293,23 @@ fn run() -> Result<(), Error> {
             println!();
 
             println!("github: @{}", person.github());
+            if let Some(zulip_id) = person.zulip_id() {
+                let zulip = ZulipApi::new();
+                match zulip.require_auth() {
+                    Ok(()) => match zulip.get_user(zulip_id) {
+                        Ok(user) => println!("zulip: {} ({zulip_id})", user.name),
+                        Err(err) => {
+                            println!("zulip_id: {zulip_id}  # Failed to look up Zulip name: {err}")
+                        }
+                    },
+                    Err(err) => {
+                        // We have no authentication credentials, so don't even attempt the network access.
+                        println!("zulip_id: {zulip_id}  # Skipped name lookup: {err}");
+                    }
+                }
+            }
             if let Email::Present(email) = person.email() {
-                println!("email:  {}", email);
+                println!("email: {}", email);
             }
             println!();
 

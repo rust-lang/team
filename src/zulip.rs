@@ -36,11 +36,7 @@ impl ZulipApi {
 
     pub(crate) fn require_auth(&self) -> Result<(), Error> {
         if self.auth.is_none() {
-            bail!(
-                "missing {} and/or {} environment variables",
-                USER_VAR,
-                TOKEN_VAR
-            );
+            bail!("missing {USER_VAR} and/or {TOKEN_VAR} environment variables");
         }
         Ok(())
     }
@@ -52,6 +48,17 @@ impl ZulipApi {
             .error_for_status()?
             .json::<ZulipUsers>()?
             .members;
+
+        Ok(response)
+    }
+
+    /// Get a single user of the Rust Zulip instance
+    pub(crate) fn get_user(&self, user_id: u64) -> Result<ZulipUser, Error> {
+        let response = self
+            .req(Method::GET, &format!("/users/{user_id}"), None)?
+            .error_for_status()?
+            .json::<ZulipOneUser>()?
+            .user;
 
         Ok(response)
     }
@@ -78,10 +85,16 @@ impl ZulipApi {
     }
 }
 
-/// A collection of Zulip users
+/// A collection of Zulip users, as returned from '/users'
 #[derive(Deserialize)]
 struct ZulipUsers {
     members: Vec<ZulipUser>,
+}
+
+/// A collection of exactly one Zulip user, as returned from '/users/{user_id}'
+#[derive(Deserialize)]
+struct ZulipOneUser {
+    user: ZulipUser,
 }
 
 /// A single Zulip user
