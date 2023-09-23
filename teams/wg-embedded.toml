@@ -55,6 +55,7 @@ page = "embedded"
 name = "Embedded devices working group"
 description = "Focusing on improving the end-to-end experience of using Rust in resource-constrained environments and non-traditional platforms"
 repo = "https://github.com/rust-embedded/wg"
+matrix-room = "#rust-embedded:matrix.org"
 
 [[lists]]
 address = "embedded-wg@rust-lang.org"
