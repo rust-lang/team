@@ -196,6 +196,7 @@ impl<'a> Generator<'a> {
                         url: i.url.into(),
                     }),
                     zulip_stream: ws.zulip_stream().map(|s| s.into()),
+                    matrix_room: ws.matrix_room().map(|s| s.into()),
                     weight: ws.weight(),
                 }),
                 roles: team

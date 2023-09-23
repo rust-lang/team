@@ -25,6 +25,7 @@ repo = "https://github.com/ghost/foo"
 discord-invite = "https://discord.gg/AAAAA"
 discord-name = "#foo"
 zulip-stream = "t-foo"
+matrix-room = "#t-foo:example.com"
 weight = 1000
 
 [[github]]

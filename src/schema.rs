@@ -65,6 +65,7 @@ pub(crate) struct Person {
     #[serde(default)]
     email: EmailField,
     discord_id: Option<u64>,
+    matrix: Option<String>,
     #[serde(default)]
     permissions: Permissions,
 }
@@ -106,6 +107,11 @@ impl Person {
 
     pub(crate) fn discord_id(&self) -> Option<u64> {
         self.discord_id
+    }
+
+    #[allow(unused)]
+    pub(crate) fn matrix(&self) -> Option<&str> {
+        self.matrix.as_deref()
     }
 
     pub(crate) fn permissions(&self) -> &Permissions {
@@ -595,6 +601,7 @@ pub(crate) struct WebsiteData {
     repo: Option<String>,
     discord_invite: Option<String>,
     discord_name: Option<String>,
+    matrix_room: Option<String>,
     zulip_stream: Option<String>,
     #[serde(default)]
     weight: i64,
@@ -638,6 +645,10 @@ impl WebsiteData {
 
     pub(crate) fn zulip_stream(&self) -> Option<&str> {
         self.zulip_stream.as_deref()
+    }
+
+    pub(crate) fn matrix_room(&self) -> Option<&str> {
+        self.matrix_room.as_deref()
     }
 }
 
