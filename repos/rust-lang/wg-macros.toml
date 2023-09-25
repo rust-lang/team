@@ -1,0 +1,10 @@
+org = "rust-lang"
+name = "wg-macros"
+description = "Home of the Rust Macros Working Gruop"
+bots = ["rustbot"]
+
+[access.teams]
+wg-macros = "maintain"
+
+[[branch-protections]]
+pattern = "main"
