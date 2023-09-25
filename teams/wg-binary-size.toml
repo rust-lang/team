@@ -1,0 +1,32 @@
+name = "wg-binary-size"
+kind = "working-group"
+subteam-of = "compiler"
+
+[people]
+leads = ["thomcc", "m-ou-se"]
+members = [
+    "davidtwco",
+    "h1467792822",
+    "Kobzol",
+    "m-ou-se",
+    "nbdd0121",
+    "nnethercote",
+    "thomcc",
+    "wain303009",
+    "workingjubilee",
+]
+
+alumni = [
+]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Binary size working group"
+description = "Improving the binary size of Rust programs and libraries"
+repo = "https://github.com/rust-lang/wg-binary-size"
+zulip-stream = "wg-binary-size"
+
+[[zulip-groups]]
+name = "wg-binary-size"
