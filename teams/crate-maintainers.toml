@@ -13,6 +13,7 @@ members = [
   "workingjubilee",
   "ChrisDenton",
   "Byron",
+  "dtolnay",
 ]
 
 [permissions]
