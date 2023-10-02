@@ -19,4 +19,4 @@ extra-teams = ["rustdoc"]
 [website]
 name = "Rustdoc team contributors"
 description = "Contributing to Rustdoc on a regular basis"
-zulip-stream = "rustdoc"
+zulip-stream = "t-rustdoc"
