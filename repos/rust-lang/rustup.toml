@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "rustup"
+description = "The Rust toolchain installer"
+bots = ["rustbot"]
+
+[access.teams]
+rustup = "maintain"
+mods = "maintain"
+
+[[branch-protections]]
+pattern = "master"
