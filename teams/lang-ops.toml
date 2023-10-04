@@ -2,9 +2,9 @@ name = "lang-ops"
 subteam-of = "lang"
 
 [people]
-leads = ["TC"]
+leads = ["traviscross"]
 members = [
-    "TC",
+    "traviscross",
 ]
 alumni = [
 ]
