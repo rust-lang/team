@@ -5,7 +5,6 @@ bots = ["rustbot"]
 
 [access.teams]
 rustup = "maintain"
-mods = "maintain"
 
 [[branch-protections]]
 pattern = "master"
