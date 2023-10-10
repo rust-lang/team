@@ -80,13 +80,12 @@ name = "T-compiler"
 name = "T-compiler/meeting"
 extra-people = [
     "aturon",
-    "Mark-Simulacrum",
-    "spastorino",
     "varkor",
     "arielb1",
     "cramertj",
-    "bjorn3",
     "Xanewok",
     "nellshamrell",
-    "jackh726"
 ]
+
+[[zulip-groups]]
+name = "T-compiler/contrib-private"

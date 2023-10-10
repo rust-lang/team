@@ -57,3 +57,12 @@ extra-teams = ["compiler"]
 name = "Compiler team contributors"
 repo = "http://github.com/rust-lang/compiler-team"
 description = "Contributing to the Rust compiler on a regular basis"
+
+[[zulip-groups]]
+name = "T-compiler"
+
+[[zulip-groups]]
+name = "T-compiler/meeting"
+
+[[zulip-groups]]
+name = "T-compiler/contrib-private"

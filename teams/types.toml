@@ -38,6 +38,9 @@ name = "T-types"
 name = "T-types/meetings"
 extra-people = ["eholk"]
 
+[[zulip-groups]] 
+name = "T-types/private"
+
 [permissions]
 bors.chalk.review = true
 bors.rust.review = true
