@@ -4,8 +4,8 @@ description = 'Automation/tooling for Rust spaces'
 bots = ["rustbot"]
 
 [access.teams]
-infra = "write"
-triagebot = "write"
+infra = "maintain"
+triagebot = "maintain"
 
 [[branch-protections]]
 pattern = "master"
