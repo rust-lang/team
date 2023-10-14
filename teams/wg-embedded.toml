@@ -2,7 +2,7 @@ name = "wg-embedded"
 kind = "working-group"
 
 [people]
-leads = ["adamgreig", "japaric", "therealprof"]
+leads = ["adamgreig", "therealprof"]
 members = [
     "Dirbaio",
     "Disasm",
@@ -17,7 +17,6 @@ members = [
     "hargoniX",
     "ithinuel",
     "jamesmunns",
-    "japaric",
     "nastevens",
     "posborne",
     "raw-bin",
@@ -37,6 +36,7 @@ alumni = [
     "dylanmckay",
     "hannobraun",
     "ithinuel",
+    "japaric",
     "jcsoo",
     "korken89",
     "laanwj",
