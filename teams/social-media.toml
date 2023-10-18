@@ -1,0 +1,9 @@
+name = "social-media"
+subteam-of = "leadership-council"
+
+[people]
+leads = ["m-ou-se"]
+members = ["m-ou-se"]
+
+[[lists]]
+address = "social@rust-lang.org"
