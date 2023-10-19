@@ -1,0 +1,20 @@
+org = 'rust-lang'
+name = 'rust-forge'
+description = 'Information useful to people contributing to Rust'
+bots = ["rustbot"]
+
+[access.teams]
+community = "maintain"
+compiler = "maintain"
+compiler-contributors = "maintain"
+crates-io = "maintain"
+docs-rs = "maintain"
+infra = "maintain"
+lang = "maintain"
+leadership-council = "maintain"
+libs = "maintain"
+release = "maintain"
+triagebot = "maintain"
+
+[[branch-protections]]
+pattern = "master"
