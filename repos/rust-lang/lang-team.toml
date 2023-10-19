@@ -1,7 +1,11 @@
 org = "rust-lang"
 name = "lang-team"
 description = "Home of the Rust lang team"
-bots = ["rustbot"]
+bots = ["rustbot", "rfcbot"]
 
 [access.teams]
 lang = "maintain"
+lang-ops = "maintain"
+lang-docs = "maintain"
+types = "maintain"
+release = "maintain"
