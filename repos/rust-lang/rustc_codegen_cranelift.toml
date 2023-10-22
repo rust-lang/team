@@ -1,0 +1,10 @@
+org = 'rust-lang'
+name = 'rustc_codegen_cranelift'
+description = 'Cranelift based backend for rustc'
+bots = []
+
+[access.teams]
+compiler = 'maintain'
+
+[access.individuals]
+bjorn3 = 'maintain'
