@@ -237,7 +237,7 @@ name = "my-repo"
 # A description of the repo (required)
 description = "A repo for awesome things!"
 # The bots that this repo requires (required)
-bots = ["bors", "highfive", "rustbot", "rust-timer"]
+bots = ["bors", "rustbot", "rust-timer"]
 
 # The teams that have access to this repo along
 # with the access level. (required)
@@ -261,6 +261,24 @@ octocat = "write"
 # The branch protections (optional)
 # Refer to https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
 # for information on how branch protections work.
+#
+# The behavior depends on whether or not bors is enabled.
+# If bors is not enabled, then this requires at least one approving review
+# (via GitHub's PR UI).
+# If bors is enabled, approvals via GitHub's UI is not required (since we
+# count the `@bors r+` comment as an approval). Also, bors will be added to
+# the "allowed pushers".
+#
+# Users with the "maintain" role or admins are allowed to merge PRs via the
+# GitHub UI. If you have bors enabled, you should only give users the "write"
+# role so that the "Merge" button is disabled, forcing the user to use the
+# `@bors r+` comment instead.
+#
+# The branch protection also requires a PR to push changes. You cannot push
+# directly to the branch.
+#
+# Admins cannot override these branch protections. If an admin needs to
+# do that, they will need to temporarily edit the branch protection.
 [[branch-protections]]
 # The pattern matching the branches to be protected (required)
 pattern = "master"
