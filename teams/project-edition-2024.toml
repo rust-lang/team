@@ -1,0 +1,17 @@
+name = "project-edition-2024"
+kind = "project-group"
+subteam-of = "leadership-council"
+
+[people]
+leads = [
+    "bstrie",
+    "ehuss"
+]
+members = [
+    "bstrie",
+    "ehuss",
+    "m-ou-se",
+]
+
+[[github]]
+orgs = ["rust-lang"]
