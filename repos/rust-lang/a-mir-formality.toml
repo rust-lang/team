@@ -1,0 +1,13 @@
+org = "rust-lang"
+name = "a-mir-formality"
+description = "a model of MIR and the Rust type/trait system"
+bots = ["rustbot", "rfcbot", "bors"]
+
+[access.teams]
+lang = "maintain"
+lang-ops = "maintain"
+lang-docs = "maintain"
+types = "maintain"
+release = "maintain"
+infra = "maintain"
+infra-bors = "write"
