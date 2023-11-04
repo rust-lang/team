@@ -23,6 +23,7 @@ orgs = ["rust-lang", "rust-lang-nursery"]
 [permissions]
 perf = true
 crater = true
+dev-desktop = true
 bors.hashbrown.review = true
 bors.libc.review = true
 bors.rust.review = true

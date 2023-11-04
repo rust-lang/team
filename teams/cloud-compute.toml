@@ -19,7 +19,6 @@ members = [
     "WaffleLapkin",
     "JulianKnodt",
     "vincenzopalazzo",
-    "thomcc",
 ]
 
 [permissions]
