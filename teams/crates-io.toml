@@ -9,6 +9,7 @@ members = [
     "JohnTitor",
     "LawnGnome",
     "mdtro",
+    "hi-rustin",
 ]
 alumni = [
     "steveklabnik",
@@ -18,7 +19,6 @@ alumni = [
     "ishitatsuyuki",
     "sgrif",
     "nellshamrell",
-    "hi-rustin",
     "pietroalbini",
     "smarnach",
     "pichfl",
