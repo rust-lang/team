@@ -15,6 +15,7 @@ leadership-council = "maintain"
 libs = "maintain"
 release = "maintain"
 triagebot = "maintain"
+project-stable-mir = "maintain"
 
 [[branch-protections]]
 pattern = "master"
