@@ -15,6 +15,7 @@ alumni = []
 name = "Specification team"
 description = "Creating and maintaining the specification for the Rust language"
 zulip-stream = "t-spec"
+repo = "https://github.com/rust-lang/spec"
 
 [rfcbot]
 label = "T-spec"
