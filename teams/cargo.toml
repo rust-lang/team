@@ -24,6 +24,7 @@ alumni = [
 [permissions]
 bors.rust.review = true
 bors.cargo.review = true
+perf = true
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
