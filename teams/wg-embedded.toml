@@ -5,7 +5,6 @@ kind = "working-group"
 leads = ["adamgreig", "japaric", "therealprof"]
 members = [
     "Dirbaio",
-    "Disasm",
     "Emilgardis",
     "adamgreig",
     "almindor",
@@ -33,6 +32,7 @@ alumni = [
     "awygle",
     "bradjc",
     "danc86",
+    "Disasm",
     "dvc94ch",
     "dylanmckay",
     "hannobraun",
