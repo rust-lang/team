@@ -1,0 +1,13 @@
+name = "docs-rs-reviewers"
+subteam-of = "docs-rs"
+
+[people]
+leads = []
+members = [
+    "GuillaumeGomez",
+    "Nemo157",
+    "syphar",
+]
+
+[[github]]
+orgs = ["rust-lang"]
