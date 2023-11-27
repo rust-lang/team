@@ -282,14 +282,35 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
         .flat_map(|r| r.access.individuals.keys())
         .map(|n| n.as_str())
         .collect::<HashSet<_>>();
+    let zulip_groups = match data.zulip_groups() {
+        Ok(z) => z,
+        Err(e) => {
+            errors.push(format!("could not get all the Zulip groups: {e}"));
+            return;
+        }
+    };
+    // All people in that are included in a Zulip group which can contain people not in all_members
+    let all_extra_zulip_people = zulip_groups
+        .values()
+        .flat_map(|z| z.members())
+        .filter_map(|m| match m {
+            ZulipGroupMember::MemberWithId { github, .. }
+            | ZulipGroupMember::MemberWithoutId { github } => Some(github.as_str()),
+            ZulipGroupMember::JustId(_) => None,
+        })
+        .collect::<HashSet<_>>();
     wrapper(
         all_members.difference(&referenced_members),
         errors,
         |person, _| {
-            if !data.person(person).unwrap().permissions().has_any() && !all_ics.contains(person) {
+            if !data.person(person).unwrap().permissions().has_any()
+                && !all_ics.contains(person)
+                && !all_extra_zulip_people.contains(person)
+            {
                 bail!(
-                    "person `{}` is not a member of any team (active or archived), has no permissions, and is not an individual contributor to any repo",
-                    person
+                    "person `{person}` is not a member of any team (active or archived), \
+                    has no permissions, is not an individual contributor to any repo, and \
+                    is not included as a extra person in a Zulip group",
                 );
             }
             Ok(())
