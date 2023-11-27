@@ -6,26 +6,11 @@ name = "alumni"
 [people]
 leads = []
 members = [
-    "Aatch",
-    "MajorBreakfast",
-    "QuietMisdreavus",
-    "TimNN",
     "alercah",
-    "arielb1",
     "birkenfeld",
-    "bkoropoff",
-    "booyaa",
-    "edunham",
-    "erickt",
-    "frewsxcv",
     "gnunicorn",
-    "jseyfried",
-    "levex",
-    "niconii",
-    "pcwalton",
     "peschkaj",
     "rpjohnst",
-    "tomprince",
     "valgrimm",
     "whitequark",
 ]
