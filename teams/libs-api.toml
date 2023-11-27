@@ -11,6 +11,12 @@ members = [
     "joshtriplett",
 ]
 alumni = [
+    "alexcrichton",
+    "aturon",
+    "brson",
+    "Gankra",
+    "huonw",
+    "Kimundi",
     "KodrAus",
     "LukasKalbertodt",
     "sfackler",

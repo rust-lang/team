@@ -11,6 +11,7 @@ members = [
     "rami3l",
 ]
 alumni = [
+    "alexcrichton",
     "nrc",
     "kinnison",
     "hi-rustin",

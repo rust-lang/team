@@ -8,7 +8,9 @@ members = [
 ]
 
 alumni = [
+    "alexcrichton",
     "ashleygwilliams",
+    "aturon",
 ]
 
 [[lists]]
