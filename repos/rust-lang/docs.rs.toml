@@ -1,0 +1,11 @@
+org = 'rust-lang'
+name = 'docs.rs'
+description = 'crates.io documentation generator'
+bots = ["rustbot"]
+
+[access.teams]
+docs-rs = 'write'
+docs-rs-reviewers = 'write'
+
+[[branch-protections]]
+pattern = 'master'
