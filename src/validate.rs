@@ -25,6 +25,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_team_leads,
     validate_team_members,
     validate_alumni,
+    validate_archived_teams,
     validate_inactive_members,
     validate_list_email_addresses,
     validate_list_extra_people,
@@ -264,6 +265,15 @@ fn validate_alumni(data: &Data, errors: &mut Vec<String>) {
         );
         Ok(())
     });
+}
+
+fn validate_archived_teams(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.archived_teams(), errors, |team, _| {
+        if !team.members(data)?.is_empty() {
+            bail!("archived team '{}' must not have current members; please move members to that team's alumni", team.name());
+        }
+        Ok(())
+    })
 }
 
 /// Ensure every person is part of at least one team (active or archived)
