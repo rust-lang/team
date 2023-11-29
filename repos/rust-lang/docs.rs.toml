@@ -4,7 +4,7 @@ description = 'crates.io documentation generator'
 bots = ["rustbot"]
 
 [access.teams]
-docs-rs = 'write'
+docs-rs = 'maintain'
 docs-rs-reviewers = 'write'
 
 [[branch-protections]]
