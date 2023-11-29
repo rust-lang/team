@@ -3,21 +3,17 @@ kind = "project-group"
 subteam-of = "core"
 
 [people]
-leads = [
-    "ashleygwilliams",
-    "nikomatsakis",
-]
-members = [
-    "ashleygwilliams",
-    "nikomatsakis",
-    "pietroalbini",
-    "skade",
-]
+leads = []
+members = []
 alumni = [
     "Manishearth",
+    "ashleygwilliams",
     "joshtriplett",
     "nellshamrell",
+    "nikomatsakis",
+    "pietroalbini",
     "rylev",
+    "skade",
 ]
 
 [website]

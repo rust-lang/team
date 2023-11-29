@@ -2,8 +2,9 @@ name = "wg-net"
 kind = "working-group"
 
 [people]
-leads = ["withoutboats", "cramertj"]
-members = [
+leads = []
+members = []
+alumni = [
     "withoutboats",
     "cramertj",
 ]

@@ -3,8 +3,9 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["nikomatsakis", "davidtwco", "spastorino"]
-members = ["nikomatsakis", "davidtwco", "spastorino"]
+leads = []
+members = []
+alumni = ["nikomatsakis", "davidtwco", "spastorino"]
 
 [website]
 name = "Meta working group"

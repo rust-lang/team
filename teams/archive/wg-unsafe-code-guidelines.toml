@@ -3,9 +3,17 @@ subteam-of = "lang"
 kind = "working-group"
 
 [people]
-leads = ["nikomatsakis", "RalfJung"]
-members = ["nikomatsakis", "RalfJung", "comex", "digama0", "JakobDegen", "CAD97"]
-alumni = ["avadacatavra"]
+leads = []
+members = []
+alumni = [
+    "avadacatavra",
+    "nikomatsakis",
+    "RalfJung",
+    "comex",
+    "digama0",
+    "JakobDegen",
+    "CAD97",
+]
 
 [website]
 name = "Unsafe Code Guidelines (UCG) working group"

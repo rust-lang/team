@@ -3,8 +3,9 @@ subteam-of = "wg-net"
 kind = "working-group"
 
 [people]
-leads = ["aturon", "yoshuawuyts"]
-members = ["aturon", "yoshuawuyts"]
+leads = []
+members = []
+alumni = ["aturon", "yoshuawuyts"]
 
 [website]
 name = "Web foundations working group"
