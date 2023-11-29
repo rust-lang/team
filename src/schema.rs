@@ -280,18 +280,9 @@ impl Team {
                 .teams()
                 .chain(data.archived_teams())
                 .flat_map(|t| t.alumni())
-                .map(|a| a.as_str());
-            let mut members_of_archived_teams = HashSet::new();
-
-            for t in data.archived_teams() {
-                members_of_archived_teams.extend(t.members(data)?);
-            }
-
-            members.extend(
-                alumni
-                    .chain(members_of_archived_teams)
-                    .filter(|person| !active_members.contains(person)),
-            )
+                .map(|a| a.as_str())
+                .filter(|person| !active_members.contains(person));
+            members.extend(alumni);
         }
         Ok(members)
     }
