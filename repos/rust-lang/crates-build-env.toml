@@ -1,0 +1,11 @@
+org = 'rust-lang'
+name = 'crates-build-env'
+description = 'Build environment for third-party Rust crates'
+bots = ["rustbot"]
+
+[access.teams]
+docs-rs = 'write'
+infra = "write"
+
+[[branch-protections]]
+pattern = 'master'
