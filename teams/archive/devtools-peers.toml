@@ -1,0 +1,13 @@
+name = "devtools-peers"
+
+[people]
+leads = []
+members = []
+alumni = [
+    "QuietMisdreavus",
+]
+
+[website]
+page = "dev-tools"
+name = "Dev tools peers"
+description = "Oversight of specific Rust tools, and coordination with devtools team"
