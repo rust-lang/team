@@ -1,8 +1,9 @@
 name = "docs"
 
 [people]
-leads = ["steveklabnik"]
-members = [
+leads = []
+members = []
+alumni = [
     "steveklabnik",
     "GuillaumeGomez",
     "rylev",

@@ -3,8 +3,9 @@ subteam-of = "wg-net"
 kind = "working-group"
 
 [people]
-leads = ["Nemo157", "levex"]
-members = [
+leads = []
+members = []
+alumni = [
     "Nemo157",
     "levex",
 ]
