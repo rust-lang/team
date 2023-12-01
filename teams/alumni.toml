@@ -5,15 +5,7 @@ name = "alumni"
 
 [people]
 leads = []
-members = [
-    "alercah",
-    "birkenfeld",
-    "gnunicorn",
-    "peschkaj",
-    "rpjohnst",
-    "valgrimm",
-    "whitequark",
-]
+members = []
 # Temporary key that includes all members listed as alumni in the individual
 # teams. This is needed while we migrate away from the alumni team.
 include-all-alumni = true

@@ -1,0 +1,13 @@
+name = "docs-peers"
+subteam-of = "docs"
+
+[people]
+leads = []
+members = []
+alumni = [
+    "alercah",
+]
+
+[website]
+name = "Documentation peers"
+description = "Oversight of specific documentation, and coordination with the docs team"
