@@ -4,6 +4,8 @@ name = "docs"
 leads = []
 members = []
 alumni = [
+    "QuietMisdreavus",
+    "frewsxcv",
     "steveklabnik",
     "GuillaumeGomez",
     "rylev",

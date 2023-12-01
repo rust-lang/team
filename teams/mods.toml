@@ -7,6 +7,8 @@ members = [
     "oli-obk",
 ]
 alumni = [
+    "erickt",
+    "niconii",
     "BurntSushi",
     "llogiq",
     "matthieu-m",
