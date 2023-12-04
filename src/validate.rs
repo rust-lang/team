@@ -235,6 +235,7 @@ fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
 /// Alumni team must consist only of automatically populated alumni from the other teams
 fn validate_alumni(data: &Data, errors: &mut Vec<String>) {
     let Some(alumni_team) = data.team("alumni") else {
+        errors.push("cannot find an 'alumni' team".to_owned());
         return;
     };
     if !alumni_team.explicit_members().is_empty() {
