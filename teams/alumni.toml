@@ -1,13 +1,13 @@
-# DEPRECATED: Do not add new members to this team, instead add to `people.alumni`
-# in the team's file or create a new `people.alumni` key and add the
-# person's name there instead.
+# This team is automatically populated with all members listed as alumni in the
+# individual teams, who are not an active member of any team.
+#
+# Do not add new members to this team. Instead add to `people.alumni` in the
+# appropriate team's file.
 name = "alumni"
 
 [people]
 leads = []
 members = []
-# Temporary key that includes all members listed as alumni in the individual
-# teams. This is needed while we migrate away from the alumni team.
 include-all-alumni = true
 
 [website]
