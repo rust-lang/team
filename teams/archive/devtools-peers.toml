@@ -1,10 +1,21 @@
 name = "devtools-peers"
+subteam-of = "devtools"
 
 [people]
 leads = []
 members = []
 alumni = [
+    "alexcrichton",
+    "emilio",
+    "fitzgen",
+    "GuillaumeGomez",
+    "llogiq",
+    "Manishearth",
+    "matklad",
+    "oli-obk",
     "QuietMisdreavus",
+    "steveklabnik",
+    "tromey",
 ]
 
 [website]
