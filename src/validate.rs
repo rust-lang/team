@@ -232,39 +232,15 @@ fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
-/// Ensure alumni are not active
+/// Alumni team must consist only of automatically populated alumni from the other teams
 fn validate_alumni(data: &Data, errors: &mut Vec<String>) {
-    let active_members = match data.active_members() {
-        Ok(ms) => ms,
-        Err(e) => {
-            errors.push(e.to_string());
-            return;
-        }
+    let Some(alumni_team) = data.team("alumni") else {
+        errors.push("cannot find an 'alumni' team".to_owned());
+        return;
     };
-    wrapper(data.team("alumni").iter(), errors, |alumni_team, errors| {
-        let mut explicit_members: HashSet<_> = alumni_team.explicit_members().iter().collect();
-        // Ensure alumni team members are not active
-        wrapper(alumni_team.members(data)?.iter(), errors, |member, _| {
-            if active_members.contains(member) {
-                bail!("alumni team includes active member '{}'", member)
-            }
-            Ok(())
-        });
-        // Ensure all explicitly named members of the alumni team are not also implicitly members
-        wrapper(
-            data.teams()
-                .filter(|t| t.name() != "alumni")
-                .flat_map(|t| t.alumni().iter().map(move |m| (t.name(), m))),
-            errors,
-            |(team, member), _| {
-                if explicit_members.remove(member) {
-                    bail!("alumni team explicitly includes member '{}' who was specified as an alumni already in '{}'", member, team)
-                }
-                Ok(())
-            },
-        );
-        Ok(())
-    });
+    if !alumni_team.explicit_members().is_empty() {
+        errors.push("'alumni' team must not have explicit members; move them to the appropriate team's alumni entry".to_owned());
+    }
 }
 
 fn validate_archived_teams(data: &Data, errors: &mut Vec<String>) {
