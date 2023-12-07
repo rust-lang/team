@@ -11,6 +11,10 @@ members = [
 ]
 alumni = [
     "brson",
+    "japaric",
+    "nrc",
+    "solson",
+    "steveklabnik",
 ]
 
 [[github]]
