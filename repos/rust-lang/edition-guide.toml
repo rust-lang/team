@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "edition-guide"
+description = "A guide to changes between various editions of Rust"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+project-edition-2024 = "maintain"
