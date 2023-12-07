@@ -1,6 +1,7 @@
 mod github;
 mod mailgun;
 mod team_api;
+mod utils;
 mod zulip;
 
 use crate::github::SyncGitHub;

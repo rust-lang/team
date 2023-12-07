@@ -1,3 +1,4 @@
+use crate::utils::ResponseExt;
 use log::{debug, info, trace};
 use std::borrow::Cow;
 use std::path::PathBuf;
@@ -47,7 +48,9 @@ impl TeamApi {
                     .unwrap_or_else(|_| Cow::Borrowed(rust_team_data::v1::BASE_URL));
                 let url = format!("{base}/{url}");
                 trace!("http request: GET {}", url);
-                Ok(reqwest::blocking::get(&url)?.error_for_status()?.json()?)
+                Ok(reqwest::blocking::get(&url)?
+                    .error_for_status()?
+                    .json_annotated()?)
             }
             TeamApi::Local(ref path) => {
                 let dest = tempfile::tempdir()?;

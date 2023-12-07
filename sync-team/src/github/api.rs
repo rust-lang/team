@@ -1,3 +1,4 @@
+use crate::utils::ResponseExt;
 use anyhow::{bail, Context};
 use hyper_old_types::header::{Link, RelationType};
 use log::{debug, trace};
@@ -138,7 +139,7 @@ impl GitHub {
             };
             Ok(self
                 .send(Method::POST, &format!("orgs/{org}/teams"), body)?
-                .json()?)
+                .json_annotated()?)
         }
     }
 
@@ -366,7 +367,7 @@ impl GitHub {
         } else {
             Ok(self
                 .send(Method::POST, &format!("orgs/{org}/repos"), req)?
-                .json()?)
+                .json_annotated()?)
         }
     }
 
@@ -761,7 +762,7 @@ impl GitHub {
     ) -> Result<Option<T>, anyhow::Error> {
         let resp = self.req(method.clone(), url)?.send()?;
         match resp.status() {
-            StatusCode::OK => Ok(Some(resp.json().with_context(|| {
+            StatusCode::OK => Ok(Some(resp.json_annotated().with_context(|| {
                 format!("Failed to decode response body on {method} request to '{url}'")
             })?)),
             StatusCode::NOT_FOUND => Ok(None),
@@ -785,7 +786,7 @@ impl GitHub {
             .send()?
             .custom_error_for_status()?;
 
-        let res: GraphResult<R> = resp.json().with_context(|| {
+        let res: GraphResult<R> = resp.json_annotated().with_context(|| {
             format!("Failed to decode response body on graphql request with query '{query}'")
         })?;
         if let Some(error) = res.errors.get(0) {
@@ -1058,20 +1059,4 @@ pub(crate) struct TeamPushAllowanceActor {
 pub(crate) enum BranchProtectionOp {
     CreateForRepo(String),
     UpdateBranchProtection(String),
-}
-
-trait ResponseExt {
-    fn custom_error_for_status(self) -> anyhow::Result<Response>;
-}
-
-impl ResponseExt for Response {
-    fn custom_error_for_status(self) -> anyhow::Result<Response> {
-        match self.error_for_status_ref() {
-            Ok(_) => Ok(self),
-            Err(err) => {
-                let body = self.text()?;
-                Err(err).context(format!("Body: {:?}", body))
-            }
-        }
-    }
 }
