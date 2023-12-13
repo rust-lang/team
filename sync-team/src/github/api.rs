@@ -127,7 +127,7 @@ impl GitHub {
                 // doesn't actually exist on GitHub
                 id: None,
                 name: name.to_string(),
-                description: description.to_string(),
+                description: Some(description.to_string()),
                 privacy,
                 slug: name.to_string(),
             })
@@ -889,7 +889,7 @@ pub(crate) struct Team {
     /// a dry run and not actually present on GitHub, so other methods can avoid acting on them.
     pub(crate) id: Option<usize>,
     pub(crate) name: String,
-    pub(crate) description: String,
+    pub(crate) description: Option<String>,
     pub(crate) privacy: TeamPrivacy,
     /// The slug usually matches the name but can differ.
     /// For example, a team named rustup.rs would have a slug rustup-rs.

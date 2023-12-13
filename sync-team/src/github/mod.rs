@@ -139,8 +139,15 @@ impl SyncGitHub {
             name_diff = Some(github_team.name.clone())
         }
         let mut description_diff = None;
-        if team.description != DEFAULT_DESCRIPTION {
-            description_diff = Some((team.description.clone(), DEFAULT_DESCRIPTION.to_owned()));
+        match &team.description {
+            Some(description) => {
+                if description != DEFAULT_DESCRIPTION {
+                    description_diff = Some((description.clone(), DEFAULT_DESCRIPTION.to_owned()));
+                }
+            }
+            None => {
+                description_diff = Some((String::new(), DEFAULT_DESCRIPTION.to_owned()));
+            }
         }
         let mut privacy_diff = None;
         if team.privacy != DEFAULT_PRIVACY {
