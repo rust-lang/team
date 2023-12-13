@@ -6,6 +6,7 @@ bots = []
 [access.teams]
 core = "admin"
 mods = "maintain"
+team-repo-admins = "write"
 
 [[branch-protections]]
 pattern = "master"
