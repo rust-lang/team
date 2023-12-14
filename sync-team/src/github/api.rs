@@ -663,7 +663,7 @@ impl GitHub {
                     // We restrict merges, if we have explicitly set some actors to be
                     // able to merge (i.e., we allow allow those with write permissions
                     // to merge *or* we only allow those in `push_actor_ids`)
-                    restricts_pushes: push_actor_ids.is_empty(),
+                    restricts_pushes: !push_actor_ids.is_empty(),
                     push_actor_ids: &push_actor_ids,
                 },
             )?;
