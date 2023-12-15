@@ -8,7 +8,7 @@ wg-async = "write"
 
 [access.individuals]
 compiler-errors = "maintain"
-TC = "maintain"
+traviscross = "maintain"
 tmandry = "maintain"
 
 [[branch-protections]]
