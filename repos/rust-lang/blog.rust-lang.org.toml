@@ -1,0 +1,10 @@
+org = "rust-lang"
+name = "blog.rust-lang.org"
+description = "Home of the Rust and Inside Rust blogs"
+bots = []
+
+[access.teams]
+inside-rust-reviewers = "write"
+
+[[branch-protections]]
+pattern = "master"
