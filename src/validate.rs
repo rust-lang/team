@@ -2,7 +2,7 @@ use crate::data::Data;
 use crate::github::GitHubApi;
 use crate::schema::{Email, Permissions, Team, TeamKind, ZulipGroupMember};
 use crate::zulip::ZulipApi;
-use failure::{bail, Error};
+use anyhow::{bail, Error};
 use log::{error, warn};
 use regex::Regex;
 use std::collections::{HashMap, HashSet};

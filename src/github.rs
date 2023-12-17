@@ -1,4 +1,4 @@
-use failure::{bail, Error};
+use anyhow::{bail, Error};
 use reqwest::blocking::{Client, ClientBuilder, RequestBuilder};
 use reqwest::header::{self, HeaderValue};
 use reqwest::Method;

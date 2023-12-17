@@ -1,6 +1,6 @@
 use crate::data::Data;
 use crate::schema::{Config, Person};
-use failure::{bail, Error};
+use anyhow::{bail, Error};
 use std::collections::{HashMap, HashSet};
 
 #[derive(serde_derive::Deserialize, Debug, Clone, Default)]
