@@ -4,7 +4,13 @@ subteam-of = "community"
 [people]
 leads = ["rylev"]
 members = ["rylev", "graciegregory", "Kobzol", "apiraino"]
-alumni = ["nikomatsakis", "nrc", "yaahc"]
+alumni = [
+    "Manishearth",
+    "nikomatsakis",
+    "nrc",
+    "sophiajt",
+    "yaahc",
+]
 
 [website]
 name = "Survey team"
