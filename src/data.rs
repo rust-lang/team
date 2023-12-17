@@ -1,5 +1,5 @@
 use crate::schema::{Config, List, Person, Repo, Team, ZulipGroup};
-use failure::{bail, Error, ResultExt};
+use anyhow::{bail, Context as _, Error};
 use serde::Deserialize;
 use std::collections::{HashMap, HashSet};
 use std::ffi::OsStr;
@@ -65,9 +65,9 @@ impl Data {
         F: Fn(&mut Self, &str, T) -> Result<(), Error>,
         F: Clone,
     {
-        for entry in std::fs::read_dir(&dir).with_context(|e| {
+        for entry in std::fs::read_dir(&dir).with_context(|| {
             let dir = dir.as_ref().display();
-            format!("`load_dir` failed to read directory '{}': {}", dir, e)
+            format!("`load_dir` failed to read directory '{}'", dir)
         })? {
             let path = entry?.path();
             if nested && path.is_dir() {
@@ -168,8 +168,8 @@ impl Data {
 
 fn load_file<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T, Error> {
     let content =
-        std::fs::read(path).with_context(|_| format!("failed to read {}", path.display()))?;
+        std::fs::read(path).with_context(|| format!("failed to read {}", path.display()))?;
     let parsed = toml::from_slice(&content)
-        .with_context(|_| format!("failed to parse {}", path.display()))?;
+        .with_context(|| format!("failed to parse {}", path.display()))?;
     Ok(parsed)
 }

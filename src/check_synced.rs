@@ -8,13 +8,13 @@ use log::{error, warn};
 use rayon::prelude::*;
 use std::collections::{HashMap, HashSet};
 
-pub(crate) fn check(data: &Data) -> Result<(), failure::Error> {
+pub(crate) fn check(data: &Data) -> anyhow::Result<()> {
     check_github(data)?;
     check_zulip(data)?;
     Ok(())
 }
 
-fn check_zulip(data: &Data) -> Result<(), failure::Error> {
+fn check_zulip(data: &Data) -> anyhow::Result<()> {
     let zulip = ZulipApi::new();
     zulip.require_auth()?;
     let mut remote_groups = zulip
@@ -78,7 +78,7 @@ fn check_zulip(data: &Data) -> Result<(), failure::Error> {
     Ok(())
 }
 
-pub(crate) fn check_github(data: &Data) -> Result<(), failure::Error> {
+pub(crate) fn check_github(data: &Data) -> anyhow::Result<()> {
     const BOT_TEAMS: &[&str] = &["bors", "bots", "rfcbot", "highfive"];
     let github = GitHubApi::new();
     let pending_invites = github.pending_org_invites()?;
@@ -90,7 +90,7 @@ pub(crate) fn check_github(data: &Data) -> Result<(), failure::Error> {
             let members = github.team_members(team.id)?;
             Ok((team.name.clone(), (team, members)))
         })
-        .collect::<Result<HashMap<_, _>, failure::Error>>()?;
+        .collect::<anyhow::Result<HashMap<_, _>>>()?;
 
     for team in data.teams() {
         let local_teams = team.github_teams(data)?;
