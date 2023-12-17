@@ -5,6 +5,7 @@ kind = "working-group"
 [people]
 leads = ["michaelwoerister", "wesleywiser"]
 members = ["michaelwoerister", "wesleywiser"]
+alumni = []
 
 [permissions]
 perf = true

@@ -10,6 +10,7 @@ members = [
     "jackh726",
     "nikomatsakis",
 ]
+alumni = []
 
 [website]
 name = "Generic Associated Types Initiative"

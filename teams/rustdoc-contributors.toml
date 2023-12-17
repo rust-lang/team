@@ -6,6 +6,7 @@ leads = []
 members = [
     "fmease"
 ]
+alumni = []
 
 [permissions]
 bors.rust.review = true

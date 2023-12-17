@@ -9,6 +9,7 @@ leads = [
 members = [
     "michaelwoerister",
 ]
+alumni = []
 
 [website]
 name = "Async Crashdump Debugging Initiative"

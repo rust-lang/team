@@ -4,6 +4,7 @@ subteam-of = "leadership-council"
 [people]
 leads = ["m-ou-se"]
 members = ["m-ou-se"]
+alumni = []
 
 [[lists]]
 address = "social@rust-lang.org"

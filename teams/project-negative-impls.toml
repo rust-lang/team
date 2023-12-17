@@ -12,6 +12,7 @@ members = [
     "pnkfelix",
     "spastorino",
 ]
+alumni = []
 
 [website]
 name = "Negative Impls Initiative"

@@ -13,6 +13,7 @@ members = [
     "Mark-Simulacrum",
     "wesleywiser",
 ]
+alumni = []
 
 # Granting these permissions because an advisor can use these to help when
 # reviewing a proposed change.

@@ -3,6 +3,7 @@ name = "leads-permissions"
 [people]
 leads = ["user-6"]
 members = ["user-3", "user-4", "user-6"]
+alumni = []
 
 [leads-permissions]
 bors.crates-io.review = true
