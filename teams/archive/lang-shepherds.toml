@@ -6,5 +6,6 @@ leads = []
 members = []
 alumni = [
     "rpjohnst",
+    "solson",
     "whitequark",
 ]
