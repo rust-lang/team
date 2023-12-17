@@ -230,6 +230,11 @@ impl Team {
         self.discord_roles.as_ref()
     }
 
+    /// Exposed only for validation.
+    pub(crate) fn raw_people(&self) -> &TeamPeople {
+        &self.people
+    }
+
     pub(crate) fn members<'a>(&'a self, data: &'a Data) -> Result<HashSet<&'a str>, Error> {
         let mut members: HashSet<_> = self.people.members.iter().map(|s| s.as_str()).collect();
 
@@ -288,7 +293,7 @@ impl Team {
     }
 
     pub(crate) fn alumni(&self) -> &[String] {
-        &self.people.alumni
+        self.people.alumni.as_ref().map_or(&[], Vec::as_slice)
     }
 
     pub(crate) fn raw_lists(&self) -> &[TeamList] {
@@ -498,23 +503,22 @@ impl std::cmp::Ord for GitHubTeam<'_> {
 
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-struct TeamPeople {
-    leads: Vec<String>,
-    members: Vec<String>,
+pub(crate) struct TeamPeople {
+    pub leads: Vec<String>,
+    pub members: Vec<String>,
+    pub alumni: Option<Vec<String>>,
     #[serde(default)]
-    alumni: Vec<String>,
-    #[serde(default)]
-    included_teams: Vec<String>,
+    pub included_teams: Vec<String>,
     #[serde(default = "default_false")]
-    include_team_leads: bool,
+    pub include_team_leads: bool,
     #[serde(default = "default_false")]
-    include_wg_leads: bool,
+    pub include_wg_leads: bool,
     #[serde(default = "default_false")]
-    include_project_group_leads: bool,
+    pub include_project_group_leads: bool,
     #[serde(default = "default_false")]
-    include_all_team_members: bool,
+    pub include_all_team_members: bool,
     #[serde(default = "default_false")]
-    include_all_alumni: bool,
+    pub include_all_alumni: bool,
 }
 
 #[derive(serde::Deserialize, Debug)]

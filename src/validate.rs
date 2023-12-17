@@ -1,6 +1,6 @@
 use crate::data::Data;
 use crate::github::GitHubApi;
-use crate::schema::{Email, Permissions, Team, TeamKind, ZulipGroupMember};
+use crate::schema::{Email, Permissions, Team, TeamKind, TeamPeople, ZulipGroupMember};
 use crate::zulip::ZulipApi;
 use anyhow::{bail, Error};
 use log::{error, warn};
@@ -241,6 +241,50 @@ fn validate_alumni(data: &Data, errors: &mut Vec<String>) {
     if !alumni_team.explicit_members().is_empty() {
         errors.push("'alumni' team must not have explicit members; move them to the appropriate team's alumni entry".to_owned());
     }
+
+    // Teams must contain an `alumni = […]` field (even if empty) so that there
+    // is an obvious place to move contributors within the same file when
+    // removing from `members`.
+    //
+    // Marker teams are exempt from this, as well as teams which comprise only
+    // members of other teams via `include-team-leads` or similar; they do not
+    // need `alumni = […]`. For these teams, the correct place to put alumni is
+    // in the same team they're being included from.
+    wrapper(data.teams(), errors, |team, _| {
+        // Exhaustive destructuring to ensure this code is touched if a new
+        // "include" settings is introduced.
+        let TeamPeople {
+            leads: _,
+            members,
+            alumni,
+            included_teams,
+            include_team_leads,
+            include_wg_leads,
+            include_project_group_leads,
+            include_all_team_members,
+            include_all_alumni,
+        } = team.raw_people();
+
+        if alumni.is_none() {
+            let exempt_team_kind = match team.kind() {
+                TeamKind::MarkerTeam => true,
+                TeamKind::Team | TeamKind::WorkingGroup | TeamKind::ProjectGroup => false,
+            };
+            let exempt_composition = members.is_empty() // intentionally not team.members(data).is_empty()
+                && (*include_team_leads
+                    || *include_wg_leads
+                    || *include_project_group_leads
+                    || *include_all_team_members
+                    || *include_all_alumni
+                    || !included_teams.is_empty());
+            let exempt = exempt_team_kind || exempt_composition;
+            if !exempt {
+                let team_name = team.name();
+                bail!("team '{team_name}' needs an `alumni = []` entry");
+            }
+        }
+        Ok(())
+    });
 }
 
 fn validate_archived_teams(data: &Data, errors: &mut Vec<String>) {
