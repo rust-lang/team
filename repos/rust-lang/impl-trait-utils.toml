@@ -4,10 +4,7 @@ description = "Utilities for working with impl traits in Rust."
 bots = []
 
 [access.teams]
-wg-async = "write"
-
-[access.individuals]
-tmandry = "maintain"
+wg-async = "maintain"
 
 [[branch-protections]]
 pattern = "main"
