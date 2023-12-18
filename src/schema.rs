@@ -1,6 +1,6 @@
 use crate::data::Data;
 pub(crate) use crate::permissions::Permissions;
-use failure::{bail, err_msg, Error};
+use anyhow::{bail, format_err, Error};
 use std::collections::{HashMap, HashSet};
 
 #[derive(serde_derive::Deserialize, Debug)]
@@ -235,11 +235,11 @@ impl Team {
 
         for team in &self.people.included_teams {
             let team = data.team(team).ok_or_else(|| {
-                err_msg(format!(
+                format_err!(
                     "team '{}' includes members from non-existent team '{}'",
                     self.name(),
                     team
-                ))
+                )
             })?;
             members.extend(team.members(data)?);
         }
@@ -280,18 +280,9 @@ impl Team {
                 .teams()
                 .chain(data.archived_teams())
                 .flat_map(|t| t.alumni())
-                .map(|a| a.as_str());
-            let mut members_of_archived_teams = HashSet::new();
-
-            for t in data.archived_teams() {
-                members_of_archived_teams.extend(t.members(data)?);
-            }
-
-            members.extend(
-                alumni
-                    .chain(members_of_archived_teams)
-                    .filter(|person| !active_members.contains(person)),
-            )
+                .map(|a| a.as_str())
+                .filter(|person| !active_members.contains(person));
+            members.extend(alumni);
         }
         Ok(members)
     }
@@ -328,14 +319,14 @@ impl Team {
             for team in &raw_list.extra_teams {
                 let team = data
                     .team(team)
-                    .ok_or_else(|| err_msg(format!("team {} is missing", team)))?;
+                    .ok_or_else(|| format_err!("team {} is missing", team))?;
                 members.extend(team.members(data)?);
             }
 
             for member in members.iter() {
                 let member = data
                     .person(member)
-                    .ok_or_else(|| err_msg(format!("member {} is missing", member)))?;
+                    .ok_or_else(|| format_err!("member {} is missing", member))?;
                 if let Email::Present(email) = member.email() {
                     list.emails.push(email.to_string());
                 }
@@ -374,7 +365,7 @@ impl Team {
             for team in &raw_group.extra_teams {
                 let team = data
                     .team(team)
-                    .ok_or_else(|| err_msg(format!("team {} is missing", team)))?;
+                    .ok_or_else(|| format_err!("team {} is missing", team))?;
                 members.extend(team.members(data)?);
             }
             for excluded in &raw_group.excluded_people {
@@ -385,7 +376,7 @@ impl Team {
 
             for member in members.iter() {
                 let member = data.person(member).ok_or_else(|| {
-                    err_msg(format!("{} does not have a person configuration", member))
+                    format_err!("{} does not have a person configuration", member)
                 })?;
                 let member = match (member.github.clone(), member.zulip_id) {
                     (github, Some(zulip_id)) => ZulipGroupMember::MemberWithId { github, zulip_id },
@@ -420,7 +411,7 @@ impl Team {
             for team in &github.extra_teams {
                 members.extend(
                     data.team(team)
-                        .ok_or_else(|| failure::err_msg(format!("missing team {}", team)))?
+                        .ok_or_else(|| format_err!("missing team {}", team))?
                         .members(data)?
                         .iter()
                         .filter_map(|name| data.person(name).map(|p| (p.github(), p.github_id()))),

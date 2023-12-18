@@ -11,6 +11,12 @@ members = [
     "rylev",
 ]
 alumni = [
+    "alexcrichton",
+    "aturon",
+    "brson",
+    "erickt",
+    "huonw",
+    "pcwalton",
     "nrc",
     "carols10cents",
     "nikomatsakis",

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use failure::{bail, Error};
+use anyhow::{bail, Error};
 use reqwest::blocking::{Client, ClientBuilder, Response};
 use reqwest::Method;
 use serde::Deserialize;

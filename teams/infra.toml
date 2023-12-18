@@ -12,11 +12,19 @@ members = [
     "Kobzol",
 ]
 alumni = [
+    "alexcrichton",
+    "aturon",
+    "brson",
     "sgrif",
     "nellshamrell",
     "ashleygwilliams",
     "aidanhs",
     "jyn514",
+    "TimNN",
+    "erickt",
+    "frewsxcv",
+    "tomprince",
+    "carols10cents",
 ]
 
 [[github]]

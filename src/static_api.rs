@@ -1,6 +1,6 @@
 use crate::data::Data;
 use crate::schema::{Bot, Email, Permissions, RepoPermission, TeamKind, ZulipGroupMember};
-use failure::Error;
+use anyhow::Error;
 use indexmap::IndexMap;
 use log::info;
 use rust_team_data::v1;

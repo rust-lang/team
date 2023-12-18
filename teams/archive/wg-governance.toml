@@ -1,0 +1,20 @@
+name = "wg-governance"
+subteam-of = "core"
+kind = "working-group"
+
+[people]
+leads = []
+members = []
+alumni = [
+    "gnunicorn",
+    "valgrimm"
+]
+
+[[lists]]
+address = "governance@rust-lang.org"
+
+[website]
+name = "Governance working group"
+description = "Managing and improving Rust team governance"
+repo = "https://github.com/rust-lang/wg-governance"
+zulip-stream = "wg-governance"

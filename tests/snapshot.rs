@@ -1,5 +1,5 @@
+use anyhow::{bail, Error};
 use duct::{cmd, Expression};
-use failure::Error;
 use std::{
     collections::HashSet,
     path::{Path, PathBuf},
@@ -112,7 +112,7 @@ impl ExpressionExt for Expression {
         print!("{}", String::from_utf8_lossy(&res.stdout));
 
         if !res.status.success() {
-            failure::bail!("command returned a non-zero exit code!");
+            bail!("command returned a non-zero exit code!");
         }
         Ok(())
     }

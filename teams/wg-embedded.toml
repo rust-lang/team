@@ -2,10 +2,9 @@ name = "wg-embedded"
 kind = "working-group"
 
 [people]
-leads = ["adamgreig", "japaric", "therealprof"]
+leads = ["adamgreig", "therealprof"]
 members = [
     "Dirbaio",
-    "Disasm",
     "Emilgardis",
     "adamgreig",
     "almindor",
@@ -17,7 +16,6 @@ members = [
     "hargoniX",
     "ithinuel",
     "jamesmunns",
-    "japaric",
     "nastevens",
     "posborne",
     "raw-bin",
@@ -33,13 +31,16 @@ alumni = [
     "awygle",
     "bradjc",
     "danc86",
+    "Disasm",
     "dvc94ch",
     "dylanmckay",
     "hannobraun",
     "ithinuel",
+    "japaric",
     "jcsoo",
     "korken89",
     "laanwj",
+    "levex",
     "paoloteti",
     "parched",
     "pftbest",

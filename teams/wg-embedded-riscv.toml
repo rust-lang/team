@@ -5,7 +5,6 @@ kind = "working-group"
 [people]
 leads = []
 members = [
-    "Disasm",
     "almindor",
     "dkhayes117",
     "romancardenas",
@@ -14,8 +13,8 @@ members = [
 ]
 
 [website]
-name = "Embedded RISCV team"
-description = "Develops and maintains the core of the embedded RISCV crate ecosystem"
+name = "Embedded RISC-V team"
+description = "Develops and maintains the core of the embedded RISC-V crate ecosystem"
 
 [[github]]
 orgs = ["rust-embedded"]

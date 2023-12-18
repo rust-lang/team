@@ -15,7 +15,7 @@ const USER_AGENT: &str = "https://github.com/rust-lang/team (infra@rust-lang.org
 use data::Data;
 use schema::{Email, Team, TeamKind};
 
-use failure::{err_msg, Error};
+use anyhow::{bail, format_err, Error};
 use log::{error, info, warn};
 use std::{collections::HashMap, path::PathBuf};
 use structopt::StructOpt;
@@ -105,10 +105,7 @@ fn main() {
     env.init();
 
     if let Err(e) = run() {
-        error!("{}", e);
-        for e in e.iter_causes() {
-            error!("cause: {}", e);
-        }
+        error!("{:?}", e);
         std::process::exit(1);
     }
 }
@@ -141,7 +138,7 @@ fn run() -> Result<(), Error> {
             let github_id = user.id;
 
             if data.person(&github_name).is_some() {
-                failure::bail!("person already in the repo: {}", github_name);
+                bail!("person already in the repo: {}", github_name);
             }
 
             let file = format!("people/{}.toml", github_name);
@@ -198,7 +195,7 @@ fn run() -> Result<(), Error> {
             let github = github::GitHubApi::new();
             let repo = match github.repo(&org, &name)? {
                 Some(r) => r,
-                None => failure::bail!("The repo '{}/{}' was not found on GitHub", org, name),
+                None => bail!("The repo '{}/{}' was not found on GitHub", org, name),
             };
             let mut teams = HashMap::new();
             let mut bots = Vec::new();
@@ -263,7 +260,7 @@ fn run() -> Result<(), Error> {
         } => {
             let person = data
                 .person(github_username)
-                .ok_or_else(|| err_msg("unknown person"))?;
+                .ok_or_else(|| format_err!("unknown person"))?;
 
             println!("-- {} --", person.name());
             println!();
@@ -366,11 +363,13 @@ fn run() -> Result<(), Error> {
         }
 
         Cli::DumpTeam { ref name } => {
-            let team = data.team(name).ok_or_else(|| err_msg("unknown team"))?;
+            let team = data.team(name).ok_or_else(|| format_err!("unknown team"))?;
             dump_team_members(team, &data, false, 0)?;
         }
         Cli::DumpList { ref name } => {
-            let list = data.list(name)?.ok_or_else(|| err_msg("unknown list"))?;
+            let list = data
+                .list(name)?
+                .ok_or_else(|| format_err!("unknown list"))?;
             let mut emails = list.emails().iter().collect::<Vec<_>>();
             emails.sort();
             for email in emails {
@@ -397,7 +396,7 @@ fn run() -> Result<(), Error> {
         }
         Cli::DumpPermission { ref name } => {
             if !crate::schema::Permissions::available(data.config()).contains(name) {
-                failure::bail!("unknown permission: {}", name);
+                bail!("unknown permission: {}", name);
             }
             let mut allowed = crate::permissions::allowed_people(&data, name)?
                 .into_iter()

@@ -1,0 +1,11 @@
+name = "lang-shepherds"
+subteam-of = "lang"
+
+[people]
+leads = []
+members = []
+alumni = [
+    "rpjohnst",
+    "solson",
+    "whitequark",
+]

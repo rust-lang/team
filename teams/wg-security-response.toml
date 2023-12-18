@@ -9,6 +9,7 @@ members = [
     "Manishearth",
 ]
 alumni = [
+    "alexcrichton",
     "nikomatsakis",
     "steveklabnik",
 ]

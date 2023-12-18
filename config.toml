@@ -12,6 +12,7 @@ allowed-github-orgs = [
     "rust-lang",
     "rust-lang-ci",
     "rust-lang-nursery",
+    "rust-lang-deprecated",
     "rust-dev-tools",
     "rust-embedded",
     "rust-analyzer",

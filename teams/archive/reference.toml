@@ -1,0 +1,18 @@
+name = "reference"
+subteam-of = "lang"
+
+[people]
+leads = []
+members = []
+alumni = [
+    "alercah",
+    "Centril",
+    "ehuss",
+    "Havvy",
+    "matthewjasper",
+]
+
+[website]
+name = "Reference team"
+description = "Developing and writing the Rust reference"
+zulip-stream = "t-lang/wg-reference"

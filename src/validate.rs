@@ -2,7 +2,7 @@ use crate::data::Data;
 use crate::github::GitHubApi;
 use crate::schema::{Email, Permissions, Team, TeamKind, ZulipGroupMember};
 use crate::zulip::ZulipApi;
-use failure::{bail, Error};
+use anyhow::{bail, Error};
 use log::{error, warn};
 use regex::Regex;
 use std::collections::{HashMap, HashSet};
@@ -25,6 +25,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_team_leads,
     validate_team_members,
     validate_alumni,
+    validate_archived_teams,
     validate_inactive_members,
     validate_list_email_addresses,
     validate_list_extra_people,
@@ -231,39 +232,24 @@ fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
-/// Ensure alumni are not active
+/// Alumni team must consist only of automatically populated alumni from the other teams
 fn validate_alumni(data: &Data, errors: &mut Vec<String>) {
-    let active_members = match data.active_members() {
-        Ok(ms) => ms,
-        Err(e) => {
-            errors.push(e.to_string());
-            return;
-        }
+    let Some(alumni_team) = data.team("alumni") else {
+        errors.push("cannot find an 'alumni' team".to_owned());
+        return;
     };
-    wrapper(data.team("alumni").iter(), errors, |alumni_team, errors| {
-        let mut explicit_members: HashSet<_> = alumni_team.explicit_members().iter().collect();
-        // Ensure alumni team members are not active
-        wrapper(alumni_team.members(data)?.iter(), errors, |member, _| {
-            if active_members.contains(member) {
-                bail!("alumni team includes active member '{}'", member)
-            }
-            Ok(())
-        });
-        // Ensure all explicitly named members of the alumni team are not also implicitly members
-        wrapper(
-            data.teams()
-                .filter(|t| t.name() != "alumni")
-                .flat_map(|t| t.alumni().iter().map(move |m| (t.name(), m))),
-            errors,
-            |(team, member), _| {
-                if explicit_members.remove(member) {
-                    bail!("alumni team explicitly includes member '{}' who was specified as an alumni already in '{}'", member, team)
-                }
-                Ok(())
-            },
-        );
+    if !alumni_team.explicit_members().is_empty() {
+        errors.push("'alumni' team must not have explicit members; move them to the appropriate team's alumni entry".to_owned());
+    }
+}
+
+fn validate_archived_teams(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.archived_teams(), errors, |team, _| {
+        if !team.members(data)?.is_empty() {
+            bail!("archived team '{}' must not have current members; please move members to that team's alumni", team.name());
+        }
         Ok(())
-    });
+    })
 }
 
 /// Ensure every person is part of at least one team (active or archived)
@@ -296,14 +282,35 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
         .flat_map(|r| r.access.individuals.keys())
         .map(|n| n.as_str())
         .collect::<HashSet<_>>();
+    let zulip_groups = match data.zulip_groups() {
+        Ok(z) => z,
+        Err(e) => {
+            errors.push(format!("could not get all the Zulip groups: {e}"));
+            return;
+        }
+    };
+    // All people in that are included in a Zulip group which can contain people not in all_members
+    let all_extra_zulip_people = zulip_groups
+        .values()
+        .flat_map(|z| z.members())
+        .filter_map(|m| match m {
+            ZulipGroupMember::MemberWithId { github, .. }
+            | ZulipGroupMember::MemberWithoutId { github } => Some(github.as_str()),
+            ZulipGroupMember::JustId(_) => None,
+        })
+        .collect::<HashSet<_>>();
     wrapper(
         all_members.difference(&referenced_members),
         errors,
         |person, _| {
-            if !data.person(person).unwrap().permissions().has_any() && !all_ics.contains(person) {
+            if !data.person(person).unwrap().permissions().has_any()
+                && !all_ics.contains(person)
+                && !all_extra_zulip_people.contains(person)
+            {
                 bail!(
-                    "person `{}` is not a member of any team (active or archived), has no permissions, and is not an individual contributor to any repo",
-                    person
+                    "person `{person}` is not a member of any team (active or archived), \
+                    has no permissions, is not an individual contributor to any repo, and \
+                    is not included as a extra person in a Zulip group",
                 );
             }
             Ok(())

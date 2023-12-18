@@ -14,16 +14,20 @@ members = [
 ]
 alumni = [
     "alexcrichton",
+    "aturon",
     "nrc",
     "dwijnand",
     "wycats",
     "withoutboats",
     "matklad",
+    "carols10cents",
 ]
 
 [permissions]
 bors.rust.review = true
 bors.cargo.review = true
+crater = true
+perf = true
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]

@@ -1,12 +1,16 @@
 name = "docs"
 
 [people]
-leads = ["steveklabnik"]
-members = [
+leads = []
+members = []
+alumni = [
+    "QuietMisdreavus",
+    "frewsxcv",
     "steveklabnik",
     "GuillaumeGomez",
     "rylev",
     "celaus",
+    "peschkaj",
 ]
 
 [permissions]

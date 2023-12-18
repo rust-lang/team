@@ -3,8 +3,9 @@ subteam-of = "wg-net"
 kind = "working-group"
 
 [people]
-leads = ["cramertj", "MajorBreakfast"]
-members = ["cramertj", "MajorBreakfast"]
+leads = []
+members = []
+alumni = ["cramertj", "MajorBreakfast"]
 
 [website]
 name = "Async foundations working group"

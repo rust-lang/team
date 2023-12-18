@@ -7,10 +7,15 @@ members = [
     "oli-obk",
 ]
 alumni = [
+    "erickt",
+    "niconii",
     "BurntSushi",
     "llogiq",
     "matthieu-m",
     "khionu",
+    "Manishearth",
+    "mbrubeck",
+    "pnkfelix",
 ]
 
 [[github]]
