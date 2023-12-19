@@ -4,8 +4,8 @@ kind = "working-group"
 
 [people]
 leads = []
-members = [
-]
+members = []
+alumni = []
 
 [website]
 name = "Embedded Cortex-R team"

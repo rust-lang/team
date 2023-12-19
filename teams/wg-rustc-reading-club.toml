@@ -5,6 +5,7 @@ kind = "working-group"
 [people]
 leads = ["nikomatsakis", "doc-jones"]
 members = ["doc-jones", "nikomatsakis"]
+alumni = []
 
 [website]
 name = "Rust Code Reading Club working group"

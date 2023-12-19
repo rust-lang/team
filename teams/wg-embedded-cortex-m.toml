@@ -11,6 +11,7 @@ members = [
     "thalesfragoso",
     "newAM",
 ]
+alumni = []
 
 [website]
 name = "Embedded Cortex-M team"

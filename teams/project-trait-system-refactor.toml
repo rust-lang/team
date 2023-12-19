@@ -15,6 +15,7 @@ members = [
     "spastorino",
     "lcnr",
 ]
+alumni = []
 
 [website]
 name = "Rustc Trait System Refactor Initiative"

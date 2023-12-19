@@ -14,6 +14,7 @@ members = [
     "ouz-a",
     "spastorino"
 ]
+alumni = []
 
 [website]
 name = "Stable MIR Project Group"

@@ -8,6 +8,7 @@ members = [
     "mathk",
     "jessebraham",
 ]
+alumni = []
 
 [website]
 name = "Embedded Triage Team"

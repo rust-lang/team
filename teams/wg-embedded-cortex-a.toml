@@ -8,6 +8,7 @@ members = [
     "raw-bin",
     "andre-richter",
 ]
+alumni = []
 
 [website]
 name = "Embedded Cortex-A team"

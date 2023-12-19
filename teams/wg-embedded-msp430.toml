@@ -8,6 +8,7 @@ members = [
     "cr1901",
     "YuhanLiin",
 ]
+alumni = []
 
 [website]
 name = "Embedded MSP430 team"

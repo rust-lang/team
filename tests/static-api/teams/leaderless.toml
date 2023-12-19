@@ -3,3 +3,4 @@ name = "leaderless"
 [people]
 leads = []
 members = ["user-0"]
+alumni = []

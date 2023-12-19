@@ -52,6 +52,10 @@ members = [
 ]
 # Past members of the team. They will not be considered as part of the team,
 # but they will be recognized on the website.
+#
+# Most teams are required to have this alumni key, even if its value is an empty
+# array. It is only optional in teams with kind="marker-team", and in teams
+# which comprise only members of other teams via include-team-leads or similar.
 alumni = [
     "buildbot",
 ]

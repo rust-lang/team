@@ -4,6 +4,7 @@ subteam-of = "libs"
 [people]
 leads = ["BurntSushi"]
 members = ["BurntSushi"]
+alumni = []
 
 [[github]]
 orgs = ["rust-lang"]

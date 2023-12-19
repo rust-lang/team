@@ -11,6 +11,7 @@ members = [
     "MabezDev",
     "jessebraham",
 ]
+alumni = []
 
 [website]
 name = "Embedded RISC-V team"

@@ -3,6 +3,7 @@ name = "web-presence"
 [people]
 leads = []
 members = []
+alumni = []
 
 [[lists]]
 address = "web-presence@rust-lang.org"

@@ -3,6 +3,7 @@ name = "foo"
 [people]
 leads = ["user-0"]
 members = ["user-0", "user-1"]
+alumni = []
 
 [permissions]
 crater = true

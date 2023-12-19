@@ -15,6 +15,7 @@ members = [
         "null-sleep",
         "roxelo"
 ]
+alumni = []
 
 [[github]]
 orgs = ["rust-lang"]

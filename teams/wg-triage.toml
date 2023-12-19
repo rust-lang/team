@@ -21,6 +21,7 @@ members = [
     "KittyBorgX",
     "Enselic",
 ]
+alumni = []
 
 [website]
 name = "Triage working group"

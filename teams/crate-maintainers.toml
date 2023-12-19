@@ -14,6 +14,7 @@ members = [
   "ChrisDenton",
   "Byron",
 ]
+alumni = []
 
 [permissions]
 bors.libc.review = true

@@ -12,6 +12,7 @@ members = [
     "jamesmunns",
     "therealprof",
 ]
+alumni = []
 
 [website]
 name = "Embedded resources working group"

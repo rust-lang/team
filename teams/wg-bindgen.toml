@@ -8,6 +8,7 @@ members = [
     "emilio",
     "fitzgen",
 ]
+alumni = []
 
 [website]
 name = "Bindgen working group"
