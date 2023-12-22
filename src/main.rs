@@ -17,7 +17,8 @@ use schema::{Email, Team, TeamKind};
 
 use anyhow::{bail, format_err, Error};
 use log::{error, info, warn};
-use std::{collections::HashMap, path::PathBuf};
+use std::collections::{BTreeMap, HashMap};
+use std::path::PathBuf;
 use structopt::StructOpt;
 
 #[derive(structopt::StructOpt)]
@@ -382,6 +383,7 @@ fn run() -> Result<(), Error> {
             );
             let mut teams: Vec<_> = data.teams().collect();
             teams.sort_by_key(|team| team.name());
+            let mut roles = BTreeMap::new();
             for team in teams {
                 if let Some(website) = team.website_data() {
                     let name = team.name();
@@ -391,7 +393,13 @@ fn run() -> Result<(), Error> {
                         name,
                         website.description()
                     );
+                    for role in website.roles() {
+                        roles.insert(&role.id, &role.description);
+                    }
                 }
+            }
+            for (role_id, description) in roles {
+                println!("governance-role-{role_id} = {description}");
             }
         }
         Cli::DumpPermission { ref name } => {

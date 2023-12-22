@@ -1,9 +1,12 @@
 use crate::data::Data;
-use crate::schema::{Bot, Email, Permissions, RepoPermission, TeamKind, ZulipGroupMember};
+use crate::schema::{
+    Bot, Email, Permissions, RepoPermission, TeamKind, WebsiteData, ZulipGroupMember,
+};
 use anyhow::Error;
 use indexmap::IndexMap;
 use log::info;
 use rust_team_data::v1;
+use std::collections::HashMap;
 use std::path::Path;
 
 pub(crate) struct Generator<'a> {
@@ -113,6 +116,17 @@ impl<'a> Generator<'a> {
         let mut teams = IndexMap::new();
 
         for team in self.data.teams() {
+            let website_data = team.website_data();
+            let mut website_roles = HashMap::new();
+            for role in website_data.map(WebsiteData::roles).unwrap_or(&[]) {
+                for assignee in &role.members {
+                    website_roles
+                        .entry(assignee.as_str())
+                        .or_insert_with(Vec::new)
+                        .push(role.id.clone());
+                }
+            }
+
             let leads = team.leads();
             let mut members = Vec::new();
             for github_name in &team.members(self.data)? {
@@ -122,6 +136,9 @@ impl<'a> Generator<'a> {
                         github: (*github_name).into(),
                         github_id: person.github_id(),
                         is_lead: leads.contains(github_name),
+                        roles: website_roles
+                            .get(*github_name)
+                            .map_or_else(Vec::new, Vec::clone),
                     });
                 }
             }
@@ -136,6 +153,7 @@ impl<'a> Generator<'a> {
                         github: github_name.to_string(),
                         github_id: person.github_id(),
                         is_lead: false,
+                        roles: Vec::new(),
                     });
                 }
             }
@@ -168,7 +186,7 @@ impl<'a> Generator<'a> {
                         .collect::<Vec<_>>(),
                 })
                 .filter(|gh| !gh.teams.is_empty()),
-                website_data: team.website_data().map(|ws| v1::TeamWebsite {
+                website_data: website_data.map(|ws| v1::TeamWebsite {
                     name: ws.name().into(),
                     description: ws.description().into(),
                     page: ws.page().unwrap_or_else(|| team.name()).into(),

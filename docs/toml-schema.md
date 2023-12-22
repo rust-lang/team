@@ -133,6 +133,18 @@ zulip-stream = "t-lang"
 # Default is 0.
 weight = -100
 
+# Customized roles held by a subset of the team's members, beyond "Team leader"
+# which is rendered automatically for members of the `leads` array.
+[[website.roles]]
+# Kebab-case id for the role. This serves as a key for translations.
+id = "cohost"
+# Text to appear on the website beneath the team member's name and GitHub handle.
+description = "Co-host"
+# Subset of the team's members holding this role. A member may hold arbitrarily
+# many roles. Each team member's roles will appear comma-separated in the same
+# order as roles are listed in the website.roles array.
+members = ["Crab01", "Crab03"]
+
 # Define the mailing lists used by the team
 # It's optional, and there can be more than one
 [[lists]]

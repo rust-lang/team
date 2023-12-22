@@ -17,6 +17,11 @@ description = "Creating and maintaining the specification for the Rust language"
 zulip-stream = "t-spec"
 repo = "https://github.com/rust-lang/spec"
 
+[[website.roles]]
+id = "spec-editor"
+description = "Editor"
+members = ["JoelMarcey"]
+
 [rfcbot]
 label = "T-spec"
 name = "Spec"

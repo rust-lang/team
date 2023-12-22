@@ -551,6 +551,8 @@ pub(crate) struct WebsiteData {
     name: String,
     description: String,
     page: Option<String>,
+    #[serde(default)]
+    roles: Vec<WebsiteRole>,
     email: Option<String>,
     repo: Option<String>,
     discord_invite: Option<String>,
@@ -577,6 +579,10 @@ impl WebsiteData {
         self.page.as_deref()
     }
 
+    pub(crate) fn roles(&self) -> &[WebsiteRole] {
+        &self.roles
+    }
+
     pub(crate) fn email(&self) -> Option<&str> {
         self.email.as_deref()
     }
@@ -599,6 +605,14 @@ impl WebsiteData {
     pub(crate) fn zulip_stream(&self) -> Option<&str> {
         self.zulip_stream.as_deref()
     }
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+pub(crate) struct WebsiteRole {
+    pub id: String,
+    pub description: String,
+    pub members: Vec<String>,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]

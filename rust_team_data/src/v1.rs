@@ -32,6 +32,8 @@ pub struct TeamMember {
     pub github: String,
     pub github_id: usize,
     pub is_lead: bool,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub roles: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
