@@ -1,0 +1,20 @@
+name = "wg-embedded-libs"
+subteam-of = "wg-embedded"
+kind = "working-group"
+
+[people]
+leads = []
+members = [
+    "Dirbaio",
+    "newAM",
+]
+alumni = []
+
+[website]
+name = "Embedded libraries team"
+description = "Develops and maintains libraries for embedded devices"
+
+[[github]]
+orgs = ["rust-embedded"]
+team-name = "libs"
+
