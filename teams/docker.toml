@@ -1,0 +1,12 @@
+name = "docker"
+
+[people]
+leads = []
+members = [
+    "sfackler",
+    "Muscraft",
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
