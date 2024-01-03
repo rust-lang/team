@@ -11,4 +11,4 @@ orgs = ["rust-lang"]
 
 [[lists]]
 address = "leads@rust-lang.org"
-extra-teams = ["wg-leads", "core"]
+extra-teams = ["wg-leads", "leadership-council"]
