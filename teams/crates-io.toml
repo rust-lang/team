@@ -26,9 +26,6 @@ alumni = [
     "wycats",
 ]
 
-[permissions]
-bors.crates-io.review = true
-
 [[github]]
 orgs = ["rust-lang", "conduit-rust"]
 

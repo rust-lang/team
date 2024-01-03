@@ -25,7 +25,6 @@ permissions-bors-repos = [
     "clippy",
     "compiler-builtins",
     "crater",
-    "crates-io",
     "hashbrown",
     "measureme",
     "miri",
