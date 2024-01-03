@@ -1,0 +1,10 @@
+# This team is regularly synced to the crates.io database and defines who has
+# access to admin functionality on crates.io.
+
+name = "crates-io-admins"
+kind = "marker-team"
+
+[people]
+leads = []
+members = []
+included-teams = ["crates-io"]
