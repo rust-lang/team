@@ -49,6 +49,12 @@ members = [
     "rfcbot",
     "craterbot",
     "rust-timer",
+    # Any subset of members may hold custom roles, beyond "Team leader" which is
+    # controlled by the `leads` array above. See [[website.roles]]. Members with
+    # roles are written using an inline table as follows. A simple string member
+    # like "bors" is equivalent to {name = "bors", roles = []}.
+    { name = "Crab01", roles = ["cohost"] },
+    { name = "Crab02", roles = ["cohost"] },
 ]
 # Past members of the team. They will not be considered as part of the team,
 # but they will be recognized on the website.
@@ -140,10 +146,6 @@ weight = -100
 id = "cohost"
 # Text to appear on the website beneath the team member's name and GitHub handle.
 description = "Co-host"
-# Subset of the team's members holding this role. A member may hold arbitrarily
-# many roles. Each team member's roles will appear comma-separated in the same
-# order as roles are listed in the website.roles array.
-members = ["Crab01", "Crab03"]
 
 # Define the mailing lists used by the team
 # It's optional, and there can be more than one
