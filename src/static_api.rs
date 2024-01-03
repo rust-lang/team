@@ -1,7 +1,5 @@
 use crate::data::Data;
-use crate::schema::{
-    Bot, Email, Permissions, RepoPermission, TeamKind, WebsiteData, ZulipGroupMember,
-};
+use crate::schema::{Bot, Email, Permissions, RepoPermission, TeamKind, ZulipGroupMember};
 use anyhow::Error;
 use indexmap::IndexMap;
 use log::info;
@@ -116,15 +114,9 @@ impl<'a> Generator<'a> {
         let mut teams = IndexMap::new();
 
         for team in self.data.teams() {
-            let website_data = team.website_data();
             let mut website_roles = HashMap::new();
-            for role in website_data.map(WebsiteData::roles).unwrap_or(&[]) {
-                for assignee in &role.members {
-                    website_roles
-                        .entry(assignee.as_str())
-                        .or_insert_with(Vec::new)
-                        .push(role.id.clone());
-                }
+            for member in team.explicit_members().iter().cloned() {
+                website_roles.insert(member.github, member.roles);
             }
 
             let leads = team.leads();
@@ -186,7 +178,7 @@ impl<'a> Generator<'a> {
                         .collect::<Vec<_>>(),
                 })
                 .filter(|gh| !gh.teams.is_empty()),
-                website_data: website_data.map(|ws| v1::TeamWebsite {
+                website_data: team.website_data().map(|ws| v1::TeamWebsite {
                     name: ws.name().into(),
                     description: ws.description().into(),
                     page: ws.page().unwrap_or_else(|| team.name()).into(),

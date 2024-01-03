@@ -6,7 +6,7 @@ leads = ["pnkfelix", "m-ou-se"]
 members = [
     "pnkfelix",
     "m-ou-se",
-    "JoelMarcey",
+    { name =  "JoelMarcey", roles = ["spec-editor"] },
     "ehuss",
 ]
 alumni = []
@@ -20,7 +20,6 @@ repo = "https://github.com/rust-lang/spec"
 [[website.roles]]
 id = "spec-editor"
 description = "Editor"
-members = ["JoelMarcey"]
 
 [rfcbot]
 label = "T-spec"

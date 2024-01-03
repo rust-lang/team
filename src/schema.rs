@@ -1,6 +1,8 @@
 use crate::data::Data;
 pub(crate) use crate::permissions::Permissions;
 use anyhow::{bail, format_err, Error};
+use serde::de::{Deserialize, Deserializer};
+use serde_untagged::UntaggedEnumVisitor;
 use std::collections::{HashMap, HashSet};
 
 #[derive(serde_derive::Deserialize, Debug)]
@@ -526,10 +528,32 @@ pub(crate) struct TeamPeople {
     pub include_all_alumni: bool,
 }
 
-#[derive(serde::Deserialize, Debug)]
-#[serde(transparent)]
+#[derive(serde::Deserialize, Clone, Debug)]
+#[serde(remote = "Self")]
 pub(crate) struct TeamMember {
+    #[serde(rename = "name")]
     pub github: String,
+    pub roles: Vec<String>,
+}
+
+impl<'de> Deserialize<'de> for TeamMember {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        UntaggedEnumVisitor::new()
+            .string(|github| {
+                Ok(TeamMember {
+                    github: github.to_owned(),
+                    roles: Vec::new(),
+                })
+            })
+            .map(|map| {
+                let deserializer = serde::de::value::MapAccessDeserializer::new(map);
+                TeamMember::deserialize(deserializer)
+            })
+            .deserialize(deserializer)
+    }
 }
 
 #[derive(serde::Deserialize, Debug)]
@@ -623,7 +647,6 @@ impl WebsiteData {
 pub(crate) struct WebsiteRole {
     pub id: String,
     pub description: String,
-    pub members: Vec<String>,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]

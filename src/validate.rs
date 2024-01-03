@@ -807,7 +807,7 @@ fn validate_website_roles(data: &Data, errors: &mut Vec<String>) {
         |team, errors| {
             let team_name = team.name();
             if let Some(website_data) = team.website_data() {
-                let team_members = team.members(data)?;
+                let mut role_ids = HashSet::new();
 
                 for role in website_data.roles() {
                     let role_id = &role.id;
@@ -815,15 +815,6 @@ fn validate_website_roles(data: &Data, errors: &mut Vec<String>) {
                         errors.push(format!(
                             "role id {role_id:?} must be alphanumeric with hyphens",
                         ));
-                    }
-
-                    for assignee in &role.members {
-                        if !team_members.contains(assignee.as_str()) {
-                            errors.push(format!(
-                                "person '{assignee}' with role '{role_id}' is not a \
-                                member of team '{team_name}'",
-                            ));
-                        }
                     }
 
                     match role_descriptions.entry(&role.id) {
@@ -838,6 +829,23 @@ fn validate_website_roles(data: &Data, errors: &mut Vec<String>) {
                                     must give those roles different ids",
                                 ));
                             }
+                        }
+                    }
+
+                    if !role_ids.insert(&role.id) {
+                        errors.push(format!(
+                            "role '{role_id}' is duplicated in team '{team_name}'",
+                        ));
+                    }
+                }
+
+                for member in team.explicit_members() {
+                    for role in &member.roles {
+                        if !role_ids.contains(role) {
+                            errors.push(format!(
+                                "person '{person}' in team '{team_name}' has unrecognized role '{role}'",
+                                person = member.github,
+                            ));
                         }
                     }
                 }
