@@ -128,9 +128,7 @@ impl<'a> Generator<'a> {
                         github: (*github_name).into(),
                         github_id: person.github_id(),
                         is_lead: leads.contains(github_name),
-                        roles: website_roles
-                            .get(*github_name)
-                            .map_or_else(Vec::new, Vec::clone),
+                        roles: website_roles.get(*github_name).cloned().unwrap_or_default(),
                     });
                 }
             }

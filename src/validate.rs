@@ -805,51 +805,54 @@ fn validate_website_roles(data: &Data, errors: &mut Vec<String>) {
         data.teams().chain(data.archived_teams()),
         errors,
         |team, errors| {
+            let Some(website_data) = team.website_data() else {
+                return Ok(());
+            };
+
             let team_name = team.name();
-            if let Some(website_data) = team.website_data() {
-                let mut role_ids = HashSet::new();
+            let mut role_ids = HashSet::new();
 
-                for role in website_data.roles() {
-                    let role_id = &role.id;
-                    if !ascii_kebab_case(role_id) {
-                        errors.push(format!(
-                            "role id {role_id:?} must be alphanumeric with hyphens",
-                        ));
-                    }
-
-                    match role_descriptions.entry(&role.id) {
-                        Entry::Vacant(entry) => {
-                            entry.insert(&role.description);
-                        }
-                        Entry::Occupied(entry) => {
-                            if **entry.get() != role.description {
-                                errors.push(format!(
-                                    "website role '{role_id}' has inconsistent description \
-                                    between different teams; if this is intentional, you \
-                                    must give those roles different ids",
-                                ));
-                            }
-                        }
-                    }
-
-                    if !role_ids.insert(&role.id) {
-                        errors.push(format!(
-                            "role '{role_id}' is duplicated in team '{team_name}'",
-                        ));
-                    }
+            for role in website_data.roles() {
+                let role_id = &role.id;
+                if !ascii_kebab_case(role_id) {
+                    errors.push(format!(
+                        "role id {role_id:?} must be alphanumeric with hyphens",
+                    ));
                 }
 
-                for member in team.explicit_members() {
-                    for role in &member.roles {
-                        if !role_ids.contains(role) {
+                match role_descriptions.entry(&role.id) {
+                    Entry::Vacant(entry) => {
+                        entry.insert(&role.description);
+                    }
+                    Entry::Occupied(entry) => {
+                        if **entry.get() != role.description {
                             errors.push(format!(
-                                "person '{person}' in team '{team_name}' has unrecognized role '{role}'",
-                                person = member.github,
+                                "website role '{role_id}' has inconsistent description \
+                                between different teams; if this is intentional, you \
+                                must give those roles different ids",
                             ));
                         }
                     }
                 }
+
+                if !role_ids.insert(&role.id) {
+                    errors.push(format!(
+                        "role '{role_id}' is duplicated in team '{team_name}'",
+                    ));
+                }
             }
+
+            for member in team.explicit_members() {
+                for role in &member.roles {
+                    if !role_ids.contains(role) {
+                        errors.push(format!(
+                            "person '{person}' in team '{team_name}' has unrecognized role '{role}'",
+                            person = member.github,
+                        ));
+                    }
+                }
+            }
+
             Ok(())
         },
     );
