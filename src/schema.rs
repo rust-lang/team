@@ -236,7 +236,12 @@ impl Team {
     }
 
     pub(crate) fn members<'a>(&'a self, data: &'a Data) -> Result<HashSet<&'a str>, Error> {
-        let mut members: HashSet<_> = self.people.members.iter().map(|s| s.as_str()).collect();
+        let mut members: HashSet<_> = self
+            .people
+            .members
+            .iter()
+            .map(|s| s.github.as_str())
+            .collect();
 
         for team in &self.people.included_teams {
             let team = data.team(team).ok_or_else(|| {
@@ -450,7 +455,7 @@ impl Team {
     }
 
     // People explicitly set as members
-    pub(crate) fn explicit_members(&self) -> &Vec<String> {
+    pub(crate) fn explicit_members(&self) -> &[TeamMember] {
         &self.people.members
     }
 
@@ -505,7 +510,7 @@ impl std::cmp::Ord for GitHubTeam<'_> {
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct TeamPeople {
     pub leads: Vec<String>,
-    pub members: Vec<String>,
+    pub members: Vec<TeamMember>,
     pub alumni: Option<Vec<String>>,
     #[serde(default)]
     pub included_teams: Vec<String>,
@@ -519,6 +524,12 @@ pub(crate) struct TeamPeople {
     pub include_all_team_members: bool,
     #[serde(default = "default_false")]
     pub include_all_alumni: bool,
+}
+
+#[derive(serde::Deserialize, Debug)]
+#[serde(transparent)]
+pub(crate) struct TeamMember {
+    pub github: String,
 }
 
 #[derive(serde::Deserialize, Debug)]
