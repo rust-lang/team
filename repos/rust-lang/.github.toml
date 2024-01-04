@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = ".github"
+description = "Special GitHub repository with fallback issue templates and community health files for other repos."
+bots = []
+
+[access.teams]
+infra = "maintain"
