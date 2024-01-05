@@ -3,16 +3,13 @@ subteam-of = "core"
 kind = "project-group"
 
 [people]
-leads = [
-    "nikomatsakis",
-    "m-ou-se"
-]
-members = [
+leads = []
+members = []
+alumni = [
     "nikomatsakis",
     "m-ou-se",
-    "rylev"
+    "rylev",
 ]
-alumni = []
 
 [[github]]
 orgs = ["rust-lang"]
