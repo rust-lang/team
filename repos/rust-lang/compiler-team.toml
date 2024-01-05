@@ -1,0 +1,14 @@
+org = "rust-lang"
+name = "compiler-team"
+description = "A home for compiler team planning documents, meeting minutes, and other such things."
+bots = []
+
+[access.teams]
+compiler = "write"
+compiler-contributors = "write"
+wg-prioritization = "write"
+types = "write"
+
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
