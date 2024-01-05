@@ -46,7 +46,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_zulip_group_extra_people,
     validate_repos,
     validate_branch_protections,
-    validate_website_roles,
+    validate_member_roles,
 ];
 
 #[allow(clippy::type_complexity)]
@@ -795,24 +795,20 @@ please remove the attribute when using bors"#,
     })
 }
 
-/// Enforce that website roles are only assigned to a valid team member, and
-/// that the same role id always has a consistent description across teams
-/// (because the role id becomes the Fluent id used for translation).
-fn validate_website_roles(data: &Data, errors: &mut Vec<String>) {
+/// Enforce that roles are only assigned to a valid team member, and that the
+/// same role id always has a consistent description across teams (because the
+/// role id becomes the Fluent id used for translation).
+fn validate_member_roles(data: &Data, errors: &mut Vec<String>) {
     let mut role_descriptions = HashMap::new();
 
     wrapper(
         data.teams().chain(data.archived_teams()),
         errors,
         |team, errors| {
-            let Some(website_data) = team.website_data() else {
-                return Ok(());
-            };
-
             let team_name = team.name();
             let mut role_ids = HashSet::new();
 
-            for role in website_data.roles() {
+            for role in team.roles() {
                 let role_id = &role.id;
                 if !ascii_kebab_case(role_id) {
                     errors.push(format!(
@@ -827,9 +823,9 @@ fn validate_website_roles(data: &Data, errors: &mut Vec<String>) {
                     Entry::Occupied(entry) => {
                         if **entry.get() != role.description {
                             errors.push(format!(
-                                "website role '{role_id}' has inconsistent description \
-                                between different teams; if this is intentional, you \
-                                must give those roles different ids",
+                                "role '{role_id}' has inconsistent description bewteen \
+                                different teams; if this is intentional, you must give \
+                                those roles different ids",
                             ));
                         }
                     }

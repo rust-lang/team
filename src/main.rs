@@ -393,9 +393,9 @@ fn run() -> Result<(), Error> {
                         name,
                         website.description()
                     );
-                    for role in website.roles() {
-                        roles.insert(&role.id, &role.description);
-                    }
+                }
+                for role in team.roles() {
+                    roles.insert(&role.id, &role.description);
                 }
             }
             for (role_id, description) in roles {

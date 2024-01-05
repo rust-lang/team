@@ -167,6 +167,8 @@ pub(crate) struct Team {
     rfcbot: Option<RfcbotData>,
     website: Option<WebsiteData>,
     #[serde(default)]
+    roles: Vec<MemberRole>,
+    #[serde(default)]
     lists: Vec<TeamList>,
     #[serde(default)]
     zulip_groups: Vec<RawZulipGroup>,
@@ -226,6 +228,10 @@ impl Team {
 
     pub(crate) fn website_data(&self) -> Option<&WebsiteData> {
         self.website.as_ref()
+    }
+
+    pub(crate) fn roles(&self) -> &[MemberRole] {
+        &self.roles
     }
 
     pub(crate) fn discord_roles(&self) -> Option<&Vec<DiscordRole>> {
@@ -529,9 +535,8 @@ pub(crate) struct TeamPeople {
 }
 
 #[derive(serde::Deserialize, Clone, Debug)]
-#[serde(remote = "Self")]
+#[serde(remote = "Self", deny_unknown_fields)]
 pub(crate) struct TeamMember {
-    #[serde(rename = "name")]
     pub github: String,
     pub roles: Vec<String>,
 }
@@ -586,8 +591,6 @@ pub(crate) struct WebsiteData {
     name: String,
     description: String,
     page: Option<String>,
-    #[serde(default)]
-    roles: Vec<WebsiteRole>,
     email: Option<String>,
     repo: Option<String>,
     discord_invite: Option<String>,
@@ -612,10 +615,6 @@ impl WebsiteData {
 
     pub(crate) fn page(&self) -> Option<&str> {
         self.page.as_deref()
-    }
-
-    pub(crate) fn roles(&self) -> &[WebsiteRole] {
-        &self.roles
     }
 
     pub(crate) fn email(&self) -> Option<&str> {
@@ -644,7 +643,7 @@ impl WebsiteData {
 
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
-pub(crate) struct WebsiteRole {
+pub(crate) struct MemberRole {
     pub id: String,
     pub description: String,
 }
