@@ -1,0 +1,16 @@
+org = "rust-lang"
+name = "rustc-dev-guide"
+description = "A guide to how rustc works and how to contribute to it."
+bots = ["rustbot"]
+
+[access.teams]
+compiler = "write"
+wg-rustc-dev-guide = "maintain"
+infra = "write"
+libs = "write"
+compiler-contributors = "write"
+libs-contributors = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["ci"]
