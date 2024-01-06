@@ -292,4 +292,8 @@ ci-checks = ["CI"]
 # merging into this branch require another review. 
 # (optional - default `false`)
 dismiss-stale-review = false
+# How many approvals are required for a PR to be merged.
+# This option is only relevant if bors is not used.
+# (optional - default `1`)
+required-approvals = 1
 ```

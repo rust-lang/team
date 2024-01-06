@@ -18,7 +18,8 @@
           "ci_checks": [
             "CI"
           ],
-          "dismiss_stale_review": false
+          "dismiss_stale_review": false,
+          "required_approvals": 1
         }
       ]
     }

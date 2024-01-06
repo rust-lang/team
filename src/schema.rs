@@ -733,4 +733,6 @@ pub(crate) struct BranchProtection {
     pub ci_checks: Vec<String>,
     #[serde(default)]
     pub dismiss_stale_review: bool,
+    #[serde(default)]
+    pub required_approvals: Option<u32>,
 }
