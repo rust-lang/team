@@ -27,7 +27,7 @@ impl Data {
         };
 
         fn validate_repo(org: &str, repo: &Repo, path: &Path) -> anyhow::Result<()> {
-            if &repo.org != org {
+            if repo.org != org {
                 bail!(
                     "repo '{}' is located in the '{}' org directory but its org is '{}'",
                     repo.name,
@@ -180,6 +180,10 @@ impl Data {
 
     pub(crate) fn archived_repos(&self) -> impl Iterator<Item = &Repo> {
         self.archived_repos.iter()
+    }
+
+    pub(crate) fn all_repos(&self) -> impl Iterator<Item = &Repo> {
+        self.repos().chain(self.archived_repos())
     }
 
     pub(crate) fn archived_teams(&self) -> impl Iterator<Item = &Team> {
