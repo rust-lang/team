@@ -2,6 +2,29 @@
   "test-org": [
     {
       "org": "test-org",
+      "name": "archived_repo",
+      "description": "An archived repo!",
+      "bots": [],
+      "teams": [
+        {
+          "name": "foo",
+          "permission": "admin"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "ci_checks": [
+            "CI"
+          ],
+          "dismiss_stale_review": false
+        }
+      ],
+      "archived": true
+    },
+    {
+      "org": "test-org",
       "name": "some_repo",
       "description": "A repo!",
       "bots": [],
@@ -24,7 +47,8 @@
             "foo"
           ]
         }
-      ]
+      ],
+      "archived": false
     }
   ]
 }

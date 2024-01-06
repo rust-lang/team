@@ -1,0 +1,11 @@
+org = "test-org"
+name = "archived_repo"
+description = "An archived repo!"
+bots = []
+
+[access.teams]
+foo = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["CI"]

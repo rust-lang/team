@@ -11,6 +11,7 @@ pub(crate) struct Data {
     teams: HashMap<String, Team>,
     archived_teams: Vec<Team>,
     repos: Vec<Repo>,
+    archived_repos: Vec<Repo>,
     config: Config,
 }
 
@@ -21,11 +22,12 @@ impl Data {
             teams: HashMap::new(),
             archived_teams: Vec::new(),
             repos: Vec::new(),
+            archived_repos: Vec::new(),
             config: load_file(Path::new("config.toml"))?,
         };
 
-        data.load_dir("repos", true, |this, org, repo: Repo, path: &Path| {
-            if repo.org != org {
+        fn validate_repo(org: &str, repo: &Repo, path: &Path) -> anyhow::Result<()> {
+            if &repo.org != org {
                 bail!(
                     "repo '{}' is located in the '{}' org directory but its org is '{}'",
                     repo.name,
@@ -40,10 +42,30 @@ impl Data {
                     path.file_name().unwrap().to_str().unwrap()
                 )
             }
+            Ok(())
+        }
 
+        data.load_dir("repos", true, |this, org, repo: Repo, path: &Path| {
+            if org == "archive" {
+                return Ok(());
+            }
+
+            validate_repo(org, &repo, path)?;
             this.repos.push(repo);
             Ok(())
         })?;
+
+        if Path::new("repos/archive").is_dir() {
+            data.load_dir(
+                "repos/archive",
+                true,
+                |this, org, repo: Repo, path: &Path| {
+                    validate_repo(org, &repo, path)?;
+                    this.archived_repos.push(repo);
+                    Ok(())
+                },
+            )?;
+        }
 
         data.load_dir("people", false, |this, _dir, person: Person, _path| {
             person.validate()?;
@@ -154,6 +176,10 @@ impl Data {
 
     pub(crate) fn repos(&self) -> impl Iterator<Item = &Repo> {
         self.repos.iter()
+    }
+
+    pub(crate) fn archived_repos(&self) -> impl Iterator<Item = &Repo> {
+        self.archived_repos.iter()
     }
 
     pub(crate) fn archived_teams(&self) -> impl Iterator<Item = &Team> {

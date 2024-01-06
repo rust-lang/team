@@ -1,7 +1,7 @@
 {
   "org": "test-org",
-  "name": "some_repo",
-  "description": "A repo!",
+  "name": "archived_repo",
+  "description": "An archived repo!",
   "bots": [],
   "teams": [
     {
@@ -16,12 +16,8 @@
       "ci_checks": [
         "CI"
       ],
-      "dismiss_stale_review": false,
-      "required_approvals": 1,
-      "allowed_merge_teams": [
-        "foo"
-      ]
+      "dismiss_stale_review": false
     }
   ],
-  "archived": false
+  "archived": true
 }
