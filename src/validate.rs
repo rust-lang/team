@@ -1,6 +1,6 @@
 use crate::data::Data;
 use crate::github::GitHubApi;
-use crate::schema::{Email, Permissions, Team, TeamKind, TeamPeople, ZulipGroupMember};
+use crate::schema::{Bot, Email, Permissions, Team, TeamKind, TeamPeople, ZulipGroupMember};
 use crate::zulip::ZulipApi;
 use anyhow::{bail, Error};
 use log::{error, warn};
@@ -44,6 +44,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_zulip_group_ids,
     validate_zulip_group_extra_people,
     validate_repos,
+    validate_branch_protections,
 ];
 
 #[allow(clippy::type_complexity)]
@@ -772,6 +773,24 @@ fn validate_repos(data: &Data, errors: &mut Vec<String>) {
         }
         Ok(())
     });
+}
+
+/// Validate that branch protections make sense in combination with used bots.
+fn validate_branch_protections(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.repos(), errors, |repo, _| {
+        let bors_used = repo.bots.iter().any(|b| matches!(b, Bot::Bors));
+        for protection in &repo.branch_protections {
+            if bors_used && protection.required_approvals.is_some() {
+                bail!(
+                    r#"repo '{}' uses bors and its branch protection for {} uses the `required-approvals` attribute;
+please remove the attribute when using bors"#,
+                    repo.name,
+                    protection.pattern,
+                );
+            }
+        }
+        Ok(())
+    })
 }
 
 fn wrapper<T, I, F>(iter: I, errors: &mut Vec<String>, mut func: F)
