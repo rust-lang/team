@@ -43,6 +43,7 @@ impl<'a> Generator<'a> {
                     pattern: b.pattern.clone(),
                     ci_checks: b.ci_checks.clone(),
                     dismiss_stale_review: b.dismiss_stale_review,
+                    required_approvals: b.required_approvals.unwrap_or(1),
                 })
                 .collect();
             let repo = v1::Repo {
