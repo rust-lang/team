@@ -751,6 +751,8 @@ pub(crate) struct Repo {
     pub name: String,
     pub description: String,
     pub homepage: Option<String>,
+    #[serde(default)]
+    pub private_non_synced: Option<bool>,
     pub bots: Vec<Bot>,
     pub access: RepoAccess,
     #[serde(default)]

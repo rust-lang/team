@@ -60,6 +60,7 @@ impl<'a> Generator<'a> {
                 name: r.name.clone(),
                 description: r.description.clone(),
                 homepage: r.homepage.clone(),
+                private: r.private_non_synced.unwrap_or(false),
                 bots: r
                     .bots
                     .iter()

@@ -263,6 +263,10 @@ description = "A repo for awesome things!"
 homepage = "https://www.rust-lang.org/"
 # The bots that this repo requires (required)
 bots = ["bors", "rustbot", "rust-timer"]
+# Should the repository be private? (optional - default `false`)
+# Note that this only serves for documentation purposes, it is
+# not synchronized by automation.
+private-non-synced = false
 
 # The teams that have access to this repo along
 # with the access level. (required)
