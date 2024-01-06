@@ -166,6 +166,7 @@ pub struct Repo {
     pub teams: Vec<RepoTeam>,
     pub members: Vec<RepoMember>,
     pub branch_protections: Vec<BranchProtection>,
+    pub archived: bool,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]

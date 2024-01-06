@@ -36,7 +36,13 @@ impl<'a> Generator<'a> {
 
     fn generate_repos(&self) -> Result<(), Error> {
         let mut repos: IndexMap<String, Vec<v1::Repo>> = IndexMap::new();
-        for r in self.data.repos() {
+        let repo_iter = self
+            .data
+            .repos()
+            .map(|repo| (repo, false))
+            .chain(self.data.archived_repos().map(|repo| (repo, true)));
+
+        for (r, archived) in repo_iter {
             let branch_protections: Vec<_> = r
                 .branch_protections
                 .iter()
@@ -99,6 +105,7 @@ impl<'a> Generator<'a> {
                     })
                     .collect(),
                 branch_protections,
+                archived,
             };
 
             self.add(&format!("v1/repos/{}.json", r.name), &repo)?;
