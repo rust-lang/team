@@ -10,7 +10,7 @@ pub(crate) struct Data {
     people: HashMap<String, Person>,
     teams: HashMap<String, Team>,
     archived_teams: Vec<Team>,
-    repos: HashMap<(String, String), Repo>,
+    repos: Vec<Repo>,
     config: Config,
 }
 
@@ -20,7 +20,7 @@ impl Data {
             people: HashMap::new(),
             teams: HashMap::new(),
             archived_teams: Vec::new(),
-            repos: HashMap::new(),
+            repos: Vec::new(),
             config: load_file(Path::new("config.toml"))?,
         };
 
@@ -41,8 +41,7 @@ impl Data {
                 )
             }
 
-            this.repos
-                .insert((repo.org.clone(), repo.name.clone()), repo);
+            this.repos.push(repo);
             Ok(())
         })?;
 
@@ -154,7 +153,7 @@ impl Data {
     }
 
     pub(crate) fn repos(&self) -> impl Iterator<Item = &Repo> {
-        self.repos.values()
+        self.repos.iter()
     }
 
     pub(crate) fn archived_teams(&self) -> impl Iterator<Item = &Team> {
