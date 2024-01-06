@@ -319,7 +319,7 @@ dependencies = [
  "futures-sink",
  "futures-util",
  "http",
- "indexmap 1.9.1",
+ "indexmap 1.9.3",
  "slab",
  "tokio",
  "tokio-util",
@@ -460,9 +460,9 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "1.9.1"
+version = "1.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "10a35a97730320ffe8e2d410b5d3b69279b98d2c14bdb8b70ea89ecf7888d41e"
+checksum = "bd070e393353796e801d209ad339e89596eb4c8d430d18ede6a1cced8fafbd99"
 dependencies = [
  "autocfg",
  "hashbrown 0.12.3",
@@ -944,7 +944,7 @@ dependencies = [
  "base64 0.13.0",
  "env_logger",
  "hyper-old-types",
- "indexmap 1.9.1",
+ "indexmap 2.1.0",
  "log",
  "reqwest",
  "rust_team_data",
