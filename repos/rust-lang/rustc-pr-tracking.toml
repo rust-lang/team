@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "rustc-pr-tracking"
+description = "Statistics about PRs on the rustc repository."
+bots = ["highfive"]
+
+[access.teams]
+release = "write"
