@@ -789,7 +789,7 @@ impl GitHub {
         let res: GraphResult<R> = resp.json_annotated().with_context(|| {
             format!("Failed to decode response body on graphql request with query '{query}'")
         })?;
-        if let Some(error) = res.errors.get(0) {
+        if let Some(error) = res.errors.first() {
             bail!("graphql error: {}", error.message);
         } else if let Some(data) = res.data {
             Ok(data)
