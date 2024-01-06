@@ -25,6 +25,7 @@
         }
       ],
       "archived": true,
+      "private": false,
       "auto_merge_enabled": true
     },
     {
@@ -54,6 +55,7 @@
         }
       ],
       "archived": false,
+      "private": false,
       "auto_merge_enabled": true
     }
   ]
