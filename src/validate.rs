@@ -316,7 +316,7 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
     let all_members = data.people().map(|p| p.github()).collect::<HashSet<_>>();
     // All the individual contributors to any Rust controlled repos
     let all_ics = data
-        .repos()
+        .all_repos()
         .flat_map(|r| r.access.individuals.keys())
         .map(|n| n.as_str())
         .collect::<HashSet<_>>();
