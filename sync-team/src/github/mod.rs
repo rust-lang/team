@@ -439,7 +439,14 @@ fn construct_branch_protection(
     expected_repo: &rust_team_data::v1::Repo,
     branch_protection: &rust_team_data::v1::BranchProtection,
 ) -> api::BranchProtection {
-    let required_approving_review_count = u8::from(!expected_repo.bots.contains(&Bot::Bors));
+    let required_approving_review_count: u8 = if expected_repo.bots.contains(&Bot::Bors) {
+        0
+    } else {
+        branch_protection
+            .required_approvals
+            .try_into()
+            .expect("Too large required approval count")
+    };
     let push_allowances = expected_repo
         .bots
         .contains(&Bot::Bors)
