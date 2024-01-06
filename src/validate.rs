@@ -729,11 +729,17 @@ fn validate_zulip_group_extra_people(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
-/// Ensure repos reference valid teams
+/// Ensure repos reference valid teams and that they are unique
 fn validate_repos(data: &Data, errors: &mut Vec<String>) {
     let allowed_orgs = data.config().allowed_github_orgs();
     let github_teams = data.github_teams();
-    wrapper(data.repos(), errors, |repo, _| {
+    let mut repo_map = HashSet::new();
+
+    wrapper(data.all_repos(), errors, |repo, _| {
+        if !repo_map.insert(format!("{}/{}", repo.org, repo.name)) {
+            bail!("The repo {}/{} is duplicated", repo.org, repo.name);
+        }
+
         if !allowed_orgs.contains(&repo.org) {
             bail!(
                 "The repo '{}' is in an invalid org '{}'",
