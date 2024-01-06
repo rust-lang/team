@@ -1,0 +1,14 @@
+org = "rust-lang"
+name = "cargo-bisect-rustc"
+description = "Bisects rustc, either nightlies or CI artifacts"
+bots = []
+
+[access.teams]
+compiler = "write"
+
+[access.individuals]
+ehuss = "write"
+
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
