@@ -751,7 +751,7 @@ fn validate_repos(data: &Data, errors: &mut Vec<String>) {
                 repo.org
             );
         }
-        for (team_name, _) in &repo.access.teams {
+        for team_name in repo.access.teams.keys() {
             if !github_teams.contains(&(repo.org.clone(), team_name.clone())) {
                 bail!(
                         "access for {}/{} is invalid: '{}' is not configured as a GitHub team for the '{}' org",
@@ -763,7 +763,7 @@ fn validate_repos(data: &Data, errors: &mut Vec<String>) {
             }
         }
 
-        for (name, _) in &repo.access.individuals {
+        for name in repo.access.individuals.keys() {
             if data.person(name).is_none() {
                 bail!(
                     "access for {}/{} is invalid: '{}' is not the name of a person in the team repo",
