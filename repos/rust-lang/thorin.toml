@@ -1,0 +1,11 @@
+org = 'rust-lang'
+name = 'thorin'
+description = 'DWARF packaging utility, written in Rust, supporting GNU extension and DWARF 5 package formats.'
+bots = ["rustbot"]
+
+[access.teams]
+compiler = 'maintain'
+compiler-contributors = 'maintain'
+
+[[branch-protections]]
+pattern = "main"
