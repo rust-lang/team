@@ -25,7 +25,7 @@ impl Data {
         };
 
         data.load_dir("repos", true, |this, org, repo: Repo| {
-            if &repo.org != org {
+            if repo.org != org {
                 bail!(
                     "repo '{}' is located in the '{}' org directory but its org is '{}'",
                     repo.name,
