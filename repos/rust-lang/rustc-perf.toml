@@ -1,0 +1,15 @@
+org = "rust-lang"
+name = "rustc-perf"
+description = "Website for graphing performance of rustc"
+bots = []
+
+[access.teams]
+wg-compiler-performance = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "Test and deploy",
+    "Test on Windows",
+    "Database Check",
+]
