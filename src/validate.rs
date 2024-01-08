@@ -3,7 +3,6 @@ use crate::github::GitHubApi;
 use crate::schema::{Bot, Email, Permissions, Team, TeamKind, TeamPeople, ZulipGroupMember};
 use crate::zulip::ZulipApi;
 use anyhow::{bail, Error};
-use itertools::Itertools as _;
 use log::{error, warn};
 use regex::Regex;
 use std::collections::hash_map::{Entry, HashMap};
@@ -635,9 +634,10 @@ fn validate_discord_team_members_have_discord_ids(data: &Data, errors: &mut Vec<
         if team.discord_roles().is_some() && team.name() != "all" {
             let team_members = team.members(data)?;
             if team_members.len() != team.discord_ids(data)?.len() {
-                let mut missing_discord_id = team_members
+                let missing_discord_id = team_members
                     .into_iter()
-                    .filter(|name| data.person(name).map(|p| p.discord_id()) == Some(None));
+                    .filter(|name| data.person(name).map(|p| p.discord_id()) == Some(None))
+                    .collect::<Vec<_>>();
 
                 bail!(
                     "the following members of the \"{}\" team do not have discord_ids: {}",
