@@ -33,7 +33,7 @@ fn check_zulip(data: &Data) -> anyhow::Result<()> {
             .get(&id)
             .unwrap_or_else(|| panic!("Zulip ID {} was not present in /users", id))
     };
-    for (_, local_group) in &data.zulip_groups()? {
+    for local_group in data.zulip_groups()?.values() {
         match remote_groups.remove(local_group.name()) {
             Some(rg) => {
                 let mut remote_members = rg.members.iter().collect::<HashSet<_>>();
