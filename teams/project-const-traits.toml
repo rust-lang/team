@@ -1,0 +1,16 @@
+name = "project-const-traits"
+kind = "project-group"
+subteam-of = "compiler"
+
+[people]
+leads = [
+    "fee1-dead",
+]
+members = [
+    "compiler-errors",
+    "fee1-dead",
+    "fmease",
+    "oli-obk",
+]
+alumni = []
+
