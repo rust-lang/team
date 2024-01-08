@@ -49,6 +49,13 @@ members = [
     "rfcbot",
     "craterbot",
     "rust-timer",
+    # Any subset of members may hold custom roles, beyond "Team leader" which is
+    # controlled by the `leads` array above. Members with roles are written
+    # using an inline table as follows. A simple string member like "bors" is
+    # equivalent to {github = "bors", roles = []}. The strings in `roles` must
+    # be present as the `id` of some role in [[roles]] section below.
+    { github = "Crab01", roles = ["cohost"] },
+    { github = "Crab02", roles = ["cohost"] },
 ]
 # Past members of the team. They will not be considered as part of the team,
 # but they will be recognized on the website.
@@ -132,6 +139,14 @@ zulip-stream = "t-lang"
 # first, and very negative values are last.
 # Default is 0.
 weight = -100
+
+# Customized roles held by a subset of the team's members, beyond "Team leader"
+# which is rendered automatically for members of the `leads` array.
+[[roles]]
+# Kebab-case id for the role. This serves as a key for translations.
+id = "cohost"
+# Text to appear on the website beneath the team member's name and GitHub handle.
+description = "Co-host"
 
 # Define the mailing lists used by the team
 # It's optional, and there can be more than one

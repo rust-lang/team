@@ -5,7 +5,8 @@ use crate::zulip::ZulipApi;
 use anyhow::{bail, Error};
 use log::{error, warn};
 use regex::Regex;
-use std::collections::{HashMap, HashSet};
+use std::collections::hash_map::{Entry, HashMap};
+use std::collections::HashSet;
 
 macro_rules! checks {
     ($($f:ident,)*) => {
@@ -45,6 +46,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_zulip_group_extra_people,
     validate_repos,
     validate_branch_protections,
+    validate_member_roles,
 ];
 
 #[allow(clippy::type_complexity)]
@@ -539,9 +541,9 @@ fn validate_rfcbot_exclude_members(data: &Data, errors: &mut Vec<String>) {
 /// Ensure team names are alphanumeric + `-`
 fn validate_team_names(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
-        if !team.name().chars().all(|c| c.is_alphanumeric() || c == '-') {
+        if !ascii_kebab_case(team.name()) {
             bail!(
-                "team name `{}` can only be alphanumeric with dashes",
+                "team name `{}` can only be alphanumeric with hyphens",
                 team.name()
             );
         }
@@ -791,6 +793,71 @@ please remove the attribute when using bors"#,
         }
         Ok(())
     })
+}
+
+/// Enforce that roles are only assigned to a valid team member, and that the
+/// same role id always has a consistent description across teams (because the
+/// role id becomes the Fluent id used for translation).
+fn validate_member_roles(data: &Data, errors: &mut Vec<String>) {
+    let mut role_descriptions = HashMap::new();
+
+    wrapper(
+        data.teams().chain(data.archived_teams()),
+        errors,
+        |team, errors| {
+            let team_name = team.name();
+            let mut role_ids = HashSet::new();
+
+            for role in team.roles() {
+                let role_id = &role.id;
+                if !ascii_kebab_case(role_id) {
+                    errors.push(format!(
+                        "role id {role_id:?} must be alphanumeric with hyphens",
+                    ));
+                }
+
+                match role_descriptions.entry(&role.id) {
+                    Entry::Vacant(entry) => {
+                        entry.insert(&role.description);
+                    }
+                    Entry::Occupied(entry) => {
+                        if **entry.get() != role.description {
+                            errors.push(format!(
+                                "role '{role_id}' has inconsistent description bewteen \
+                                different teams; if this is intentional, you must give \
+                                those roles different ids",
+                            ));
+                        }
+                    }
+                }
+
+                if !role_ids.insert(&role.id) {
+                    errors.push(format!(
+                        "role '{role_id}' is duplicated in team '{team_name}'",
+                    ));
+                }
+            }
+
+            for member in team.explicit_members() {
+                for role in &member.roles {
+                    if !role_ids.contains(role) {
+                        errors.push(format!(
+                            "person '{person}' in team '{team_name}' has unrecognized role '{role}'",
+                            person = member.github,
+                        ));
+                    }
+                }
+            }
+
+            Ok(())
+        },
+    );
+}
+
+/// We use Fluent ids which are lowercase alphanumeric with hyphens.
+fn ascii_kebab_case(s: &str) -> bool {
+    s.chars()
+        .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')
 }
 
 fn wrapper<T, I, F>(iter: I, errors: &mut Vec<String>, mut func: F)

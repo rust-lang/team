@@ -1,6 +1,8 @@
 use crate::data::Data;
 pub(crate) use crate::permissions::Permissions;
 use anyhow::{bail, format_err, Error};
+use serde::de::{Deserialize, Deserializer};
+use serde_untagged::UntaggedEnumVisitor;
 use std::collections::{HashMap, HashSet};
 
 #[derive(serde_derive::Deserialize, Debug)]
@@ -165,6 +167,8 @@ pub(crate) struct Team {
     rfcbot: Option<RfcbotData>,
     website: Option<WebsiteData>,
     #[serde(default)]
+    roles: Vec<MemberRole>,
+    #[serde(default)]
     lists: Vec<TeamList>,
     #[serde(default)]
     zulip_groups: Vec<RawZulipGroup>,
@@ -226,6 +230,10 @@ impl Team {
         self.website.as_ref()
     }
 
+    pub(crate) fn roles(&self) -> &[MemberRole] {
+        &self.roles
+    }
+
     pub(crate) fn discord_roles(&self) -> Option<&Vec<DiscordRole>> {
         self.discord_roles.as_ref()
     }
@@ -236,7 +244,12 @@ impl Team {
     }
 
     pub(crate) fn members<'a>(&'a self, data: &'a Data) -> Result<HashSet<&'a str>, Error> {
-        let mut members: HashSet<_> = self.people.members.iter().map(|s| s.as_str()).collect();
+        let mut members: HashSet<_> = self
+            .people
+            .members
+            .iter()
+            .map(|s| s.github.as_str())
+            .collect();
 
         for team in &self.people.included_teams {
             let team = data.team(team).ok_or_else(|| {
@@ -450,7 +463,7 @@ impl Team {
     }
 
     // People explicitly set as members
-    pub(crate) fn explicit_members(&self) -> &Vec<String> {
+    pub(crate) fn explicit_members(&self) -> &[TeamMember] {
         &self.people.members
     }
 
@@ -505,7 +518,7 @@ impl std::cmp::Ord for GitHubTeam<'_> {
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct TeamPeople {
     pub leads: Vec<String>,
-    pub members: Vec<String>,
+    pub members: Vec<TeamMember>,
     pub alumni: Option<Vec<String>>,
     #[serde(default)]
     pub included_teams: Vec<String>,
@@ -519,6 +532,33 @@ pub(crate) struct TeamPeople {
     pub include_all_team_members: bool,
     #[serde(default = "default_false")]
     pub include_all_alumni: bool,
+}
+
+#[derive(serde::Deserialize, Clone, Debug)]
+#[serde(remote = "Self", deny_unknown_fields)]
+pub(crate) struct TeamMember {
+    pub github: String,
+    pub roles: Vec<String>,
+}
+
+impl<'de> Deserialize<'de> for TeamMember {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        UntaggedEnumVisitor::new()
+            .string(|github| {
+                Ok(TeamMember {
+                    github: github.to_owned(),
+                    roles: Vec::new(),
+                })
+            })
+            .map(|map| {
+                let deserializer = serde::de::value::MapAccessDeserializer::new(map);
+                TeamMember::deserialize(deserializer)
+            })
+            .deserialize(deserializer)
+    }
 }
 
 #[derive(serde::Deserialize, Debug)]
@@ -599,6 +639,13 @@ impl WebsiteData {
     pub(crate) fn zulip_stream(&self) -> Option<&str> {
         self.zulip_stream.as_deref()
     }
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+pub(crate) struct MemberRole {
+    pub id: String,
+    pub description: String,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]

@@ -6,7 +6,7 @@ leads = ["pnkfelix", "m-ou-se"]
 members = [
     "pnkfelix",
     "m-ou-se",
-    "JoelMarcey",
+    { github =  "JoelMarcey", roles = ["spec-editor"] },
     "ehuss",
 ]
 alumni = []
@@ -16,6 +16,10 @@ name = "Specification team"
 description = "Creating and maintaining the specification for the Rust language"
 zulip-stream = "t-spec"
 repo = "https://github.com/rust-lang/spec"
+
+[[roles]]
+id = "spec-editor"
+description = "Editor"
 
 [rfcbot]
 label = "T-spec"

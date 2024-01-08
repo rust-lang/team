@@ -4,6 +4,7 @@ use anyhow::Error;
 use indexmap::IndexMap;
 use log::info;
 use rust_team_data::v1;
+use std::collections::HashMap;
 use std::path::Path;
 
 pub(crate) struct Generator<'a> {
@@ -113,6 +114,11 @@ impl<'a> Generator<'a> {
         let mut teams = IndexMap::new();
 
         for team in self.data.teams() {
+            let mut website_roles = HashMap::new();
+            for member in team.explicit_members().iter().cloned() {
+                website_roles.insert(member.github, member.roles);
+            }
+
             let leads = team.leads();
             let mut members = Vec::new();
             for github_name in &team.members(self.data)? {
@@ -122,6 +128,7 @@ impl<'a> Generator<'a> {
                         github: (*github_name).into(),
                         github_id: person.github_id(),
                         is_lead: leads.contains(github_name),
+                        roles: website_roles.get(*github_name).cloned().unwrap_or_default(),
                     });
                 }
             }
@@ -136,6 +143,7 @@ impl<'a> Generator<'a> {
                         github: github_name.to_string(),
                         github_id: person.github_id(),
                         is_lead: false,
+                        roles: Vec::new(),
                     });
                 }
             }

@@ -18,6 +18,7 @@ rust_team_data = { path = "rust_team_data", features = ["email-encryption"] }
 serde = "1"
 serde_derive = "1"
 serde_json = "1"
+serde-untagged = "0.1"
 structopt = "0.3.26"
 toml = "0.8"
 
