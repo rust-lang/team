@@ -3,14 +3,14 @@ name = "leadership-council"
 [people]
 leads = []
 members = [
-    "carols10cents",
-    "eholk",
-    "ehuss",
-    "jackh726",
-    "jonathanpallant",
-    "Mark-Simulacrum",
-    "m-ou-se",
-    "technetos",
+    { github = "carols10cents", roles = ["council-rep-crates-io"] },
+    { github = "eholk", roles = ["council-rep-compiler"] },
+    { github = "ehuss", roles = ["council-rep-devtools"] },
+    { github = "jackh726", roles = ["council-rep-lang"] },
+    { github = "jonathanpallant", roles = ["council-rep-launching-pad"] },
+    { github = "Mark-Simulacrum", roles = ["council-rep-infra"] },
+    { github = "m-ou-se", roles = ["council-rep-libs"] },
+    { github = "technetos", roles = ["council-rep-mods"] },
 ]
 alumni = ["khionu", "rylev"]
 
@@ -29,6 +29,38 @@ email = "council@rust-lang.org"
 zulip-stream = "council"
 weight = 1000
 repo = "https://github.com/rust-lang/leadership-council"
+
+[[roles]]
+id = "council-rep-compiler"
+description = "Compiler team"
+
+[[roles]]
+id = "council-rep-crates-io"
+description = "Crates.io team"
+
+[[roles]]
+id = "council-rep-devtools"
+description = "Dev tools team"
+
+[[roles]]
+id = "council-rep-infra"
+description = "Infrastructure team"
+
+[[roles]]
+id = "council-rep-lang"
+description = "Language team"
+
+[[roles]]
+id = "council-rep-launching-pad"
+description = "Launching pad"
+
+[[roles]]
+id = "council-rep-libs"
+description = "Library team"
+
+[[roles]]
+id = "council-rep-mods"
+description = "Moderation team"
 
 [[lists]]
 address = "council@rust-lang.org"
