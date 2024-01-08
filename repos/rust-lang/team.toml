@@ -7,6 +7,7 @@ bots = []
 core = "admin"
 mods = "maintain"
 team-repo-admins = "write"
+infra = "triage"
 
 [[branch-protections]]
 pattern = "master"
