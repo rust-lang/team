@@ -1,8 +1,4 @@
-#![allow(
-    clippy::enum_variant_names,
-    clippy::new_ret_no_self,
-    clippy::redundant_closure
-)]
+#![allow(clippy::enum_variant_names)]
 
 mod data;
 #[macro_use]
