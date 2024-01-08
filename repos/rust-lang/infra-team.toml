@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "infra-team"
+description = "Coordination repository for the Rust infra team"
+bots = []
+
+[access.teams]
+infra = "write"
