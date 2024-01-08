@@ -1,6 +1,6 @@
 use crate::data::Data;
 use crate::schema::{Bot, Email, Permissions, RepoPermission, TeamKind, ZulipGroupMember};
-use anyhow::Error;
+use anyhow::{ensure, Context as _, Error};
 use indexmap::IndexMap;
 use log::info;
 use rust_team_data::v1;
@@ -364,7 +364,10 @@ impl<'a> Generator<'a> {
         Ok(())
     }
 
-    fn add<T: serde::Serialize>(&self, path: &str, obj: &T) -> Result<(), Error> {
+    fn add<T>(&self, path: &str, obj: &T) -> Result<(), Error>
+    where
+        T: serde::Serialize + serde::de::DeserializeOwned + PartialEq,
+    {
         info!("writing API object {}...", path);
         let dest = self.dest.join(path);
         if let Some(parent) = dest.parent() {
@@ -372,8 +375,17 @@ impl<'a> Generator<'a> {
                 std::fs::create_dir_all(parent)?;
             }
         }
+
         let json = serde_json::to_string_pretty(obj)?;
         std::fs::write(&dest, json.as_bytes())?;
+
+        let obj2: T =
+            serde_json::from_str(&json).with_context(|| format!("failed to deserialize {path}"))?;
+        ensure!(
+            *obj == obj2,
+            "deserializing {path} produced a different result than what was serialized",
+        );
+
         Ok(())
     }
 }
