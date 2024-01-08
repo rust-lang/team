@@ -3,5 +3,11 @@ kind = "working-group"
 
 [people]
 leads = ["user-2"]
-members = ["user-2"]
+members = [
+    { github = "user-2", roles = ["convener"] },
+]
 alumni = ["user-0", "user-5"]
+
+[[roles]]
+id = "convener"
+description = "Convener"

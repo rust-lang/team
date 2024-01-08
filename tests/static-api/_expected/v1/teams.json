@@ -130,7 +130,10 @@
         "name": "Second user",
         "github": "user-2",
         "github_id": 2,
-        "is_lead": true
+        "is_lead": true,
+        "roles": [
+          "convener"
+        ]
       }
     ],
     "alumni": [
@@ -149,7 +152,12 @@
     ],
     "github": null,
     "website_data": null,
-    "roles": [],
+    "roles": [
+      {
+        "id": "convener",
+        "description": "Convener"
+      }
+    ],
     "discord": []
   }
 }
