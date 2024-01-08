@@ -1,7 +1,7 @@
 org = "rust-lang"
 name = "compiler-team"
 description = "A home for compiler team planning documents, meeting minutes, and other such things."
-bots = []
+bots = ["rustbot"]
 
 [access.teams]
 compiler = "write"
