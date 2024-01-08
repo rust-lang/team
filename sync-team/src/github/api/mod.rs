@@ -133,7 +133,7 @@ impl HttpClient {
     }
 }
 
-pub(crate) struct GitHub {
+pub struct GitHub {
     dry_run: bool,
     client: HttpClient,
 }

@@ -4,7 +4,7 @@ mod team_api;
 mod utils;
 mod zulip;
 
-use crate::github::SyncGitHub;
+use crate::github::{GitHub, SyncGitHub};
 use crate::team_api::TeamApi;
 use anyhow::Context;
 use log::{error, info, warn};
@@ -81,7 +81,8 @@ fn app() -> anyhow::Result<()> {
         match service.as_str() {
             "github" => {
                 let token = get_env("GITHUB_TOKEN")?;
-                let sync = SyncGitHub::new(token, &team_api, dry_run)?;
+                let github = GitHub::new(token, dry_run)?;
+                let sync = SyncGitHub::new(github, &team_api)?;
                 let diff = sync.diff_all()?;
                 info!("{}", diff);
                 if !only_print_plan {

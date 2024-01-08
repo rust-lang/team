@@ -1,11 +1,13 @@
 mod api;
 
-use self::api::{BranchProtectionOp, GitHub, TeamPrivacy, TeamRole};
+use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
 use crate::{github::api::RepoPermission, TeamApi};
 use log::debug;
 use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write;
+
+pub use self::api::GitHub;
 
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
 static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
@@ -19,8 +21,7 @@ pub(crate) struct SyncGitHub {
 }
 
 impl SyncGitHub {
-    pub(crate) fn new(token: String, team_api: &TeamApi, dry_run: bool) -> anyhow::Result<Self> {
-        let github = GitHub::new(token, dry_run)?;
+    pub(crate) fn new(github: GitHub, team_api: &TeamApi) -> anyhow::Result<Self> {
         let teams = team_api.get_teams()?;
         let repos = team_api.get_repos()?;
 
