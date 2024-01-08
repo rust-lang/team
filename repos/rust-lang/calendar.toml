@@ -1,0 +1,18 @@
+org = "rust-lang"
+name = "calendar"
+description = "Calendars for Rust project teams"
+bots = ["rustbot"]
+
+[access.teams]
+compiler = "maintain"
+compiler-contributors = "maintain"
+crates-io = "maintain"
+docs-rs = "maintain"
+infra = "maintain"
+lang = "maintain"
+leadership-council = "maintain"
+libs = "maintain"
+release = "maintain"
+
+[[branch-protections]]
+pattern = "main"
