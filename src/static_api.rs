@@ -189,6 +189,14 @@ impl<'a> Generator<'a> {
                     zulip_stream: ws.zulip_stream().map(|s| s.into()),
                     weight: ws.weight(),
                 }),
+                roles: team
+                    .roles()
+                    .iter()
+                    .map(|role| v1::MemberRole {
+                        id: role.id.clone(),
+                        description: role.description.clone(),
+                    })
+                    .collect(),
                 discord: team
                     .discord_roles()
                     .map(|roles| {

@@ -14,6 +14,7 @@
     "alumni": [],
     "github": null,
     "website_data": null,
+    "roles": [],
     "discord": []
   },
   "foo": {
@@ -69,6 +70,7 @@
       "zulip_stream": "t-foo",
       "weight": 1000
     },
+    "roles": [],
     "discord": []
   },
   "leaderless": {
@@ -86,6 +88,7 @@
     "alumni": [],
     "github": null,
     "website_data": null,
+    "roles": [],
     "discord": []
   },
   "leads-permissions": {
@@ -115,6 +118,7 @@
     "alumni": [],
     "github": null,
     "website_data": null,
+    "roles": [],
     "discord": []
   },
   "wg-test": {
@@ -145,6 +149,7 @@
     ],
     "github": null,
     "website_data": null,
+    "roles": [],
     "discord": []
   }
 }
