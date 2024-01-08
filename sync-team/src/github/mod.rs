@@ -20,7 +20,7 @@ pub(crate) struct SyncGitHub {
 
 impl SyncGitHub {
     pub(crate) fn new(token: String, team_api: &TeamApi, dry_run: bool) -> anyhow::Result<Self> {
-        let github = GitHub::new(token, dry_run);
+        let github = GitHub::new(token, dry_run)?;
         let teams = team_api.get_teams()?;
         let repos = team_api.get_repos()?;
 

@@ -2,6 +2,7 @@ use crate::utils::ResponseExt;
 use anyhow::{bail, Context};
 use hyper_old_types::header::{Link, RelationType};
 use log::{debug, trace};
+use reqwest::header::HeaderMap;
 use reqwest::{
     blocking::{Client, RequestBuilder, Response},
     header::{self, HeaderValue},
@@ -12,715 +13,26 @@ use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
 
-pub(crate) struct GitHub {
-    token: String,
-    dry_run: bool,
+struct HttpClient {
     client: Client,
 }
 
-impl GitHub {
-    pub(crate) fn new(token: String, dry_run: bool) -> Self {
-        GitHub {
-            token,
-            dry_run,
-            client: Client::new(),
-        }
-    }
+impl HttpClient {
+    fn from_token(token: String) -> anyhow::Result<Self> {
+        let builder = reqwest::blocking::ClientBuilder::default();
+        let mut map = HeaderMap::default();
+        let mut auth = HeaderValue::from_str(&format!("token {}", token))?;
+        auth.set_sensitive(true);
 
-    /// Get user names by user ids
-    pub(crate) fn usernames(&self, ids: &[usize]) -> anyhow::Result<HashMap<usize, String>> {
-        #[derive(serde::Deserialize)]
-        #[serde(rename_all = "camelCase")]
-        struct Usernames {
-            database_id: usize,
-            login: String,
-        }
-        #[derive(serde::Serialize)]
-        struct Params {
-            ids: Vec<String>,
-        }
-        static QUERY: &str = "
-            query($ids: [ID!]!) {
-                nodes(ids: $ids) {
-                    ... on User {
-                        databaseId
-                        login
-                    }
-                }
-            }
-        ";
-
-        let mut result = HashMap::new();
-        for chunk in ids.chunks(100) {
-            let res: GraphNodes<Usernames> = self.graphql(
-                QUERY,
-                Params {
-                    ids: chunk.iter().map(|id| user_node_id(*id)).collect(),
-                },
-            )?;
-            for node in res.nodes.into_iter().flatten() {
-                result.insert(node.database_id, node.login);
-            }
-        }
-        Ok(result)
-    }
-
-    /// Get the owners of an org
-    pub(crate) fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<usize>> {
-        #[derive(serde::Deserialize, Eq, PartialEq, Hash)]
-        struct User {
-            id: usize,
-        }
-        let mut owners = HashSet::new();
-        self.rest_paginated(
-            &Method::GET,
-            format!("orgs/{org}/members?role=admin"),
-            |resp: Vec<User>| {
-                owners.extend(resp.into_iter().map(|u| u.id));
-                Ok(())
-            },
-        )?;
-        Ok(owners)
-    }
-
-    /// Get all teams associated with a org
-    ///
-    /// Returns a list of tuples of team name and slug
-    pub(crate) fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
-        let mut teams = Vec::new();
-
-        self.rest_paginated(
-            &Method::GET,
-            format!("orgs/{org}/teams"),
-            |resp: Vec<Team>| {
-                teams.extend(resp.into_iter().map(|t| (t.name, t.slug)));
-                Ok(())
-            },
-        )?;
-
-        Ok(teams)
-    }
-
-    /// Get the team by name and org
-    pub(crate) fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
-        self.send_option(Method::GET, &format!("orgs/{org}/teams/{team}"))
-    }
-
-    /// Create a team in a org
-    pub(crate) fn create_team(
-        &self,
-        org: &str,
-        name: &str,
-        description: &str,
-        privacy: TeamPrivacy,
-    ) -> anyhow::Result<Team> {
-        #[derive(serde::Serialize, Debug)]
-        struct Req<'a> {
-            name: &'a str,
-            description: &'a str,
-            privacy: TeamPrivacy,
-        }
-        debug!("Creating team '{name}' in '{org}'");
-        if self.dry_run {
-            Ok(Team {
-                // The `None` marks that the team is "created" by the dry run and
-                // doesn't actually exist on GitHub
-                id: None,
-                name: name.to_string(),
-                description: Some(description.to_string()),
-                privacy,
-                slug: name.to_string(),
-            })
-        } else {
-            let body = &Req {
-                name,
-                description,
-                privacy,
-            };
-            Ok(self
-                .send(Method::POST, &format!("orgs/{org}/teams"), body)?
-                .json_annotated()?)
-        }
-    }
-
-    /// Edit a team
-    pub(crate) fn edit_team(
-        &self,
-        org: &str,
-        name: &str,
-        new_name: Option<&str>,
-        new_description: Option<&str>,
-        new_privacy: Option<TeamPrivacy>,
-    ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize, Debug)]
-        struct Req<'a> {
-            #[serde(skip_serializing_if = "Option::is_none")]
-            name: Option<&'a str>,
-            #[serde(skip_serializing_if = "Option::is_none")]
-            description: Option<&'a str>,
-            #[serde(skip_serializing_if = "Option::is_none")]
-            privacy: Option<TeamPrivacy>,
-        }
-        let req = Req {
-            name: new_name,
-            description: new_description,
-            privacy: new_privacy,
-        };
-        debug!(
-            "Editing team '{name}' in '{org}' with request: {}",
-            serde_json::to_string(&req).unwrap_or_else(|_| "INVALID_REQUEST".to_string())
+        map.insert(header::AUTHORIZATION, auth);
+        map.insert(
+            header::USER_AGENT,
+            HeaderValue::from_static(crate::USER_AGENT),
         );
-        if !self.dry_run {
-            self.send(Method::PATCH, &format!("orgs/{org}/teams/{name}"), &req)?;
-        }
 
-        Ok(())
-    }
-
-    /// Delete a team by name and org
-    pub(crate) fn delete_team(&self, org: &str, slug: &str) -> anyhow::Result<()> {
-        debug!("Deleting team with slug '{slug}' in '{org}'");
-        if !self.dry_run {
-            let method = Method::DELETE;
-            let url = &format!("orgs/{org}/teams/{slug}");
-            let resp = self.req(method.clone(), url)?.send()?;
-            allow_not_found(resp, method, url)?;
-        }
-        Ok(())
-    }
-
-    pub(crate) fn team_memberships(
-        &self,
-        team: &Team,
-    ) -> anyhow::Result<HashMap<usize, TeamMember>> {
-        #[derive(serde::Deserialize)]
-        struct RespTeam {
-            members: RespMembers,
-        }
-        #[derive(serde::Deserialize)]
-        #[serde(rename_all = "camelCase")]
-        struct RespMembers {
-            page_info: GraphPageInfo,
-            edges: Vec<RespEdge>,
-        }
-        #[derive(serde::Deserialize)]
-        struct RespEdge {
-            role: TeamRole,
-            node: RespNode,
-        }
-        #[derive(serde::Deserialize)]
-        #[serde(rename_all = "camelCase")]
-        struct RespNode {
-            database_id: usize,
-            login: String,
-        }
-        #[derive(serde::Serialize)]
-        struct Params<'a> {
-            team: String,
-            cursor: Option<&'a str>,
-        }
-        static QUERY: &str = "
-            query($team: ID!, $cursor: String) {
-                node(id: $team) {
-                    ... on Team {
-                        members(after: $cursor) {
-                            pageInfo {
-                                endCursor
-                                hasNextPage
-                            }
-                            edges {
-                                role
-                                node {
-                                    databaseId
-                                    login
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        ";
-
-        let mut memberships = HashMap::new();
-        // Return the empty HashMap on new teams from dry runs
-        if let Some(id) = team.id {
-            let mut page_info = GraphPageInfo::start();
-            while page_info.has_next_page {
-                let res: GraphNode<RespTeam> = self.graphql(
-                    QUERY,
-                    Params {
-                        team: team_node_id(id),
-                        cursor: page_info.end_cursor.as_deref(),
-                    },
-                )?;
-                if let Some(team) = res.node {
-                    page_info = team.members.page_info;
-                    for edge in team.members.edges.into_iter() {
-                        memberships.insert(
-                            edge.node.database_id,
-                            TeamMember {
-                                username: edge.node.login,
-                                role: edge.role,
-                            },
-                        );
-                    }
-                }
-            }
-        }
-
-        Ok(memberships)
-    }
-
-    /// The GitHub names of users invited to the given team
-    pub(crate) fn team_membership_invitations(
-        &self,
-        org: &str,
-        team: &str,
-    ) -> anyhow::Result<HashSet<String>> {
-        let mut invites = HashSet::new();
-
-        self.rest_paginated(
-            &Method::GET,
-            format!("orgs/{org}/teams/{team}/invitations"),
-            |resp: Vec<Login>| {
-                invites.extend(resp.into_iter().map(|l| l.login));
-                Ok(())
-            },
-        )?;
-
-        Ok(invites)
-    }
-
-    /// Set a user's membership in a team to a role
-    pub(crate) fn set_team_membership(
-        &self,
-        org: &str,
-        team: &str,
-        user: &str,
-        role: TeamRole,
-    ) -> anyhow::Result<()> {
-        debug!("Setting membership of '{user}' in team '{team}' in org '{org}' to role '{role}'");
-        #[derive(serde::Serialize, Debug)]
-        struct Req {
-            role: TeamRole,
-        }
-        if !self.dry_run {
-            self.send(
-                Method::PUT,
-                &format!("orgs/{org}/teams/{team}/memberships/{user}"),
-                &Req { role },
-            )?;
-        }
-
-        Ok(())
-    }
-
-    /// Remove a user from a team
-    pub(crate) fn remove_team_membership(
-        &self,
-        org: &str,
-        team: &str,
-        user: &str,
-    ) -> anyhow::Result<()> {
-        debug!("Removing membership of '{user}' from team '{team}' in org '{org}'");
-        if !self.dry_run {
-            let url = &format!("orgs/{org}/teams/{team}/memberships/{user}");
-            let method = Method::DELETE;
-            let resp = self.req(method.clone(), url)?.send()?;
-            allow_not_found(resp, method, url)?;
-        }
-
-        Ok(())
-    }
-
-    /// Get a repo by org and name
-    pub(crate) fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
-        self.send_option(Method::GET, &format!("repos/{org}/{repo}"))
-    }
-
-    /// Create a repo
-    pub(crate) fn create_repo(
-        &self,
-        org: &str,
-        name: &str,
-        description: &str,
-    ) -> anyhow::Result<Repo> {
-        #[derive(serde::Serialize, Debug)]
-        struct Req<'a> {
-            name: &'a str,
-            description: &'a str,
-            auto_init: bool,
-        }
-        let req = &Req {
-            name,
-            description,
-            auto_init: true,
-        };
-        debug!("Creating the repo {org}/{name} with {req:?}");
-        if self.dry_run {
-            Ok(Repo {
-                id: String::from("ID"),
-                name: name.to_string(),
-                org: org.to_string(),
-                description: Some(description.to_string()),
-            })
-        } else {
-            Ok(self
-                .send(Method::POST, &format!("orgs/{org}/repos"), req)?
-                .json_annotated()?)
-        }
-    }
-
-    pub(crate) fn edit_repo(
-        &self,
-        org: &str,
-        repo_name: &str,
-        description: &str,
-    ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize, Debug)]
-        struct Req<'a> {
-            description: &'a str,
-        }
-        let req = Req { description };
-        debug!("Editing repo {}/{} with {:?}", org, repo_name, req);
-        if !self.dry_run {
-            self.send(Method::PATCH, &format!("repos/{org}/{repo_name}"), &req)?;
-        }
-        Ok(())
-    }
-
-    /// Get teams in a repo
-    pub(crate) fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
-        let mut teams = Vec::new();
-
-        self.rest_paginated(
-            &Method::GET,
-            format!("repos/{org}/{repo}/teams"),
-            |resp: Vec<RepoTeam>| {
-                teams.extend(resp);
-                Ok(())
-            },
-        )?;
-
-        Ok(teams)
-    }
-
-    /// Get collaborators in a repo
-    ///
-    /// Only fetches those who are direct collaborators (i.e., not a collaborator through a repo team)
-    pub(crate) fn repo_collaborators(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<Vec<RepoUser>> {
-        let mut users = Vec::new();
-
-        self.rest_paginated(
-            &Method::GET,
-            format!("repos/{org}/{repo}/collaborators?affiliation=direct"),
-            |resp: Vec<RepoUser>| {
-                users.extend(resp);
-                Ok(())
-            },
-        )?;
-
-        Ok(users)
-    }
-
-    /// Update a team's permissions to a repo
-    pub(crate) fn update_team_repo_permissions(
-        &self,
-        org: &str,
-        repo: &str,
-        team: &str,
-        permission: &RepoPermission,
-    ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize, Debug)]
-        struct Req<'a> {
-            permission: &'a RepoPermission,
-        }
-        debug!("Updating permission for team {team} on {org}/{repo} to {permission:?}");
-        if !self.dry_run {
-            self.send(
-                Method::PUT,
-                &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}"),
-                &Req { permission },
-            )?;
-        }
-
-        Ok(())
-    }
-
-    /// Update a user's permissions to a repo
-    pub(crate) fn update_user_repo_permissions(
-        &self,
-        org: &str,
-        repo: &str,
-        user: &str,
-        permission: &RepoPermission,
-    ) -> anyhow::Result<()> {
-        #[derive(serde::Serialize, Debug)]
-        struct Req<'a> {
-            permission: &'a RepoPermission,
-        }
-        debug!("Updating permission for user {user} on {org}/{repo} to {permission:?}");
-        if !self.dry_run {
-            self.send(
-                Method::PUT,
-                &format!("repos/{org}/{repo}/collaborators/{user}"),
-                &Req { permission },
-            )?;
-        }
-        Ok(())
-    }
-
-    /// Remove a team from a repo
-    pub(crate) fn remove_team_from_repo(
-        &self,
-        org: &str,
-        repo: &str,
-        team: &str,
-    ) -> anyhow::Result<()> {
-        debug!("Removing team {team} from repo {org}/{repo}");
-        if !self.dry_run {
-            let method = Method::DELETE;
-            let url = &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}");
-            let resp = self.req(method.clone(), url)?.send()?;
-            allow_not_found(resp, method, url)?;
-        }
-
-        Ok(())
-    }
-
-    /// Remove a collaborator from a repo
-    pub(crate) fn remove_collaborator_from_repo(
-        &self,
-        org: &str,
-        repo: &str,
-        collaborator: &str,
-    ) -> anyhow::Result<()> {
-        debug!("Removing collaborator {collaborator} from repo {org}/{repo}");
-        if !self.dry_run {
-            let method = Method::DELETE;
-            let url = &format!("repos/{org}/{repo}/collaborators/{collaborator}");
-            let resp = self.req(method.clone(), url)?.send()?;
-            allow_not_found(resp, method, url)?;
-        }
-        Ok(())
-    }
-
-    /// Get branch_protections
-    pub(crate) fn branch_protections(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>> {
-        #[derive(serde::Serialize)]
-        struct Params<'a> {
-            org: &'a str,
-            repo: &'a str,
-        }
-        static QUERY: &str = "
-            query($org:String!,$repo:String!) {
-                repository(owner:$org, name:$repo) {
-                    branchProtectionRules(first:100) {
-                        nodes { 
-                            id,
-                            pattern,
-                            isAdminEnforced,
-                            dismissesStaleReviews,
-                            requiredStatusCheckContexts,
-                            requiredApprovingReviewCount
-                            pushAllowances(first: 100) {
-                                nodes {
-                                    actor {
-                                        ... on Actor {
-                                            login
-                                        }
-                                        ... on Team {
-                                            organization {
-                                                login
-                                            },
-                                            name
-                                        }
-                                    }
-                                }
-                            }
-                         }
-                    }
-                }
-            }
-        ";
-
-        #[derive(serde::Deserialize)]
-        struct Wrapper {
-            repository: Respository,
-        }
-        #[derive(serde::Deserialize)]
-        #[serde(rename_all = "camelCase")]
-        struct Respository {
-            branch_protection_rules: GraphNodes<BranchProtectionWrapper>,
-        }
-        #[derive(serde::Deserialize)]
-        #[serde(rename_all = "camelCase")]
-        struct BranchProtectionWrapper {
-            id: String,
-            #[serde(flatten)]
-            protection: BranchProtection,
-        }
-
-        let mut result = HashMap::new();
-        let res: Wrapper = self.graphql(QUERY, Params { org, repo })?;
-        for node in res
-            .repository
-            .branch_protection_rules
-            .nodes
-            .into_iter()
-            .flatten()
-        {
-            result.insert(node.protection.pattern.clone(), (node.id, node.protection));
-        }
-        Ok(result)
-    }
-
-    /// Create or update a branch protection.
-    pub(crate) fn upsert_branch_protection(
-        &self,
-        op: BranchProtectionOp,
-        pattern: &str,
-        branch_protection: &BranchProtection,
-    ) -> anyhow::Result<()> {
-        debug!("Updating '{}' branch protection", pattern);
-        #[derive(Debug, serde::Serialize)]
-        #[serde(rename_all = "camelCase")]
-        struct Params<'a> {
-            id: &'a str,
-            pattern: &'a str,
-            contexts: &'a [String],
-            dismiss_stale: bool,
-            review_count: u8,
-            restricts_pushes: bool,
-            push_actor_ids: &'a [String],
-        }
-        let mutation_name = match op {
-            BranchProtectionOp::CreateForRepo(_) => "createBranchProtectionRule",
-            BranchProtectionOp::UpdateBranchProtection(_) => "updateBranchProtectionRule",
-        };
-        let id_field = match op {
-            BranchProtectionOp::CreateForRepo(_) => "repositoryId",
-            BranchProtectionOp::UpdateBranchProtection(_) => "branchProtectionRuleId",
-        };
-        let id = &match op {
-            BranchProtectionOp::CreateForRepo(id) => id,
-            BranchProtectionOp::UpdateBranchProtection(id) => id,
-        };
-        let query = format!("
-        mutation($id: ID!, $pattern:String!, $contexts: [String!], $dismissStale: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean) {{
-            {mutation_name}(input: {{
-                {id_field}: $id, 
-                pattern: $pattern, 
-                requiresStatusChecks: true, 
-                requiredStatusCheckContexts: $contexts, 
-                isAdminEnforced: true, 
-                requiredApprovingReviewCount: $reviewCount, 
-                dismissesStaleReviews: $dismissStale, 
-                requiresApprovingReviews:true,
-                restrictsPushes: $restrictsPushes,
-                pushActorIds: $pushActorIds
-            }}) {{
-              branchProtectionRule {{
-                id
-              }}
-            }}
-          }}
-        ");
-        let mut push_actor_ids = vec![];
-        for actor in &branch_protection.push_allowances {
-            match actor {
-                PushAllowanceActor::User(UserPushAllowanceActor { login: name }) => {
-                    push_actor_ids.push(self.user_id(name)?);
-                }
-                PushAllowanceActor::Team(TeamPushAllowanceActor {
-                    organization: Login { login: org },
-                    name,
-                }) => push_actor_ids.push(
-                    self.team(org, name)?
-                        .with_context(|| format!("could not find team: {org}/{name}"))?
-                        .name,
-                ),
-            }
-        }
-
-        if !self.dry_run {
-            let _: serde_json::Value = self.graphql(
-                &query,
-                Params {
-                    id,
-                    pattern,
-                    contexts: &branch_protection.required_status_check_contexts,
-                    dismiss_stale: branch_protection.dismisses_stale_reviews,
-                    review_count: branch_protection.required_approving_review_count,
-                    // We restrict merges, if we have explicitly set some actors to be
-                    // able to merge (i.e., we allow allow those with write permissions
-                    // to merge *or* we only allow those in `push_actor_ids`)
-                    restricts_pushes: !push_actor_ids.is_empty(),
-                    push_actor_ids: &push_actor_ids,
-                },
-            )?;
-        }
-        Ok(())
-    }
-
-    fn user_id(&self, name: &str) -> anyhow::Result<String> {
-        #[derive(serde::Serialize)]
-        struct Params<'a> {
-            name: &'a str,
-        }
-        let query = "
-            query($name: String!) {
-                user(login: $name) {
-                    id
-                }
-            }
-        ";
-        #[derive(serde::Deserialize)]
-        struct Data {
-            user: User,
-        }
-        #[derive(serde::Deserialize)]
-        struct User {
-            id: String,
-        }
-
-        let data: Data = self.graphql(query, Params { name })?;
-        Ok(data.user.id)
-    }
-
-    /// Delete a branch protection
-    pub(crate) fn delete_branch_protection(
-        &self,
-        org: &str,
-        repo_name: &str,
-        id: &str,
-    ) -> anyhow::Result<()> {
-        debug!("Removing protection in {}/{}", org, repo_name);
-        println!("Remove protection {id}");
-        if !self.dry_run {
-            #[derive(serde::Serialize)]
-            #[serde(rename_all = "camelCase")]
-            struct Params<'a> {
-                id: &'a str,
-            }
-            let query = "
-                mutation($id: ID!) {
-                    deleteBranchProtectionRule(input: { branchProtectionRuleId: $id }) {
-                        clientMutationId
-                    }
-                }
-            ";
-            let _: serde_json::Value = self.graphql(query, Params { id })?;
-        }
-        Ok(())
+        Ok(Self {
+            client: builder.build()?,
+        })
     }
 
     fn req(&self, method: Method, url: &str) -> anyhow::Result<RequestBuilder> {
@@ -730,19 +42,7 @@ impl GitHub {
             Cow::Owned(format!("https://api.github.com/{url}"))
         };
         trace!("http request: {} {}", method, url);
-        if self.dry_run && method != Method::GET && !url.contains("graphql") {
-            panic!("Called a non-GET request in dry run mode: {method}");
-        }
-        let mut auth = HeaderValue::from_str(&format!("token {}", self.token))?;
-        auth.set_sensitive(true);
-        Ok(self
-            .client
-            .request(method, url.as_ref())
-            .header(header::AUTHORIZATION, auth)
-            .header(
-                header::USER_AGENT,
-                HeaderValue::from_static(crate::USER_AGENT),
-            ))
+        Ok(self.client.request(method, url.as_ref()))
     }
 
     fn send<T: serde::Serialize + std::fmt::Debug>(
@@ -828,6 +128,722 @@ impl GitHub {
             f(resp.json().with_context(|| {
                 format!("Failed to deserialize response body for {method} request to '{next_url}'")
             })?)?;
+        }
+        Ok(())
+    }
+}
+
+pub(crate) struct GitHub {
+    dry_run: bool,
+    client: HttpClient,
+}
+
+impl GitHub {
+    pub(crate) fn new(token: String, dry_run: bool) -> anyhow::Result<Self> {
+        Ok(Self {
+            dry_run,
+            client: HttpClient::from_token(token)?,
+        })
+    }
+
+    /// Get user names by user ids
+    pub(crate) fn usernames(&self, ids: &[usize]) -> anyhow::Result<HashMap<usize, String>> {
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct Usernames {
+            database_id: usize,
+            login: String,
+        }
+        #[derive(serde::Serialize)]
+        struct Params {
+            ids: Vec<String>,
+        }
+        static QUERY: &str = "
+            query($ids: [ID!]!) {
+                nodes(ids: $ids) {
+                    ... on User {
+                        databaseId
+                        login
+                    }
+                }
+            }
+        ";
+
+        let mut result = HashMap::new();
+        for chunk in ids.chunks(100) {
+            let res: GraphNodes<Usernames> = self.client.graphql(
+                QUERY,
+                Params {
+                    ids: chunk.iter().map(|id| user_node_id(*id)).collect(),
+                },
+            )?;
+            for node in res.nodes.into_iter().flatten() {
+                result.insert(node.database_id, node.login);
+            }
+        }
+        Ok(result)
+    }
+
+    /// Get the owners of an org
+    pub(crate) fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<usize>> {
+        #[derive(serde::Deserialize, Eq, PartialEq, Hash)]
+        struct User {
+            id: usize,
+        }
+        let mut owners = HashSet::new();
+        self.client.rest_paginated(
+            &Method::GET,
+            format!("orgs/{org}/members?role=admin"),
+            |resp: Vec<User>| {
+                owners.extend(resp.into_iter().map(|u| u.id));
+                Ok(())
+            },
+        )?;
+        Ok(owners)
+    }
+
+    /// Get all teams associated with a org
+    ///
+    /// Returns a list of tuples of team name and slug
+    pub(crate) fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
+        let mut teams = Vec::new();
+
+        self.client.rest_paginated(
+            &Method::GET,
+            format!("orgs/{org}/teams"),
+            |resp: Vec<Team>| {
+                teams.extend(resp.into_iter().map(|t| (t.name, t.slug)));
+                Ok(())
+            },
+        )?;
+
+        Ok(teams)
+    }
+
+    /// Get the team by name and org
+    pub(crate) fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
+        self.client
+            .send_option(Method::GET, &format!("orgs/{org}/teams/{team}"))
+    }
+
+    /// Create a team in a org
+    pub(crate) fn create_team(
+        &self,
+        org: &str,
+        name: &str,
+        description: &str,
+        privacy: TeamPrivacy,
+    ) -> anyhow::Result<Team> {
+        #[derive(serde::Serialize, Debug)]
+        struct Req<'a> {
+            name: &'a str,
+            description: &'a str,
+            privacy: TeamPrivacy,
+        }
+        debug!("Creating team '{name}' in '{org}'");
+        if self.dry_run {
+            Ok(Team {
+                // The `None` marks that the team is "created" by the dry run and
+                // doesn't actually exist on GitHub
+                id: None,
+                name: name.to_string(),
+                description: Some(description.to_string()),
+                privacy,
+                slug: name.to_string(),
+            })
+        } else {
+            let body = &Req {
+                name,
+                description,
+                privacy,
+            };
+            Ok(self
+                .client
+                .send(Method::POST, &format!("orgs/{org}/teams"), body)?
+                .json_annotated()?)
+        }
+    }
+
+    /// Edit a team
+    pub(crate) fn edit_team(
+        &self,
+        org: &str,
+        name: &str,
+        new_name: Option<&str>,
+        new_description: Option<&str>,
+        new_privacy: Option<TeamPrivacy>,
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize, Debug)]
+        struct Req<'a> {
+            #[serde(skip_serializing_if = "Option::is_none")]
+            name: Option<&'a str>,
+            #[serde(skip_serializing_if = "Option::is_none")]
+            description: Option<&'a str>,
+            #[serde(skip_serializing_if = "Option::is_none")]
+            privacy: Option<TeamPrivacy>,
+        }
+        let req = Req {
+            name: new_name,
+            description: new_description,
+            privacy: new_privacy,
+        };
+        debug!(
+            "Editing team '{name}' in '{org}' with request: {}",
+            serde_json::to_string(&req).unwrap_or_else(|_| "INVALID_REQUEST".to_string())
+        );
+        if !self.dry_run {
+            self.client
+                .send(Method::PATCH, &format!("orgs/{org}/teams/{name}"), &req)?;
+        }
+
+        Ok(())
+    }
+
+    /// Delete a team by name and org
+    pub(crate) fn delete_team(&self, org: &str, slug: &str) -> anyhow::Result<()> {
+        debug!("Deleting team with slug '{slug}' in '{org}'");
+        if !self.dry_run {
+            let method = Method::DELETE;
+            let url = &format!("orgs/{org}/teams/{slug}");
+            let resp = self.client.req(method.clone(), url)?.send()?;
+            allow_not_found(resp, method, url)?;
+        }
+        Ok(())
+    }
+
+    pub(crate) fn team_memberships(
+        &self,
+        team: &Team,
+    ) -> anyhow::Result<HashMap<usize, TeamMember>> {
+        #[derive(serde::Deserialize)]
+        struct RespTeam {
+            members: RespMembers,
+        }
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct RespMembers {
+            page_info: GraphPageInfo,
+            edges: Vec<RespEdge>,
+        }
+        #[derive(serde::Deserialize)]
+        struct RespEdge {
+            role: TeamRole,
+            node: RespNode,
+        }
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct RespNode {
+            database_id: usize,
+            login: String,
+        }
+        #[derive(serde::Serialize)]
+        struct Params<'a> {
+            team: String,
+            cursor: Option<&'a str>,
+        }
+        static QUERY: &str = "
+            query($team: ID!, $cursor: String) {
+                node(id: $team) {
+                    ... on Team {
+                        members(after: $cursor) {
+                            pageInfo {
+                                endCursor
+                                hasNextPage
+                            }
+                            edges {
+                                role
+                                node {
+                                    databaseId
+                                    login
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ";
+
+        let mut memberships = HashMap::new();
+        // Return the empty HashMap on new teams from dry runs
+        if let Some(id) = team.id {
+            let mut page_info = GraphPageInfo::start();
+            while page_info.has_next_page {
+                let res: GraphNode<RespTeam> = self.client.graphql(
+                    QUERY,
+                    Params {
+                        team: team_node_id(id),
+                        cursor: page_info.end_cursor.as_deref(),
+                    },
+                )?;
+                if let Some(team) = res.node {
+                    page_info = team.members.page_info;
+                    for edge in team.members.edges.into_iter() {
+                        memberships.insert(
+                            edge.node.database_id,
+                            TeamMember {
+                                username: edge.node.login,
+                                role: edge.role,
+                            },
+                        );
+                    }
+                }
+            }
+        }
+
+        Ok(memberships)
+    }
+
+    /// The GitHub names of users invited to the given team
+    pub(crate) fn team_membership_invitations(
+        &self,
+        org: &str,
+        team: &str,
+    ) -> anyhow::Result<HashSet<String>> {
+        let mut invites = HashSet::new();
+
+        self.client.rest_paginated(
+            &Method::GET,
+            format!("orgs/{org}/teams/{team}/invitations"),
+            |resp: Vec<Login>| {
+                invites.extend(resp.into_iter().map(|l| l.login));
+                Ok(())
+            },
+        )?;
+
+        Ok(invites)
+    }
+
+    /// Set a user's membership in a team to a role
+    pub(crate) fn set_team_membership(
+        &self,
+        org: &str,
+        team: &str,
+        user: &str,
+        role: TeamRole,
+    ) -> anyhow::Result<()> {
+        debug!("Setting membership of '{user}' in team '{team}' in org '{org}' to role '{role}'");
+        #[derive(serde::Serialize, Debug)]
+        struct Req {
+            role: TeamRole,
+        }
+        if !self.dry_run {
+            self.client.send(
+                Method::PUT,
+                &format!("orgs/{org}/teams/{team}/memberships/{user}"),
+                &Req { role },
+            )?;
+        }
+
+        Ok(())
+    }
+
+    /// Remove a user from a team
+    pub(crate) fn remove_team_membership(
+        &self,
+        org: &str,
+        team: &str,
+        user: &str,
+    ) -> anyhow::Result<()> {
+        debug!("Removing membership of '{user}' from team '{team}' in org '{org}'");
+        if !self.dry_run {
+            let url = &format!("orgs/{org}/teams/{team}/memberships/{user}");
+            let method = Method::DELETE;
+            let resp = self.client.req(method.clone(), url)?.send()?;
+            allow_not_found(resp, method, url)?;
+        }
+
+        Ok(())
+    }
+
+    /// Get a repo by org and name
+    pub(crate) fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
+        self.client
+            .send_option(Method::GET, &format!("repos/{org}/{repo}"))
+    }
+
+    /// Create a repo
+    pub(crate) fn create_repo(
+        &self,
+        org: &str,
+        name: &str,
+        description: &str,
+    ) -> anyhow::Result<Repo> {
+        #[derive(serde::Serialize, Debug)]
+        struct Req<'a> {
+            name: &'a str,
+            description: &'a str,
+            auto_init: bool,
+        }
+        let req = &Req {
+            name,
+            description,
+            auto_init: true,
+        };
+        debug!("Creating the repo {org}/{name} with {req:?}");
+        if self.dry_run {
+            Ok(Repo {
+                id: String::from("ID"),
+                name: name.to_string(),
+                org: org.to_string(),
+                description: Some(description.to_string()),
+            })
+        } else {
+            Ok(self
+                .client
+                .send(Method::POST, &format!("orgs/{org}/repos"), req)?
+                .json_annotated()?)
+        }
+    }
+
+    pub(crate) fn edit_repo(
+        &self,
+        org: &str,
+        repo_name: &str,
+        description: &str,
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize, Debug)]
+        struct Req<'a> {
+            description: &'a str,
+        }
+        let req = Req { description };
+        debug!("Editing repo {}/{} with {:?}", org, repo_name, req);
+        if !self.dry_run {
+            self.client
+                .send(Method::PATCH, &format!("repos/{org}/{repo_name}"), &req)?;
+        }
+        Ok(())
+    }
+
+    /// Get teams in a repo
+    pub(crate) fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
+        let mut teams = Vec::new();
+
+        self.client.rest_paginated(
+            &Method::GET,
+            format!("repos/{org}/{repo}/teams"),
+            |resp: Vec<RepoTeam>| {
+                teams.extend(resp);
+                Ok(())
+            },
+        )?;
+
+        Ok(teams)
+    }
+
+    /// Get collaborators in a repo
+    ///
+    /// Only fetches those who are direct collaborators (i.e., not a collaborator through a repo team)
+    pub(crate) fn repo_collaborators(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<Vec<RepoUser>> {
+        let mut users = Vec::new();
+
+        self.client.rest_paginated(
+            &Method::GET,
+            format!("repos/{org}/{repo}/collaborators?affiliation=direct"),
+            |resp: Vec<RepoUser>| {
+                users.extend(resp);
+                Ok(())
+            },
+        )?;
+
+        Ok(users)
+    }
+
+    /// Update a team's permissions to a repo
+    pub(crate) fn update_team_repo_permissions(
+        &self,
+        org: &str,
+        repo: &str,
+        team: &str,
+        permission: &RepoPermission,
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize, Debug)]
+        struct Req<'a> {
+            permission: &'a RepoPermission,
+        }
+        debug!("Updating permission for team {team} on {org}/{repo} to {permission:?}");
+        if !self.dry_run {
+            self.client.send(
+                Method::PUT,
+                &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}"),
+                &Req { permission },
+            )?;
+        }
+
+        Ok(())
+    }
+
+    /// Update a user's permissions to a repo
+    pub(crate) fn update_user_repo_permissions(
+        &self,
+        org: &str,
+        repo: &str,
+        user: &str,
+        permission: &RepoPermission,
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize, Debug)]
+        struct Req<'a> {
+            permission: &'a RepoPermission,
+        }
+        debug!("Updating permission for user {user} on {org}/{repo} to {permission:?}");
+        if !self.dry_run {
+            self.client.send(
+                Method::PUT,
+                &format!("repos/{org}/{repo}/collaborators/{user}"),
+                &Req { permission },
+            )?;
+        }
+        Ok(())
+    }
+
+    /// Remove a team from a repo
+    pub(crate) fn remove_team_from_repo(
+        &self,
+        org: &str,
+        repo: &str,
+        team: &str,
+    ) -> anyhow::Result<()> {
+        debug!("Removing team {team} from repo {org}/{repo}");
+        if !self.dry_run {
+            let method = Method::DELETE;
+            let url = &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}");
+            let resp = self.client.req(method.clone(), url)?.send()?;
+            allow_not_found(resp, method, url)?;
+        }
+
+        Ok(())
+    }
+
+    /// Remove a collaborator from a repo
+    pub(crate) fn remove_collaborator_from_repo(
+        &self,
+        org: &str,
+        repo: &str,
+        collaborator: &str,
+    ) -> anyhow::Result<()> {
+        debug!("Removing collaborator {collaborator} from repo {org}/{repo}");
+        if !self.dry_run {
+            let method = Method::DELETE;
+            let url = &format!("repos/{org}/{repo}/collaborators/{collaborator}");
+            let resp = self.client.req(method.clone(), url)?.send()?;
+            allow_not_found(resp, method, url)?;
+        }
+        Ok(())
+    }
+
+    /// Get branch_protections
+    pub(crate) fn branch_protections(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>> {
+        #[derive(serde::Serialize)]
+        struct Params<'a> {
+            org: &'a str,
+            repo: &'a str,
+        }
+        static QUERY: &str = "
+            query($org:String!,$repo:String!) {
+                repository(owner:$org, name:$repo) {
+                    branchProtectionRules(first:100) {
+                        nodes { 
+                            id,
+                            pattern,
+                            isAdminEnforced,
+                            dismissesStaleReviews,
+                            requiredStatusCheckContexts,
+                            requiredApprovingReviewCount
+                            pushAllowances(first: 100) {
+                                nodes {
+                                    actor {
+                                        ... on Actor {
+                                            login
+                                        }
+                                        ... on Team {
+                                            organization {
+                                                login
+                                            },
+                                            name
+                                        }
+                                    }
+                                }
+                            }
+                         }
+                    }
+                }
+            }
+        ";
+
+        #[derive(serde::Deserialize)]
+        struct Wrapper {
+            repository: Respository,
+        }
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct Respository {
+            branch_protection_rules: GraphNodes<BranchProtectionWrapper>,
+        }
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct BranchProtectionWrapper {
+            id: String,
+            #[serde(flatten)]
+            protection: BranchProtection,
+        }
+
+        let mut result = HashMap::new();
+        let res: Wrapper = self.client.graphql(QUERY, Params { org, repo })?;
+        for node in res
+            .repository
+            .branch_protection_rules
+            .nodes
+            .into_iter()
+            .flatten()
+        {
+            result.insert(node.protection.pattern.clone(), (node.id, node.protection));
+        }
+        Ok(result)
+    }
+
+    /// Create or update a branch protection.
+    pub(crate) fn upsert_branch_protection(
+        &self,
+        op: BranchProtectionOp,
+        pattern: &str,
+        branch_protection: &BranchProtection,
+    ) -> anyhow::Result<()> {
+        debug!("Updating '{}' branch protection", pattern);
+        #[derive(Debug, serde::Serialize)]
+        #[serde(rename_all = "camelCase")]
+        struct Params<'a> {
+            id: &'a str,
+            pattern: &'a str,
+            contexts: &'a [String],
+            dismiss_stale: bool,
+            review_count: u8,
+            restricts_pushes: bool,
+            push_actor_ids: &'a [String],
+        }
+        let mutation_name = match op {
+            BranchProtectionOp::CreateForRepo(_) => "createBranchProtectionRule",
+            BranchProtectionOp::UpdateBranchProtection(_) => "updateBranchProtectionRule",
+        };
+        let id_field = match op {
+            BranchProtectionOp::CreateForRepo(_) => "repositoryId",
+            BranchProtectionOp::UpdateBranchProtection(_) => "branchProtectionRuleId",
+        };
+        let id = &match op {
+            BranchProtectionOp::CreateForRepo(id) => id,
+            BranchProtectionOp::UpdateBranchProtection(id) => id,
+        };
+        let query = format!("
+        mutation($id: ID!, $pattern:String!, $contexts: [String!], $dismissStale: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean) {{
+            {mutation_name}(input: {{
+                {id_field}: $id, 
+                pattern: $pattern, 
+                requiresStatusChecks: true, 
+                requiredStatusCheckContexts: $contexts, 
+                isAdminEnforced: true, 
+                requiredApprovingReviewCount: $reviewCount, 
+                dismissesStaleReviews: $dismissStale, 
+                requiresApprovingReviews:true,
+                restrictsPushes: $restrictsPushes,
+                pushActorIds: $pushActorIds
+            }}) {{
+              branchProtectionRule {{
+                id
+              }}
+            }}
+          }}
+        ");
+        let mut push_actor_ids = vec![];
+        for actor in &branch_protection.push_allowances {
+            match actor {
+                PushAllowanceActor::User(UserPushAllowanceActor { login: name }) => {
+                    push_actor_ids.push(self.user_id(name)?);
+                }
+                PushAllowanceActor::Team(TeamPushAllowanceActor {
+                    organization: Login { login: org },
+                    name,
+                }) => push_actor_ids.push(
+                    self.team(org, name)?
+                        .with_context(|| format!("could not find team: {org}/{name}"))?
+                        .name,
+                ),
+            }
+        }
+
+        if !self.dry_run {
+            let _: serde_json::Value = self.client.graphql(
+                &query,
+                Params {
+                    id,
+                    pattern,
+                    contexts: &branch_protection.required_status_check_contexts,
+                    dismiss_stale: branch_protection.dismisses_stale_reviews,
+                    review_count: branch_protection.required_approving_review_count,
+                    // We restrict merges, if we have explicitly set some actors to be
+                    // able to merge (i.e., we allow allow those with write permissions
+                    // to merge *or* we only allow those in `push_actor_ids`)
+                    restricts_pushes: !push_actor_ids.is_empty(),
+                    push_actor_ids: &push_actor_ids,
+                },
+            )?;
+        }
+        Ok(())
+    }
+
+    fn user_id(&self, name: &str) -> anyhow::Result<String> {
+        #[derive(serde::Serialize)]
+        struct Params<'a> {
+            name: &'a str,
+        }
+        let query = "
+            query($name: String!) {
+                user(login: $name) {
+                    id
+                }
+            }
+        ";
+        #[derive(serde::Deserialize)]
+        struct Data {
+            user: User,
+        }
+        #[derive(serde::Deserialize)]
+        struct User {
+            id: String,
+        }
+
+        let data: Data = self.client.graphql(query, Params { name })?;
+        Ok(data.user.id)
+    }
+
+    /// Delete a branch protection
+    pub(crate) fn delete_branch_protection(
+        &self,
+        org: &str,
+        repo_name: &str,
+        id: &str,
+    ) -> anyhow::Result<()> {
+        debug!("Removing protection in {}/{}", org, repo_name);
+        println!("Remove protection {id}");
+        if !self.dry_run {
+            #[derive(serde::Serialize)]
+            #[serde(rename_all = "camelCase")]
+            struct Params<'a> {
+                id: &'a str,
+            }
+            let query = "
+                mutation($id: ID!) {
+                    deleteBranchProtectionRule(input: { branchProtectionRuleId: $id }) {
+                        clientMutationId
+                    }
+                }
+            ";
+            let _: serde_json::Value = self.client.graphql(query, Params { id })?;
         }
         Ok(())
     }
