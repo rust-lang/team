@@ -3,7 +3,7 @@ use anyhow::{bail, Context as _, Error};
 use serde::de::DeserializeOwned;
 use std::collections::{HashMap, HashSet};
 use std::ffi::OsStr;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 #[derive(Debug)]
 pub(crate) struct Data {
@@ -73,7 +73,7 @@ impl Data {
             if nested && path.is_dir() {
                 self.load_dir(&path, false, f.clone())?;
             } else if !nested && path.is_file() && path.extension() == Some(OsStr::new("toml")) {
-                fn dir(path: &PathBuf) -> Option<&str> {
+                fn dir(path: &Path) -> Option<&str> {
                     path.parent()?.file_name()?.to_str()
                 }
                 f(self, dir(&path).unwrap(), load_file(&path)?)?;
