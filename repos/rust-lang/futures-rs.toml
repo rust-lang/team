@@ -1,0 +1,10 @@
+org = "rust-lang"
+name = "futures-rs"
+description = "Zero-cost asynchronous programming in Rust"
+bots = ["rustbot"]
+
+[access.teams]
+wg-async = "write"
+
+[[branch-protections]]
+pattern = "master"
