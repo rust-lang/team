@@ -1,0 +1,14 @@
+org = "rust-lang"
+name = "measureme"
+description = "Support crate for rustc's self-profiling feature"
+bots = ["bors"]
+
+[access.teams]
+compiler = "write"
+
+[[branch-protections]]
+pattern = "master"
+
+[[branch-protections]]
+pattern = "stable"
+ci-checks = ["bors build finished"]
