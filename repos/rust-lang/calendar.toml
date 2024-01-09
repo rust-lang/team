@@ -10,9 +10,11 @@ crates-io = "maintain"
 docs-rs = "maintain"
 infra = "maintain"
 lang = "maintain"
+lang-ops = "maintain"
 leadership-council = "maintain"
 libs = "maintain"
 release = "maintain"
+wg-async = "maintain"
 
 [[branch-protections]]
 pattern = "main"
