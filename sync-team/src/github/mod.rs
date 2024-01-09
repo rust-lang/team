@@ -1,7 +1,7 @@
 mod api;
 
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
-use crate::{github::api::RepoPermission, TeamApi};
+use crate::github::api::RepoPermission;
 use log::debug;
 use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
@@ -12,7 +12,16 @@ pub(crate) use self::api::{GitHubRead, GitHubWrite};
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
 static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
 
-pub(crate) struct SyncGitHub {
+pub(crate) fn create_diff(
+    github: GitHubRead,
+    teams: Vec<rust_team_data::v1::Team>,
+    repos: Vec<rust_team_data::v1::Repo>,
+) -> anyhow::Result<Diff> {
+    let github = SyncGitHub::new(github, teams, repos)?;
+    github.diff_all()
+}
+
+struct SyncGitHub {
     github: GitHubRead,
     teams: Vec<rust_team_data::v1::Team>,
     repos: Vec<rust_team_data::v1::Repo>,
@@ -21,10 +30,11 @@ pub(crate) struct SyncGitHub {
 }
 
 impl SyncGitHub {
-    pub(crate) fn new(github: GitHubRead, team_api: &TeamApi) -> anyhow::Result<Self> {
-        let teams = team_api.get_teams()?;
-        let repos = team_api.get_repos()?;
-
+    pub(crate) fn new(
+        github: GitHubRead,
+        teams: Vec<rust_team_data::v1::Team>,
+        repos: Vec<rust_team_data::v1::Repo>,
+    ) -> anyhow::Result<Self> {
         debug!("caching mapping between user ids and usernames");
         let users = teams
             .iter()

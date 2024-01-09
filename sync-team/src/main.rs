@@ -4,7 +4,7 @@ mod team_api;
 mod utils;
 mod zulip;
 
-use crate::github::{GitHubRead, GitHubWrite, SyncGitHub};
+use crate::github::{create_diff, GitHubRead, GitHubWrite};
 use crate::team_api::TeamApi;
 use anyhow::Context;
 use log::{error, info, warn};
@@ -82,8 +82,9 @@ fn app() -> anyhow::Result<()> {
             "github" => {
                 let token = get_env("GITHUB_TOKEN")?;
                 let gh_read = GitHubRead::new(token.clone())?;
-                let sync = SyncGitHub::new(gh_read, &team_api)?;
-                let diff = sync.diff_all()?;
+                let teams = team_api.get_teams()?;
+                let repos = team_api.get_repos()?;
+                let diff = create_diff(gh_read, teams, repos)?;
                 info!("{}", diff);
                 if !only_print_plan {
                     let gh_write = GitHubWrite::new(token, dry_run)?;
