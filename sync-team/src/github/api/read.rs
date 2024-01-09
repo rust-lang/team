@@ -10,10 +10,8 @@ pub(crate) struct GitHubRead {
 }
 
 impl GitHubRead {
-    pub(crate) fn new(token: String) -> anyhow::Result<Self> {
-        Ok(Self {
-            client: HttpClient::from_token(token)?,
-        })
+    pub(crate) fn from_client(client: HttpClient) -> anyhow::Result<Self> {
+        Ok(Self { client })
     }
 
     /// Get user names by user ids

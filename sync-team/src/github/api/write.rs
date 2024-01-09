@@ -17,11 +17,11 @@ pub(crate) struct GitHubWrite {
 }
 
 impl GitHubWrite {
-    pub(crate) fn new(token: String, dry_run: bool) -> anyhow::Result<Self> {
+    pub(crate) fn new(client: HttpClient, dry_run: bool) -> anyhow::Result<Self> {
         Ok(Self {
-            client: HttpClient::from_token(token.clone())?,
+            client: client.clone(),
             dry_run,
-            read: GitHubRead::new(token)?,
+            read: GitHubRead::from_client(client)?,
         })
     }
 

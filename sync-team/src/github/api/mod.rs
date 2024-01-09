@@ -18,12 +18,14 @@ use std::fmt;
 pub(crate) use read::GitHubRead;
 pub(crate) use write::GitHubWrite;
 
-struct HttpClient {
+#[derive(Clone)]
+pub(crate) struct HttpClient {
     client: Client,
+    base_url: String,
 }
 
 impl HttpClient {
-    fn from_token(token: String) -> anyhow::Result<Self> {
+    pub(crate) fn from_url_and_token(mut base_url: String, token: String) -> anyhow::Result<Self> {
         let builder = reqwest::blocking::ClientBuilder::default();
         let mut map = HeaderMap::default();
         let mut auth = HeaderValue::from_str(&format!("token {}", token))?;
@@ -35,8 +37,13 @@ impl HttpClient {
             HeaderValue::from_static(crate::USER_AGENT),
         );
 
+        if !base_url.ends_with("/") {
+            base_url.push('/');
+        }
+
         Ok(Self {
             client: builder.build()?,
+            base_url,
         })
     }
 
@@ -44,7 +51,7 @@ impl HttpClient {
         let url = if url.starts_with("https://") {
             Cow::Borrowed(url)
         } else {
-            Cow::Owned(format!("https://api.github.com/{url}"))
+            Cow::Owned(format!("{}{url}", self.base_url))
         };
         trace!("http request: {} {}", method, url);
         Ok(self.client.request(method, url.as_ref()))

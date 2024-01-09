@@ -4,7 +4,7 @@ mod team_api;
 mod utils;
 mod zulip;
 
-use crate::github::{create_diff, GitHubRead, GitHubWrite};
+use crate::github::{create_diff, GitHubRead, GitHubWrite, HttpClient};
 use crate::team_api::TeamApi;
 use anyhow::Context;
 use log::{error, info, warn};
@@ -81,13 +81,15 @@ fn app() -> anyhow::Result<()> {
         match service.as_str() {
             "github" => {
                 let token = get_env("GITHUB_TOKEN")?;
-                let gh_read = GitHubRead::new(token.clone())?;
+                let client =
+                    HttpClient::from_url_and_token("https://api.github.com/".to_string(), token)?;
+                let gh_read = GitHubRead::from_client(client.clone())?;
                 let teams = team_api.get_teams()?;
                 let repos = team_api.get_repos()?;
                 let diff = create_diff(gh_read, teams, repos)?;
                 info!("{}", diff);
                 if !only_print_plan {
-                    let gh_write = GitHubWrite::new(token, dry_run)?;
+                    let gh_write = GitHubWrite::new(client, dry_run)?;
                     diff.apply(&gh_write)?;
                 }
             }

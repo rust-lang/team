@@ -7,7 +7,7 @@ use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write;
 
-pub(crate) use self::api::{GitHubRead, GitHubWrite};
+pub(crate) use self::api::{GitHubRead, GitHubWrite, HttpClient};
 
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
 static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
