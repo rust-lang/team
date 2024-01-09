@@ -15,7 +15,7 @@ use serde::{de::DeserializeOwned, Deserialize};
 use std::borrow::Cow;
 use std::fmt;
 
-pub(crate) use read::GitHubRead;
+pub(crate) use read::{GitHubApiRead, GithubRead};
 pub(crate) use write::GitHubWrite;
 
 #[derive(Clone)]

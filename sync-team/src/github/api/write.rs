@@ -1,8 +1,9 @@
 use anyhow::Context;
 use log::debug;
 use reqwest::Method;
+use std::rc::Rc;
 
-use crate::github::api::read::GitHubRead;
+use crate::github::api::read::GithubRead;
 use crate::github::api::{
     allow_not_found, BranchProtection, BranchProtectionOp, HttpClient, Login, PushAllowanceActor,
     Repo, RepoPermission, Team, TeamPrivacy, TeamPushAllowanceActor, TeamRole,
@@ -13,15 +14,19 @@ use crate::utils::ResponseExt;
 pub(crate) struct GitHubWrite {
     client: HttpClient,
     dry_run: bool,
-    read: GitHubRead,
+    read: Rc<dyn GithubRead>,
 }
 
 impl GitHubWrite {
-    pub(crate) fn new(client: HttpClient, dry_run: bool) -> anyhow::Result<Self> {
+    pub(crate) fn new(
+        client: HttpClient,
+        read: Rc<dyn GithubRead>,
+        dry_run: bool,
+    ) -> anyhow::Result<Self> {
         Ok(Self {
             client: client.clone(),
             dry_run,
-            read: GitHubRead::from_client(client)?,
+            read,
         })
     }
 

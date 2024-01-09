@@ -5,17 +5,58 @@ use crate::github::api::{
 use reqwest::Method;
 use std::collections::{HashMap, HashSet};
 
-pub(crate) struct GitHubRead {
+pub(crate) trait GithubRead {
+    /// Get user names by user ids
+    fn usernames(&self, ids: &[usize]) -> anyhow::Result<HashMap<usize, String>>;
+
+    /// Get the owners of an org
+    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<usize>>;
+
+    /// Get all teams associated with a org
+    ///
+    /// Returns a list of tuples of team name and slug
+    fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>>;
+
+    /// Get the team by name and org
+    fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>>;
+
+    fn team_memberships(&self, team: &Team) -> anyhow::Result<HashMap<usize, TeamMember>>;
+
+    /// The GitHub names of users invited to the given team
+    fn team_membership_invitations(&self, org: &str, team: &str)
+        -> anyhow::Result<HashSet<String>>;
+
+    /// Get a repo by org and name
+    fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>>;
+
+    /// Get teams in a repo
+    fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>>;
+
+    /// Get collaborators in a repo
+    ///
+    /// Only fetches those who are direct collaborators (i.e., not a collaborator through a repo team)
+    fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>>;
+
+    /// Get branch_protections
+    fn branch_protections(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>>;
+}
+
+pub(crate) struct GitHubApiRead {
     client: HttpClient,
 }
 
-impl GitHubRead {
+impl GitHubApiRead {
     pub(crate) fn from_client(client: HttpClient) -> anyhow::Result<Self> {
         Ok(Self { client })
     }
+}
 
-    /// Get user names by user ids
-    pub(crate) fn usernames(&self, ids: &[usize]) -> anyhow::Result<HashMap<usize, String>> {
+impl GithubRead for GitHubApiRead {
+    fn usernames(&self, ids: &[usize]) -> anyhow::Result<HashMap<usize, String>> {
         #[derive(serde::Deserialize)]
         #[serde(rename_all = "camelCase")]
         struct Usernames {
@@ -52,8 +93,7 @@ impl GitHubRead {
         Ok(result)
     }
 
-    /// Get the owners of an org
-    pub(crate) fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<usize>> {
+    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<usize>> {
         #[derive(serde::Deserialize, Eq, PartialEq, Hash)]
         struct User {
             id: usize,
@@ -70,10 +110,7 @@ impl GitHubRead {
         Ok(owners)
     }
 
-    /// Get all teams associated with a org
-    ///
-    /// Returns a list of tuples of team name and slug
-    pub(crate) fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
+    fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
         let mut teams = Vec::new();
 
         self.client.rest_paginated(
@@ -88,16 +125,12 @@ impl GitHubRead {
         Ok(teams)
     }
 
-    /// Get the team by name and org
-    pub(crate) fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
+    fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
         self.client
             .send_option(Method::GET, &format!("orgs/{org}/teams/{team}"))
     }
 
-    pub(crate) fn team_memberships(
-        &self,
-        team: &Team,
-    ) -> anyhow::Result<HashMap<usize, TeamMember>> {
+    fn team_memberships(&self, team: &Team) -> anyhow::Result<HashMap<usize, TeamMember>> {
         #[derive(serde::Deserialize)]
         struct RespTeam {
             members: RespMembers,
@@ -176,8 +209,7 @@ impl GitHubRead {
         Ok(memberships)
     }
 
-    /// The GitHub names of users invited to the given team
-    pub(crate) fn team_membership_invitations(
+    fn team_membership_invitations(
         &self,
         org: &str,
         team: &str,
@@ -196,14 +228,12 @@ impl GitHubRead {
         Ok(invites)
     }
 
-    /// Get a repo by org and name
-    pub(crate) fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
+    fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
         self.client
             .send_option(Method::GET, &format!("repos/{org}/{repo}"))
     }
 
-    /// Get teams in a repo
-    pub(crate) fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
+    fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
         let mut teams = Vec::new();
 
         self.client.rest_paginated(
@@ -218,14 +248,7 @@ impl GitHubRead {
         Ok(teams)
     }
 
-    /// Get collaborators in a repo
-    ///
-    /// Only fetches those who are direct collaborators (i.e., not a collaborator through a repo team)
-    pub(crate) fn repo_collaborators(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<Vec<RepoUser>> {
+    fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>> {
         let mut users = Vec::new();
 
         self.client.rest_paginated(
@@ -240,8 +263,7 @@ impl GitHubRead {
         Ok(users)
     }
 
-    /// Get branch_protections
-    pub(crate) fn branch_protections(
+    fn branch_protections(
         &self,
         org: &str,
         repo: &str,
