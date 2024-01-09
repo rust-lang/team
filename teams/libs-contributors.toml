@@ -16,7 +16,9 @@ members = [
   "sunfishcode",
   "yaahc",
 ]
-alumni = []
+alumni = [
+  "shepmaster",
+]
 
 [permissions]
 bors.rust.review = true
