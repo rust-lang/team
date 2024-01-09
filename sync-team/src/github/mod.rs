@@ -7,13 +7,13 @@ use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write;
 
-pub(crate) use self::api::{GitHub, GitHubWrite};
+pub(crate) use self::api::{GitHubRead, GitHubWrite};
 
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
 static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
 
 pub(crate) struct SyncGitHub {
-    github: GitHub,
+    github: GitHubRead,
     teams: Vec<rust_team_data::v1::Team>,
     repos: Vec<rust_team_data::v1::Repo>,
     usernames_cache: HashMap<usize, String>,
@@ -21,7 +21,7 @@ pub(crate) struct SyncGitHub {
 }
 
 impl SyncGitHub {
-    pub(crate) fn new(github: GitHub, team_api: &TeamApi) -> anyhow::Result<Self> {
+    pub(crate) fn new(github: GitHubRead, team_api: &TeamApi) -> anyhow::Result<Self> {
         let teams = team_api.get_teams()?;
         let repos = team_api.get_repos()?;
 
