@@ -248,6 +248,7 @@ impl SyncGitHub {
         Ok(RepoDiff::Update(UpdateRepoDiff {
             org: expected_repo.org.clone(),
             name: actual_repo.name,
+            repo_id: actual_repo.id,
             description_diff,
             permission_diffs,
             branch_protection_diffs,
@@ -537,7 +538,7 @@ struct CreateRepoDiff {
 
 impl CreateRepoDiff {
     fn apply(&self, sync: &SyncGitHub) -> anyhow::Result<()> {
-        let _ = sync
+        let repo = sync
             .github
             .create_repo(&self.org, &self.name, &self.description)?;
 
@@ -550,7 +551,7 @@ impl CreateRepoDiff {
                 pattern: branch.clone(),
                 operation: BranchProtectionDiffOperation::Create(protection.clone()),
             }
-            .apply(sync, &self.org, &self.name)?;
+            .apply(sync, &self.org, &self.name, &repo.id)?;
         }
         Ok(())
     }
@@ -578,6 +579,7 @@ impl std::fmt::Display for CreateRepoDiff {
 struct UpdateRepoDiff {
     org: String,
     name: String,
+    repo_id: String,
     description_diff: Option<(Option<String>, String)>,
     permission_diffs: Vec<RepoPermissionAssignmentDiff>,
     branch_protection_diffs: Vec<BranchProtectionDiff>,
@@ -598,7 +600,7 @@ impl UpdateRepoDiff {
             permission.apply(sync, &self.org, &self.name)?;
         }
         for branch_protection in &self.branch_protection_diffs {
-            branch_protection.apply(sync, &self.org, &self.name)?;
+            branch_protection.apply(sync, &self.org, &self.name, &self.repo_id)?;
         }
         Ok(())
     }
@@ -701,12 +703,17 @@ struct BranchProtectionDiff {
 }
 
 impl BranchProtectionDiff {
-    fn apply(&self, sync: &SyncGitHub, org: &str, repo_name: &str) -> anyhow::Result<()> {
-        let repo_id = sync.github.repo(org, repo_name)?.unwrap().id;
+    fn apply(
+        &self,
+        sync: &SyncGitHub,
+        org: &str,
+        repo_name: &str,
+        repo_id: &str,
+    ) -> anyhow::Result<()> {
         match &self.operation {
             BranchProtectionDiffOperation::Create(bp) => {
                 sync.github.upsert_branch_protection(
-                    BranchProtectionOp::CreateForRepo(repo_id),
+                    BranchProtectionOp::CreateForRepo(repo_id.to_string()),
                     &self.pattern,
                     bp,
                 )?;
