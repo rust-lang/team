@@ -9,7 +9,7 @@ alumni = []
 
 [website]
 name = "Embedded Cortex-R team"
-description = "Develops and maintains the core of the Cortex-R crate ecosystem "
+description = "Develops and maintains the core of the Cortex-R crate ecosystem"
 
 [[github]]
 orgs = ["rust-embedded"]
