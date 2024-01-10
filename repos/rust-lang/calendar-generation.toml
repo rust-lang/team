@@ -5,7 +5,16 @@ bots = ["rustbot"]
 
 [access.teams]
 compiler = "write"
-infra = "write"
+compiler-contributors = "write"
+crates-io = "write"
+docs-rs = "write"
+infra = "maintain"
+lang = "write"
+lang-ops = "write"
+leadership-council = "write"
+libs = "write"
+release = "write"
+wg-async = "write"
 
 [[branch-protections]]
 pattern = "main"
