@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "rustc-hash"
+description = "Custom hash algorithm used by rustc (plus hashmap/set aliases): fast, deterministic, not secure"
+bots = []
+
+[access.teams]
+compiler = "write"
+compiler-contributors = "write"
+
+[[branch-protections]]
+pattern = "master"
