@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "docker-rust-nightly"
+description = ""
+bots = []
+
+[access.teams]
