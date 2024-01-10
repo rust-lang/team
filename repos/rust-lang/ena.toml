@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "ena"
+description = "An implementation of union-find / congruence-closure in Rust. Extracted from rustc for independent experimentation."
+bots = []
+
+[access.teams]
+compiler = "write"
+compiler-contributors = "write"
+
+[[branch-protections]]
+pattern = 'master'
