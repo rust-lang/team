@@ -1,0 +1,14 @@
+org = "rust-lang"
+name = "std-dev-guide"
+description = "Guide for standard library developers"
+bots = ["rustbot"]
+
+[access.teams]
+libs-contributors = "write"
+libs-api = "write"
+libs = "maintain"
+wg-rustc-dev-guide = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["book-test"]
