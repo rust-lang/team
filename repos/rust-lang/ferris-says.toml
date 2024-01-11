@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "ferris-says"
+description = "A Rust flavored implementation of `cowsay`"
+bots = []
+
+[access.teams]
+crate-maintainers = "maintain"
