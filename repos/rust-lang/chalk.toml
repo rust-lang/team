@@ -1,0 +1,10 @@
+org = "rust-lang"
+name = "chalk"
+description = "An implementation and definition of the Rust trait system using a PROLOG-like logic solver"
+bots = ["rustbot", "bors"]
+
+[access.teams]
+types = "write"
+
+[[branch-protections]]
+pattern = "master"
