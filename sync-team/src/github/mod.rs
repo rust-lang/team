@@ -1,4 +1,6 @@
 mod api;
+#[cfg(test)]
+mod tests;
 
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
 use crate::github::api::{GithubRead, RepoPermission};
@@ -802,6 +804,7 @@ enum BranchProtectionDiffOperation {
     Delete(String),
 }
 
+#[derive(Debug)]
 enum TeamDiff {
     Create(CreateTeamDiff),
     Edit(EditTeamDiff),
@@ -830,6 +833,7 @@ impl std::fmt::Display for TeamDiff {
     }
 }
 
+#[derive(Debug)]
 struct CreateTeamDiff {
     org: String,
     name: String,
@@ -871,6 +875,7 @@ impl std::fmt::Display for CreateTeamDiff {
     }
 }
 
+#[derive(Debug)]
 struct EditTeamDiff {
     org: String,
     name: String,
@@ -947,6 +952,7 @@ impl std::fmt::Display for EditTeamDiff {
     }
 }
 
+#[derive(Debug)]
 enum MemberDiff {
     Create(TeamRole),
     ChangeRole((TeamRole, TeamRole)),
@@ -972,6 +978,7 @@ impl MemberDiff {
     }
 }
 
+#[derive(Debug)]
 struct DeleteTeamDiff {
     org: String,
     name: String,
