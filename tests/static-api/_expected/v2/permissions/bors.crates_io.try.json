@@ -1,0 +1,28 @@
+{
+  "people": [
+    {
+      "github_id": 0,
+      "github": "user-0",
+      "name": "Zeroth user",
+      "discord_id": 0
+    },
+    {
+      "github_id": 0,
+      "github": "user-1",
+      "name": "First user",
+      "discord_id": 1
+    },
+    {
+      "github_id": 2,
+      "github": "user-2",
+      "name": "Second user",
+      "discord_id": 2
+    },
+    {
+      "github_id": 6,
+      "github": "user-6",
+      "name": "Sixth user",
+      "discord_id": null
+    }
+  ]
+}

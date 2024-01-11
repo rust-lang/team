@@ -3,7 +3,7 @@ use crate::schema::{Bot, Email, Permissions, RepoPermission, TeamKind, ZulipGrou
 use anyhow::{ensure, Context as _, Error};
 use indexmap::IndexMap;
 use log::info;
-use rust_team_data::v1;
+use rust_team_data::{v1, v2};
 use std::collections::HashMap;
 use std::path::Path;
 
@@ -297,6 +297,24 @@ impl<'a> Generator<'a> {
                     github_ids,
                     discord_ids,
                 },
+            )?;
+
+            let mut people = allowed
+                .iter()
+                .map(|p| v2::PermissionPerson {
+                    name: p.name().into(),
+                    github: p.github().into(),
+                    github_id: p.github_id(),
+                    discord_id: p.discord_id(),
+                })
+                .collect::<Vec<_>>();
+
+            // The sort operation here is necessary to ensure a stable output for the snapshot tests.
+            people.sort();
+
+            self.add(
+                &format!("v2/permissions/{}.json", perm.replace('-', "_")),
+                &v2::Permission { people },
             )?;
         }
         Ok(())
