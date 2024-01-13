@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "rustc-demangle"
+description = "Rust symbol demangling"
+bots = []
+
+[access.teams]
+compiler = "write"
+compiler-contributors = "write"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = ["test"]
