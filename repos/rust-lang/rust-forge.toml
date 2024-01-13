@@ -13,6 +13,7 @@ infra = "maintain"
 lang = "maintain"
 leadership-council = "maintain"
 libs = "maintain"
+project-edition-2024 = "maintain"
 release = "maintain"
 triagebot = "maintain"
 
