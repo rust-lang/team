@@ -1,0 +1,19 @@
+org = "rust-lang"
+name = "rust-bindgen"
+description = "Automatically generates Rust FFI bindings to C (and some C++) libraries."
+bots = ["rustbot"]
+
+[access.teams]
+wg-bindgen = "write"
+
+[access.individuals]
+emilio = "admin"
+fitzgen = "admin"
+pvdrz = "write"
+
+[[branch-protections]]
+pattern = "main"
+required-approvals = 0
+ci-checks = [
+    "test",
+]
