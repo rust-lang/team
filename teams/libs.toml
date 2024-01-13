@@ -25,7 +25,6 @@ perf = true
 crater = true
 dev-desktop = true
 bors.hashbrown.review = true
-bors.libc.review = true
 bors.rust.review = true
 bors.stdarch.review = true
 

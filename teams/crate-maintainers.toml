@@ -17,7 +17,6 @@ members = [
 alumni = []
 
 [permissions]
-bors.libc.review = true
 bors.stdarch.review = true
 bors.compiler-builtins.review = true
 
