@@ -1,4 +1,5 @@
 name = "wg-cli"
+subteam-of = "launching-pad"
 kind = "working-group"
 
 [people]
