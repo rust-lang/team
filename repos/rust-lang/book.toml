@@ -1,0 +1,13 @@
+org = "rust-lang"
+name = "book"
+description = "The Rust Programming Language"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+carols10cents = "maintain"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = []
