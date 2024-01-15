@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "libs-team"
+description = "The home of the library team"
+bots = ["rustbot"]
+
+[access.teams]
+libs = "maintain"
+libs-api = "write"
