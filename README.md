@@ -13,6 +13,7 @@ automatically synchronized with:
 | Mailing lists and aliases (`@rust-lang.org`, `@crates.io`) | *Shortly after merge* | [Integration source][sync-team-src] |
 | Zulip user group membership | *Shortly after merge* | [Integration source][sync-team-src] |
 | [Governance section on the website][www] | 2 minutes | [Integration source][www-src] |
+| crates.io admin access | 1 hour | [Integration source][crates-io-admin-src] |
 
 If you need to add or remove a person from a team, send a PR to this
 repository.  After it's merged, their account will be added/removed
@@ -29,6 +30,7 @@ from all the supported services.
 [rfcbot]: https://rfcbot.rs
 [rfcbot-src]: https://github.com/anp/rfcbot-rs/blob/master/src/teams.rs
 [sync-team-src]: https://github.com/rust-lang/sync-team
+[crates-io-admin-src]: https://github.com/rust-lang/crates.io/blob/main/src/worker/jobs/sync_admins.rs
 
 ## Documentation
 
