@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "miri"
+description = "An interpreter for Rust's mid-level intermediate representation"
+bots = ["rustbot", "bors"]
+
+[access.teams]
+compiler = "write"
+miri = "write"
+
+[[branch-protections]]
+pattern = "master"
