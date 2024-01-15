@@ -43,7 +43,7 @@ impl HttpClient {
             HeaderValue::from_static(crate::USER_AGENT),
         );
 
-        if !base_url.ends_with("/") {
+        if !base_url.ends_with('/') {
             base_url.push('/');
         }
 
