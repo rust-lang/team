@@ -4,6 +4,7 @@ description = "Calendars for Rust project teams"
 bots = ["rustbot"]
 
 [access.teams]
+cargo = "maintain"
 compiler = "maintain"
 compiler-contributors = "maintain"
 crates-io = "maintain"
