@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "types-team"
+description = "Home of the \"types team\", affiliated with the compiler and lang teams."
+bots = ["rustbot"]
+
+[access.teams]
+types = "write"
