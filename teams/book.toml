@@ -1,0 +1,12 @@
+name = "book"
+subteam-of = "launching-pad"
+
+[people]
+leads = ["carols10cents"]
+members = [
+    "carols10cents",
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
