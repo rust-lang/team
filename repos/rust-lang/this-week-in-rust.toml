@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "this-week-in-rust"
+description = "Data for this-week-in-rust.org"
+bots = []
+
+[access.teams]
+twir-reviewers = "write"
+twir = "write"
+
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
