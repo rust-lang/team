@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "rustc_codegen_gcc"
+description = "libgccjit AOT codegen for rustc"
+bots = []
+
+[access.teams]
+compiler = "write"
+
+[access.individuals]
+antoyo = "maintain"
+GuillaumeGomez = "write"
