@@ -1,17 +1,28 @@
 mod api;
 
-use self::api::{BranchProtectionOp, GitHub, TeamPrivacy, TeamRole};
-use crate::{github::api::RepoPermission, TeamApi};
+use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
+use crate::github::api::RepoPermission;
 use log::debug;
 use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write;
 
+pub(crate) use self::api::{GitHubRead, GitHubWrite, HttpClient};
+
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
 static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
 
-pub(crate) struct SyncGitHub {
-    github: GitHub,
+pub(crate) fn create_diff(
+    github: GitHubRead,
+    teams: Vec<rust_team_data::v1::Team>,
+    repos: Vec<rust_team_data::v1::Repo>,
+) -> anyhow::Result<Diff> {
+    let github = SyncGitHub::new(github, teams, repos)?;
+    github.diff_all()
+}
+
+struct SyncGitHub {
+    github: GitHubRead,
     teams: Vec<rust_team_data::v1::Team>,
     repos: Vec<rust_team_data::v1::Repo>,
     usernames_cache: HashMap<usize, String>,
@@ -19,11 +30,11 @@ pub(crate) struct SyncGitHub {
 }
 
 impl SyncGitHub {
-    pub(crate) fn new(token: String, team_api: &TeamApi, dry_run: bool) -> anyhow::Result<Self> {
-        let github = GitHub::new(token, dry_run);
-        let teams = team_api.get_teams()?;
-        let repos = team_api.get_repos()?;
-
+    pub(crate) fn new(
+        github: GitHubRead,
+        teams: Vec<rust_team_data::v1::Team>,
+        repos: Vec<rust_team_data::v1::Repo>,
+    ) -> anyhow::Result<Self> {
         debug!("caching mapping between user ids and usernames");
         let users = teams
             .iter()
@@ -247,6 +258,7 @@ impl SyncGitHub {
         Ok(RepoDiff::Update(UpdateRepoDiff {
             org: expected_repo.org.clone(),
             name: actual_repo.name,
+            repo_id: actual_repo.id,
             description_diff,
             permission_diffs,
             branch_protection_diffs,
@@ -477,7 +489,7 @@ pub(crate) struct Diff {
 
 impl Diff {
     /// Apply the diff to GitHub
-    pub(crate) fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
+    pub(crate) fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
         for team_diff in self.team_diffs {
             team_diff.apply(sync)?;
         }
@@ -509,7 +521,7 @@ enum RepoDiff {
 }
 
 impl RepoDiff {
-    fn apply(&self, sync: &SyncGitHub) -> anyhow::Result<()> {
+    fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
         match self {
             RepoDiff::Create(c) => c.apply(sync),
             RepoDiff::Update(u) => u.apply(sync),
@@ -535,10 +547,8 @@ struct CreateRepoDiff {
 }
 
 impl CreateRepoDiff {
-    fn apply(&self, sync: &SyncGitHub) -> anyhow::Result<()> {
-        let _ = sync
-            .github
-            .create_repo(&self.org, &self.name, &self.description)?;
+    fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
+        let repo = sync.create_repo(&self.org, &self.name, &self.description)?;
 
         for permission in &self.permissions {
             permission.apply(sync, &self.org, &self.name)?;
@@ -549,7 +559,7 @@ impl CreateRepoDiff {
                 pattern: branch.clone(),
                 operation: BranchProtectionDiffOperation::Create(protection.clone()),
             }
-            .apply(sync, &self.org, &self.name)?;
+            .apply(sync, &self.org, &self.name, &repo.id)?;
         }
         Ok(())
     }
@@ -577,6 +587,7 @@ impl std::fmt::Display for CreateRepoDiff {
 struct UpdateRepoDiff {
     org: String,
     name: String,
+    repo_id: String,
     description_diff: Option<(Option<String>, String)>,
     permission_diffs: Vec<RepoPermissionAssignmentDiff>,
     branch_protection_diffs: Vec<BranchProtectionDiff>,
@@ -589,15 +600,16 @@ impl UpdateRepoDiff {
             && self.branch_protection_diffs.is_empty()
     }
 
-    fn apply(&self, sync: &SyncGitHub) -> anyhow::Result<()> {
+    fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
         if let Some((_, description)) = &self.description_diff {
-            sync.github.edit_repo(&self.org, &self.name, description)?;
+            sync.edit_repo(&self.org, &self.name, description)?;
         }
         for permission in &self.permission_diffs {
             permission.apply(sync, &self.org, &self.name)?;
         }
+
         for branch_protection in &self.branch_protection_diffs {
-            branch_protection.apply(sync, &self.org, &self.name)?;
+            branch_protection.apply(sync, &self.org, &self.name, &self.repo_id)?;
         }
         Ok(())
     }
@@ -637,25 +649,25 @@ struct RepoPermissionAssignmentDiff {
 }
 
 impl RepoPermissionAssignmentDiff {
-    fn apply(&self, sync: &SyncGitHub, org: &str, repo_name: &str) -> anyhow::Result<()> {
+    fn apply(&self, sync: &GitHubWrite, org: &str, repo_name: &str) -> anyhow::Result<()> {
         match &self.diff {
             RepoPermissionDiff::Create(p) | RepoPermissionDiff::Update(_, p) => {
                 match &self.collaborator {
-                    RepoCollaborator::Team(team_name) => sync
-                        .github
-                        .update_team_repo_permissions(org, repo_name, team_name, p)?,
-                    RepoCollaborator::User(user_name) => sync
-                        .github
-                        .update_user_repo_permissions(org, repo_name, user_name, p)?,
+                    RepoCollaborator::Team(team_name) => {
+                        sync.update_team_repo_permissions(org, repo_name, team_name, p)?
+                    }
+                    RepoCollaborator::User(user_name) => {
+                        sync.update_user_repo_permissions(org, repo_name, user_name, p)?
+                    }
                 }
             }
             RepoPermissionDiff::Delete(_) => match &self.collaborator {
-                RepoCollaborator::Team(team_name) => sync
-                    .github
-                    .remove_team_from_repo(org, repo_name, team_name)?,
-                RepoCollaborator::User(user_name) => sync
-                    .github
-                    .remove_collaborator_from_repo(org, repo_name, user_name)?,
+                RepoCollaborator::Team(team_name) => {
+                    sync.remove_team_from_repo(org, repo_name, team_name)?
+                }
+                RepoCollaborator::User(user_name) => {
+                    sync.remove_collaborator_from_repo(org, repo_name, user_name)?
+                }
             },
         }
         Ok(())
@@ -700,18 +712,23 @@ struct BranchProtectionDiff {
 }
 
 impl BranchProtectionDiff {
-    fn apply(&self, sync: &SyncGitHub, org: &str, repo_name: &str) -> anyhow::Result<()> {
-        let repo_id = sync.github.repo(org, repo_name)?.unwrap().id;
+    fn apply(
+        &self,
+        sync: &GitHubWrite,
+        org: &str,
+        repo_name: &str,
+        repo_id: &str,
+    ) -> anyhow::Result<()> {
         match &self.operation {
             BranchProtectionDiffOperation::Create(bp) => {
-                sync.github.upsert_branch_protection(
-                    BranchProtectionOp::CreateForRepo(repo_id),
+                sync.upsert_branch_protection(
+                    BranchProtectionOp::CreateForRepo(repo_id.to_string()),
                     &self.pattern,
                     bp,
                 )?;
             }
             BranchProtectionDiffOperation::Update(id, _, bp) => {
-                sync.github.upsert_branch_protection(
+                sync.upsert_branch_protection(
                     BranchProtectionOp::UpdateBranchProtection(id.clone()),
                     &self.pattern,
                     bp,
@@ -723,7 +740,7 @@ impl BranchProtectionDiff {
                 the protection is not in the team repo",
                     self.pattern, org, repo_name
                 );
-                sync.github.delete_branch_protection(org, repo_name, id)?;
+                sync.delete_branch_protection(org, repo_name, id)?;
             }
         }
 
@@ -791,7 +808,7 @@ enum TeamDiff {
 }
 
 impl TeamDiff {
-    fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
+    fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
         match self {
             TeamDiff::Create(c) => c.apply(sync)?,
             TeamDiff::Edit(e) => e.apply(sync)?,
@@ -821,9 +838,8 @@ struct CreateTeamDiff {
 }
 
 impl CreateTeamDiff {
-    fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
-        sync.github
-            .create_team(&self.org, &self.name, &self.description, self.privacy)?;
+    fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
+        sync.create_team(&self.org, &self.name, &self.description, self.privacy)?;
         for (member_name, role) in self.members {
             MemberDiff::Create(role).apply(&self.org, &self.name, &member_name, sync)?;
         }
@@ -864,12 +880,12 @@ struct EditTeamDiff {
 }
 
 impl EditTeamDiff {
-    fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
+    fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
         if self.name_diff.is_some()
             || self.description_diff.is_some()
             || self.privacy_diff.is_some()
         {
-            sync.github.edit_team(
+            sync.edit_team(
                 &self.org,
                 &self.name,
                 self.name_diff.as_deref(),
@@ -938,12 +954,12 @@ enum MemberDiff {
 }
 
 impl MemberDiff {
-    fn apply(self, org: &str, team: &str, member: &str, sync: &SyncGitHub) -> anyhow::Result<()> {
+    fn apply(self, org: &str, team: &str, member: &str, sync: &GitHubWrite) -> anyhow::Result<()> {
         match self {
             MemberDiff::Create(role) | MemberDiff::ChangeRole((_, role)) => {
-                sync.github.set_team_membership(org, team, member, role)?;
+                sync.set_team_membership(org, team, member, role)?;
             }
-            MemberDiff::Delete => sync.github.remove_team_membership(org, team, member)?,
+            MemberDiff::Delete => sync.remove_team_membership(org, team, member)?,
             MemberDiff::Noop => {}
         }
 
@@ -962,8 +978,8 @@ struct DeleteTeamDiff {
 }
 
 impl DeleteTeamDiff {
-    fn apply(self, sync: &SyncGitHub) -> anyhow::Result<()> {
-        sync.github.delete_team(&self.org, &self.slug)?;
+    fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
+        sync.delete_team(&self.org, &self.slug)?;
         Ok(())
     }
 }
