@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "simpleinfra"
+description = "Rust Infrastructure automation"
+bots = []
+
+[access.teams]
+infra = "write"
+
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
