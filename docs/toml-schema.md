@@ -153,11 +153,6 @@ description = "Co-host"
 [[lists]]
 # The email address of the list (required)
 address = "overlords@rust-lang.org"
-# Access level of the list (required)
-# - readonly: only users authenticated with Mailgun can send mails
-# - members: only members of the list can send mails
-# - everyone: everyone can send mails
-access-level = "everyone"
 # This can be set to false to avoid including all the team members in the list
 # It's useful if you want to create the list with a different set of members
 # It's optional, and the default is `true`.
