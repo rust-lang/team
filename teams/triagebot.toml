@@ -6,9 +6,10 @@ leads = ["Mark-Simulacrum"]
 members = [
     "Mark-Simulacrum",
     "ehuss",
+]
+alumni = [
     "spastorino",
 ]
-alumni = []
 
 [[github]]
 orgs = ["rust-lang"]
