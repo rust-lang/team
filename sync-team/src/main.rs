@@ -81,22 +81,14 @@ fn app() -> anyhow::Result<()> {
         match service.as_str() {
             "github" => {
                 let token = get_env("GITHUB_TOKEN")?;
-                let client_readonly = HttpClient::from_url_and_token(
-                    "https://api.github.com/".to_string(),
-                    token.clone(),
-                    true,
-                )?;
-                let gh_read = GitHubRead::from_client(client_readonly)?;
+                let client =
+                    HttpClient::from_url_and_token("https://api.github.com/".to_string(), token)?;
+                let gh_read = GitHubRead::from_client(client.clone())?;
                 let teams = team_api.get_teams()?;
                 let repos = team_api.get_repos()?;
                 let diff = create_diff(gh_read, teams, repos)?;
                 info!("{}", diff);
                 if !only_print_plan {
-                    let client = HttpClient::from_url_and_token(
-                        "https://api.github.com/".to_string(),
-                        token,
-                        false,
-                    )?;
                     let gh_write = GitHubWrite::new(client, dry_run)?;
                     diff.apply(&gh_write)?;
                 }

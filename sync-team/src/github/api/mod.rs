@@ -22,16 +22,10 @@ pub(crate) use write::GitHubWrite;
 pub(crate) struct HttpClient {
     client: Client,
     base_url: String,
-    /// If true, only read-only HTTP methods (GET, HEAD, etc.) are allowed.
-    read_only: bool,
 }
 
 impl HttpClient {
-    pub(crate) fn from_url_and_token(
-        mut base_url: String,
-        token: String,
-        read_only: bool,
-    ) -> anyhow::Result<Self> {
+    pub(crate) fn from_url_and_token(mut base_url: String, token: String) -> anyhow::Result<Self> {
         let builder = reqwest::blocking::ClientBuilder::default();
         let mut map = HeaderMap::default();
         let mut auth = HeaderValue::from_str(&format!("token {}", token))?;
@@ -50,17 +44,10 @@ impl HttpClient {
         Ok(Self {
             client: builder.build()?,
             base_url,
-            read_only,
         })
     }
 
     fn req(&self, method: Method, url: &str) -> anyhow::Result<RequestBuilder> {
-        if self.read_only && !method.is_safe() {
-            return Err(anyhow::anyhow!(
-                "This HTTP client can only be used to perform read-only requests. Method {method} is not allowed."
-            ));
-        }
-
         let url = if url.starts_with("https://") {
             Cow::Borrowed(url)
         } else {
