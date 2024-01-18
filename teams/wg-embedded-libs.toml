@@ -7,6 +7,7 @@ leads = []
 members = [
     "Dirbaio",
     "newAM",
+    "reitermarkus"
 ]
 alumni = []
 
@@ -17,4 +18,3 @@ description = "Develops and maintains libraries for embedded devices"
 [[github]]
 orgs = ["rust-embedded"]
 team-name = "libs"
-
