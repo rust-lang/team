@@ -1,0 +1,10 @@
+org = "rust-lang"
+name = "google-summer-of-code"
+description = "Rust project ideas for Google Summer of Code"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+Kobzol = "write"
+jackh726 = "write"
