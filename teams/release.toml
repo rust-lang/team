@@ -1,4 +1,5 @@
 name = "release"
+subteam-of = "infra"
 
 [people]
 leads = ["Mark-Simulacrum"]

@@ -1,5 +1,4 @@
 name = "wg-triage"
-subteam-of = "release"
 kind = "working-group"
 
 [people]
@@ -20,7 +19,7 @@ members = [
     "anden3",
     "KittyBorgX",
     "Enselic",
-    "tranquillity-codes"
+    "tranquillity-codes",
 ]
 alumni = []
 
