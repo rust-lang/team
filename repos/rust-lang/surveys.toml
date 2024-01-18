@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "surveys"
+description = "Repo for coordinating the creation, distribution, collection, and analysis of surveys for the Rust project. "
+bots = []
+
+[access.teams]
+community-survey = "write"
