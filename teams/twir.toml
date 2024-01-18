@@ -14,5 +14,8 @@ alumni = [
     "nasa42",
 ]
 
+[[github]]
+orgs = ["rust-lang"]
+
 [[lists]]
 address = "twir@rust-lang.org"
