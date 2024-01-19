@@ -6,6 +6,7 @@ mod zulip;
 
 use crate::github::{create_diff, GitHubRead, GitHubWrite, HttpClient};
 use crate::team_api::TeamApi;
+use crate::zulip::SyncZulip;
 use anyhow::Context;
 use log::{error, info, warn};
 
@@ -101,7 +102,12 @@ fn app() -> anyhow::Result<()> {
             "zulip" => {
                 let username = get_env("ZULIP_USERNAME")?;
                 let token = get_env("ZULIP_API_TOKEN")?;
-                zulip::run(username, token, &team_api, dry_run)?;
+                let sync = SyncZulip::new(username, token, &team_api, dry_run)?;
+                let diff = sync.diff_all()?;
+                info!("{}", diff);
+                if !only_print_plan {
+                    diff.apply(&sync)?;
+                }
             }
             _ => panic!("unknown service: {service}"),
         }
