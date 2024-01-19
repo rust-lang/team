@@ -26,7 +26,7 @@ pub(crate) struct HttpClient {
 
 impl HttpClient {
     pub(crate) fn from_url_and_token(mut base_url: String, token: String) -> anyhow::Result<Self> {
-        let builder = reqwest::blocking::ClientBuilder::default();
+        let mut builder = reqwest::blocking::ClientBuilder::default();
         let mut map = HeaderMap::default();
         let mut auth = HeaderValue::from_str(&format!("token {}", token))?;
         auth.set_sensitive(true);
@@ -36,6 +36,7 @@ impl HttpClient {
             header::USER_AGENT,
             HeaderValue::from_static(crate::USER_AGENT),
         );
+        builder = builder.default_headers(map);
 
         if !base_url.ends_with('/') {
             base_url.push('/');
