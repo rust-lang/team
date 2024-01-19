@@ -4,7 +4,7 @@ use crate::team_api::TeamApi;
 use api::{ZulipApi, ZulipUserGroup};
 use rust_team_data::v1::ZulipGroupMember;
 
-use std::{cell::RefCell, collections::BTreeMap, mem};
+use std::collections::BTreeMap;
 
 pub(crate) struct SyncZulip {
     zulip_controller: ZulipController,
@@ -20,7 +20,7 @@ impl SyncZulip {
     ) -> anyhow::Result<Self> {
         let zulip_api = ZulipApi::new(username, token, dry_run);
         let user_group_definitions = get_user_group_definitions(team_api, &zulip_api)?;
-        let zulip_controller = ZulipController::new(zulip_api, dry_run)?;
+        let zulip_controller = ZulipController::new(zulip_api)?;
         Ok(Self {
             zulip_controller,
             user_group_definitions,
@@ -140,7 +140,6 @@ impl CreateUserGroupDiff {
     fn apply(&self, sync: &SyncZulip) -> Result<(), anyhow::Error> {
         sync.zulip_controller
             .create_user_group(&self.name, &self.description, &self.member_ids)
-            .map(|_| ())
     }
 }
 
@@ -228,16 +227,14 @@ fn get_user_group_definitions(
 /// Interacts with the Zulip API
 struct ZulipController {
     /// User group name to Zulip user group id
-    user_group_ids: RefCell<BTreeMap<String, ZulipUserGroup>>,
+    user_group_ids: BTreeMap<String, ZulipUserGroup>,
     /// The Zulip API
     zulip_api: ZulipApi,
-    /// Whether this is a dry run or not
-    dry_run: bool,
 }
 
 impl ZulipController {
     /// Create a new `ZulipController`
-    fn new(zulip_api: ZulipApi, dry_run: bool) -> anyhow::Result<Self> {
+    fn new(zulip_api: ZulipApi) -> anyhow::Result<Self> {
         let user_groups = zulip_api.get_user_groups()?;
 
         let user_group_ids = user_groups
@@ -250,18 +247,14 @@ impl ZulipController {
             .collect();
 
         Ok(Self {
-            user_group_ids: RefCell::new(user_group_ids),
+            user_group_ids,
             zulip_api,
-            dry_run,
         })
     }
 
     /// Get a user group id for the given user group name
     fn user_group_id_from_name(&self, user_group_name: &str) -> Option<usize> {
-        self.user_group_ids
-            .borrow()
-            .get(user_group_name)
-            .map(|u| u.id)
+        self.user_group_ids.get(user_group_name).map(|u| u.id)
     }
 
     /// Create a user group with a certain name, description, and members
@@ -270,39 +263,16 @@ impl ZulipController {
         user_group_name: &str,
         description: &str,
         member_ids: &[usize],
-    ) -> anyhow::Result<usize> {
+    ) -> anyhow::Result<()> {
         self.zulip_api
             .create_user_group(user_group_name, description, member_ids)?;
 
-        if self.dry_run {
-            // If this is a dry run, we insert a record since it won't be on the actual API
-            self.user_group_ids.borrow_mut().insert(
-                user_group_name.to_owned(),
-                ZulipUserGroup {
-                    id: 0,
-                    name: user_group_name.to_owned(),
-                    members: member_ids.into(),
-                },
-            );
-        } else {
-            // Otherwise, update the user group cache so it has the user group that was just created
-            let user_groups = self.zulip_api.get_user_groups()?;
-            let user_groups = user_groups
-                .into_iter()
-                .map(|ug| (ug.name.clone(), ug))
-                .collect();
-            *self.user_group_ids.borrow_mut() = user_groups;
-        }
-
-        Ok(self
-            .user_group_id_from_name(user_group_name)
-            .expect("user group id not found even thoough it was just created"))
+        Ok(())
     }
 
     /// Get the members of a user group given its name
     fn user_group_members_from_name(&self, user_group_name: &str) -> Option<Vec<usize>> {
         self.user_group_ids
-            .borrow()
             .get(user_group_name)
             .map(|u| u.members.to_owned())
     }
