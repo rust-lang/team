@@ -1,4 +1,5 @@
 name = "all"
+kind = "marker-team"
 
 [people]
 leads = []

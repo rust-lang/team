@@ -4,6 +4,7 @@
 # Do not add new members to this team. Instead add to `people.alumni` in the
 # appropriate team's file.
 name = "alumni"
+kind = "marker-team"
 
 [people]
 leads = []
