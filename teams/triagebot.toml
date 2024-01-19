@@ -6,6 +6,7 @@ leads = ["Mark-Simulacrum"]
 members = [
     "Mark-Simulacrum",
     "ehuss",
+    "jackh726"
 ]
 alumni = [
     "spastorino",
