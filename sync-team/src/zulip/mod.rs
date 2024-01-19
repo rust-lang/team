@@ -30,7 +30,10 @@ impl SyncZulip {
     pub(crate) fn diff_all(&self) -> anyhow::Result<Diff> {
         self.user_group_definitions
             .iter()
-            .map(|(user_group_name, member_ids)| self.diff_user_group(user_group_name, member_ids))
+            .filter_map(|(user_group_name, member_ids)| {
+                self.diff_user_group(user_group_name, member_ids)
+                    .transpose()
+            })
             .collect::<anyhow::Result<Vec<_>>>()
             .map(|user_group_diffs| Diff { user_group_diffs })
     }
@@ -39,7 +42,7 @@ impl SyncZulip {
         &self,
         user_group_name: &str,
         member_ids: &[usize],
-    ) -> anyhow::Result<UserGroupDiff> {
+    ) -> anyhow::Result<Option<UserGroupDiff>> {
         let id = self
             .zulip_controller
             .user_group_id_from_name(user_group_name);
@@ -50,11 +53,11 @@ impl SyncZulip {
             }
             None => {
                 log::debug!("no '{user_group_name}' user group found on Zulip");
-                return Ok(UserGroupDiff::Create(CreateUserGroupDiff {
+                return Ok(Some(UserGroupDiff::Create(CreateUserGroupDiff {
                     name: user_group_name.to_owned(),
                     description: format!("The {user_group_name} team (managed by the Team repo)"),
                     member_ids: member_ids.to_owned(),
-                }));
+                })));
             }
         };
 
@@ -75,12 +78,19 @@ impl SyncZulip {
             .filter(|i| !member_ids.contains(i))
             .copied()
             .collect::<Vec<_>>();
-        Ok(UserGroupDiff::Update(UpdateUserGroupDiff {
-            name: user_group_name.to_owned(),
-            user_group_id,
-            member_id_additions: add_ids,
-            member_id_deletions: remove_ids,
-        }))
+        if add_ids.is_empty() && remove_ids.is_empty() {
+            log::debug!(
+                "'{user_group_name}' user group ({user_group_id}) does not need to be updated"
+            );
+            Ok(None)
+        } else {
+            Ok(Some(UserGroupDiff::Update(UpdateUserGroupDiff {
+                name: user_group_name.to_owned(),
+                user_group_id,
+                member_id_additions: add_ids,
+                member_id_deletions: remove_ids,
+            })))
+        }
     }
 }
 
