@@ -19,3 +19,6 @@ repo = "https://github.com/rust-lang/surveys"
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[lists]]
+address = "surveys@rust-lang.org"
