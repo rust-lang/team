@@ -8,7 +8,6 @@ members = [
     "pietroalbini",
     "shepmaster",
     "jdno",
-    "rylev",
     "Kobzol",
 ]
 alumni = [
@@ -25,6 +24,7 @@ alumni = [
     "frewsxcv",
     "tomprince",
     "carols10cents",
+    "rylev",
 ]
 
 [[github]]
