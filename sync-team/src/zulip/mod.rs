@@ -4,7 +4,7 @@ use crate::team_api::TeamApi;
 use api::{ZulipApi, ZulipUserGroup};
 use rust_team_data::v1::ZulipGroupMember;
 
-use std::{cell::RefCell, collections::BTreeMap};
+use std::{cell::RefCell, collections::BTreeMap, mem};
 
 pub(crate) struct SyncZulip {
     zulip_controller: ZulipController,
@@ -91,7 +91,7 @@ pub(crate) struct Diff {
 impl Diff {
     pub(crate) fn apply(&self, sync: &SyncZulip) -> anyhow::Result<()> {
         for user_group_diff in &self.user_group_diffs {
-            user_group_diff.apply(sync)?
+            user_group_diff.apply(sync)?;
         }
         Ok(())
     }
@@ -149,7 +149,10 @@ impl std::fmt::Display for CreateUserGroupDiff {
         writeln!(f, "➕ Creating user group:")?;
         writeln!(f, "  Name: {}", self.name)?;
         writeln!(f, "  Description: {}", self.description)?;
-        // TODO: members
+        writeln!(f, "  Members:")?;
+        for member_id in &self.member_ids {
+            writeln!(f, "    {member_id}")?;
+        }
         Ok(())
     }
 }
@@ -175,7 +178,13 @@ impl std::fmt::Display for UpdateUserGroupDiff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "📝 Updating user group:")?;
         writeln!(f, "  Name: {}", self.name)?;
-        // TODO: members
+        writeln!(f, "  Members:")?;
+        for member_id in &self.member_id_additions {
+            writeln!(f, "    ➕ {member_id}")?;
+        }
+        for member_id in &self.member_id_deletions {
+            writeln!(f, "    − {member_id}")?;
+        }
         Ok(())
     }
 }
