@@ -15,6 +15,11 @@ alumni = []
 [[github]]
 orgs = ["rust-lang"]
 
+[rfcbot]
+label = "T-testing-devex"
+name = "Testing DevEx"
+ping = "rust-lang/testing-devex"
+
 [website]
 name = "Testing DevEx team"
 description = "Working on the associated libraries, tooling, strategy, and integration points that support the developer experience with writing, executing, and analyzing tests"
