@@ -46,6 +46,9 @@ impl DataModel {
             .expect("Team not found")
     }
 
+    /// Creates a GitHub model from the current team data mock.
+    /// Note that all users should have been created before calling this method, so that
+    /// GitHub knows about the users' existence.
     pub fn gh_model(&self) -> GithubMock {
         let users: HashMap<UserId, String> = self
             .people
@@ -122,13 +125,19 @@ impl TeamData {
         TeamDataBuilder::default().name(name.to_string())
     }
 
-    pub fn add_gh_member(&mut self, team: &str, member: usize) {
-        let team = self
-            .gh_teams
+    pub fn add_gh_member(&mut self, team: &str, member: UserId) {
+        self.github_team(team).members.push(member);
+    }
+
+    pub fn remove_gh_member(&mut self, team: &str, user: UserId) {
+        self.github_team(team).members.retain(|u| *u != user);
+    }
+
+    fn github_team(&mut self, name: &str) -> &mut GitHubTeam {
+        self.gh_teams
             .iter_mut()
-            .find(|t| t.name == team)
-            .expect("GitHub team not found");
-        team.members.push(member);
+            .find(|t| t.name == name)
+            .expect("GitHub team not found")
     }
 
     fn to_data(&self) -> rust_team_data::v1::Team {
@@ -143,7 +152,7 @@ impl TeamData {
             subteam_of: None,
             members: vec![],
             alumni: vec![],
-            github: (!gh_teams.is_empty()).then(|| TeamGitHub { teams: gh_teams }),
+            github: (!gh_teams.is_empty()).then_some(TeamGitHub { teams: gh_teams }),
             website_data: None,
             roles: vec![],
             discord: vec![],
