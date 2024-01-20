@@ -4,6 +4,7 @@ use anyhow::{ensure, Context as _, Error};
 use indexmap::IndexMap;
 use log::info;
 use rust_team_data::v1;
+use rust_team_data::v1::ZulipStream;
 use std::collections::HashMap;
 use std::path::Path;
 
@@ -27,6 +28,7 @@ impl<'a> Generator<'a> {
         self.generate_repos()?;
         self.generate_lists()?;
         self.generate_zulip_groups()?;
+        self.generate_zulip_streams()?;
         self.generate_permissions()?;
         self.generate_rfcbot()?;
         self.generate_zulip_map()?;
@@ -269,6 +271,33 @@ impl<'a> Generator<'a> {
 
         groups.sort_keys();
         self.add("v1/zulip-groups.json", &v1::ZulipGroups { groups })?;
+        Ok(())
+    }
+
+    fn generate_zulip_streams(&self) -> Result<(), Error> {
+        let mut streams = IndexMap::new();
+
+        for stream in self.data.zulip_streams()?.values() {
+            let ZulipStream {
+                name,
+                groups,
+                visibility,
+            } = stream;
+
+            let mut groups = groups.to_vec();
+            groups.sort();
+            streams.insert(
+                stream.name.clone(),
+                v1::ZulipStream {
+                    name: name.clone(),
+                    groups,
+                    visibility: visibility.clone(),
+                },
+            );
+        }
+
+        streams.sort_keys();
+        self.add("v1/zulip-streams.json", &v1::ZulipStreams { streams })?;
         Ok(())
     }
 

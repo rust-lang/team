@@ -1,5 +1,6 @@
 use crate::schema::{Config, List, Person, Repo, Team, ZulipGroup};
 use anyhow::{bail, Context as _, Error};
+use rust_team_data::v1::ZulipStream;
 use serde::de::DeserializeOwned;
 use std::collections::{HashMap, HashSet};
 use std::ffi::OsStr;
@@ -110,6 +111,16 @@ impl Data {
             }
         }
         Ok(groups)
+    }
+
+    pub(crate) fn zulip_streams(&self) -> Result<HashMap<String, ZulipStream>, Error> {
+        let mut streams = HashMap::new();
+        for team in self.teams() {
+            for stream in team.zulip_streams()? {
+                streams.insert(stream.name.clone(), stream);
+            }
+        }
+        Ok(streams)
     }
 
     pub(crate) fn team(&self, name: &str) -> Option<&Team> {
