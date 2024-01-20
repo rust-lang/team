@@ -4,7 +4,7 @@ use derive_builder::Builder;
 use rust_team_data::v1::{GitHubTeam, Person, TeamGitHub, TeamKind};
 
 use crate::github::api::{
-    BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Team, TeamMember, TeamPrivacy,
+    BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::github::{api, SyncGitHub, TeamDiff};
 
@@ -35,12 +35,37 @@ impl DataModel {
     }
 
     pub fn gh_model(&self) -> GithubMock {
+        let users: HashMap<UserId, String> = self
+            .people
+            .iter()
+            .map(|user| (user.github_id, user.name.clone()))
+            .collect();
+
+        let mut team_memberships: HashMap<String, HashMap<UserId, TeamMember>> = HashMap::default();
+        for team in &self.teams {
+            for gh_team in &team.gh_teams {
+                let res = team_memberships.insert(
+                    gh_team.name.clone(),
+                    gh_team
+                        .members
+                        .iter()
+                        .map(|member| {
+                            (
+                                *member,
+                                TeamMember {
+                                    username: users.get(member).expect("User not found").clone(),
+                                    role: TeamRole::Member,
+                                },
+                            )
+                        })
+                        .collect(),
+                );
+                assert!(res.is_none());
+            }
+        }
+
         GithubMock {
-            users: self
-                .people
-                .iter()
-                .map(|user| (user.github_id, user.name.clone()))
-                .collect(),
+            users,
             owners: Default::default(),
             teams: self
                 .teams
@@ -55,6 +80,7 @@ impl DataModel {
                     slug: team.name,
                 })
                 .collect(),
+            team_memberships,
         }
     }
 
@@ -122,13 +148,15 @@ impl TeamDataBuilder {
 }
 
 /// Represents the state of GitHub repositories, teams and users.
-#[derive(Default, Clone)]
+#[derive(Default)]
 pub struct GithubMock {
     // user ID -> login
     users: HashMap<UserId, String>,
     // org name -> user ID
     owners: HashMap<String, Vec<UserId>>,
     teams: Vec<Team>,
+    // Team name -> members
+    team_memberships: HashMap<String, HashMap<UserId, TeamMember>>,
 }
 
 impl GithubRead for GithubMock {
@@ -163,8 +191,12 @@ impl GithubRead for GithubMock {
         Ok(self.teams.iter().find(|t| t.name == team).cloned())
     }
 
-    fn team_memberships(&self, _team: &Team) -> anyhow::Result<HashMap<UserId, TeamMember>> {
-        todo!()
+    fn team_memberships(&self, team: &Team) -> anyhow::Result<HashMap<UserId, TeamMember>> {
+        let memberships = self
+            .team_memberships
+            .get(&team.name)
+            .ok_or_else(|| anyhow::anyhow!("Team {} not found", team.name))?;
+        Ok(memberships.clone())
     }
 
     fn team_membership_invitations(

@@ -296,7 +296,7 @@ impl fmt::Display for TeamRole {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub(crate) struct TeamMember {
     pub(crate) username: String,
     pub(crate) role: TeamRole,
