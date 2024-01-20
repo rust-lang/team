@@ -124,6 +124,26 @@ pub struct ZulipGroups {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ZulipStream {
+    pub name: String,
+    pub groups: Vec<ZulipGroup>,
+    pub visibility: ZulipStreamVisibility,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "kebab-case")]
+pub enum ZulipStreamVisibility {
+    WebPublic,
+    PrivateSharedHistory,
+    PrivateProtectedHistory,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ZulipStreams {
+    pub streams: IndexMap<String, ZulipStream>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Permission {
     pub github_users: Vec<String>,
     pub github_ids: Vec<usize>,
