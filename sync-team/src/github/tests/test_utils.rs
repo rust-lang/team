@@ -57,6 +57,7 @@ impl DataModel {
             .collect();
 
         let mut team_memberships: HashMap<String, HashMap<UserId, TeamMember>> = HashMap::default();
+        let mut teams = vec![];
         for team in &self.teams {
             for gh_team in &team.gh_teams {
                 let res = team_memberships.insert(
@@ -76,25 +77,21 @@ impl DataModel {
                         .collect(),
                 );
                 assert!(res.is_none());
+
+                teams.push(api::Team {
+                    id: Some(teams.len() as u64),
+                    name: gh_team.name.clone(),
+                    description: Some("Managed by the rust-lang/team repository.".to_string()),
+                    privacy: TeamPrivacy::Closed,
+                    slug: gh_team.name.clone(),
+                })
             }
         }
 
         GithubMock {
             users,
             owners: Default::default(),
-            teams: self
-                .teams
-                .clone()
-                .into_iter()
-                .enumerate()
-                .map(|(id, team)| api::Team {
-                    id: Some(id as u64),
-                    name: team.name.clone(),
-                    description: Some("Managed by the rust-lang/team repository.".to_string()),
-                    privacy: TeamPrivacy::Closed,
-                    slug: team.name,
-                })
-                .collect(),
+            teams,
             team_memberships,
             team_invitations: Default::default(),
         }
