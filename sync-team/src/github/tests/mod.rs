@@ -153,3 +153,48 @@ fn team_remove_member() {
     ]
     "###);
 }
+
+#[test]
+fn team_delete() {
+    let mut model = DataModel::default();
+    let user = model.create_user("mark");
+
+    // We need at least two github teams, otherwise the diff for removing the last GH team
+    // won't be generated, because no organization is known to scan for existing unmanaged teams.
+    model.create_team(
+        TeamData::new("admins")
+            .gh_team("admins-gh", &[user])
+            .gh_team("users-gh", &[user]),
+    );
+    let gh = model.gh_model();
+
+    model.get_team("admins").remove_gh_team("users-gh");
+
+    let team_diff = model.diff_teams(gh);
+    insta::assert_debug_snapshot!(team_diff, @r###"
+    [
+        Edit(
+            EditTeamDiff {
+                org: "rust-lang",
+                name: "admins-gh",
+                name_diff: None,
+                description_diff: None,
+                privacy_diff: None,
+                member_diffs: [
+                    (
+                        "mark",
+                        Noop,
+                    ),
+                ],
+            },
+        ),
+        Delete(
+            DeleteTeamDiff {
+                org: "rust-lang",
+                name: "users-gh",
+                slug: "users-gh",
+            },
+        ),
+    ]
+    "###);
+}

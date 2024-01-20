@@ -25,7 +25,7 @@ pub struct DataModel {
 
 impl DataModel {
     pub fn create_user(&mut self, name: &str) -> UserId {
-        let github_id = self.people.len();
+        let github_id = self.people.len() as UserId;
         self.people.push(Person {
             name: name.to_string(),
             email: Some(format!("{name}@rust.com")),
@@ -130,6 +130,10 @@ impl TeamData {
         self.github_team(team).members.retain(|u| *u != user);
     }
 
+    pub fn remove_gh_team(&mut self, name: &str) {
+        self.gh_teams.retain(|t| t.name != name);
+    }
+
     fn github_team(&mut self, name: &str) -> &mut GitHubTeam {
         self.gh_teams
             .iter_mut()
@@ -213,7 +217,8 @@ impl GithubRead for GithubMock {
             .collect())
     }
 
-    fn org_teams(&self, _org: &str) -> anyhow::Result<Vec<(String, String)>> {
+    fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
+        assert_eq!(org, DEFAULT_ORG);
         Ok(self
             .teams
             .iter()
