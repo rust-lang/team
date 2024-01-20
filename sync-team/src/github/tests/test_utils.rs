@@ -10,6 +10,8 @@ use crate::github::{api, SyncGitHub, TeamDiff};
 
 const DEFAULT_ORG: &str = "rust-lang";
 
+type UserId = u64;
+
 /// Represents the contents of rust_team_data state.
 /// In tests, you should fill the model with repos, teams, people etc.,
 /// and then call `gh_model` to construct a corresponding GitHubModel.
@@ -22,8 +24,8 @@ pub struct DataModel {
 }
 
 impl DataModel {
-    pub fn create_user(&mut self, name: &str) -> u64 {
-        let github_id = self.people.len() as u64;
+    pub fn create_user(&mut self, name: &str) -> UserId {
+        let github_id = self.people.len();
         self.people.push(Person {
             name: name.to_string(),
             email: Some(format!("{name}@rust.com")),
@@ -107,7 +109,7 @@ impl TeamData {
 }
 
 impl TeamDataBuilder {
-    pub fn gh_team(mut self, name: &str, members: &[u64]) -> Self {
+    pub fn gh_team(mut self, name: &str, members: &[UserId]) -> Self {
         let mut gh_teams = self.gh_teams.unwrap_or_default();
         gh_teams.push(GitHubTeam {
             org: DEFAULT_ORG.to_string(),
@@ -122,13 +124,15 @@ impl TeamDataBuilder {
 /// Represents the state of GitHub repositories, teams and users.
 #[derive(Default, Clone)]
 pub struct GithubMock {
-    users: HashMap<u64, String>,
-    owners: HashMap<String, Vec<u64>>,
+    // user ID -> login
+    users: HashMap<UserId, String>,
+    // org name -> user ID
+    owners: HashMap<String, Vec<UserId>>,
     teams: Vec<Team>,
 }
 
 impl GithubRead for GithubMock {
-    fn usernames(&self, ids: &[u64]) -> anyhow::Result<HashMap<u64, String>> {
+    fn usernames(&self, ids: &[UserId]) -> anyhow::Result<HashMap<UserId, String>> {
         Ok(self
             .users
             .iter()
@@ -137,7 +141,7 @@ impl GithubRead for GithubMock {
             .collect())
     }
 
-    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<u64>> {
+    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<UserId>> {
         Ok(self
             .owners
             .get(org)
@@ -159,7 +163,7 @@ impl GithubRead for GithubMock {
         Ok(self.teams.iter().find(|t| t.name == team).cloned())
     }
 
-    fn team_memberships(&self, _team: &Team) -> anyhow::Result<HashMap<u64, TeamMember>> {
+    fn team_memberships(&self, _team: &Team) -> anyhow::Result<HashMap<UserId, TeamMember>> {
         todo!()
     }
 
