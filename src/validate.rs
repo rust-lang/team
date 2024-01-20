@@ -44,6 +44,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_discord_team_members_have_discord_ids,
     validate_zulip_group_ids,
     validate_zulip_group_extra_people,
+    validate_zulip_streams,
     validate_repos,
     validate_branch_protections,
     validate_member_roles,
@@ -732,6 +733,39 @@ fn validate_zulip_group_extra_people(data: &Data, errors: &mut Vec<String>) {
                     );
                 }
             }
+            Ok(())
+        });
+        Ok(())
+    });
+}
+
+/// Ensure that each group with access to a Zulip stream exists and that stream names are unique.
+fn validate_zulip_streams(data: &Data, errors: &mut Vec<String>) {
+    let mut stream_names: HashSet<String> = HashSet::default();
+
+    wrapper(data.teams(), errors, |team, errors| {
+        let groups: HashSet<String> = team
+            .zulip_groups(data)?
+            .into_iter()
+            .map(|g| g.name().to_string())
+            .collect();
+        wrapper(team.zulip_streams()?.iter(), errors, |stream, errors| {
+            // Check that mentioned Zulip groups exist
+            wrapper(stream.groups.iter(), errors, |group, _| {
+                if !groups.contains(group) {
+                    bail!(
+                        "Zulip group `{group}` in stream `{}` of team `{}` does not exist",
+                        stream.name,
+                        team.name()
+                    );
+                }
+                Ok(())
+            });
+
+            if !stream_names.insert(stream.name.clone()) {
+                bail!("Zulip stream `{}` is duplicated", stream.name);
+            }
+
             Ok(())
         });
         Ok(())

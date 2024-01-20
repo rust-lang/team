@@ -126,7 +126,7 @@ pub struct ZulipGroups {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ZulipStream {
     pub name: String,
-    pub groups: Vec<ZulipGroup>,
+    pub groups: Vec<String>,
     pub visibility: ZulipStreamVisibility,
 }
 
