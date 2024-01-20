@@ -172,6 +172,8 @@ pub(crate) struct Team {
     lists: Vec<TeamList>,
     #[serde(default)]
     zulip_groups: Vec<RawZulipGroup>,
+    #[serde(default)]
+    zulip_streams: Vec<RawZulipStream>,
     discord_roles: Option<Vec<DiscordRole>>,
 }
 
@@ -678,6 +680,28 @@ pub(crate) struct RawZulipGroup {
     pub(crate) extra_teams: Vec<String>,
     #[serde(default)]
     pub(crate) excluded_people: Vec<String>,
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+pub(crate) struct RawZulipStream {
+    pub(crate) name: String,
+    #[serde(default)]
+    pub(crate) groups: Vec<String>,
+    #[serde(default = "default_zulip_stream_visibility")]
+    pub(crate) visibility: RawZulipVisibility,
+}
+
+fn default_zulip_stream_visibility() -> RawZulipVisibility {
+    RawZulipVisibility::Public
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum RawZulipVisibility {
+    Public,
+    PrivateShared,
+    PrivateProtected,
 }
 
 #[derive(Debug)]
