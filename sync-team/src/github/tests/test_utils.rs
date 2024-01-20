@@ -81,6 +81,7 @@ impl DataModel {
                 })
                 .collect(),
             team_memberships,
+            team_invitations: Default::default(),
         }
     }
 
@@ -157,6 +158,17 @@ pub struct GithubMock {
     teams: Vec<Team>,
     // Team name -> members
     team_memberships: HashMap<String, HashMap<UserId, TeamMember>>,
+    // Team name -> list of invited users
+    team_invitations: HashMap<String, Vec<String>>,
+}
+
+impl GithubMock {
+    pub fn add_invitation(&mut self, repo: &str, user: &str) {
+        self.team_invitations
+            .entry(repo.to_string())
+            .or_default()
+            .push(user.to_string());
+    }
 }
 
 impl GithubRead for GithubMock {
@@ -195,16 +207,24 @@ impl GithubRead for GithubMock {
         let memberships = self
             .team_memberships
             .get(&team.name)
-            .ok_or_else(|| anyhow::anyhow!("Team {} not found", team.name))?;
-        Ok(memberships.clone())
+            .cloned()
+            .unwrap_or_default();
+        Ok(memberships)
     }
 
     fn team_membership_invitations(
         &self,
-        _org: &str,
-        _team: &str,
+        org: &str,
+        team: &str,
     ) -> anyhow::Result<HashSet<String>> {
-        todo!()
+        assert_eq!(org, DEFAULT_ORG);
+        Ok(self
+            .team_invitations
+            .get(team)
+            .cloned()
+            .unwrap_or_default()
+            .into_iter()
+            .collect())
     }
 
     fn repo(&self, _org: &str, _repo: &str) -> anyhow::Result<Option<Repo>> {
