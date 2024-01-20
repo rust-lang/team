@@ -22,7 +22,7 @@ pub struct DataModel {
 }
 
 impl DataModel {
-    pub fn add_user(&mut self, name: &str) -> u64 {
+    pub fn create_user(&mut self, name: &str) -> u64 {
         let github_id = self.people.len() as u64;
         self.people.push(Person {
             name: name.to_string(),
@@ -56,7 +56,7 @@ impl DataModel {
         }
     }
 
-    pub fn add_team(&mut self, team: TeamDataBuilder) {
+    pub fn create_team(&mut self, team: TeamDataBuilder) {
         let team = team.build().expect("Cannot build team");
         self.teams.push(team);
     }

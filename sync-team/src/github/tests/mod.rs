@@ -13,10 +13,10 @@ fn team_noop() {
 #[test]
 fn team_create() {
     let mut model = DataModel::default();
-    let user = model.add_user("mark");
-    let user2 = model.add_user("jan");
+    let user = model.create_user("mark");
+    let user2 = model.create_user("jan");
     let gh = model.gh_model();
-    model.add_team(TeamData::new("admins").gh_team("admins", &[user, user2]));
+    model.create_team(TeamData::new("admins").gh_team("admins", &[user, user2]));
     let team_diff = model.diff_teams(gh);
     insta::assert_debug_snapshot!(team_diff, @r###"
     [
