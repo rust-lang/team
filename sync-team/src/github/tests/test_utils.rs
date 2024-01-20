@@ -34,6 +34,18 @@ impl DataModel {
         github_id
     }
 
+    pub fn create_team(&mut self, team: TeamDataBuilder) {
+        let team = team.build().expect("Cannot build team");
+        self.teams.push(team);
+    }
+
+    pub fn get_team(&mut self, name: &str) -> &mut TeamData {
+        self.teams
+            .iter_mut()
+            .find(|t| t.name == name)
+            .expect("Team not found")
+    }
+
     pub fn gh_model(&self) -> GithubMock {
         let users: HashMap<UserId, String> = self
             .people
@@ -75,7 +87,7 @@ impl DataModel {
                 .map(|(id, team)| api::Team {
                     id: Some(id as u64),
                     name: team.name.clone(),
-                    description: None,
+                    description: Some("Managed by the rust-lang/team repository.".to_string()),
                     privacy: TeamPrivacy::Closed,
                     slug: team.name,
                 })
@@ -83,11 +95,6 @@ impl DataModel {
             team_memberships,
             team_invitations: Default::default(),
         }
-    }
-
-    pub fn create_team(&mut self, team: TeamDataBuilder) {
-        let team = team.build().expect("Cannot build team");
-        self.teams.push(team);
     }
 
     pub fn diff_teams(&self, github: GithubMock) -> Vec<TeamDiff> {
@@ -113,6 +120,15 @@ pub struct TeamData {
 impl TeamData {
     pub fn new(name: &str) -> TeamDataBuilder {
         TeamDataBuilder::default().name(name.to_string())
+    }
+
+    pub fn add_gh_member(&mut self, team: &str, member: usize) {
+        let team = self
+            .gh_teams
+            .iter_mut()
+            .find(|t| t.name == team)
+            .expect("GitHub team not found");
+        team.members.push(member);
     }
 
     fn to_data(&self) -> rust_team_data::v1::Team {
