@@ -48,6 +48,7 @@ pub(crate) trait GithubRead {
     fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>>;
 
     /// Get branch_protections
+    /// Returns a map branch pattern -> (protection ID, protection data)
     fn branch_protections(
         &self,
         org: &str,

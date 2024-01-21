@@ -1,5 +1,5 @@
-use crate::github::tests::test_utils::{DataModel, RepoData, TeamData};
-use rust_team_data::v1::RepoPermission;
+use crate::github::tests::test_utils::{BranchProtectionBuilder, DataModel, RepoData, TeamData};
+use rust_team_data::v1::{BranchProtectionMode, RepoPermission};
 
 mod test_utils;
 
@@ -307,7 +307,13 @@ fn repo_create() {
         RepoData::new("repo1")
             .description("foo".to_string())
             .member("user1", RepoPermission::Write)
-            .team("team1", RepoPermission::Triage),
+            .team("team1", RepoPermission::Triage)
+            .branch_protections(vec![BranchProtectionBuilder::pr_required(
+                "main",
+                &["test"],
+                1,
+            )
+            .build()]),
     );
     let diff = model.diff_repos(gh);
     insta::assert_debug_snapshot!(diff, @r#"
@@ -342,7 +348,22 @@ fn repo_create() {
                         ),
                     },
                 ],
-                branch_protections: [],
+                branch_protections: [
+                    (
+                        "main",
+                        BranchProtection {
+                            pattern: "main",
+                            is_admin_enforced: true,
+                            dismisses_stale_reviews: false,
+                            required_approving_review_count: 1,
+                            required_status_check_contexts: [
+                                "test",
+                            ],
+                            push_allowances: [],
+                            requires_approving_reviews: true,
+                        },
+                    ),
+                ],
                 app_installations: [],
             },
         ),
@@ -720,6 +741,241 @@ fn repo_archive_repo() {
                 ),
                 permission_diffs: [],
                 branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_add_branch_protection() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Write));
+
+    let gh = model.gh_model();
+    model.get_repo("repo1").branch_protections.extend([
+        BranchProtectionBuilder::pr_required("master", &["test", "test 2"], 0).build(),
+        BranchProtectionBuilder::pr_not_required("beta").build(),
+    ]);
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [
+                    BranchProtectionDiff {
+                        pattern: "master",
+                        operation: Create(
+                            BranchProtection {
+                                pattern: "master",
+                                is_admin_enforced: true,
+                                dismisses_stale_reviews: false,
+                                required_approving_review_count: 0,
+                                required_status_check_contexts: [
+                                    "test",
+                                    "test 2",
+                                ],
+                                push_allowances: [],
+                                requires_approving_reviews: true,
+                            },
+                        ),
+                    },
+                    BranchProtectionDiff {
+                        pattern: "beta",
+                        operation: Create(
+                            BranchProtection {
+                                pattern: "beta",
+                                is_admin_enforced: true,
+                                dismisses_stale_reviews: false,
+                                required_approving_review_count: 0,
+                                required_status_check_contexts: [],
+                                push_allowances: [],
+                                requires_approving_reviews: false,
+                            },
+                        ),
+                    },
+                ],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_update_branch_protection() {
+    let mut model = DataModel::default();
+    model.create_repo(
+        RepoData::new("repo1")
+            .team("team1", RepoPermission::Write)
+            .branch_protections(vec![BranchProtectionBuilder::pr_required(
+                "master",
+                &["test"],
+                1,
+            )
+            .build()]),
+    );
+
+    let gh = model.gh_model();
+    let protection = model
+        .get_repo("repo1")
+        .branch_protections
+        .last_mut()
+        .unwrap();
+    match &mut protection.mode {
+        BranchProtectionMode::PrRequired {
+            ci_checks,
+            required_approvals,
+        } => {
+            ci_checks.push("Test".to_string());
+            *required_approvals = 0;
+        }
+        BranchProtectionMode::PrNotRequired => unreachable!(),
+    }
+    protection.dismiss_stale_review = true;
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [
+                    BranchProtectionDiff {
+                        pattern: "master",
+                        operation: Update(
+                            "0",
+                            BranchProtection {
+                                pattern: "master",
+                                is_admin_enforced: true,
+                                dismisses_stale_reviews: false,
+                                required_approving_review_count: 1,
+                                required_status_check_contexts: [
+                                    "test",
+                                ],
+                                push_allowances: [],
+                                requires_approving_reviews: true,
+                            },
+                            BranchProtection {
+                                pattern: "master",
+                                is_admin_enforced: true,
+                                dismisses_stale_reviews: true,
+                                required_approving_review_count: 0,
+                                required_status_check_contexts: [
+                                    "test",
+                                    "Test",
+                                ],
+                                push_allowances: [],
+                                requires_approving_reviews: true,
+                            },
+                        ),
+                    },
+                ],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_remove_branch_protection() {
+    let mut model = DataModel::default();
+    model.create_repo(
+        RepoData::new("repo1")
+            .team("team1", RepoPermission::Write)
+            .branch_protections(vec![
+                BranchProtectionBuilder::pr_required("main", &["test"], 1).build(),
+                BranchProtectionBuilder::pr_required("stable", &["test"], 0).build(),
+            ]),
+    );
+
+    let gh = model.gh_model();
+    model.get_repo("repo1").branch_protections.pop().unwrap();
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [
+                    BranchProtectionDiff {
+                        pattern: "stable",
+                        operation: Delete(
+                            "1",
+                        ),
+                    },
+                ],
                 app_installation_diffs: [],
             },
         ),

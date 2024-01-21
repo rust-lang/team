@@ -2,13 +2,17 @@ use std::collections::{HashMap, HashSet};
 
 use derive_builder::Builder;
 use rust_team_data::v1;
-use rust_team_data::v1::{Bot, GitHubTeam, Person, RepoPermission, TeamGitHub, TeamKind};
+use rust_team_data::v1::{
+    Bot, BranchProtectionMode, GitHubTeam, MergeBot, Person, RepoPermission, TeamGitHub, TeamKind,
+};
 
 use crate::github::api::{
     BranchProtection, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation, RepoTeam,
     RepoUser, Team, TeamMember, TeamPrivacy, TeamRole,
 };
-use crate::github::{api, convert_permission, RepoDiff, SyncGitHub, TeamDiff};
+use crate::github::{
+    api, construct_branch_protection, convert_permission, RepoDiff, SyncGitHub, TeamDiff,
+};
 
 const DEFAULT_ORG: &str = "rust-lang";
 
@@ -105,6 +109,7 @@ impl DataModel {
 
         let mut repos = HashMap::default();
         let mut repo_members: HashMap<String, RepoMembers> = HashMap::default();
+        let mut branch_protections = HashMap::new();
 
         for repo in &self.repos {
             repos.insert(
@@ -144,6 +149,16 @@ impl DataModel {
                 })
                 .collect();
             repo_members.insert(repo.name.clone(), RepoMembers { teams, members });
+
+            let repo_v1: v1::Repo = repo.clone().into();
+            let mut protections = vec![];
+            for protection in &repo.branch_protections {
+                protections.push((
+                    format!("{}", protections.len()),
+                    construct_branch_protection(&repo_v1, protection),
+                ));
+            }
+            branch_protections.insert(repo.name.clone(), protections);
         }
 
         GithubMock {
@@ -154,6 +169,7 @@ impl DataModel {
             team_invitations: Default::default(),
             repos,
             repo_members,
+            branch_protections,
         }
     }
 
@@ -265,6 +281,8 @@ pub struct RepoData {
     pub archived: bool,
     #[builder(default)]
     pub allow_auto_merge: bool,
+    #[builder(default)]
+    pub branch_protections: Vec<v1::BranchProtection>,
 }
 
 impl RepoData {
@@ -298,6 +316,7 @@ impl From<RepoData> for v1::Repo {
             members,
             archived,
             allow_auto_merge,
+            branch_protections,
         } = value;
         Self {
             org: DEFAULT_ORG.to_string(),
@@ -307,7 +326,7 @@ impl From<RepoData> for v1::Repo {
             bots,
             teams: teams.clone(),
             members: members.clone(),
-            branch_protections: vec![],
+            branch_protections,
             archived,
             private: false,
             auto_merge_enabled: allow_auto_merge,
@@ -337,6 +356,58 @@ impl RepoDataBuilder {
     }
 }
 
+#[derive(Clone)]
+pub struct BranchProtectionBuilder {
+    pub pattern: String,
+    pub dismiss_stale_review: bool,
+    pub mode: BranchProtectionMode,
+    pub allowed_merge_teams: Vec<String>,
+    pub merge_bots: Vec<MergeBot>,
+}
+
+impl BranchProtectionBuilder {
+    pub fn pr_required(pattern: &str, ci_checks: &[&str], required_approvals: u32) -> Self {
+        Self::create(
+            pattern,
+            BranchProtectionMode::PrRequired {
+                ci_checks: ci_checks.iter().map(|s| s.to_string()).collect(),
+                required_approvals,
+            },
+        )
+    }
+
+    pub fn pr_not_required(pattern: &str) -> Self {
+        Self::create(pattern, BranchProtectionMode::PrNotRequired)
+    }
+
+    pub fn build(self) -> v1::BranchProtection {
+        let BranchProtectionBuilder {
+            pattern,
+            dismiss_stale_review,
+            mode,
+            allowed_merge_teams,
+            merge_bots,
+        } = self;
+        v1::BranchProtection {
+            pattern,
+            dismiss_stale_review,
+            mode,
+            allowed_merge_teams,
+            merge_bots,
+        }
+    }
+
+    fn create(pattern: &str, mode: BranchProtectionMode) -> Self {
+        Self {
+            pattern: pattern.to_string(),
+            mode,
+            dismiss_stale_review: false,
+            allowed_merge_teams: vec![],
+            merge_bots: vec![],
+        }
+    }
+}
+
 /// Represents the state of GitHub repositories, teams and users.
 #[derive(Default)]
 pub struct GithubMock {
@@ -353,6 +424,8 @@ pub struct GithubMock {
     repos: HashMap<String, Repo>,
     // Repo name -> (teams, members)
     repo_members: HashMap<String, RepoMembers>,
+    // Repo name -> Vec<(protection ID, branch protection)>
+    branch_protections: HashMap<String, Vec<(String, BranchProtection)>>,
 }
 
 impl GithubMock {
@@ -461,10 +534,19 @@ impl GithubRead for GithubMock {
     fn branch_protections(
         &self,
         org: &str,
-        _repo: &str,
+        repo: &str,
     ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>> {
         assert_eq!(org, DEFAULT_ORG);
-        Ok(HashMap::default())
+
+        let Some(protections) = self.branch_protections.get(repo) else {
+            return Ok(Default::default());
+        };
+        let mut result = HashMap::default();
+        for (id, protection) in protections {
+            result.insert(protection.pattern.clone(), (id.clone(), protection.clone()));
+        }
+
+        Ok(result)
     }
 }
 

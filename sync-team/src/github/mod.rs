@@ -606,7 +606,7 @@ pub fn convert_permission(p: &rust_team_data::v1::RepoPermission) -> RepoPermiss
     }
 }
 
-fn construct_branch_protection(
+pub fn construct_branch_protection(
     expected_repo: &rust_team_data::v1::Repo,
     branch_protection: &rust_team_data::v1::BranchProtection,
 ) -> api::BranchProtection {
