@@ -1,0 +1,10 @@
+org = "rust-lang"
+name = "rfcs"
+description = "RFCs for changes to Rust"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+all = "write"
+
+[[branch-protections]]
+pattern = "master"
