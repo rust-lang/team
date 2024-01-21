@@ -2,9 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use derive_builder::Builder;
 use rust_team_data::v1;
-use rust_team_data::v1::{
-    Bot, GitHubTeam, Person, RepoMember, RepoPermission, TeamGitHub, TeamKind,
-};
+use rust_team_data::v1::{Bot, GitHubTeam, Person, RepoPermission, TeamGitHub, TeamKind};
 
 use crate::github::api::{
     BranchProtection, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation, RepoTeam,
@@ -261,7 +259,7 @@ pub struct RepoData {
     #[builder(default)]
     bots: Vec<Bot>,
     #[builder(default)]
-    teams: Vec<v1::RepoTeam>,
+    pub teams: Vec<v1::RepoTeam>,
     #[builder(default)]
     pub members: Vec<v1::RepoMember>,
 }
@@ -272,7 +270,14 @@ impl RepoData {
     }
 
     pub fn add_member(&mut self, name: &str, permission: RepoPermission) {
-        self.members.push(RepoMember {
+        self.members.push(v1::RepoMember {
+            name: name.to_string(),
+            permission,
+        });
+    }
+
+    pub fn add_team(&mut self, name: &str, permission: RepoPermission) {
+        self.teams.push(v1::RepoTeam {
             name: name.to_string(),
             permission,
         });

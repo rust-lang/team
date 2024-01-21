@@ -473,3 +473,165 @@ fn repo_remove_member() {
     ]
     "#);
 }
+
+#[test]
+fn repo_add_team() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").member("user1", RepoPermission::Write));
+
+    let gh = model.gh_model();
+    model
+        .get_repo("repo1")
+        .add_team("team1", RepoPermission::Triage);
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [
+                    RepoPermissionAssignmentDiff {
+                        collaborator: Team(
+                            "team1",
+                        ),
+                        diff: Create(
+                            Triage,
+                        ),
+                    },
+                ],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_change_team_permissions() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Triage));
+
+    let gh = model.gh_model();
+    model.get_repo("repo1").teams.last_mut().unwrap().permission = RepoPermission::Admin;
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [
+                    RepoPermissionAssignmentDiff {
+                        collaborator: Team(
+                            "team1",
+                        ),
+                        diff: Update(
+                            Triage,
+                            Admin,
+                        ),
+                    },
+                ],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_remove_team() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Write));
+
+    let gh = model.gh_model();
+    model.get_repo("repo1").teams.clear();
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [
+                    RepoPermissionAssignmentDiff {
+                        collaborator: Team(
+                            "team1",
+                        ),
+                        diff: Delete(
+                            Write,
+                        ),
+                    },
+                ],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
