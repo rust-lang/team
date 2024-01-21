@@ -209,13 +209,56 @@ fn repo_noop() {
 }
 
 #[test]
+fn repo_change_description() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").description("foo".to_string()));
+    let gh = model.gh_model();
+    model.get_repo("repo1").description = "bar".to_string();
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "foo",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "bar",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
 fn repo_create() {
     let mut model = DataModel::default();
     let gh = model.gh_model();
 
     model.create_repo(
         RepoData::new("repo1")
-            .description(Some("foo".to_string()))
+            .description("foo".to_string())
             .member("user1", RepoPermission::Write)
             .team("team1", RepoPermission::Triage),
     );
@@ -265,7 +308,6 @@ fn repo_add_member() {
     let mut model = DataModel::default();
     model.create_repo(
         RepoData::new("repo1")
-            .description(Some("foo".to_string()))
             .member("user1", RepoPermission::Write)
             .team("team1", RepoPermission::Triage),
     );
@@ -287,7 +329,7 @@ fn repo_add_member() {
                 settings_diff: (
                     RepoSettings {
                         description: Some(
-                            "foo",
+                            "",
                         ),
                         homepage: None,
                         archived: false,
@@ -295,7 +337,7 @@ fn repo_add_member() {
                     },
                     RepoSettings {
                         description: Some(
-                            "foo",
+                            "",
                         ),
                         homepage: None,
                         archived: false,
@@ -323,11 +365,7 @@ fn repo_add_member() {
 #[test]
 fn repo_change_member_permissions() {
     let mut model = DataModel::default();
-    model.create_repo(
-        RepoData::new("repo1")
-            .description(Some("foo".to_string()))
-            .member("user1", RepoPermission::Write),
-    );
+    model.create_repo(RepoData::new("repo1").member("user1", RepoPermission::Write));
 
     let gh = model.gh_model();
     model
@@ -349,7 +387,7 @@ fn repo_change_member_permissions() {
                 settings_diff: (
                     RepoSettings {
                         description: Some(
-                            "foo",
+                            "",
                         ),
                         homepage: None,
                         archived: false,
@@ -357,7 +395,7 @@ fn repo_change_member_permissions() {
                     },
                     RepoSettings {
                         description: Some(
-                            "foo",
+                            "",
                         ),
                         homepage: None,
                         archived: false,
@@ -386,11 +424,7 @@ fn repo_change_member_permissions() {
 #[test]
 fn repo_remove_member() {
     let mut model = DataModel::default();
-    model.create_repo(
-        RepoData::new("repo1")
-            .description(Some("foo".to_string()))
-            .member("user1", RepoPermission::Write),
-    );
+    model.create_repo(RepoData::new("repo1").member("user1", RepoPermission::Write));
 
     let gh = model.gh_model();
     model.get_repo("repo1").members.clear();
@@ -407,7 +441,7 @@ fn repo_remove_member() {
                 settings_diff: (
                     RepoSettings {
                         description: Some(
-                            "foo",
+                            "",
                         ),
                         homepage: None,
                         archived: false,
@@ -415,7 +449,7 @@ fn repo_remove_member() {
                     },
                     RepoSettings {
                         description: Some(
-                            "foo",
+                            "",
                         ),
                         homepage: None,
                         archived: false,

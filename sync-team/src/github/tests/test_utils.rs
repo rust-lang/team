@@ -116,7 +116,7 @@ impl DataModel {
                     node_id: repos.len().to_string(),
                     name: repo.name.clone(),
                     org: DEFAULT_ORG.to_string(),
-                    description: repo.description.clone(),
+                    description: Some(repo.description.clone()),
                     homepage: None,
                     archived: false,
                     allow_auto_merge: None,
@@ -257,7 +257,7 @@ impl TeamDataBuilder {
 pub struct RepoData {
     name: String,
     #[builder(default)]
-    description: Option<String>,
+    pub description: String,
     #[builder(default)]
     bots: Vec<Bot>,
     #[builder(default)]
@@ -289,7 +289,7 @@ impl RepoData {
         v1::Repo {
             org: DEFAULT_ORG.to_string(),
             name: name.clone(),
-            description: description.unwrap_or_default(),
+            description,
             homepage: None,
             bots,
             teams: teams.clone(),
