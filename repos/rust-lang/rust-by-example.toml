@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "rust-by-example"
+description = "Learn Rust with examples (Live code editor included)"
+bots = ["rustbot"]
+
+[access.teams]
+wg-rust-by-example = "write"
