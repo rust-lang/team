@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "hashbrown"
+description = "Rust port of Google's SwissTable hash map"
+bots = ["bors"]
+
+[access.teams]
+libs = "write"
+libs-contributors = "write"
+
+[[branch-protections]]
+pattern = "master"
