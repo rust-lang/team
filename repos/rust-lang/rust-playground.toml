@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "rust-playground"
+description = "The Rust Playground"
+bots = []
+
+[access.teams]
+infra = "maintain"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = []
+required-approvals = 0
