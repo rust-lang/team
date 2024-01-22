@@ -1,0 +1,20 @@
+org = "rust-lang"
+name = "www.rust-lang.org"
+description = "The home of the Rust website"
+bots = ["rustbot"]
+
+[access.teams]
+website = "write"
+
+[access.individuals]
+Manishearth = "admin"
+
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
+
+[[branch-protections]]
+pattern = "deploy"
+
+[[branch-protections]]
+pattern = "try"
