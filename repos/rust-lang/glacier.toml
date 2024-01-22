@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "glacier"
+description = "A big 'ol pile of ICE."
+bots = []
+
+[access.teams]
+wg-triage = "write"
