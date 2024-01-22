@@ -2,7 +2,7 @@ name = "community-survey"
 subteam-of = "community"
 
 [people]
-leads = ["rylev"]
+leads = ["Kobzol", "apiraino"]
 members = ["rylev", "graciegregory", "Kobzol", "apiraino"]
 alumni = [
     "Manishearth",
