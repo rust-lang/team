@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "git2-rs"
+description = "libgit2 bindings for Rust"
+bots = []
+
+[access.teams]
+cargo = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["Success gate"]
+required-approvals = 0
