@@ -1,0 +1,18 @@
+org = "rust-lang"
+name = "www.rust-lang.org"
+description = "The home of the Rust website"
+homepage = "https://www.rust-lang.org"
+bots = ["rustbot"]
+
+[access.teams]
+# Admin is needed for integrating with external services, e.g. Pontoon
+website = "admin"
+
+[[branch-protections]]
+pattern = "master"
+pr-required = false
+
+[[branch-protections]]
+pattern = "deploy"
+pr-required = false
+allowed-merge-teams = ["website"]
