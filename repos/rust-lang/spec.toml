@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "spec"
+description = "The Rust specification"
+bots = []
+
+[access.teams]
+spec = "write"
