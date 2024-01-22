@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "mdBook"
+description = "Create book from markdown files. Like Gitbook but implemented in Rust"
+bots = ["rustbot"]
+
+[access.teams]
+devtools = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["Success gate"]
+required-approvals = 0
