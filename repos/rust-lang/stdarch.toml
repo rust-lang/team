@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "stdarch"
+description = "Rust's standard library vendor-specific APIs and run-time feature detection"
+bots = ["rustbot"]
+
+[access.teams]
+libs = "write"
+
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
