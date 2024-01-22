@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "wg-debugging"
+description = "Work on debugging Rust code, under the compiler team."
+bots = []
+
+[access.teams]
+wg-debugging = "write"
