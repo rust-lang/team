@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "async-book"
+description = "Asynchronous Programming in Rust"
+bots = []
+
+[access.teams]
+wg-async = "write"
