@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "const-eval"
+description = "home for proposals in and around compile-time function evaluation"
+bots = []
+
+[access.teams]
+wg-const-eval = "write"
