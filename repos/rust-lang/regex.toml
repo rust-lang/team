@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "regex"
+description = "An implementation of regular expressions for Rust. This implementation uses finite automata and guarantees linear time matching on all inputs."
+bots = []
+
+[access.teams]
+regex = "maintain"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = []
+required-approvals = 0
