@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "release-team"
+description = "This repository contains all the documents related to the Rust release team."
+bots = []
+
+[access.teams]
+release = "write"
