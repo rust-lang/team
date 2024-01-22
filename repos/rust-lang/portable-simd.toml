@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "portable-simd"
+description = "The testing ground for the future of portable SIMD in Rust"
+bots = []
+
+[access.teams]
+project-portable-simd = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["x86-tests"]
