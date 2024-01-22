@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "rustc-rayon"
+description = "Rayon: A data parallelism library for Rust"
+bots = []
+
+[access.teams]
+compiler = "write"
+compiler-contributors = "write"
