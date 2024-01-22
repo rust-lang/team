@@ -24,7 +24,7 @@ impl Data {
             config: load_file(Path::new("config.toml"))?,
         };
 
-        data.load_dir("repos", true, |this, org, repo: Repo| {
+        data.load_dir("repos", true, |this, org, repo: Repo, path: &Path| {
             if repo.org != org {
                 bail!(
                     "repo '{}' is located in the '{}' org directory but its org is '{}'",
@@ -33,24 +33,31 @@ impl Data {
                     repo.org
                 )
             }
+            if repo.name != path.file_stem().unwrap().to_str().unwrap() {
+                bail!(
+                    "repo '{}' is located in file '{}', please ensure that the name matches",
+                    repo.name,
+                    path.file_name().unwrap().to_str().unwrap()
+                )
+            }
 
             this.repos
                 .insert((repo.org.clone(), repo.name.clone()), repo);
             Ok(())
         })?;
 
-        data.load_dir("people", false, |this, _dir, person: Person| {
+        data.load_dir("people", false, |this, _dir, person: Person, _path| {
             person.validate()?;
             this.people.insert(person.github().to_string(), person);
             Ok(())
         })?;
 
-        data.load_dir("teams", false, |this, _dir, team: Team| {
+        data.load_dir("teams", false, |this, _dir, team: Team, _path| {
             this.teams.insert(team.name().to_string(), team);
             Ok(())
         })?;
 
-        data.load_dir("teams/archive", false, |this, _dir, team: Team| {
+        data.load_dir("teams/archive", false, |this, _dir, team: Team, _path| {
             this.archived_teams.push(team);
             Ok(())
         })?;
@@ -62,7 +69,7 @@ impl Data {
     where
         P: AsRef<Path>,
         T: DeserializeOwned,
-        F: Fn(&mut Self, &str, T) -> Result<(), Error>,
+        F: Fn(&mut Self, &str, T, &Path) -> Result<(), Error>,
         F: Clone,
     {
         for entry in std::fs::read_dir(&dir).with_context(|| {
@@ -76,7 +83,7 @@ impl Data {
                 fn dir(path: &Path) -> Option<&str> {
                     path.parent()?.file_name()?.to_str()
                 }
-                f(self, dir(&path).unwrap(), load_file(&path)?)?;
+                f(self, dir(&path).unwrap(), load_file(&path)?, &path)?;
             }
         }
 
