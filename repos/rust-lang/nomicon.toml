@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "nomicon"
+description = "The Dark Arts of Advanced and Unsafe Rust Programming"
+bots = []
+
+[access.teams]
+lang-docs = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["test"]
