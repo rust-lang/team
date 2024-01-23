@@ -8,4 +8,4 @@ project-portable-simd = "write"
 
 [[branch-protections]]
 pattern = "master"
-ci-checks = ["x86-tests"]
+required-approvals = 0
