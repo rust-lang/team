@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "generate-manifest-list"
+description = "Creates a list of manifests on static.rust-lang.org"
+bots = []
+
+[access.teams]
+infra = "write"
