@@ -45,6 +45,7 @@ impl<'a> Generator<'a> {
                     ci_checks: b.ci_checks.clone(),
                     dismiss_stale_review: b.dismiss_stale_review,
                     required_approvals: b.required_approvals.unwrap_or(1),
+                    allowed_merge_teams: b.allowed_merge_teams.clone(),
                 })
                 .collect();
             let repo = v1::Repo {

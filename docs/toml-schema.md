@@ -306,4 +306,9 @@ dismiss-stale-review = false
 # This option is only relevant if bors is not used.
 # (optional - default `1`)
 required-approvals = 1
+# Which GitHub teams have access to push/merge to this branch.
+# If unspecified, all teams/contributors with write or higher access
+# can push/merge to the branch.
+# (optional)
+allowed-merge-teams = ["awesome-team"]
 ```
