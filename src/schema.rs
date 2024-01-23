@@ -763,7 +763,7 @@ pub(crate) struct RepoAccess {
     pub individuals: HashMap<String, RepoPermission>,
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde_derive::Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) enum RepoPermission {
     Triage,
