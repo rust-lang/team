@@ -14,11 +14,32 @@ const USER_AGENT: &str = "https://github.com/rust-lang/team (infra@rust-lang.org
 use data::Data;
 use schema::{Email, Team, TeamKind};
 
+use crate::schema::RepoPermission;
 use anyhow::{bail, format_err, Error};
 use log::{error, info, warn};
 use std::collections::{BTreeMap, HashMap};
 use std::path::PathBuf;
+use std::str::FromStr;
 use structopt::StructOpt;
+
+enum DumpIndividuaAccessGroupBy {
+    Person,
+    Repo,
+}
+
+impl FromStr for DumpIndividuaAccessGroupBy {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "person" => Ok(Self::Person),
+            "repo" => Ok(Self::Repo),
+            _ => Err(format!(
+                "Invalid group by mode {s}. Valid modes are 'person' or 'repo'"
+            )),
+        }
+    }
+}
 
 #[derive(structopt::StructOpt)]
 #[structopt(name = "team", about = "manage the rust team members")]
@@ -82,6 +103,14 @@ enum Cli {
         help = "print all the people with a permission"
     )]
     DumpPermission { name: String },
+    #[structopt(
+        name = "dump-individual-access",
+        help = "print all the people with an individual access to a repository"
+    )]
+    DumpIndividuaAccess {
+        #[structopt(default_value = "repo", long)]
+        group_by: DumpIndividuaAccessGroupBy,
+    },
     #[structopt(name = "encrypt-email", help = "encrypt an email address")]
     EncryptEmail,
     #[structopt(name = "decrypt-email", help = "decrypt an email address")]
@@ -407,6 +436,42 @@ fn run() -> Result<(), Error> {
             allowed.sort_unstable();
             for github_username in &allowed {
                 println!("{}", github_username);
+            }
+        }
+        Cli::DumpIndividuaAccess { group_by } => {
+            // user -> (repo, access)
+            let mut users: HashMap<String, Vec<(String, RepoPermission)>> = HashMap::default();
+            for repo in data.repos() {
+                let repo_name = format!("{}/{}", repo.org, repo.name);
+                for (user, access) in &repo.access.individuals {
+                    users
+                        .entry(user.clone())
+                        .or_default()
+                        .push((repo_name.clone(), access.clone()));
+                }
+            }
+            let output: HashMap<String, Vec<(String, RepoPermission)>> = match group_by {
+                DumpIndividuaAccessGroupBy::Person => users,
+                DumpIndividuaAccessGroupBy::Repo => {
+                    let mut repos: HashMap<String, Vec<(String, RepoPermission)>> = HashMap::new();
+                    for (user, accesses) in users {
+                        for (repo, access) in accesses {
+                            repos.entry(repo).or_default().push((user.clone(), access));
+                        }
+                    }
+                    repos
+                }
+            };
+            let mut output = output.into_iter().collect::<Vec<_>>();
+            output.sort_unstable_by_key(|(key, _)| key.clone());
+            for (_, values) in output.iter_mut() {
+                values.sort_unstable_by_key(|(name, _)| name.clone());
+            }
+            for (key, values) in output {
+                println!("{key}");
+                for (name, permission) in values {
+                    println!("\t {name}: {permission:?}");
+                }
             }
         }
         Cli::EncryptEmail => {
