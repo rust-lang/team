@@ -2,7 +2,6 @@ org = 'rust-lang'
 name = 'libc'
 description = 'Raw bindings to platform APIs for Rust'
 bots = [
-    'bors',
     'rustbot',
 ]
 
