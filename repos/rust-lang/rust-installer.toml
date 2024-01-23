@@ -1,0 +1,10 @@
+org = "rust-lang"
+name = "rust-installer"
+description = "The Bourne shell installer used by Rust and Cargo"
+bots = []
+
+[access.teams]
+infra = "write"
+
+[[branch-protections]]
+pattern = "master"
