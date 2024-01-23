@@ -27,3 +27,4 @@ orgs = ["rust-lang"]
 
 [permissions]
 bors.rust.review = true
+bors.project-stable-mir.review = true
