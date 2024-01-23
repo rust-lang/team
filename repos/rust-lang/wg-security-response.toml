@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "wg-security-response"
+description = "Documentation for the Rust Security Response WG"
+bots = []
+
+[access.teams]
+security = "write"
