@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "miri-test-libstd"
+description = "Testing the Rust standard library with Miri, continuously"
+bots = []
+
+[access.teams]
+miri = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["Success"]
+required-approvals = 0
