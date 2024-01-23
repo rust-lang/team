@@ -1,0 +1,18 @@
+org = "rust-lang"
+name = "promote-release"
+description = "Tooling to publish Rust releases."
+bots = []
+
+[access.teams]
+infra = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "Local release (beta)",
+    "Local release (nightly)",
+    "Local release (stable)",
+    "Build Docker image",
+    "Test",
+]
+required-approvals = 0
