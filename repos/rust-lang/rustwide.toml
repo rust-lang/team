@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "rustwide"
+description = "Execute your code on the Rust ecosystem."
+bots = []
+
+[access.teams]
+infra = "write"
