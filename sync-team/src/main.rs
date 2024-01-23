@@ -9,7 +9,6 @@ use crate::team_api::TeamApi;
 use crate::zulip::SyncZulip;
 use anyhow::Context;
 use log::{error, info, warn};
-use std::rc::Rc;
 
 const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun", "zulip"];
 const USER_AGENT: &str = "rust-lang teams sync (https://github.com/rust-lang/sync-team)";
@@ -85,13 +84,13 @@ fn app() -> anyhow::Result<()> {
                 let token = get_env("GITHUB_TOKEN")?;
                 let client =
                     HttpClient::from_url_and_token("https://api.github.com/".to_string(), token)?;
-                let gh_read = Rc::new(GitHubApiRead::from_client(client.clone())?);
+                let gh_read = Box::new(GitHubApiRead::from_client(client.clone())?);
                 let teams = team_api.get_teams()?;
                 let repos = team_api.get_repos()?;
-                let diff = create_diff(gh_read.clone(), teams, repos)?;
+                let diff = create_diff(gh_read, teams, repos)?;
                 info!("{}", diff);
                 if !only_print_plan {
-                    let gh_write = GitHubWrite::new(client, gh_read, dry_run)?;
+                    let gh_write = GitHubWrite::new(client, dry_run)?;
                     diff.apply(&gh_write)?;
                 }
             }

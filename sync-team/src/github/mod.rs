@@ -8,7 +8,6 @@ use log::debug;
 use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write;
-use std::rc::Rc;
 
 pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
 
@@ -16,7 +15,7 @@ static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
 static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
 
 pub(crate) fn create_diff(
-    github: Rc<dyn GithubRead>,
+    github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
     repos: Vec<rust_team_data::v1::Repo>,
 ) -> anyhow::Result<Diff> {
@@ -25,7 +24,7 @@ pub(crate) fn create_diff(
 }
 
 struct SyncGitHub {
-    github: Rc<dyn GithubRead>,
+    github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
     repos: Vec<rust_team_data::v1::Repo>,
     usernames_cache: HashMap<usize, String>,
@@ -34,7 +33,7 @@ struct SyncGitHub {
 
 impl SyncGitHub {
     pub(crate) fn new(
-        github: Rc<dyn GithubRead>,
+        github: Box<dyn GithubRead>,
         teams: Vec<rust_team_data::v1::Team>,
         repos: Vec<rust_team_data::v1::Repo>,
     ) -> anyhow::Result<Self> {
