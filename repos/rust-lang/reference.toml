@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "reference"
+description = "The Rust Reference"
+bots = ["rustbot"]
+
+[access.teams]
+lang-docs = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["Test"]
