@@ -102,6 +102,17 @@ cargo run dump-website
 
 The website will automatically load new teams added here, however they cannot be translated unless `tools.ftl` is also updated.
 
+You can also print a list of users with individual access to repositories
+
+```
+# Group the accesses by repository
+cargo run dump-individual-access --group-mode repo
+
+# Group the accesses by contributor
+cargo run dump-individual-access --group-mode person
+```
+
+
 ### Building the static API
 
 You can build locally the content of `https://team-api.infra.rust-lang.org/v1/`
