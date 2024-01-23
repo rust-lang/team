@@ -9,3 +9,4 @@ foo = "admin"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["CI"]
+allowed-merge-teams = ["foo"]

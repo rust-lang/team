@@ -778,16 +778,41 @@ fn validate_repos(data: &Data, errors: &mut Vec<String>) {
 
 /// Validate that branch protections make sense in combination with used bots.
 fn validate_branch_protections(data: &Data, errors: &mut Vec<String>) {
+    let github_teams = data.github_teams();
+
     wrapper(data.repos(), errors, |repo, _| {
         let bors_used = repo.bots.iter().any(|b| matches!(b, Bot::Bors));
         for protection in &repo.branch_protections {
-            if bors_used && protection.required_approvals.is_some() {
-                bail!(
-                    r#"repo '{}' uses bors and its branch protection for {} uses the `required-approvals` attribute;
+            for team in &protection.allowed_merge_teams {
+                let key = (repo.org.clone(), team.clone());
+                if !github_teams.contains(&key) {
+                    bail!(
+                        r#"repo '{}' uses a branch protection for {} that mentions the '{}' github team;
+but that team does not seem to exist"#,
+                        repo.name,
+                        protection.pattern,
+                        team
+                    );
+                }
+            }
+
+            if bors_used {
+                if protection.required_approvals.is_some() {
+                    bail!(
+                        r#"repo '{}' uses bors and its branch protection for {} uses the `required-approvals` attribute;
 please remove the attribute when using bors"#,
-                    repo.name,
-                    protection.pattern,
-                );
+                        repo.name,
+                        protection.pattern,
+                    );
+                }
+                if !protection.allowed_merge_teams.is_empty() {
+                    bail!(
+                        r#"repo '{}' uses bors and its branch protection for {} uses the `allowed-merge-teams` attribute;
+please remove the attribute when using bors"#,
+                        repo.name,
+                        protection.pattern,
+                    );
+                }
             }
         }
         Ok(())

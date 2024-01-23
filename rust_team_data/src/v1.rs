@@ -196,6 +196,7 @@ pub struct BranchProtection {
     pub ci_checks: Vec<String>,
     pub dismiss_stale_review: bool,
     pub required_approvals: u32,
+    pub allowed_merge_teams: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
