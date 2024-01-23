@@ -1,0 +1,21 @@
+org = "rust-lang"
+name = "relnotes"
+description = "Generate release notes for \"The Rust Programming Language\""
+bots = []
+
+[access.teams]
+release = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "build (macos-latest, beta)",
+    "build (macos-latest, nightly)",
+    "build (macos-latest, stable)",
+    "build (ubuntu-latest, nightly)",
+    "build (ubuntu-latest, beta)",
+    "build (ubuntu-latest, stable)",
+    "build (windows-latest, beta)",
+    "build (windows-latest, nightly)",
+    "build (windows-latest, stable)",
+]
