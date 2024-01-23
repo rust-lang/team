@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "wg-cargo-std-aware"
+description = "Repo for working on \"std aware cargo\""
+bots = []
+
+[access.teams]
+cargo = "write"
