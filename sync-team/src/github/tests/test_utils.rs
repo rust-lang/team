@@ -101,6 +101,7 @@ impl TeamData {
             alumni: vec![],
             github: (!gh_teams.is_empty()).then(|| TeamGitHub { teams: gh_teams }),
             website_data: None,
+            roles: vec![],
             discord: vec![],
         }
     }

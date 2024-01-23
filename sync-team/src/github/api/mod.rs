@@ -268,8 +268,8 @@ where
 
 /// An object with a `login` field
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
-struct Login {
-    login: String,
+pub(crate) struct Login {
+    pub(crate) login: String,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Debug, Eq, PartialEq, Copy, Clone)]
@@ -365,8 +365,8 @@ pub(crate) struct UserPushAllowanceActor {
 /// Team that can be allowed to push to a branch in a repo
 #[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
 pub(crate) struct TeamPushAllowanceActor {
-    organization: Login,
-    name: String,
+    pub(crate) organization: Login,
+    pub(crate) name: String,
 }
 
 pub(crate) enum BranchProtectionOp {
