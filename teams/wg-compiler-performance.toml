@@ -29,4 +29,3 @@ repo = "https://github.com/rust-lang/rustc-perf"
 [permissions]
 perf = true
 bors.rust.try = true
-bors.measureme.review = true
