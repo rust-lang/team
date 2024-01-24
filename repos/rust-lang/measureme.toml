@@ -8,8 +8,8 @@ compiler = "write"
 
 [[branch-protections]]
 pattern = "master"
-ci-checks = ["build"]
+ci-checks = ["success"]
 
 [[branch-protections]]
 pattern = "stable"
-ci-checks = ["build"]
+ci-checks = ["success"]
