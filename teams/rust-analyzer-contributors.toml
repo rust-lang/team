@@ -1,0 +1,20 @@
+name = "rust-analyzer-contributors"
+subteam-of = "rust-analyzer"
+
+[people]
+leads = []
+members = [
+    "alibektas",
+    "bjorn3",
+    "davidbarsky",
+    "Nadrieril",
+]
+alumni = []
+
+[website]
+name = "rust-analyzer team contributors"
+description = "Contributing to the rust-analyzer compiler front-end on a regular basis"
+repo = "https://github.com/rust-lang/rust-analyzer"
+
+[[github]]
+orgs = ["rust-lang", "rust-analyzer"]
