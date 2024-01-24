@@ -26,6 +26,9 @@ alumni = [
     "wycats",
 ]
 
+[permissions]
+crates-io-admin = true
+
 [[github]]
 orgs = ["rust-lang", "conduit-rust"]
 

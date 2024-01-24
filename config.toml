@@ -44,6 +44,7 @@ permissions-bors-repos = [
 permissions-bools = [
     "perf",
     "crater",
+    "crates-io-admin",
     "dev-desktop",
     "sync-team-confirmation",
 ]

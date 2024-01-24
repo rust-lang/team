@@ -224,6 +224,8 @@ permissions are available:
 perf = true
 # Grants access to the @craterbot GitHub bot
 crater = true
+# Grants admin access on crates.io
+crates-io-admin = true
 # Grants `@bors r+` rights in the repo `rust-lang/some-repo`
 bors.some-repo.review = true
 # Grants `@bors try` rights in the repo `rust-lang/some-repo`.
