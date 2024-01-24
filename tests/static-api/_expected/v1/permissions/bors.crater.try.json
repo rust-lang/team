@@ -1,4 +1,21 @@
 {
+  "people": [
+    {
+      "github_id": 0,
+      "github": "user-0",
+      "name": "Zeroth user"
+    },
+    {
+      "github_id": 0,
+      "github": "user-1",
+      "name": "First user"
+    },
+    {
+      "github_id": 2,
+      "github": "user-2",
+      "name": "Second user"
+    }
+  ],
   "github_users": [
     "user-0",
     "user-1",
