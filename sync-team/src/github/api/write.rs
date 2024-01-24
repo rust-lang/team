@@ -1,9 +1,6 @@
-use anyhow::Context;
 use log::debug;
 use reqwest::Method;
-use std::rc::Rc;
 
-use crate::github::api::read::GithubRead;
 use crate::github::api::{
     allow_not_found, BranchProtection, BranchProtectionOp, HttpClient, Login, PushAllowanceActor,
     Repo, RepoPermission, Team, TeamPrivacy, TeamPushAllowanceActor, TeamRole,
@@ -14,19 +11,13 @@ use crate::utils::ResponseExt;
 pub(crate) struct GitHubWrite {
     client: HttpClient,
     dry_run: bool,
-    read: Rc<dyn GithubRead>,
 }
 
 impl GitHubWrite {
-    pub(crate) fn new(
-        client: HttpClient,
-        read: Rc<dyn GithubRead>,
-        dry_run: bool,
-    ) -> anyhow::Result<Self> {
+    pub(crate) fn new(client: HttpClient, dry_run: bool) -> anyhow::Result<Self> {
         Ok(Self {
             client: client.clone(),
             dry_run,
-            read,
         })
     }
 
@@ -53,6 +44,38 @@ impl GitHubWrite {
 
         let data: Data = self.client.graphql(query, Params { name })?;
         Ok(data.user.id)
+    }
+
+    fn team_id(&self, org: &str, name: &str) -> anyhow::Result<String> {
+        #[derive(serde::Serialize)]
+        struct Params<'a> {
+            org: &'a str,
+            team: &'a str,
+        }
+        let query = "
+            query($org: String!, $team: String!) {
+                organization(login: $org) {
+                    team(slug: $team) {
+                        id
+                    }
+                }
+            }
+        ";
+        #[derive(serde::Deserialize)]
+        struct Data {
+            organization: Organization,
+        }
+        #[derive(serde::Deserialize)]
+        struct Organization {
+            team: Team,
+        }
+        #[derive(serde::Deserialize)]
+        struct Team {
+            id: String,
+        }
+
+        let data: Data = self.client.graphql(query, Params { org, team: name })?;
+        Ok(data.organization.team.id)
     }
 
     /// Create a team in a org
@@ -377,12 +400,7 @@ impl GitHubWrite {
                 PushAllowanceActor::Team(TeamPushAllowanceActor {
                     organization: Login { login: org },
                     name,
-                }) => push_actor_ids.push(
-                    self.read
-                        .team(org, name)?
-                        .with_context(|| format!("could not find team: {org}/{name}"))?
-                        .name,
-                ),
+                }) => push_actor_ids.push(self.team_id(org, name)?),
             }
         }
 

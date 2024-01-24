@@ -3,12 +3,11 @@ mod api;
 mod tests;
 
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
-use crate::github::api::{GithubRead, RepoPermission};
+use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission};
 use log::debug;
 use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write;
-use std::rc::Rc;
 
 pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
 
@@ -16,7 +15,7 @@ static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
 static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
 
 pub(crate) fn create_diff(
-    github: Rc<dyn GithubRead>,
+    github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
     repos: Vec<rust_team_data::v1::Repo>,
 ) -> anyhow::Result<Diff> {
@@ -25,7 +24,7 @@ pub(crate) fn create_diff(
 }
 
 struct SyncGitHub {
-    github: Rc<dyn GithubRead>,
+    github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
     repos: Vec<rust_team_data::v1::Repo>,
     usernames_cache: HashMap<usize, String>,
@@ -34,7 +33,7 @@ struct SyncGitHub {
 
 impl SyncGitHub {
     pub(crate) fn new(
-        github: Rc<dyn GithubRead>,
+        github: Box<dyn GithubRead>,
         teams: Vec<rust_team_data::v1::Team>,
         repos: Vec<rust_team_data::v1::Repo>,
     ) -> anyhow::Result<Self> {
@@ -454,7 +453,8 @@ fn construct_branch_protection(
     expected_repo: &rust_team_data::v1::Repo,
     branch_protection: &rust_team_data::v1::BranchProtection,
 ) -> api::BranchProtection {
-    let required_approving_review_count: u8 = if expected_repo.bots.contains(&Bot::Bors) {
+    let uses_bors = expected_repo.bots.contains(&Bot::Bors);
+    let required_approving_review_count: u8 = if uses_bors {
         0
     } else {
         branch_protection
@@ -462,15 +462,24 @@ fn construct_branch_protection(
             .try_into()
             .expect("Too large required approval count")
     };
-    let push_allowances = expected_repo
-        .bots
-        .contains(&Bot::Bors)
-        .then(|| {
-            vec![api::PushAllowanceActor::User(api::UserPushAllowanceActor {
-                login: "bors".to_owned(),
-            })]
+    let mut push_allowances: Vec<PushAllowanceActor> = branch_protection
+        .allowed_merge_teams
+        .iter()
+        .map(|team| {
+            api::PushAllowanceActor::Team(api::TeamPushAllowanceActor {
+                organization: Login {
+                    login: expected_repo.org.clone(),
+                },
+                name: team.to_string(),
+            })
         })
-        .unwrap_or_default();
+        .collect();
+
+    if uses_bors {
+        push_allowances.push(PushAllowanceActor::User(api::UserPushAllowanceActor {
+            login: "bors".to_owned(),
+        }));
+    }
     api::BranchProtection {
         pattern: branch_protection.pattern.clone(),
         is_admin_enforced: true,

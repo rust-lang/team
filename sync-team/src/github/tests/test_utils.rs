@@ -1,5 +1,4 @@
 use std::collections::{HashMap, HashSet};
-use std::rc::Rc;
 
 use derive_builder::Builder;
 use rust_team_data::v1::{GitHubTeam, Person, TeamGitHub, TeamKind};
@@ -66,7 +65,7 @@ impl DataModel {
         let teams = self.teams.iter().map(|r| r.to_data()).collect();
         let repos = vec![];
 
-        let read = Rc::new(github);
+        let read = Box::new(github);
         let sync = SyncGitHub::new(read, teams, repos).expect("Cannot create SyncGitHub");
         sync.diff_teams().expect("Cannot diff teams")
     }
@@ -101,6 +100,7 @@ impl TeamData {
             alumni: vec![],
             github: (!gh_teams.is_empty()).then(|| TeamGitHub { teams: gh_teams }),
             website_data: None,
+            roles: vec![],
             discord: vec![],
         }
     }
