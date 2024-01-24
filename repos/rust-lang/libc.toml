@@ -11,6 +11,7 @@ crate-maintainers = 'maintain'
 [[branch-protections]]
 pattern = 'main'
 ci-checks = ['success']
+required-approvals = 0
 
 [[branch-protections]]
 pattern = 'libc-0.2'
