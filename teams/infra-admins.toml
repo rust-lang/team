@@ -14,7 +14,7 @@ alumni = [
 ]
 
 [[github]]
-orgs = ["rust-lang-deprecated"]
+orgs = ["rust-lang-deprecated", "rust-lang"]
 
 [permissions]
 sync-team-confirmation = true

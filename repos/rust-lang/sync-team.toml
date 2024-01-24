@@ -9,3 +9,4 @@ infra = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["CI"]
+allowed-merge-teams = ["infra-admins"]
