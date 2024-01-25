@@ -5,8 +5,3 @@ bots = []
 
 [access.teams]
 regex = "maintain"
-
-[[branch-protections]]
-pattern = "master"
-ci-checks = []
-required-approvals = 0
