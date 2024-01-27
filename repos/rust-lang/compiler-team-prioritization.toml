@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "compiler-team-prioritization"
+description = "Home repository for the compiler team \"prioritization group\""
+bots = []
+
+[access.teams]
+wg-prioritization = "maintain"
