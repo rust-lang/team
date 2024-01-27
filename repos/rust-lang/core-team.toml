@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "core-team"
+description = "A place to house minutes and other documents related to the core team."
+bots = []
+
+[access.teams]
+core = "maintain"
