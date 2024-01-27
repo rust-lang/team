@@ -16,3 +16,4 @@ required-approvals = 0
 [[branch-protections]]
 pattern = 'libc-0.2'
 ci-checks = ['success']
+required-approvals = 0
