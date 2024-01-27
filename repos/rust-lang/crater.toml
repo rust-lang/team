@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "crater"
+description = "Run experiments across parts of the Rust ecosystem!"
+bots = ["bors", "highfive"]
+
+[access.teams]
+infra = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["homu"]
