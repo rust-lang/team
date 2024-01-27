@@ -4,4 +4,4 @@ description = "Home of the Allocators working group: Paving a path for a standar
 bots = []
 
 [access.teams]
-wg-allocators = "write"
+wg-allocators = "maintain"
