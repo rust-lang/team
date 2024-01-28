@@ -1,0 +1,10 @@
+org = "rust-lang"
+name = "packed_simd"
+description = "Portable Packed SIMD Vectors for Rust standard library"
+bots = []
+
+[access.teams]
+libs-contributors = "write"
+libs-api = "write"
+libs = "write"
+project-portable-simd = "write"
