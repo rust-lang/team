@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "moderation-team"
+description = "Home of the Rust Moderation team."
+bots = []
+
+[access.teams]
+mods = "write"
