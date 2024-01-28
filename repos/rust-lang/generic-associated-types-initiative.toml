@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "generic-associated-types-initiative"
+description = "Generic Associated Types lang team initiative"
+bots = []
+
+[access.teams]
+initiative-generic-associated-types = "write"
