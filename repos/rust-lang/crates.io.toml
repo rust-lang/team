@@ -1,0 +1,21 @@
+org = "rust-lang"
+name = "crates.io"
+description = "The Rust package registry"
+bots = ["bors"]
+
+[access.teams]
+crates-io = "write"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = [
+    "Backend / Lint",
+    "Backend / Test",
+    "Frontend / Lint",
+    "Frontend / Test",
+    "Backend / cargo-deny",
+]
+required-approvals = 0
+allowed-merge-teams = [
+    "crates-io",
+]
