@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "polonius"
+description = "Defines the Rust borrow checker."
+bots = []
+
+[access.teams]
+wg-polonius = "write"
