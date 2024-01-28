@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "pin-utils"
+description = "Utilities for pinning"
+bots = []
+
+[access.teams]
+wg-async = "write"
