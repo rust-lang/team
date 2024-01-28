@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "initiative-template"
+description = "A template for lang-team initiatives"
+bots = []
+
+[access.teams]
+lang = "maintain"
