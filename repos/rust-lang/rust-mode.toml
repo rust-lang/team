@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "rust-mode"
+description = "Emacs configuration for Rust"
+bots = []
+
+[access.teams]
+emacs = "write"
