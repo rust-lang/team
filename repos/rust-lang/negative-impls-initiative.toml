@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "negative-impls-initiative"
+description = "Lang team negative impls initiative"
+bots = []
+
+[access.teams]
+initiative-negative-impls = "write"
