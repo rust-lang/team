@@ -6,6 +6,11 @@ bots = ["rustbot"]
 [access.teams]
 devtools = "write"
 
+[access.individuals]
+# Dylan-DPC is maintaining mdbook along with ehuss. Planning to add a team
+# soon, and then this can be removed.
+Dylan-DPC = "write"
+
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["Success gate"]
