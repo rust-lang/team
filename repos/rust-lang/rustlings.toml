@@ -1,0 +1,10 @@
+org = "rust-lang"
+name = "rustlings"
+description = ":crab: Small exercises to get you used to reading and writing Rust code!"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+# This repository probably needs a separate team?
+shadows-withal = "write"
