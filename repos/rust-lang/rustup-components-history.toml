@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "rustup-components-history"
+description = "Rustup package status history"
+bots = []
+
+[access.teams]
+infra = "write"
