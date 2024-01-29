@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "async-fundamentals-initiative"
+description = ""
+bots = []
+
+[access.teams]
+wg-async = "maintain"
+
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
