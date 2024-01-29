@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "project-portable-simd"
+description = "Portable SIMD project group"
+bots = []
+
+[access.teams]
+project-portable-simd = "maintain"
