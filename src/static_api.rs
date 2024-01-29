@@ -290,9 +290,23 @@ impl<'a> Generator<'a> {
             github_users.sort();
             github_ids.sort_unstable();
             discord_ids.sort_unstable();
+
+            let mut people = allowed
+                .iter()
+                .map(|p| v1::PermissionPerson {
+                    name: p.name().into(),
+                    github: p.github().into(),
+                    github_id: p.github_id(),
+                })
+                .collect::<Vec<_>>();
+
+            // The sort operation here is necessary to ensure a stable output for the snapshot tests.
+            people.sort();
+
             self.add(
                 &format!("v1/permissions/{}.json", perm.replace('-', "_")),
                 &v1::Permission {
+                    people,
                     github_users,
                     github_ids,
                     discord_ids,

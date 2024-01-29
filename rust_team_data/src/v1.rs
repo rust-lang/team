@@ -125,9 +125,17 @@ pub struct ZulipGroups {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Permission {
+    pub people: Vec<PermissionPerson>,
     pub github_users: Vec<String>,
     pub github_ids: Vec<usize>,
     pub discord_ids: Vec<usize>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
+pub struct PermissionPerson {
+    pub github_id: usize,
+    pub github: String,
+    pub name: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
