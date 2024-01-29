@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "api-guidelines"
+description = "Rust API guidelines"
+bots = []
+
+[access.teams]
+libs-api = "write"
+libs = "write"
