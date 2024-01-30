@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "rust-enhanced"
+description = "The official Sublime Text 4 package for the Rust Programming Language"
+bots = []
+
+[access.teams]
+devtools = "write"
