@@ -59,12 +59,12 @@ pub(crate) enum Email<'a> {
 pub(crate) struct Person {
     name: String,
     github: String,
-    github_id: usize,
-    zulip_id: Option<usize>,
+    github_id: u64,
+    zulip_id: Option<u64>,
     irc: Option<String>,
     #[serde(default)]
     email: EmailField,
-    discord_id: Option<usize>,
+    discord_id: Option<u64>,
     #[serde(default)]
     permissions: Permissions,
 }
@@ -78,11 +78,11 @@ impl Person {
         &self.github
     }
 
-    pub(crate) fn github_id(&self) -> usize {
+    pub(crate) fn github_id(&self) -> u64 {
         self.github_id
     }
 
-    pub(crate) fn zulip_id(&self) -> Option<usize> {
+    pub(crate) fn zulip_id(&self) -> Option<u64> {
         self.zulip_id
     }
 
@@ -104,7 +104,7 @@ impl Person {
         }
     }
 
-    pub(crate) fn discord_id(&self) -> Option<usize> {
+    pub(crate) fn discord_id(&self) -> Option<u64> {
         self.discord_id
     }
 
@@ -449,7 +449,7 @@ impl Team {
         Ok(result)
     }
 
-    pub(crate) fn discord_ids(&self, data: &Data) -> Result<Vec<usize>, Error> {
+    pub(crate) fn discord_ids(&self, data: &Data) -> Result<Vec<u64>, Error> {
         Ok(self
             .members(data)?
             .iter()
@@ -492,14 +492,14 @@ impl DiscordRole {
 
 #[derive(Eq, PartialEq, Debug)]
 pub(crate) struct DiscordTeam {
-    pub(crate) members: Vec<usize>,
+    pub(crate) members: Vec<u64>,
 }
 
 #[derive(Eq, PartialEq)]
 pub(crate) struct GitHubTeam<'a> {
     pub(crate) org: &'a str,
     pub(crate) name: &'a str,
-    pub(crate) members: Vec<(&'a str, usize)>,
+    pub(crate) members: Vec<(&'a str, u64)>,
 }
 
 impl std::cmp::PartialOrd for GitHubTeam<'_> {
@@ -673,7 +673,7 @@ pub(crate) struct RawZulipGroup {
     #[serde(default)]
     pub(crate) extra_people: Vec<String>,
     #[serde(default)]
-    pub(crate) extra_zulip_ids: Vec<usize>,
+    pub(crate) extra_zulip_ids: Vec<u64>,
     #[serde(default)]
     pub(crate) extra_teams: Vec<String>,
     #[serde(default)]
@@ -720,8 +720,8 @@ impl ZulipGroup {
 
 #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub(crate) enum ZulipGroupMember {
-    MemberWithId { github: String, zulip_id: usize },
-    JustId(usize),
+    MemberWithId { github: String, zulip_id: u64 },
+    JustId(u64),
     MemberWithoutId { github: String },
 }
 

@@ -10,7 +10,7 @@ static TOKEN_VAR: &str = "GITHUB_TOKEN";
 
 #[derive(serde::Deserialize)]
 pub(crate) struct User {
-    pub(crate) id: usize,
+    pub(crate) id: u64,
     pub(crate) login: String,
     pub(crate) name: Option<String>,
     pub(crate) email: Option<String>,
@@ -114,11 +114,11 @@ impl GitHubApi {
             .json()?)
     }
 
-    pub(crate) fn usernames(&self, ids: &[usize]) -> Result<HashMap<usize, String>, Error> {
+    pub(crate) fn usernames(&self, ids: &[u64]) -> Result<HashMap<u64, String>, Error> {
         #[derive(serde::Deserialize)]
         #[serde(rename_all = "camelCase")]
         struct Usernames {
-            database_id: usize,
+            database_id: u64,
             login: String,
         }
         #[derive(serde::Serialize)]
@@ -248,8 +248,8 @@ impl GitHubApi {
     }
 }
 
-fn user_node_id(id: usize) -> String {
-    base64::encode(format!("04:User{}", id))
+fn user_node_id(id: u64) -> String {
+    base64::encode(format!("04:User{id}"))
 }
 
 #[derive(serde::Deserialize, Debug)]

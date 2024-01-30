@@ -151,7 +151,7 @@ fn run() -> Result<(), Error> {
             struct PersonToAdd<'a> {
                 name: &'a str,
                 github: &'a str,
-                github_id: usize,
+                github_id: u64,
                 #[serde(skip_serializing_if = "Option::is_none")]
                 email: Option<&'a str>,
             }
@@ -518,7 +518,7 @@ fn dump_team_members(
         }
         println!(
             "{}{}{}",
-            "\t".repeat(tab_offset as usize),
+            "\t".repeat(usize::from(tab_offset)),
             member,
             if leads.contains(member) {
                 " (lead)"

@@ -87,7 +87,7 @@ struct ZulipUsers {
 /// A single Zulip user
 #[derive(Clone, Deserialize, PartialEq, Eq, Hash)]
 pub(crate) struct ZulipUser {
-    pub(crate) user_id: usize,
+    pub(crate) user_id: u64,
     #[serde(rename = "full_name")]
     pub(crate) name: String,
 }
