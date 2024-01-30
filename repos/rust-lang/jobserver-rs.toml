@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "jobserver-rs"
+description = ""
+bots = []
+
+[access.teams]
+cargo = "write"
+compiler = "write"
