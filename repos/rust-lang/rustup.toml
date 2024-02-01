@@ -8,3 +8,4 @@ rustup = "maintain"
 
 [[branch-protections]]
 pattern = "master"
+ci-checks = ["conclusion"]
