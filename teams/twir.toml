@@ -1,4 +1,5 @@
 name = "twir"
+subteam-of = "launching-pad"
 
 [people]
 leads = ["nellshamrell"]

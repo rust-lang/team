@@ -185,15 +185,6 @@ fn validate_subteam_of(data: &Data, errors: &mut Vec<String>) {
                 );
             };
 
-            if !matches!(team.kind(), TeamKind::Team) && parent.subteam_of().is_some() {
-                bail!(
-                    "{} `{}` can't be a subteam of a subteam (`{}`)",
-                    team.kind(),
-                    team.name(),
-                    parent.name(),
-                );
-            }
-
             team = parent;
         }
         Ok(())

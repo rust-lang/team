@@ -1,5 +1,6 @@
 name = "wg-triage"
 kind = "working-group"
+subteam-of = "launching-pad"
 
 [people]
 leads = ["Dylan-DPC"]

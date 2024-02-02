@@ -1,0 +1,7 @@
+name = "launching-pad"
+
+[people]
+# This is an "umbrella" team, and thus does not have any members.
+leads = []
+members = []
+alumni = []
