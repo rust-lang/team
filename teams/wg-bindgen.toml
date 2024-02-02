@@ -7,13 +7,17 @@ leads = ["emilio", "fitzgen"]
 members = [
     "emilio",
     "fitzgen",
+    "pvdrz",
+    "tshepang",
+    "kulp",
+    "ojeda",
 ]
 alumni = []
 
 [website]
 name = "Bindgen working group"
 description = "Developing tools for generating FFI bindings"
-repo = "https://github.com/rust-lang-nursery/rust-bindgen"
+repo = "https://github.com/rust-lang/rust-bindgen"
 discord-invite = "https://discord.gg/kgujzMR"
 discord-name = "#wg-bindgen"
 
