@@ -32,7 +32,7 @@ impl ZulipApi {
         &self,
         user_group_name: &str,
         description: &str,
-        member_ids: &[usize],
+        member_ids: &[u64],
     ) -> anyhow::Result<()> {
         log::info!(
             "creating Zulip user group '{}' with description '{}' and member ids: {:?}",
@@ -98,9 +98,9 @@ impl ZulipApi {
 
     pub(crate) fn update_user_group_members(
         &self,
-        user_group_id: usize,
-        add_ids: &[usize],
-        remove_ids: &[usize],
+        user_group_id: u64,
+        add_ids: &[u64],
+        remove_ids: &[u64],
     ) -> anyhow::Result<()> {
         if add_ids.is_empty() && remove_ids.is_empty() {
             log::debug!(
@@ -164,7 +164,7 @@ impl ZulipApi {
 }
 
 /// Serialize a slice of numbers as a JSON array
-fn serialize_as_array(items: &[usize]) -> String {
+fn serialize_as_array(items: &[u64]) -> String {
     let items = items
         .iter()
         .map(|id| id.to_string())
@@ -185,7 +185,7 @@ pub(crate) struct ZulipUser {
     // Note: users may hide their emails
     #[serde(rename = "delivery_email")]
     pub(crate) email: Option<String>,
-    pub(crate) user_id: usize,
+    pub(crate) user_id: u64,
 }
 
 /// A collection of Zulip user groups
@@ -197,7 +197,7 @@ struct ZulipUserGroups {
 /// A single Zulip user group
 #[derive(Deserialize)]
 pub(crate) struct ZulipUserGroup {
-    pub(crate) id: usize,
+    pub(crate) id: u64,
     pub(crate) name: String,
-    pub(crate) members: Vec<usize>,
+    pub(crate) members: Vec<u64>,
 }

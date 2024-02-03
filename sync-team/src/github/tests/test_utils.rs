@@ -22,8 +22,8 @@ pub struct DataModel {
 }
 
 impl DataModel {
-    pub fn add_user(&mut self, name: &str) -> usize {
-        let github_id = self.people.len();
+    pub fn add_user(&mut self, name: &str) -> u64 {
+        let github_id = self.people.len() as u64;
         self.people.push(Person {
             name: name.to_string(),
             email: Some(format!("{name}@rust.com")),
@@ -46,7 +46,7 @@ impl DataModel {
                 .into_iter()
                 .enumerate()
                 .map(|(id, team)| api::Team {
-                    id: Some(id),
+                    id: Some(id as u64),
                     name: team.name.clone(),
                     description: None,
                     privacy: TeamPrivacy::Closed,
@@ -107,7 +107,7 @@ impl TeamData {
 }
 
 impl TeamDataBuilder {
-    pub fn gh_team(mut self, name: &str, members: &[usize]) -> Self {
+    pub fn gh_team(mut self, name: &str, members: &[u64]) -> Self {
         let mut gh_teams = self.gh_teams.unwrap_or_default();
         gh_teams.push(GitHubTeam {
             org: DEFAULT_ORG.to_string(),
@@ -122,13 +122,13 @@ impl TeamDataBuilder {
 /// Represents the state of GitHub repositories, teams and users.
 #[derive(Default, Clone)]
 pub struct GithubMock {
-    users: HashMap<usize, String>,
-    owners: HashMap<String, Vec<usize>>,
+    users: HashMap<u64, String>,
+    owners: HashMap<String, Vec<u64>>,
     teams: Vec<Team>,
 }
 
 impl GithubRead for GithubMock {
-    fn usernames(&self, ids: &[usize]) -> anyhow::Result<HashMap<usize, String>> {
+    fn usernames(&self, ids: &[u64]) -> anyhow::Result<HashMap<u64, String>> {
         Ok(self
             .users
             .iter()
@@ -137,7 +137,7 @@ impl GithubRead for GithubMock {
             .collect())
     }
 
-    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<usize>> {
+    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<u64>> {
         Ok(self
             .owners
             .get(org)
@@ -159,7 +159,7 @@ impl GithubRead for GithubMock {
         Ok(self.teams.iter().find(|t| t.name == team).cloned())
     }
 
-    fn team_memberships(&self, _team: &Team) -> anyhow::Result<HashMap<usize, TeamMember>> {
+    fn team_memberships(&self, _team: &Team) -> anyhow::Result<HashMap<u64, TeamMember>> {
         todo!()
     }
 

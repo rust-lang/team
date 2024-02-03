@@ -8,7 +8,7 @@ use std::collections::BTreeMap;
 
 pub(crate) struct SyncZulip {
     zulip_controller: ZulipController,
-    user_group_definitions: BTreeMap<String, Vec<usize>>,
+    user_group_definitions: BTreeMap<String, Vec<u64>>,
 }
 
 impl SyncZulip {
@@ -41,7 +41,7 @@ impl SyncZulip {
     fn diff_user_group(
         &self,
         user_group_name: &str,
-        member_ids: &[usize],
+        member_ids: &[u64],
     ) -> anyhow::Result<Option<UserGroupDiff>> {
         let id = self
             .zulip_controller
@@ -143,7 +143,7 @@ impl std::fmt::Display for UserGroupDiff {
 struct CreateUserGroupDiff {
     name: String,
     description: String,
-    member_ids: Vec<usize>,
+    member_ids: Vec<u64>,
 }
 
 impl CreateUserGroupDiff {
@@ -168,9 +168,9 @@ impl std::fmt::Display for CreateUserGroupDiff {
 
 struct UpdateUserGroupDiff {
     name: String,
-    user_group_id: usize,
-    member_id_additions: Vec<usize>,
-    member_id_deletions: Vec<usize>,
+    user_group_id: u64,
+    member_id_additions: Vec<u64>,
+    member_id_deletions: Vec<u64>,
 }
 
 impl UpdateUserGroupDiff {
@@ -202,7 +202,7 @@ impl std::fmt::Display for UpdateUserGroupDiff {
 fn get_user_group_definitions(
     team_api: &TeamApi,
     zulip_api: &ZulipApi,
-) -> anyhow::Result<BTreeMap<String, Vec<usize>>> {
+) -> anyhow::Result<BTreeMap<String, Vec<u64>>> {
     let email_map = zulip_api
         .get_users()?
         .into_iter()
@@ -222,11 +222,10 @@ fn get_user_group_definitions(
                         if id.is_none() {
                             log::warn!("no Zulip id found for '{}'", e);
                         }
-                        id
+                        id.copied()
                     }
-                    ZulipGroupMember::Id(id) => Some(id),
+                    ZulipGroupMember::Id(id) => Some(*id),
                 })
-                .copied()
                 .collect::<Vec<_>>();
             (name, member_ids)
         })
@@ -263,7 +262,7 @@ impl ZulipController {
     }
 
     /// Get a user group id for the given user group name
-    fn user_group_id_from_name(&self, user_group_name: &str) -> Option<usize> {
+    fn user_group_id_from_name(&self, user_group_name: &str) -> Option<u64> {
         self.user_group_ids.get(user_group_name).map(|u| u.id)
     }
 
@@ -272,7 +271,7 @@ impl ZulipController {
         &self,
         user_group_name: &str,
         description: &str,
-        member_ids: &[usize],
+        member_ids: &[u64],
     ) -> anyhow::Result<()> {
         self.zulip_api
             .create_user_group(user_group_name, description, member_ids)?;
@@ -281,7 +280,7 @@ impl ZulipController {
     }
 
     /// Get the members of a user group given its name
-    fn user_group_members_from_name(&self, user_group_name: &str) -> Option<Vec<usize>> {
+    fn user_group_members_from_name(&self, user_group_name: &str) -> Option<Vec<u64>> {
         self.user_group_ids
             .get(user_group_name)
             .map(|u| u.members.to_owned())

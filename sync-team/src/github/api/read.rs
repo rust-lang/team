@@ -7,10 +7,10 @@ use std::collections::{HashMap, HashSet};
 
 pub(crate) trait GithubRead {
     /// Get user names by user ids
-    fn usernames(&self, ids: &[usize]) -> anyhow::Result<HashMap<usize, String>>;
+    fn usernames(&self, ids: &[u64]) -> anyhow::Result<HashMap<u64, String>>;
 
     /// Get the owners of an org
-    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<usize>>;
+    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<u64>>;
 
     /// Get all teams associated with a org
     ///
@@ -20,7 +20,7 @@ pub(crate) trait GithubRead {
     /// Get the team by name and org
     fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>>;
 
-    fn team_memberships(&self, team: &Team) -> anyhow::Result<HashMap<usize, TeamMember>>;
+    fn team_memberships(&self, team: &Team) -> anyhow::Result<HashMap<u64, TeamMember>>;
 
     /// The GitHub names of users invited to the given team
     fn team_membership_invitations(&self, org: &str, team: &str)
@@ -56,11 +56,11 @@ impl GitHubApiRead {
 }
 
 impl GithubRead for GitHubApiRead {
-    fn usernames(&self, ids: &[usize]) -> anyhow::Result<HashMap<usize, String>> {
+    fn usernames(&self, ids: &[u64]) -> anyhow::Result<HashMap<u64, String>> {
         #[derive(serde::Deserialize)]
         #[serde(rename_all = "camelCase")]
         struct Usernames {
-            database_id: usize,
+            database_id: u64,
             login: String,
         }
         #[derive(serde::Serialize)]
@@ -93,10 +93,10 @@ impl GithubRead for GitHubApiRead {
         Ok(result)
     }
 
-    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<usize>> {
+    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<u64>> {
         #[derive(serde::Deserialize, Eq, PartialEq, Hash)]
         struct User {
-            id: usize,
+            id: u64,
         }
         let mut owners = HashSet::new();
         self.client.rest_paginated(
@@ -130,7 +130,7 @@ impl GithubRead for GitHubApiRead {
             .send_option(Method::GET, &format!("orgs/{org}/teams/{team}"))
     }
 
-    fn team_memberships(&self, team: &Team) -> anyhow::Result<HashMap<usize, TeamMember>> {
+    fn team_memberships(&self, team: &Team) -> anyhow::Result<HashMap<u64, TeamMember>> {
         #[derive(serde::Deserialize)]
         struct RespTeam {
             members: RespMembers,
@@ -149,7 +149,7 @@ impl GithubRead for GitHubApiRead {
         #[derive(serde::Deserialize)]
         #[serde(rename_all = "camelCase")]
         struct RespNode {
-            database_id: usize,
+            database_id: u64,
             login: String,
         }
         #[derive(serde::Serialize)]

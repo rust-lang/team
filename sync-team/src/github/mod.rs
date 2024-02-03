@@ -27,8 +27,8 @@ struct SyncGitHub {
     github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
     repos: Vec<rust_team_data::v1::Repo>,
-    usernames_cache: HashMap<usize, String>,
-    org_owners: HashMap<String, HashSet<usize>>,
+    usernames_cache: HashMap<u64, String>,
+    org_owners: HashMap<String, HashSet<u64>>,
 }
 
 impl SyncGitHub {
@@ -44,8 +44,10 @@ impl SyncGitHub {
             .flatten()
             .flat_map(|team| &team.members)
             .copied()
-            .collect::<HashSet<_>>();
-        let usernames_cache = github.usernames(&users.into_iter().collect::<Vec<_>>())?;
+            .collect::<HashSet<_>>()
+            .into_iter()
+            .collect::<Vec<_>>();
+        let usernames_cache = github.usernames(&users)?;
 
         debug!("caching organization owners");
         let orgs = teams
@@ -135,7 +137,7 @@ impl SyncGitHub {
                     .iter()
                     .map(|member| {
                         let expected_role = self.expected_role(&github_team.org, *member);
-                        (self.usernames_cache[member].clone(), expected_role)
+                        (self.usernames_cache[&member].clone(), expected_role)
                     })
                     .collect();
                 return Ok(TeamDiff::Create(CreateTeamDiff {
@@ -332,7 +334,7 @@ impl SyncGitHub {
         Ok(branch_protection_diffs)
     }
 
-    fn expected_role(&self, org: &str, user: usize) -> TeamRole {
+    fn expected_role(&self, org: &str, user: u64) -> TeamRole {
         if let Some(true) = self
             .org_owners
             .get(org)

@@ -21,7 +21,7 @@ impl Mailgun {
         }
     }
 
-    pub(super) fn get_routes(&self, skip: Option<usize>) -> Result<RoutesResponse, Error> {
+    pub(super) fn get_routes(&self, skip: Option<u64>) -> Result<RoutesResponse, Error> {
         let url = if let Some(skip) = skip {
             format!("routes?skip={skip}")
         } else {
@@ -119,7 +119,7 @@ impl Mailgun {
 #[derive(serde::Deserialize)]
 pub(super) struct RoutesResponse {
     pub(super) items: Vec<Route>,
-    pub(super) total_count: usize,
+    pub(super) total_count: u64,
 }
 
 #[derive(serde::Deserialize)]

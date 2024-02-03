@@ -100,9 +100,9 @@ pub(crate) fn run(
 
     let mut routes = Vec::new();
     let mut response = mailgun.get_routes(None)?;
-    let mut cur = 0;
+    let mut cur = 0u64;
     while !response.items.is_empty() {
-        cur += response.items.len();
+        cur += response.items.len() as u64;
         routes.extend(response.items);
         if cur >= response.total_count {
             break;
