@@ -5,15 +5,15 @@ subteam-of = "lang"
 [people]
 leads = ["lcnr", "nikomatsakis"]
 members = [
-        "lcnr",
-        "nikomatsakis",
-        "varkor",
-        "davidtwco",
-        "oli-obk",
-        "BoxyUwU",
+    "lcnr",
+    "nikomatsakis",
+    "varkor",
+    "davidtwco",
+    "oli-obk",
+    "BoxyUwU",
 ]
 alumni = [
-        "withoutboats",
+    "withoutboats",
 ]
 
 [website]

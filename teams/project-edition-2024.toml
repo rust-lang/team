@@ -5,7 +5,7 @@ subteam-of = "leadership-council"
 [people]
 leads = [
     "bstrie",
-    "ehuss"
+    "ehuss",
 ]
 members = [
     "bstrie",

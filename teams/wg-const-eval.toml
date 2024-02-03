@@ -11,7 +11,7 @@ members = [
     "fee1-dead",
 ]
 alumni = [
-    "ecstatic-morse"
+    "ecstatic-morse",
 ]
 
 [website]

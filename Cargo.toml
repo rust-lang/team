@@ -31,5 +31,5 @@ walkdir = "2.3.1"
 
 [workspace]
 members = [
-    "rust_team_data"
+    "rust_team_data",
 ]

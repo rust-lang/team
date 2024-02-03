@@ -26,7 +26,7 @@ ping = "rust-lang/opsem"
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
 
-[[zulip-groups]] 
+[[zulip-groups]]
 name = "T-opsem"
 
 [[zulip-groups]]

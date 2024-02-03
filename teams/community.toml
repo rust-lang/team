@@ -62,7 +62,7 @@ address = "rustbridge@rust-lang.org"
 include-team-members = false
 extra-people = [
     "shadows-withal",
-    "arshiamufti"
+    "arshiamufti",
 ]
 
 [[lists]]

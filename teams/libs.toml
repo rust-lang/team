@@ -2,19 +2,19 @@ name = "libs"
 
 [people]
 leads = [
-  "m-ou-se",
-  "Amanieu",
+    "m-ou-se",
+    "Amanieu",
 ]
 members = [
-  "Amanieu",
-  "m-ou-se",
-  "joshtriplett",
-  "cuviper",
-  "the8472",
-  "thomcc",
+    "Amanieu",
+    "m-ou-se",
+    "joshtriplett",
+    "cuviper",
+    "the8472",
+    "thomcc",
 ]
 alumni = [
-  "yaahc",
+    "yaahc",
 ]
 
 [[github]]

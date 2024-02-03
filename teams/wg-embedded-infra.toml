@@ -17,4 +17,3 @@ description = "Managing infrastructure for wg-embedded"
 [[github]]
 orgs = ["rust-embedded"]
 team-name = "infrastructure"
-

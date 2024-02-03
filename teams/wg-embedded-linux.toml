@@ -20,4 +20,3 @@ description = "The embedded Linux team develops and maintains the core of the em
 [[github]]
 orgs = ["rust-embedded"]
 team-name = "embedded-linux"
-

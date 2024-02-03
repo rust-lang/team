@@ -5,12 +5,12 @@ kind = "working-group"
 [people]
 leads = ["estebank", "oli-obk"]
 members = [
-  "JohnTitor",
-  "TaKO8Ki",
-  "compiler-errors",
-  "davidtwco",
-  "estebank",
-  "oli-obk",
+    "JohnTitor",
+    "TaKO8Ki",
+    "compiler-errors",
+    "davidtwco",
+    "estebank",
+    "oli-obk",
 ]
 alumni = []
 

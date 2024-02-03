@@ -4,15 +4,15 @@ subteam-of = "libs"
 [people]
 leads = []
 members = [
-  "Amanieu",
-  "JohnTitor",
-  "KodrAus",
-  "joshtriplett",
-  "the8472",
-  "thomcc",
-  "workingjubilee",
-  "ChrisDenton",
-  "Byron",
+    "Amanieu",
+    "JohnTitor",
+    "KodrAus",
+    "joshtriplett",
+    "the8472",
+    "thomcc",
+    "workingjubilee",
+    "ChrisDenton",
+    "Byron",
 ]
 alumni = []
 

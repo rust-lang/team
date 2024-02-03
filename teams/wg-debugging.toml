@@ -8,10 +8,10 @@ members = [
     "davidtwco",
     "michaelwoerister",
     "pnkfelix",
-    "wesleywiser"
+    "wesleywiser",
 ]
 alumni = [
-    "Manishearth"
+    "Manishearth",
 ]
 
 [website]

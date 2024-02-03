@@ -5,15 +5,15 @@ kind = "working-group"
 [people]
 leads = ["nikomatsakis", "matthewjasper"]
 members = [
-        "nikomatsakis",
-        "matthewjasper",
-        "arora-aman",
-        "Azhng",
-        "ChrisPardy",
-        "jenniferwills",
-        "logmosier",
-        "null-sleep",
-        "roxelo"
+    "nikomatsakis",
+    "matthewjasper",
+    "arora-aman",
+    "Azhng",
+    "ChrisPardy",
+    "jenniferwills",
+    "logmosier",
+    "null-sleep",
+    "roxelo",
 ]
 alumni = []
 

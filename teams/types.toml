@@ -31,7 +31,7 @@ ping = "rust-lang/types"
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
 
-[[zulip-groups]] 
+[[zulip-groups]]
 name = "T-types"
 
 [[zulip-groups]]
