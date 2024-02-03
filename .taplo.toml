@@ -1,0 +1,15 @@
+[formatting]
+align_comments = false
+allowed_blank_lines = 1
+array_auto_collapse = false
+array_auto_expand = false
+indent_string = "    "
+
+# TODO: consider sorting arrays of team members if we can agree on how the sort
+# order should be case sensitive.
+#
+# [[rule]]
+# include = ["teams/**/*.toml"]
+# keys = ["people"]
+# [rule.formatting]
+# reorder_arrays = true
