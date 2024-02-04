@@ -9,3 +9,4 @@ wg-bindgen = "write"
 [[branch-protections]]
 pattern = "main"
 required-approvals = 0
+ci-checks = ["success"]
