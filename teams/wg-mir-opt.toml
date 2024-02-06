@@ -4,7 +4,7 @@ kind = "working-group"
 
 [people]
 leads = ["oli-obk"]
-members = ["oli-obk", "eddyb", "davidtwco", "wesleywiser", "vertexclique", "JakobDegen"]
+members = ["oli-obk", "eddyb", "davidtwco", "wesleywiser", "vertexclique", "JakobDegen", "DianQK"]
 alumni = ["spastorino"]
 
 [[github]]
