@@ -31,7 +31,7 @@ pub struct Team {
 pub struct TeamMember {
     pub name: String,
     pub github: String,
-    pub github_id: usize,
+    pub github_id: u64,
     pub is_lead: bool,
     #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub roles: Vec<String>,
@@ -46,7 +46,7 @@ pub struct TeamGitHub {
 pub struct GitHubTeam {
     pub org: String,
     pub name: String,
-    pub members: Vec<usize>,
+    pub members: Vec<u64>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -70,7 +70,7 @@ pub struct MemberRole {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TeamDiscord {
     pub name: String,
-    pub members: Vec<usize>,
+    pub members: Vec<u64>,
     pub color: Option<String>,
 }
 
@@ -115,7 +115,7 @@ pub enum ZulipGroupMember {
     // TODO(rylev): this variant can be removed once
     // it is verified that noone is relying on it
     Email(String),
-    Id(usize),
+    Id(u64),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -127,13 +127,13 @@ pub struct ZulipGroups {
 pub struct Permission {
     pub people: Vec<PermissionPerson>,
     pub github_users: Vec<String>,
-    pub github_ids: Vec<usize>,
-    pub discord_ids: Vec<usize>,
+    pub github_ids: Vec<u64>,
+    pub discord_ids: Vec<u64>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub struct PermissionPerson {
-    pub github_id: usize,
+    pub github_id: u64,
     pub github: String,
     pub name: String,
 }
@@ -153,7 +153,7 @@ pub struct RfcbotTeam {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ZulipMapping {
     /// Zulip ID to GitHub ID
-    pub users: IndexMap<usize, usize>,
+    pub users: IndexMap<u64, u64>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -211,7 +211,7 @@ pub struct BranchProtection {
 pub struct Person {
     pub name: String,
     pub email: Option<String>,
-    pub github_id: usize,
+    pub github_id: u64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
