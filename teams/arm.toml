@@ -10,5 +10,5 @@ members = [
     "hug-dev",
 ]
 included-teams = [
-    "arm-maintainers"
+    "arm-maintainers",
 ]

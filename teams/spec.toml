@@ -6,7 +6,7 @@ leads = ["pnkfelix", "m-ou-se"]
 members = [
     "pnkfelix",
     "m-ou-se",
-    { github =  "JoelMarcey", roles = ["spec-editor"] },
+    { github = "JoelMarcey", roles = ["spec-editor"] },
     "ehuss",
 ]
 alumni = []

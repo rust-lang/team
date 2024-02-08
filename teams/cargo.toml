@@ -10,7 +10,7 @@ members = [
     "weihanglo",
     "epage",
     "Muscraft",
-    "arlosi"
+    "arlosi",
 ]
 alumni = [
     "alexcrichton",

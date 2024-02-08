@@ -5,7 +5,7 @@ kind = "marker-team"
 leads = []
 members = [
     "da-x",
-    "chris-morgan"
+    "chris-morgan",
 ]
 
 [[github]]

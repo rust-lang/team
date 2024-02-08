@@ -31,7 +31,7 @@ alumni = [
     "djcarpe",
     "frxstrem",
     "jechasteen",
-    "mstallmo"
+    "mstallmo",
 ]
 
 [website]
@@ -54,5 +54,5 @@ excluded-people = [
     "camelid",
     "pnkfelix",
     "hkmatsumoto",
-    "inquisitivecrystal"
+    "inquisitivecrystal",
 ]

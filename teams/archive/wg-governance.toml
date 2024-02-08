@@ -7,7 +7,7 @@ leads = []
 members = []
 alumni = [
     "gnunicorn",
-    "valgrimm"
+    "valgrimm",
 ]
 
 [[lists]]

@@ -15,7 +15,7 @@ members = [
     "nnethercote",
 ]
 alumni = [
-    "wesleywiser"
+    "wesleywiser",
 ]
 
 [[github]]

@@ -1,7 +1,7 @@
 org = "rust-lang"
 name = "testing-devex-team"
 description = "Home of the Rust Testing DevEx team"
-bots = ["rustbot","rfcbot"]
+bots = ["rustbot", "rfcbot"]
 
 [access.teams]
 testing-devex = "maintain"

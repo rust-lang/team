@@ -4,7 +4,7 @@ subteam-of = "rustdoc"
 [people]
 leads = []
 members = [
-    "fmease"
+    "fmease",
 ]
 alumni = []
 
