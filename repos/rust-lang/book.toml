@@ -11,3 +11,4 @@ carols10cents = "maintain"
 [[branch-protections]]
 pattern = "main"
 ci-checks = []
+required-approvals = 0
