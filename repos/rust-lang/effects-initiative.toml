@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "effects-initiative"
+description = "Public repository for the Rust effects initiative"
+bots = []
+
+[access.teams]
+initiative-keyword-generics = "write"
