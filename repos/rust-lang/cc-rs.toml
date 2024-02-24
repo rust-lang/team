@@ -11,3 +11,4 @@ NobodyXu = 'write'
 
 [[branch-protections]]
 pattern = 'main'
+required-approvals = 0
