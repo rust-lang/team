@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "stdarch"
 description = "Rust's standard library vendor-specific APIs and run-time feature detection"
+homepage = "https://doc.rust-lang.org/stable/core/arch/"
 bots = ["rustbot"]
 
 [access.teams]

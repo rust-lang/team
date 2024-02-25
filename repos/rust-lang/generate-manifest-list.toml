@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "generate-manifest-list"
 description = "Creates a list of manifests on static.rust-lang.org"
+homepage = "https://static.rust-lang.org/manifests.txt"
 bots = []
 
 [access.teams]

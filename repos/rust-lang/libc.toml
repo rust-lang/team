@@ -1,6 +1,7 @@
 org = 'rust-lang'
 name = 'libc'
 description = 'Raw bindings to platform APIs for Rust'
+homepage = "https://docs.rs/libc"
 bots = [
     'rustbot',
 ]

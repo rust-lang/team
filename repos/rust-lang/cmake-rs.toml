@@ -1,6 +1,7 @@
 org = 'rust-lang'
 name = 'cmake-rs'
 description = 'Rust build dependency for running cmake'
+homepage = "https://docs.rs/cmake"
 bots = []
 
 [access.teams]

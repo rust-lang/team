@@ -1,6 +1,7 @@
 org = 'rust-lang'
 name = 'rust-forge'
 description = 'Information useful to people contributing to Rust'
+homepage = "https://forge.rust-lang.org/"
 bots = ["rustbot"]
 
 [access.teams]

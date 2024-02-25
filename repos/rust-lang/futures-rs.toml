@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "futures-rs"
 description = "Zero-cost asynchronous programming in Rust"
+homepage = "https://rust-lang.github.io/futures-rs/"
 bots = ["rustbot"]
 
 [access.teams]

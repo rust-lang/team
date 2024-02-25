@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "rustlings"
 description = ":crab: Small exercises to get you used to reading and writing Rust code!"
+homepage = "https://rustlings.cool"
 bots = []
 
 [access.teams]

@@ -1,6 +1,7 @@
 org = 'rust-lang'
 name = 'unsafe-code-guidelines'
 description = "Forum for discussion about what unsafe code can and can't do"
+homepage = "https://rust-lang.github.io/unsafe-code-guidelines"
 bots = ["rustbot", "rfcbot"]
 
 [access.teams]

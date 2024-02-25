@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "reference"
 description = "The Rust Reference"
+homepage = "https://doc.rust-lang.org/nightly/reference/"
 bots = ["rustbot"]
 
 [access.teams]

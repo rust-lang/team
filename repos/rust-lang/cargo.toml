@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "cargo"
 description = "The Rust package manager"
+homepage = "https://doc.rust-lang.org/cargo"
 bots = ["bors", "rustbot", "rfcbot"]
 
 [access.teams]

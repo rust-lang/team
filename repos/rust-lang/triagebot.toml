@@ -1,6 +1,7 @@
 org = 'rust-lang'
 name = 'triagebot'
 description = 'Automation/tooling for Rust spaces'
+homepage = "https://triage.rust-lang.org"
 bots = ["rustbot"]
 
 [access.teams]

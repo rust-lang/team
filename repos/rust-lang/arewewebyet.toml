@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "arewewebyet"
 description = "Are we web yet? A simple reckoning of Rust's readiness for Web-related things."
+homepage = "https://www.arewewebyet.org/"
 bots = []
 
 [access.teams]

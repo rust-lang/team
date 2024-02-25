@@ -1,6 +1,7 @@
 org = 'rust-lang'
 name = 'compiler-builtins'
 description = 'Porting `compiler-rt` intrinsics to Rust'
+homepage = "https://github.com/rust-lang/rust/issues/35437"
 bots = []
 
 [access.teams]

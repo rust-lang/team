@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "thanks"
 description = "Celebrate Rust contributors."
+homepage = "https://thanks.rust-lang.org"
 bots = []
 
 [access.teams]

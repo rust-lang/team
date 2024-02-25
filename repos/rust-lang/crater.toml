@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "crater"
 description = "Run experiments across parts of the Rust ecosystem!"
+homepage = "https://crater.rust-lang.org"
 bots = ["bors", "highfive"]
 
 [access.teams]

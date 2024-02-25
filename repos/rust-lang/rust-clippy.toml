@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "rust-clippy"
 description = "A bunch of lints to catch common mistakes and improve your Rust code. Book: https://doc.rust-lang.org/clippy/"
+homepage = "https://rust-lang.github.io/rust-clippy/"
 bots = ["bors", "rustbot"]
 
 [access.teams]

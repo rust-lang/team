@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "book"
 description = "The Rust Programming Language"
+homepage = "https://doc.rust-lang.org/book/"
 bots = []
 
 [access.teams]
