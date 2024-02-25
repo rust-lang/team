@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "pkg-config-rs"
 description = "Build library for invoking pkg-config for Rust"
+homepage = "https://docs.rs/pkg-config"
 bots = []
 
 [access.teams]

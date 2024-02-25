@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "nomicon"
 description = "The Dark Arts of Advanced and Unsafe Rust Programming"
+homepage = "https://doc.rust-lang.org/nomicon/"
 bots = []
 
 [access.teams]

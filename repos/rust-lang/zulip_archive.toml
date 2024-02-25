@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "zulip_archive"
 description = "A tool for archiving and displaying Zulip chat channels."
+homepage = "https://zulip-archive.rust-lang.org"
 bots = []
 
 [access.teams]

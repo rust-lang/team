@@ -1,6 +1,7 @@
 org = 'rust-lang'
 name = 'flate2-rs'
 description = 'DEFLATE, gzip, and zlib bindings for Rust'
+homepage = "https://docs.rs/flate2"
 bots = []
 
 [access.teams]

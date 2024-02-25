@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "rustup"
 description = "The Rust toolchain installer"
+homepage = "https://rust-lang.github.io/rustup/"
 bots = ["rustbot"]
 
 [access.teams]

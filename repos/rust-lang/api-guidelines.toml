@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "api-guidelines"
 description = "Rust API guidelines"
+homepage = "https://rust-lang.github.io/api-guidelines/"
 bots = []
 
 [access.teams]

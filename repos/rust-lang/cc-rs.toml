@@ -1,6 +1,7 @@
 org = 'rust-lang'
 name = 'cc-rs'
 description = 'Rust library for build scripts to compile C/C++ code into a Rust library'
+homepage = "https://docs.rs/cc"
 bots = []
 
 [access.teams]

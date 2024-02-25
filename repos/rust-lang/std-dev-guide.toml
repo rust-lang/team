@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "std-dev-guide"
 description = "Guide for standard library developers"
+homepage = "https://std-dev-guide.rust-lang.org"
 bots = ["rustbot"]
 
 [access.teams]

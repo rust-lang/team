@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "areweasyncyet.rs"
 description = "Are we async yet?"
+homepage = "https://areweasyncyet.rs"
 bots = []
 
 [access.teams]

@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "rustup-components-history"
 description = "Rustup package status history"
+homepage = "https://rust-lang.github.io/rustup-components-history"
 bots = []
 
 [access.teams]

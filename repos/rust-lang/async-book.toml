@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "async-book"
 description = "Asynchronous Programming in Rust"
+homepage = "https://rust-lang.github.io/async-book/index.html"
 bots = []
 
 [access.teams]

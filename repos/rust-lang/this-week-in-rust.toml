@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "this-week-in-rust"
 description = "Data for this-week-in-rust.org"
+homepage = "https://this-week-in-rust.org/"
 bots = []
 
 [access.teams]

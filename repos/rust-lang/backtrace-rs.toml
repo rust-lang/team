@@ -1,6 +1,7 @@
 org = 'rust-lang'
 name = 'backtrace-rs'
 description = 'Backtraces in Rust'
+homepage = "https://docs.rs/backtrace"
 bots = []
 
 [access.teams]

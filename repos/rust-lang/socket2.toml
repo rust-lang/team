@@ -1,6 +1,7 @@
 org = 'rust-lang'
 name = 'socket2'
 description = 'Advanced configuration options for sockets.'
+homepage = "https://docs.rs/socket2"
 bots = []
 
 [access.teams]

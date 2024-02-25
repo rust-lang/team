@@ -1,6 +1,7 @@
 org = 'rust-lang'
 name = 'log'
 description = 'Logging implementation for Rust'
+homepage = "https://docs.rs/log"
 bots = []
 
 [access.teams]

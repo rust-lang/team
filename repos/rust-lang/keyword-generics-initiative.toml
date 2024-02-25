@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "keyword-generics-initiative"
 description = "Public repository for the Rust keyword generics initiative"
+homepage = "https://rust-lang.github.io/keyword-generics-initiative/"
 bots = []
 
 [access.teams]

@@ -1,6 +1,7 @@
 org = 'rust-lang'
 name = 'docs.rs'
 description = 'crates.io documentation generator'
+homepage = "https://docs.rs"
 bots = ["rustbot"]
 
 [access.teams]
