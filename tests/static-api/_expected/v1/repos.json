@@ -4,6 +4,7 @@
       "org": "test-org",
       "name": "some_repo",
       "description": "A repo!",
+      "homepage": null,
       "bots": [],
       "teams": [
         {

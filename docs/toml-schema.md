@@ -252,6 +252,8 @@ org = "rust-lang"
 name = "my-repo"
 # A description of the repo (required)
 description = "A repo for awesome things!"
+# A URL that is displayed next to the description.
+homepage = "https://www.rust-lang.org/"
 # The bots that this repo requires (required)
 bots = ["bors", "rustbot", "rust-timer"]
 

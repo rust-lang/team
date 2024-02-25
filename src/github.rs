@@ -255,6 +255,7 @@ fn user_node_id(id: u64) -> String {
 #[derive(serde::Deserialize, Debug)]
 pub(crate) struct Repo {
     pub(crate) description: Option<String>,
+    pub(crate) homepage: Option<String>,
 }
 
 #[derive(serde::Deserialize, Debug)]
