@@ -52,6 +52,7 @@ impl<'a> Generator<'a> {
                 org: r.org.clone(),
                 name: r.name.clone(),
                 description: r.description.clone(),
+                homepage: r.homepage.clone(),
                 bots: r
                     .bots
                     .iter()

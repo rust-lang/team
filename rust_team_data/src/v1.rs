@@ -161,6 +161,7 @@ pub struct Repo {
     pub org: String,
     pub name: String,
     pub description: String,
+    pub homepage: Option<String>,
     pub bots: Vec<Bot>,
     pub teams: Vec<RepoTeam>,
     pub members: Vec<RepoMember>,

@@ -211,6 +211,7 @@ fn run() -> Result<(), Error> {
                 org: &'a str,
                 name: &'a str,
                 description: &'a str,
+                homepage: &'a Option<String>,
                 bots: Vec<String>,
                 access: AccessToAdd,
                 #[serde(skip_serializing_if = "Vec::is_empty")]
@@ -267,6 +268,7 @@ fn run() -> Result<(), Error> {
                 description: &repo.description.unwrap_or_else(|| {
                     format!("The {name} repo maintained by the rust-lang project")
                 }),
+                homepage: &repo.homepage,
                 bots,
                 access: AccessToAdd { teams, individuals },
                 branch: branches,
