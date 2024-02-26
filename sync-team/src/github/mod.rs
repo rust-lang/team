@@ -244,6 +244,7 @@ impl SyncGitHub {
                     org: expected_repo.org.clone(),
                     name: expected_repo.name.clone(),
                     description: expected_repo.description.clone(),
+                    homepage: expected_repo.homepage.clone(),
                     permissions,
                     branch_protections,
                 }));
@@ -252,18 +253,19 @@ impl SyncGitHub {
 
         let permission_diffs = self.diff_permissions(expected_repo)?;
         let branch_protection_diffs = self.diff_branch_protections(&actual_repo, expected_repo)?;
-        let description_diff =
-            (actual_repo.description.as_ref() != Some(&expected_repo.description)).then(|| {
-                (
-                    actual_repo.description.clone(),
-                    expected_repo.description.clone(),
-                )
-            });
+        let old_settings = RepoSettings {
+            description: actual_repo.description.clone(),
+            homepage: actual_repo.homepage.clone(),
+        };
+        let new_settings = RepoSettings {
+            description: Some(expected_repo.description.clone()),
+            homepage: expected_repo.homepage.clone(),
+        };
         Ok(RepoDiff::Update(UpdateRepoDiff {
             org: expected_repo.org.clone(),
             name: actual_repo.name,
             repo_id: actual_repo.id,
-            description_diff,
+            settings_diff: (old_settings, new_settings),
             permission_diffs,
             branch_protection_diffs,
         }))
@@ -556,13 +558,14 @@ struct CreateRepoDiff {
     org: String,
     name: String,
     description: String,
+    homepage: Option<String>,
     permissions: Vec<RepoPermissionAssignmentDiff>,
     branch_protections: Vec<(String, api::BranchProtection)>,
 }
 
 impl CreateRepoDiff {
     fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
-        let repo = sync.create_repo(&self.org, &self.name, &self.description)?;
+        let repo = sync.create_repo(&self.org, &self.name, &self.description, &self.homepage)?;
 
         for permission in &self.permissions {
             permission.apply(sync, &self.org, &self.name)?;
@@ -585,6 +588,7 @@ impl std::fmt::Display for CreateRepoDiff {
         writeln!(f, "  Org: {}", self.org)?;
         writeln!(f, "  Name: {}", self.name)?;
         writeln!(f, "  Description: {}", self.description)?;
+        writeln!(f, "  Homepage: {:?}", self.homepage)?;
         writeln!(f, "  Permissions:")?;
         for diff in &self.permissions {
             write!(f, "{diff}")?;
@@ -598,25 +602,35 @@ impl std::fmt::Display for CreateRepoDiff {
     }
 }
 
+#[derive(PartialEq)]
+struct RepoSettings {
+    description: Option<String>,
+    homepage: Option<String>,
+}
+
 struct UpdateRepoDiff {
     org: String,
     name: String,
     repo_id: String,
-    description_diff: Option<(Option<String>, String)>,
+    settings_diff: (RepoSettings, RepoSettings),
     permission_diffs: Vec<RepoPermissionAssignmentDiff>,
     branch_protection_diffs: Vec<BranchProtectionDiff>,
 }
 
 impl UpdateRepoDiff {
     pub(crate) fn noop(&self) -> bool {
-        self.description_diff.is_none()
+        self.settings_diff.0 == self.settings_diff.1
             && self.permission_diffs.is_empty()
             && self.branch_protection_diffs.is_empty()
     }
 
     fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
-        if let Some((_, description)) = &self.description_diff {
-            sync.edit_repo(&self.org, &self.name, description)?;
+        if self.settings_diff.0 != self.settings_diff.1 {
+            let RepoSettings {
+                description,
+                homepage,
+            } = &self.settings_diff.1;
+            sync.edit_repo(&self.org, &self.name, description, homepage)?;
         }
         for permission in &self.permission_diffs {
             permission.apply(sync, &self.org, &self.name)?;
@@ -635,12 +649,26 @@ impl std::fmt::Display for UpdateRepoDiff {
             return Ok(());
         }
         writeln!(f, "📝 Editing repo '{}/{}':", self.org, self.name)?;
-        if let Some((old, new)) = &self.description_diff {
-            if let Some(old) = old {
-                writeln!(f, "  New description: '{old}' => '{new}'")?;
-            } else {
-                writeln!(f, "  Set description: '{new}'")?;
+        let (settings_old, settings_new) = &self.settings_diff;
+        let RepoSettings {
+            description,
+            homepage,
+        } = settings_old;
+        match (description, &settings_new.description) {
+            (None, Some(new)) => writeln!(f, "  Set description: '{new}'")?,
+            (Some(old), None) => writeln!(f, "  Remove description: '{old}'")?,
+            (Some(old), Some(new)) if old != new => {
+                writeln!(f, "  New description: '{old}' => '{new}'")?
             }
+            _ => {}
+        }
+        match (homepage, &settings_new.homepage) {
+            (None, Some(new)) => writeln!(f, "  Set homepage: '{new}'")?,
+            (Some(old), None) => writeln!(f, "  Remove homepage: '{old}'")?,
+            (Some(old), Some(new)) if old != new => {
+                writeln!(f, "  New homepage: '{old}' => '{new}'")?
+            }
+            _ => {}
         }
         if !self.permission_diffs.is_empty() {
             writeln!(f, "  Permission Changes:")?;

@@ -909,7 +909,7 @@ dependencies = [
 [[package]]
 name = "rust_team_data"
 version = "1.0.0"
-source = "git+https://github.com/rust-lang/team#a01edf210bf3ba9e5a6e9b982526dd90bb0063b0"
+source = "git+https://github.com/rust-lang/team#676ca8437e18dc66dbf2661613177d5a4f50571c"
 dependencies = [
  "chacha20poly1305",
  "getrandom",

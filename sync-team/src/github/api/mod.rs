@@ -256,6 +256,7 @@ pub(crate) struct Repo {
     #[serde(alias = "owner", deserialize_with = "repo_owner")]
     pub(crate) org: String,
     pub(crate) description: Option<String>,
+    pub(crate) homepage: Option<String>,
 }
 
 fn repo_owner<'de, D>(deserializer: D) -> Result<String, D::Error>

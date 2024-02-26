@@ -211,16 +211,19 @@ impl GitHubWrite {
         org: &str,
         name: &str,
         description: &str,
+        homepage: &Option<String>,
     ) -> anyhow::Result<Repo> {
         #[derive(serde::Serialize, Debug)]
         struct Req<'a> {
             name: &'a str,
             description: &'a str,
+            homepage: &'a Option<String>,
             auto_init: bool,
         }
         let req = &Req {
             name,
             description,
+            homepage,
             auto_init: true,
         };
         debug!("Creating the repo {org}/{name} with {req:?}");
@@ -230,6 +233,7 @@ impl GitHubWrite {
                 name: name.to_string(),
                 org: org.to_string(),
                 description: Some(description.to_string()),
+                homepage: homepage.clone(),
             })
         } else {
             Ok(self
@@ -243,13 +247,18 @@ impl GitHubWrite {
         &self,
         org: &str,
         repo_name: &str,
-        description: &str,
+        description: &Option<String>,
+        homepage: &Option<String>,
     ) -> anyhow::Result<()> {
         #[derive(serde::Serialize, Debug)]
         struct Req<'a> {
-            description: &'a str,
+            description: &'a Option<String>,
+            homepage: &'a Option<String>,
         }
-        let req = Req { description };
+        let req = Req {
+            description,
+            homepage,
+        };
         debug!("Editing repo {}/{} with {:?}", org, repo_name, req);
         if !self.dry_run {
             self.client
