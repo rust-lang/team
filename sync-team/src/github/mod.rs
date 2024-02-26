@@ -137,7 +137,7 @@ impl SyncGitHub {
                     .iter()
                     .map(|member| {
                         let expected_role = self.expected_role(&github_team.org, *member);
-                        (self.usernames_cache[&member].clone(), expected_role)
+                        (self.usernames_cache[member].clone(), expected_role)
                     })
                     .collect();
                 return Ok(TeamDiff::Create(CreateTeamDiff {
