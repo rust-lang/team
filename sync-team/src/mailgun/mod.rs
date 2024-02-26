@@ -189,7 +189,6 @@ fn extract<'a>(s: &'a str, prefix: &str, suffix: &str) -> &'a str {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rust_team_data::email_encryption;
 
     #[test]
     fn test_build_route_actions() {
