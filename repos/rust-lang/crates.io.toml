@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "crates.io"
 description = "The Rust package registry"
+homepage = "https://crates.io"
 bots = ["bors"]
 
 [access.teams]
