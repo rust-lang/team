@@ -1,0 +1,11 @@
+{
+  "streams": {
+    "t-foo": {
+      "name": "t-foo",
+      "groups": [
+        "T-foo"
+      ],
+      "visibility": "private-shared-history"
+    }
+  }
+}

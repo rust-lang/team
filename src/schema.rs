@@ -1,6 +1,7 @@
 use crate::data::Data;
 pub(crate) use crate::permissions::Permissions;
 use anyhow::{bail, format_err, Error};
+use rust_team_data::v1::{ZulipStream, ZulipStreamVisibility};
 use serde::de::{Deserialize, Deserializer};
 use serde_untagged::UntaggedEnumVisitor;
 use std::collections::{HashMap, HashSet};
@@ -172,6 +173,8 @@ pub(crate) struct Team {
     lists: Vec<TeamList>,
     #[serde(default)]
     zulip_groups: Vec<RawZulipGroup>,
+    #[serde(default)]
+    zulip_streams: Vec<RawZulipStream>,
     discord_roles: Option<Vec<DiscordRole>>,
 }
 
@@ -408,6 +411,27 @@ impl Team {
             groups.push(group);
         }
         Ok(groups)
+    }
+
+    pub(crate) fn zulip_streams(&self) -> Result<Vec<ZulipStream>, Error> {
+        let streams = self
+            .zulip_streams
+            .iter()
+            .map(|stream| ZulipStream {
+                name: stream.name.clone(),
+                groups: stream.groups.clone(),
+                visibility: match stream.visibility {
+                    RawZulipVisibility::Public => ZulipStreamVisibility::WebPublic,
+                    RawZulipVisibility::PrivateShared => {
+                        ZulipStreamVisibility::PrivateSharedHistory
+                    }
+                    RawZulipVisibility::PrivateProtected => {
+                        ZulipStreamVisibility::PrivateProtectedHistory
+                    }
+                },
+            })
+            .collect();
+        Ok(streams)
     }
 
     pub(crate) fn permissions(&self) -> &Permissions {
@@ -678,6 +702,28 @@ pub(crate) struct RawZulipGroup {
     pub(crate) extra_teams: Vec<String>,
     #[serde(default)]
     pub(crate) excluded_people: Vec<String>,
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+pub(crate) struct RawZulipStream {
+    pub(crate) name: String,
+    #[serde(default)]
+    pub(crate) groups: Vec<String>,
+    #[serde(default = "default_zulip_stream_visibility")]
+    pub(crate) visibility: RawZulipVisibility,
+}
+
+fn default_zulip_stream_visibility() -> RawZulipVisibility {
+    RawZulipVisibility::Public
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum RawZulipVisibility {
+    Public,
+    PrivateShared,
+    PrivateProtected,
 }
 
 #[derive(Debug)]

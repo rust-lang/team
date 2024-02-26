@@ -47,3 +47,8 @@ extra-teams = ["wg-test"]
 
 [[zulip-groups]]
 name = "T-foo"
+
+[[zulip-streams]]
+name = "t-foo"
+groups = ["T-foo"]
+visibility = "private-shared"

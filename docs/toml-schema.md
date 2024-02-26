@@ -202,6 +202,20 @@ excluded-people = [
     "rylev",
 ]
 
+# Define Zulip streams owned
+# It's optional, and there can be more than one
+[[zulip-streams]]
+# The name of the Zulip stream (required)
+name = "t-overlords"
+# Zulip groups that will have access to the stream if it is private (optional)
+groups = ["T-overlords"]
+# Visibility of the stream (optional, default = "public")
+# Possible values:
+# "public": a web-public stream readable by anyone even without Zulip login
+# "private-shared": a private stream with a shared history (joining the stream reveals you the whole history)
+# "private-protected": a private stream with a protected history (joining the stream doesn't reveal its history)
+visibility = "public"
+
 # Roles to define in Discord.
 [[discord-roles]]
 # The name of the role.
