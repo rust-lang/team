@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "annotate-snippets-rs"
+description = "Library for snippet annotations"
+bots = []
+
+[access.teams]
+cargo = "write"
+wg-diagnostics = "write"
+
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
