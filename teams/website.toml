@@ -5,6 +5,7 @@ subteam-of = "web-presence"
 leads = ["Manishearth"]
 members = [
     "Manishearth",
+    "senekor",
 ]
 alumni = [
     "XAMPPRocky",
