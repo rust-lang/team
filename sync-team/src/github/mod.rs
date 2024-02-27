@@ -256,10 +256,12 @@ impl SyncGitHub {
         let old_settings = RepoSettings {
             description: actual_repo.description.clone(),
             homepage: actual_repo.homepage.clone(),
+            archived: actual_repo.archived,
         };
         let new_settings = RepoSettings {
             description: Some(expected_repo.description.clone()),
             homepage: expected_repo.homepage.clone(),
+            archived: expected_repo.archived,
         };
         Ok(RepoDiff::Update(UpdateRepoDiff {
             org: expected_repo.org.clone(),
@@ -606,6 +608,7 @@ impl std::fmt::Display for CreateRepoDiff {
 struct RepoSettings {
     description: Option<String>,
     homepage: Option<String>,
+    archived: bool,
 }
 
 struct UpdateRepoDiff {
@@ -629,8 +632,15 @@ impl UpdateRepoDiff {
             let RepoSettings {
                 description,
                 homepage,
+                archived,
             } = &self.settings_diff.1;
-            sync.edit_repo(&self.org, &self.name, description, homepage)?;
+            let archived_diff = if self.settings_diff.0.archived != *archived {
+                Some(*archived)
+            } else {
+                None
+            };
+
+            sync.edit_repo(&self.org, &self.name, description, homepage, archived_diff)?;
         }
         for permission in &self.permission_diffs {
             permission.apply(sync, &self.org, &self.name)?;
@@ -653,6 +663,7 @@ impl std::fmt::Display for UpdateRepoDiff {
         let RepoSettings {
             description,
             homepage,
+            archived,
         } = settings_old;
         match (description, &settings_new.description) {
             (None, Some(new)) => writeln!(f, "  Set description: '{new}'")?,
@@ -668,6 +679,11 @@ impl std::fmt::Display for UpdateRepoDiff {
             (Some(old), Some(new)) if old != new => {
                 writeln!(f, "  New homepage: '{old}' => '{new}'")?
             }
+            _ => {}
+        }
+        match (archived, &settings_new.archived) {
+            (false, true) => writeln!(f, "  Archive")?,
+            (true, false) => writeln!(f, "  Unarchive")?,
             _ => {}
         }
         if !self.permission_diffs.is_empty() {
