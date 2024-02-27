@@ -2,6 +2,7 @@
   "org": "test-org",
   "name": "archived_repo",
   "description": "An archived repo!",
+  "homepage": null,
   "bots": [],
   "teams": [
     {
