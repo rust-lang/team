@@ -839,6 +839,25 @@ but that team does not seem to exist"#,
                 }
             }
 
+            if !protection.pr_required {
+                // It does not make sense to use CI checks when a PR is not required, because with a
+                // CI check, it would not be possible to push into the branch without a PR anyway.
+                if !protection.ci_checks.is_empty() {
+                    bail!(
+                        r#"repo '{}' uses a branch protection for {} that does not require a PR, but has non-empty `ci-checks`"#,
+                        repo.name,
+                        protection.pattern,
+                    );
+                }
+                if protection.required_approvals.is_some() {
+                    bail!(
+                        r#"repo '{}' uses a branch protection for {} that does not require a PR, but sets the `required-approvals` attribute"#,
+                        repo.name,
+                        protection.pattern,
+                    );
+                }
+            }
+
             if bors_used {
                 if protection.required_approvals.is_some() {
                     bail!(
