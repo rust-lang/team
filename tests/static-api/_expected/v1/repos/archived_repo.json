@@ -14,11 +14,15 @@
   "branch_protections": [
     {
       "pattern": "master",
-      "ci_checks": [
-        "CI"
-      ],
       "dismiss_stale_review": false,
-      "required_approvals": 1,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "CI"
+          ],
+          "required_approvals": 1
+        }
+      },
       "allowed_merge_teams": []
     }
   ],
