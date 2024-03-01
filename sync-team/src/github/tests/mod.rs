@@ -252,6 +252,53 @@ fn repo_change_description() {
 }
 
 #[test]
+fn repo_change_homepage() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").homepage(Some("https://foo.rs".to_string())));
+    let gh = model.gh_model();
+    model.get_repo("repo1").homepage = Some("https://bar.rs".to_string());
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: Some(
+                            "https://foo.rs",
+                        ),
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: Some(
+                            "https://bar.rs",
+                        ),
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
 fn repo_create() {
     let mut model = DataModel::default();
     let gh = model.gh_model();

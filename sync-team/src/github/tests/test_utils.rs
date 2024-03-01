@@ -115,7 +115,7 @@ impl DataModel {
                     name: repo.name.clone(),
                     org: DEFAULT_ORG.to_string(),
                     description: Some(repo.description.clone()),
-                    homepage: None,
+                    homepage: repo.homepage.clone(),
                     archived: false,
                     allow_auto_merge: None,
                 },
@@ -257,6 +257,8 @@ pub struct RepoData {
     #[builder(default)]
     pub description: String,
     #[builder(default)]
+    pub homepage: Option<String>,
+    #[builder(default)]
     bots: Vec<Bot>,
     #[builder(default)]
     pub teams: Vec<v1::RepoTeam>,
@@ -287,6 +289,7 @@ impl RepoData {
         let RepoData {
             name,
             description,
+            homepage,
             bots,
             teams,
             members,
@@ -295,7 +298,7 @@ impl RepoData {
             org: DEFAULT_ORG.to_string(),
             name: name.clone(),
             description,
-            homepage: None,
+            homepage,
             bots,
             teams: teams.clone(),
             members: members.clone(),
