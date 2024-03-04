@@ -8,6 +8,7 @@ bots = []
 
 [access.individuals]
 carols10cents = "maintain"
+chriskrycho = "maintain"
 
 [[branch-protections]]
 pattern = "main"
