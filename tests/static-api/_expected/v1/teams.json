@@ -68,6 +68,7 @@
         "url": "https://discord.gg/AAAAA"
       },
       "zulip_stream": "t-foo",
+      "matrix_room": "#t-foo:example.com",
       "weight": 1000
     },
     "roles": [],

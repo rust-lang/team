@@ -15,6 +15,7 @@ discord-id = 123456 # Discord ID of the person (optional)
 # This will, for example, avoid adding the person to the mailing lists.
 email = "john@doe.com"  # Email address used for mailing lists (optional)
 irc = "jdoe"  # Nickname of the person on IRC, if different than the GitHub one (optional)
+matrix = "@john:doe.com" # Matrix username (MXID) of the person (optional)
 
 [permissions]
 # Optional, see the permissions documentation
@@ -134,6 +135,8 @@ discord-invite = "https://discord.gg/e6Q3cvu"
 discord-name = "#wg-rustup"
 # The name of the team's stream on Zulip.
 zulip-stream = "t-lang"
+# An alias for the team's matrix room.
+matrix-room = "#t-lang:matrix.org"
 # An integer to influence the sort order of team in the teams list.
 # They are sorted in descending order, so very large positive values are
 # first, and very negative values are last.
