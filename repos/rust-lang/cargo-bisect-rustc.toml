@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "cargo-bisect-rustc"
 description = "Bisects rustc, either nightlies or CI artifacts"
+homepage = "https://rust-lang.github.io/cargo-bisect-rustc/"
 bots = []
 
 [access.teams]
