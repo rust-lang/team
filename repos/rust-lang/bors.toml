@@ -7,3 +7,13 @@ bots = ["rustbot"]
 infra = "write"
 infra-bors = "write"
 mods = "maintain"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = ["Test", "Test Docker"]
+required-approvals = 0
+
+[[branch-protections]]
+pattern = "staging"
+ci-checks = ["Test", "Test Docker"]
+required-approvals = 0
