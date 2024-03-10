@@ -2,9 +2,10 @@ name = "book"
 subteam-of = "launching-pad"
 
 [people]
-leads = ["carols10cents"]
+leads = ["carols10cents", "chriskrycho"]
 members = [
     "carols10cents",
+    "chriskrycho",
 ]
 alumni = []
 
