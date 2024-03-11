@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "gcc"
+description = "GCC fork with libgccjit changes needed by rustc_codegen_gcc"
+bots = []
+
+[access.teams]
+wg-gcc-backend = "maintain"
