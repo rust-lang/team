@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "gccjit.rs"
+description = "Rust bindings for libgccjit"
+bots = []
+
+[access.teams]
+wg-gcc-backend = "maintain"
