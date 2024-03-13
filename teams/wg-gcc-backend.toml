@@ -1,0 +1,20 @@
+name = "wg-gcc-backend"
+subteam-of = "compiler"
+kind = "working-group"
+
+[people]
+leads = ["antoyo"]
+members = ["antoyo", "GuillaumeGomez"]
+alumni = []
+
+[permissions]
+perf = true
+
+[website]
+name = "rustc_codegen_gcc"
+description = "libgccjit AOT codegen for rustc"
+zulip-stream = "rustc-codegen-gcc"
+repo = "https://github.com/rust-lang/rustc_codegen_gcc"
+
+[[github]]
+orgs = ["rust-lang"]
