@@ -35,11 +35,11 @@ orgs = ["rust-lang", "conduit-rust"]
 
 [rfcbot]
 label = "T-crates-io"
-name = "Crates.io"
+name = "crates.io"
 ping = "rust-lang/crates-io"
 
 [website]
-name = "Crates.io team"
+name = "crates.io team"
 description = "Managing operations, development, and official policies for crates.io"
 zulip-stream = "t-crates-io"
 repo = "https://github.com/rust-lang/crates.io"
