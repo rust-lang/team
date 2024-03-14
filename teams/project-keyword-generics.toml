@@ -12,6 +12,7 @@ members = [
     "nikomatsakis",
     "yoshuawuyts",
     "lcnr",
+    "TC",
 ]
 alumni = []
 
