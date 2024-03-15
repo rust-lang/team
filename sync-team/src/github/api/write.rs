@@ -234,6 +234,7 @@ impl GitHubWrite {
                 org: org.to_string(),
                 description: Some(description.to_string()),
                 homepage: homepage.clone(),
+                archived: false,
             })
         } else {
             Ok(self
@@ -249,15 +250,19 @@ impl GitHubWrite {
         repo_name: &str,
         description: &Option<String>,
         homepage: &Option<String>,
+        archived: Option<bool>,
     ) -> anyhow::Result<()> {
         #[derive(serde::Serialize, Debug)]
         struct Req<'a> {
             description: &'a Option<String>,
             homepage: &'a Option<String>,
+            #[serde(skip_serializing_if = "Option::is_none")]
+            archived: Option<bool>,
         }
         let req = Req {
             description,
             homepage,
+            archived,
         };
         debug!("Editing repo {}/{} with {:?}", org, repo_name, req);
         if !self.dry_run {

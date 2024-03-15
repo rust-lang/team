@@ -257,6 +257,7 @@ pub(crate) struct Repo {
     pub(crate) org: String,
     pub(crate) description: Option<String>,
     pub(crate) homepage: Option<String>,
+    pub(crate) archived: bool,
 }
 
 fn repo_owner<'de, D>(deserializer: D) -> Result<String, D::Error>
