@@ -5,10 +5,7 @@ homepage = "https://doc.rust-lang.org/book/"
 bots = []
 
 [access.teams]
-
-[access.individuals]
-carols10cents = "maintain"
-chriskrycho = "maintain"
+book = "maintain"
 
 [[branch-protections]]
 pattern = "main"
