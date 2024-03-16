@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "governance"
+description = "The home for Rust's governance documentation, such as team charters."
+bots = []
+
+[access.teams]
