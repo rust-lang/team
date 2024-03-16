@@ -3,7 +3,7 @@ use reqwest::Method;
 
 use crate::github::api::{
     allow_not_found, BranchProtection, BranchProtectionOp, HttpClient, Login, PushAllowanceActor,
-    Repo, RepoPermission, Team, TeamPrivacy, TeamPushAllowanceActor, TeamRole,
+    Repo, RepoPermission, RepoSettings, Team, TeamPrivacy, TeamPushAllowanceActor, TeamRole,
     UserPushAllowanceActor,
 };
 use crate::utils::ResponseExt;
@@ -210,20 +210,19 @@ impl GitHubWrite {
         &self,
         org: &str,
         name: &str,
-        description: &str,
-        homepage: &Option<String>,
+        settings: &RepoSettings,
     ) -> anyhow::Result<Repo> {
         #[derive(serde::Serialize, Debug)]
         struct Req<'a> {
             name: &'a str,
             description: &'a str,
-            homepage: &'a Option<String>,
+            homepage: &'a Option<&'a str>,
             auto_init: bool,
         }
         let req = &Req {
             name,
-            description,
-            homepage,
+            description: settings.description.as_deref().unwrap_or_default(),
+            homepage: &settings.homepage.as_deref(),
             auto_init: true,
         };
         debug!("Creating the repo {org}/{name} with {req:?}");
@@ -232,8 +231,8 @@ impl GitHubWrite {
                 id: String::from("ID"),
                 name: name.to_string(),
                 org: org.to_string(),
-                description: Some(description.to_string()),
-                homepage: homepage.clone(),
+                description: settings.description.clone(),
+                homepage: settings.homepage.clone(),
                 archived: false,
             })
         } else {

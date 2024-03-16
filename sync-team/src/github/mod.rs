@@ -3,7 +3,7 @@ mod api;
 mod tests;
 
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
-use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission};
+use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings};
 use log::debug;
 use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
@@ -567,7 +567,12 @@ struct CreateRepoDiff {
 
 impl CreateRepoDiff {
     fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
-        let repo = sync.create_repo(&self.org, &self.name, &self.description, &self.homepage)?;
+        let settings = RepoSettings {
+            description: Some(self.description.clone()),
+            homepage: self.homepage.clone(),
+            archived: false,
+        };
+        let repo = sync.create_repo(&self.org, &self.name, &settings)?;
 
         for permission in &self.permissions {
             permission.apply(sync, &self.org, &self.name)?;
@@ -602,13 +607,6 @@ impl std::fmt::Display for CreateRepoDiff {
         }
         Ok(())
     }
-}
-
-#[derive(PartialEq)]
-struct RepoSettings {
-    description: Option<String>,
-    homepage: Option<String>,
-    archived: bool,
 }
 
 struct UpdateRepoDiff {
