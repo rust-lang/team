@@ -757,7 +757,7 @@ pub(crate) struct Repo {
     pub branch_protections: Vec<BranchProtection>,
 }
 
-#[derive(serde_derive::Deserialize, Debug, Clone)]
+#[derive(serde_derive::Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum Bot {
     Bors,

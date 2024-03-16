@@ -54,6 +54,7 @@ impl<'a> Generator<'a> {
                     allowed_merge_teams: b.allowed_merge_teams.clone(),
                 })
                 .collect();
+            let managed_by_bors = r.bots.contains(&Bot::Bors);
             let repo = v1::Repo {
                 org: r.org.clone(),
                 name: r.name.clone(),
@@ -106,6 +107,7 @@ impl<'a> Generator<'a> {
                     .collect(),
                 branch_protections,
                 archived,
+                auto_merge_enabled: !managed_by_bors,
             };
 
             self.add(&format!("v1/repos/{}.json", r.name), &repo)?;

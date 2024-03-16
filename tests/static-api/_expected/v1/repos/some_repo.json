@@ -24,5 +24,6 @@
       ]
     }
   ],
-  "archived": false
+  "archived": false,
+  "auto_merge_enabled": true
 }

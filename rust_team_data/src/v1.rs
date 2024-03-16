@@ -168,6 +168,9 @@ pub struct Repo {
     pub members: Vec<RepoMember>,
     pub branch_protections: Vec<BranchProtection>,
     pub archived: bool,
+    // Is the GitHub "Auto-merge" option enabled?
+    // https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request
+    pub auto_merge_enabled: bool,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
