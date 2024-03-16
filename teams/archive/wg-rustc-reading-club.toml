@@ -3,9 +3,12 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["nikomatsakis", "doc-jones"]
-members = ["doc-jones", "nikomatsakis"]
-alumni = []
+leads = []
+members = []
+alumni = [
+    "nikomatsakis",
+    "doc-jones"
+]
 
 [website]
 name = "Rust Code Reading Club working group"
