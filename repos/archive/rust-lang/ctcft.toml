@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "ctcft"
+description = "Cross Team Collaboration Fun Times"
+bots = []
+
+[access.teams]
