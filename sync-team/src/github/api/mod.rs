@@ -258,6 +258,7 @@ pub(crate) struct Repo {
     pub(crate) description: Option<String>,
     pub(crate) homepage: Option<String>,
     pub(crate) archived: bool,
+    pub(crate) allow_auto_merge: bool,
 }
 
 fn repo_owner<'de, D>(deserializer: D) -> Result<String, D::Error>
@@ -381,4 +382,5 @@ pub(crate) struct RepoSettings {
     pub description: Option<String>,
     pub homepage: Option<String>,
     pub archived: bool,
+    pub auto_merge_enabled: bool,
 }

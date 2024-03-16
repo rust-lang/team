@@ -218,12 +218,14 @@ impl GitHubWrite {
             description: &'a str,
             homepage: &'a Option<&'a str>,
             auto_init: bool,
+            allow_auto_merge: bool,
         }
         let req = &Req {
             name,
             description: settings.description.as_deref().unwrap_or_default(),
             homepage: &settings.homepage.as_deref(),
             auto_init: true,
+            allow_auto_merge: settings.auto_merge_enabled,
         };
         debug!("Creating the repo {org}/{name} with {req:?}");
         if self.dry_run {
@@ -234,6 +236,7 @@ impl GitHubWrite {
                 description: settings.description.clone(),
                 homepage: settings.homepage.clone(),
                 archived: false,
+                allow_auto_merge: settings.auto_merge_enabled,
             })
         } else {
             Ok(self
@@ -254,11 +257,13 @@ impl GitHubWrite {
             description: &'a Option<&'a str>,
             homepage: &'a Option<&'a str>,
             archived: bool,
+            allow_auto_merge: bool,
         }
         let req = Req {
             description: &settings.description.as_deref(),
             homepage: &settings.homepage.as_deref(),
             archived: settings.archived,
+            allow_auto_merge: settings.auto_merge_enabled,
         };
         debug!("Editing repo {}/{} with {:?}", org, repo_name, req);
         if !self.dry_run {

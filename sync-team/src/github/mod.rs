@@ -243,8 +243,12 @@ impl SyncGitHub {
                 return Ok(RepoDiff::Create(CreateRepoDiff {
                     org: expected_repo.org.clone(),
                     name: expected_repo.name.clone(),
-                    description: expected_repo.description.clone(),
-                    homepage: expected_repo.homepage.clone(),
+                    settings: RepoSettings {
+                        description: Some(expected_repo.description.clone()),
+                        homepage: expected_repo.homepage.clone(),
+                        archived: false,
+                        auto_merge_enabled: expected_repo.auto_merge_enabled,
+                    },
                     permissions,
                     branch_protections,
                 }));
@@ -257,11 +261,13 @@ impl SyncGitHub {
             description: actual_repo.description.clone(),
             homepage: actual_repo.homepage.clone(),
             archived: actual_repo.archived,
+            auto_merge_enabled: actual_repo.allow_auto_merge,
         };
         let new_settings = RepoSettings {
             description: Some(expected_repo.description.clone()),
             homepage: expected_repo.homepage.clone(),
             archived: expected_repo.archived,
+            auto_merge_enabled: expected_repo.auto_merge_enabled,
         };
         Ok(RepoDiff::Update(UpdateRepoDiff {
             org: expected_repo.org.clone(),
@@ -559,20 +565,14 @@ impl std::fmt::Display for RepoDiff {
 struct CreateRepoDiff {
     org: String,
     name: String,
-    description: String,
-    homepage: Option<String>,
+    settings: RepoSettings,
     permissions: Vec<RepoPermissionAssignmentDiff>,
     branch_protections: Vec<(String, api::BranchProtection)>,
 }
 
 impl CreateRepoDiff {
     fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
-        let settings = RepoSettings {
-            description: Some(self.description.clone()),
-            homepage: self.homepage.clone(),
-            archived: false,
-        };
-        let repo = sync.create_repo(&self.org, &self.name, &settings)?;
+        let repo = sync.create_repo(&self.org, &self.name, &self.settings)?;
 
         for permission in &self.permissions {
             permission.apply(sync, &self.org, &self.name)?;
@@ -591,11 +591,19 @@ impl CreateRepoDiff {
 
 impl std::fmt::Display for CreateRepoDiff {
     fn fmt(&self, mut f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let RepoSettings {
+            description,
+            homepage,
+            archived: _,
+            auto_merge_enabled,
+        } = &self.settings;
+
         writeln!(f, "➕ Creating repo:")?;
         writeln!(f, "  Org: {}", self.org)?;
         writeln!(f, "  Name: {}", self.name)?;
-        writeln!(f, "  Description: {}", self.description)?;
-        writeln!(f, "  Homepage: {:?}", self.homepage)?;
+        writeln!(f, "  Description: {:?}", description)?;
+        writeln!(f, "  Homepage: {:?}", homepage)?;
+        writeln!(f, "  Auto-merge: {}", auto_merge_enabled)?;
         writeln!(f, "  Permissions:")?;
         for diff in &self.permissions {
             write!(f, "{diff}")?;
@@ -652,6 +660,7 @@ impl std::fmt::Display for UpdateRepoDiff {
             description,
             homepage,
             archived,
+            auto_merge_enabled,
         } = settings_old;
         match (description, &settings_new.description) {
             (None, Some(new)) => writeln!(f, "  Set description: '{new}'")?,
@@ -672,6 +681,11 @@ impl std::fmt::Display for UpdateRepoDiff {
         match (archived, &settings_new.archived) {
             (false, true) => writeln!(f, "  Archive")?,
             (true, false) => writeln!(f, "  Unarchive")?,
+            _ => {}
+        }
+        match (auto_merge_enabled, &settings_new.auto_merge_enabled) {
+            (false, true) => writeln!(f, "  Enable auto-merge")?,
+            (true, false) => writeln!(f, "  Disable auto-merge")?,
             _ => {}
         }
         if !self.permission_diffs.is_empty() {
