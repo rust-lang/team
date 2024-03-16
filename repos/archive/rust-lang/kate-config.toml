@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "kate-config"
+description = "Kate configuration for Rust"
+bots = []
+
+[access.teams]

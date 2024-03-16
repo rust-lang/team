@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "jemalloc"
+description = "No longer used"
+bots = []
+
+[access.teams]

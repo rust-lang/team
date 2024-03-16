@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "highfive"
+description = "Github hooks to provide an encouraging atmosphere for new contributors"
+bots = []
+
+[access.teams]
