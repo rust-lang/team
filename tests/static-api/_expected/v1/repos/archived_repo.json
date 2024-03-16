@@ -22,5 +22,6 @@
       "allowed_merge_teams": []
     }
   ],
-  "archived": true
+  "archived": true,
+  "auto_merge_enabled": true
 }
