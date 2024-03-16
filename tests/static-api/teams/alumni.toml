@@ -1,4 +1,5 @@
 name = "alumni"
+kind = "marker-team"
 
 [people]
 leads = []

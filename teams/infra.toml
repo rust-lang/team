@@ -1,4 +1,5 @@
 name = "infra"
+subteam-of = "leadership-council"
 
 [people]
 leads = ["shepmaster", "jdno"]

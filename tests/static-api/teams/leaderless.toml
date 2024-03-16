@@ -1,4 +1,5 @@
 name = "leaderless"
+subteam-of = "leadership-council"
 
 [people]
 leads = []

@@ -1,7 +1,7 @@
 {
   "name": "leads-permissions",
   "kind": "team",
-  "subteam_of": null,
+  "subteam_of": "leadership-council",
   "members": [
     {
       "name": "Sixth user",

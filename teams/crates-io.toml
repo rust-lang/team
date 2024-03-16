@@ -1,4 +1,5 @@
 name = "crates-io"
+subteam-of = "leadership-council"
 
 [people]
 leads = ["jtgeibel", "Turbo87"]

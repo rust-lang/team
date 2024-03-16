@@ -1,4 +1,5 @@
 name = "devtools"
+subteam-of = "leadership-council"
 
 [people]
 leads = ["Manishearth"]

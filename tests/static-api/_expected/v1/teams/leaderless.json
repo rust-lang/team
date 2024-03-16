@@ -1,7 +1,7 @@
 {
   "name": "leaderless",
   "kind": "team",
-  "subteam_of": null,
+  "subteam_of": "leadership-council",
   "members": [
     {
       "name": "Zeroth user",

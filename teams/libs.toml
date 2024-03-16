@@ -1,4 +1,5 @@
 name = "libs"
+subteam-of = "leadership-council"
 
 [people]
 leads = [

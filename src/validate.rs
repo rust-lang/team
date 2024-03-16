@@ -40,7 +40,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_team_names,
     validate_github_teams,
     validate_zulip_stream_name,
-    validate_project_groups_have_parent_teams,
+    validate_subteam_of_required,
     validate_discord_team_members_have_discord_ids,
     validate_zulip_group_ids,
     validate_zulip_group_extra_people,
@@ -607,14 +607,14 @@ fn validate_zulip_stream_name(data: &Data, errors: &mut Vec<String>) {
     })
 }
 
-/// Ensure each project group has a parent team, according to RFC 2856.
-fn validate_project_groups_have_parent_teams(data: &Data, errors: &mut Vec<String>) {
+/// Ensure teams have a parent team.
+fn validate_subteam_of_required(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
-        if team.kind() == TeamKind::ProjectGroup && team.subteam_of().is_none() {
-            bail!(
-                "the project group `{}` doesn't have a parent team, but it's required to have one",
-                team.name()
-            );
+        if team.kind() != TeamKind::MarkerTeam
+            && team.subteam_of().is_none()
+            && !matches!(team.name(), "leadership-council" | "core")
+        {
+            bail!("team `{}` must specify `subteam-of`", team.name());
         }
         Ok(())
     })

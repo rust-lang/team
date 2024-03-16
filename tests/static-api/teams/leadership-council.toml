@@ -1,0 +1,6 @@
+name = "leadership-council"
+
+[people]
+leads = []
+members = []
+alumni = []

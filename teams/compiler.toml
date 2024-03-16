@@ -1,4 +1,5 @@
 name = "compiler"
+subteam-of = "leadership-council"
 
 [people]
 leads = ["davidtwco", "wesleywiser"]
