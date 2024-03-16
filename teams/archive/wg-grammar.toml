@@ -3,12 +3,11 @@ subteam-of = "lang"
 kind = "working-group"
 
 [people]
-leads = ["eddyb"]
-members = [
+leads = []
+members = []
+alumni = [
     "eddyb",
     "CAD97",
-]
-alumni = [
     "Centril",
     "qmx",
 ]
