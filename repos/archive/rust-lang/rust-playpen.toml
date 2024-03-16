@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "rust-playpen"
+description = "A web interface for running Rust code"
+bots = []
+
+[access.teams]

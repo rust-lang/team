@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "vscode-rust"
+description = "Rust extension for Visual Studio Code"
+bots = []
+
+[access.teams]

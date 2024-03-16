@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "wg-governance"
+description = ""
+bots = []
+
+[access.teams]
