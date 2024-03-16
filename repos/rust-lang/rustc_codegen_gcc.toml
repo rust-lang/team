@@ -5,7 +5,4 @@ bots = []
 
 [access.teams]
 compiler = "write"
-
-[access.individuals]
-antoyo = "maintain"
-GuillaumeGomez = "write"
+wg-gcc-backend = "maintain"
