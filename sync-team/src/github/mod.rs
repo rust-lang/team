@@ -261,7 +261,7 @@ impl SyncGitHub {
             description: actual_repo.description.clone(),
             homepage: actual_repo.homepage.clone(),
             archived: actual_repo.archived,
-            auto_merge_enabled: actual_repo.allow_auto_merge,
+            auto_merge_enabled: actual_repo.allow_auto_merge.unwrap_or(false),
         };
         let new_settings = RepoSettings {
             description: Some(expected_repo.description.clone()),
