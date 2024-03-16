@@ -247,21 +247,18 @@ impl GitHubWrite {
         &self,
         org: &str,
         repo_name: &str,
-        description: &Option<String>,
-        homepage: &Option<String>,
-        archived: Option<bool>,
+        settings: &RepoSettings,
     ) -> anyhow::Result<()> {
         #[derive(serde::Serialize, Debug)]
         struct Req<'a> {
-            description: &'a Option<String>,
-            homepage: &'a Option<String>,
-            #[serde(skip_serializing_if = "Option::is_none")]
-            archived: Option<bool>,
+            description: &'a Option<&'a str>,
+            homepage: &'a Option<&'a str>,
+            archived: bool,
         }
         let req = Req {
-            description,
-            homepage,
-            archived,
+            description: &settings.description.as_deref(),
+            homepage: &settings.homepage.as_deref(),
+            archived: settings.archived,
         };
         debug!("Editing repo {}/{} with {:?}", org, repo_name, req);
         if !self.dry_run {

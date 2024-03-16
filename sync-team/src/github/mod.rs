@@ -613,6 +613,7 @@ struct UpdateRepoDiff {
     org: String,
     name: String,
     repo_id: String,
+    // old, new
     settings_diff: (RepoSettings, RepoSettings),
     permission_diffs: Vec<RepoPermissionAssignmentDiff>,
     branch_protection_diffs: Vec<BranchProtectionDiff>,
@@ -627,18 +628,7 @@ impl UpdateRepoDiff {
 
     fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
         if self.settings_diff.0 != self.settings_diff.1 {
-            let RepoSettings {
-                description,
-                homepage,
-                archived,
-            } = &self.settings_diff.1;
-            let archived_diff = if self.settings_diff.0.archived != *archived {
-                Some(*archived)
-            } else {
-                None
-            };
-
-            sync.edit_repo(&self.org, &self.name, description, homepage, archived_diff)?;
+            sync.edit_repo(&self.org, &self.name, &self.settings_diff.1)?;
         }
         for permission in &self.permission_diffs {
             permission.apply(sync, &self.org, &self.name)?;
