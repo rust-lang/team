@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "all-hands-2020"
+description = "Website for the Rust All Hands 2020"
+bots = []
+
+[access.teams]
