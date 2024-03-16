@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "rust-reach-www"
+description = "the website for the rust reach program"
+bots = []
+
+[access.teams]
