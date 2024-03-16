@@ -496,11 +496,6 @@ impl DiscordRole {
     }
 }
 
-#[derive(Eq, PartialEq, Debug)]
-pub(crate) struct DiscordTeam {
-    pub(crate) members: Vec<u64>,
-}
-
 #[derive(Eq, PartialEq)]
 pub(crate) struct GitHubTeam<'a> {
     pub(crate) org: &'a str,
