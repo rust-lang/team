@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "dyn-upcasting-coercion-initiative"
+description = "Initiative to support upcasting dyn Trait values to supertraits"
+bots = []
+
+[access.teams]
+initiative-dyn-upcasting = "write"
