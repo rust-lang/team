@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "project-rfc-2229"
+description = "A repository tracking the planning for implementation and evaluation of RFC 2229."
+bots = []
+
+[access.teams]
