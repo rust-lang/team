@@ -629,12 +629,30 @@ struct UpdateRepoDiff {
 
 impl UpdateRepoDiff {
     pub(crate) fn noop(&self) -> bool {
+        if !self.can_be_modified() {
+            return true;
+        }
+
         self.settings_diff.0 == self.settings_diff.1
             && self.permission_diffs.is_empty()
             && self.branch_protection_diffs.is_empty()
     }
 
+    fn can_be_modified(&self) -> bool {
+        // Archived repositories cannot be modified
+        // If the repository should be archived, and we do not change its archival status,
+        // we should not change any other properties of the repo.
+        if self.settings_diff.1.archived && self.settings_diff.0.archived {
+            return false;
+        }
+        true
+    }
+
     fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
+        if !self.can_be_modified() {
+            return Ok(());
+        }
+
         if self.settings_diff.0 != self.settings_diff.1 {
             sync.edit_repo(&self.org, &self.name, &self.settings_diff.1)?;
         }
