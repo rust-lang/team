@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "rust-central-station"
+description = "Old home of some infra pieces"
+bots = []
+
+[access.teams]

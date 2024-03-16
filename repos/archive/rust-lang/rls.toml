@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "rls"
+description = "Repository for the Rust Language Server (aka RLS)"
+bots = []
+
+[access.teams]
