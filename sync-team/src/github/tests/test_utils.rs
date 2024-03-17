@@ -4,7 +4,8 @@ use derive_builder::Builder;
 use rust_team_data::v1::{GitHubTeam, Person, TeamGitHub, TeamKind};
 
 use crate::github::api::{
-    BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Team, TeamMember, TeamPrivacy, TeamRole,
+    BranchProtection, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation, RepoTeam,
+    RepoUser, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::github::{api, SyncGitHub, TeamDiff};
 
@@ -215,6 +216,17 @@ impl GithubRead for GithubMock {
             .unwrap_or_default()
             .into_iter()
             .collect())
+    }
+
+    fn org_app_installations(&self, _org: &str) -> anyhow::Result<Vec<OrgAppInstallation>> {
+        Ok(vec![])
+    }
+
+    fn app_installation_repos(
+        &self,
+        _installation_id: u64,
+    ) -> anyhow::Result<Vec<RepoAppInstallation>> {
+        Ok(vec![])
     }
 
     fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
