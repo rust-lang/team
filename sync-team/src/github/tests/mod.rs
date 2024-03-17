@@ -682,3 +682,47 @@ fn repo_remove_team() {
     ]
     "#);
 }
+
+#[test]
+fn repo_archive_repo() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1"));
+
+    let gh = model.gh_model();
+    model.get_repo("repo1").archived = true;
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: true,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}

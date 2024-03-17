@@ -264,6 +264,10 @@ pub struct RepoData {
     pub teams: Vec<v1::RepoTeam>,
     #[builder(default)]
     pub members: Vec<v1::RepoMember>,
+    #[builder(default)]
+    pub archived: bool,
+    #[builder(default)]
+    pub allow_auto_merge: bool,
 }
 
 impl RepoData {
@@ -293,6 +297,8 @@ impl RepoData {
             bots,
             teams,
             members,
+            archived,
+            allow_auto_merge,
         } = self.clone();
         v1::Repo {
             org: DEFAULT_ORG.to_string(),
@@ -303,9 +309,9 @@ impl RepoData {
             teams: teams.clone(),
             members: members.clone(),
             branch_protections: vec![],
-            archived: false,
+            archived,
             private: false,
-            auto_merge_enabled: false,
+            auto_merge_enabled: allow_auto_merge,
         }
     }
 }
