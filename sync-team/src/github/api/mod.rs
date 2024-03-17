@@ -138,7 +138,7 @@ impl HttpClient {
                 }
             }
 
-            f(resp.json().with_context(|| {
+            f(resp.json_annotated().with_context(|| {
                 format!("Failed to deserialize response body for {method} request to '{next_url}'")
             })?)?;
         }
