@@ -231,6 +231,7 @@ impl GitHubWrite {
         if self.dry_run {
             Ok(Repo {
                 id: String::from("ID"),
+                repo_id: 0,
                 name: name.to_string(),
                 org: org.to_string(),
                 description: settings.description.clone(),
@@ -269,6 +270,23 @@ impl GitHubWrite {
         if !self.dry_run {
             self.client
                 .send(Method::PATCH, &format!("repos/{org}/{repo_name}"), &req)?;
+        }
+        Ok(())
+    }
+
+    pub(crate) fn add_repo_to_app_installation(
+        &self,
+        installation_id: u64,
+        repository_id: u64,
+    ) -> anyhow::Result<()> {
+        debug!("Adding installation {installation_id} to repository {repository_id}");
+        if !self.dry_run {
+            self.client
+                .req(
+                    Method::PUT,
+                    &format!("user/installations/{installation_id}/repositories/{repository_id}"),
+                )?
+                .send()?;
         }
         Ok(())
     }
