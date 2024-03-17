@@ -3,9 +3,7 @@ mod api;
 mod tests;
 
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
-use crate::github::api::{
-    GithubRead, Login, PushAllowanceActor, Repo, RepoPermission, RepoSettings,
-};
+use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings};
 use log::debug;
 use rust_team_data::v1::Bot;
 use std::collections::{HashMap, HashSet};
@@ -28,7 +26,7 @@ pub(crate) fn create_diff(
 type OrgName = String;
 type RepoName = String;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 enum GithubApp {
     RenovateBot,
 }
@@ -91,7 +89,7 @@ impl SyncGitHub {
         let usernames_cache = github.usernames(&users)?;
 
         debug!("caching organization owners");
-        let mut orgs = teams
+        let orgs = teams
             .iter()
             .filter_map(|t| t.github.as_ref())
             .flat_map(|gh| &gh.teams)
@@ -334,13 +332,39 @@ impl SyncGitHub {
             archived: expected_repo.archived,
             auto_merge_enabled: expected_repo.auto_merge_enabled,
         };
+
+        let existing_installations = self
+            .org_apps
+            .get(&expected_repo.org)
+            .map(|installations| {
+                installations
+                    .iter()
+                    .filter_map(|installation| {
+                        // Only load installations from apps that we know about, to avoid removing
+                        // unknown installations.
+                        if installation.repositories.contains(&actual_repo.name) {
+                            Some(AppInstallation {
+                                app: installation.app,
+                                installation_id: installation.installation_id,
+                            })
+                        } else {
+                            None
+                        }
+                    })
+                    .collect::<Vec<_>>()
+            })
+            .unwrap_or_default();
+        let app_installation_diffs =
+            self.diff_app_installations(expected_repo, &existing_installations)?;
         Ok(RepoDiff::Update(UpdateRepoDiff {
             org: expected_repo.org.clone(),
             name: actual_repo.name,
             repo_node_id: actual_repo.node_id,
+            repo_id: actual_repo.repo_id,
             settings_diff: (old_settings, new_settings),
             permission_diffs,
             branch_protection_diffs,
+            app_installation_diffs,
         }))
     }
 
@@ -703,7 +727,7 @@ impl CreateRepoDiff {
         }
 
         for installation in &self.app_installations {
-            installation.apply(sync, &repo)?;
+            installation.apply(sync, repo.repo_id)?;
         }
 
         Ok(())
@@ -746,10 +770,12 @@ struct UpdateRepoDiff {
     org: String,
     name: String,
     repo_node_id: String,
+    repo_id: u64,
     // old, new
     settings_diff: (RepoSettings, RepoSettings),
     permission_diffs: Vec<RepoPermissionAssignmentDiff>,
     branch_protection_diffs: Vec<BranchProtectionDiff>,
+    app_installation_diffs: Vec<AppInstallationDiff>,
 }
 
 impl UpdateRepoDiff {
@@ -761,6 +787,7 @@ impl UpdateRepoDiff {
         self.settings_diff.0 == self.settings_diff.1
             && self.permission_diffs.is_empty()
             && self.branch_protection_diffs.is_empty()
+            && self.app_installation_diffs.is_empty()
     }
 
     fn can_be_modified(&self) -> bool {
@@ -787,6 +814,10 @@ impl UpdateRepoDiff {
 
         for branch_protection in &self.branch_protection_diffs {
             branch_protection.apply(sync, &self.org, &self.name, &self.repo_node_id)?;
+        }
+
+        for app_installation in &self.app_installation_diffs {
+            app_installation.apply(sync, self.repo_id)?;
         }
         Ok(())
     }
@@ -840,6 +871,10 @@ impl std::fmt::Display for UpdateRepoDiff {
         writeln!(f, "  Branch Protections:")?;
         for branch_protection_diff in &self.branch_protection_diffs {
             write!(f, "{branch_protection_diff}")?;
+        }
+        writeln!(f, "  App installation changes:")?;
+        for diff in &self.app_installation_diffs {
+            write!(f, "{diff}")?;
         }
 
         Ok(())
@@ -1010,13 +1045,13 @@ enum AppInstallationDiff {
 }
 
 impl AppInstallationDiff {
-    fn apply(&self, sync: &GitHubWrite, repo: &Repo) -> anyhow::Result<()> {
+    fn apply(&self, sync: &GitHubWrite, repo_id: u64) -> anyhow::Result<()> {
         match self {
             AppInstallationDiff::Add(app) => {
-                sync.add_repo_to_app_installation(app.installation_id, repo.repo_id)?;
+                sync.add_repo_to_app_installation(app.installation_id, repo_id)?;
             }
-            AppInstallationDiff::Remove(_) => {
-                todo!()
+            AppInstallationDiff::Remove(app) => {
+                sync.remove_repo_from_app_installation(app.installation_id, repo_id)?;
             }
         }
         Ok(())

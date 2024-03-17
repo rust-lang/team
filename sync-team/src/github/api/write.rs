@@ -279,14 +279,33 @@ impl GitHubWrite {
         installation_id: u64,
         repository_id: u64,
     ) -> anyhow::Result<()> {
-        debug!("Adding installation {installation_id} to repository {repository_id}");
+        debug!("Adding repository {repository_id} to installation {installation_id}");
         if !self.dry_run {
             self.client
                 .req(
                     Method::PUT,
                     &format!("user/installations/{installation_id}/repositories/{repository_id}"),
                 )?
-                .send()?;
+                .send()?
+                .custom_error_for_status()?;
+        }
+        Ok(())
+    }
+
+    pub(crate) fn remove_repo_from_app_installation(
+        &self,
+        installation_id: u64,
+        repository_id: u64,
+    ) -> anyhow::Result<()> {
+        debug!("Removing repository {repository_id} from installation {installation_id}");
+        if !self.dry_run {
+            self.client
+                .req(
+                    Method::DELETE,
+                    &format!("user/installations/{installation_id}/repositories/{repository_id}"),
+                )?
+                .send()?
+                .custom_error_for_status()?;
         }
         Ok(())
     }
