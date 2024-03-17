@@ -23,12 +23,37 @@ pub(crate) fn create_diff(
     github.diff_all()
 }
 
+type OrgName = String;
+type RepoName = String;
+
+#[derive(Clone, Debug)]
+enum GithubApp {
+    RenovateBot,
+}
+
+impl GithubApp {
+    fn from_id(app_id: u64) -> Option<Self> {
+        match app_id {
+            2740 => Some(GithubApp::RenovateBot),
+            _ => None,
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+struct GithubAppInstallation {
+    app: GithubApp,
+    installation_id: u64,
+    repositories: HashSet<RepoName>,
+}
+
 struct SyncGitHub {
     github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
     repos: Vec<rust_team_data::v1::Repo>,
     usernames_cache: HashMap<u64, String>,
-    org_owners: HashMap<String, HashSet<u64>>,
+    org_owners: HashMap<OrgName, HashSet<u64>>,
+    org_apps: HashMap<OrgName, Vec<GithubAppInstallation>>,
 }
 
 impl SyncGitHub {
@@ -50,15 +75,37 @@ impl SyncGitHub {
         let usernames_cache = github.usernames(&users)?;
 
         debug!("caching organization owners");
-        let orgs = teams
+        let mut orgs = teams
             .iter()
             .filter_map(|t| t.github.as_ref())
             .flat_map(|gh| &gh.teams)
             .map(|gh_team| &gh_team.org)
             .collect::<HashSet<_>>();
+
         let mut org_owners = HashMap::new();
+        let mut org_apps = HashMap::new();
+
         for org in &orgs {
             org_owners.insert((*org).to_string(), github.org_owners(org)?);
+
+            let mut installations: Vec<GithubAppInstallation> = vec![];
+
+            for installation in github.org_app_installations(org)? {
+                if let Some(app) = GithubApp::from_id(installation.app_id) {
+                    let mut repositories = HashSet::new();
+                    for repo_installation in
+                        github.app_installation_repos(installation.installation_id)?
+                    {
+                        repositories.insert(repo_installation.name);
+                    }
+                    installations.push(GithubAppInstallation {
+                        app,
+                        installation_id: installation.installation_id,
+                        repositories,
+                    });
+                }
+            }
+            org_apps.insert(org.to_string(), installations);
         }
 
         Ok(SyncGitHub {
@@ -67,6 +114,7 @@ impl SyncGitHub {
             repos,
             usernames_cache,
             org_owners,
+            org_apps,
         })
     }
 

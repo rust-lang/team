@@ -113,7 +113,7 @@ impl HttpClient {
 
     fn rest_paginated<F, T>(&self, method: &Method, url: String, mut f: F) -> anyhow::Result<()>
     where
-        F: FnMut(Vec<T>) -> anyhow::Result<()>,
+        F: FnMut(T) -> anyhow::Result<()>,
         T: DeserializeOwned,
     {
         let mut next = Some(url);
@@ -249,9 +249,23 @@ impl fmt::Display for RepoPermission {
 }
 
 #[derive(serde::Deserialize, Debug)]
+pub(crate) struct OrgAppInstallation {
+    #[serde(rename = "id")]
+    pub(crate) installation_id: u64,
+    pub(crate) app_id: u64,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct RepoAppInstallation {
+    pub(crate) name: String,
+}
+
+#[derive(serde::Deserialize, Debug)]
 pub(crate) struct Repo {
     #[serde(rename = "node_id")]
     pub(crate) id: String,
+    #[serde(rename = "id")]
+    pub(crate) repo_id: u64,
     pub(crate) name: String,
     #[serde(alias = "owner", deserialize_with = "repo_owner")]
     pub(crate) org: String,

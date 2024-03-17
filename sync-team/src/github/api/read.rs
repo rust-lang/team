@@ -1,6 +1,7 @@
 use crate::github::api::{
     team_node_id, user_node_id, BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient,
-    Login, Repo, RepoTeam, RepoUser, Team, TeamMember, TeamRole,
+    Login, OrgAppInstallation, Repo, RepoAppInstallation, RepoTeam, RepoUser, Team, TeamMember,
+    TeamRole,
 };
 use reqwest::Method;
 use std::collections::{HashMap, HashSet};
@@ -11,6 +12,15 @@ pub(crate) trait GithubRead {
 
     /// Get the owners of an org
     fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<u64>>;
+
+    /// Get the app installations of an org
+    fn org_app_installations(&self, org: &str) -> anyhow::Result<Vec<OrgAppInstallation>>;
+
+    /// Get the repositories enabled for an app installation.
+    fn app_installation_repos(
+        &self,
+        installation_id: u64,
+    ) -> anyhow::Result<Vec<RepoAppInstallation>>;
 
     /// Get all teams associated with a org
     ///
@@ -108,6 +118,45 @@ impl GithubRead for GitHubApiRead {
             },
         )?;
         Ok(owners)
+    }
+
+    fn org_app_installations(&self, org: &str) -> anyhow::Result<Vec<OrgAppInstallation>> {
+        #[derive(serde::Deserialize, Debug)]
+        struct InstallationPage {
+            installations: Vec<OrgAppInstallation>,
+        }
+
+        let mut installations = Vec::new();
+        self.client.rest_paginated(
+            &Method::GET,
+            format!("orgs/{org}/installations"),
+            |response: InstallationPage| {
+                installations.extend(response.installations);
+                Ok(())
+            },
+        )?;
+        Ok(installations)
+    }
+
+    fn app_installation_repos(
+        &self,
+        installation_id: u64,
+    ) -> anyhow::Result<Vec<RepoAppInstallation>> {
+        #[derive(serde::Deserialize, Debug)]
+        struct InstallationPage {
+            repositories: Vec<RepoAppInstallation>,
+        }
+
+        let mut installations = Vec::new();
+        self.client.rest_paginated(
+            &Method::GET,
+            format!("user/installations/{installation_id}/repositories"),
+            |response: InstallationPage| {
+                installations.extend(response.repositories);
+                Ok(())
+            },
+        )?;
+        Ok(installations)
     }
 
     fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
