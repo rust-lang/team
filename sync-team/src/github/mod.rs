@@ -384,10 +384,12 @@ fn calculate_permission_diffs(
         permissions.push(diff);
     }
     // Bot permissions
-    let bots = expected_repo.bots.iter().map(|b| {
-        let bot_name = bot_name(b);
+    let bots = expected_repo.bots.iter().filter_map(|b| {
+        let Some(bot_name) = bot_name(b) else {
+            return None;
+        };
         actual_teams.remove(bot_name);
-        (bot_name, RepoPermission::Write)
+        Some((bot_name, RepoPermission::Write))
     });
     // Member permissions
     let members = expected_repo
@@ -441,13 +443,14 @@ fn calculate_permission_diffs(
     Ok(permissions)
 }
 
-fn bot_name(bot: &Bot) -> &str {
+/// Returns `None` if the bot is not an actual bot user, but rather a GitHub app.
+fn bot_name(bot: &Bot) -> Option<&str> {
     match bot {
-        Bot::Bors => "bors",
-        Bot::Highfive => "rust-highfive",
-        Bot::RustTimer => "rust-timer",
-        Bot::Rustbot => "rustbot",
-        Bot::Rfcbot => "rfcbot",
+        Bot::Bors => Some("bors"),
+        Bot::Highfive => Some("rust-highfive"),
+        Bot::RustTimer => Some("rust-timer"),
+        Bot::Rustbot => Some("rustbot"),
+        Bot::Rfcbot => Some("rfcbot"),
     }
 }
 
