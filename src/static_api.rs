@@ -69,6 +69,7 @@ impl<'a> Generator<'a> {
                         Bot::RustTimer => v1::Bot::RustTimer,
                         Bot::Rustbot => v1::Bot::Rustbot,
                         Bot::Rfcbot => v1::Bot::Rfcbot,
+                        Bot::Renovate => v1::Bot::Renovate,
                     })
                     .collect(),
                 teams: r
