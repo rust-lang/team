@@ -337,7 +337,7 @@ impl SyncGitHub {
         Ok(RepoDiff::Update(UpdateRepoDiff {
             org: expected_repo.org.clone(),
             name: actual_repo.name,
-            repo_id: actual_repo.id,
+            repo_node_id: actual_repo.id,
             settings_diff: (old_settings, new_settings),
             permission_diffs,
             branch_protection_diffs,
@@ -745,7 +745,7 @@ impl std::fmt::Display for CreateRepoDiff {
 struct UpdateRepoDiff {
     org: String,
     name: String,
-    repo_id: String,
+    repo_node_id: String,
     // old, new
     settings_diff: (RepoSettings, RepoSettings),
     permission_diffs: Vec<RepoPermissionAssignmentDiff>,
@@ -786,7 +786,7 @@ impl UpdateRepoDiff {
         }
 
         for branch_protection in &self.branch_protection_diffs {
-            branch_protection.apply(sync, &self.org, &self.name, &self.repo_id)?;
+            branch_protection.apply(sync, &self.org, &self.name, &self.repo_node_id)?;
         }
         Ok(())
     }
