@@ -262,8 +262,7 @@ pub(crate) struct RepoAppInstallation {
 
 #[derive(serde::Deserialize, Debug)]
 pub(crate) struct Repo {
-    #[serde(rename = "node_id")]
-    pub(crate) id: String,
+    pub(crate) node_id: String,
     #[serde(rename = "id")]
     pub(crate) repo_id: u64,
     pub(crate) name: String,

@@ -337,7 +337,7 @@ impl SyncGitHub {
         Ok(RepoDiff::Update(UpdateRepoDiff {
             org: expected_repo.org.clone(),
             name: actual_repo.name,
-            repo_node_id: actual_repo.id,
+            repo_node_id: actual_repo.node_id,
             settings_diff: (old_settings, new_settings),
             permission_diffs,
             branch_protection_diffs,
@@ -699,7 +699,7 @@ impl CreateRepoDiff {
                 pattern: branch.clone(),
                 operation: BranchProtectionDiffOperation::Create(protection.clone()),
             }
-            .apply(sync, &self.org, &self.name, &repo.id)?;
+            .apply(sync, &self.org, &self.name, &repo.node_id)?;
         }
 
         for installation in &self.app_installations {

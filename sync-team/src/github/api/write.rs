@@ -230,7 +230,7 @@ impl GitHubWrite {
         debug!("Creating the repo {org}/{name} with {req:?}");
         if self.dry_run {
             Ok(Repo {
-                id: String::from("ID"),
+                node_id: String::from("ID"),
                 repo_id: 0,
                 name: name.to_string(),
                 org: org.to_string(),
