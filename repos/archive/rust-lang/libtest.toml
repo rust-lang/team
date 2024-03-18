@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "libtest"
+description = "Rust's built-in testing and benchmarking framework"
+bots = []
+
+[access.teams]
