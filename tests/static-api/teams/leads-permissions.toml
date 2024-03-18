@@ -1,5 +1,5 @@
 name = "leads-permissions"
-subteam-of = "leadership-council"
+top-level = true
 
 [people]
 leads = ["user-6"]

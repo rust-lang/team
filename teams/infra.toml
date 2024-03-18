@@ -1,5 +1,5 @@
 name = "infra"
-subteam-of = "leadership-council"
+top-level = true
 
 [people]
 leads = ["shepmaster", "jdno"]

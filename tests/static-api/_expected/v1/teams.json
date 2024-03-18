@@ -20,7 +20,8 @@
   "foo": {
     "name": "foo",
     "kind": "team",
-    "subteam_of": "leadership-council",
+    "subteam_of": null,
+    "top_level": true,
     "members": [
       {
         "name": "Zeroth user",
@@ -77,7 +78,8 @@
   "leaderless": {
     "name": "leaderless",
     "kind": "team",
-    "subteam_of": "leadership-council",
+    "subteam_of": null,
+    "top_level": true,
     "members": [
       {
         "name": "Zeroth user",
@@ -106,7 +108,8 @@
   "leads-permissions": {
     "name": "leads-permissions",
     "kind": "team",
-    "subteam_of": "leadership-council",
+    "subteam_of": null,
+    "top_level": true,
     "members": [
       {
         "name": "Sixth user",
@@ -136,7 +139,8 @@
   "wg-test": {
     "name": "wg-test",
     "kind": "working_group",
-    "subteam_of": "leadership-council",
+    "subteam_of": null,
+    "top_level": true,
     "members": [
       {
         "name": "Second user",

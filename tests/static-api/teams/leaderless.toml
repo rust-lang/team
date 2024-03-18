@@ -1,5 +1,5 @@
 name = "leaderless"
-subteam-of = "leadership-council"
+top-level = true
 
 [people]
 leads = []

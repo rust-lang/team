@@ -610,11 +610,23 @@ fn validate_zulip_stream_name(data: &Data, errors: &mut Vec<String>) {
 /// Ensure teams have a parent team.
 fn validate_subteam_of_required(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
+        let top_level = team.top_level().unwrap_or(false);
+        if top_level && team.subteam_of().is_some() {
+            bail!(
+                "team `{}` specifies both top-level=true and subteam-of, \
+                it should only specify one or the other",
+                team.name()
+            );
+        }
         if team.kind() != TeamKind::MarkerTeam
             && team.subteam_of().is_none()
             && !matches!(team.name(), "leadership-council" | "core")
+            && !top_level
         {
-            bail!("team `{}` must specify `subteam-of`", team.name());
+            bail!(
+                "team `{}` must specify `subteam-of` or top-level=true",
+                team.name()
+            );
         }
         Ok(())
     })

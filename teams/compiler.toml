@@ -1,5 +1,5 @@
 name = "compiler"
-subteam-of = "leadership-council"
+top-level = true
 
 [people]
 leads = ["davidtwco", "wesleywiser"]

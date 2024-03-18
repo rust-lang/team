@@ -1,5 +1,5 @@
 name = "launching-pad"
-subteam-of = "leadership-council"
+top-level = true
 
 [people]
 # This is an "umbrella" team, and thus does not have any members.

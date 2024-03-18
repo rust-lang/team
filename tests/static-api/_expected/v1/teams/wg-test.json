@@ -1,7 +1,8 @@
 {
   "name": "wg-test",
   "kind": "working_group",
-  "subteam_of": "leadership-council",
+  "subteam_of": null,
+  "top_level": true,
   "members": [
     {
       "name": "Second user",

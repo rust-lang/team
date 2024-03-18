@@ -1,5 +1,5 @@
 name = "crates-io"
-subteam-of = "leadership-council"
+top-level = true
 
 [people]
 leads = ["jtgeibel", "Turbo87"]

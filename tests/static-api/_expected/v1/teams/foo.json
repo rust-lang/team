@@ -1,7 +1,8 @@
 {
   "name": "foo",
   "kind": "team",
-  "subteam_of": "leadership-council",
+  "subteam_of": null,
+  "top_level": true,
   "members": [
     {
       "name": "Zeroth user",

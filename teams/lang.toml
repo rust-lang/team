@@ -1,5 +1,5 @@
 name = "lang"
-subteam-of = "leadership-council"
+top-level = true
 
 [people]
 leads = [

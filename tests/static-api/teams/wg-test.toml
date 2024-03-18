@@ -1,6 +1,6 @@
 name = "wg-test"
 kind = "working-group"
-subteam-of = "leadership-council"
+top-level = true
 
 [people]
 leads = ["user-2"]

@@ -1,5 +1,5 @@
 name = "devtools"
-subteam-of = "leadership-council"
+top-level = true
 
 [people]
 leads = ["Manishearth"]
