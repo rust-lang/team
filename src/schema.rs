@@ -760,6 +760,7 @@ pub(crate) enum Bot {
     Rustbot,
     RustTimer,
     Rfcbot,
+    Renovate,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]

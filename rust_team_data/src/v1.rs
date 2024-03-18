@@ -181,6 +181,7 @@ pub enum Bot {
     Rustbot,
     RustTimer,
     Rfcbot,
+    Renovate,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
