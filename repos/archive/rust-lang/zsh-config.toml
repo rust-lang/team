@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "zsh-config"
+description = "zsh configuration for Rust"
+bots = []
+
+[access.teams]
