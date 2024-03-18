@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "nano-config"
+description = "Nano configuration for Rust"
+bots = []
+
+[access.teams]

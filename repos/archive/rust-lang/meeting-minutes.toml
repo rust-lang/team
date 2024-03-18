@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "meeting-minutes"
+description = "Official minutes for Rust-related meetings"
+bots = []
+
+[access.teams]

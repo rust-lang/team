@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "mailgun-mailmap"
+description = "Mail configuration for rust-lang domains"
+bots = []
+
+[access.teams]
