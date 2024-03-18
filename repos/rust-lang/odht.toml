@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "odht"
+description = "An on-disk hash table implementation"
+bots = []
+
+[access.teams]
+compiler = "write"
+compiler-contributors = "write"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = ["Required Checks Passed"]
