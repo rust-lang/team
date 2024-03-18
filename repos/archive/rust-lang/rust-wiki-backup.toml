@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "rust-wiki-backup"
+description = "A backup of the Rust wiki"
+bots = []
+
+[access.teams]

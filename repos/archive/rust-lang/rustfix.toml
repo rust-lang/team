@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "rustfix"
+description = "Automatically apply the suggestions made by rustc"
+bots = []
+
+[access.teams]
