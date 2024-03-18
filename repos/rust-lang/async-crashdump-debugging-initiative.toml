@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "async-crashdump-debugging-initiative"
+description = ""
+bots = []
+
+[access.teams]
+initiative-async-crashdump-debugging = "write"
