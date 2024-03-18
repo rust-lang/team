@@ -32,7 +32,7 @@ directory. The structure of the file is this:
 name = "overlords"  # Name of the team, used for GitHub (required)
 subteam-of = "gods"  # Name of the parent team of this team (optional)
 
-# The kind of the team (optional). Could be be:
+# The kind of the team (optional). Could be:
 # - team (default)
 # - working-group
 # - project-group

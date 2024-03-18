@@ -844,7 +844,7 @@ fn validate_member_roles(data: &Data, errors: &mut Vec<String>) {
                     Entry::Occupied(entry) => {
                         if **entry.get() != role.description {
                             errors.push(format!(
-                                "role '{role_id}' has inconsistent description bewteen \
+                                "role '{role_id}' has inconsistent description between \
                                 different teams; if this is intentional, you must give \
                                 those roles different ids",
                             ));

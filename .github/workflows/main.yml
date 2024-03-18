@@ -58,7 +58,7 @@ jobs:
       - name: Start the synchronization tool
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-          # Introduce some artifical delay to help github pages propagate.
+          # Introduce some artificial delay to help github pages propagate.
           sleep 60
           aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
           cat output.json | python3 -m json.tool
