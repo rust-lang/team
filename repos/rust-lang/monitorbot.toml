@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "monitorbot"
+description = "Monitoring of external API services Rust infrastructure relies upon"
+bots = []
+
+[access.teams]
+infra = "write"
