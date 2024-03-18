@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "rust-artwork"
+description = "Official artwork for the Rust project."
+bots = []
+
+# There is no current clear owner of this repository, so the access is left empty for now.
+[access.teams]
