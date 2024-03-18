@@ -5,7 +5,4 @@ homepage = "https://rustlings.cool"
 bots = []
 
 [access.teams]
-
-[access.individuals]
-# This repository probably needs a separate team?
-shadows-withal = "write"
+rustlings = "maintain"
