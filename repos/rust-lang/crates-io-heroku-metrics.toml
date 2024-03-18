@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "crates-io-heroku-metrics"
+description = "Heroku metrics collector for crates.io"
+bots = []
+
+[access.teams]
+infra = "write"
