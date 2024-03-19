@@ -618,6 +618,14 @@ fn validate_subteam_of_required(data: &Data, errors: &mut Vec<String>) {
                 team.name()
             );
         }
+        if top_level && team.kind() != TeamKind::Team {
+            bail!(
+                "team `{}` is top-level, but is a `{}` team kind, \
+                 it must be a normal team (don't specify \"kind\")",
+                team.name(),
+                team.kind()
+            );
+        }
         if team.kind() != TeamKind::MarkerTeam
             && team.subteam_of().is_none()
             && !matches!(team.name(), "leadership-council" | "core")
