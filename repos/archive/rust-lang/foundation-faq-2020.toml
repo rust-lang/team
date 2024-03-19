@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "foundation-faq-2020"
+description = "Have questions on the Rust Foundation? Ask here!"
+bots = []
+
+[access.teams]

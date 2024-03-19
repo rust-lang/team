@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "ghost-code-initiative"
+description = ""
+bots = []
+
+[access.teams]

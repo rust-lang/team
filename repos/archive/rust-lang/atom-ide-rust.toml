@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "atom-ide-rust"
+description = "Rust IDE support for Atom, powered by the Rust Analyzer or Rust Language Server"
+bots = []
+
+[access.teams]
