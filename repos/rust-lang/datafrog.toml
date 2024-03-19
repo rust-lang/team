@@ -1,0 +1,9 @@
+org = "rust-lang"
+name = "datafrog"
+description = "A lightweight Datalog engine in Rust"
+bots = []
+
+[access.teams]
+wg-polonius = "write"
+compiler = "write"
+compiler-contributors = "write"
