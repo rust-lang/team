@@ -5,7 +5,7 @@ mod tests;
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
 use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings};
 use log::debug;
-use rust_team_data::v1::Bot;
+use rust_team_data::v1::{Bot, BranchProtectionMode};
 use std::collections::{HashMap, HashSet};
 use std::fmt::{Display, Formatter, Write};
 
@@ -606,10 +606,14 @@ fn construct_branch_protection(
     let required_approving_review_count: u8 = if uses_bors {
         0
     } else {
-        branch_protection
-            .required_approvals
-            .try_into()
-            .expect("Too large required approval count")
+        match branch_protection.mode {
+            BranchProtectionMode::PrRequired {
+                required_approvals, ..
+            } => required_approvals
+                .try_into()
+                .expect("Too large required approval count"),
+            BranchProtectionMode::PrNotRequired => 0,
+        }
     };
     let mut push_allowances: Vec<PushAllowanceActor> = branch_protection
         .allowed_merge_teams
@@ -634,8 +638,17 @@ fn construct_branch_protection(
         is_admin_enforced: true,
         dismisses_stale_reviews: branch_protection.dismiss_stale_review,
         required_approving_review_count,
-        required_status_check_contexts: branch_protection.ci_checks.clone(),
+        required_status_check_contexts: match &branch_protection.mode {
+            BranchProtectionMode::PrRequired { ci_checks, .. } => ci_checks.clone(),
+            BranchProtectionMode::PrNotRequired => {
+                vec![]
+            }
+        },
         push_allowances,
+        requires_approving_reviews: matches!(
+            branch_protection.mode,
+            BranchProtectionMode::PrRequired { .. }
+        ),
     }
 }
 

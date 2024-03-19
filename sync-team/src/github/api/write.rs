@@ -409,6 +409,8 @@ impl GitHubWrite {
             dismiss_stale: bool,
             review_count: u8,
             restricts_pushes: bool,
+            // Is a PR required to push into this branch?
+            requires_approving_reviews: bool,
             push_actor_ids: &'a [String],
         }
         let mutation_name = match op {
@@ -424,7 +426,7 @@ impl GitHubWrite {
             BranchProtectionOp::UpdateBranchProtection(id) => id,
         };
         let query = format!("
-        mutation($id: ID!, $pattern:String!, $contexts: [String!], $dismissStale: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean) {{
+        mutation($id: ID!, $pattern:String!, $contexts: [String!], $dismissStale: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean, $requiresApprovingReviews: Boolean) {{
             {mutation_name}(input: {{
                 {id_field}: $id, 
                 pattern: $pattern, 
@@ -433,7 +435,7 @@ impl GitHubWrite {
                 isAdminEnforced: true, 
                 requiredApprovingReviewCount: $reviewCount, 
                 dismissesStaleReviews: $dismissStale, 
-                requiresApprovingReviews:true,
+                requiresApprovingReviews: $requiresApprovingReviews,
                 restrictsPushes: $restrictsPushes,
                 pushActorIds: $pushActorIds
             }}) {{
@@ -470,6 +472,7 @@ impl GitHubWrite {
                     // to merge *or* we only allow those in `push_actor_ids`)
                     restricts_pushes: !push_actor_ids.is_empty(),
                     push_actor_ids: &push_actor_ids,
+                    requires_approving_reviews: branch_protection.requires_approving_reviews,
                 },
             )?;
         }
