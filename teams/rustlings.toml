@@ -1,5 +1,5 @@
 name = "rustlings"
-kind = "team"
+kind = "marker-team"
 
 [people]
 leads = ["shadows-withal"]
