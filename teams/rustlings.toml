@@ -1,0 +1,10 @@
+name = "rustlings"
+kind = "marker-team"
+
+[people]
+leads = ["shadows-withal"]
+members = ["shadows-withal"]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
