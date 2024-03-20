@@ -6,6 +6,7 @@ bots = ["bors", "rustbot"]
 
 [access.teams]
 clippy = "write"
+clippy-contributors = "triage"
 
 [[branch-protections]]
 pattern = "master"

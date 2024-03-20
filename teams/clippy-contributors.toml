@@ -1,0 +1,20 @@
+name = "clippy-contributors"
+subteam-of = "clippy"
+
+[people]
+leads = []
+members = [
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Clippy-Contributors"
+description = "Regular contributors to the Clippy linter"
+zulip-stream = "clippy"
+repo = "https://github.com/rust-lang/rust-clippy"
+
+[[zulip-groups]]
+name = "T-clippy"
