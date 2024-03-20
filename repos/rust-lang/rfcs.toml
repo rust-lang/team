@@ -2,7 +2,7 @@ org = "rust-lang"
 name = "rfcs"
 description = "RFCs for changes to Rust"
 homepage = "https://rust-lang.github.io/rfcs/"
-bots = ["rustbot", "rfcbot"]
+bots = ["rustbot", "rfcbot", "renovate"]
 
 [access.teams]
 all = "write"
