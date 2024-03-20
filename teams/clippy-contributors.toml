@@ -4,6 +4,10 @@ subteam-of = "clippy"
 [people]
 leads = []
 members = [
+    "GuillaumeGomez",
+    "J-ZhengLi",
+    "m-rph",
+    "pitaj",
 ]
 alumni = []
 
