@@ -17,6 +17,3 @@ ci-checks = [
     "Backend / cargo-deny",
 ]
 required-approvals = 0
-allowed-merge-teams = [
-    "crates-io",
-]
