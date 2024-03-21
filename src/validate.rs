@@ -42,6 +42,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_zulip_stream_name,
     validate_project_groups_have_parent_teams,
     validate_discord_team_members_have_discord_ids,
+    validate_unique_zulip_groups,
     validate_zulip_group_ids,
     validate_zulip_group_extra_people,
     validate_repos,
@@ -706,6 +707,29 @@ fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
             }
             Ok(())
         });
+        Ok(())
+    });
+}
+
+/// Ensure there is at most one definition for any given Zulip group
+fn validate_unique_zulip_groups(data: &Data, errors: &mut Vec<String>) {
+    let mut groups = HashMap::new();
+    wrapper(data.teams(), errors, |team, errors| {
+        wrapper(
+            team.zulip_groups(data).iter().flatten(),
+            errors,
+            |group, _| {
+                if let Some(other_team) = groups.insert(group.name().to_owned(), team.name()) {
+                    bail!(
+                        "the Zulip group `{}` is defined in both `{}` and `{}` team definitions",
+                        group.name(),
+                        team.name(),
+                        other_team
+                    );
+                }
+                Ok(())
+            },
+        );
         Ok(())
     });
 }
