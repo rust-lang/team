@@ -31,6 +31,8 @@ directory. The structure of the file is this:
 ```toml
 name = "overlords"  # Name of the team, used for GitHub (required)
 subteam-of = "gods"  # Name of the parent team of this team (optional)
+# Set this to `true` if it is a top-level team, with a representative on the leadership-council.
+top-level = true
 
 # The kind of the team (optional). Could be:
 # - team (default)

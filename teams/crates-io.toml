@@ -1,4 +1,5 @@
 name = "crates-io"
+top-level = true
 
 [people]
 leads = ["jtgeibel", "Turbo87"]

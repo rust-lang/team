@@ -1,4 +1,5 @@
 name = "infra"
+top-level = true
 
 [people]
 leads = ["shepmaster", "jdno"]

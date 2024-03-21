@@ -163,6 +163,7 @@ pub(crate) struct Team {
     #[serde(default)]
     kind: TeamKind,
     subteam_of: Option<String>,
+    top_level: Option<bool>,
     people: TeamPeople,
     #[serde(default)]
     permissions: Permissions,
@@ -192,6 +193,10 @@ impl Team {
 
     pub(crate) fn subteam_of(&self) -> Option<&str> {
         self.subteam_of.as_deref()
+    }
+
+    pub(crate) fn top_level(&self) -> Option<bool> {
+        self.top_level
     }
 
     // Return's whether the provided team is a subteam of this team

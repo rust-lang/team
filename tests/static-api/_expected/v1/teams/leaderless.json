@@ -2,6 +2,7 @@
   "name": "leaderless",
   "kind": "team",
   "subteam_of": null,
+  "top_level": true,
   "members": [
     {
       "name": "Zeroth user",

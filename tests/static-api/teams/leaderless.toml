@@ -1,4 +1,5 @@
 name = "leaderless"
+top-level = true
 
 [people]
 leads = []

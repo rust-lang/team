@@ -2,6 +2,7 @@
   "name": "leads-permissions",
   "kind": "team",
   "subteam_of": null,
+  "top_level": true,
   "members": [
     {
       "name": "Sixth user",

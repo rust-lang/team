@@ -1,4 +1,5 @@
 name = "leads-permissions"
+top-level = true
 
 [people]
 leads = ["user-6"]

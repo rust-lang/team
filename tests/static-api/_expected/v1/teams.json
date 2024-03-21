@@ -1,7 +1,7 @@
 {
   "alumni": {
     "name": "alumni",
-    "kind": "team",
+    "kind": "marker_team",
     "subteam_of": null,
     "members": [
       {
@@ -21,6 +21,7 @@
     "name": "foo",
     "kind": "team",
     "subteam_of": null,
+    "top_level": true,
     "members": [
       {
         "name": "Zeroth user",
@@ -78,6 +79,7 @@
     "name": "leaderless",
     "kind": "team",
     "subteam_of": null,
+    "top_level": true,
     "members": [
       {
         "name": "Zeroth user",
@@ -92,10 +94,22 @@
     "roles": [],
     "discord": []
   },
+  "leadership-council": {
+    "name": "leadership-council",
+    "kind": "team",
+    "subteam_of": null,
+    "members": [],
+    "alumni": [],
+    "github": null,
+    "website_data": null,
+    "roles": [],
+    "discord": []
+  },
   "leads-permissions": {
     "name": "leads-permissions",
     "kind": "team",
     "subteam_of": null,
+    "top_level": true,
     "members": [
       {
         "name": "Sixth user",
@@ -125,7 +139,7 @@
   "wg-test": {
     "name": "wg-test",
     "kind": "working_group",
-    "subteam_of": null,
+    "subteam_of": "foo",
     "members": [
       {
         "name": "Second user",

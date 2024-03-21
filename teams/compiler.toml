@@ -1,4 +1,5 @@
 name = "compiler"
+top-level = true
 
 [people]
 leads = ["davidtwco", "wesleywiser"]

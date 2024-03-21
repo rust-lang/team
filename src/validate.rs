@@ -40,7 +40,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_team_names,
     validate_github_teams,
     validate_zulip_stream_name,
-    validate_project_groups_have_parent_teams,
+    validate_subteam_of_required,
     validate_discord_team_members_have_discord_ids,
     validate_zulip_group_ids,
     validate_zulip_group_extra_people,
@@ -607,12 +607,32 @@ fn validate_zulip_stream_name(data: &Data, errors: &mut Vec<String>) {
     })
 }
 
-/// Ensure each project group has a parent team, according to RFC 2856.
-fn validate_project_groups_have_parent_teams(data: &Data, errors: &mut Vec<String>) {
+/// Ensure teams have a parent team.
+fn validate_subteam_of_required(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
-        if team.kind() == TeamKind::ProjectGroup && team.subteam_of().is_none() {
+        let top_level = team.top_level().unwrap_or(false);
+        if top_level && team.subteam_of().is_some() {
             bail!(
-                "the project group `{}` doesn't have a parent team, but it's required to have one",
+                "team `{}` specifies both top-level=true and subteam-of, \
+                it should only specify one or the other",
+                team.name()
+            );
+        }
+        if top_level && team.kind() != TeamKind::Team {
+            bail!(
+                "team `{}` is top-level, but is a `{}` team kind, \
+                 it must be a normal team (don't specify \"kind\")",
+                team.name(),
+                team.kind()
+            );
+        }
+        if team.kind() != TeamKind::MarkerTeam
+            && team.subteam_of().is_none()
+            && !matches!(team.name(), "leadership-council" | "core")
+            && !top_level
+        {
+            bail!(
+                "team `{}` must specify `subteam-of` or top-level=true",
                 team.name()
             );
         }

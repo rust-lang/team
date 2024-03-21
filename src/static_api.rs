@@ -175,6 +175,7 @@ impl<'a> Generator<'a> {
                     TeamKind::MarkerTeam => v1::TeamKind::MarkerTeam,
                 },
                 subteam_of: team.subteam_of().map(|st| st.into()),
+                top_level: team.top_level(),
                 members,
                 alumni,
                 github: Some(v1::TeamGitHub {

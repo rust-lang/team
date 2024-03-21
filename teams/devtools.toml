@@ -1,4 +1,5 @@
 name = "devtools"
+top-level = true
 
 [people]
 leads = ["Manishearth"]

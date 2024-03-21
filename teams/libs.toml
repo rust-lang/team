@@ -1,4 +1,5 @@
 name = "libs"
+top-level = true
 
 [people]
 leads = [

@@ -1,5 +1,6 @@
 name = "wg-test"
 kind = "working-group"
+subteam-of = "foo"
 
 [people]
 leads = ["user-2"]
