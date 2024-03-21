@@ -1,0 +1,19 @@
+org = "rust-lang"
+name = "crates.io"
+description = "The Rust package registry"
+homepage = "https://crates.io"
+bots = ["renovate"]
+
+[access.teams]
+crates-io = "write"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = [
+    "Backend / Lint",
+    "Backend / Test",
+    "Frontend / Lint",
+    "Frontend / Test",
+    "Backend / cargo-deny",
+]
+required-approvals = 0
