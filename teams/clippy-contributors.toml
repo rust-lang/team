@@ -21,4 +21,4 @@ zulip-stream = "clippy"
 repo = "https://github.com/rust-lang/rust-clippy"
 
 [[zulip-groups]]
-name = "T-clippy"
+name = "T-clippy-contributors"
