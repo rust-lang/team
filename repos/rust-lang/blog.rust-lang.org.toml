@@ -2,7 +2,7 @@ org = "rust-lang"
 name = "blog.rust-lang.org"
 description = "Home of the Rust and Inside Rust blogs"
 homepage = "https://blog.rust-lang.org"
-bots = []
+bots = ["renovate"]
 
 [access.teams]
 inside-rust-reviewers = "write"
