@@ -12,9 +12,10 @@ members = [
     "oli-obk",
     "pnkfelix",
     "ouz-a",
+]
+alumni = [
     "spastorino",
 ]
-alumni = []
 
 [website]
 name = "Stable MIR Project Group"
