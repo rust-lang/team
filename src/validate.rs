@@ -359,15 +359,17 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
 /// Ensure every member of a team with a mailing list has an email address
 fn validate_list_email_addresses(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
-        if team.lists(data)?.is_empty() {
+        let lists = team.lists(data)?;
+        if lists.is_empty() {
             return Ok(());
         }
         wrapper(team.members(data)?.iter(), errors, |member, _| {
             if let Some(member) = data.person(member) {
                 if let Email::Missing = member.email() {
                     bail!(
-                        "person `{}` is a member of a mailing list but has no email address",
-                        member.github()
+                        "person `{}` is a member of at least one mailing list ({}) but has no email address",
+                        member.github(),
+                        lists.iter().map(|l| l.address()).collect::<Vec<_>>().join(", "),
                     );
                 }
             }
