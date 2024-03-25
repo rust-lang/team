@@ -3,7 +3,10 @@ kind = "marker-team"
 
 [people]
 leads = ["shadows-withal"]
-members = ["shadows-withal"]
+members = [
+    "shadows-withal",
+    "mo8it",
+]
 alumni = []
 
 [[github]]
