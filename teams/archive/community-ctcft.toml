@@ -2,17 +2,14 @@ name = "community-ctcft"
 subteam-of = "community"
 
 [people]
-leads = [
-    "AngelOnFira",
-    "nikomatsakis",
-]
-members = [
+leads = []
+members = []
+alumni = [
     "AngelOnFira",
     "nikomatsakis",
     "technetos",
-    "yaahc",
+    "yaahc"
 ]
-alumni = []
 
 [[github]]
 orgs = ["rust-lang"]
