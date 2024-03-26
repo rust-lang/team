@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "mirror-google-fuchsia-zircon"
+description = "Zircon Kernel, Core Drivers, and Services"
+bots = []
+
+[access.teams]
