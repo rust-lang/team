@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "never-type-initiative"
+description = "In pursuit of the stabilization of never type"
+bots = []
+
+[access.teams]
