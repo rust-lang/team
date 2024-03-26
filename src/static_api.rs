@@ -4,6 +4,7 @@ use anyhow::{ensure, Context as _, Error};
 use indexmap::IndexMap;
 use log::info;
 use rust_team_data::v1;
+use rust_team_data::v1::BranchProtectionMode;
 use std::collections::HashMap;
 use std::path::Path;
 
@@ -48,9 +49,15 @@ impl<'a> Generator<'a> {
                 .iter()
                 .map(|b| v1::BranchProtection {
                     pattern: b.pattern.clone(),
-                    ci_checks: b.ci_checks.clone(),
                     dismiss_stale_review: b.dismiss_stale_review,
-                    required_approvals: b.required_approvals.unwrap_or(1),
+                    mode: if b.pr_required {
+                        BranchProtectionMode::PrRequired {
+                            ci_checks: b.ci_checks.clone(),
+                            required_approvals: b.required_approvals.unwrap_or(1),
+                        }
+                    } else {
+                        BranchProtectionMode::PrNotRequired
+                    },
                     allowed_merge_teams: b.allowed_merge_teams.clone(),
                 })
                 .collect();
