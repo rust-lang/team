@@ -9,4 +9,4 @@ lang-docs = "write"
 
 [[branch-protections]]
 pattern = "master"
-ci-checks = ["test"]
+ci-checks = ["Test"]
