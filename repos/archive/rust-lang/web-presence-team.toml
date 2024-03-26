@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "web-presence-team"
+description = "Home of the Web Presence Team"
+bots = []
+
+[access.teams]
