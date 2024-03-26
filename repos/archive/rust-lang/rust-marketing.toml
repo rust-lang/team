@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "rust-marketing"
+description = "Rust marketing handbook"
+bots = []
+
+[access.teams]

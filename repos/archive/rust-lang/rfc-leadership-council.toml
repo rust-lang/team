@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "rfc-leadership-council"
+description = "RFCs for changes to Rust"
+bots = []
+
+[access.teams]

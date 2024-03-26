@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "rust-memory-model"
+description = "Collecting examples and information to help design a memory model for Rust."
+bots = []
+
+[access.teams]
