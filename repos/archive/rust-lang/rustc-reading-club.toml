@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "rustc-reading-club"
+description = "Rust Code Reading Clubs"
+bots = []
+
+[access.teams]
