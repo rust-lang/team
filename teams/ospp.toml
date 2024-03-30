@@ -1,0 +1,9 @@
+name = "ospp"
+kind = "marker-team"
+
+[people]
+leads = []
+members = ["Amanieu"]
+
+[[lists]]
+address = "ospp@rust-lang.org"
