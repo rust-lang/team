@@ -116,6 +116,8 @@ label = "T-cargo"
 name = "Cargo"
 # The GitHub team to tag in a GitHub comment.
 ping = "rust-lang/cargo"
+# Team members to be excluded from FCPs
+exclude-members = ["some-team-member"]
 
 # Information about the team to display on the www.rust-lang.org website.
 [website]
