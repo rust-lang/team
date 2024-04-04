@@ -5,6 +5,7 @@ bots = ["rustbot", "rfcbot"]
 
 [access.teams]
 leadership-council = "maintain"
+council-librarians = "write"
 
 [[branch-protections]]
 pattern = "main"

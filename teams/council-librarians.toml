@@ -1,0 +1,9 @@
+name = "council-librarians"
+kind = "marker-team"
+
+[people]
+leads = []
+members = ["rylev", "ehuss"]
+
+[[github]]
+orgs = ["rust-lang"]
