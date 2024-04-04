@@ -866,11 +866,15 @@ impl std::fmt::Display for UpdateRepoDiff {
         for permission_diff in &self.permission_diffs {
             write!(f, "{permission_diff}")?;
         }
-        writeln!(f, "  Branch Protections:")?;
+        if !self.branch_protection_diffs.is_empty() {
+            writeln!(f, "  Branch Protections:")?;
+        }
         for branch_protection_diff in &self.branch_protection_diffs {
             write!(f, "{branch_protection_diff}")?;
         }
-        writeln!(f, "  App installation changes:")?;
+        if !self.app_installation_diffs.is_empty() {
+            writeln!(f, "  App installation changes:")?;
+        }
         for diff in &self.app_installation_diffs {
             write!(f, "{diff}")?;
         }
