@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "rust-semverver"
+description = "Automatic checking for semantic versioning in library crates"
+bots = []
+
+[access.teams]
