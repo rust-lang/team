@@ -4,3 +4,8 @@ description = ""
 bots = []
 
 [access.teams]
+
+[access.individuals]
+# Liaison for the deref-patterns initiative, which
+# doesn't have a working group yet.
+traviscross = "write"
