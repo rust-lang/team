@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "infra-private"
+description = ""
+bots = []
+private-non-synced = true
+
+[access.teams]
+infra = "maintain"
