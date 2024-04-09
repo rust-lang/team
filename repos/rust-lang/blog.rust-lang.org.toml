@@ -9,3 +9,7 @@ inside-rust-reviewers = "write"
 
 [[branch-protections]]
 pattern = "master"
+ci-checks = [
+    "lint",
+    "build",
+]
