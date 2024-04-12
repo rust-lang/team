@@ -4,15 +4,17 @@ subteam-of = "leadership-council"
 
 [people]
 leads = [
-    "bstrie",
+    "traviscross",
     "ehuss",
 ]
 members = [
-    "bstrie",
+    "traviscross",
     "ehuss",
     "m-ou-se",
 ]
-alumni = []
+alumni = [
+    "bstrie",
+]
 
 [[github]]
 orgs = ["rust-lang"]
