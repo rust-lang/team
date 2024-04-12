@@ -4,7 +4,7 @@ name = "types"
 subteam-of = "compiler"
 
 [people]
-leads = ["nikomatsakis", "jackh726"]
+leads = ["jackh726", "lcnr"]
 members = [
     "aliemjay",
     "BoxyUwU",
