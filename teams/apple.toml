@@ -12,3 +12,6 @@ members = [
     "nvzqz",
     "madsmtm",
 ]
+
+[[zulip-groups]]
+name = "apple"
