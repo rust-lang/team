@@ -5,3 +5,4 @@ bots = []
 
 [access.teams]
 infra = "write"
+docs-rs = "write"
