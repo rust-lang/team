@@ -12,8 +12,3 @@ mods = "maintain"
 pattern = "main"
 ci-checks = ["Test", "Test Docker"]
 required-approvals = 0
-
-[[branch-protections]]
-pattern = "staging"
-ci-checks = ["Test", "Test Docker"]
-required-approvals = 0
