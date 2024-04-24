@@ -18,7 +18,17 @@ allowed-github-orgs = [
     "rust-analyzer",
 ]
 
-allowed-domains = []
+allowed-domains = [
+    "https://(.*)rust-lang.org/?.*",
+    "https://areweasyncyet.rs/?.*",
+    "https://crates.io/?.*",
+    "https://docs.rs/?.*",
+    "https://github.com/rust-lang/rust/issues/35437",
+    "https://rfcbot.rs/?.*",
+    "https://rust-analyzer.github.io/?.*",
+    "https://rust-lang.github.io/?.*",
+    "https://www.arewewebyet.org/?.*",
+]
 
 permissions-bors-repos = [
     "bors-kindergarten",
