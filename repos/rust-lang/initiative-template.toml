@@ -1,7 +1,7 @@
 org = "rust-lang"
 name = "initiative-template"
 description = "A template for lang-team initiatives"
-homepage = "https://nikomatsakis.github.io/initiative-template/"
+homepage = "https://rust-lang.github.io/initiative-template/"
 bots = []
 
 [access.teams]
