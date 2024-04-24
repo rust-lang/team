@@ -48,6 +48,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_repos,
     validate_branch_protections,
     validate_member_roles,
+    validate_homepage_urls,
 ];
 
 #[allow(clippy::type_complexity)]
@@ -919,6 +920,24 @@ fn validate_member_roles(data: &Data, errors: &mut Vec<String>) {
             Ok(())
         },
     );
+}
+
+/// Ensure homepage URLs on GitHub are owned and managed by the Rust project
+fn validate_homepage_urls(data: &Data, errors: &mut Vec<String>) {
+    let allowed_domains: Vec<Regex> = data.config().allowed_domains().iter().map(|domain| Regex::new(domain).unwrap()).collect();
+
+    wrapper(data.repos(), errors, |repo, errors| {
+        if let Some(homepage) = &repo.homepage {
+            if !allowed_domains.iter().any(|domain| domain.is_match(homepage)) {
+                errors.push(format!(
+                    "homepage URL for {}/{} is not on an allowed domain: {}",
+                    repo.org, repo.name, homepage
+                ));
+            }
+        }
+
+        Ok(())
+    });
 }
 
 /// We use Fluent ids which are lowercase alphanumeric with hyphens.

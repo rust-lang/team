@@ -18,6 +18,8 @@ allowed-github-orgs = [
     "rust-analyzer",
 ]
 
+allowed-domains = []
+
 permissions-bors-repos = [
     "bors-kindergarten",
     "cargo",
