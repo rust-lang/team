@@ -23,7 +23,7 @@ allowed-domains = [
     "https://areweasyncyet.rs/?.*",
     "https://crates.io/?.*",
     "https://docs.rs/?.*",
-    "https://github.com/rust-lang/rust/issues/35437",
+    "https://github.com/rust-lang/?.*",
     "https://rfcbot.rs/?.*",
     "https://rust-analyzer.github.io/?.*",
     "https://rust-lang.github.io/?.*",
