@@ -260,6 +260,8 @@ name = "my-repo"
 # A description of the repo (required)
 description = "A repo for awesome things!"
 # A URL that is displayed next to the description.
+# The URL or domain must be explicitely allowed in `allowed-domains` in the
+# configuration of the team repo.
 homepage = "https://www.rust-lang.org/"
 # The bots that this repo requires (required)
 bots = ["bors", "rustbot", "rust-timer"]
