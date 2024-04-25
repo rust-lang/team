@@ -3,7 +3,6 @@ name = "leadership-council"
 [people]
 leads = []
 members = [
-    { github = "carols10cents", roles = ["council-rep-crates-io"] },
     { github = "eholk", roles = ["council-rep-compiler"] },
     { github = "ehuss", roles = ["council-rep-devtools"] },
     { github = "jackh726", roles = ["council-rep-lang"] },
@@ -12,7 +11,7 @@ members = [
     { github = "m-ou-se", roles = ["council-rep-libs"] },
     { github = "technetos", roles = ["council-rep-mods"] },
 ]
-alumni = ["khionu", "rylev"]
+alumni = ["khionu", "rylev", "carols10cents"]
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
@@ -33,10 +32,6 @@ repo = "https://github.com/rust-lang/leadership-council"
 [[roles]]
 id = "council-rep-compiler"
 description = "Compiler team"
-
-[[roles]]
-id = "council-rep-crates-io"
-description = "Crates.io team"
 
 [[roles]]
 id = "council-rep-devtools"
