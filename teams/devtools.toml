@@ -52,6 +52,7 @@ extra-teams = [
     "rustfmt",
     "rustup",
     "wg-bindgen",
+    "crates-io",
 ]
 extra-people = ["spacekookie"]
 

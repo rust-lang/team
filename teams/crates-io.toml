@@ -1,5 +1,5 @@
 name = "crates-io"
-top-level = true
+subteam-of = "devtools"
 
 [people]
 leads = ["jtgeibel", "Turbo87"]
