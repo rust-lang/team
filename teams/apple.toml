@@ -1,4 +1,5 @@
-name = "macos"
+# macOS/iOS/tvOS/watchOS/visionOS
+name = "apple"
 kind = "marker-team"
 
 [people]
@@ -11,3 +12,6 @@ members = [
     "nvzqz",
     "madsmtm",
 ]
+
+[[zulip-groups]]
+name = "apple"
