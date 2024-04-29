@@ -9,4 +9,11 @@ compiler-contributors = "write"
 
 [[branch-protections]]
 pattern = "main"
-ci-checks = ["test"]
+ci-checks = [
+    "Test (stable)",
+    "Test (beta)",
+    "Test (nightly)",
+    "Fuzz Targets",
+    "Rustfmt",
+    "Publish Documentation"
+]
