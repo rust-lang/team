@@ -1,0 +1,16 @@
+org = "rust-lang"
+name = "rust-project-goals"
+description = "Rust Project Goals tracker"
+homepage = "https://rust-lang.github.io/rust-project-goals/"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+lang = "maintain"
+lang-ops = "maintain"
+lang-docs = "maintain"
+types = "maintain"
+release = "maintain"
+leadership-council = "maintain"
+libs = "maintain"
+libs-api = "maintain"
+project-edition-2024 = "maintain"
