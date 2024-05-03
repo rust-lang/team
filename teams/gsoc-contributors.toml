@@ -9,3 +9,6 @@ members = [
 
 [permissions]
 dev-desktop = true
+
+[[zulip-groups]]
+name = "gsoc-contributors"
