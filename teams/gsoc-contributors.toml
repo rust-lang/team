@@ -1,0 +1,11 @@
+name = "gsoc-contributors"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "Oneirical"
+]
+
+[permissions]
+dev-desktop = true
