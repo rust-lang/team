@@ -4,7 +4,14 @@ kind = "marker-team"
 [people]
 leads = []
 members = [
-    "Oneirical"
+    "Oneirical",
+    "d-sonuga",
+    "mav3ri3k",
+    "s7tya",
+    "FractalFir",
+    "ding-young",
+    "suaviloquence",
+    "tiif"
 ]
 
 [permissions]
