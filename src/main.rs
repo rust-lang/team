@@ -61,11 +61,6 @@ enum Cli {
         help = "add a new person from their GitHub profile"
     )]
     AddPerson { github_name: String },
-    #[structopt(
-        name = "add-repo",
-        help = "add a new repo config from an existing GitHub repo"
-    )]
-    AddRepo { org: String, name: String },
     #[structopt(name = "static-api", help = "generate the static API")]
     StaticApi { dest: String },
     #[structopt(name = "show-person", help = "print information about a person")]
@@ -187,95 +182,6 @@ fn run() -> Result<(), Error> {
             )?;
 
             info!("written data to {}", file);
-        }
-        Cli::AddRepo { org, name } => {
-            #[derive(serde::Serialize, Debug)]
-            #[serde(rename_all = "kebab-case")]
-            struct AccessToAdd {
-                #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
-                teams: HashMap<String, String>,
-                #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
-                individuals: HashMap<String, String>,
-            }
-            #[derive(serde::Serialize, Debug)]
-            #[serde(rename_all = "kebab-case")]
-            struct BranchToAdd {
-                name: String,
-                #[serde(skip_serializing_if = "Option::is_none")]
-                dismiss_stale_review: Option<bool>,
-                #[serde(skip_serializing_if = "Option::is_none")]
-                ci_checks: Option<Vec<String>>,
-            }
-            #[derive(serde::Serialize, Debug)]
-            #[serde(rename_all = "kebab-case")]
-            struct RepoToAdd<'a> {
-                org: &'a str,
-                name: &'a str,
-                description: &'a str,
-                homepage: &'a Option<String>,
-                bots: Vec<String>,
-                access: AccessToAdd,
-                #[serde(skip_serializing_if = "Vec::is_empty")]
-                branch: Vec<BranchToAdd>,
-            }
-            let github = github::GitHubApi::new();
-            let repo = match github.repo(&org, &name)? {
-                Some(r) => r,
-                None => bail!("The repo '{}/{}' was not found on GitHub", org, name),
-            };
-            let mut teams = HashMap::new();
-            let mut bots = Vec::new();
-
-            const BOTS: &[&str] = &["bors", "rust-highfive", "rust-timer", "rustbot", "rfcbot"];
-            let switch = |bot| {
-                if bot == "rust-highfive" {
-                    "highfive".to_owned()
-                } else {
-                    bot
-                }
-            };
-            for team in github.repo_teams(&org, &name)? {
-                if BOTS.contains(&team.name.as_str()) {
-                    let name = switch(team.name);
-                    bots.push(name.to_owned());
-                } else if team.name == "bots" {
-                    bots.extend(BOTS.iter().map(|&s| switch(s.to_owned())));
-                } else {
-                    teams.insert(team.name, team.permission.as_toml().to_owned());
-                }
-            }
-
-            let individuals = github
-                .repo_collaborators(&org, &name)?
-                .into_iter()
-                .map(|c| (c.name, c.permissions.highest().to_owned()))
-                .collect();
-
-            let mut branches = Vec::new();
-            for branch in github.protected_branches(&org, &name)? {
-                let protection = github.branch_protection(&org, &name, &branch.name)?;
-                branches.push(BranchToAdd {
-                    name: branch.name,
-                    ci_checks: protection.required_status_checks.map(|c| c.contexts),
-                    dismiss_stale_review: protection
-                        .required_pull_request_reviews
-                        .map(|r| r.dismiss_stale_reviews),
-                });
-            }
-
-            let repo = RepoToAdd {
-                org: &org,
-                name: &name,
-                description: &repo.description.unwrap_or_else(|| {
-                    format!("The {name} repo maintained by the rust-lang project")
-                }),
-                homepage: &repo.homepage,
-                bots,
-                access: AccessToAdd { teams, individuals },
-                branch: branches,
-            };
-            let file = format!("repos/{org}/{name}.toml");
-            std::fs::write(file, toml::to_string_pretty(&repo)?.as_bytes())?;
         }
         Cli::StaticApi { ref dest } => {
             let dest = PathBuf::from(dest);
