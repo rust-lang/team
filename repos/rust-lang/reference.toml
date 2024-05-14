@@ -5,6 +5,7 @@ homepage = "https://doc.rust-lang.org/nightly/reference/"
 bots = ["rustbot"]
 
 [access.teams]
+lang = "write"
 lang-docs = "write"
 
 [[branch-protections]]
