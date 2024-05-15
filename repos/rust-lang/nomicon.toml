@@ -5,6 +5,7 @@ homepage = "https://doc.rust-lang.org/nomicon/"
 bots = []
 
 [access.teams]
+lang = "write"
 lang-docs = "write"
 
 [[branch-protections]]
