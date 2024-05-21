@@ -1,0 +1,9 @@
+name = "rust-for-linux"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "ojeda",
+    "Darksonn"
+]
