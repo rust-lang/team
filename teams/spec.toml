@@ -2,7 +2,7 @@ name = "spec"
 subteam-of = "lang"
 
 [people]
-leads = ["pnkfelix", "m-ou-se"]
+leads = ["pnkfelix", "JoelMarcey"]
 members = [
     "pnkfelix",
     "m-ou-se",
