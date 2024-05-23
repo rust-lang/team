@@ -4,6 +4,15 @@ kind = "marker-team"
 [people]
 leads = []
 members = [
+    "alex",
+    "bjorn3",
+    "Darksonn",
+    "dingxiangfei2009",
+    "fbq",
+    "metaspace",
+    "nbdd0121",
     "ojeda",
-    "Darksonn"
+    "tgross35",
+    "wedsonaf",
+    "y86-dev",
 ]
