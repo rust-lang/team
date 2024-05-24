@@ -6,12 +6,12 @@ members = [
     { github = "eholk", roles = ["council-rep-compiler"] },
     { github = "ehuss", roles = ["council-rep-devtools"] },
     { github = "jackh726", roles = ["council-rep-lang"] },
-    { github = "jonathanpallant", roles = ["council-rep-launching-pad"] },
+    { github = "jamesmunns", roles = ["council-rep-launching-pad"] },
     { github = "Mark-Simulacrum", roles = ["council-rep-infra"] },
     { github = "m-ou-se", roles = ["council-rep-libs"] },
     { github = "technetos", roles = ["council-rep-mods"] },
 ]
-alumni = ["khionu", "rylev", "carols10cents"]
+alumni = ["khionu", "rylev", "carols10cents", "jonathanpallant"]
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
