@@ -3,6 +3,7 @@ name = "rust-team"
 version = "0.1.0"
 authors = ["Alex Crichton <alex@alexcrichton.com>", "Pietro Albini <pietro@pietroalbini.org>"]
 edition = '2018'
+license.workspace = true
 
 [dependencies]
 anyhow = { version = "1", features = ["backtrace"] }
@@ -33,3 +34,6 @@ walkdir = "2.3.1"
 members = [
     "rust_team_data",
 ]
+
+[workspace.package]
+license = "MIT OR Apache-2.0"
