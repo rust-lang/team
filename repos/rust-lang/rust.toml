@@ -1,0 +1,54 @@
+org = "rust-lang"
+name = "rust"
+description = "Empowering everyone to build reliable and efficient software."
+bots = ["bors", "rustbot", "rfcbot"]
+
+[access.teams]
+bootstrap = "write"
+cargo = "write"
+clippy = "write"
+compiler = "write"
+infra = "write"
+lang = "write"
+lang-ops = "write"
+libs = "write"
+libs-api = "write"
+libs-contributors = "write"
+mods = "write"
+opsem = "write"
+project-exploit-mitigations = "write"
+project-stable-mir = "write"
+release = "write"
+rustdoc = "write"
+style = "write"
+types = "write"
+wg-prioritization = "triage"
+wg-triage = "write"
+
+[[branch-protections]]
+pattern = "master"
+merge-bots = ["homu"]
+
+[[branch-protections]]
+pattern = "stable"
+merge-bots = ["homu"]
+
+[[branch-protections]]
+pattern = "beta"
+merge-bots = ["homu"]
+
+[[branch-protections]]
+pattern = "*"
+merge-bots = ["homu"]
+
+[[branch-protections]]
+pattern = "*/**/*"
+
+[[branch-protections]]
+pattern = "cargo_update"
+
+[[branch-protections]]
+pattern = "automation/bors/try-merge"
+
+[[branch-protections]]
+pattern = "automation/bors/try"
