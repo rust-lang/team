@@ -10,14 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Rust 1.77.0
-        run: |
-          rustc -vV
-          rustup install 1.77.0
-          rustup default 1.77.0
-          rustc -vV
-          rustup component add rustfmt clippy
-
       - name: Run rustfmt
         run: cargo fmt -- --check
 
