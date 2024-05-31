@@ -26,3 +26,7 @@ zulip-stream = "wg-macros"
 
 [[zulip-groups]]
 name = "wg-macros"
+
+[permissions]
+perf = true
+bors.rust.try = true
