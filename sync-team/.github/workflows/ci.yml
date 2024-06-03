@@ -8,14 +8,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Install Rust Stable
-        run: |
-          rustc -vV
-          rustup update stable
-          rustup default stable
-          rustc -vV
+      - uses: actions/checkout@v4
 
       - name: Run rustfmt
         run: cargo fmt -- --check
