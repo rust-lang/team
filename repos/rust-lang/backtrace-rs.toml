@@ -7,8 +7,5 @@ bots = []
 [access.teams]
 crate-maintainers = 'maintain'
 
-[access.individuals]
-alexcrichton = 'write'
-
 [[branch-protections]]
 pattern = 'master'
