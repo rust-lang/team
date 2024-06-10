@@ -1,9 +1,12 @@
-name = "rustdoc-contributors"
+name = "rustdoc-frontend"
 subteam-of = "rustdoc"
 
 [people]
 leads = []
 members = [
+    "notriddle",
+    "GuillaumeGomez",
+    "jsha",
 ]
 alumni = []
 
@@ -17,6 +20,12 @@ orgs = ["rust-lang", "rust-lang-nursery"]
 extra-teams = ["rustdoc"]
 
 [website]
-name = "Rustdoc team contributors"
-description = "Contributing to Rustdoc on a regular basis"
+name = "Rustdoc web frontend"
+description = "Rustdoc frontend design and development"
 zulip-stream = "t-rustdoc"
+
+[rfcbot]
+label = "T-rustdoc-frontend"
+name = "Rustdoc frontend"
+ping = "rust-lang/rustdoc"
+
