@@ -250,7 +250,14 @@ dev-desktop = true
 Repos are configured by creating a file in the `repos` folder
 under the corresponding org directory. For example, the `rust-lang/rust`
 repository is managed by the file "repos/rust-lang/rust.toml".
-The following configuration options are available:
+
+The following sections describe the options available.[^missing]
+
+If you need to transfer a repository into the `rust-lang/rust` org from outside the org, please consult with the Infrastructure Team. The general process is to get permission from infra to transfer it, and to coordinate transferring the repo (transfer requests expire after 24 hours, so be sure to coordinate accordingly). Then create a PR to the team repo to add the repository to set up permissions.
+
+[^missing]: If particular GitHub settings are not mentioned here, consult with the Infrastructure Team to either have them manually make the changes, or to add support for the missing settings to the sync-team tool.
+
+### General repository settings
 
 ```toml
 # The org this repo belongs to (required)
@@ -265,49 +272,63 @@ homepage = "https://www.rust-lang.org/"
 bots = ["bors", "rustbot", "rust-timer"]
 # Should the repository be private? (optional - default `false`)
 # Note that this only serves for documentation purposes, it is
-# not synchronized by automation.
+# not synchronized by automation. If you need to create a private
+# repository, please consult with the Infrastructure Team.
 private-non-synced = false
+```
 
-# The teams that have access to this repo along
-# with the access level. (required)
+### Repository access
+
+Access to a repository is given on a per-team basis. Teams who are responsible for a repository may give access to other teams at their discretion.
+
+See [GitHub's documentation][github-roles] for information on what each role is allowed to do. The recommendations for choosing a role are:
+
+- `admin` — No users or teams except for org owners should have this permission level.
+- `maintain` — Teams may have this permission level at their discretion for repositories the team is responsible for. Repositories using the bors bot may want to consider using the `write` permission level instead in order to deactivate the “Merge” button on PRs to enforce that merges go through bors.
+- `write` — Teams that are responsible for a repository should have at least this permission level.
+- `triage` — This role is available if teams want to give these permissions to other teams, such as for triage support. Unfortunately this role does not allow contributors to edit issue descriptions or titles, so its utility for that purpose is limited.
+
+[github-roles]: https://help.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization
+
+```toml
+# The list of teams with access to this repository (required).
+#
 # The key is the team name, and the value is either:
 # - "triage"
 # - "write"
 # - "maintain"
 # - "admin"
-# Refer to https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization
-# for information on permissions.
 [access.teams]
 compiler = "write"
 mods = "maintain"
 
-# Access granted to individuals. This should be avoided if possible, access
-# should only be given to teams.
+# Access granted to individuals. DO NOT USE! Access should only be given based
+# on teams.
+#
 # The key is the GitHub username, and the value is the permission level (same as teams).
 [access.individuals]
 octocat = "write"
+```
 
+### Repository branch protections
+
+[Branch protections] restrict actions on specified branches. It is strongly encouraged to set up branch protections on the default branch (e.g. `main` or `master`).
+
+The behavior of branch protections depends on whether or not `bors` is enabled in the `bots` key mentioned above:
+
+- If bors is not enabled, then the default will be to require at least one approving review (via GitHub's PR UI).
+- If bors is enabled, approvals via GitHub's UI is not required (since we count the `@bors r+` comment as an approval). Also, bors will be added to the "allowed pushers".
+
+Users with the "maintain" or "admin" role are allowed to merge PRs via the GitHub UI. If you have bors enabled, you should only give users the "write" role so that the "Merge" button is disabled, forcing the user to use the `@bors r+` comment instead.
+
+The branch protection requires a PR to push changes. You cannot push directly to the branch.
+
+Admins cannot override these branch protections. If an admin needs to do that, they will need to temporarily edit the branch protection in the GitHub settings.
+
+[Branch protections]: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
+
+```toml
 # The branch protections (optional)
-# Refer to https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
-# for information on how branch protections work.
-#
-# The behavior depends on whether or not bors is enabled.
-# If bors is not enabled, then this requires at least one approving review
-# (via GitHub's PR UI).
-# If bors is enabled, approvals via GitHub's UI is not required (since we
-# count the `@bors r+` comment as an approval). Also, bors will be added to
-# the "allowed pushers".
-#
-# Users with the "maintain" role or admins are allowed to merge PRs via the
-# GitHub UI. If you have bors enabled, you should only give users the "write"
-# role so that the "Merge" button is disabled, forcing the user to use the
-# `@bors r+` comment instead.
-#
-# The branch protection also requires a PR to push changes. You cannot push
-# directly to the branch.
-#
-# Admins cannot override these branch protections. If an admin needs to
-# do that, they will need to temporarily edit the branch protection.
 [[branch-protections]]
 # The pattern matching the branches to be protected (required)
 pattern = "master"

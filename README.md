@@ -10,6 +10,7 @@ automatically synchronized with:
 | [Perf and @rust-timer][perf] | *In real time* | [Integration source][perf-src] |
 | [@rfcbot][rfcbot] | 5 minutes | [Integration source][rfcbot-src] |
 | GitHub teams membership | *Shortly after merge* | [Integration source][sync-team-src] |
+| GitHub repositories | *Shortly after merge* | [Integration source][sync-team-src] |
 | Mailing lists and aliases (`@rust-lang.org`, `@crates.io`) | *Shortly after merge* | [Integration source][sync-team-src] |
 | Zulip user group membership | *Shortly after merge* | [Integration source][sync-team-src] |
 | [Governance section on the website][www] | 2 minutes | [Integration source][www-src] |
