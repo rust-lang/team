@@ -21,7 +21,7 @@ extra-teams = ["rustdoc"]
 
 [website]
 name = "Rustdoc web frontend"
-description = "Rustdoc frontend design and development"
+description = "Rustdoc frontend design, UI, UX and development"
 zulip-stream = "t-rustdoc"
 
 [rfcbot]
