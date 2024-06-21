@@ -28,5 +28,5 @@ zulip-stream = "t-rustdoc"
 [rfcbot]
 label = "T-rustdoc-frontend"
 name = "Rustdoc frontend"
-ping = "rust-lang/rustdoc"
+ping = "rust-lang/rustdoc-frontend"
 
