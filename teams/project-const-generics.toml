@@ -3,7 +3,7 @@ kind = "project-group"
 subteam-of = "lang"
 
 [people]
-leads = ["lcnr", "nikomatsakis"]
+leads = ["BoxyUwU", "lcnr"]
 members = [
     "lcnr",
     "nikomatsakis",
