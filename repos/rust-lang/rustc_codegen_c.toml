@@ -6,7 +6,6 @@ bots = []
 [access.teams]
 codegen-c-maintainers = "maintain"
 compiler = "maintain"
-compiler-contributors = "write"
 
 [[branch-protections]]
 pattern = "main"

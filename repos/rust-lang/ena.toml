@@ -5,7 +5,6 @@ bots = []
 
 [access.teams]
 compiler = "write"
-compiler-contributors = "write"
 
 [[branch-protections]]
 pattern = 'master'

@@ -6,7 +6,6 @@ bots = ["rustbot"]
 
 [access.teams]
 compiler = "write"
-compiler-contributors = "write"
 wg-prioritization = "write"
 types = "write"
 

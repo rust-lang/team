@@ -9,7 +9,6 @@ compiler = "write"
 wg-rustc-dev-guide = "maintain"
 infra = "write"
 libs = "write"
-compiler-contributors = "write"
 libs-contributors = "write"
 
 [[branch-protections]]

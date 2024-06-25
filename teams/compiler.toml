@@ -4,32 +4,76 @@ top-level = true
 [people]
 leads = ["davidtwco", "wesleywiser"]
 members = [
-    "Aaron1011",
-    "cjgillot",
+    "alexcrichton",
+    "apiraino",
+    "b-naber",
+    "bjorn3",
+    "BoxyUwU",
+    "camelid",
+    "chenyukang",
+    "cjgillot", 
     "compiler-errors",
+    "cuviper",
     "davidtwco",
-    "eddyb",
+    "DianQK",
+    "durin42",
+    "eholk",
+    "est31",
     "estebank",
+    "fee1-dead",
+    "flodiebold",
+    "fmease", 
+    "jackh726",
+    "jieyouxu",
+    "jswrenn",
     "lcnr",
+    "lqd",
+    "lukas-code",
+    "Mark-Simulacrum",
+    "matthewjasper",
+    "Nadrieril",
     "nagisa",
+    "nikic",
+    "nikomatsakis",
+    "Noratrieb",
+    "nnethercote",
     "oli-obk",
     "petrochenkov",
     "pnkfelix",
-    "matthewjasper",
+    "RalfJung",
+    "saethlin",
+    "scottmcm",
+    "SparrowLii",
+    "spastorino",
+    "TaKO8Ki",
+    "tgross35",
+    "the8472",
+    "tmandry",
+    "tmiasko",
+    "Urgau",
+    "WaffleLapkin",
     "wesleywiser",
-    "jackh726",
+    "Zalathar",
 ]
 alumni = [
+    "Aaron1011",
     "Aatch",
     "arielb1",
     "bkoropoff",
+    "Centril",
     "cramertj",
     "dotdash",
+    "ecstatic-morse",
+    "eddyb",
     "jseyfried",
+    "LeSeulArtichaut",
+    "matklad",
     "michaelwoerister",
-    "nikomatsakis",
     "nrc",
+    "scalexm",
     "varkor",
+    "Xanewok",
+    "zackmdavis",
     "Zoxc",
 ]
 
@@ -43,11 +87,6 @@ bors.miri.review = true
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
 
-[rfcbot]
-label = "T-compiler"
-name = "Compiler"
-ping = "rust-lang/compiler"
-
 [website]
 name = "Compiler team"
 repo = "http://github.com/rust-lang/compiler-team"
@@ -59,19 +98,9 @@ address = "compiler-private@rust-lang.org"
 
 [[lists]]
 address = "compiler@rust-lang.org"
-extra-teams = ["compiler-contributors"]
-extra-people = [
-    "arielb1",
-    "jseyfried",
-]
 
 [[lists]]
 address = "compiler-team@rust-lang.org"
-extra-teams = ["compiler-contributors"]
-extra-people = [
-    "arielb1",
-    "jseyfried",
-]
 
 [[lists]]
 address = "compiler-and-subteams@rust-lang.org"
@@ -82,15 +111,3 @@ name = "T-compiler"
 
 [[zulip-groups]]
 name = "T-compiler/meeting"
-extra-people = [
-    "aturon",
-    "Mark-Simulacrum",
-    "spastorino",
-    "varkor",
-    "arielb1",
-    "cramertj",
-    "bjorn3",
-    "Xanewok",
-    "nellshamrell",
-    "jackh726",
-]

@@ -1,0 +1,49 @@
+name = "compiler-maintainers"
+subteam-of = "compiler"
+
+[people]
+leads = []
+members = [
+    "BoxyUwU",
+    "chenyukang",
+    "cjgillot",
+    "compiler-errors",
+    "davidtwco",
+    "estebank",
+    "jackh726",
+    "lcnr",
+    "lqd",
+    "Mark-Simulacrum",
+    "matthewjasper",
+    "Nadrieril",
+    "nagisa",
+    "nnethercote",
+    "Noratrieb",
+    "oli-obk",
+    "petrochenkov",
+    "pnkfelix",
+    "saethlin",
+    "SparrowLii",
+    "spastorino",
+    "wesleywiser",
+]
+alumni = [
+    "Aaron1011",
+    "Aatch",
+    "arielb1",
+    "bkoropoff",
+    "cramertj",
+    "dotdash",
+    "eddyb",
+    "michaelwoerister",
+    "jseyfried",
+    "nikomatsakis",
+    "nrc",
+    "varkor",
+    "Zoxc",
+]
+
+[website]
+name = "Compiler maintainers"
+repo = "https://github.com/rust-lang/compiler-team"
+description = "Maintainers of the compiler"
