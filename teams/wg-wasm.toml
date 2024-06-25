@@ -3,15 +3,15 @@ subteam-of = "launching-pad"
 kind = "working-group"
 
 [people]
-leads = ["fitzgen"]
+leads = []
 members = [
-    "fitzgen",
 ]
 
 alumni = [
     "alexcrichton",
     "ashleygwilliams",
     "aturon",
+    "fitzgen",
     "yoshuawuyts",
 ]
 
