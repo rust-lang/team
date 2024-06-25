@@ -5,7 +5,6 @@ bots = ["rustbot"]
 
 [access.teams]
 compiler = 'maintain'
-compiler-contributors = 'maintain'
 
 [[branch-protections]]
 pattern = "main"
