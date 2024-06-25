@@ -1,0 +1,32 @@
+name = "rustdoc-frontend"
+subteam-of = "rustdoc"
+
+[people]
+leads = []
+members = [
+    "notriddle",
+    "GuillaumeGomez",
+    "jsha",
+    "camelid",
+]
+alumni = []
+
+[permissions]
+bors.rust.review = true
+dev-desktop = true
+perf = true
+
+[[github]]
+orgs = ["rust-lang", "rust-lang-nursery"]
+extra-teams = ["rustdoc"]
+
+[website]
+name = "Rustdoc web frontend"
+description = "Rustdoc frontend design, UI, UX and development"
+zulip-stream = "t-rustdoc"
+
+[rfcbot]
+label = "T-rustdoc-frontend"
+name = "Rustdoc frontend"
+ping = "rust-lang/rustdoc-frontend"
+
