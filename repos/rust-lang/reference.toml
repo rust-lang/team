@@ -7,6 +7,7 @@ bots = ["rustbot"]
 [access.teams]
 lang = "write"
 lang-docs = "write"
+spec = "write"
 
 [[branch-protections]]
 pattern = "master"
