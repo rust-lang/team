@@ -797,6 +797,8 @@ pub(crate) struct BranchProtection {
     pub dismiss_stale_review: bool,
     #[serde(default)]
     pub required_approvals: Option<u32>,
+    #[serde(default = "default_true")]
+    pub pr_required: bool,
     #[serde(default)]
     pub allowed_merge_teams: Vec<String>,
 }
