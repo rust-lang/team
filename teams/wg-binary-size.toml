@@ -22,6 +22,10 @@ members = [
 alumni = [
 ]
 
+[permissions]
+bors.rust.try = true
+perf = true
+
 [[github]]
 orgs = ["rust-lang"]
 
