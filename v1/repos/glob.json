@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "glob",
+  "description": "Support for matching file paths against Unix shell style patterns.",
+  "homepage": "http://doc.rust-lang.org/glob",
+  "bots": [],
+  "teams": [
+    {
+      "name": "crate-maintainers",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

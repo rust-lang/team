@@ -1,0 +1,26 @@
+{
+  "org": "rust-lang",
+  "name": "book",
+  "description": "The Rust Programming Language",
+  "homepage": "https://doc.rust-lang.org/book/",
+  "bots": [],
+  "teams": [
+    {
+      "name": "book",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "main",
+      "ci_checks": [],
+      "dismiss_stale_review": false,
+      "required_approvals": 0,
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,23 @@
+{
+  "people": [
+    {
+      "github_id": 451321,
+      "github": "Diggsey",
+      "name": "Diggory Blake"
+    },
+    {
+      "github_id": 762626,
+      "github": "nrc",
+      "name": "Nick Cameron"
+    }
+  ],
+  "github_users": [
+    "Diggsey",
+    "nrc"
+  ],
+  "github_ids": [
+    451321,
+    762626
+  ],
+  "discord_ids": []
+}

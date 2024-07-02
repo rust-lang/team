@@ -1,0 +1,68 @@
+{
+  "people": [
+    {
+      "github_id": 36186,
+      "github": "cuviper",
+      "name": "Josh Stone"
+    },
+    {
+      "github_id": 162737,
+      "github": "joshtriplett",
+      "name": "Josh Triplett"
+    },
+    {
+      "github_id": 278509,
+      "github": "Amanieu",
+      "name": "Amanieu d'Antras"
+    },
+    {
+      "github_id": 456674,
+      "github": "BurntSushi",
+      "name": "Andrew Gallant"
+    },
+    {
+      "github_id": 783247,
+      "github": "m-ou-se",
+      "name": "Mara Bos"
+    },
+    {
+      "github_id": 860665,
+      "github": "thomcc",
+      "name": "Thom Chiovoloni"
+    },
+    {
+      "github_id": 1065730,
+      "github": "the8472",
+      "name": "The 8472"
+    },
+    {
+      "github_id": 1940490,
+      "github": "dtolnay",
+      "name": "David Tolnay"
+    }
+  ],
+  "github_users": [
+    "Amanieu",
+    "BurntSushi",
+    "cuviper",
+    "dtolnay",
+    "joshtriplett",
+    "m-ou-se",
+    "the8472",
+    "thomcc"
+  ],
+  "github_ids": [
+    36186,
+    162737,
+    278509,
+    456674,
+    783247,
+    860665,
+    1065730,
+    1940490
+  ],
+  "discord_ids": [
+    443825361256448003,
+    451800670635294731
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "org": "rust-lang",
+  "name": "rust-analyzer",
+  "description": "A Rust compiler front-end for IDEs",
+  "homepage": "https://rust-analyzer.github.io/",
+  "bots": [
+    "bors",
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "rust-analyzer",
+      "permission": "write"
+    },
+    {
+      "name": "rust-analyzer-contributors",
+      "permission": "triage"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "ci_checks": [],
+      "dismiss_stale_review": false,
+      "required_approvals": 1,
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": false
+}

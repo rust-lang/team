@@ -1,0 +1,43 @@
+{
+  "name": "fuchsia",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "David Koloski",
+      "github": "djkoloski",
+      "github_id": 7554649,
+      "is_lead": false
+    },
+    {
+      "name": "Erick Tryzelaar",
+      "github": "erickt",
+      "github_id": 84711,
+      "is_lead": false
+    },
+    {
+      "name": "Joseph Ryan",
+      "github": "P1n3appl3",
+      "github_id": 9326885,
+      "is_lead": false
+    },
+    {
+      "name": "Tyler Mandry",
+      "github": "tmandry",
+      "github_id": 2280544,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Dan Johnson",
+      "github": "ComputerDruid",
+      "github_id": 34696,
+      "is_lead": false
+    }
+  ],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

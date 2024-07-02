@@ -1,0 +1,95 @@
+{
+  "people": [
+    {
+      "github_id": 476013,
+      "github": "matthiaskrgr",
+      "name": "Matthias Krüger"
+    },
+    {
+      "github_id": 1617736,
+      "github": "Manishearth",
+      "name": "Manish Goregaokar"
+    },
+    {
+      "github_id": 1830331,
+      "github": "Alexendoo",
+      "name": "Alex Macleod"
+    },
+    {
+      "github_id": 4200835,
+      "github": "llogiq",
+      "name": "Andre Bogus"
+    },
+    {
+      "github_id": 7761774,
+      "github": "Jarcho",
+      "name": "Jason Newcomb"
+    },
+    {
+      "github_id": 9744647,
+      "github": "flip1995",
+      "name": "Philipp Krones"
+    },
+    {
+      "github_id": 17087237,
+      "github": "xFrednet",
+      "name": "Fridtjof Stoldt"
+    },
+    {
+      "github_id": 17407489,
+      "github": "giraffate",
+      "name": "Takayuki Nakata"
+    },
+    {
+      "github_id": 30553356,
+      "github": "y21",
+      "name": "Timo"
+    },
+    {
+      "github_id": 44697459,
+      "github": "dswij",
+      "name": "dswij"
+    },
+    {
+      "github_id": 73757586,
+      "github": "blyxyas",
+      "name": "Alejandra González"
+    },
+    {
+      "github_id": 114838443,
+      "github": "Centri3",
+      "name": "Catherine"
+    }
+  ],
+  "github_users": [
+    "Alexendoo",
+    "Centri3",
+    "Jarcho",
+    "Manishearth",
+    "blyxyas",
+    "dswij",
+    "flip1995",
+    "giraffate",
+    "llogiq",
+    "matthiaskrgr",
+    "xFrednet",
+    "y21"
+  ],
+  "github_ids": [
+    476013,
+    1617736,
+    1830331,
+    4200835,
+    7761774,
+    9744647,
+    17087237,
+    17407489,
+    30553356,
+    44697459,
+    73757586,
+    114838443
+  ],
+  "discord_ids": [
+    278623213448331265
+  ]
+}

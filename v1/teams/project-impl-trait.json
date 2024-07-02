@@ -1,0 +1,45 @@
+{
+  "name": "project-impl-trait",
+  "kind": "project_group",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": true
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "initiative-impl-trait",
+        "members": [
+          155238,
+          332036
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Impl Trait Initiative",
+    "description": "Extending Rust with Impl Trait",
+    "page": "project-impl-trait",
+    "email": null,
+    "repo": "https://github.com/rust-lang/impl-trait-initiative",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

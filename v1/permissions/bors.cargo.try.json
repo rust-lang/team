@@ -1,0 +1,76 @@
+{
+  "people": [
+    {
+      "github_id": 27786,
+      "github": "steveklabnik",
+      "name": "Steve Klabnik"
+    },
+    {
+      "github_id": 43198,
+      "github": "ehuss",
+      "name": "Eric Huss"
+    },
+    {
+      "github_id": 60961,
+      "github": "epage",
+      "name": "Ed Page"
+    },
+    {
+      "github_id": 162737,
+      "github": "joshtriplett",
+      "name": "Josh Triplett"
+    },
+    {
+      "github_id": 704597,
+      "github": "arlosi",
+      "name": "Arlo Siemsen"
+    },
+    {
+      "github_id": 3709504,
+      "github": "Eh2406",
+      "name": "Jacob Finkelman"
+    },
+    {
+      "github_id": 5047365,
+      "github": "Mark-Simulacrum",
+      "name": "Mark Rousskov"
+    },
+    {
+      "github_id": 14314532,
+      "github": "weihanglo",
+      "name": "Weihang Lo"
+    },
+    {
+      "github_id": 23045215,
+      "github": "Muscraft",
+      "name": "Scott Schafer"
+    }
+  ],
+  "github_users": [
+    "Eh2406",
+    "Mark-Simulacrum",
+    "Muscraft",
+    "arlosi",
+    "ehuss",
+    "epage",
+    "joshtriplett",
+    "steveklabnik",
+    "weihanglo"
+  ],
+  "github_ids": [
+    27786,
+    43198,
+    60961,
+    162737,
+    704597,
+    3709504,
+    5047365,
+    14314532,
+    23045215
+  ],
+  "discord_ids": [
+    271866667292819456,
+    442403469580566528,
+    451800670635294731
+  ]
+}

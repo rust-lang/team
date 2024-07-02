@@ -1,0 +1,356 @@
+{
+  "name": "compiler-contributors",
+  "kind": "team",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "apiraino",
+      "github": "apiraino",
+      "github_id": 6098822,
+      "is_lead": false
+    },
+    {
+      "name": "b-naber",
+      "github": "b-naber",
+      "github_id": 71934879,
+      "is_lead": false
+    },
+    {
+      "name": "bjorn3",
+      "github": "bjorn3",
+      "github_id": 17426603,
+      "is_lead": false
+    },
+    {
+      "name": "Boxy",
+      "github": "BoxyUwU",
+      "github_id": 21149742,
+      "is_lead": false
+    },
+    {
+      "name": "Yukang",
+      "github": "chenyukang",
+      "github_id": 230646,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Stone",
+      "github": "cuviper",
+      "github_id": 36186,
+      "is_lead": false
+    },
+    {
+      "name": "Augie Fackler",
+      "github": "durin42",
+      "github_id": 20269,
+      "is_lead": false
+    },
+    {
+      "name": "Eric Holk",
+      "github": "eholk",
+      "github_id": 105766,
+      "is_lead": false
+    },
+    {
+      "name": "est31",
+      "github": "est31",
+      "github_id": 8872119,
+      "is_lead": false
+    },
+    {
+      "name": "Deadbeef",
+      "github": "fee1-dead",
+      "github_id": 43851243,
+      "is_lead": false
+    },
+    {
+      "name": "Florian Diebold",
+      "github": "flodiebold",
+      "github_id": 906069,
+      "is_lead": false
+    },
+    {
+      "name": "León Orell Valerian Liehr",
+      "github": "fmease",
+      "github_id": 14913065,
+      "is_lead": false
+    },
+    {
+      "name": "Jieyou Xu",
+      "github": "jieyouxu",
+      "github_id": 39484203,
+      "is_lead": false
+    },
+    {
+      "name": "Rémy Rakic",
+      "github": "lqd",
+      "github_id": 247183,
+      "is_lead": false
+    },
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": false
+    },
+    {
+      "name": "Nadrieril",
+      "github": "Nadrieril",
+      "github_id": 6783654,
+      "is_lead": false
+    },
+    {
+      "name": "Nikita Popov",
+      "github": "nikic",
+      "github_id": 216080,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "nils",
+      "github": "Nilstrieb",
+      "github_id": 48135649,
+      "is_lead": false
+    },
+    {
+      "name": "Nicholas Nethercote",
+      "github": "nnethercote",
+      "github_id": 1940286,
+      "is_lead": false
+    },
+    {
+      "name": "Ralf Jung",
+      "github": "RalfJung",
+      "github_id": 330628,
+      "is_lead": false
+    },
+    {
+      "name": "Ben Kimock",
+      "github": "saethlin",
+      "github_id": 12105168,
+      "is_lead": false
+    },
+    {
+      "name": "Sparrow Li",
+      "github": "SparrowLii",
+      "github_id": 68270294,
+      "is_lead": false
+    },
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    },
+    {
+      "name": "Takayuki Maeda",
+      "github": "TaKO8Ki",
+      "github_id": 41065217,
+      "is_lead": false
+    },
+    {
+      "name": "The 8472",
+      "github": "the8472",
+      "github_id": 1065730,
+      "is_lead": false
+    },
+    {
+      "name": "Tyler Mandry",
+      "github": "tmandry",
+      "github_id": 2280544,
+      "is_lead": false
+    },
+    {
+      "name": "tmiasko",
+      "github": "tmiasko",
+      "github_id": 51362316,
+      "is_lead": false
+    },
+    {
+      "name": "Urgau",
+      "github": "Urgau",
+      "github_id": 3616612,
+      "is_lead": false
+    },
+    {
+      "name": "Waffle Maybe",
+      "github": "WaffleLapkin",
+      "github_id": 38225716,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Mazdak Farrokhzad",
+      "github": "Centril",
+      "github_id": 855702,
+      "is_lead": false
+    },
+    {
+      "name": "Dylan MacKenzie",
+      "github": "ecstatic-morse",
+      "github_id": 29463364,
+      "is_lead": false
+    },
+    {
+      "name": "Léo Lanteri Thauvin",
+      "github": "LeSeulArtichaut",
+      "github_id": 38361244,
+      "is_lead": false
+    },
+    {
+      "name": "Aleksey Kladov",
+      "github": "matklad",
+      "github_id": 1711539,
+      "is_lead": false
+    },
+    {
+      "name": "Alexandre Martin",
+      "github": "scalexm",
+      "github_id": 1173131,
+      "is_lead": false
+    },
+    {
+      "name": "varkor",
+      "github": "varkor",
+      "github_id": 3943692,
+      "is_lead": false
+    },
+    {
+      "name": "Igor Matuszewski",
+      "github": "Xanewok",
+      "github_id": 3093213,
+      "is_lead": false
+    },
+    {
+      "name": "Zack M. Davis",
+      "github": "zackmdavis",
+      "github_id": 1076988,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "compiler-contributors",
+        "members": [
+          1408859,
+          21149742,
+          5047365,
+          6783654,
+          48135649,
+          330628,
+          68270294,
+          41065217,
+          3616612,
+          38225716,
+          6098822,
+          71934879,
+          17426603,
+          230646,
+          1822483,
+          3674314,
+          36186,
+          1295100,
+          20269,
+          77424,
+          105766,
+          8872119,
+          1606434,
+          43851243,
+          906069,
+          14913065,
+          31162821,
+          39484203,
+          29864074,
+          247183,
+          20113453,
+          1825894,
+          679122,
+          216080,
+          155238,
+          1940286,
+          332036,
+          5751617,
+          173127,
+          12105168,
+          52642,
+          1065730,
+          2280544,
+          51362316,
+          831192
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "compiler-contributors",
+        "members": [
+          1408859,
+          21149742,
+          5047365,
+          6783654,
+          48135649,
+          330628,
+          68270294,
+          41065217,
+          3616612,
+          38225716,
+          6098822,
+          71934879,
+          17426603,
+          230646,
+          1822483,
+          3674314,
+          36186,
+          1295100,
+          20269,
+          77424,
+          105766,
+          8872119,
+          1606434,
+          43851243,
+          906069,
+          14913065,
+          31162821,
+          39484203,
+          29864074,
+          247183,
+          20113453,
+          1825894,
+          679122,
+          216080,
+          155238,
+          1940286,
+          332036,
+          5751617,
+          173127,
+          12105168,
+          52642,
+          1065730,
+          2280544,
+          51362316,
+          831192
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Compiler team contributors",
+    "description": "Contributing to the Rust compiler on a regular basis",
+    "page": "compiler-contributors",
+    "email": null,
+    "repo": "http://github.com/rust-lang/compiler-team",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,90 @@
+{
+  "name": "rust-for-linux",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Alex Gaynor",
+      "github": "alex",
+      "github_id": 772,
+      "is_lead": false
+    },
+    {
+      "name": "bjorn3",
+      "github": "bjorn3",
+      "github_id": 17426603,
+      "is_lead": false
+    },
+    {
+      "name": "Alice Ryhl",
+      "github": "Darksonn",
+      "github_id": 928074,
+      "is_lead": false
+    },
+    {
+      "name": "Ding Xiang Fei",
+      "github": "dingxiangfei2009",
+      "github_id": 6884440,
+      "is_lead": false
+    },
+    {
+      "name": "Boqun Feng",
+      "github": "fbq",
+      "github_id": 673448,
+      "is_lead": false
+    },
+    {
+      "name": "Matthew Maurer",
+      "github": "maurer",
+      "github_id": 136037,
+      "is_lead": false
+    },
+    {
+      "name": "Andreas Hindborg",
+      "github": "metaspace",
+      "github_id": 1032242,
+      "is_lead": false
+    },
+    {
+      "name": "Gary Guo",
+      "github": "nbdd0121",
+      "github_id": 4065244,
+      "is_lead": false
+    },
+    {
+      "name": "Miguel Ojeda",
+      "github": "ojeda",
+      "github_id": 1054456,
+      "is_lead": false
+    },
+    {
+      "name": "Trevor Gross",
+      "github": "tgross35",
+      "github_id": 13724985,
+      "is_lead": false
+    },
+    {
+      "name": "Vincenzo Palazzo",
+      "github": "vincenzopalazzo",
+      "github_id": 17150045,
+      "is_lead": false
+    },
+    {
+      "name": "Wedson Almeida Filho",
+      "github": "wedsonaf",
+      "github_id": 7494395,
+      "is_lead": false
+    },
+    {
+      "name": "Benno Lossin",
+      "github": "y86-dev",
+      "github_id": 94611769,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

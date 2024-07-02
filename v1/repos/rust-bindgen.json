@@ -1,0 +1,30 @@
+{
+  "org": "rust-lang",
+  "name": "rust-bindgen",
+  "description": "Automatically generates Rust FFI bindings to C (and some C++) libraries.",
+  "homepage": "https://rust-lang.github.io/rust-bindgen/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "wg-bindgen",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "main",
+      "ci_checks": [
+        "success"
+      ],
+      "dismiss_stale_review": false,
+      "required_approvals": 0,
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

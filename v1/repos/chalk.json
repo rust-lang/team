@@ -1,0 +1,29 @@
+{
+  "org": "rust-lang",
+  "name": "chalk",
+  "description": "An implementation and definition of the Rust trait system using a PROLOG-like logic solver",
+  "homepage": "https://rust-lang.github.io/chalk/book/",
+  "bots": [
+    "rustbot",
+    "bors"
+  ],
+  "teams": [
+    {
+      "name": "types",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "ci_checks": [],
+      "dismiss_stale_review": false,
+      "required_approvals": 1,
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": false
+}

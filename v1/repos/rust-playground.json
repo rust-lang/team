@@ -1,0 +1,26 @@
+{
+  "org": "rust-lang",
+  "name": "rust-playground",
+  "description": "The Rust Playground",
+  "homepage": "https://play.rust-lang.org/",
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "main",
+      "ci_checks": [],
+      "dismiss_stale_review": false,
+      "required_approvals": 0,
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

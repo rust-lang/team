@@ -1,0 +1,52 @@
+{
+  "name": "wg-wasm",
+  "kind": "working_group",
+  "subteam_of": "launching-pad",
+  "members": [],
+  "alumni": [
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    },
+    {
+      "name": "Ashley Williams",
+      "github": "ashleygwilliams",
+      "github_id": 1163554,
+      "is_lead": false
+    },
+    {
+      "name": "Aaron Turon",
+      "github": "aturon",
+      "github_id": 709807,
+      "is_lead": false
+    },
+    {
+      "name": "Nick Fitzgerald",
+      "github": "fitzgen",
+      "github_id": 74571,
+      "is_lead": false
+    },
+    {
+      "name": "Yoshua Wuyts",
+      "github": "yoshuawuyts",
+      "github_id": 2467194,
+      "is_lead": false
+    }
+  ],
+  "github": null,
+  "website_data": {
+    "name": "WebAssembly (WASM) working group",
+    "description": "Improving on the end-to-end experience of embedding Rust code in JS libraries and apps via WebAssembly",
+    "page": "wasm",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

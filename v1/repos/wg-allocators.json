@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "wg-allocators",
+  "description": "Home of the Allocators working group: Paving a path for a standard set of allocator traits to be used in collections!",
+  "homepage": "http://bit.ly/hello-wg-allocators",
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-allocators",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

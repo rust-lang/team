@@ -1,0 +1,94 @@
+{
+  "name": "wg-rfc-2229",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Matthew Jasper",
+      "github": "matthewjasper",
+      "github_id": 20113453,
+      "is_lead": true
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": true
+    },
+    {
+      "name": "Aman Arora",
+      "github": "arora-aman",
+      "github_id": 4193035,
+      "is_lead": false
+    },
+    {
+      "name": "Archer Zhang",
+      "github": "Azhng",
+      "github_id": 9267198,
+      "is_lead": false
+    },
+    {
+      "name": "ChrisPardy",
+      "github": "ChrisPardy",
+      "github_id": 25291724,
+      "is_lead": false
+    },
+    {
+      "name": "Jennifer Wills",
+      "github": "jenniferwills",
+      "github_id": 22324472,
+      "is_lead": false
+    },
+    {
+      "name": "logmosier",
+      "github": "logmosier",
+      "github_id": 10948303,
+      "is_lead": false
+    },
+    {
+      "name": "Dhruv Jauhar",
+      "github": "null-sleep",
+      "github_id": 13277988,
+      "is_lead": false
+    },
+    {
+      "name": "Roxane",
+      "github": "roxelo",
+      "github_id": 12419401,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-rfc-2229",
+        "members": [
+          9267198,
+          25291724,
+          4193035,
+          22324472,
+          10948303,
+          20113453,
+          155238,
+          13277988,
+          12419401
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "RFC 2229 working group",
+    "description": "Improving the behavior of closure-capture, and improving the documentation on closures",
+    "page": "wg-rfc-2229",
+    "email": null,
+    "repo": "https://rust-lang.github.io/compiler-team/working-groups/rfc-2229/",
+    "discord": null,
+    "zulip_stream": "t-compiler/wg-rfc-2229",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

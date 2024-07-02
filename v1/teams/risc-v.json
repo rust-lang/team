@@ -1,0 +1,30 @@
+{
+  "name": "risc-v",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Denis Vasilik",
+      "github": "denisvasilik",
+      "github_id": 18697981,
+      "is_lead": false
+    },
+    {
+      "name": "Khem Raj",
+      "github": "kraj",
+      "github_id": 465279,
+      "is_lead": false
+    },
+    {
+      "name": "Tom Eccles",
+      "github": "tblah",
+      "github_id": 3716681,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,39 @@
+{
+  "org": "rust-lang",
+  "name": "bors",
+  "description": "Rust implementation of bors used for various Rust components (e.g. the compiler).",
+  "homepage": null,
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "mods",
+      "permission": "maintain"
+    },
+    {
+      "name": "infra",
+      "permission": "write"
+    },
+    {
+      "name": "infra-bors",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "main",
+      "ci_checks": [
+        "Test",
+        "Test Docker"
+      ],
+      "dismiss_stale_review": false,
+      "required_approvals": 0,
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}
