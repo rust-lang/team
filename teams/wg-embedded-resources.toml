@@ -6,13 +6,16 @@ kind = "working-group"
 leads = []
 members = [
     "adamgreig",
-    "andre-richter",
+    "BartMassey",
     "eldruin",
     "hargoniX",
+    "hdoordt",
     "jamesmunns",
     "therealprof",
 ]
-alumni = []
+alumni = [
+    "andre-richter",
+]
 
 [website]
 name = "Embedded resources working group"
