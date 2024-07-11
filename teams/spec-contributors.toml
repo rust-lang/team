@@ -1,0 +1,22 @@
+name = "spec-contributors"
+subteam-of = "spec"
+
+[people]
+leads = []
+members = [
+    "chorman0773",
+]
+alumni = []
+
+[website]
+name = "Specification team contributors"
+description = "Regular contributors to the Rust specification"
+repo = "https://github.com/rust-lang/spec"
+zulip-stream = "t-spec"
+
+[[github]]
+orgs = ["rust-lang"]
+extra-teams = ["spec"]
+
+[[zulip-groups]]
+name = "T-spec-contributors"
