@@ -8,6 +8,7 @@ bots = ["rustbot"]
 lang = "write"
 lang-docs = "write"
 spec = "write"
+spec-contributors = "write"
 
 [[branch-protections]]
 pattern = "master"
