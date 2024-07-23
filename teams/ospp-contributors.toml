@@ -1,0 +1,14 @@
+name = "ospp-contributors"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+	"liwagu",
+]
+
+[permissions]
+dev-desktop = true
+
+[[zulip-groups]]
+name = "ospp-contributors"
