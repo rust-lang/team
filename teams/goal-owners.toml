@@ -1,0 +1,37 @@
+# Auto-generated from the rust-project-goals repository
+name = "goal-owners"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "BoxyUwU",
+    "GuillaumeGomez",
+    "Muscraft",
+    "Nadrieril",
+    "SparrowLii",
+    "ZuseZ4",
+    "blyxyas",
+    "celinval",
+    "Eh2406",
+    "epage",
+    "estebank",
+    "fee1-dead",
+    "hi-rustin",
+    "jkelleyrtp",
+    "joshtriplett",
+    "lcnr",
+    "lqd",
+    "nikomatsakis",
+    "notriddle",
+    "obi1kenobi",
+    "oli-obk",
+    "pnkfelix",
+    "tmandry",
+    "traviscross",
+    "weihanglo",
+]
+included-teams = []
+
+[[github]]
+orgs = ["rust-lang"]
