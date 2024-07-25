@@ -27,6 +27,7 @@ zulip-stream = "t-types"
 label = "T-types"
 name = "Types"
 ping = "rust-lang/types"
+exclude-members = ["aliemjay"]
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
