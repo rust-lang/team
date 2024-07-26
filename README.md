@@ -64,7 +64,7 @@ cargo run add-person <github-username>
 You can also add additional information, such as someone's Discord or Zulip ID by adding additional fields to their `.toml` file.
 
 To determine someone's Zulip ID, find them in the list of people on the
-right-hand side in Zulip, click the "three dots" menu, and copy the 'User ID'
+right-hand side in Zulip, click the "three dots" menu and then "View profile", and copy the 'User ID'
 into the toml file:
 
 ```
