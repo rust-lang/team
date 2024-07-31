@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "infra-team"
 description = "Coordination repository for the Rust infra team"
+homepage = "https://www.rust-lang.org/governance/teams/infra"
 bots = []
 
 [access.teams]
