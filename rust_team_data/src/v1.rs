@@ -210,11 +210,20 @@ pub enum RepoPermission {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum BranchProtectionMode {
+    PrRequired {
+        ci_checks: Vec<String>,
+        required_approvals: u32,
+    },
+    PrNotRequired,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BranchProtection {
     pub pattern: String,
-    pub ci_checks: Vec<String>,
     pub dismiss_stale_review: bool,
-    pub required_approvals: u32,
+    pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,
 }
 
