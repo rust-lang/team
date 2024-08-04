@@ -1,0 +1,13 @@
+org = "rust-lang"
+name = "crates.io-index"
+description = "Registry index for crates.io"
+homepage = "https://crates.io"
+bots = []
+
+[access.teams]
+crates-io = "write"
+crates-io-on-call = "write"
+
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
