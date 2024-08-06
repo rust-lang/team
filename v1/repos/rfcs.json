@@ -1,0 +1,30 @@
+{
+  "org": "rust-lang",
+  "name": "rfcs",
+  "description": "RFCs for changes to Rust",
+  "homepage": "https://rust-lang.github.io/rfcs/",
+  "bots": [
+    "rustbot",
+    "rfcbot",
+    "renovate"
+  ],
+  "teams": [
+    {
+      "name": "all",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "ci_checks": [],
+      "dismiss_stale_review": false,
+      "required_approvals": 1,
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,59 @@
+{
+  "name": "project-trait-system-refactor",
+  "kind": "project_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": true
+    },
+    {
+      "name": "Boxy",
+      "github": "BoxyUwU",
+      "github_id": 21149742,
+      "is_lead": false
+    },
+    {
+      "name": "Camille Gillot",
+      "github": "cjgillot",
+      "github_id": 1822483,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Goulet",
+      "github": "compiler-errors",
+      "github_id": 3674314,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "initiative-trait-system-refactor",
+        "members": [
+          21149742,
+          1822483,
+          3674314,
+          29864074
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Rustc Trait System Refactor Initiative",
+    "description": "Refactoring the trait system of rustc",
+    "page": "project-trait-system-refactor",
+    "email": null,
+    "repo": "https://github.com/rust-lang/types-team",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

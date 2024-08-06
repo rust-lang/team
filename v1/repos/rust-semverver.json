@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "rust-semverver",
+  "description": "Automatic checking for semantic versioning in library crates",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

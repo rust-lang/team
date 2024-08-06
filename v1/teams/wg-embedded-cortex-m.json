@@ -1,0 +1,59 @@
+{
+  "name": "wg-embedded-cortex-m",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [
+    {
+      "name": "Adam Greig",
+      "github": "adamgreig",
+      "github_id": 47219,
+      "is_lead": false
+    },
+    {
+      "name": "Alex Martens",
+      "github": "newAM",
+      "github_id": 7845120,
+      "is_lead": false
+    },
+    {
+      "name": "Thales",
+      "github": "thalesfragoso",
+      "github_id": 46510852,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Egger",
+      "github": "therealprof",
+      "github_id": 3321888,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "wg-embedded-cortex-m",
+        "members": [
+          47219,
+          7845120,
+          46510852,
+          3321888
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded Cortex-M team",
+    "description": "Develops and maintains the core of the Cortex-M crate ecosystem",
+    "page": "wg-embedded-cortex-m",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

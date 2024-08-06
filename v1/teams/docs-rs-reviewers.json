@@ -1,0 +1,42 @@
+{
+  "name": "docs-rs-reviewers",
+  "kind": "team",
+  "subteam_of": "docs-rs",
+  "members": [
+    {
+      "name": "Guillaume Gomez",
+      "github": "GuillaumeGomez",
+      "github_id": 3050060,
+      "is_lead": false
+    },
+    {
+      "name": "Wim",
+      "github": "Nemo157",
+      "github_id": 81079,
+      "is_lead": false
+    },
+    {
+      "name": "Denis Cornehl",
+      "github": "syphar",
+      "github_id": 540890,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "docs-rs-reviewers",
+        "members": [
+          3050060,
+          81079,
+          540890
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

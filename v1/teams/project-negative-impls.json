@@ -1,0 +1,52 @@
+{
+  "name": "project-negative-impls",
+  "kind": "project_group",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": true
+    },
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": true
+    },
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "initiative-negative-impls",
+        "members": [
+          155238,
+          173127,
+          52642
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Negative Impls Initiative",
+    "description": "Extending negative impls and integrating them into coherence",
+    "page": "project-negative-impls",
+    "email": null,
+    "repo": "https://github.com/rust-lang/negative-impls-initiative",
+    "discord": null,
+    "zulip_stream": "wg-traits",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

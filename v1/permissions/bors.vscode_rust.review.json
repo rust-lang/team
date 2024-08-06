@@ -1,0 +1,23 @@
+{
+  "people": [
+    {
+      "github_id": 1711539,
+      "github": "matklad",
+      "name": "Aleksey Kladov"
+    },
+    {
+      "github_id": 3093213,
+      "github": "Xanewok",
+      "name": "Igor Matuszewski"
+    }
+  ],
+  "github_users": [
+    "Xanewok",
+    "matklad"
+  ],
+  "github_ids": [
+    1711539,
+    3093213
+  ],
+  "discord_ids": []
+}

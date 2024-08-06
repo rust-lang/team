@@ -1,0 +1,44 @@
+{
+  "people": [
+    {
+      "github_id": 308347,
+      "github": "lnicola",
+      "name": "Laurențiu Nicola"
+    },
+    {
+      "github_id": 906069,
+      "github": "flodiebold",
+      "name": "Florian Diebold"
+    },
+    {
+      "github_id": 3757771,
+      "github": "Veykril",
+      "name": "Lukas Wirth"
+    },
+    {
+      "github_id": 24381114,
+      "github": "lowr",
+      "name": "Ryo Yoshida"
+    },
+    {
+      "github_id": 45197576,
+      "github": "HKalbasi",
+      "name": "Hamidreza Kalbasi"
+    }
+  ],
+  "github_users": [
+    "HKalbasi",
+    "Veykril",
+    "flodiebold",
+    "lnicola",
+    "lowr"
+  ],
+  "github_ids": [
+    308347,
+    906069,
+    3757771,
+    24381114,
+    45197576
+  ],
+  "discord_ids": []
+}

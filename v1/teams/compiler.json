@@ -1,0 +1,219 @@
+{
+  "name": "compiler",
+  "kind": "team",
+  "subteam_of": null,
+  "top_level": true,
+  "members": [
+    {
+      "name": "David Wood",
+      "github": "davidtwco",
+      "github_id": 1295100,
+      "is_lead": true
+    },
+    {
+      "name": "Wesley Wiser",
+      "github": "wesleywiser",
+      "github_id": 831192,
+      "is_lead": true
+    },
+    {
+      "name": "Aaron Hill",
+      "github": "Aaron1011",
+      "github_id": 1408859,
+      "is_lead": false
+    },
+    {
+      "name": "Camille Gillot",
+      "github": "cjgillot",
+      "github_id": 1822483,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Goulet",
+      "github": "compiler-errors",
+      "github_id": 3674314,
+      "is_lead": false
+    },
+    {
+      "name": "Eduard-Mihai Burtescu",
+      "github": "eddyb",
+      "github_id": 77424,
+      "is_lead": false
+    },
+    {
+      "name": "Esteban Kuber",
+      "github": "estebank",
+      "github_id": 1606434,
+      "is_lead": false
+    },
+    {
+      "name": "Jack Huey",
+      "github": "jackh726",
+      "github_id": 31162821,
+      "is_lead": false
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": false
+    },
+    {
+      "name": "Matthew Jasper",
+      "github": "matthewjasper",
+      "github_id": 20113453,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Woerister",
+      "github": "michaelwoerister",
+      "github_id": 1825894,
+      "is_lead": false
+    },
+    {
+      "name": "Simonas Kazlauskas",
+      "github": "nagisa",
+      "github_id": 679122,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    },
+    {
+      "name": "Vadim Petrochenkov",
+      "github": "petrochenkov",
+      "github_id": 5751617,
+      "is_lead": false
+    },
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "James Miller",
+      "github": "Aatch",
+      "github_id": 342416,
+      "is_lead": false
+    },
+    {
+      "name": "Ariel Ben-Yehuda",
+      "github": "arielb1",
+      "github_id": 1830974,
+      "is_lead": false
+    },
+    {
+      "name": "Brian Koropoff",
+      "github": "bkoropoff",
+      "github_id": 2101303,
+      "is_lead": false
+    },
+    {
+      "name": "Taylor Cramer",
+      "github": "cramertj",
+      "github_id": 5963049,
+      "is_lead": false
+    },
+    {
+      "name": "Björn Steinbrink",
+      "github": "dotdash",
+      "github_id": 230962,
+      "is_lead": false
+    },
+    {
+      "name": "Jeffrey Seyfried",
+      "github": "jseyfried",
+      "github_id": 8652869,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "Nick Cameron",
+      "github": "nrc",
+      "github_id": 762626,
+      "is_lead": false
+    },
+    {
+      "name": "varkor",
+      "github": "varkor",
+      "github_id": 3943692,
+      "is_lead": false
+    },
+    {
+      "name": "Zoxc",
+      "github": "Zoxc",
+      "github_id": 25784,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "compiler",
+        "members": [
+          1408859,
+          1822483,
+          3674314,
+          1295100,
+          77424,
+          1606434,
+          31162821,
+          29864074,
+          20113453,
+          1825894,
+          679122,
+          332036,
+          5751617,
+          173127,
+          831192
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "compiler",
+        "members": [
+          1408859,
+          1822483,
+          3674314,
+          1295100,
+          77424,
+          1606434,
+          31162821,
+          29864074,
+          20113453,
+          1825894,
+          679122,
+          332036,
+          5751617,
+          173127,
+          831192
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Compiler team",
+    "description": "Developing and managing compiler internals and optimizations",
+    "page": "compiler",
+    "email": null,
+    "repo": "http://github.com/rust-lang/compiler-team",
+    "discord": null,
+    "zulip_stream": "t-compiler",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

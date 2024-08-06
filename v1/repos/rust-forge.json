@@ -1,0 +1,72 @@
+{
+  "org": "rust-lang",
+  "name": "rust-forge",
+  "description": "Information useful to people contributing to Rust",
+  "homepage": "https://forge.rust-lang.org/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "triagebot",
+      "permission": "maintain"
+    },
+    {
+      "name": "project-edition-2024",
+      "permission": "maintain"
+    },
+    {
+      "name": "lang",
+      "permission": "maintain"
+    },
+    {
+      "name": "infra",
+      "permission": "maintain"
+    },
+    {
+      "name": "release",
+      "permission": "maintain"
+    },
+    {
+      "name": "libs",
+      "permission": "maintain"
+    },
+    {
+      "name": "docs-rs",
+      "permission": "maintain"
+    },
+    {
+      "name": "compiler-contributors",
+      "permission": "maintain"
+    },
+    {
+      "name": "community",
+      "permission": "maintain"
+    },
+    {
+      "name": "compiler",
+      "permission": "maintain"
+    },
+    {
+      "name": "crates-io",
+      "permission": "maintain"
+    },
+    {
+      "name": "leadership-council",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "ci_checks": [],
+      "dismiss_stale_review": false,
+      "required_approvals": 1,
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

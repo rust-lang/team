@@ -1,0 +1,244 @@
+{
+  "teams": {
+    "T-cargo": {
+      "name": "Cargo",
+      "ping": "rust-lang/cargo",
+      "members": [
+        "Eh2406",
+        "Muscraft",
+        "arlosi",
+        "ehuss",
+        "epage",
+        "joshtriplett",
+        "weihanglo"
+      ]
+    },
+    "T-compiler": {
+      "name": "Compiler",
+      "ping": "rust-lang/compiler",
+      "members": [
+        "Aaron1011",
+        "cjgillot",
+        "compiler-errors",
+        "davidtwco",
+        "eddyb",
+        "estebank",
+        "jackh726",
+        "lcnr",
+        "matthewjasper",
+        "michaelwoerister",
+        "nagisa",
+        "oli-obk",
+        "petrochenkov",
+        "pnkfelix",
+        "wesleywiser"
+      ]
+    },
+    "T-crates-io": {
+      "name": "crates.io",
+      "ping": "rust-lang/crates-io",
+      "members": [
+        "JohnTitor",
+        "LawnGnome",
+        "Turbo87",
+        "carols10cents",
+        "eth3lbert",
+        "hi-rustin",
+        "jtgeibel",
+        "mdtro"
+      ]
+    },
+    "T-dev-tools": {
+      "name": "Dev tools",
+      "ping": "rust-lang/dev-tools",
+      "members": [
+        "GuillaumeGomez",
+        "Manishearth",
+        "calebcartwright",
+        "ehuss",
+        "oli-obk",
+        "rbtcollins"
+      ]
+    },
+    "T-docs-rs": {
+      "name": "Docs.rs",
+      "ping": "rust-lang/docs-rs",
+      "members": [
+        "Byron",
+        "GuillaumeGomez",
+        "Nemo157",
+        "jsha",
+        "syphar"
+      ]
+    },
+    "T-infra": {
+      "name": "Infrastructure",
+      "ping": "rust-lang/infra",
+      "members": [
+        "Kobzol",
+        "MarcoIeni",
+        "Mark-Simulacrum",
+        "jdno",
+        "kennytm",
+        "pietroalbini",
+        "shepmaster"
+      ]
+    },
+    "T-lang": {
+      "name": "Language",
+      "ping": "rust-lang/lang",
+      "members": [
+        "joshtriplett",
+        "nikomatsakis",
+        "pnkfelix",
+        "scottmcm",
+        "tmandry",
+        "traviscross"
+      ]
+    },
+    "T-leadership-council": {
+      "name": "Leadership Council",
+      "ping": "rust-lang/leadership-council",
+      "members": [
+        "Mark-Simulacrum",
+        "eholk",
+        "ehuss",
+        "jackh726",
+        "jamesmunns",
+        "m-ou-se",
+        "technetos"
+      ]
+    },
+    "T-libs": {
+      "name": "Library",
+      "ping": "rust-lang/libs",
+      "members": [
+        "Amanieu",
+        "cuviper",
+        "joshtriplett",
+        "m-ou-se",
+        "the8472",
+        "thomcc"
+      ]
+    },
+    "T-libs-api": {
+      "name": "Library API",
+      "ping": "rust-lang/libs-api",
+      "members": [
+        "Amanieu",
+        "BurntSushi",
+        "dtolnay",
+        "joshtriplett",
+        "m-ou-se"
+      ]
+    },
+    "T-localization": {
+      "name": "Localization",
+      "ping": "rust-lang/localization",
+      "members": [
+        "JohnTitor",
+        "Manishearth",
+        "vertexclique"
+      ]
+    },
+    "T-moderation": {
+      "name": "Moderation",
+      "ping": "rust-lang/moderation",
+      "members": [
+        "oli-obk",
+        "technetos"
+      ]
+    },
+    "T-opsem": {
+      "name": "Opsem",
+      "ping": "rust-lang/opsem",
+      "members": [
+        "CAD97",
+        "JakobDegen",
+        "RalfJung",
+        "digama0",
+        "saethlin"
+      ]
+    },
+    "T-release": {
+      "name": "Release",
+      "ping": "rust-lang/release",
+      "members": [
+        "BoxyUwU",
+        "Dylan-DPC",
+        "Mark-Simulacrum",
+        "cuviper",
+        "pietroalbini",
+        "tmandry"
+      ]
+    },
+    "T-rustdoc": {
+      "name": "Rustdoc",
+      "ping": "rust-lang/rustdoc",
+      "members": [
+        "GuillaumeGomez",
+        "Manishearth",
+        "Nemo157",
+        "aDotInTheVoid",
+        "camelid",
+        "fmease",
+        "jsha",
+        "notriddle"
+      ]
+    },
+    "T-rustdoc-frontend": {
+      "name": "Rustdoc frontend",
+      "ping": "rust-lang/rustdoc-frontend",
+      "members": [
+        "GuillaumeGomez",
+        "camelid",
+        "jsha",
+        "notriddle"
+      ]
+    },
+    "T-spec": {
+      "name": "Spec",
+      "ping": "rust-lang/spec",
+      "members": [
+        "JoelMarcey",
+        "ehuss",
+        "m-ou-se",
+        "pnkfelix",
+        "traviscross"
+      ]
+    },
+    "T-style": {
+      "name": "Style",
+      "ping": "rust-lang/style",
+      "members": [
+        "calebcartwright",
+        "compiler-errors",
+        "joshtriplett"
+      ]
+    },
+    "T-testing-devex": {
+      "name": "Testing DevEx",
+      "ping": "rust-lang/testing-devex",
+      "members": [
+        "Muscraft",
+        "calebcartwright",
+        "epage",
+        "thomcc",
+        "weihanglo"
+      ]
+    },
+    "T-types": {
+      "name": "Types",
+      "ping": "rust-lang/types",
+      "members": [
+        "BoxyUwU",
+        "compiler-errors",
+        "jackh726",
+        "lcnr",
+        "nikomatsakis",
+        "oli-obk",
+        "spastorino"
+      ]
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "arewewebyet",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Adrian Tombu",
+      "github": "adriantombu",
+      "github_id": 383297,
+      "is_lead": false
+    },
+    {
+      "name": "Takayuki Nakata",
+      "github": "giraffate",
+      "github_id": 17407489,
+      "is_lead": false
+    },
+    {
+      "name": "Ibraheem Ahmed",
+      "github": "ibraheemdev",
+      "github_id": 34988408,
+      "is_lead": false
+    },
+    {
+      "name": "Luca Palmieri",
+      "github": "LukeMathWalker",
+      "github_id": 20745048,
+      "is_lead": false
+    },
+    {
+      "name": "Marco Otte-Witte",
+      "github": "marcoow",
+      "github_id": 1510,
+      "is_lead": false
+    },
+    {
+      "name": "Tobias Bieniek",
+      "github": "Turbo87",
+      "github_id": 141300,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "arewewebyet",
+        "members": [
+          20745048,
+          141300,
+          383297,
+          17407489,
+          34988408,
+          1510
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,69 @@
+{
+  "people": [
+    {
+      "github_id": 52642,
+      "github": "spastorino",
+      "name": "Santiago Pastorino"
+    },
+    {
+      "github_id": 155238,
+      "github": "nikomatsakis",
+      "name": "Niko Matsakis"
+    },
+    {
+      "github_id": 332036,
+      "github": "oli-obk",
+      "name": "Oliver Scherer"
+    },
+    {
+      "github_id": 3674314,
+      "github": "compiler-errors",
+      "name": "Michael Goulet"
+    },
+    {
+      "github_id": 21149742,
+      "github": "BoxyUwU",
+      "name": "Boxy"
+    },
+    {
+      "github_id": 28497461,
+      "github": "aliemjay",
+      "name": "Ali MJ Al-Nasrawy"
+    },
+    {
+      "github_id": 29864074,
+      "github": "lcnr",
+      "name": "lcnr"
+    },
+    {
+      "github_id": 31162821,
+      "github": "jackh726",
+      "name": "Jack Huey"
+    }
+  ],
+  "github_users": [
+    "BoxyUwU",
+    "aliemjay",
+    "compiler-errors",
+    "jackh726",
+    "lcnr",
+    "nikomatsakis",
+    "oli-obk",
+    "spastorino"
+  ],
+  "github_ids": [
+    52642,
+    155238,
+    332036,
+    3674314,
+    21149742,
+    28497461,
+    29864074,
+    31162821
+  ],
+  "discord_ids": [
+    282164774379192320,
+    434359017515646988,
+    442067131769683974
+  ]
+}

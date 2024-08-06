@@ -1,0 +1,26 @@
+{
+  "org": "rust-lang",
+  "name": "crates.io-infra",
+  "description": "is ur crates.io running?",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    },
+    {
+      "name": "crates-io-on-call",
+      "permission": "write"
+    },
+    {
+      "name": "crates-io",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": true,
+  "auto_merge_enabled": true
+}

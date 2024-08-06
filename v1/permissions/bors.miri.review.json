@@ -1,0 +1,136 @@
+{
+  "people": [
+    {
+      "github_id": 77424,
+      "github": "eddyb",
+      "name": "Eduard-Mihai Burtescu"
+    },
+    {
+      "github_id": 173127,
+      "github": "pnkfelix",
+      "name": "Felix Klock"
+    },
+    {
+      "github_id": 330628,
+      "github": "RalfJung",
+      "name": "Ralf Jung"
+    },
+    {
+      "github_id": 332036,
+      "github": "oli-obk",
+      "name": "Oliver Scherer"
+    },
+    {
+      "github_id": 679122,
+      "github": "nagisa",
+      "name": "Simonas Kazlauskas"
+    },
+    {
+      "github_id": 831192,
+      "github": "wesleywiser",
+      "name": "Wesley Wiser"
+    },
+    {
+      "github_id": 1295100,
+      "github": "davidtwco",
+      "name": "David Wood"
+    },
+    {
+      "github_id": 1408859,
+      "github": "Aaron1011",
+      "name": "Aaron Hill"
+    },
+    {
+      "github_id": 1606434,
+      "github": "estebank",
+      "name": "Esteban Kuber"
+    },
+    {
+      "github_id": 1822483,
+      "github": "cjgillot",
+      "name": "Camille Gillot"
+    },
+    {
+      "github_id": 1825894,
+      "github": "michaelwoerister",
+      "name": "Michael Woerister"
+    },
+    {
+      "github_id": 3674314,
+      "github": "compiler-errors",
+      "name": "Michael Goulet"
+    },
+    {
+      "github_id": 5751617,
+      "github": "petrochenkov",
+      "name": "Vadim Petrochenkov"
+    },
+    {
+      "github_id": 12105168,
+      "github": "saethlin",
+      "name": "Ben Kimock"
+    },
+    {
+      "github_id": 20113453,
+      "github": "matthewjasper",
+      "name": "Matthew Jasper"
+    },
+    {
+      "github_id": 29864074,
+      "github": "lcnr",
+      "name": "lcnr"
+    },
+    {
+      "github_id": 31162821,
+      "github": "jackh726",
+      "name": "Jack Huey"
+    }
+  ],
+  "github_users": [
+    "Aaron1011",
+    "RalfJung",
+    "cjgillot",
+    "compiler-errors",
+    "davidtwco",
+    "eddyb",
+    "estebank",
+    "jackh726",
+    "lcnr",
+    "matthewjasper",
+    "michaelwoerister",
+    "nagisa",
+    "oli-obk",
+    "petrochenkov",
+    "pnkfelix",
+    "saethlin",
+    "wesleywiser"
+  ],
+  "github_ids": [
+    77424,
+    173127,
+    330628,
+    332036,
+    679122,
+    831192,
+    1295100,
+    1408859,
+    1606434,
+    1822483,
+    1825894,
+    3674314,
+    5751617,
+    12105168,
+    20113453,
+    29864074,
+    31162821
+  ],
+  "discord_ids": [
+    119181581033275392,
+    282164774379192320,
+    300421337103466496,
+    391665108490649601,
+    443061971114262528,
+    446730792933130242,
+    449245991216873475
+  ]
+}

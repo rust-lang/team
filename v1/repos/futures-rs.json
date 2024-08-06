@@ -1,0 +1,28 @@
+{
+  "org": "rust-lang",
+  "name": "futures-rs",
+  "description": "Zero-cost asynchronous programming in Rust",
+  "homepage": "https://rust-lang.github.io/futures-rs/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "wg-async",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "ci_checks": [],
+      "dismiss_stale_review": false,
+      "required_approvals": 0,
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

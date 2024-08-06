@@ -1,0 +1,205 @@
+{
+  "name": "infra",
+  "kind": "team",
+  "subteam_of": null,
+  "top_level": true,
+  "members": [
+    {
+      "name": "Jan David Nose",
+      "github": "jdno",
+      "github_id": 865550,
+      "is_lead": true
+    },
+    {
+      "name": "Jake Goulding",
+      "github": "shepmaster",
+      "github_id": 174509,
+      "is_lead": true
+    },
+    {
+      "name": "kennytm",
+      "github": "kennytm",
+      "github_id": 103023,
+      "is_lead": false
+    },
+    {
+      "name": "Jakub Beránek",
+      "github": "Kobzol",
+      "github_id": 4539057,
+      "is_lead": false
+    },
+    {
+      "name": "Marco Ieni",
+      "github": "MarcoIeni",
+      "github_id": 11428655,
+      "is_lead": false
+    },
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": false
+    },
+    {
+      "name": "Pietro Albini",
+      "github": "pietroalbini",
+      "github_id": 2299951,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Aidan Hobson Sayers",
+      "github": "aidanhs",
+      "github_id": 1050652,
+      "is_lead": false
+    },
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    },
+    {
+      "name": "Ashley Williams",
+      "github": "ashleygwilliams",
+      "github_id": 1163554,
+      "is_lead": false
+    },
+    {
+      "name": "Aaron Turon",
+      "github": "aturon",
+      "github_id": 709807,
+      "is_lead": false
+    },
+    {
+      "name": "Brian Anderson",
+      "github": "brson",
+      "github_id": 147214,
+      "is_lead": false
+    },
+    {
+      "name": "Carol Nichols",
+      "github": "carols10cents",
+      "github_id": 193874,
+      "is_lead": false
+    },
+    {
+      "name": "Erick Tryzelaar",
+      "github": "erickt",
+      "github_id": 84711,
+      "is_lead": false
+    },
+    {
+      "name": "Corey Farwell",
+      "github": "frewsxcv",
+      "github_id": 416575,
+      "is_lead": false
+    },
+    {
+      "name": "Jynn Nelson",
+      "github": "jyn514",
+      "github_id": 23638587,
+      "is_lead": false
+    },
+    {
+      "name": "Nell Shamrell-Harrington",
+      "github": "nellshamrell",
+      "github_id": 813007,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan Levick",
+      "github": "rylev",
+      "github_id": 1327285,
+      "is_lead": false
+    },
+    {
+      "name": "Sage Griffin",
+      "github": "sgrif",
+      "github_id": 1529387,
+      "is_lead": false
+    },
+    {
+      "name": "Tim Neumann",
+      "github": "TimNN",
+      "github_id": 1178249,
+      "is_lead": false
+    },
+    {
+      "name": "Tom Prince",
+      "github": "tomprince",
+      "github_id": 283816,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "bors-rs",
+        "name": "rust-infra",
+        "members": [
+          4539057,
+          11428655,
+          5047365,
+          865550,
+          103023,
+          2299951,
+          174509
+        ]
+      },
+      {
+        "org": "rust-lang",
+        "name": "infra",
+        "members": [
+          4539057,
+          11428655,
+          5047365,
+          865550,
+          103023,
+          2299951,
+          174509
+        ]
+      },
+      {
+        "org": "rust-lang-ci",
+        "name": "infra",
+        "members": [
+          4539057,
+          11428655,
+          5047365,
+          865550,
+          103023,
+          2299951,
+          174509
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "infra",
+        "members": [
+          4539057,
+          11428655,
+          5047365,
+          865550,
+          103023,
+          2299951,
+          174509
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Infrastructure team",
+    "description": "Managing the infrastructure supporting the Rust project itself, including CI, releases, bots, and metrics",
+    "page": "infra",
+    "email": "infra@rust-lang.org",
+    "repo": "https://github.com/rust-lang/infra-team",
+    "discord": null,
+    "zulip_stream": "t-infra",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

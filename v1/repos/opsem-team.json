@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "opsem-team",
+  "description": "Home of the operational semantics team, used primarily for procedural items",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "opsem",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

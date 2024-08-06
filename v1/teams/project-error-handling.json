@@ -1,0 +1,80 @@
+{
+  "name": "project-error-handling",
+  "kind": "project_group",
+  "subteam_of": "libs",
+  "members": [
+    {
+      "name": "Jane Lusby",
+      "github": "yaahc",
+      "github_id": 1993852,
+      "is_lead": true
+    },
+    {
+      "name": "Andrew Gallant",
+      "github": "BurntSushi",
+      "github_id": 456674,
+      "is_lead": false
+    },
+    {
+      "name": "Jakub Duchniewicz",
+      "github": "JDuchniewicz",
+      "github_id": 18423461,
+      "is_lead": false
+    },
+    {
+      "name": "Nika Layzell",
+      "github": "mystor",
+      "github_id": 1261662,
+      "is_lead": false
+    },
+    {
+      "name": "Charles \"Chas\" O'Riley",
+      "github": "nagashi",
+      "github_id": 1844327,
+      "is_lead": false
+    },
+    {
+      "name": "Sean Chen",
+      "github": "seanchen1991",
+      "github_id": 4572868,
+      "is_lead": false
+    },
+    {
+      "name": "Senyo Simpson",
+      "github": "senyosimpson",
+      "github_id": 31822321,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "project-error-handling",
+        "members": [
+          456674,
+          18423461,
+          1261662,
+          1844327,
+          4572868,
+          31822321,
+          1993852
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Error Handling Project Group",
+    "description": "Identifying error handling best practices and consolidating the ecosystem",
+    "page": "project-error-handling",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

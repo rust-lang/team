@@ -1,0 +1,37 @@
+{
+  "org": "rust-lang",
+  "name": "measureme",
+  "description": "Support crate for rustc's self-profiling feature",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "compiler",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "ci_checks": [
+        "success"
+      ],
+      "dismiss_stale_review": false,
+      "required_approvals": 1,
+      "allowed_merge_teams": []
+    },
+    {
+      "pattern": "stable",
+      "ci_checks": [
+        "success"
+      ],
+      "dismiss_stale_review": false,
+      "required_approvals": 1,
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

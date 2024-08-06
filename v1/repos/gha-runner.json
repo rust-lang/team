@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "gha-runner",
+  "description": "Custom fork of the GitHub Actions runner",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra-admins",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}
