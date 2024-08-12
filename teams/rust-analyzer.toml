@@ -4,16 +4,17 @@ subteam-of = "compiler"
 [people]
 leads = ["Veykril"]
 members = [
+    "davidbarsky",
+    "flodiebold",
+    "HKalbasi",
     "lnicola",
     "Veykril",
-    "flodiebold",
-    "lowr",
-    "HKalbasi",
 ]
 alumni = [
     "edwin0cheng",
-    "SomeoneToIgnore",
+    "lowr",
     "matklad",
+    "SomeoneToIgnore",
 ]
 
 [website]
