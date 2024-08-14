@@ -587,7 +587,7 @@ fn validate_github_usernames(data: &Data, github: &GitHubApi, errors: &mut Vec<S
         Ok(res) => wrapper(res.iter(), errors, |(id, name), _| {
             let original = people[id].github();
             if original != name {
-                bail!("user `{}` changed username to `{}`", original, name);
+                bail!("GitHub user `{}` changed username to `{}`", original, name);
             }
             Ok(())
         }),
