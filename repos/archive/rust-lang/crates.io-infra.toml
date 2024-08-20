@@ -5,6 +5,3 @@ bots = []
 private-non-synced = true
 
 [access.teams]
-infra = "write"
-crates-io-on-call = "write"
-crates-io = "write"
