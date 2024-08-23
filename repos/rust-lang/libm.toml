@@ -8,3 +8,5 @@ crate-maintainers = 'maintain'
 
 [[branch-protections]]
 pattern = "master"
+ci-checks = ['success']
+required-approvals = 0
