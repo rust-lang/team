@@ -1,0 +1,13 @@
+name = "codegen-c-maintainers"
+subteam-of = "compiler"
+
+[people]
+leads = []
+members = [
+    "Amanieu",
+    "tgross35"
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]

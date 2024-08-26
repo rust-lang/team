@@ -1,0 +1,9 @@
+org = "rust-lang"
+name = "rustc_codegen_c"
+description = "C based backend for rustc"
+bots = []
+
+[access.teams]
+codegen-c-maintainers = "maintain"
+compiler = "maintain"
+compiler-contributors = "write"
