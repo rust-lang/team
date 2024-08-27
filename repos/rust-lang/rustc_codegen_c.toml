@@ -7,3 +7,8 @@ bots = []
 codegen-c-maintainers = "maintain"
 compiler = "maintain"
 compiler-contributors = "write"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = ['success']
+required-approvals = 0
