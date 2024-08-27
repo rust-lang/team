@@ -6,6 +6,7 @@ bots = ["renovate"]
 
 [access.teams]
 inside-rust-reviewers = "write"
+website = "maintain"
 
 [[branch-protections]]
 pattern = "master"
