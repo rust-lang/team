@@ -7,7 +7,6 @@ members = [
     "carols10cents",
     "jtgeibel",
     "Turbo87",
-    "JohnTitor",
     "LawnGnome",
     "mdtro",
     "Rustin170506",
@@ -26,6 +25,7 @@ alumni = [
     "pichfl",
     "locks",
     "wycats",
+    "JohnTitor",
 ]
 
 [permissions]
