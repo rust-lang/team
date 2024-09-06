@@ -151,7 +151,7 @@ impl Data {
     pub(crate) fn subteams_of<'a>(
         &'a self,
         team_name: &'a str,
-    ) -> impl Iterator<Item = &Team> + 'a {
+    ) -> impl Iterator<Item = &'a Team> + 'a {
         self.team(team_name).into_iter().flat_map(move |team| {
             self.teams()
                 .filter(move |maybe_subteam| team.is_parent_of(self, maybe_subteam))
