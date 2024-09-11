@@ -3,8 +3,9 @@ kind = "project-group"
 subteam-of = "libs"
 
 [people]
-leads = ["yaahc"]
-members = [
+leads = []
+members = []
+alumni = [
     "yaahc",
     "BurntSushi",
     "seanchen1991",
@@ -13,7 +14,6 @@ members = [
     "mystor",
     "senyosimpson",
 ]
-alumni = []
 
 [website]
 name = "Error Handling Project Group"
