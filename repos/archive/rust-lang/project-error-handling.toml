@@ -4,4 +4,3 @@ description = "Error handling project group"
 bots = []
 
 [access.teams]
-project-error-handling = "write"
