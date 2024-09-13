@@ -47,7 +47,7 @@ impl Data {
 
         data.load_dir("repos", true, |this, org, repo: Repo, path: &Path| {
             if org == "archive" {
-                return Ok(());
+                bail!("repo '{}' is located in the 'archive/' directory. Move it into the org subdirectory, e.g. 'archive/rust-lang/'", repo.name);
             }
 
             validate_repo(org, &repo, path)?;
