@@ -6,6 +6,3 @@ bots = ["rustbot", "bors"]
 
 [access.teams]
 types = "write"
-
-[[branch-protections]]
-pattern = "master"
