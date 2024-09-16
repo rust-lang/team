@@ -19,3 +19,4 @@ ci-checks = [
     "build (windows-latest, nightly)",
     "build (windows-latest, stable)",
 ]
+required-approvals = 0
