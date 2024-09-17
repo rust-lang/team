@@ -46,3 +46,6 @@ extra-teams = [
     "mods-discord",
     "mods-discourse",
 ]
+
+[[zulip-groups]]
+name = "T-mods"
