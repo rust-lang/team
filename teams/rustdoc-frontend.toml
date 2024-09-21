@@ -18,7 +18,6 @@ perf = true
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
-extra-teams = ["rustdoc"]
 
 [website]
 name = "Rustdoc web frontend"
