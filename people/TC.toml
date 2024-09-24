@@ -2,4 +2,4 @@ name = "TC"
 github = "traviscross"
 github-id = 1076834
 zulip-id = 614535
-email = false
+email = "tc+rust@traviscross.com"
