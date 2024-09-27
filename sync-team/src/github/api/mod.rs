@@ -338,6 +338,7 @@ pub(crate) struct BranchProtection {
     pub(crate) required_status_check_contexts: Vec<String>,
     #[serde(deserialize_with = "allowances")]
     pub(crate) push_allowances: Vec<PushAllowanceActor>,
+    pub(crate) requires_approving_reviews: bool,
 }
 
 fn nullable<'de, D, T>(deserializer: D) -> Result<T, D::Error>
