@@ -332,7 +332,8 @@ impl GithubRead for GitHubApiRead {
                             isAdminEnforced,
                             dismissesStaleReviews,
                             requiredStatusCheckContexts,
-                            requiredApprovingReviewCount
+                            requiredApprovingReviewCount,
+                            requiresApprovingReviews
                             pushAllowances(first: 100) {
                                 nodes {
                                     actor {
