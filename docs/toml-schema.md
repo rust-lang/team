@@ -333,13 +333,18 @@ Admins cannot override these branch protections. If an admin needs to do that, t
 # The pattern matching the branches to be protected (required)
 pattern = "master"
 # Which CI checks to are required for merging (optional)
+# Cannot be set if `pr-required` is `false`.
 ci-checks = ["CI"]
 # Whether new commits after a reviewer's approval of a PR 
 # merging into this branch require another review. 
 # (optional - default `false`)
 dismiss-stale-review = false
+# Is a PR required when making changes to this branch?
+# (optional - default `true`)
+pr-required = true
 # How many approvals are required for a PR to be merged.
 # This option is only relevant if bors is not used.
+# Cannot be set if `pr-required` is `false`.
 # (optional - default `1`)
 required-approvals = 1
 # Which GitHub teams have access to push/merge to this branch.
