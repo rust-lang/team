@@ -5,13 +5,13 @@ leads = []
 members = [
     { github = "eholk", roles = ["council-rep-compiler"] },
     { github = "ehuss", roles = ["council-rep-devtools"] },
-    { github = "jackh726", roles = ["council-rep-lang"] },
+    { github = "traviscross", roles = ["council-rep-lang"] },
     { github = "jamesmunns", roles = ["council-rep-launching-pad"] },
     { github = "Mark-Simulacrum", roles = ["council-rep-infra"] },
     { github = "m-ou-se", roles = ["council-rep-libs"] },
     { github = "technetos", roles = ["council-rep-mods"] },
 ]
-alumni = ["khionu", "rylev", "carols10cents", "jonathanpallant"]
+alumni = ["khionu", "rylev", "carols10cents", "jonathanpallant", "jackh726"]
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
