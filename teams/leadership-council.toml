@@ -9,9 +9,9 @@ members = [
     { github = "jamesmunns", roles = ["council-rep-launching-pad"] },
     { github = "Mark-Simulacrum", roles = ["council-rep-infra"] },
     { github = "m-ou-se", roles = ["council-rep-libs"] },
-    { github = "technetos", roles = ["council-rep-mods"] },
+    { github = "oli-obk", roles = ["council-rep-mods"] },
 ]
-alumni = ["khionu", "rylev", "carols10cents", "jonathanpallant", "jackh726"]
+alumni = ["khionu", "rylev", "carols10cents", "jonathanpallant", "jackh726", "technetos"]
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
