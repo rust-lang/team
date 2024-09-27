@@ -1,0 +1,7 @@
+name = "twitter"
+kind = "marker-team"
+
+[people]
+leads = []
+members = []
+alumni = ["m-ou-se", "badboy", "pietroalbini"]
