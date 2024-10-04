@@ -6,12 +6,12 @@ kind = "working-group"
 leads = ["pnkfelix", "wesleywiser"]
 members = [
     "davidtwco",
-    "michaelwoerister",
     "pnkfelix",
     "wesleywiser",
 ]
 alumni = [
     "Manishearth",
+    "michaelwoerister",
 ]
 
 [website]

@@ -9,12 +9,12 @@ members = [
     "rylev",
     "tgnottingham",
     "pnkfelix",
-    "michaelwoerister",
     "Kobzol",
     "lqd",
     "nnethercote",
 ]
 alumni = [
+    "michaelwoerister",
     "wesleywiser",
 ]
 

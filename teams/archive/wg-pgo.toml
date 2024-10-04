@@ -3,9 +3,9 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["michaelwoerister"]
-members = ["michaelwoerister"]
-alumni = []
+leads = []
+members = []
+alumni = ["michaelwoerister"]
 
 [website]
 name = "Profile-guided optimization working group"
