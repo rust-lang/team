@@ -1,0 +1,15 @@
+org = "rust-lang"
+name = "crates.io-index-archive"
+description = "Archive of the crates.io-index commit history after squashes"
+bots = []
+
+[access.teams]
+crates-io = "admin"
+
+[[branch-protections]]
+pattern = "snapshot-*"
+pr-required = false
+
+[[branch-protections]]
+pattern = "main"
+pr-required = false
