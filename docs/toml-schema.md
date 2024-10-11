@@ -352,4 +352,12 @@ required-approvals = 1
 # can push/merge to the branch.
 # (optional)
 allowed-merge-teams = ["awesome-team"]
+# Determines the merge queue bot(s) that manage pushes to this branch.
+# When a bot manages the queue, some other options, like
+# `required-approvals` and `pr-required` options are not valid.
+#
+# Currently, only the "homu" option is supported.
+# When "homu" is used, "bors" has to be in the `bots` array.
+# (optional)
+merge-bots = ["homu"]
 ```
