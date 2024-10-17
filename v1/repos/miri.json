@@ -1,0 +1,37 @@
+{
+  "org": "rust-lang",
+  "name": "miri",
+  "description": "An interpreter for Rust's mid-level intermediate representation",
+  "homepage": null,
+  "bots": [
+    "rustbot",
+    "bors"
+  ],
+  "teams": [
+    {
+      "name": "miri",
+      "permission": "write"
+    },
+    {
+      "name": "compiler",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": false
+}

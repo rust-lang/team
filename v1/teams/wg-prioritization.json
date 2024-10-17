@@ -1,0 +1,179 @@
+{
+  "name": "wg-prioritization",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "apiraino",
+      "github": "apiraino",
+      "github_id": 6098822,
+      "is_lead": true
+    },
+    {
+      "name": "Wesley Wiser",
+      "github": "wesleywiser",
+      "github_id": 831192,
+      "is_lead": true
+    },
+    {
+      "name": "Noah Lev",
+      "github": "camelid",
+      "github_id": 37223377,
+      "is_lead": false
+    },
+    {
+      "name": "Dylan DPC",
+      "github": "Dylan-DPC",
+      "github_id": 99973273,
+      "is_lead": false
+    },
+    {
+      "name": "Hameer Abbasi",
+      "github": "hameerabbasi",
+      "github_id": 2190658,
+      "is_lead": false
+    },
+    {
+      "name": "Hirochika Matsumoto",
+      "github": "hkmatsumoto",
+      "github_id": 57856193,
+      "is_lead": false
+    },
+    {
+      "name": "inquisitivecrystal",
+      "github": "inquisitivecrystal",
+      "github_id": 22333129,
+      "is_lead": false
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": false
+    },
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "amit",
+      "github": "am-1t",
+      "github_id": 28247396,
+      "is_lead": false
+    },
+    {
+      "name": "Bawer Dagdeviren",
+      "github": "bawerd",
+      "github_id": 625483,
+      "is_lead": false
+    },
+    {
+      "name": "Mazdak Farrokhzad",
+      "github": "Centril",
+      "github_id": 855702,
+      "is_lead": false
+    },
+    {
+      "name": "DJ Carpenter",
+      "github": "djcarpe",
+      "github_id": 59489977,
+      "is_lead": false
+    },
+    {
+      "name": "Fredrik Østrem",
+      "github": "frxstrem",
+      "github_id": 1686349,
+      "is_lead": false
+    },
+    {
+      "name": "Jonathan Chasteen",
+      "github": "jechasteen",
+      "github_id": 13788397,
+      "is_lead": false
+    },
+    {
+      "name": "Yuki Okushi",
+      "github": "JohnTitor",
+      "github_id": 25030997,
+      "is_lead": false
+    },
+    {
+      "name": "Jynn Nelson",
+      "github": "jyn514",
+      "github_id": 23638587,
+      "is_lead": false
+    },
+    {
+      "name": "Léo Lanteri Thauvin",
+      "github": "LeSeulArtichaut",
+      "github_id": 38361244,
+      "is_lead": false
+    },
+    {
+      "name": "Who? Me?!",
+      "github": "mark-i-m",
+      "github_id": 8827840,
+      "is_lead": false
+    },
+    {
+      "name": "Mason Stallmo",
+      "github": "mstallmo",
+      "github_id": 6796542,
+      "is_lead": false
+    },
+    {
+      "name": "Jeremy Lempereur",
+      "github": "o0Ignition0o",
+      "github_id": 9465678,
+      "is_lead": false
+    },
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    },
+    {
+      "name": "Stu",
+      "github": "Stupremee",
+      "github_id": 39732259,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-prioritization",
+        "members": [
+          99973273,
+          6098822,
+          37223377,
+          2190658,
+          57856193,
+          22333129,
+          29864074,
+          173127,
+          831192
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Prioritization working group",
+    "description": "Triaging bugs, mainly deciding if bugs are critical (potential release blockers) or not",
+    "page": "wg-prioritization",
+    "email": null,
+    "repo": "https://rust-lang.github.io/compiler-team/working-groups/prioritization/",
+    "discord": null,
+    "zulip_stream": "t-compiler/wg-prioritization",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

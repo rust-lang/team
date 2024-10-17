@@ -1,0 +1,30 @@
+{
+  "people": [
+    {
+      "github_id": 762626,
+      "github": "nrc",
+      "name": "Nick Cameron"
+    },
+    {
+      "github_id": 2331607,
+      "github": "alexheretic",
+      "name": "Alex Butler"
+    },
+    {
+      "github_id": 3093213,
+      "github": "Xanewok",
+      "name": "Igor Matuszewski"
+    }
+  ],
+  "github_users": [
+    "Xanewok",
+    "alexheretic",
+    "nrc"
+  ],
+  "github_ids": [
+    762626,
+    2331607,
+    3093213
+  ],
+  "discord_ids": []
+}

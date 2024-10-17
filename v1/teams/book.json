@@ -1,0 +1,35 @@
+{
+  "name": "book",
+  "kind": "team",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Carol Nichols",
+      "github": "carols10cents",
+      "github_id": 193874,
+      "is_lead": true
+    },
+    {
+      "name": "Chris Krycho",
+      "github": "chriskrycho",
+      "github_id": 2403023,
+      "is_lead": true
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "book",
+        "members": [
+          193874,
+          2403023
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,87 @@
+{
+  "name": "wg-embedded-resources",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [
+    {
+      "name": "Adam Greig",
+      "github": "adamgreig",
+      "github_id": 47219,
+      "is_lead": false
+    },
+    {
+      "name": "Bart Massey",
+      "github": "BartMassey",
+      "github_id": 117151,
+      "is_lead": false
+    },
+    {
+      "name": "Diego Barrios Romero",
+      "github": "eldruin",
+      "github_id": 43125,
+      "is_lead": false
+    },
+    {
+      "name": "Henrik Böving",
+      "github": "hargoniX",
+      "github_id": 33270164,
+      "is_lead": false
+    },
+    {
+      "name": "Henk Oordt",
+      "github": "hdoordt",
+      "github_id": 17907879,
+      "is_lead": false
+    },
+    {
+      "name": "James Munns",
+      "github": "jamesmunns",
+      "github_id": 2097964,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Egger",
+      "github": "therealprof",
+      "github_id": 3321888,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Andre Richter",
+      "github": "andre-richter",
+      "github_id": 4130005,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "resources",
+        "members": [
+          117151,
+          47219,
+          43125,
+          33270164,
+          17907879,
+          2097964,
+          3321888
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded resources working group",
+    "description": "Managing various resources owned by the embedded working group",
+    "page": "wg-embedded-resources",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

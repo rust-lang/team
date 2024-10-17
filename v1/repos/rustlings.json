@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "rustlings",
+  "description": ":crab: Small exercises to get you used to reading and writing Rust code!",
+  "homepage": "https://rustlings.cool",
+  "bots": [],
+  "teams": [
+    {
+      "name": "rustlings",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

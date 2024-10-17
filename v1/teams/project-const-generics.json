@@ -1,0 +1,86 @@
+{
+  "name": "project-const-generics",
+  "kind": "project_group",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "Boxy",
+      "github": "BoxyUwU",
+      "github_id": 21149742,
+      "is_lead": true
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": true
+    },
+    {
+      "name": "Noah Lev",
+      "github": "camelid",
+      "github_id": 37223377,
+      "is_lead": false
+    },
+    {
+      "name": "David Wood",
+      "github": "davidtwco",
+      "github_id": 1295100,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "varkor",
+      "github": "varkor",
+      "github_id": 3943692,
+      "is_lead": false
+    },
+    {
+      "name": "Without Boats",
+      "github": "withoutboats",
+      "github_id": 9063376,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "project-const-generics",
+        "members": [
+          21149742,
+          37223377,
+          1295100,
+          29864074,
+          155238,
+          332036
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Const Generics Project Group",
+    "description": "Working to advance const generics support in the Rust language",
+    "page": "project-const-generics",
+    "email": null,
+    "repo": "https://github.com/rust-lang/project-const-generics",
+    "discord": null,
+    "zulip_stream": "project-const-generics",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

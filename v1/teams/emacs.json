@@ -1,0 +1,70 @@
+{
+  "name": "emacs",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "brotzeit",
+      "github": "brotzeit",
+      "github_id": 25367303,
+      "is_lead": false
+    },
+    {
+      "name": "Jen-Chieh Shen",
+      "github": "jcs090218",
+      "github_id": 8685505,
+      "is_lead": false
+    },
+    {
+      "name": "Jim Blandy",
+      "github": "jimblandy",
+      "github_id": 751272,
+      "is_lead": false
+    },
+    {
+      "name": "Micah Chalmer",
+      "github": "MicahChalmer",
+      "github_id": 698400,
+      "is_lead": false
+    },
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": false
+    },
+    {
+      "name": "Sibi Prabakaran",
+      "github": "psibi",
+      "github_id": 737477,
+      "is_lead": false
+    },
+    {
+      "name": "Tom Tromey",
+      "github": "tromey",
+      "github_id": 1557670,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "emacs",
+        "members": [
+          698400,
+          25367303,
+          8685505,
+          751272,
+          173127,
+          737477,
+          1557670
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

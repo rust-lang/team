@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "async-book",
+  "description": "Asynchronous Programming in Rust",
+  "homepage": "https://rust-lang.github.io/async-book/index.html",
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-async",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

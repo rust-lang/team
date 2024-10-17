@@ -1,0 +1,65 @@
+{
+  "people": [
+    {
+      "github_id": 103023,
+      "github": "kennytm",
+      "name": "kennytm"
+    },
+    {
+      "github_id": 174509,
+      "github": "shepmaster",
+      "name": "Jake Goulding"
+    },
+    {
+      "github_id": 865550,
+      "github": "jdno",
+      "name": "Jan David Nose"
+    },
+    {
+      "github_id": 2299951,
+      "github": "pietroalbini",
+      "name": "Pietro Albini"
+    },
+    {
+      "github_id": 4539057,
+      "github": "Kobzol",
+      "name": "Jakub Beránek"
+    },
+    {
+      "github_id": 5047365,
+      "github": "Mark-Simulacrum",
+      "name": "Mark Rousskov"
+    },
+    {
+      "github_id": 11428655,
+      "github": "MarcoIeni",
+      "name": "Marco Ieni"
+    }
+  ],
+  "github_users": [
+    "Kobzol",
+    "MarcoIeni",
+    "Mark-Simulacrum",
+    "jdno",
+    "kennytm",
+    "pietroalbini",
+    "shepmaster"
+  ],
+  "github_ids": [
+    103023,
+    174509,
+    865550,
+    2299951,
+    4539057,
+    5047365,
+    11428655
+  ],
+  "discord_ids": [
+    296309029947441155,
+    382886245069488129,
+    442403469580566528,
+    453980540824059918,
+    650270302198169611,
+    953562944472510494
+  ]
+}

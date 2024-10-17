@@ -1,0 +1,45 @@
+{
+  "name": "project-generic-associated-types",
+  "kind": "project_group",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "Jack Huey",
+      "github": "jackh726",
+      "github_id": 31162821,
+      "is_lead": true
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "initiative-generic-associated-types",
+        "members": [
+          31162821,
+          155238
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Generic Associated Types Initiative",
+    "description": "Extending Rust with Generic Associated Types",
+    "page": "project-generic-associated-types",
+    "email": null,
+    "repo": "https://github.com/rust-lang/generic-associated-types-initiative",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,74 @@
+{
+  "name": "spec",
+  "kind": "team",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "Joel Marcey",
+      "github": "JoelMarcey",
+      "github_id": 3757713,
+      "is_lead": true,
+      "roles": [
+        "spec-editor"
+      ]
+    },
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": true
+    },
+    {
+      "name": "Eric Huss",
+      "github": "ehuss",
+      "github_id": 43198,
+      "is_lead": false
+    },
+    {
+      "name": "Mara Bos",
+      "github": "m-ou-se",
+      "github_id": 783247,
+      "is_lead": false
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "spec",
+        "members": [
+          3757713,
+          43198,
+          783247,
+          173127,
+          1076834
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Specification team",
+    "description": "Creating and maintaining the specification for the Rust language",
+    "page": "spec",
+    "email": null,
+    "repo": "https://github.com/rust-lang/spec",
+    "discord": null,
+    "zulip_stream": "t-spec",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [
+    {
+      "id": "spec-editor",
+      "description": "Editor"
+    }
+  ],
+  "discord": []
+}

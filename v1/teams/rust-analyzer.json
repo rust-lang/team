@@ -1,0 +1,102 @@
+{
+  "name": "rust-analyzer",
+  "kind": "team",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Lukas Wirth",
+      "github": "Veykril",
+      "github_id": 3757771,
+      "is_lead": true
+    },
+    {
+      "name": "David Barsky",
+      "github": "davidbarsky",
+      "github_id": 2067774,
+      "is_lead": false
+    },
+    {
+      "name": "Florian Diebold",
+      "github": "flodiebold",
+      "github_id": 906069,
+      "is_lead": false
+    },
+    {
+      "name": "Hamidreza Kalbasi",
+      "github": "HKalbasi",
+      "github_id": 45197576,
+      "is_lead": false
+    },
+    {
+      "name": "Laurențiu Nicola",
+      "github": "lnicola",
+      "github_id": 308347,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Edwin Cheng",
+      "github": "edwin0cheng",
+      "github_id": 11014119,
+      "is_lead": false
+    },
+    {
+      "name": "Ryo Yoshida",
+      "github": "lowr",
+      "github_id": 24381114,
+      "is_lead": false
+    },
+    {
+      "name": "Aleksey Kladov",
+      "github": "matklad",
+      "github_id": 1711539,
+      "is_lead": false
+    },
+    {
+      "name": "Kirill Bulatov",
+      "github": "SomeoneToIgnore",
+      "github_id": 2690773,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-analyzer",
+        "name": "rust-analyzer",
+        "members": [
+          45197576,
+          3757771,
+          2067774,
+          906069,
+          308347
+        ]
+      },
+      {
+        "org": "rust-lang",
+        "name": "rust-analyzer",
+        "members": [
+          45197576,
+          3757771,
+          2067774,
+          906069,
+          308347
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "rust-analyzer team",
+    "description": "Rust IDE support and error-resilient compiler front-end",
+    "page": "rust-analyzer",
+    "email": null,
+    "repo": "https://github.com/rust-lang/rust-analyzer",
+    "discord": null,
+    "zulip_stream": "t-compiler/rust-analyzer",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

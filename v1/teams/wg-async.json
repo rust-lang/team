@@ -1,0 +1,242 @@
+{
+  "name": "wg-async",
+  "kind": "working_group",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": true
+    },
+    {
+      "name": "Tyler Mandry",
+      "github": "tmandry",
+      "github_id": 2280544,
+      "is_lead": true
+    },
+    {
+      "name": "Michael Goulet",
+      "github": "compiler-errors",
+      "github_id": 3674314,
+      "is_lead": false
+    },
+    {
+      "name": "Eric Holk",
+      "github": "eholk",
+      "github_id": 105766,
+      "is_lead": false
+    },
+    {
+      "name": "Esteban Kuber",
+      "github": "estebank",
+      "github_id": 1606434,
+      "is_lead": false
+    },
+    {
+      "name": "Gus Wynn",
+      "github": "guswynn",
+      "github_id": 5404303,
+      "is_lead": false
+    },
+    {
+      "name": "Nick Cameron",
+      "github": "nrc",
+      "github_id": 762626,
+      "is_lead": false
+    },
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": false
+    },
+    {
+      "name": "Taiki Endo",
+      "github": "taiki-e",
+      "github_id": 43724913,
+      "is_lead": false
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": false
+    },
+    {
+      "name": "Vincenzo Palazzo",
+      "github": "vincenzopalazzo",
+      "github_id": 17150045,
+      "is_lead": false
+    },
+    {
+      "name": "Yoshua Wuyts",
+      "github": "yoshuawuyts",
+      "github_id": 2467194,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Aaron Hill",
+      "github": "Aaron1011",
+      "github_id": 1408859,
+      "is_lead": false
+    },
+    {
+      "name": "Didrik Nordström",
+      "github": "betamos",
+      "github_id": 135960,
+      "is_lead": false
+    },
+    {
+      "name": "Bhargav Voleti",
+      "github": "bIgBV",
+      "github_id": 5019938,
+      "is_lead": false
+    },
+    {
+      "name": "Taylor Cramer",
+      "github": "cramertj",
+      "github_id": 5963049,
+      "is_lead": false
+    },
+    {
+      "name": "csmoe",
+      "github": "csmoe",
+      "github_id": 35686186,
+      "is_lead": false
+    },
+    {
+      "name": "Doc Jones",
+      "github": "doc-jones",
+      "github_id": 37349558,
+      "is_lead": false
+    },
+    {
+      "name": "Andrew Chin",
+      "github": "eminence",
+      "github_id": 402454,
+      "is_lead": false
+    },
+    {
+      "name": "Emmanuel Antony",
+      "github": "emmanuelantony2000",
+      "github_id": 19288251,
+      "is_lead": false
+    },
+    {
+      "name": "Squirrel",
+      "github": "gilescope",
+      "github_id": 803976,
+      "is_lead": false
+    },
+    {
+      "name": "Lee Bernick",
+      "github": "lbernick",
+      "github_id": 29333301,
+      "is_lead": false
+    },
+    {
+      "name": "Lucio Franco",
+      "github": "LucioFranco",
+      "github_id": 5758045,
+      "is_lead": false
+    },
+    {
+      "name": "Josef Brandl",
+      "github": "MajorBreakfast",
+      "github_id": 340142,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Woerister",
+      "github": "michaelwoerister",
+      "github_id": 1825894,
+      "is_lead": false
+    },
+    {
+      "name": "Nell Shamrell-Harrington",
+      "github": "nellshamrell",
+      "github_id": 813007,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan Levick",
+      "github": "rylev",
+      "github_id": 1327285,
+      "is_lead": false
+    },
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    },
+    {
+      "name": "Without Boats",
+      "github": "withoutboats",
+      "github_id": 9063376,
+      "is_lead": false
+    },
+    {
+      "name": "Zeeshan Ali",
+      "github": "zeenix",
+      "github_id": 2027,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-async",
+        "members": [
+          3674314,
+          105766,
+          1606434,
+          5404303,
+          155238,
+          762626,
+          173127,
+          43724913,
+          2280544,
+          1076834,
+          17150045,
+          2467194
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "wg-async",
+        "members": [
+          3674314,
+          105766,
+          1606434,
+          5404303,
+          155238,
+          762626,
+          173127,
+          43724913,
+          2280544,
+          1076834,
+          17150045,
+          2467194
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Async working group",
+    "description": "Pursuing core language and library support for async-await",
+    "page": "wg-async",
+    "email": null,
+    "repo": "https://github.com/rust-lang/wg-async",
+    "discord": null,
+    "zulip_stream": "wg-async",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

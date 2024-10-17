@@ -1,0 +1,34 @@
+{
+  "org": "rust-lang",
+  "name": "stdarch",
+  "description": "Rust's standard library vendor-specific APIs and run-time feature detection",
+  "homepage": "https://doc.rust-lang.org/stable/core/arch/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "libs",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "success"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

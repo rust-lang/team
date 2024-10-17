@@ -1,0 +1,38 @@
+{
+  "name": "project-async-crashdump-debugging",
+  "kind": "project_group",
+  "subteam_of": "wg-async",
+  "members": [
+    {
+      "name": "Michael Woerister",
+      "github": "michaelwoerister",
+      "github_id": 1825894,
+      "is_lead": true
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "initiative-async-crashdump-debugging",
+        "members": [
+          1825894
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Async Crashdump Debugging Initiative",
+    "description": "Simplify crashdump debugging of async programs",
+    "page": "project-async-crashdump-debugging",
+    "email": null,
+    "repo": "https://github.com/rust-lang/async-crashdump-debugging-initiative",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

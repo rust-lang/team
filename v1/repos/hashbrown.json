@@ -1,0 +1,36 @@
+{
+  "org": "rust-lang",
+  "name": "hashbrown",
+  "description": "Rust port of Google's SwissTable hash map",
+  "homepage": "https://rust-lang.github.io/hashbrown",
+  "bots": [
+    "bors"
+  ],
+  "teams": [
+    {
+      "name": "libs",
+      "permission": "write"
+    },
+    {
+      "name": "libs-contributors",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": false
+}

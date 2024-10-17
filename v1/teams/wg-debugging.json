@@ -1,0 +1,65 @@
+{
+  "name": "wg-debugging",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": true
+    },
+    {
+      "name": "Wesley Wiser",
+      "github": "wesleywiser",
+      "github_id": 831192,
+      "is_lead": true
+    },
+    {
+      "name": "David Wood",
+      "github": "davidtwco",
+      "github_id": 1295100,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Manish Goregaokar",
+      "github": "Manishearth",
+      "github_id": 1617736,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Woerister",
+      "github": "michaelwoerister",
+      "github_id": 1825894,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-debugging",
+        "members": [
+          1295100,
+          173127,
+          831192
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Debugging Working Group",
+    "description": "Providing users with a great experience when debugging Rust code",
+    "page": "wg-debugging",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": "t-compiler/wg-debugging",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

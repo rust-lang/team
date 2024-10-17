@@ -1,0 +1,104 @@
+{
+  "people": [
+    {
+      "github_id": 63622,
+      "github": "Byron",
+      "name": "Sebastian Thiel"
+    },
+    {
+      "github_id": 162737,
+      "github": "joshtriplett",
+      "name": "Josh Triplett"
+    },
+    {
+      "github_id": 278509,
+      "github": "Amanieu",
+      "name": "Amanieu d'Antras"
+    },
+    {
+      "github_id": 860665,
+      "github": "thomcc",
+      "name": "Thom Chiovoloni"
+    },
+    {
+      "github_id": 1065730,
+      "github": "the8472",
+      "name": "The 8472"
+    },
+    {
+      "github_id": 3735327,
+      "github": "jongiddy",
+      "name": "Jonathan Giddy"
+    },
+    {
+      "github_id": 4459874,
+      "github": "ChrisDenton",
+      "name": "Chris Denton"
+    },
+    {
+      "github_id": 5018213,
+      "github": "japaric",
+      "name": "Jorge Aparicio"
+    },
+    {
+      "github_id": 6721458,
+      "github": "KodrAus",
+      "name": "Ashley Mannix"
+    },
+    {
+      "github_id": 13724985,
+      "github": "tgross35",
+      "name": "Trevor Gross"
+    },
+    {
+      "github_id": 25030997,
+      "github": "JohnTitor",
+      "name": "Yuki Okushi"
+    },
+    {
+      "github_id": 29864074,
+      "github": "lcnr",
+      "name": "lcnr"
+    },
+    {
+      "github_id": 46493976,
+      "github": "workingjubilee",
+      "name": "Jubilee"
+    }
+  ],
+  "github_users": [
+    "Amanieu",
+    "Byron",
+    "ChrisDenton",
+    "JohnTitor",
+    "KodrAus",
+    "japaric",
+    "jongiddy",
+    "joshtriplett",
+    "lcnr",
+    "tgross35",
+    "the8472",
+    "thomcc",
+    "workingjubilee"
+  ],
+  "github_ids": [
+    63622,
+    162737,
+    278509,
+    860665,
+    1065730,
+    3735327,
+    4459874,
+    5018213,
+    6721458,
+    13724985,
+    25030997,
+    29864074,
+    46493976
+  ],
+  "discord_ids": [
+    362122860673892353,
+    451800670635294731,
+    707155612672196689
+  ]
+}

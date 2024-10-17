@@ -1,0 +1,40 @@
+{
+  "people": [
+    {
+      "github_id": 1617736,
+      "github": "Manishearth",
+      "name": "Manish Goregaokar"
+    },
+    {
+      "github_id": 3093213,
+      "github": "Xanewok",
+      "name": "Igor Matuszewski"
+    },
+    {
+      "github_id": 10811417,
+      "github": "ibabushkin",
+      "name": "Inokentiy Babushkin"
+    },
+    {
+      "github_id": 25030997,
+      "github": "JohnTitor",
+      "name": "Yuki Okushi"
+    }
+  ],
+  "github_users": [
+    "JohnTitor",
+    "Manishearth",
+    "Xanewok",
+    "ibabushkin"
+  ],
+  "github_ids": [
+    1617736,
+    3093213,
+    10811417,
+    25030997
+  ],
+  "discord_ids": [
+    278623213448331265,
+    362122860673892353
+  ]
+}

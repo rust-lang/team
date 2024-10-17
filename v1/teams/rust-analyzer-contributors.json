@@ -1,0 +1,101 @@
+{
+  "name": "rust-analyzer-contributors",
+  "kind": "team",
+  "subteam_of": "rust-analyzer",
+  "members": [
+    {
+      "name": "Ali Bektas",
+      "github": "alibektas",
+      "github_id": 20956650,
+      "is_lead": false
+    },
+    {
+      "name": "bjorn3",
+      "github": "bjorn3",
+      "github_id": 17426603,
+      "is_lead": false
+    },
+    {
+      "name": "Chayim Refael Friedman",
+      "github": "ChayimFriedman2",
+      "github_id": 24700207,
+      "is_lead": false
+    },
+    {
+      "name": "DropDemBits",
+      "github": "DropDemBits",
+      "github_id": 13354275,
+      "is_lead": false
+    },
+    {
+      "name": "Nadrieril",
+      "github": "Nadrieril",
+      "github_id": 6783654,
+      "is_lead": false
+    },
+    {
+      "name": "roife",
+      "github": "roife",
+      "github_id": 17700217,
+      "is_lead": false
+    },
+    {
+      "name": "Shoyu Vanilla",
+      "github": "ShoyuVanilla",
+      "github_id": 10542892,
+      "is_lead": false
+    },
+    {
+      "name": "Dongyang Zheng",
+      "github": "Young-Flash",
+      "github_id": 71162630,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-analyzer",
+        "name": "rust-analyzer-contributors",
+        "members": [
+          24700207,
+          13354275,
+          6783654,
+          10542892,
+          71162630,
+          20956650,
+          17426603,
+          17700217
+        ]
+      },
+      {
+        "org": "rust-lang",
+        "name": "rust-analyzer-contributors",
+        "members": [
+          24700207,
+          13354275,
+          6783654,
+          10542892,
+          71162630,
+          20956650,
+          17426603,
+          17700217
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "rust-analyzer team contributors",
+    "description": "Contributing to the rust-analyzer compiler front-end on a regular basis",
+    "page": "rust-analyzer-contributors",
+    "email": null,
+    "repo": "https://github.com/rust-lang/rust-analyzer",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}
