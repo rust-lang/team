@@ -3,6 +3,8 @@ mod write;
 
 use crate::utils::ResponseExt;
 use anyhow::{bail, Context};
+use base64::prelude::BASE64_STANDARD;
+use base64::Engine as _;
 use hyper_old_types::header::{Link, RelationType};
 use log::{debug, trace};
 use reqwest::header::HeaderMap;
@@ -319,11 +321,11 @@ pub(crate) struct TeamMember {
 }
 
 fn user_node_id(id: u64) -> String {
-    base64::encode(format!("04:User{id}"))
+    BASE64_STANDARD.encode(format!("04:User{id}"))
 }
 
 fn team_node_id(id: u64) -> String {
-    base64::encode(format!("04:Team{id}"))
+    BASE64_STANDARD.encode(format!("04:Team{id}"))
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Deserialize)]
