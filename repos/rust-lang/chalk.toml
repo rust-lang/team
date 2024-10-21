@@ -2,7 +2,11 @@ org = "rust-lang"
 name = "chalk"
 description = "An implementation and definition of the Rust trait system using a PROLOG-like logic solver"
 homepage = "https://rust-lang.github.io/chalk/book/"
-bots = ["rustbot", "bors"]
+bots = ["rustbot"]
 
 [access.teams]
 types = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["conclusion"]
