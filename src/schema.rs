@@ -787,6 +787,12 @@ pub(crate) enum RepoPermission {
     Admin,
 }
 
+#[derive(serde_derive::Deserialize, Debug, PartialEq, Eq)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum MergeBot {
+    Homu,
+}
+
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct BranchProtection {
@@ -801,4 +807,6 @@ pub(crate) struct BranchProtection {
     pub pr_required: bool,
     #[serde(default)]
     pub allowed_merge_teams: Vec<String>,
+    #[serde(default)]
+    pub merge_bots: Vec<MergeBot>,
 }
