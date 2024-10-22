@@ -25,9 +25,7 @@ orgs = ["rust-lang", "rust-lang-nursery"]
 perf = true
 crater = true
 dev-desktop = true
-bors.hashbrown.review = true
 bors.rust.review = true
-bors.stdarch.review = true
 
 [rfcbot]
 label = "T-libs"

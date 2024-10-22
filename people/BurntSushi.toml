@@ -4,6 +4,3 @@ github-id = 456674
 irc = "burntsushi"
 email = "jamslam@gmail.com"
 zulip-id = 222471
-
-[permissions]
-bors.regex.review = true

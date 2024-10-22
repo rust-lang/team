@@ -2,6 +2,3 @@ name = "gnzlbg"
 github = "gnzlbg"
 github-id = 904614
 zulip-id = 132920
-
-[permissions]
-bors.stdarch.review = true

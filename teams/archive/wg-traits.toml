@@ -35,6 +35,3 @@ zulip-stream = "wg-traits"
 
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
-
-[permissions]
-bors.chalk.review = true

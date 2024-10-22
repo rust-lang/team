@@ -1,6 +1,3 @@
 name = "Diggory Blake"
 github = "Diggsey"
 github-id = 451321
-
-[permissions]
-bors.rustup-rs.review = true
