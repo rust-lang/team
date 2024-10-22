@@ -25,7 +25,6 @@ repo = "https://github.com/rust-lang/rust-analyzer"
 
 [permissions]
 bors.rust.review = true
-bors.rust-analyzer.review = true
 
 [[github]]
 orgs = ["rust-lang", "rust-analyzer"]
