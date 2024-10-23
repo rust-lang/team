@@ -2,7 +2,7 @@ org = "rust-lang"
 name = "rust-clippy"
 description = "A bunch of lints to catch common mistakes and improve your Rust code. Book: https://doc.rust-lang.org/clippy/"
 homepage = "https://rust-lang.github.io/rust-clippy/"
-bots = ["rustbot"]
+bots = ["bors", "rustbot"]
 
 [access.teams]
 clippy = "write"
@@ -10,8 +10,3 @@ clippy-contributors = "triage"
 
 [[branch-protections]]
 pattern = "master"
-ci-checks = [
-    "conclusion",
-    "conclusion_dev",
-    "conclusion_remark"
-]
