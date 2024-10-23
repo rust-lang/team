@@ -19,10 +19,6 @@ members = [
 ]
 alumni = []
 
-[permissions]
-bors.stdarch.review = true
-bors.compiler-builtins.review = true
-
 [[github]]
 orgs = ["rust-lang"]
 

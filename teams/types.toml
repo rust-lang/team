@@ -40,7 +40,6 @@ name = "T-types/meetings"
 extra-people = ["eholk"]
 
 [permissions]
-bors.chalk.review = true
 bors.rust.review = true
 perf = true
 crater = true

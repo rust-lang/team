@@ -4,6 +4,3 @@ github-id = 25030997
 email = "huyuumi.dev@gmail.com"
 discord-id = 362122860673892353
 zulip-id = 217081
-
-[permissions]
-bors.semverver.review = true
