@@ -6,7 +6,6 @@ bots = ["rustbot"]
 [access.teams]
 cargo = "maintain"
 compiler = "maintain"
-compiler-contributors = "maintain"
 crates-io = "maintain"
 docs-rs = "maintain"
 infra = "maintain"

@@ -9,7 +9,6 @@ bots = ["rustbot", "rfcbot"]
 
 [access.teams]
 compiler = 'maintain'
-compiler-contributors = 'maintain'
 
 # Likewise, eventually we may want a branch protections section, but we will
 # tackle that later.

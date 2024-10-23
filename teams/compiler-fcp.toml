@@ -1,0 +1,26 @@
+name = "compiler-fcp"
+subteam-of = "compiler"
+
+[people]
+leads = []
+members = [
+    "cjgillot",
+    "compiler-errors",
+    "davidtwco",
+    "estebank",
+    "Mark-Simulacrum",
+    "matthewjasper",
+    "nagisa",
+    "Noratrieb",
+    "oli-obk",
+    "petrochenkov",
+    "SparrowLii",
+    "spastorino",
+    "wesleywiser",
+]
+alumni = []
+
+[rfcbot]
+label = "T-compiler"
+name = "Compiler"
+ping = "rust-lang/compiler-fcp"
