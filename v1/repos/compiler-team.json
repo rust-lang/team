@@ -1,0 +1,44 @@
+{
+  "org": "rust-lang",
+  "name": "compiler-team",
+  "description": "A home for compiler team planning documents, meeting minutes, and other such things.",
+  "homepage": "https://rust-lang.github.io/compiler-team/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "compiler",
+      "permission": "write"
+    },
+    {
+      "name": "compiler-contributors",
+      "permission": "write"
+    },
+    {
+      "name": "wg-prioritization",
+      "permission": "write"
+    },
+    {
+      "name": "types",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

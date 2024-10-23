@@ -1,0 +1,43 @@
+{
+  "name": "spec-contributors",
+  "kind": "team",
+  "subteam_of": "spec",
+  "members": [
+    {
+      "name": "Connor Horman",
+      "github": "chorman0773",
+      "github_id": 5026283,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "spec-contributors",
+        "members": [
+          3757713,
+          5026283,
+          43198,
+          783247,
+          173127,
+          1076834
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Specification team contributors",
+    "description": "Regular contributors to the Rust specification",
+    "page": "spec-contributors",
+    "email": null,
+    "repo": "https://github.com/rust-lang/spec",
+    "discord": null,
+    "zulip_stream": "t-spec",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

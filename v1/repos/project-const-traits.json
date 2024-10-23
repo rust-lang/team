@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "project-const-traits",
+  "description": "Const Traits Project Group",
+  "homepage": "https://rust-lang.github.io/project-const-traits/",
+  "bots": [],
+  "teams": [
+    {
+      "name": "project-const-traits",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

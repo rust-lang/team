@@ -1,0 +1,196 @@
+{
+  "name": "goal-owners",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Alejandra González",
+      "github": "blyxyas",
+      "github_id": 73757586,
+      "is_lead": false
+    },
+    {
+      "name": "Boxy",
+      "github": "BoxyUwU",
+      "github_id": 21149742,
+      "is_lead": false
+    },
+    {
+      "name": "Celina V.",
+      "github": "celinval",
+      "github_id": 35149715,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Finkelman",
+      "github": "Eh2406",
+      "github_id": 3709504,
+      "is_lead": false
+    },
+    {
+      "name": "Ed Page",
+      "github": "epage",
+      "github_id": 60961,
+      "is_lead": false
+    },
+    {
+      "name": "Esteban Kuber",
+      "github": "estebank",
+      "github_id": 1606434,
+      "is_lead": false
+    },
+    {
+      "name": "Deadbeef",
+      "github": "fee1-dead",
+      "github_id": 43851243,
+      "is_lead": false
+    },
+    {
+      "name": "Guillaume Gomez",
+      "github": "GuillaumeGomez",
+      "github_id": 3050060,
+      "is_lead": false
+    },
+    {
+      "name": "Jonathan Kelley",
+      "github": "jkelleyrtp",
+      "github_id": 10237910,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": false
+    },
+    {
+      "name": "Rémy Rakic",
+      "github": "lqd",
+      "github_id": 247183,
+      "is_lead": false
+    },
+    {
+      "name": "Scott Schafer",
+      "github": "Muscraft",
+      "github_id": 23045215,
+      "is_lead": false
+    },
+    {
+      "name": "Nadrieril",
+      "github": "Nadrieril",
+      "github_id": 6783654,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Howell",
+      "github": "notriddle",
+      "github_id": 1593513,
+      "is_lead": false
+    },
+    {
+      "name": "Predrag Gruevski",
+      "github": "obi1kenobi",
+      "github_id": 2348618,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    },
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": false
+    },
+    {
+      "name": "Rustin",
+      "github": "Rustin170506",
+      "github_id": 29879298,
+      "is_lead": false
+    },
+    {
+      "name": "Sparrow Li",
+      "github": "SparrowLii",
+      "github_id": 68270294,
+      "is_lead": false
+    },
+    {
+      "name": "Tyler Mandry",
+      "github": "tmandry",
+      "github_id": 2280544,
+      "is_lead": false
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": false
+    },
+    {
+      "name": "Weihang Lo",
+      "github": "weihanglo",
+      "github_id": 14314532,
+      "is_lead": false
+    },
+    {
+      "name": "Manuel Drehwald",
+      "github": "ZuseZ4",
+      "github_id": 25483084,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "goal-owners",
+        "members": [
+          21149742,
+          3709504,
+          3050060,
+          23045215,
+          6783654,
+          29879298,
+          68270294,
+          25483084,
+          73757586,
+          35149715,
+          60961,
+          1606434,
+          43851243,
+          10237910,
+          162737,
+          29864074,
+          247183,
+          155238,
+          1593513,
+          2348618,
+          332036,
+          173127,
+          2280544,
+          1076834,
+          14314532
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

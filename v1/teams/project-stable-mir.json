@@ -1,0 +1,72 @@
+{
+  "name": "project-stable-mir",
+  "kind": "project_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Celina V.",
+      "github": "celinval",
+      "github_id": 35149715,
+      "is_lead": true
+    },
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": true
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    },
+    {
+      "name": "Scott McMurray",
+      "github": "scottmcm",
+      "github_id": 18526288,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Oguz",
+      "github": "ouz-a",
+      "github_id": 90461915,
+      "is_lead": false
+    },
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "project-stable-mir",
+        "members": [
+          35149715,
+          332036,
+          173127,
+          18526288
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Stable MIR Project Group",
+    "description": "Define compiler intermediate representation usable by external tools",
+    "page": "project-stable-mir",
+    "email": null,
+    "repo": "https://github.com/rust-lang/project-stable-mir",
+    "discord": null,
+    "zulip_stream": "project-stable-mir",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,129 @@
+{
+  "name": "lang",
+  "kind": "team",
+  "subteam_of": null,
+  "top_level": true,
+  "members": [
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": true
+    },
+    {
+      "name": "Tyler Mandry",
+      "github": "tmandry",
+      "github_id": 2280544,
+      "is_lead": true
+    },
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    },
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": false
+    },
+    {
+      "name": "Scott McMurray",
+      "github": "scottmcm",
+      "github_id": 18526288,
+      "is_lead": false
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Aaron Turon",
+      "github": "aturon",
+      "github_id": 709807,
+      "is_lead": false
+    },
+    {
+      "name": "Mazdak Farrokhzad",
+      "github": "Centril",
+      "github_id": 855702,
+      "is_lead": false
+    },
+    {
+      "name": "Taylor Cramer",
+      "github": "cramertj",
+      "github_id": 5963049,
+      "is_lead": false
+    },
+    {
+      "name": "Eduard-Mihai Burtescu",
+      "github": "eddyb",
+      "github_id": 77424,
+      "is_lead": false
+    },
+    {
+      "name": "Huon Wilson",
+      "github": "huonw",
+      "github_id": 1203825,
+      "is_lead": false
+    },
+    {
+      "name": "Nick Cameron",
+      "github": "nrc",
+      "github_id": 762626,
+      "is_lead": false
+    },
+    {
+      "name": "Without Boats",
+      "github": "withoutboats",
+      "github_id": 9063376,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "lang",
+        "members": [
+          162737,
+          155238,
+          173127,
+          18526288,
+          2280544,
+          1076834
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "lang",
+        "members": [
+          162737,
+          155238,
+          173127,
+          18526288,
+          2280544,
+          1076834
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Language team",
+    "description": "Designing and helping to implement new language features",
+    "page": "lang",
+    "email": null,
+    "repo": "http://github.com/rust-lang/lang-team",
+    "discord": null,
+    "zulip_stream": "t-lang",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

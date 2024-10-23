@@ -1,0 +1,133 @@
+{
+  "name": "project-group-leads",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Boxy",
+      "github": "BoxyUwU",
+      "github_id": 21149742,
+      "is_lead": false
+    },
+    {
+      "name": "Caleb Zulawski",
+      "github": "calebzulawski",
+      "github_id": 563826,
+      "is_lead": false
+    },
+    {
+      "name": "Celina V.",
+      "github": "celinval",
+      "github_id": 35149715,
+      "is_lead": false
+    },
+    {
+      "name": "Charles Lew",
+      "github": "crlf0710",
+      "github_id": 451806,
+      "is_lead": false
+    },
+    {
+      "name": "Eric Huss",
+      "github": "ehuss",
+      "github_id": 43198,
+      "is_lead": false
+    },
+    {
+      "name": "Deadbeef",
+      "github": "fee1-dead",
+      "github_id": 43851243,
+      "is_lead": false
+    },
+    {
+      "name": "Jack Huey",
+      "github": "jackh726",
+      "github_id": 31162821,
+      "is_lead": false
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Woerister",
+      "github": "michaelwoerister",
+      "github_id": 1825894,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    },
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": false
+    },
+    {
+      "name": "Ramon de C Valle",
+      "github": "rcvalle",
+      "github_id": 3988004,
+      "is_lead": false
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": false
+    },
+    {
+      "name": "Jubilee",
+      "github": "workingjubilee",
+      "github_id": 46493976,
+      "is_lead": false
+    },
+    {
+      "name": "Yoshua Wuyts",
+      "github": "yoshuawuyts",
+      "github_id": 2467194,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "project-group-leads",
+        "members": [
+          21149742,
+          563826,
+          35149715,
+          451806,
+          43198,
+          43851243,
+          31162821,
+          29864074,
+          1825894,
+          155238,
+          332036,
+          173127,
+          3988004,
+          1076834,
+          46493976,
+          2467194
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

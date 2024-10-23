@@ -1,0 +1,93 @@
+{
+  "name": "wg-compiler-performance",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": true
+    },
+    {
+      "name": "Jakub Beránek",
+      "github": "Kobzol",
+      "github_id": 4539057,
+      "is_lead": false
+    },
+    {
+      "name": "Rémy Rakic",
+      "github": "lqd",
+      "github_id": 247183,
+      "is_lead": false
+    },
+    {
+      "name": "Nicholas Nethercote",
+      "github": "nnethercote",
+      "github_id": 1940286,
+      "is_lead": false
+    },
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan Levick",
+      "github": "rylev",
+      "github_id": 1327285,
+      "is_lead": false
+    },
+    {
+      "name": "Tyson Nottingham",
+      "github": "tgnottingham",
+      "github_id": 3668166,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Michael Woerister",
+      "github": "michaelwoerister",
+      "github_id": 1825894,
+      "is_lead": false
+    },
+    {
+      "name": "Wesley Wiser",
+      "github": "wesleywiser",
+      "github_id": 831192,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-compiler-performance",
+        "members": [
+          4539057,
+          5047365,
+          247183,
+          1940286,
+          173127,
+          1327285,
+          3668166
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Compiler performance working group",
+    "description": "Improving rustc compilation performance (build times)",
+    "page": "wg-compiler-performance",
+    "email": null,
+    "repo": "https://github.com/rust-lang/rustc-perf",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

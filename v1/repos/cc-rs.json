@@ -1,0 +1,35 @@
+{
+  "org": "rust-lang",
+  "name": "cc-rs",
+  "description": "Rust library for build scripts to compile C/C++ code into a Rust library",
+  "homepage": "https://docs.rs/cc",
+  "bots": [],
+  "teams": [
+    {
+      "name": "crate-maintainers",
+      "permission": "maintain"
+    }
+  ],
+  "members": [
+    {
+      "name": "NobodyXu",
+      "permission": "write"
+    }
+  ],
+  "branch_protections": [
+    {
+      "pattern": "main",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

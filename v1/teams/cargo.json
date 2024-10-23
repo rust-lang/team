@@ -1,0 +1,142 @@
+{
+  "name": "cargo",
+  "kind": "team",
+  "subteam_of": "devtools",
+  "members": [
+    {
+      "name": "Eric Huss",
+      "github": "ehuss",
+      "github_id": 43198,
+      "is_lead": true
+    },
+    {
+      "name": "Arlo Siemsen",
+      "github": "arlosi",
+      "github_id": 704597,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Finkelman",
+      "github": "Eh2406",
+      "github_id": 3709504,
+      "is_lead": false
+    },
+    {
+      "name": "Ed Page",
+      "github": "epage",
+      "github_id": 60961,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    },
+    {
+      "name": "Scott Schafer",
+      "github": "Muscraft",
+      "github_id": 23045215,
+      "is_lead": false
+    },
+    {
+      "name": "Weihang Lo",
+      "github": "weihanglo",
+      "github_id": 14314532,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    },
+    {
+      "name": "Aaron Turon",
+      "github": "aturon",
+      "github_id": 709807,
+      "is_lead": false
+    },
+    {
+      "name": "Carol Nichols",
+      "github": "carols10cents",
+      "github_id": 193874,
+      "is_lead": false
+    },
+    {
+      "name": "Dale Wijnand",
+      "github": "dwijnand",
+      "github_id": 344610,
+      "is_lead": false
+    },
+    {
+      "name": "Aleksey Kladov",
+      "github": "matklad",
+      "github_id": 1711539,
+      "is_lead": false
+    },
+    {
+      "name": "Nick Cameron",
+      "github": "nrc",
+      "github_id": 762626,
+      "is_lead": false
+    },
+    {
+      "name": "Without Boats",
+      "github": "withoutboats",
+      "github_id": 9063376,
+      "is_lead": false
+    },
+    {
+      "name": "Yehuda Katz",
+      "github": "wycats",
+      "github_id": 4,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "cargo",
+        "members": [
+          3709504,
+          23045215,
+          704597,
+          43198,
+          60961,
+          162737,
+          14314532
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "cargo",
+        "members": [
+          3709504,
+          23045215,
+          704597,
+          43198,
+          60961,
+          162737,
+          14314532
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Cargo team",
+    "description": "Designing and implementing the official Rust package manager, Cargo",
+    "page": "cargo",
+    "email": null,
+    "repo": "https://github.com/rust-lang/cargo",
+    "discord": null,
+    "zulip_stream": "t-cargo",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}
