@@ -10,7 +10,9 @@ members = [
     "compiler-errors",
     "davidtwco",
     "estebank",
+    "fee1-dead",
     "jackh726",
+
     "lcnr",
     "lqd",
     "Mark-Simulacrum",
