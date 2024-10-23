@@ -30,6 +30,7 @@ alumni = [
 
 [permissions]
 perf = true
+bors.clippy.review = true
 bors.rust.review = true
 dev-desktop = true
 
