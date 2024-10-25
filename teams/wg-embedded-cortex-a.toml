@@ -6,9 +6,12 @@ kind = "working-group"
 leads = []
 members = [
     "raw-bin",
+    "nchong-at-aws",
+    "berkus",
+]
+alumni = [
     "andre-richter",
 ]
-alumni = []
 
 [website]
 name = "Embedded Cortex-A team"
