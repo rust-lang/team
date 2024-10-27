@@ -6,11 +6,12 @@ leads = []
 members = [
     "GuillaumeGomez",
     "J-ZhengLi",
-    "m-rph",
     "pitaj",
     "samueltardieu",
 ]
-alumni = []
+alumni = [
+    "m-rph",
+]
 
 [[github]]
 orgs = ["rust-lang"]
