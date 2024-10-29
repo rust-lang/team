@@ -2,11 +2,11 @@ org = "rust-lang"
 name = "crater"
 description = "Run experiments across parts of the Rust ecosystem!"
 homepage = "https://crater.rust-lang.org"
-bots = ["bors", "highfive"]
+bots = ["highfive"]
 
 [access.teams]
 infra = "write"
 
 [[branch-protections]]
 pattern = "master"
-ci-checks = ["homu"]
+ci-checks = ["conclusion"]
