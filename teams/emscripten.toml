@@ -4,6 +4,7 @@ kind = "marker-team"
 [people]
 leads = []
 members = [
+    "burakemir",
     "hoodmane",
     "juntyr",
 ]
