@@ -110,3 +110,17 @@ name = "T-compiler"
 
 [[zulip-groups]]
 name = "T-compiler/meeting"
+include-team-members = false
+extra-people = [
+    "davidtwco",
+    "wesleywiser",
+    "apiraino",
+    "bjorn3",
+    "SparrowLii",
+    "estebank",
+    "BoxyUwU",
+    "jieyouxu",
+    "jswrenn",
+    "spastorino",
+    "tmiasko"
+]
