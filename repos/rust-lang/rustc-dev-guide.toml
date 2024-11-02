@@ -5,6 +5,7 @@ homepage = "https://rustc-dev-guide.rust-lang.org"
 bots = ["rustbot"]
 
 [access.teams]
+bootstrap = "write"
 compiler = "write"
 wg-rustc-dev-guide = "maintain"
 infra = "write"
