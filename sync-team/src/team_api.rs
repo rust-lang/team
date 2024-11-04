@@ -45,6 +45,11 @@ impl TeamApi {
         self.req::<rust_team_data::v1::ZulipGroups>("zulip-groups.json")
     }
 
+    pub(crate) fn get_zulip_streams(&self) -> anyhow::Result<rust_team_data::v1::ZulipStreams> {
+        debug!("loading Zulip streams from the Team API");
+        self.req::<rust_team_data::v1::ZulipStreams>("zulip-streams.json")
+    }
+
     fn req<T: serde::de::DeserializeOwned>(&self, url: &str) -> anyhow::Result<T> {
         match self {
             TeamApi::Production => {
