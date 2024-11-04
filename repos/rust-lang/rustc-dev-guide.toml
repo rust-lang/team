@@ -14,3 +14,4 @@ libs-contributors = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["ci"]
+required-approvals = 0
