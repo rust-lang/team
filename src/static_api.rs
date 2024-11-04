@@ -1,6 +1,7 @@
 use crate::data::Data;
 use crate::schema::{
     Bot, Email, MergeBot, Permissions, RepoPermission, TeamKind, ZulipGroupMember,
+    ZulipStreamMember,
 };
 use anyhow::{ensure, Context as _, Error};
 use indexmap::IndexMap;
@@ -30,6 +31,7 @@ impl<'a> Generator<'a> {
         self.generate_repos()?;
         self.generate_lists()?;
         self.generate_zulip_groups()?;
+        self.generate_zulip_streams()?;
         self.generate_permissions()?;
         self.generate_rfcbot()?;
         self.generate_zulip_map()?;
@@ -300,6 +302,37 @@ impl<'a> Generator<'a> {
 
         groups.sort_keys();
         self.add("v1/zulip-groups.json", &v1::ZulipGroups { groups })?;
+        Ok(())
+    }
+
+    fn generate_zulip_streams(&self) -> Result<(), Error> {
+        let mut streams = IndexMap::new();
+
+        for stream in self.data.zulip_streams()?.values() {
+            let mut members = stream.members().to_vec();
+            members.sort();
+            streams.insert(
+                stream.name().to_string(),
+                v1::ZulipStream {
+                    name: stream.name().to_string(),
+                    members: members
+                        .into_iter()
+                        .filter_map(|m| match m {
+                            ZulipStreamMember::MemberWithId { zulip_id, .. } => {
+                                Some(v1::ZulipStreamMember::Id(zulip_id))
+                            }
+                            ZulipStreamMember::JustId(zulip_id) => {
+                                Some(v1::ZulipStreamMember::Id(zulip_id))
+                            }
+                            ZulipStreamMember::MemberWithoutId { .. } => None,
+                        })
+                        .collect(),
+                },
+            );
+        }
+
+        streams.sort_keys();
+        self.add("v1/zulip-streams.json", &v1::ZulipStreams { streams })?;
         Ok(())
     }
 
