@@ -7,6 +7,8 @@ bots = ["rustbot", "renovate"]
 [access.teams]
 inside-rust-reviewers = "write"
 website = "maintain"
+# For Rust release blog posts
+release = "write"
 
 [[branch-protections]]
 pattern = "master"
