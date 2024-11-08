@@ -12,3 +12,6 @@ alumni = [
     "ComputerDruid",
     "djkoloski",
 ]
+
+[permissions]
+bors.rust.try = true
