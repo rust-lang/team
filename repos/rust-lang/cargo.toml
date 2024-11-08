@@ -2,13 +2,15 @@ org = "rust-lang"
 name = "cargo"
 description = "The Rust package manager"
 homepage = "https://doc.rust-lang.org/cargo"
-bots = ["bors", "rustbot", "rfcbot", "renovate"]
+bots = ["rustbot", "rfcbot", "renovate"]
 
 [access.teams]
 cargo = "write"
 
 [[branch-protections]]
 pattern = "master"
+ci-checks = ["conclusion"]
 
 [[branch-protections]]
 pattern = "rust-1.*"
+ci-checks = ["conclusion"]
