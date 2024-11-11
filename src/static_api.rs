@@ -1,8 +1,5 @@
 use crate::data::Data;
-use crate::schema::{
-    Bot, Email, MergeBot, Permissions, RepoPermission, TeamKind, ZulipGroupMember,
-    ZulipStreamMember,
-};
+use crate::schema::{Bot, Email, MergeBot, Permissions, RepoPermission, TeamKind, ZulipMember};
 use anyhow::{ensure, Context as _, Error};
 use indexmap::IndexMap;
 use log::info;
@@ -287,13 +284,13 @@ impl<'a> Generator<'a> {
                     members: members
                         .into_iter()
                         .filter_map(|m| match m {
-                            ZulipGroupMember::MemberWithId { zulip_id, .. } => {
+                            ZulipMember::MemberWithId { zulip_id, .. } => {
                                 Some(v1::ZulipGroupMember::Id(zulip_id))
                             }
-                            ZulipGroupMember::JustId(zulip_id) => {
+                            ZulipMember::JustId(zulip_id) => {
                                 Some(v1::ZulipGroupMember::Id(zulip_id))
                             }
-                            ZulipGroupMember::MemberWithoutId { .. } => None,
+                            ZulipMember::MemberWithoutId { .. } => None,
                         })
                         .collect(),
                 },
@@ -318,13 +315,13 @@ impl<'a> Generator<'a> {
                     members: members
                         .into_iter()
                         .filter_map(|m| match m {
-                            ZulipStreamMember::MemberWithId { zulip_id, .. } => {
+                            ZulipMember::MemberWithId { zulip_id, .. } => {
                                 Some(v1::ZulipStreamMember::Id(zulip_id))
                             }
-                            ZulipStreamMember::JustId(zulip_id) => {
+                            ZulipMember::JustId(zulip_id) => {
                                 Some(v1::ZulipStreamMember::Id(zulip_id))
                             }
-                            ZulipStreamMember::MemberWithoutId { .. } => None,
+                            ZulipMember::MemberWithoutId { .. } => None,
                         })
                         .collect(),
                 },
