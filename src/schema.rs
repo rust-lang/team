@@ -308,16 +308,12 @@ impl Team {
             let alumni = data
                 .teams()
                 .chain(data.archived_teams())
-                .flat_map(|t| t.alumni())
-                .map(|a| a.as_str())
+                .flat_map(|t| t.explicit_alumni())
+                .map(|a| a.github.as_str())
                 .filter(|person| !active_members.contains(person));
             members.extend(alumni);
         }
         Ok(members)
-    }
-
-    pub(crate) fn alumni(&self) -> &[String] {
-        self.people.alumni.as_ref().map_or(&[], Vec::as_slice)
     }
 
     pub(crate) fn raw_lists(&self) -> &[TeamList] {
@@ -478,6 +474,10 @@ impl Team {
         &self.people.members
     }
 
+    pub(crate) fn explicit_alumni(&self) -> &[TeamMember] {
+        self.people.alumni.as_ref().map_or(&[], Vec::as_slice)
+    }
+
     pub(crate) fn contains_person(&self, data: &Data, person: &Person) -> Result<bool, Error> {
         let members = self.members(data)?;
         Ok(members.contains(person.github()))
@@ -525,7 +525,7 @@ impl std::cmp::Ord for GitHubTeam<'_> {
 pub(crate) struct TeamPeople {
     pub leads: Vec<String>,
     pub members: Vec<TeamMember>,
-    pub alumni: Option<Vec<String>>,
+    pub alumni: Option<Vec<TeamMember>>,
     #[serde(default)]
     pub included_teams: Vec<String>,
     #[serde(default = "default_false")]
