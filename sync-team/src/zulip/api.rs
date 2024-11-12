@@ -126,6 +126,21 @@ impl ZulipApi {
         Ok(response)
     }
 
+    /// Is a Zulip stream private?
+    pub(crate) fn is_stream_private(&self, stream_id: u64) -> anyhow::Result<bool> {
+        #[derive(Deserialize)]
+        struct OneZulipStream {
+            stream: ZulipStream,
+        }
+
+        Ok(self
+            .req(reqwest::Method::GET, &format!("/streams/{stream_id}"), None)?
+            .error_for_status()?
+            .json::<OneZulipStream>()?
+            .stream
+            .invite_only)
+    }
+
     pub(crate) fn update_user_group_members(
         &self,
         user_group_id: u64,
@@ -224,13 +239,19 @@ impl ZulipApi {
             Ok(())
         };
 
-        let subscriptions = format!("{{\"name\": \"{stream_name}\", \"description\": \"\"}}");
-        let add_ids = serialize_as_array(add_ids);
-        submit(reqwest::Method::POST, subscriptions, add_ids)?;
+        if !add_ids.is_empty() {
+            let subscriptions = format!("{{\"name\": \"{stream_name}\", \"description\": \"\"}}");
+            let add_ids = serialize_as_array(add_ids);
+            submit(reqwest::Method::POST, subscriptions, add_ids)?;
+        }
 
-        let subscriptions = format!("[{stream_name}]");
-        let remove_ids = serialize_as_array(remove_ids);
-        submit(reqwest::Method::DELETE, subscriptions, remove_ids)
+        if !remove_ids.is_empty() {
+            let subscriptions = format!("[{stream_name}]");
+            let remove_ids = serialize_as_array(remove_ids);
+            submit(reqwest::Method::DELETE, subscriptions, remove_ids)?;
+        }
+
+        Ok(())
     }
 
     /// Perform a request against the Zulip API
@@ -302,6 +323,7 @@ struct ZulipStreams {
 pub(crate) struct ZulipStream {
     pub(crate) stream_id: u64,
     pub(crate) name: String,
+    pub(crate) invite_only: bool,
 }
 
 /// Membership of a Zulip stream

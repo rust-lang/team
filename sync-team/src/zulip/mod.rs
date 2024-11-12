@@ -126,6 +126,7 @@ impl SyncZulip {
                 ));
             }
         };
+        let is_stream_private = self.zulip_controller.is_stream_private(stream_id)?;
 
         let existing_members = self.zulip_controller.stream_members_from_id(stream_id)?;
         log::debug!(
@@ -136,11 +137,15 @@ impl SyncZulip {
             .filter(|i| !existing_members.contains(i))
             .copied()
             .collect::<Vec<_>>();
-        let remove_ids = existing_members
-            .iter()
-            .filter(|i| !member_ids.contains(i))
-            .copied()
-            .collect::<Vec<_>>();
+        let remove_ids = if is_stream_private {
+            existing_members
+                .iter()
+                .filter(|i| !member_ids.contains(i))
+                .copied()
+                .collect::<Vec<_>>()
+        } else {
+            vec![]
+        };
         if add_ids.is_empty() && remove_ids.is_empty() {
             log::debug!("'{stream_name}' stream ({stream_id}) does not need to be updated");
             Ok(None)
@@ -462,5 +467,9 @@ impl ZulipController {
     /// Get the members of a stream given its id
     fn stream_members_from_id(&self, stream_id: u64) -> anyhow::Result<Vec<u64>> {
         self.zulip_api.get_stream_members(stream_id)
+    }
+
+    fn is_stream_private(&self, stream_id: u64) -> anyhow::Result<bool> {
+        self.zulip_api.is_stream_private(stream_id)
     }
 }
