@@ -431,7 +431,9 @@ impl GitHubWrite {
                 {id_field}: $id, 
                 pattern: $pattern, 
                 requiresStatusChecks: true, 
-                requiredStatusCheckContexts: $contexts, 
+                requiredStatusCheckContexts: $contexts,
+                # Disable 'Require branch to be up-to-date before merging'
+                requiresStrictStatusChecks: false,
                 isAdminEnforced: true, 
                 requiredApprovingReviewCount: $reviewCount, 
                 dismissesStaleReviews: $dismissStale, 
