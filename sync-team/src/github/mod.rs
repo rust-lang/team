@@ -5,7 +5,7 @@ mod tests;
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
 use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings};
 use log::debug;
-use rust_team_data::v1::{Bot, BranchProtectionMode};
+use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot};
 use std::collections::{HashMap, HashSet};
 use std::fmt::{Display, Formatter, Write};
 
@@ -29,12 +29,17 @@ type RepoName = String;
 #[derive(Copy, Clone, Debug, PartialEq)]
 enum GithubApp {
     RenovateBot,
+    /// New Rust implementation of Bors
+    Bors,
 }
 
 impl GithubApp {
+    /// You can find the GitHub app ID e.g. through `gh api apps/<name>` or through the
+    /// app settings page (if we own the app).
     fn from_id(app_id: u64) -> Option<Self> {
         match app_id {
             2740 => Some(GithubApp::RenovateBot),
+            278306 => Some(GithubApp::Bors),
             _ => None,
         }
     }
@@ -44,6 +49,7 @@ impl Display for GithubApp {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             GithubApp::RenovateBot => f.write_str("RenovateBot"),
+            GithubApp::Bors => f.write_str("Bors"),
         }
     }
 }
@@ -444,7 +450,8 @@ impl SyncGitHub {
         // Find apps that should be enabled on the repository
         for app in expected_repo.bots.iter().filter_map(|bot| match bot {
             Bot::Renovate => Some(GithubApp::RenovateBot),
-            _ => None,
+            Bot::Bors => Some(GithubApp::Bors),
+            Bot::Highfive | Bot::Rfcbot | Bot::RustTimer | Bot::Rustbot => None,
         }) {
             // Find installation ID of this app on GitHub
             let gh_installation = self
@@ -579,6 +586,7 @@ fn calculate_permission_diffs(
 /// Returns `None` if the bot is not an actual bot user, but rather a GitHub app.
 fn bot_user_name(bot: &Bot) -> Option<&str> {
     match bot {
+        // FIXME: set this to `None` once homu is removed completely
         Bot::Bors => Some("bors"),
         Bot::Highfive => Some("rust-highfive"),
         Bot::RustTimer => Some("rust-timer"),
@@ -602,8 +610,8 @@ fn construct_branch_protection(
     expected_repo: &rust_team_data::v1::Repo,
     branch_protection: &rust_team_data::v1::BranchProtection,
 ) -> api::BranchProtection {
-    let uses_bors = expected_repo.bots.contains(&Bot::Bors);
-    let required_approving_review_count: u8 = if uses_bors {
+    let uses_homu = branch_protection.merge_bots.contains(&MergeBot::Homu);
+    let required_approving_review_count: u8 = if uses_homu {
         0
     } else {
         match branch_protection.mode {
@@ -628,7 +636,7 @@ fn construct_branch_protection(
         })
         .collect();
 
-    if uses_bors {
+    if uses_homu {
         push_allowances.push(PushAllowanceActor::User(api::UserPushAllowanceActor {
             login: "bors".to_owned(),
         }));
