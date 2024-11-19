@@ -1,5 +1,7 @@
 use crate::data::Data;
-use crate::schema::{Bot, Email, Permissions, RepoPermission, TeamKind, ZulipGroupMember};
+use crate::schema::{
+    Bot, Email, MergeBot, Permissions, RepoPermission, TeamKind, ZulipGroupMember,
+};
 use anyhow::{ensure, Context as _, Error};
 use indexmap::IndexMap;
 use log::info;
@@ -59,6 +61,13 @@ impl<'a> Generator<'a> {
                         BranchProtectionMode::PrNotRequired
                     },
                     allowed_merge_teams: b.allowed_merge_teams.clone(),
+                    merge_bots: b
+                        .merge_bots
+                        .iter()
+                        .map(|bot| match bot {
+                            MergeBot::Homu => v1::MergeBot::Homu,
+                        })
+                        .collect(),
                 })
                 .collect();
             let managed_by_bors = r.bots.contains(&Bot::Bors);

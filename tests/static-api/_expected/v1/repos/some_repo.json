@@ -25,7 +25,8 @@
       },
       "allowed_merge_teams": [
         "foo"
-      ]
+      ],
+      "merge_bots": []
     }
   ],
   "archived": false,

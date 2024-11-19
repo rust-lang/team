@@ -220,11 +220,18 @@ pub enum BranchProtectionMode {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum MergeBot {
+    Homu,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BranchProtection {
     pub pattern: String,
     pub dismiss_stale_review: bool,
     pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,
+    pub merge_bots: Vec<MergeBot>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
