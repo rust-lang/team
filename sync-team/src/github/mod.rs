@@ -5,7 +5,7 @@ mod tests;
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
 use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings};
 use log::debug;
-use rust_team_data::v1::{Bot, BranchProtectionMode};
+use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot};
 use std::collections::{HashMap, HashSet};
 use std::fmt::{Display, Formatter, Write};
 
@@ -602,8 +602,8 @@ fn construct_branch_protection(
     expected_repo: &rust_team_data::v1::Repo,
     branch_protection: &rust_team_data::v1::BranchProtection,
 ) -> api::BranchProtection {
-    let uses_bors = expected_repo.bots.contains(&Bot::Bors);
-    let required_approving_review_count: u8 = if uses_bors {
+    let uses_homu = branch_protection.merge_bots.contains(&MergeBot::Homu);
+    let required_approving_review_count: u8 = if uses_homu {
         0
     } else {
         match branch_protection.mode {
@@ -628,7 +628,7 @@ fn construct_branch_protection(
         })
         .collect();
 
-    if uses_bors {
+    if uses_homu {
         push_allowances.push(PushAllowanceActor::User(api::UserPushAllowanceActor {
             login: "bors".to_owned(),
         }));
