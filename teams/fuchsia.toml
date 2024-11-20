@@ -4,13 +4,14 @@ kind = "marker-team"
 [people]
 leads = []
 members = [
-    "tmandry",
     "erickt",
     "P1n3appl3",
+    "Nashenas88",
 ]
 alumni = [
     "ComputerDruid",
     "djkoloski",
+    "tmandry",
 ]
 
 [permissions]
