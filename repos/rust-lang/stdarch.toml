@@ -9,5 +9,5 @@ libs = "write"
 
 [[branch-protections]]
 pattern = "master"
-ci-checks = ["success"]
+ci-checks = ["conclusion"]
 required-approvals = 0
