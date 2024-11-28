@@ -11,6 +11,7 @@ members = [
     "oli-obk",
     "BoxyUwU",
     "camelid",
+    "compiler-errors",
 ]
 alumni = [
     "varkor",
