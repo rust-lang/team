@@ -1,0 +1,35 @@
+name = "goals"
+subteam-of = "launching-pad"
+
+[people]
+leads = ["nikomatsakis"]
+members = [
+    "nikomatsakis",
+    "joshtriplett",
+    "lqd",
+    "nandsh",
+]
+alumni = [
+]
+
+[[github]]
+team-name = "goals"
+orgs = ["rust-lang"]
+
+[permissions]
+bors.rust.review = true
+
+[rfcbot]
+label = "T-goals"
+name = "Goals"
+ping = "rust-lang/goals"
+
+[website]
+name = "Goals team"
+description = "Administering the Rust goal setting program"
+email = "goals@rust-lang.org"
+zulip-stream = "project goals"
+repo = "https://github.com/rust-lang/rust-project-goals"
+
+[[zulip-groups]]
+name = "T-goals"
