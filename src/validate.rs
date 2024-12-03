@@ -304,8 +304,8 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
             for member in members {
                 referenced_members.insert(member);
             }
-            for person in team.alumni() {
-                referenced_members.insert(person);
+            for person in team.explicit_alumni() {
+                referenced_members.insert(person.github.as_str());
             }
             for list in team.raw_lists() {
                 for person in &list.extra_people {

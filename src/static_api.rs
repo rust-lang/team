@@ -147,6 +147,9 @@ impl<'a> Generator<'a> {
             for member in team.explicit_members().iter().cloned() {
                 website_roles.insert(member.github, member.roles);
             }
+            for alum in team.explicit_alumni().iter().cloned() {
+                website_roles.insert(alum.github, alum.roles);
+            }
 
             let leads = team.leads();
             let mut members = Vec::new();
@@ -165,14 +168,17 @@ impl<'a> Generator<'a> {
             members.sort_by_key(|member| !member.is_lead);
 
             let mut alumni = Vec::new();
-            for github_name in team.alumni() {
-                if let Some(person) = self.data.person(github_name) {
+            for alum in team.explicit_alumni() {
+                if let Some(person) = self.data.person(&alum.github) {
                     alumni.push(v1::TeamMember {
                         name: person.name().into(),
-                        github: github_name.to_string(),
+                        github: alum.github.to_string(),
                         github_id: person.github_id(),
                         is_lead: false,
-                        roles: Vec::new(),
+                        roles: website_roles
+                            .get(alum.github.as_str())
+                            .cloned()
+                            .unwrap_or_default(),
                     });
                 }
             }
