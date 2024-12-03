@@ -128,3 +128,6 @@ extra-people = [
     "spastorino",
     "tmiasko"
 ]
+
+[[zulip-streams]]
+name = "t-compiler/contrib-private"
