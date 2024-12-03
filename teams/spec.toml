@@ -8,6 +8,7 @@ members = [
     { github = "JoelMarcey", roles = ["spec-editor"] },
     "ehuss",
     "traviscross",
+    "nikomatsakis",
 ]
 alumni = [
     "pnkfelix",
