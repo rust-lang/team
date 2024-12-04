@@ -1,0 +1,22 @@
+name = "project-directors"
+
+[people]
+leads = []
+members = [
+  "carols10cents",
+  "JakobDegen",
+  "rylev",
+  "scottmcm",
+  "spastorino",
+]
+alumni = [
+  "Mark-Simulacrum",
+]
+
+[website]
+name = "Project Directors"
+description = "Charged with representing the project on the Board of the Rust Foundation"
+email = "project-directors@rust-lang.org"
+
+[[lists]]
+address = "project-directors@rust-lang.org"
