@@ -1,4 +1,4 @@
-name = "project-directors"
+name = "foundation-board-project-directors"
 kind = "marker-team"
 
 [people]
@@ -15,7 +15,7 @@ alumni = [
 ]
 
 [website]
-name = "Project Directors"
+name = "Foundation Board Project Directors"
 description = "Charged with representing the project on the Board of the Rust Foundation"
 email = "project-directors@rust-lang.org"
 
