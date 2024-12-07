@@ -1,0 +1,81 @@
+{
+  "name": "wg-security-response",
+  "kind": "working_group",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Josh Stone",
+      "github": "cuviper",
+      "github_id": 36186,
+      "is_lead": false
+    },
+    {
+      "name": "Manish Goregaokar",
+      "github": "Manishearth",
+      "github_id": 1617736,
+      "is_lead": false
+    },
+    {
+      "name": "Pietro Albini",
+      "github": "pietroalbini",
+      "github_id": 2299951,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "Steve Klabnik",
+      "github": "steveklabnik",
+      "github_id": 27786,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "security",
+        "members": [
+          1617736,
+          36186,
+          2299951
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Security Response WG",
+    "description": "Triaging and responding to incoming vulnerability reports",
+    "page": "wg-security-response",
+    "email": "security@rust-lang.org",
+    "repo": "https://github.com/rust-lang/wg-security-response",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": [
+    {
+      "name": "security",
+      "members": [
+        278623213448331265,
+        443825361256448003,
+        296309029947441155
+      ],
+      "color": "#e91e63"
+    }
+  ]
+}

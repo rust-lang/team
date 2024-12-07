@@ -1,0 +1,2719 @@
+{
+  "people": {
+    "17cupsofcoffee": {
+      "name": "Joe Clay",
+      "email": "joe@seventeencups.net",
+      "github_id": 784533
+    },
+    "Aaron1011": {
+      "name": "Aaron Hill",
+      "email": "aa1ronham@gmail.com",
+      "github_id": 1408859
+    },
+    "Aatch": {
+      "name": "James Miller",
+      "email": "james@aatch.net",
+      "github_id": 342416
+    },
+    "AlexEne": {
+      "name": "Alexandru Ene",
+      "email": "alexene0x11@gmail.com",
+      "github_id": 5849037
+    },
+    "Alexendoo": {
+      "name": "Alex Macleod",
+      "email": "alex@macleod.io",
+      "github_id": 1830331
+    },
+    "Amanieu": {
+      "name": "Amanieu d'Antras",
+      "email": "amanieu@gmail.com",
+      "github_id": 278509
+    },
+    "AminArria": {
+      "name": "Amin Arria",
+      "email": "arria.amin@gmail.com",
+      "github_id": 3791966
+    },
+    "AngelOnFira": {
+      "name": "Forest Anderson",
+      "email": "forestkzanderson@gmail.com",
+      "github_id": 14791619
+    },
+    "Azhng": {
+      "name": "Archer Zhang",
+      "email": null,
+      "github_id": 9267198
+    },
+    "AzureMarker": {
+      "name": "Mark Drobnak",
+      "email": "mark.drobnak@gmail.com",
+      "github_id": 4417660
+    },
+    "BartMassey": {
+      "name": "Bart Massey",
+      "email": "bart@cs.pdx.edu",
+      "github_id": 117151
+    },
+    "BatmanAoD": {
+      "name": "Kyle J Strand",
+      "email": "batmanaod@gmail.com",
+      "github_id": 2313807
+    },
+    "BenLewis-Seequent": {
+      "name": "Ben Lewis",
+      "email": null,
+      "github_id": 7391596
+    },
+    "BlackHoleFox": {
+      "name": "Fox",
+      "email": "blackholefoxdev@gmail.com",
+      "github_id": 20936452
+    },
+    "BoxyUwU": {
+      "name": "Boxy",
+      "email": "rust@boxyuwu.dev",
+      "github_id": 21149742
+    },
+    "BurntSushi": {
+      "name": "Andrew Gallant",
+      "email": "jamslam@gmail.com",
+      "github_id": 456674
+    },
+    "Byron": {
+      "name": "Sebastian Thiel",
+      "email": "sebastian.thiel@icloud.com",
+      "github_id": 63622
+    },
+    "CAD97": {
+      "name": "Christopher Durham",
+      "email": "cad97@cad97.com",
+      "github_id": 5992217
+    },
+    "Centri3": {
+      "name": "Catherine",
+      "email": "catherine3.flores@gmail.com",
+      "github_id": 114838443
+    },
+    "Centril": {
+      "name": "Mazdak Farrokhzad",
+      "email": "twingoow@gmail.com",
+      "github_id": 855702
+    },
+    "ChayimFriedman2": {
+      "name": "Chayim Refael Friedman",
+      "email": "chayimfr@gmail.com",
+      "github_id": 24700207
+    },
+    "ChrisDenton": {
+      "name": "Chris Denton",
+      "email": "chris@chrisdenton.dev",
+      "github_id": 4459874
+    },
+    "ChrisPardy": {
+      "name": "ChrisPardy",
+      "email": null,
+      "github_id": 25291724
+    },
+    "CohenArthur": {
+      "name": "Arthur Cohen",
+      "email": "cohenarthur.dev@gmail.com",
+      "github_id": 43524065
+    },
+    "ComputerDruid": {
+      "name": "Dan Johnson",
+      "email": "computerdruid@gmail.com",
+      "github_id": 34696
+    },
+    "CraftSpider": {
+      "name": "Jakob Wiesmore",
+      "email": "runetynan@gmail.com",
+      "github_id": 13342132
+    },
+    "Dajamante": {
+      "name": " Aïssata Maiga",
+      "email": null,
+      "github_id": 40670675
+    },
+    "Darksonn": {
+      "name": "Alice Ryhl",
+      "email": "alice@ryhl.io",
+      "github_id": 928074
+    },
+    "DianQK": {
+      "name": "DianQK",
+      "email": "dianqk@dianqk.net",
+      "github_id": 10829914
+    },
+    "Dirbaio": {
+      "name": "Dario Nieuwenhuis",
+      "email": "dirbaio@dirbaio.net",
+      "github_id": 1247578
+    },
+    "Disasm": {
+      "name": "Vadim Kaushan",
+      "email": "admin@disasm.info",
+      "github_id": 1418749
+    },
+    "DropDemBits": {
+      "name": "DropDemBits",
+      "email": "r3usrlnd@gmail.com",
+      "github_id": 13354275
+    },
+    "Dylan-DPC": {
+      "name": "Dylan DPC",
+      "email": "dylan.dpc@gmail.com",
+      "github_id": 99973273
+    },
+    "Eh2406": {
+      "name": "Jacob Finkelman",
+      "email": "eh2406@wayne.edu",
+      "github_id": 3709504
+    },
+    "Emilgardis": {
+      "name": "Emil Gardström",
+      "email": "emil.gardstrom@protonmail.com",
+      "github_id": 1502855
+    },
+    "Enselic": {
+      "name": "Martin Nordholts",
+      "email": "enselic@gmail.com",
+      "github_id": 115040
+    },
+    "FractalFir": {
+      "name": "FractalFir",
+      "email": null,
+      "github_id": 75212430
+    },
+    "Gankra": {
+      "name": "Aria Beingessner",
+      "email": "a.beingessner@gmail.com",
+      "github_id": 1136864
+    },
+    "GuillaumeGomez": {
+      "name": "Guillaume Gomez",
+      "email": "guillaume1.gomez@gmail.com",
+      "github_id": 3050060
+    },
+    "HKalbasi": {
+      "name": "Hamidreza Kalbasi",
+      "email": "hamidrezakalbasi@protonmail.com",
+      "github_id": 45197576
+    },
+    "HallerPatrick": {
+      "name": "Patrick Haller",
+      "email": "patrickhaller40@googlemail.com",
+      "github_id": 22773355
+    },
+    "Havvy": {
+      "name": "Ryan Scheel",
+      "email": "ryan.havvy@gmail.com",
+      "github_id": 731722
+    },
+    "J-ZhengLi": {
+      "name": "Jonathan Lee",
+      "email": "lizhengghengj@gmail.com",
+      "github_id": 32276130
+    },
+    "JDuchniewicz": {
+      "name": "Jakub Duchniewicz",
+      "email": "j.duchniewicz@gmail.com",
+      "github_id": 18423461
+    },
+    "JOE1994": {
+      "name": "Youngsuk Kim",
+      "email": null,
+      "github_id": 10286488
+    },
+    "JakobDegen": {
+      "name": "Jakob Degen",
+      "email": "jakob.e.degen@gmail.com",
+      "github_id": 51179609
+    },
+    "JamesPatrickGill": {
+      "name": "James Gill",
+      "email": null,
+      "github_id": 44863195
+    },
+    "JamieCunliffe": {
+      "name": "Jamie Cunliffe",
+      "email": null,
+      "github_id": 29557119
+    },
+    "Jarcho": {
+      "name": "Jason Newcomb",
+      "email": "jsnewcomb@pm.me",
+      "github_id": 7761774
+    },
+    "JoelMarcey": {
+      "name": "Joel Marcey",
+      "email": "jimarcey@gmail.com",
+      "github_id": 3757713
+    },
+    "JohnCSimon": {
+      "name": "John Simon",
+      "email": "johncsimon@gmail.com",
+      "github_id": 1977159
+    },
+    "JohnTitor": {
+      "name": "Yuki Okushi",
+      "email": "huyuumi.dev@gmail.com",
+      "github_id": 25030997
+    },
+    "JulianKnodt": {
+      "name": "Julian Knodt",
+      "email": "julianknodt@gmail.com",
+      "github_id": 7675847
+    },
+    "KarlK90": {
+      "name": "Stefan Kerkmann",
+      "email": "karlk90@pm.me",
+      "github_id": 13887561
+    },
+    "Kimundi": {
+      "name": "Marvin Löbel",
+      "email": "loebel.marvin@gmail.com",
+      "github_id": 2903206
+    },
+    "KittyBorgX": {
+      "name": "Krishna Ramasimha",
+      "email": "krishnaramasimha12@gmail.com",
+      "github_id": 82328083
+    },
+    "Kixiron": {
+      "name": "Chase Wilson",
+      "email": "me@chasewilson.dev",
+      "github_id": 25047011
+    },
+    "Kobzol": {
+      "name": "Jakub Beránek",
+      "email": "berykubik@gmail.com",
+      "github_id": 4539057
+    },
+    "KodrAus": {
+      "name": "Ashley Mannix",
+      "email": "kodraus@hey.com",
+      "github_id": 6721458
+    },
+    "LawnGnome": {
+      "name": "Adam Harvey",
+      "email": "adam@adamharvey.name",
+      "github_id": 229984
+    },
+    "LeSeulArtichaut": {
+      "name": "Léo Lanteri Thauvin",
+      "email": "leseulartichaut@gmail.com",
+      "github_id": 38361244
+    },
+    "Lokathor": {
+      "name": "Daniel Gee",
+      "email": "zefria@gmail.com",
+      "github_id": 5456384
+    },
+    "LucasBullen": {
+      "name": "Lucas Bullen",
+      "email": "lbullen@redhat.com",
+      "github_id": 10255066
+    },
+    "LucioFranco": {
+      "name": "Lucio Franco",
+      "email": null,
+      "github_id": 5758045
+    },
+    "LukasKalbertodt": {
+      "name": "Lukas Kalbertodt",
+      "email": "lukas.kalbertodt@gmail.com",
+      "github_id": 7419664
+    },
+    "LukeMathWalker": {
+      "name": "Luca Palmieri",
+      "email": "rust@lpalmieri.com",
+      "github_id": 20745048
+    },
+    "MabezDev": {
+      "name": "Scott Mabin",
+      "email": "scott@mabez.dev",
+      "github_id": 6977289
+    },
+    "MajorBreakfast": {
+      "name": "Josef Brandl",
+      "email": "mail@josefbrandl.de",
+      "github_id": 340142
+    },
+    "Manishearth": {
+      "name": "Manish Goregaokar",
+      "email": "manishsmail@gmail.com",
+      "github_id": 1617736
+    },
+    "MarcoIeni": {
+      "name": "Marco Ieni",
+      "email": "marcoieni@rustfoundation.org",
+      "github_id": 11428655
+    },
+    "Mark-Simulacrum": {
+      "name": "Mark Rousskov",
+      "email": "mark.simulacrum@gmail.com",
+      "github_id": 5047365
+    },
+    "MarkMcCaskey": {
+      "name": "Mark McCaskey",
+      "email": null,
+      "github_id": 5770194
+    },
+    "MicahChalmer": {
+      "name": "Micah Chalmer",
+      "email": null,
+      "github_id": 698400
+    },
+    "Muirrum": {
+      "name": "Cara Salter",
+      "email": "cara@devcara.com",
+      "github_id": 8702646
+    },
+    "Muscraft": {
+      "name": "Scott Schafer",
+      "email": "schaferjscott@gmail.com",
+      "github_id": 23045215
+    },
+    "Nadrieril": {
+      "name": "Nadrieril",
+      "email": "nadrieril+rust@gmail.com",
+      "github_id": 6783654
+    },
+    "Nashenas88": {
+      "name": "Paul Daniel Faria",
+      "email": "nashenas88@gmail.com",
+      "github_id": 1673130
+    },
+    "Nemo157": {
+      "name": "Wim",
+      "email": "rust-lang@nemo157.com",
+      "github_id": 81079
+    },
+    "Noah-Kennedy": {
+      "name": "Noah Kennedy",
+      "email": "noah.kennedy.professional@gmail.comn",
+      "github_id": 9875622
+    },
+    "NobodyXu": {
+      "name": "Jiahao XU",
+      "email": "Jiahao_XU@outlook.com",
+      "github_id": 30436523
+    },
+    "Noratrieb": {
+      "name": "nora",
+      "email": "rust@noratrieb.dev",
+      "github_id": 48135649
+    },
+    "Oneirical": {
+      "name": "Julien Robert",
+      "email": null,
+      "github_id": 96022417
+    },
+    "P1n3appl3": {
+      "name": "Joseph Ryan",
+      "email": "josephryan3.14@gmail.com",
+      "github_id": 9326885
+    },
+    "PeytonT": {
+      "name": "Peyton Turner",
+      "email": "donaldpeytonturner@gmail.com",
+      "github_id": 22621596
+    },
+    "QuietMisdreavus": {
+      "name": "QuietMisdreavus",
+      "email": "grey@quietmisdreavus.net",
+      "github_id": 5217170
+    },
+    "RalfJung": {
+      "name": "Ralf Jung",
+      "email": "post@ralfj.de",
+      "github_id": 330628
+    },
+    "Redblueflame": {
+      "name": "Valentin Ricard",
+      "email": "contact@redblueflame.com",
+      "github_id": 24188356
+    },
+    "RobbieClarken": {
+      "name": "Robbie Clarken",
+      "email": "robbie.clarken@gmail.com",
+      "github_id": 663161
+    },
+    "RobertoSnap": {
+      "name": "RobertoSnap",
+      "email": null,
+      "github_id": 4772930
+    },
+    "Rustin170506": {
+      "name": "Rustin",
+      "email": "170506.antelope338@passinbox.com",
+      "github_id": 29879298
+    },
+    "SarthakSingh31": {
+      "name": "Sarthak Singh",
+      "email": null,
+      "github_id": 35749450
+    },
+    "Shnatsel": {
+      "name": "Sergey Davidoff",
+      "email": "shnatsel@gmail.com",
+      "github_id": 291257
+    },
+    "ShoyuVanilla": {
+      "name": "Shoyu Vanilla",
+      "email": "modulo641@gmail.com",
+      "github_id": 10542892
+    },
+    "SiavoshZarrasvand": {
+      "name": "Siavosh Zarrasvand",
+      "email": "siavosh@zarrasvand.com",
+      "github_id": 492510
+    },
+    "SimonSapin": {
+      "name": "Simon Sapin",
+      "email": "simon.sapin@exyr.org",
+      "github_id": 291359
+    },
+    "SomeoneToIgnore": {
+      "name": "Kirill Bulatov",
+      "email": "mail4score@gmail.com",
+      "github_id": 2690773
+    },
+    "Sp00ph": {
+      "name": "Markus Everling",
+      "email": "markuseverling@gmail.com",
+      "github_id": 61327188
+    },
+    "SparrowLii": {
+      "name": "Sparrow Li",
+      "email": "liyuan179@huawei.com",
+      "github_id": 68270294
+    },
+    "Stammark": {
+      "name": "Stam Markianos-Wright",
+      "email": null,
+      "github_id": 30555766
+    },
+    "Stupremee": {
+      "name": "Stu",
+      "email": "justus.k@protonmail.com",
+      "github_id": 39732259
+    },
+    "TaKO8Ki": {
+      "name": "Takayuki Maeda",
+      "email": "takoyaki0316@gmail.com",
+      "github_id": 41065217
+    },
+    "Thomasdezeeuw": {
+      "name": "Thomas de Zeeuw",
+      "email": "thomasdezeeuw@gmail.com",
+      "github_id": 3159064
+    },
+    "TimDiekmann": {
+      "name": "Tim Diekmann",
+      "email": "tim.diekmann@3dvision.de",
+      "github_id": 21277928
+    },
+    "TimNN": {
+      "name": "Tim Neumann",
+      "email": "mail@timnn.me",
+      "github_id": 1178249
+    },
+    "Turbo87": {
+      "name": "Tobias Bieniek",
+      "email": "tobias@bieniek.cloud",
+      "github_id": 141300
+    },
+    "U007D": {
+      "name": "Brad Gibson",
+      "email": "b2b@humanenginuity.com",
+      "github_id": 2874989
+    },
+    "Urgau": {
+      "name": "Urgau",
+      "email": "urgau@numericable.fr",
+      "github_id": 3616612
+    },
+    "Veykril": {
+      "name": "Lukas Wirth",
+      "email": "lukastw97@gmail.com",
+      "github_id": 3757771
+    },
+    "WaffleLapkin": {
+      "name": "Waffle Maybe",
+      "email": "waffle.lapkin@gmail.com",
+      "github_id": 38225716
+    },
+    "Wodann": {
+      "name": "Remco",
+      "email": "wodannson@gmail.com",
+      "github_id": 6917585
+    },
+    "XAMPPRocky": {
+      "name": "Erin Power",
+      "email": "xampprocky@icloud.com",
+      "github_id": 4464295
+    },
+    "Xanewok": {
+      "name": "Igor Matuszewski",
+      "email": "xanewok@gmail.com",
+      "github_id": 3093213
+    },
+    "Xylakant": {
+      "name": "Felix Gilcher",
+      "email": null,
+      "github_id": 337823
+    },
+    "Young-Flash": {
+      "name": "Dongyang Zheng",
+      "email": "flash12561256@gmail.com",
+      "github_id": 71162630
+    },
+    "YuhanLiin": {
+      "name": "Yuhan Lin",
+      "email": "yuhanliin+github@protonmail.com",
+      "github_id": 15389635
+    },
+    "Zalathar": {
+      "name": "Stuart Cook",
+      "email": "scook0+rustc@gmail.com",
+      "github_id": 20290842
+    },
+    "Zoxc": {
+      "name": "Zoxc",
+      "email": "zoxc32@gmail.com",
+      "github_id": 25784
+    },
+    "ZuseZ4": {
+      "name": "Manuel Drehwald",
+      "email": null,
+      "github_id": 25483084
+    },
+    "aDotInTheVoid": {
+      "name": "Alona Enraght-Moony",
+      "email": "contact@alona.page",
+      "github_id": 28781354
+    },
+    "acfoltzer": {
+      "name": "Adam C. Foltzer",
+      "email": "acfoltzer@acfoltzer.net",
+      "github_id": 205266
+    },
+    "aclysma": {
+      "name": "Philip Degarmo",
+      "email": "aclysma@gmail.com",
+      "github_id": 316070
+    },
+    "adamgemmell": {
+      "name": "Adam Gemmell",
+      "email": null,
+      "github_id": 3757567
+    },
+    "adamgreig": {
+      "name": "Adam Greig",
+      "email": "adam@adamgreig.com",
+      "github_id": 47219
+    },
+    "adityac8": {
+      "name": "Aditya Arora",
+      "email": "adityadvlp@gmail.com",
+      "github_id": 19192257
+    },
+    "adriantombu": {
+      "name": "Adrian Tombu",
+      "email": "contact@otso.fr",
+      "github_id": 383297
+    },
+    "aidanhs": {
+      "name": "Aidan Hobson Sayers",
+      "email": "aidanhs@cantab.net",
+      "github_id": 1050652
+    },
+    "albertlarsan68": {
+      "name": "Albert Larsan",
+      "email": "albert.larsan@gmail.com",
+      "github_id": 74931857
+    },
+    "alercah": {
+      "name": "Alexis Hunt",
+      "email": null,
+      "github_id": 20842325
+    },
+    "alex": {
+      "name": "Alex Gaynor",
+      "email": "alex.gaynor@gmail.com",
+      "github_id": 772
+    },
+    "alex-semenyuk": {
+      "name": "Alexey Semenyuk",
+      "email": "alexsemenyuk88@gmail.com",
+      "github_id": 5480441
+    },
+    "alexcrichton": {
+      "name": "Alex Crichton",
+      "email": "alex@alexcrichton.com",
+      "github_id": 64996
+    },
+    "alexheretic": {
+      "name": "Alex Butler",
+      "email": "alexheretic@gmail.com",
+      "github_id": 2331607
+    },
+    "alibektas": {
+      "name": "Ali Bektas",
+      "email": "bektasali@protonmail.com",
+      "github_id": 20956650
+    },
+    "alice-i-cecile": {
+      "name": "Alice Cecile",
+      "email": "alice.i.cecile@gmail.com",
+      "github_id": 3579909
+    },
+    "aliemjay": {
+      "name": "Ali MJ Al-Nasrawy",
+      "email": "alimjalnasrawy@gmail.com",
+      "github_id": 28497461
+    },
+    "almindor": {
+      "name": "Aleš Katona",
+      "email": "ales@katona.me",
+      "github_id": 1950958
+    },
+    "am-1t": {
+      "name": "amit",
+      "email": null,
+      "github_id": 28247396
+    },
+    "amandasystems": {
+      "name": "Amanda Stjerna",
+      "email": null,
+      "github_id": 102855
+    },
+    "amanjeev": {
+      "name": "Amanjeev Sethi",
+      "email": null,
+      "github_id": 160476
+    },
+    "amousset": {
+      "name": "Alexis Mousset",
+      "email": "contact@amousset.me",
+      "github_id": 329388
+    },
+    "anden3": {
+      "name": "André Vennberg",
+      "email": "andre.vennberg@gmail.com",
+      "github_id": 1500580
+    },
+    "andre-richter": {
+      "name": "Andre Richter",
+      "email": "andre.o.richter@gmail.com",
+      "github_id": 4130005
+    },
+    "andrewpollack": {
+      "name": "andrewpollack",
+      "email": "andrewpkq@gmail.com",
+      "github_id": 24868505
+    },
+    "antoyo": {
+      "name": "Antoni Boucher",
+      "email": "bouanto@zoho.com",
+      "github_id": 584972
+    },
+    "apasel422": {
+      "name": "Andrew Paseltiner",
+      "email": null,
+      "github_id": 8644784
+    },
+    "apiraino": {
+      "name": "apiraino",
+      "email": "apiraino@protonmail.com",
+      "github_id": 6098822
+    },
+    "arielb1": {
+      "name": "Ariel Ben-Yehuda",
+      "email": "ariel.byd@gmail.com",
+      "github_id": 1830974
+    },
+    "arlosi": {
+      "name": "Arlo Siemsen",
+      "email": "arsiem@microsoft.com",
+      "github_id": 704597
+    },
+    "arora-aman": {
+      "name": "Aman Arora",
+      "email": null,
+      "github_id": 4193035
+    },
+    "arshiamufti": {
+      "name": "Arshia Mufti",
+      "email": "amufti16@gmail.com",
+      "github_id": 15066212
+    },
+    "ashleygwilliams": {
+      "name": "Ashley Williams",
+      "email": "ashley666ashley@gmail.com",
+      "github_id": 1163554
+    },
+    "asquared31415": {
+      "name": "asquared31415",
+      "email": null,
+      "github_id": 34665709
+    },
+    "aturon": {
+      "name": "Aaron Turon",
+      "email": "aturon@mozilla.com",
+      "github_id": 709807
+    },
+    "autozimu": {
+      "name": "Junfeng Li",
+      "email": "autozimu@gmail.com",
+      "github_id": 1453551
+    },
+    "avadacatavra": {
+      "name": "Diane Hosfelt",
+      "email": "dianehosfelt@gmail.com",
+      "github_id": 11877868
+    },
+    "awygle": {
+      "name": "awygle",
+      "email": null,
+      "github_id": 7854806
+    },
+    "ayazhafiz": {
+      "name": "hafiz",
+      "email": "ayaz.hafiz.1@gmail.com",
+      "github_id": 20735482
+    },
+    "b-naber": {
+      "name": "b-naber",
+      "email": "b_naber@gmx.de",
+      "github_id": 71934879
+    },
+    "bIgBV": {
+      "name": "Bhargav Voleti",
+      "email": "bhargav.voleti93@gmail.com",
+      "github_id": 5019938
+    },
+    "badboy": {
+      "name": "Jan-Erik Rediger",
+      "email": "janerik@fnordig.de",
+      "github_id": 2129
+    },
+    "basil-cow": {
+      "name": "Michael Babenko",
+      "email": "misha-babenko@yandex.ru",
+      "github_id": 25266609
+    },
+    "bawerd": {
+      "name": "Bawer Dagdeviren",
+      "email": null,
+      "github_id": 625483
+    },
+    "bdillo": {
+      "name": "Ben Dillon",
+      "email": "ben.g.dillon@pm.me",
+      "github_id": 146687321
+    },
+    "bennyvasquez": {
+      "name": "benny Vasquez",
+      "email": "bennycrampton@gmail.com",
+      "github_id": 13630986
+    },
+    "berkus": {
+      "name": "Berkus Decker",
+      "email": "berkus@gmail.com",
+      "github_id": 80306
+    },
+    "betamos": {
+      "name": "Didrik Nordström",
+      "email": "didrik.nordstrom@gmail.com",
+      "github_id": 135960
+    },
+    "birkenfeld": {
+      "name": "Georg Brandl",
+      "email": "georg@python.org",
+      "github_id": 144359
+    },
+    "bjorn3": {
+      "name": "bjorn3",
+      "email": "bjorn3_gh@protonmail.com",
+      "github_id": 17426603
+    },
+    "bkoropoff": {
+      "name": "Brian Koropoff",
+      "email": "bkoropoff@gmail.com",
+      "github_id": 2101303
+    },
+    "bluss": {
+      "name": "bluss",
+      "email": null,
+      "github_id": 3209739
+    },
+    "blyxyas": {
+      "name": "Alejandra González",
+      "email": "blyxyas@gmail.com",
+      "github_id": 73757586
+    },
+    "booyaa": {
+      "name": "Mark Sta Ana",
+      "email": "booyaabooyaabooyaa@gmail.com",
+      "github_id": 192864
+    },
+    "bradjc": {
+      "name": "Brad Campbell",
+      "email": null,
+      "github_id": 1467890
+    },
+    "brotzeit": {
+      "name": "brotzeit",
+      "email": null,
+      "github_id": 25367303
+    },
+    "brson": {
+      "name": "Brian Anderson",
+      "email": null,
+      "github_id": 147214
+    },
+    "bstrie": {
+      "name": "Ben Striegel",
+      "email": "ben.striegel@gmail.com",
+      "github_id": 865233
+    },
+    "burakemir": {
+      "name": "Burak Emir",
+      "email": null,
+      "github_id": 10248140
+    },
+    "burrbull": {
+      "name": "Zgarbul Andrey",
+      "email": "zgarbul.andrey@gmail.com",
+      "github_id": 3072754
+    },
+    "calebcartwright": {
+      "name": "Caleb Cartwright",
+      "email": "caleb.cartwright@outlook.com",
+      "github_id": 13042488
+    },
+    "calebzulawski": {
+      "name": "Caleb Zulawski",
+      "email": "caleb.zulawski@gmail.com",
+      "github_id": 563826
+    },
+    "camelid": {
+      "name": "Noah Lev",
+      "email": "camelidcamel@gmail.com",
+      "github_id": 37223377
+    },
+    "camsteffen": {
+      "name": "Cameron Steffen",
+      "email": "cam.steffen94@gmail.com",
+      "github_id": 5565418
+    },
+    "carllerche": {
+      "name": "Carl Lerche",
+      "email": "me@carllerche.com",
+      "github_id": 6180
+    },
+    "carols10cents": {
+      "name": "Carol Nichols",
+      "email": "carol.nichols@gmail.com",
+      "github_id": 193874
+    },
+    "cdmistman": {
+      "name": "Colton Donnelly",
+      "email": "colton@donn.io",
+      "github_id": 23486351
+    },
+    "celaus": {
+      "name": "Claus Matzinger",
+      "email": "celaus@gmail.com",
+      "github_id": 713346
+    },
+    "celinval": {
+      "name": "Celina V.",
+      "email": "celinval@amazon.com",
+      "github_id": 35149715
+    },
+    "chansuke": {
+      "name": "chansuke",
+      "email": "moonset20@gmail.com",
+      "github_id": 501052
+    },
+    "chenyukang": {
+      "name": "Yukang",
+      "email": "moorekang@gmail.com",
+      "github_id": 230646
+    },
+    "chorman0773": {
+      "name": "Connor Horman",
+      "email": "chorman@lcdev.xyz",
+      "github_id": 5026283
+    },
+    "chris-morgan": {
+      "name": "Chris Morgan",
+      "email": null,
+      "github_id": 392868
+    },
+    "chriskrycho": {
+      "name": "Chris Krycho",
+      "email": "hello@chriskrycho.com",
+      "github_id": 2403023
+    },
+    "chrissimpkins": {
+      "name": "Chris Simpkins",
+      "email": "chris@sourcefoundry.org",
+      "github_id": 4249591
+    },
+    "chriswailes": {
+      "name": "Chris Wailes",
+      "email": null,
+      "github_id": 530751
+    },
+    "cjgillot": {
+      "name": "Camille Gillot",
+      "email": "gillot.camille@gmail.com",
+      "github_id": 1822483
+    },
+    "clubby789": {
+      "name": "Jamie Hill-Daniel",
+      "email": "jamie@hill-daniel.co.uk",
+      "github_id": 13556931
+    },
+    "codesections": {
+      "name": "Daniel Sockwell",
+      "email": "daniel@codesections.com",
+      "github_id": 35405463
+    },
+    "comex": {
+      "name": "comex",
+      "email": null,
+      "github_id": 47517
+    },
+    "compiler-errors": {
+      "name": "Michael Goulet",
+      "email": "michael@errs.io",
+      "github_id": 3674314
+    },
+    "contrun": {
+      "name": "B YI",
+      "email": "uuuuuu@protonmail.com",
+      "github_id": 32609395
+    },
+    "cr1901": {
+      "name": "William D. Jones",
+      "email": null,
+      "github_id": 6418027
+    },
+    "cramertj": {
+      "name": "Taylor Cramer",
+      "email": "cramertaylorj@gmail.com",
+      "github_id": 5963049
+    },
+    "cratelyn": {
+      "name": "Katelyn Martin",
+      "email": null,
+      "github_id": 57912822
+    },
+    "crlf0710": {
+      "name": "Charles Lew",
+      "email": "crlf0710@gmail.com",
+      "github_id": 451806
+    },
+    "csmoe": {
+      "name": "csmoe",
+      "email": null,
+      "github_id": 35686186
+    },
+    "cuviper": {
+      "name": "Josh Stone",
+      "email": "cuviper@gmail.com",
+      "github_id": 36186
+    },
+    "d-sonuga": {
+      "name": "Demilade Sonuga",
+      "email": null,
+      "github_id": 78101187
+    },
+    "da-x": {
+      "name": "Dan Aloni",
+      "email": null,
+      "github_id": 321273
+    },
+    "danc86": {
+      "name": "Dan Callaghan",
+      "email": "djc@djc.id.au",
+      "github_id": 398575
+    },
+    "danielframpton": {
+      "name": "Daniel Frampton",
+      "email": null,
+      "github_id": 15899604
+    },
+    "danielhenrymantilla": {
+      "name": "Daniel Henry-Mantilla",
+      "email": "daniel.henry.mantilla@gmail.com",
+      "github_id": 9920355
+    },
+    "davidbarsky": {
+      "name": "David Barsky",
+      "email": "me@davidbarsky.com",
+      "github_id": 2067774
+    },
+    "davidtwco": {
+      "name": "David Wood",
+      "email": "david@davidtw.co",
+      "github_id": 1295100
+    },
+    "deg4uss3r": {
+      "name": "Ricky",
+      "email": "ricky@hosfe.lt",
+      "github_id": 15351059
+    },
+    "denisvasilik": {
+      "name": "Denis Vasilik",
+      "email": "contact@denisvasilik.com",
+      "github_id": 18697981
+    },
+    "detrumi": {
+      "name": "Wilco Kusee",
+      "email": "wilcokusee@gmail.com",
+      "github_id": 5758008
+    },
+    "digama0": {
+      "name": "Mario Carneiro",
+      "email": "di.gama@gmail.com",
+      "github_id": 868588
+    },
+    "ding-young": {
+      "name": "ding-young",
+      "email": null,
+      "github_id": 88336128
+    },
+    "dingxiangfei2009": {
+      "name": "Ding Xiang Fei",
+      "email": null,
+      "github_id": 6884440
+    },
+    "djc": {
+      "name": "Dirkjan Ochtman",
+      "email": "dirkjan@ochtman.nl",
+      "github_id": 158471
+    },
+    "djcarpe": {
+      "name": "DJ Carpenter",
+      "email": null,
+      "github_id": 59489977
+    },
+    "djkoloski": {
+      "name": "David Koloski",
+      "email": "djkoloski@gmail.com",
+      "github_id": 7554649
+    },
+    "dkhayes117": {
+      "name": "dkhayes117",
+      "email": null,
+      "github_id": 59458913
+    },
+    "doc-jones": {
+      "name": "Doc Jones",
+      "email": "debi.jones@gmail.com",
+      "github_id": 37349558
+    },
+    "dotdash": {
+      "name": "Björn Steinbrink",
+      "email": "bsteinbr@gmail.com",
+      "github_id": 230962
+    },
+    "dswij": {
+      "name": "dswij",
+      "email": "dswijj@gmail.com",
+      "github_id": 44697459
+    },
+    "dtolnay": {
+      "name": "David Tolnay",
+      "email": "dtolnay@gmail.com",
+      "github_id": 1940490
+    },
+    "durin42": {
+      "name": "Augie Fackler",
+      "email": "raf@durin42.com",
+      "github_id": 20269
+    },
+    "dvc94ch": {
+      "name": "David Craven",
+      "email": "david@craven.ch",
+      "github_id": 741807
+    },
+    "dwijnand": {
+      "name": "Dale Wijnand",
+      "email": "dale.wijnand@gmail.com",
+      "github_id": 344610
+    },
+    "dylanmckay": {
+      "name": "Dylan McKay",
+      "email": "me@dylanmckay.io",
+      "github_id": 7722159
+    },
+    "ebroto": {
+      "name": "Eduardo Broto",
+      "email": "ebroto@tutanota.com",
+      "github_id": 816908
+    },
+    "ecstatic-morse": {
+      "name": "Dylan MacKenzie",
+      "email": "ecstaticmorse@gmail.com",
+      "github_id": 29463364
+    },
+    "eddyb": {
+      "name": "Eduard-Mihai Burtescu",
+      "email": "eddyb@lyken.rs",
+      "github_id": 77424
+    },
+    "edmilsonefs": {
+      "name": "Edmilson Ferreira da Silva",
+      "email": "edmilson.efs@gmail.com",
+      "github_id": 498938
+    },
+    "edunham": {
+      "name": "E. Dunham",
+      "email": "github@edunham.net",
+      "github_id": 812892
+    },
+    "edwin0cheng": {
+      "name": "Edwin Cheng",
+      "email": "edwin0cheng@gmail.com",
+      "github_id": 11014119
+    },
+    "eholk": {
+      "name": "Eric Holk",
+      "email": "eric@theincredibleholk.org",
+      "github_id": 105766
+    },
+    "ehuss": {
+      "name": "Eric Huss",
+      "email": "eric@huss.org",
+      "github_id": 43198
+    },
+    "eldruin": {
+      "name": "Diego Barrios Romero",
+      "email": "eldruin@gmail.com",
+      "github_id": 43125
+    },
+    "elshize": {
+      "name": "Michał Siedlaczek",
+      "email": null,
+      "github_id": 3026120
+    },
+    "emilio": {
+      "name": "Emilio Cobos Álvarez",
+      "email": "emilio@crisal.io",
+      "github_id": 1323194
+    },
+    "eminence": {
+      "name": "Andrew Chin",
+      "email": "achin@eminence32.net",
+      "github_id": 402454
+    },
+    "emmanuelantony2000": {
+      "name": "Emmanuel Antony",
+      "email": "emmanuelantony2000@gmail.com",
+      "github_id": 19288251
+    },
+    "epage": {
+      "name": "Ed Page",
+      "email": "eopage@gmail.com",
+      "github_id": 60961
+    },
+    "erickt": {
+      "name": "Erick Tryzelaar",
+      "email": "erick.tryzelaar@gmail.com",
+      "github_id": 84711
+    },
+    "ericseppanen": {
+      "name": "Eric Seppanen",
+      "email": "eds@reric.net",
+      "github_id": 36317762
+    },
+    "erlend-sh": {
+      "name": "Erlend Sogge Heggen",
+      "email": "e.soghe@gmail.com",
+      "github_id": 583842
+    },
+    "est31": {
+      "name": "est31",
+      "email": "est31@protonmail.com",
+      "github_id": 8872119
+    },
+    "estebank": {
+      "name": "Esteban Kuber",
+      "email": "esteban@kuber.com.ar",
+      "github_id": 1606434
+    },
+    "eth3lbert": {
+      "name": "eth3lbert",
+      "email": "eth3lbert+dev@gmail.com",
+      "github_id": 2889664
+    },
+    "extrawurst": {
+      "name": "Stephan D.",
+      "email": "mail@rusticorn.com",
+      "github_id": 776816
+    },
+    "fbq": {
+      "name": "Boqun Feng",
+      "email": null,
+      "github_id": 673448
+    },
+    "fee1-dead": {
+      "name": "Deadbeef",
+      "email": "ent3rm4n@gmail.com",
+      "github_id": 43851243
+    },
+    "fitzgen": {
+      "name": "Nick Fitzgerald",
+      "email": "nfitzgerald@mozilla.com",
+      "github_id": 74571
+    },
+    "flaki": {
+      "name": "István Szmozsánszky",
+      "email": "rust@flaki.hu",
+      "github_id": 2089432
+    },
+    "flip1995": {
+      "name": "Philipp Krones",
+      "email": "hello@philkrones.com",
+      "github_id": 9744647
+    },
+    "flodiebold": {
+      "name": "Florian Diebold",
+      "email": "flodiebold@gmail.com",
+      "github_id": 906069
+    },
+    "fmease": {
+      "name": "León Orell Valerian Liehr",
+      "email": "me@fmease.dev",
+      "github_id": 14913065
+    },
+    "frewsxcv": {
+      "name": "Corey Farwell",
+      "email": "coreyf@rwell.org",
+      "github_id": 416575
+    },
+    "frxstrem": {
+      "name": "Fredrik Østrem",
+      "email": null,
+      "github_id": 1686349
+    },
+    "gdr-at-ms": {
+      "name": "Gabriel Dos Reis",
+      "email": null,
+      "github_id": 11031650
+    },
+    "gilescope": {
+      "name": "Squirrel",
+      "email": null,
+      "github_id": 803976
+    },
+    "giraffate": {
+      "name": "Takayuki Nakata",
+      "email": "f.seasons017@gmail.com",
+      "github_id": 17407489
+    },
+    "gnunicorn": {
+      "name": "Benjamin Kampmann",
+      "email": "ben@gnunicorn.org",
+      "github_id": 40496
+    },
+    "gnzlbg": {
+      "name": "gnzlbg",
+      "email": null,
+      "github_id": 904614
+    },
+    "graciegregory": {
+      "name": "graciegregory",
+      "email": "graciegregory@rustfoundation.org",
+      "github_id": 45044840
+    },
+    "guswynn": {
+      "name": "Gus Wynn",
+      "email": "guswynn@gmail.com",
+      "github_id": 5404303
+    },
+    "h-michael": {
+      "name": "Hirokazu Hata",
+      "email": "h.hata.ai.t@gmail.com",
+      "github_id": 4556097
+    },
+    "h1467792822": {
+      "name": "h1467792822",
+      "email": null,
+      "github_id": 8490488
+    },
+    "hameerabbasi": {
+      "name": "Hameer Abbasi",
+      "email": null,
+      "github_id": 2190658
+    },
+    "hanna-kruppe": {
+      "name": "Hanna Kruppe",
+      "email": null,
+      "github_id": 2311707
+    },
+    "hannobraun": {
+      "name": "Hanno Braun",
+      "email": "hanno@braun-robotics.com",
+      "github_id": 85732
+    },
+    "hargoniX": {
+      "name": "Henrik Böving",
+      "email": null,
+      "github_id": 33270164
+    },
+    "hdhoang": {
+      "name": "Hoàng Đức Hiếu",
+      "email": "rust@hdhoang.space",
+      "github_id": 12537
+    },
+    "hdoordt": {
+      "name": "Henk Oordt",
+      "email": null,
+      "github_id": 17907879
+    },
+    "heiher": {
+      "name": "WANG Rui",
+      "email": "wangrui@loongson.cn",
+      "github_id": 1407733
+    },
+    "hellow554": {
+      "name": "Marcel",
+      "email": null,
+      "github_id": 921462
+    },
+    "henryboisdequin": {
+      "name": "Henry Boisdequin",
+      "email": "boisdequinhenry19@gmail.com",
+      "github_id": 65845077
+    },
+    "heyrutvik": {
+      "name": "Rutvik Patel",
+      "email": "heyrutvik@gmail.com",
+      "github_id": 6268538
+    },
+    "higuoxing": {
+      "name": "Xing GUO",
+      "email": "higuoxing@gmail.com",
+      "github_id": 21099318
+    },
+    "hkmatsumoto": {
+      "name": "Hirochika Matsumoto",
+      "email": "git@hkmatsumoto.com",
+      "github_id": 57856193
+    },
+    "hkratz": {
+      "name": "Hans Kratz",
+      "email": "hans@appfour.com",
+      "github_id": 3736990
+    },
+    "hoodmane": {
+      "name": "Hood Chatham",
+      "email": null,
+      "github_id": 8739626
+    },
+    "hsivonen": {
+      "name": "Henri Sivonen",
+      "email": "hsivonen@hsivonen.fi",
+      "github_id": 478856
+    },
+    "hug-dev": {
+      "name": "Hugues de Valon",
+      "email": null,
+      "github_id": 29229160
+    },
+    "huonw": {
+      "name": "Huon Wilson",
+      "email": "dbau.pp@gmail.com",
+      "github_id": 1203825
+    },
+    "ibraheemdev": {
+      "name": "Ibraheem Ahmed",
+      "email": "ibraheem@ibraheem.ca",
+      "github_id": 34988408
+    },
+    "igaray": {
+      "name": "Iñaki Garay",
+      "email": "igarai@gmail.com",
+      "github_id": 167193
+    },
+    "imtsuki": {
+      "name": "imtsuki",
+      "email": "me@qjx.app",
+      "github_id": 8423594
+    },
+    "inflation": {
+      "name": "Inflation",
+      "email": null,
+      "github_id": 2375962
+    },
+    "inquisitivecrystal": {
+      "name": "inquisitivecrystal",
+      "email": null,
+      "github_id": 22333129
+    },
+    "ishitatsuyuki": {
+      "name": "Tatsuyuki Ishi",
+      "email": "ishitatsuyuki@gmail.com",
+      "github_id": 12389383
+    },
+    "ispringle": {
+      "name": "Ian S. Pringle",
+      "email": "pard@0x44.pw",
+      "github_id": 18722936
+    },
+    "ithinuel": {
+      "name": "Wilfried Chauveau",
+      "email": "wilfried.chauveau@ithinuel.me",
+      "github_id": 4605303
+    },
+    "jackh726": {
+      "name": "Jack Huey",
+      "email": "jackh726@gmail.com",
+      "github_id": 31162821
+    },
+    "jacobbramley": {
+      "name": "Jacob Bramley",
+      "email": null,
+      "github_id": 5206553
+    },
+    "jamesmunns": {
+      "name": "James Munns",
+      "email": "james@onevariable.com",
+      "github_id": 2097964
+    },
+    "jannic": {
+      "name": "Jan Niehusmann",
+      "email": "jan@gondor.com",
+      "github_id": 232606
+    },
+    "japaric": {
+      "name": "Jorge Aparicio",
+      "email": "jorge@japaric.io",
+      "github_id": 5018213
+    },
+    "jasonwilliams": {
+      "name": "Jason Williams",
+      "email": "jase.williams@gmail.com",
+      "github_id": 936006
+    },
+    "jcs090218": {
+      "name": "Jen-Chieh Shen",
+      "email": "jcs090218@gmail.com",
+      "github_id": 8685505
+    },
+    "jcsoo": {
+      "name": "Jonathan Soo",
+      "email": "jcsoo@bobbin.io",
+      "github_id": 2399463
+    },
+    "jdno": {
+      "name": "Jan David Nose",
+      "email": "jandavidnose@rustfoundation.org",
+      "github_id": 865550
+    },
+    "jechasteen": {
+      "name": "Jonathan Chasteen",
+      "email": null,
+      "github_id": 13788397
+    },
+    "jenniferwills": {
+      "name": "Jennifer Wills",
+      "email": null,
+      "github_id": 22324472
+    },
+    "jessebraham": {
+      "name": "Jesse Braham",
+      "email": "jesse@beta7.io",
+      "github_id": 1945813
+    },
+    "jhpratt": {
+      "name": "Jacob Pratt",
+      "email": "jacob@jhpratt.dev",
+      "github_id": 3161395
+    },
+    "jieyouxu": {
+      "name": "Jieyou Xu",
+      "email": "jieyouxu@outlook.com",
+      "github_id": 39484203
+    },
+    "jimblandy": {
+      "name": "Jim Blandy",
+      "email": "jimb@red-bean.com",
+      "github_id": 751272
+    },
+    "jkelleyrtp": {
+      "name": "Jonathan Kelley",
+      "email": null,
+      "github_id": 10237910
+    },
+    "joaopaulocarreiro": {
+      "name": "João Paulo Carreiro",
+      "email": null,
+      "github_id": 44179172
+    },
+    "joboet": {
+      "name": "Jonas Böttiger",
+      "email": "jonasboettiger@icloud.com",
+      "github_id": 25721079
+    },
+    "joelpalmer": {
+      "name": "Joel Parmer",
+      "email": "joelpalmer@gmail.com",
+      "github_id": 8049061
+    },
+    "jonathanpallant": {
+      "name": "Jonathan Pallant",
+      "email": "jonathan.pallant@ferrous-systems.com",
+      "github_id": 18005923
+    },
+    "jongiddy": {
+      "name": "Jonathan Giddy",
+      "email": "jongiddy@gmail.com",
+      "github_id": 3735327
+    },
+    "joshlf": {
+      "name": "Joshua Liebow-Feeser",
+      "email": null,
+      "github_id": 1046063
+    },
+    "joshtriplett": {
+      "name": "Josh Triplett",
+      "email": "josh@joshtriplett.org",
+      "github_id": 162737
+    },
+    "jryans": {
+      "name": "J. Ryan Stinnett",
+      "email": "jryans@gmail.com",
+      "github_id": 279572
+    },
+    "jseyfried": {
+      "name": "Jeffrey Seyfried",
+      "email": "jeffrey.seyfried@gmail.com",
+      "github_id": 8652869
+    },
+    "jsha": {
+      "name": "Jacob Hoffman-Andrews",
+      "email": "rust@hoffman-andrews.com",
+      "github_id": 220205
+    },
+    "jswrenn": {
+      "name": "Jack Wrenn",
+      "email": "jack@wrenn.fyi",
+      "github_id": 3820879
+    },
+    "jtgeibel": {
+      "name": "Justin Geibel",
+      "email": "jtgeibel@gmail.com",
+      "github_id": 22186
+    },
+    "juntyr": {
+      "name": "Juniper Tyree",
+      "email": null,
+      "github_id": 50025784
+    },
+    "justahero": {
+      "name": "Sebastian Ziebell",
+      "email": null,
+      "github_id": 1305185
+    },
+    "jyn514": {
+      "name": "Jynn Nelson",
+      "email": "rust@jyn.dev",
+      "github_id": 23638587
+    },
+    "kanru": {
+      "name": "Kan-Ru Chen",
+      "email": "kanru@kanru.info",
+      "github_id": 17571
+    },
+    "kennykerr": {
+      "name": "Kenny Kerr",
+      "email": null,
+      "github_id": 9845234
+    },
+    "kennytm": {
+      "name": "kennytm",
+      "email": "kennytm@gmail.com",
+      "github_id": 103023
+    },
+    "khionu": {
+      "name": "Khionu Sybiern",
+      "email": "dev@khionu.net",
+      "github_id": 11195266
+    },
+    "killercup": {
+      "name": "Pascal Hertleif",
+      "email": "killercup@gmail.com",
+      "github_id": 20063
+    },
+    "kinnison": {
+      "name": "Daniel Silverstone",
+      "email": "dsilvers@digital-scurf.org",
+      "github_id": 1469421
+    },
+    "korken89": {
+      "name": "Emil Fresk",
+      "email": "emil.fresk@gmail.com",
+      "github_id": 913109
+    },
+    "kraj": {
+      "name": "Khem Raj",
+      "email": null,
+      "github_id": 465279
+    },
+    "kulp": {
+      "name": "Darren Kulp",
+      "email": "darren@kulp.ch",
+      "github_id": 74288
+    },
+    "kupiakos": {
+      "name": "Alyssa Haroldsen",
+      "email": "kupiakos@gmail.com",
+      "github_id": 3309728
+    },
+    "kvark": {
+      "name": "Dzmitry Malyshau",
+      "email": "kvark@mozilla.com",
+      "github_id": 107301
+    },
+    "laanwj": {
+      "name": "Wladimir J. van der Laan",
+      "email": null,
+      "github_id": 126646
+    },
+    "lbernick": {
+      "name": "Lee Bernick",
+      "email": "lee.a.bernick@gmail.com",
+      "github_id": 29333301
+    },
+    "lcnr": {
+      "name": "lcnr",
+      "email": "rust@lcnr.de",
+      "github_id": 29864074
+    },
+    "levex": {
+      "name": "Levente Kurusa",
+      "email": "lkurusa@kernelstuff.org",
+      "github_id": 849140
+    },
+    "listochkin": {
+      "name": "Андрей Листочкин (Andrei Listochkin)",
+      "email": null,
+      "github_id": 405222
+    },
+    "liwagu": {
+      "name": "liwagu",
+      "email": null,
+      "github_id": 69970253
+    },
+    "ljedrz": {
+      "name": "ljedrz",
+      "email": null,
+      "github_id": 3750347
+    },
+    "llogiq": {
+      "name": "Andre Bogus",
+      "email": "bogusandre@gmail.com",
+      "github_id": 4200835
+    },
+    "lnicola": {
+      "name": "Laurențiu Nicola",
+      "email": "lnicola@dend.ro",
+      "github_id": 308347
+    },
+    "locks": {
+      "name": "Ricardo Mendes",
+      "email": "rokusu@gmail.com",
+      "github_id": 32344
+    },
+    "logicsoup": {
+      "name": "Elina Shakhnovich",
+      "email": "elinashahzm@gmail.com",
+      "github_id": 20725524
+    },
+    "logmosier": {
+      "name": "logmosier",
+      "email": null,
+      "github_id": 10948303
+    },
+    "lolbinarycat": {
+      "name": "binarycat",
+      "email": "dogedoge61@gmail.com",
+      "github_id": 19915050
+    },
+    "lowr": {
+      "name": "Ryo Yoshida",
+      "email": "low.ryoshida@gmail.com",
+      "github_id": 24381114
+    },
+    "lqd": {
+      "name": "Rémy Rakic",
+      "email": "remy.rakic+rust@gmail.com",
+      "github_id": 247183
+    },
+    "lukas-code": {
+      "name": "Lukas Markeffsky",
+      "email": "lukas-code@outlook.com",
+      "github_id": 26522220
+    },
+    "luqmana": {
+      "name": "Luqman Aden",
+      "email": "rust@luqman.ca",
+      "github_id": 287063
+    },
+    "lzybkr": {
+      "name": "Jason Shirk",
+      "email": null,
+      "github_id": 2148248
+    },
+    "m-ou-se": {
+      "name": "Mara Bos",
+      "email": "m-ou.se@m-ou.se",
+      "github_id": 783247
+    },
+    "m-rph": {
+      "name": "Quinn Sinclair",
+      "email": "me@m-rph.dev",
+      "github_id": 52372765
+    },
+    "madsmtm": {
+      "name": "Mads Marquart",
+      "email": "mads@marquart.dk",
+      "github_id": 10577181
+    },
+    "marcoow": {
+      "name": "Marco Otte-Witte",
+      "email": "marco.otte-witte@mainmatter.com",
+      "github_id": 1510
+    },
+    "mariannegoldin": {
+      "name": "M Goldin",
+      "email": "marianne.goldin@gmail.com",
+      "github_id": 23177337
+    },
+    "marioidival": {
+      "name": "Mário Idival",
+      "email": "marioidival@gmail.com",
+      "github_id": 1129263
+    },
+    "mark-i-m": {
+      "name": "Who? Me?!",
+      "email": "m.mim95@gmail.com",
+      "github_id": 8827840
+    },
+    "matheus-consoli": {
+      "name": "Consoli",
+      "email": null,
+      "github_id": 27595790
+    },
+    "mathk": {
+      "name": "Mathieu Suen",
+      "email": null,
+      "github_id": 314381
+    },
+    "matklad": {
+      "name": "Aleksey Kladov",
+      "email": "aleksey.kladov@gmail.com",
+      "github_id": 1711539
+    },
+    "mattgathu": {
+      "name": "Matt Gathu",
+      "email": "mattgathu@gmail.com",
+      "github_id": 1155192
+    },
+    "matthewjasper": {
+      "name": "Matthew Jasper",
+      "email": "mjjasper1@gmail.com",
+      "github_id": 20113453
+    },
+    "matthiasbeyer": {
+      "name": "Matthias Beyer",
+      "email": "mail@beyermatthias.de",
+      "github_id": 427866
+    },
+    "matthiaskrgr": {
+      "name": "Matthias Krüger",
+      "email": "matthias.krueger@famsik.de",
+      "github_id": 476013
+    },
+    "matthieu-m": {
+      "name": "Matthieu M.",
+      "email": "matthieu.monrocq@gmail.com",
+      "github_id": 2420441
+    },
+    "maurer": {
+      "name": "Matthew Maurer",
+      "email": null,
+      "github_id": 136037
+    },
+    "mav3ri3k": {
+      "name": "Apurva Mishra",
+      "email": null,
+      "github_id": 59974350
+    },
+    "mbrubeck": {
+      "name": "Matt Brubeck",
+      "email": "mbrubeck@gmail.com",
+      "github_id": 5920
+    },
+    "mcarton": {
+      "name": "Martin Carton",
+      "email": "cartonmartin@gmail.com",
+      "github_id": 3751788
+    },
+    "mdtro": {
+      "name": "Matthew T",
+      "email": "me@mdtro.dev",
+      "github_id": 20070360
+    },
+    "mental32": {
+      "name": "mental",
+      "email": "m3nta1@yahoo.com",
+      "github_id": 27660514
+    },
+    "metaspace": {
+      "name": "Andreas Hindborg",
+      "email": null,
+      "github_id": 1032242
+    },
+    "mgeisler": {
+      "name": "Martin Geisler",
+      "email": null,
+      "github_id": 89623
+    },
+    "michaelwoerister": {
+      "name": "Michael Woerister",
+      "email": "michaelwoerister@gmail.com",
+      "github_id": 1825894
+    },
+    "miguelraz": {
+      "name": "Miguel Raz Guzmán Macedo",
+      "email": null,
+      "github_id": 13056181
+    },
+    "mmilenko": {
+      "name": "Miodrag Milenković",
+      "email": "miodrag.milenkovic@gmail.com",
+      "github_id": 10790773
+    },
+    "mo8it": {
+      "name": "Mo",
+      "email": null,
+      "github_id": 76752051
+    },
+    "mstallmo": {
+      "name": "Mason Stallmo",
+      "email": null,
+      "github_id": 6796542
+    },
+    "mystor": {
+      "name": "Nika Layzell",
+      "email": "nika@thelayzells.com",
+      "github_id": 1261662
+    },
+    "nagashi": {
+      "name": "Charles \"Chas\" O'Riley",
+      "email": "ceoriley@gmail.com",
+      "github_id": 1844327
+    },
+    "nagisa": {
+      "name": "Simonas Kazlauskas",
+      "email": "simonas+t-compiler@kazlauskas.me",
+      "github_id": 679122
+    },
+    "nasa42": {
+      "name": "Vikrant Chaudhary",
+      "email": "nasa42@gmail.com",
+      "github_id": 233999
+    },
+    "nastevens": {
+      "name": "Nick Stevens",
+      "email": "nickastevens83@gmail.com",
+      "github_id": 1500008
+    },
+    "nathanwhit": {
+      "name": "Nathan Whitaker",
+      "email": null,
+      "github_id": 17734409
+    },
+    "nbdd0121": {
+      "name": "Gary Guo",
+      "email": "gary@garyguo.net",
+      "github_id": 4065244
+    },
+    "nchong-at-aws": {
+      "name": "Nathan Chong",
+      "email": "nathan.chong@gmail.com",
+      "github_id": 52972368
+    },
+    "nellshamrell": {
+      "name": "Nell Shamrell-Harrington",
+      "email": "nellshamrell@gmail.com",
+      "github_id": 813007
+    },
+    "newAM": {
+      "name": "Alex Martens",
+      "email": null,
+      "github_id": 7845120
+    },
+    "nico-abram": {
+      "name": "Nicolas",
+      "email": null,
+      "github_id": 24706838
+    },
+    "niconii": {
+      "name": "Nicolette Verlinden",
+      "email": "nicole@nicole.moe",
+      "github_id": 10183419
+    },
+    "nikic": {
+      "name": "Nikita Popov",
+      "email": "nikita.ppv@gmail.com",
+      "github_id": 216080
+    },
+    "nikomatsakis": {
+      "name": "Niko Matsakis",
+      "email": "rust@nikomatsakis.com",
+      "github_id": 155238
+    },
+    "nmccarty": {
+      "name": "Nathan McCarty",
+      "email": "nathan@mccarty.io",
+      "github_id": 8325047
+    },
+    "nnethercote": {
+      "name": "Nicholas Nethercote",
+      "email": "n.nethercote@gmail.com",
+      "github_id": 1940286
+    },
+    "notriddle": {
+      "name": "Michael Howell",
+      "email": "notriddle+rust-mod@protonmail.com",
+      "github_id": 1593513
+    },
+    "nox": {
+      "name": "Anthony Ramine",
+      "email": "n.oxyde@gmail.com",
+      "github_id": 123095
+    },
+    "nrc": {
+      "name": "Nick Cameron",
+      "email": "nrc@ncameron.org",
+      "github_id": 762626
+    },
+    "null-sleep": {
+      "name": "Dhruv Jauhar",
+      "email": null,
+      "github_id": 13277988
+    },
+    "nvzqz": {
+      "name": "Nikolai Vazquez",
+      "email": "rust@nikolaivazquez.com",
+      "github_id": 10367662
+    },
+    "o0Ignition0o": {
+      "name": "Jeremy Lempereur",
+      "email": "jeremy.lempereur@gmail.com",
+      "github_id": 9465678
+    },
+    "obi1kenobi": {
+      "name": "Predrag Gruevski",
+      "email": null,
+      "github_id": 2348618
+    },
+    "ojeda": {
+      "name": "Miguel Ojeda",
+      "email": "ojeda@kernel.org",
+      "github_id": 1054456
+    },
+    "oli-obk": {
+      "name": "Oliver Scherer",
+      "email": "rustc-contact@oli-obk.de",
+      "github_id": 332036
+    },
+    "ollie27": {
+      "name": "Oliver Middleton",
+      "email": "olliemail27@gmail.com",
+      "github_id": 7189418
+    },
+    "onur": {
+      "name": "Onur Aslan",
+      "email": "onuraslan@gmail.com",
+      "github_id": 345828
+    },
+    "onur-ozkan": {
+      "name": "Onur Özkan",
+      "email": "contact@onurozkan.dev",
+      "github_id": 39852038
+    },
+    "oskgo": {
+      "name": "Oskar Goldhahn",
+      "email": null,
+      "github_id": 92018610
+    },
+    "ouz-a": {
+      "name": "Oguz",
+      "email": null,
+      "github_id": 90461915
+    },
+    "ozkriff": {
+      "name": "Andrey Lesnikov",
+      "email": "ozkriff@gmail.com",
+      "github_id": 662976
+    },
+    "paoloteti": {
+      "name": "Paolo Teti",
+      "email": "paolo.teti@gmail.com",
+      "github_id": 35451649
+    },
+    "parched": {
+      "name": "James Duley",
+      "email": null,
+      "github_id": 5975405
+    },
+    "patchfx": {
+      "name": "Richard Patching",
+      "email": "richard@justaddpixels.com",
+      "github_id": 294376
+    },
+    "pcwalton": {
+      "name": "Patrick Walton",
+      "email": "pcwalton@mimiga.net",
+      "github_id": 157897
+    },
+    "peschkaj": {
+      "name": "Jeremiah Peschka",
+      "email": "jeremiah.peschka@gmail.com",
+      "github_id": 71570
+    },
+    "petrochenkov": {
+      "name": "Vadim Petrochenkov",
+      "email": "vadim.petrochenkov@gmail.com",
+      "github_id": 5751617
+    },
+    "pftbest": {
+      "name": "Vadzim Dambrouski",
+      "email": null,
+      "github_id": 1573340
+    },
+    "phansch": {
+      "name": "Philipp Hansch",
+      "email": "dev@phansch.net",
+      "github_id": 2042399
+    },
+    "pichfl": {
+      "name": "Florian Pichler",
+      "email": "fp@ylk.gd",
+      "github_id": 194641
+    },
+    "pierreN": {
+      "name": "pierreN",
+      "email": null,
+      "github_id": 946757
+    },
+    "pierwill": {
+      "name": "pierwill",
+      "email": "rust@pierwill.com",
+      "github_id": 19642016
+    },
+    "pietroalbini": {
+      "name": "Pietro Albini",
+      "email": "pietro@pietroalbini.org",
+      "github_id": 2299951
+    },
+    "pinkforest": {
+      "name": "pinkforest",
+      "email": "rust_pinkforest_666_in@proton.me",
+      "github_id": 36498018
+    },
+    "pitaj": {
+      "name": "Peter Jaszkowiak",
+      "email": "p.jaszkow@gmail.com",
+      "github_id": 803701
+    },
+    "pksunkara": {
+      "name": "Pavan Kumar Sunkara",
+      "email": "pavan.sss1991@gmail.com",
+      "github_id": 174703
+    },
+    "pnkfelix": {
+      "name": "Felix Klock",
+      "email": "pnkfelix@pnkfx.org",
+      "github_id": 173127
+    },
+    "posborne": {
+      "name": "Paul Osborne",
+      "email": "osbpau@gmail.com",
+      "github_id": 41714
+    },
+    "programmerjake": {
+      "name": "Jacob Lifshay",
+      "email": "programmerjake@gmail.com",
+      "github_id": 4584340
+    },
+    "psibi": {
+      "name": "Sibi Prabakaran",
+      "email": null,
+      "github_id": 737477
+    },
+    "pvdrz": {
+      "name": "Christian Poveda Ruiz",
+      "email": "git@pvdrz.com",
+      "github_id": 31802960
+    },
+    "qmx": {
+      "name": "Douglas Campos",
+      "email": "qmx@qmx.me",
+      "github_id": 66734
+    },
+    "rami3l": {
+      "name": "rami3l",
+      "email": "rami3l@outlook.com",
+      "github_id": 33851577
+    },
+    "raw-bin": {
+      "name": "Robin Randhawa",
+      "email": null,
+      "github_id": 705890
+    },
+    "rbtcollins": {
+      "name": "Robert Collins",
+      "email": "robertc+rust@robertcollins.net",
+      "github_id": 499678
+    },
+    "rcvalle": {
+      "name": "Ramon de C Valle",
+      "email": null,
+      "github_id": 3988004
+    },
+    "reitermarkus": {
+      "name": "Markus Reiter",
+      "email": "me@reitermark.us",
+      "github_id": 1309829
+    },
+    "repi": {
+      "name": "Johan Andersson",
+      "email": "johan@embark-studios.com",
+      "github_id": 1262692
+    },
+    "retep998": {
+      "name": "Peter Atashian",
+      "email": null,
+      "github_id": 666308
+    },
+    "rmsyn": {
+      "name": "rmsyn",
+      "email": "rmsyn@weathered-steel.dev",
+      "github_id": 117854522
+    },
+    "robjtede": {
+      "name": "Rob Ede",
+      "email": null,
+      "github_id": 3316789
+    },
+    "roife": {
+      "name": "roife",
+      "email": "roifewu@gmail.com",
+      "github_id": 17700217
+    },
+    "romancardenas": {
+      "name": "Román Cárdenas",
+      "email": null,
+      "github_id": 12596603
+    },
+    "roxelo": {
+      "name": "Roxane",
+      "email": null,
+      "github_id": 12419401
+    },
+    "rpjohnst": {
+      "name": "Russell Johnston",
+      "email": "rpjohnst@gmail.com",
+      "github_id": 161677
+    },
+    "rust-timer": {
+      "name": "Rust timing data pusher",
+      "email": null,
+      "github_id": 12471139
+    },
+    "ryankurte": {
+      "name": "Ryan",
+      "email": null,
+      "github_id": 860620
+    },
+    "rylev": {
+      "name": "Ryan Levick",
+      "email": "me@ryanlevick.com",
+      "github_id": 1327285
+    },
+    "s7tya": {
+      "name": "Shina",
+      "email": null,
+      "github_id": 53410646
+    },
+    "saethlin": {
+      "name": "Ben Kimock",
+      "email": "kimockb@gmail.com",
+      "github_id": 12105168
+    },
+    "samueltardieu": {
+      "name": "Samuel Tardieu",
+      "email": "sam@rfc1149.net",
+      "github_id": 44656
+    },
+    "sanxiyn": {
+      "name": "Seo Sanghyeon",
+      "email": null,
+      "github_id": 45249
+    },
+    "scalexm": {
+      "name": "Alexandre Martin",
+      "email": "alexandre@scalexm.fr",
+      "github_id": 1173131
+    },
+    "scampi": {
+      "name": "Stéphane Campinas",
+      "email": "stephane.campinas@gmail.com",
+      "github_id": 795879
+    },
+    "scottjmaddox": {
+      "name": "Scott J Maddox",
+      "email": "scottjmaddox@gmail.com",
+      "github_id": 28676699
+    },
+    "scottmcm": {
+      "name": "Scott McMurray",
+      "email": "smcmurray@acm.org",
+      "github_id": 18526288
+    },
+    "sdroege": {
+      "name": "Sebastian Dröge",
+      "email": "slomo@coaxion.net",
+      "github_id": 301846
+    },
+    "seanchen1991": {
+      "name": "Sean Chen",
+      "email": "seanchen11235@gmail.com",
+      "github_id": 4572868
+    },
+    "sebasmagri": {
+      "name": "Sebastián Magrí",
+      "email": "sebasmagri@gmail.com",
+      "github_id": 11137
+    },
+    "sekineh": {
+      "name": "Hideki Sekine",
+      "email": null,
+      "github_id": 3956266
+    },
+    "senekor": {
+      "name": "Remo Senekowitsch",
+      "email": "remo@buenzli.dev",
+      "github_id": 54984957
+    },
+    "senyosimpson": {
+      "name": "Senyo Simpson",
+      "email": "simpsonsenyo@gmail.com",
+      "github_id": 31822321
+    },
+    "sfackler": {
+      "name": "Steven Fackler",
+      "email": "sfackler@gmail.com",
+      "github_id": 1455697
+    },
+    "sgrif": {
+      "name": "Sage Griffin",
+      "email": "sage@sagetheprogrammer.com",
+      "github_id": 1529387
+    },
+    "shadows-withal": {
+      "name": "Liv",
+      "email": "shadows@with.al",
+      "github_id": 6445316
+    },
+    "shannmu": {
+      "name": "shanmu",
+      "email": null,
+      "github_id": 138972944
+    },
+    "shekohex": {
+      "name": "Shady Khalifa",
+      "email": "shekohex@gmail.com",
+      "github_id": 14620076
+    },
+    "shepmaster": {
+      "name": "Jake Goulding",
+      "email": "jake.goulding@integer32.com",
+      "github_id": 174509
+    },
+    "sinato": {
+      "name": "Shingo Kato",
+      "email": null,
+      "github_id": 20817743
+    },
+    "sirhcel": {
+      "name": "Christian Meusel",
+      "email": null,
+      "github_id": 8770800
+    },
+    "sivadeilra": {
+      "name": "Arlie Davis",
+      "email": null,
+      "github_id": 4743776
+    },
+    "skade": {
+      "name": "Florian Gilcher",
+      "email": "flo@andersground.net",
+      "github_id": 47542
+    },
+    "smarnach": {
+      "name": "Sven Marnach",
+      "email": "sven@marnach.net",
+      "github_id": 249196
+    },
+    "smmalis37": {
+      "name": "Steven Malis",
+      "email": null,
+      "github_id": 4054472
+    },
+    "solson": {
+      "name": "Scott Olson",
+      "email": "scott@solson.me",
+      "github_id": 26806
+    },
+    "sophiajt": {
+      "name": "JT",
+      "email": "jonathan.d.turner@gmail.com",
+      "github_id": 547158
+    },
+    "spacekookie": {
+      "name": "Katharina Fey",
+      "email": "kookie@spacekookie.de",
+      "github_id": 7669898
+    },
+    "spastorino": {
+      "name": "Santiago Pastorino",
+      "email": "spastorino@gmail.com",
+      "github_id": 52642
+    },
+    "steffahn": {
+      "name": "Frank Steffahn",
+      "email": "fdsteffahn@gmail.com",
+      "github_id": 3986214
+    },
+    "stephenhines": {
+      "name": "Stephen Hines",
+      "email": null,
+      "github_id": 17790020
+    },
+    "steveklabnik": {
+      "name": "Steve Klabnik",
+      "email": "steve@steveklabnik.com",
+      "github_id": 27786
+    },
+    "stusmall": {
+      "name": "Stuart Small",
+      "email": "stuart.alan.small@gmail.com",
+      "github_id": 1697444
+    },
+    "suaviloquence": {
+      "name": "Max Carr",
+      "email": null,
+      "github_id": 56054085
+    },
+    "sunfishcode": {
+      "name": "Dan Gohman",
+      "email": "dev@sunfishcode.online",
+      "github_id": 4503403
+    },
+    "syphar": {
+      "name": "Denis Cornehl",
+      "email": "denis@cornehl.org",
+      "github_id": 540890
+    },
+    "taiki-e": {
+      "name": "Taiki Endo",
+      "email": null,
+      "github_id": 43724913
+    },
+    "tamuhey": {
+      "name": "Yohei Tamura",
+      "email": "tamuhey@gmail.com",
+      "github_id": 24998666
+    },
+    "tarcieri": {
+      "name": "Tony Arcieri",
+      "email": "tony@iqlusion.io",
+      "github_id": 797
+    },
+    "tblah": {
+      "name": "Tom Eccles",
+      "email": null,
+      "github_id": 3716681
+    },
+    "technetos": {
+      "name": "Josh Gould",
+      "email": "me@technetos.email",
+      "github_id": 10949810
+    },
+    "tgnottingham": {
+      "name": "Tyson Nottingham",
+      "email": "tgnottingham@gmail.com",
+      "github_id": 3668166
+    },
+    "tgross35": {
+      "name": "Trevor Gross",
+      "email": "tmgross@umich.edu",
+      "github_id": 13724985
+    },
+    "thalesfragoso": {
+      "name": "Thales",
+      "email": null,
+      "github_id": 46510852
+    },
+    "the8472": {
+      "name": "The 8472",
+      "email": "the8472.rs@infinite-source.de",
+      "github_id": 1065730
+    },
+    "thejpster": {
+      "name": "Jonathan Pallant",
+      "email": "rust@thejpster.org.uk",
+      "github_id": 959887
+    },
+    "therealprof": {
+      "name": "Daniel Egger",
+      "email": "derust@eggers-club.de",
+      "github_id": 3321888
+    },
+    "thomcc": {
+      "name": "Thom Chiovoloni",
+      "email": "chiovolonit@gmail.com",
+      "github_id": 860665
+    },
+    "tiif": {
+      "name": "byt",
+      "email": null,
+      "github_id": 55319043
+    },
+    "tmandry": {
+      "name": "Tyler Mandry",
+      "email": "tmandry@gmail.com",
+      "github_id": 2280544
+    },
+    "tmiasko": {
+      "name": "tmiasko",
+      "email": "tomasz.miasko@gmail.com",
+      "github_id": 51362316
+    },
+    "togiberlin": {
+      "name": "Togi Sergey",
+      "email": null,
+      "github_id": 13764830
+    },
+    "tomprince": {
+      "name": "Tom Prince",
+      "email": "tom.prince@twistedmatrix.com",
+      "github_id": 283816
+    },
+    "topecongiro": {
+      "name": "Seiichi Uchida",
+      "email": "seuchida@gmail.com",
+      "github_id": 21980157
+    },
+    "tranquillity-codes": {
+      "name": "Tranquillity Codes",
+      "email": "tranquillitycodes@proton.me",
+      "github_id": 120999089
+    },
+    "traviscross": {
+      "name": "TC",
+      "email": "tc+rust@traviscross.com",
+      "github_id": 1076834
+    },
+    "tromey": {
+      "name": "Tom Tromey",
+      "email": null,
+      "github_id": 1557670
+    },
+    "tshepang": {
+      "name": "Tshepang Mbambo",
+      "email": "tshepang@gmail.com",
+      "github_id": 588486
+    },
+    "turboladen": {
+      "name": "Steve Loveless",
+      "email": null,
+      "github_id": 142010
+    },
+    "upsuper": {
+      "name": "Xidorn Quan",
+      "email": null,
+      "github_id": 333750
+    },
+    "v-thakkar": {
+      "name": "vaishali Thakkar",
+      "email": null,
+      "github_id": 7105009
+    },
+    "valgrimm": {
+      "name": "valgrimm",
+      "email": "vgrimm@posteo.net",
+      "github_id": 56933147
+    },
+    "varkor": {
+      "name": "varkor",
+      "email": "github@varkor.com",
+      "github_id": 3943692
+    },
+    "vertexclique": {
+      "name": "Mahmut Bulut",
+      "email": "vertexclique@gmail.com",
+      "github_id": 578559
+    },
+    "vincenzopalazzo": {
+      "name": "Vincenzo Palazzo",
+      "email": "vincenzopalazzo@member.fsf.org",
+      "github_id": 17150045
+    },
+    "vlad20012": {
+      "name": "Vlad Beskrovnyy",
+      "email": "beskvlad@gmail.com",
+      "github_id": 3221931
+    },
+    "wain303009": {
+      "name": "Wayne Wu",
+      "email": null,
+      "github_id": 38760447
+    },
+    "wedsonaf": {
+      "name": "Wedson Almeida Filho",
+      "email": null,
+      "github_id": 7494395
+    },
+    "weihanglo": {
+      "name": "Weihang Lo",
+      "email": "me@weihanglo.tw",
+      "github_id": 14314532
+    },
+    "wesleywiser": {
+      "name": "Wesley Wiser",
+      "email": "wwiser@gmail.com",
+      "github_id": 831192
+    },
+    "wezm": {
+      "name": "Wesley Moore",
+      "email": "wes@wezm.net",
+      "github_id": 21787
+    },
+    "whitequark": {
+      "name": "whitequark",
+      "email": "whitequark@whitequark.org",
+      "github_id": 54771
+    },
+    "withoutboats": {
+      "name": "Without Boats",
+      "email": "woboats@gmail.com",
+      "github_id": 9063376
+    },
+    "wizofe": {
+      "name": "Ioannis Valasakis",
+      "email": "code@wizofe.uk",
+      "github_id": 22352218
+    },
+    "workingjubilee": {
+      "name": "Jubilee",
+      "email": "workingjubilee@gmail.com",
+      "github_id": 46493976
+    },
+    "woshilapin": {
+      "name": "Jean SIMARD",
+      "email": "woshilapin@tuziwo.info",
+      "github_id": 2520723
+    },
+    "wycats": {
+      "name": "Yehuda Katz",
+      "email": "wycats@gmail.com",
+      "github_id": 4
+    },
+    "xFrednet": {
+      "name": "Fridtjof Stoldt",
+      "email": "xFrednet@gmail.com",
+      "github_id": 17087237
+    },
+    "xacrimon": {
+      "name": "Joel Wejdenstål",
+      "email": "joel.wejdenstal@gmail.com",
+      "github_id": 21025159
+    },
+    "xen0n": {
+      "name": "WANG Xuerui",
+      "email": "git@xen0n.name",
+      "github_id": 1175567
+    },
+    "xiangzhai": {
+      "name": "ZHAI Xiang",
+      "email": "zhaixiang@loongson.cn",
+      "github_id": 851100
+    },
+    "xry111": {
+      "name": "Xi Ruoyao",
+      "email": "xry111@xry111.site",
+      "github_id": 8733039
+    },
+    "y21": {
+      "name": "Timo",
+      "email": "y21x@proton.me",
+      "github_id": 30553356
+    },
+    "y86-dev": {
+      "name": "Benno Lossin",
+      "email": null,
+      "github_id": 94611769
+    },
+    "yaahc": {
+      "name": "Jane Lusby",
+      "email": "jlusby42@gmail.com",
+      "github_id": 1993852
+    },
+    "yerke": {
+      "name": "Yerkebulan Tulibergenov",
+      "email": "yerkebulan@gmail.com",
+      "github_id": 5137691
+    },
+    "yoshuawuyts": {
+      "name": "Yoshua Wuyts",
+      "email": "rust@yosh.is",
+      "github_id": 2467194
+    },
+    "ytmimi": {
+      "name": "Yacin Tmimi",
+      "email": "yacintmimi@gmail.com",
+      "github_id": 29028348
+    },
+    "zackmdavis": {
+      "name": "Zack M. Davis",
+      "email": null,
+      "github_id": 1076988
+    },
+    "zaharidichev": {
+      "name": "Zahari Dichev",
+      "email": null,
+      "github_id": 4391506
+    },
+    "zeenix": {
+      "name": "Zeeshan Ali",
+      "email": "zeeshanak@gnome.org",
+      "github_id": 2027
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "name": "wg-embedded-hal",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [
+    {
+      "name": "Dario Nieuwenhuis",
+      "github": "Dirbaio",
+      "github_id": 1247578,
+      "is_lead": false
+    },
+    {
+      "name": "Diego Barrios Romero",
+      "github": "eldruin",
+      "github_id": 43125,
+      "is_lead": false
+    },
+    {
+      "name": "Scott Mabin",
+      "github": "MabezDev",
+      "github_id": 6977289,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan",
+      "github": "ryankurte",
+      "github_id": 860620,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Egger",
+      "github": "therealprof",
+      "github_id": 3321888,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "embedded-hal",
+        "members": [
+          1247578,
+          6977289,
+          43125,
+          860620,
+          3321888
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded HAL team",
+    "description": "Develops and maintains crates that ease the development of Hardware Abstraction Layers, Board Support Crates and drivers",
+    "page": "wg-embedded-hal",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

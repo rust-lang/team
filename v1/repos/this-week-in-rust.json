@@ -1,0 +1,35 @@
+{
+  "org": "rust-lang",
+  "name": "this-week-in-rust",
+  "description": "Data for this-week-in-rust.org",
+  "homepage": "https://this-week-in-rust.org/",
+  "bots": [],
+  "teams": [
+    {
+      "name": "twir",
+      "permission": "write"
+    },
+    {
+      "name": "twir-reviewers",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

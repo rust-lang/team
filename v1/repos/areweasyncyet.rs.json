@@ -1,0 +1,23 @@
+{
+  "org": "rust-lang",
+  "name": "areweasyncyet.rs",
+  "description": "Are we async yet?",
+  "homepage": "https://areweasyncyet.rs",
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-async",
+      "permission": "write"
+    }
+  ],
+  "members": [
+    {
+      "name": "upsuper",
+      "permission": "write"
+    }
+  ],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

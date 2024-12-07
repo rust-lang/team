@@ -1,0 +1,59 @@
+{
+  "name": "triagebot",
+  "kind": "team",
+  "subteam_of": "infra",
+  "members": [
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": true
+    },
+    {
+      "name": "Eric Huss",
+      "github": "ehuss",
+      "github_id": 43198,
+      "is_lead": false
+    },
+    {
+      "name": "Jack Huey",
+      "github": "jackh726",
+      "github_id": 31162821,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "triagebot",
+        "members": [
+          5047365,
+          43198,
+          31162821
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Triagebot team",
+    "description": "Maintaining and improving the rust-lang/triagebot tooling",
+    "page": "triagebot",
+    "email": "triagebot@rust-lang.org",
+    "repo": "https://github.com/rust-lang/triagebot",
+    "discord": null,
+    "zulip_stream": "triagebot",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,68 @@
+{
+  "name": "community-content",
+  "kind": "team",
+  "subteam_of": "community",
+  "members": [
+    {
+      "name": "Aditya Arora",
+      "github": "adityac8",
+      "github_id": 19192257,
+      "is_lead": false
+    },
+    {
+      "name": "Nell Shamrell-Harrington",
+      "github": "nellshamrell",
+      "github_id": 813007,
+      "is_lead": false
+    },
+    {
+      "name": "Wesley Moore",
+      "github": "wezm",
+      "github_id": 21787,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Vikrant Chaudhary",
+      "github": "nasa42",
+      "github_id": 233999,
+      "is_lead": false
+    },
+    {
+      "name": "Florian Gilcher",
+      "github": "skade",
+      "github_id": 47542,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "community-content",
+        "members": [
+          19192257,
+          813007,
+          21787
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Content team",
+    "description": "Collecting and developing community content",
+    "page": "community-content",
+    "email": null,
+    "repo": "https://github.com/rust-community/content-team",
+    "discord": {
+      "channel": "#content-team",
+      "url": "https://discord.gg/b7a22kw"
+    },
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

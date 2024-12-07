@@ -1,0 +1,24 @@
+{
+  "org": "rust-lang",
+  "name": "libs-team",
+  "description": "The home of the library team",
+  "homepage": null,
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "libs-api",
+      "permission": "write"
+    },
+    {
+      "name": "libs",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "infra-team",
+  "description": "Coordination repository for the Rust infra team",
+  "homepage": "https://www.rust-lang.org/governance/teams/infra",
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

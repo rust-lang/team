@@ -1,0 +1,37 @@
+{
+  "org": "rust-lang",
+  "name": "promote-release",
+  "description": "Tooling to publish Rust releases.",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "Local release (beta)",
+            "Local release (nightly)",
+            "Local release (stable)",
+            "Build Docker image",
+            "Test"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "rust-dbg-ext",
+  "description": "",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "initiative-async-crashdump-debugging",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "rust-artwork",
+  "description": "Official artwork for the Rust project.",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

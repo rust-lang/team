@@ -1,0 +1,59 @@
+{
+  "name": "miri",
+  "kind": "team",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": true
+    },
+    {
+      "name": "Ralf Jung",
+      "github": "RalfJung",
+      "github_id": 330628,
+      "is_lead": true
+    },
+    {
+      "name": "Ben Kimock",
+      "github": "saethlin",
+      "github_id": 12105168,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Scott Olson",
+      "github": "solson",
+      "github_id": 26806,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "miri",
+        "members": [
+          330628,
+          332036,
+          12105168
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Miri",
+    "description": "Designing and implementing the Miri interpreter",
+    "page": "miri",
+    "email": null,
+    "repo": "https://github.com/rust-lang/miri",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

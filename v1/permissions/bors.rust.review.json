@@ -1,0 +1,852 @@
+{
+  "people": [
+    {
+      "github_id": 20269,
+      "github": "durin42",
+      "name": "Augie Fackler"
+    },
+    {
+      "github_id": 36186,
+      "github": "cuviper",
+      "name": "Josh Stone"
+    },
+    {
+      "github_id": 43198,
+      "github": "ehuss",
+      "name": "Eric Huss"
+    },
+    {
+      "github_id": 45249,
+      "github": "sanxiyn",
+      "name": "Seo Sanghyeon"
+    },
+    {
+      "github_id": 52642,
+      "github": "spastorino",
+      "name": "Santiago Pastorino"
+    },
+    {
+      "github_id": 60961,
+      "github": "epage",
+      "name": "Ed Page"
+    },
+    {
+      "github_id": 64996,
+      "github": "alexcrichton",
+      "name": "Alex Crichton"
+    },
+    {
+      "github_id": 74571,
+      "github": "fitzgen",
+      "name": "Nick Fitzgerald"
+    },
+    {
+      "github_id": 81079,
+      "github": "Nemo157",
+      "name": "Wim"
+    },
+    {
+      "github_id": 103023,
+      "github": "kennytm",
+      "name": "kennytm"
+    },
+    {
+      "github_id": 105766,
+      "github": "eholk",
+      "name": "Eric Holk"
+    },
+    {
+      "github_id": 155238,
+      "github": "nikomatsakis",
+      "name": "Niko Matsakis"
+    },
+    {
+      "github_id": 162737,
+      "github": "joshtriplett",
+      "name": "Josh Triplett"
+    },
+    {
+      "github_id": 173127,
+      "github": "pnkfelix",
+      "name": "Felix Klock"
+    },
+    {
+      "github_id": 174509,
+      "github": "shepmaster",
+      "name": "Jake Goulding"
+    },
+    {
+      "github_id": 216080,
+      "github": "nikic",
+      "name": "Nikita Popov"
+    },
+    {
+      "github_id": 220205,
+      "github": "jsha",
+      "name": "Jacob Hoffman-Andrews"
+    },
+    {
+      "github_id": 230646,
+      "github": "chenyukang",
+      "name": "Yukang"
+    },
+    {
+      "github_id": 247183,
+      "github": "lqd",
+      "name": "Rémy Rakic"
+    },
+    {
+      "github_id": 278509,
+      "github": "Amanieu",
+      "name": "Amanieu d'Antras"
+    },
+    {
+      "github_id": 291359,
+      "github": "SimonSapin",
+      "name": "Simon Sapin"
+    },
+    {
+      "github_id": 308347,
+      "github": "lnicola",
+      "name": "Laurențiu Nicola"
+    },
+    {
+      "github_id": 330628,
+      "github": "RalfJung",
+      "name": "Ralf Jung"
+    },
+    {
+      "github_id": 332036,
+      "github": "oli-obk",
+      "name": "Oliver Scherer"
+    },
+    {
+      "github_id": 456674,
+      "github": "BurntSushi",
+      "name": "Andrew Gallant"
+    },
+    {
+      "github_id": 476013,
+      "github": "matthiaskrgr",
+      "name": "Matthias Krüger"
+    },
+    {
+      "github_id": 563826,
+      "github": "calebzulawski",
+      "name": "Caleb Zulawski"
+    },
+    {
+      "github_id": 679122,
+      "github": "nagisa",
+      "name": "Simonas Kazlauskas"
+    },
+    {
+      "github_id": 704597,
+      "github": "arlosi",
+      "name": "Arlo Siemsen"
+    },
+    {
+      "github_id": 783247,
+      "github": "m-ou-se",
+      "name": "Mara Bos"
+    },
+    {
+      "github_id": 831192,
+      "github": "wesleywiser",
+      "name": "Wesley Wiser"
+    },
+    {
+      "github_id": 860665,
+      "github": "thomcc",
+      "name": "Thom Chiovoloni"
+    },
+    {
+      "github_id": 865550,
+      "github": "jdno",
+      "name": "Jan David Nose"
+    },
+    {
+      "github_id": 906069,
+      "github": "flodiebold",
+      "name": "Florian Diebold"
+    },
+    {
+      "github_id": 1065730,
+      "github": "the8472",
+      "name": "The 8472"
+    },
+    {
+      "github_id": 1076834,
+      "github": "traviscross",
+      "name": "TC"
+    },
+    {
+      "github_id": 1295100,
+      "github": "davidtwco",
+      "name": "David Wood"
+    },
+    {
+      "github_id": 1557670,
+      "github": "tromey",
+      "name": "Tom Tromey"
+    },
+    {
+      "github_id": 1593513,
+      "github": "notriddle",
+      "name": "Michael Howell"
+    },
+    {
+      "github_id": 1606434,
+      "github": "estebank",
+      "name": "Esteban Kuber"
+    },
+    {
+      "github_id": 1617736,
+      "github": "Manishearth",
+      "name": "Manish Goregaokar"
+    },
+    {
+      "github_id": 1822483,
+      "github": "cjgillot",
+      "name": "Camille Gillot"
+    },
+    {
+      "github_id": 1830331,
+      "github": "Alexendoo",
+      "name": "Alex Macleod"
+    },
+    {
+      "github_id": 1830974,
+      "github": "arielb1",
+      "name": "Ariel Ben-Yehuda"
+    },
+    {
+      "github_id": 1940286,
+      "github": "nnethercote",
+      "name": "Nicholas Nethercote"
+    },
+    {
+      "github_id": 1940490,
+      "github": "dtolnay",
+      "name": "David Tolnay"
+    },
+    {
+      "github_id": 1993852,
+      "github": "yaahc",
+      "name": "Jane Lusby"
+    },
+    {
+      "github_id": 2067774,
+      "github": "davidbarsky",
+      "name": "David Barsky"
+    },
+    {
+      "github_id": 2280544,
+      "github": "tmandry",
+      "name": "Tyler Mandry"
+    },
+    {
+      "github_id": 2299951,
+      "github": "pietroalbini",
+      "name": "Pietro Albini"
+    },
+    {
+      "github_id": 3050060,
+      "github": "GuillaumeGomez",
+      "name": "Guillaume Gomez"
+    },
+    {
+      "github_id": 3161395,
+      "github": "jhpratt",
+      "name": "Jacob Pratt"
+    },
+    {
+      "github_id": 3209739,
+      "github": "bluss",
+      "name": "bluss"
+    },
+    {
+      "github_id": 3616612,
+      "github": "Urgau",
+      "name": "Urgau"
+    },
+    {
+      "github_id": 3674314,
+      "github": "compiler-errors",
+      "name": "Michael Goulet"
+    },
+    {
+      "github_id": 3709504,
+      "github": "Eh2406",
+      "name": "Jacob Finkelman"
+    },
+    {
+      "github_id": 3757771,
+      "github": "Veykril",
+      "name": "Lukas Wirth"
+    },
+    {
+      "github_id": 3820879,
+      "github": "jswrenn",
+      "name": "Jack Wrenn"
+    },
+    {
+      "github_id": 3988004,
+      "github": "rcvalle",
+      "name": "Ramon de C Valle"
+    },
+    {
+      "github_id": 4200835,
+      "github": "llogiq",
+      "name": "Andre Bogus"
+    },
+    {
+      "github_id": 4459874,
+      "github": "ChrisDenton",
+      "name": "Chris Denton"
+    },
+    {
+      "github_id": 4503403,
+      "github": "sunfishcode",
+      "name": "Dan Gohman"
+    },
+    {
+      "github_id": 4539057,
+      "github": "Kobzol",
+      "name": "Jakub Beránek"
+    },
+    {
+      "github_id": 5018213,
+      "github": "japaric",
+      "name": "Jorge Aparicio"
+    },
+    {
+      "github_id": 5047365,
+      "github": "Mark-Simulacrum",
+      "name": "Mark Rousskov"
+    },
+    {
+      "github_id": 5751617,
+      "github": "petrochenkov",
+      "name": "Vadim Petrochenkov"
+    },
+    {
+      "github_id": 5963049,
+      "github": "cramertj",
+      "name": "Taylor Cramer"
+    },
+    {
+      "github_id": 6098822,
+      "github": "apiraino",
+      "name": "apiraino"
+    },
+    {
+      "github_id": 6721458,
+      "github": "KodrAus",
+      "name": "Ashley Mannix"
+    },
+    {
+      "github_id": 6783654,
+      "github": "Nadrieril",
+      "name": "Nadrieril"
+    },
+    {
+      "github_id": 7761774,
+      "github": "Jarcho",
+      "name": "Jason Newcomb"
+    },
+    {
+      "github_id": 8644784,
+      "github": "apasel422",
+      "name": "Andrew Paseltiner"
+    },
+    {
+      "github_id": 8872119,
+      "github": "est31",
+      "name": "est31"
+    },
+    {
+      "github_id": 9744647,
+      "github": "flip1995",
+      "name": "Philipp Krones"
+    },
+    {
+      "github_id": 10829914,
+      "github": "DianQK",
+      "name": "DianQK"
+    },
+    {
+      "github_id": 11428655,
+      "github": "MarcoIeni",
+      "name": "Marco Ieni"
+    },
+    {
+      "github_id": 12105168,
+      "github": "saethlin",
+      "name": "Ben Kimock"
+    },
+    {
+      "github_id": 13042488,
+      "github": "calebcartwright",
+      "name": "Caleb Cartwright"
+    },
+    {
+      "github_id": 13556931,
+      "github": "clubby789",
+      "name": "Jamie Hill-Daniel"
+    },
+    {
+      "github_id": 13724985,
+      "github": "tgross35",
+      "name": "Trevor Gross"
+    },
+    {
+      "github_id": 14314532,
+      "github": "weihanglo",
+      "name": "Weihang Lo"
+    },
+    {
+      "github_id": 14913065,
+      "github": "fmease",
+      "name": "León Orell Valerian Liehr"
+    },
+    {
+      "github_id": 17087237,
+      "github": "xFrednet",
+      "name": "Fridtjof Stoldt"
+    },
+    {
+      "github_id": 17426603,
+      "github": "bjorn3",
+      "name": "bjorn3"
+    },
+    {
+      "github_id": 18526288,
+      "github": "scottmcm",
+      "name": "Scott McMurray"
+    },
+    {
+      "github_id": 20113453,
+      "github": "matthewjasper",
+      "name": "Matthew Jasper"
+    },
+    {
+      "github_id": 20290842,
+      "github": "Zalathar",
+      "name": "Stuart Cook"
+    },
+    {
+      "github_id": 21149742,
+      "github": "BoxyUwU",
+      "name": "Boxy"
+    },
+    {
+      "github_id": 23045215,
+      "github": "Muscraft",
+      "name": "Scott Schafer"
+    },
+    {
+      "github_id": 25030997,
+      "github": "JohnTitor",
+      "name": "Yuki Okushi"
+    },
+    {
+      "github_id": 25721079,
+      "github": "joboet",
+      "name": "Jonas Böttiger"
+    },
+    {
+      "github_id": 26522220,
+      "github": "lukas-code",
+      "name": "Lukas Markeffsky"
+    },
+    {
+      "github_id": 28497461,
+      "github": "aliemjay",
+      "name": "Ali MJ Al-Nasrawy"
+    },
+    {
+      "github_id": 28781354,
+      "github": "aDotInTheVoid",
+      "name": "Alona Enraght-Moony"
+    },
+    {
+      "github_id": 29864074,
+      "github": "lcnr",
+      "name": "lcnr"
+    },
+    {
+      "github_id": 30553356,
+      "github": "y21",
+      "name": "Timo"
+    },
+    {
+      "github_id": 31162821,
+      "github": "jackh726",
+      "name": "Jack Huey"
+    },
+    {
+      "github_id": 34988408,
+      "github": "ibraheemdev",
+      "name": "Ibraheem Ahmed"
+    },
+    {
+      "github_id": 35149715,
+      "github": "celinval",
+      "name": "Celina V."
+    },
+    {
+      "github_id": 37223377,
+      "github": "camelid",
+      "name": "Noah Lev"
+    },
+    {
+      "github_id": 38225716,
+      "github": "WaffleLapkin",
+      "name": "Waffle Maybe"
+    },
+    {
+      "github_id": 39484203,
+      "github": "jieyouxu",
+      "name": "Jieyou Xu"
+    },
+    {
+      "github_id": 39852038,
+      "github": "onur-ozkan",
+      "name": "Onur Özkan"
+    },
+    {
+      "github_id": 41065217,
+      "github": "TaKO8Ki",
+      "name": "Takayuki Maeda"
+    },
+    {
+      "github_id": 43851243,
+      "github": "fee1-dead",
+      "name": "Deadbeef"
+    },
+    {
+      "github_id": 44697459,
+      "github": "dswij",
+      "name": "dswij"
+    },
+    {
+      "github_id": 45197576,
+      "github": "HKalbasi",
+      "name": "Hamidreza Kalbasi"
+    },
+    {
+      "github_id": 46493976,
+      "github": "workingjubilee",
+      "name": "Jubilee"
+    },
+    {
+      "github_id": 48135649,
+      "github": "Noratrieb",
+      "name": "nora"
+    },
+    {
+      "github_id": 51362316,
+      "github": "tmiasko",
+      "name": "tmiasko"
+    },
+    {
+      "github_id": 68270294,
+      "github": "SparrowLii",
+      "name": "Sparrow Li"
+    },
+    {
+      "github_id": 71934879,
+      "github": "b-naber",
+      "name": "b-naber"
+    },
+    {
+      "github_id": 73757586,
+      "github": "blyxyas",
+      "name": "Alejandra González"
+    },
+    {
+      "github_id": 74931857,
+      "github": "albertlarsan68",
+      "name": "Albert Larsan"
+    },
+    {
+      "github_id": 99973273,
+      "github": "Dylan-DPC",
+      "name": "Dylan DPC"
+    },
+    {
+      "github_id": 114838443,
+      "github": "Centri3",
+      "name": "Catherine"
+    }
+  ],
+  "github_users": [
+    "Alexendoo",
+    "Amanieu",
+    "BoxyUwU",
+    "BurntSushi",
+    "Centri3",
+    "ChrisDenton",
+    "DianQK",
+    "Dylan-DPC",
+    "Eh2406",
+    "GuillaumeGomez",
+    "HKalbasi",
+    "Jarcho",
+    "JohnTitor",
+    "Kobzol",
+    "KodrAus",
+    "Manishearth",
+    "MarcoIeni",
+    "Mark-Simulacrum",
+    "Muscraft",
+    "Nadrieril",
+    "Nemo157",
+    "Noratrieb",
+    "RalfJung",
+    "SimonSapin",
+    "SparrowLii",
+    "TaKO8Ki",
+    "Urgau",
+    "Veykril",
+    "WaffleLapkin",
+    "Zalathar",
+    "aDotInTheVoid",
+    "albertlarsan68",
+    "alexcrichton",
+    "aliemjay",
+    "apasel422",
+    "apiraino",
+    "arielb1",
+    "arlosi",
+    "b-naber",
+    "bjorn3",
+    "bluss",
+    "blyxyas",
+    "calebcartwright",
+    "calebzulawski",
+    "camelid",
+    "celinval",
+    "chenyukang",
+    "cjgillot",
+    "clubby789",
+    "compiler-errors",
+    "cramertj",
+    "cuviper",
+    "davidbarsky",
+    "davidtwco",
+    "dswij",
+    "dtolnay",
+    "durin42",
+    "eholk",
+    "ehuss",
+    "epage",
+    "est31",
+    "estebank",
+    "fee1-dead",
+    "fitzgen",
+    "flip1995",
+    "flodiebold",
+    "fmease",
+    "ibraheemdev",
+    "jackh726",
+    "japaric",
+    "jdno",
+    "jhpratt",
+    "jieyouxu",
+    "joboet",
+    "joshtriplett",
+    "jsha",
+    "jswrenn",
+    "kennytm",
+    "lcnr",
+    "llogiq",
+    "lnicola",
+    "lqd",
+    "lukas-code",
+    "m-ou-se",
+    "matthewjasper",
+    "matthiaskrgr",
+    "nagisa",
+    "nikic",
+    "nikomatsakis",
+    "nnethercote",
+    "notriddle",
+    "oli-obk",
+    "onur-ozkan",
+    "petrochenkov",
+    "pietroalbini",
+    "pnkfelix",
+    "rcvalle",
+    "saethlin",
+    "sanxiyn",
+    "scottmcm",
+    "shepmaster",
+    "spastorino",
+    "sunfishcode",
+    "tgross35",
+    "the8472",
+    "thomcc",
+    "tmandry",
+    "tmiasko",
+    "traviscross",
+    "tromey",
+    "weihanglo",
+    "wesleywiser",
+    "workingjubilee",
+    "xFrednet",
+    "y21",
+    "yaahc"
+  ],
+  "github_ids": [
+    20269,
+    36186,
+    43198,
+    45249,
+    52642,
+    60961,
+    64996,
+    74571,
+    81079,
+    103023,
+    105766,
+    155238,
+    162737,
+    173127,
+    174509,
+    216080,
+    220205,
+    230646,
+    247183,
+    278509,
+    291359,
+    308347,
+    330628,
+    332036,
+    456674,
+    476013,
+    563826,
+    679122,
+    704597,
+    783247,
+    831192,
+    860665,
+    865550,
+    906069,
+    1065730,
+    1076834,
+    1295100,
+    1557670,
+    1593513,
+    1606434,
+    1617736,
+    1822483,
+    1830331,
+    1830974,
+    1940286,
+    1940490,
+    1993852,
+    2067774,
+    2280544,
+    2299951,
+    3050060,
+    3161395,
+    3209739,
+    3616612,
+    3674314,
+    3709504,
+    3757771,
+    3820879,
+    3988004,
+    4200835,
+    4459874,
+    4503403,
+    4539057,
+    5018213,
+    5047365,
+    5751617,
+    5963049,
+    6098822,
+    6721458,
+    6783654,
+    7761774,
+    8644784,
+    8872119,
+    9744647,
+    10829914,
+    11428655,
+    12105168,
+    13042488,
+    13556931,
+    13724985,
+    14314532,
+    14913065,
+    17087237,
+    17426603,
+    18526288,
+    20113453,
+    20290842,
+    21149742,
+    23045215,
+    25030997,
+    25721079,
+    26522220,
+    28497461,
+    28781354,
+    29864074,
+    30553356,
+    31162821,
+    34988408,
+    35149715,
+    37223377,
+    38225716,
+    39484203,
+    39852038,
+    41065217,
+    43851243,
+    44697459,
+    45197576,
+    46493976,
+    48135649,
+    51362316,
+    68270294,
+    71934879,
+    73757586,
+    74931857,
+    99973273,
+    114838443
+  ],
+  "discord_ids": [
+    85400548534145024,
+    119181581033275392,
+    123482303698567168,
+    218496229808668672,
+    274907435972427778,
+    278623213448331265,
+    282133495550312450,
+    282164774379192320,
+    296309029947441155,
+    300421337103466496,
+    301677135293186049,
+    362122860673892353,
+    382886245069488129,
+    414755070161453076,
+    434359017515646988,
+    442067131769683974,
+    442403469580566528,
+    443061971114262528,
+    443825361256448003,
+    446730792933130242,
+    446765297286774784,
+    446773566478745611,
+    449245991216873475,
+    451800670635294731,
+    453980540824059918,
+    468253584421552139,
+    521108621115916298,
+    650270302198169611,
+    953562944472510494,
+    1067068563938095134
+  ]
+}

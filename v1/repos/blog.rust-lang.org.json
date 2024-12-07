@@ -1,0 +1,45 @@
+{
+  "org": "rust-lang",
+  "name": "blog.rust-lang.org",
+  "description": "Home of the Rust and Inside Rust blogs",
+  "homepage": "https://blog.rust-lang.org",
+  "bots": [
+    "rustbot",
+    "renovate"
+  ],
+  "teams": [
+    {
+      "name": "release",
+      "permission": "write"
+    },
+    {
+      "name": "inside-rust-reviewers",
+      "permission": "write"
+    },
+    {
+      "name": "website",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "lint",
+            "build"
+          ],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

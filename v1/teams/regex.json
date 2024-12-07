@@ -1,0 +1,38 @@
+{
+  "name": "regex",
+  "kind": "team",
+  "subteam_of": "libs",
+  "members": [
+    {
+      "name": "Andrew Gallant",
+      "github": "BurntSushi",
+      "github_id": 456674,
+      "is_lead": true
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "regex",
+        "members": [
+          456674
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Regex crate team",
+    "description": "Developing and maintaining the regex crate",
+    "page": "regex",
+    "email": null,
+    "repo": "https://github.com/rust-lang/regex",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": -250
+  },
+  "roles": [],
+  "discord": []
+}
