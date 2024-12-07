@@ -10,3 +10,4 @@ infra = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["conclusion"]
+required-approvals = 0
