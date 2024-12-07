@@ -3,9 +3,9 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["pnkfelix", "wesleywiser"]
-members = ["davidtwco", "pnkfelix", "wesleywiser", "Aaron1011", "cjgillot"]
-alumni = ["michaelwoerister", "pierwill", "spastorino"]
+leads = ["wesleywiser"]
+members = ["davidtwco", "wesleywiser", "Aaron1011", "cjgillot"]
+alumni = ["michaelwoerister", "pierwill", "pnkfelix", "spastorino"]
 
 [[github]]
 orgs = ["rust-lang"]

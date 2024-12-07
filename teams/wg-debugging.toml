@@ -3,15 +3,15 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["pnkfelix", "wesleywiser"]
+leads = ["wesleywiser"]
 members = [
     "davidtwco",
-    "pnkfelix",
     "wesleywiser",
 ]
 alumni = [
     "Manishearth",
     "michaelwoerister",
+    "pnkfelix",
 ]
 
 [website]

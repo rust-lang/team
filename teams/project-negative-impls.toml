@@ -5,14 +5,14 @@ subteam-of = "lang"
 [people]
 leads = [
     "nikomatsakis",
-    "pnkfelix",
 ]
 members = [
     "nikomatsakis",
-    "pnkfelix",
     "spastorino",
 ]
-alumni = []
+alumni = [
+    "pnkfelix",
+]
 
 [website]
 name = "Negative Impls Initiative"

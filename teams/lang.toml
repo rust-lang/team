@@ -9,7 +9,6 @@ leads = [
 members = [
     "joshtriplett",
     "nikomatsakis",
-    "pnkfelix",
     "scottmcm",
     "tmandry",
     "traviscross",
@@ -20,6 +19,7 @@ alumni = [
     "Centril",
     "cramertj",
     "nrc",
+    "pnkfelix",
     "withoutboats",
     "eddyb",
 ]

@@ -5,17 +5,16 @@ subteam-of = "compiler"
 [people]
 leads = [
     "celinval",
-    "pnkfelix",
 ]
 members = [
     "celinval",
     "oli-obk",
-    "pnkfelix",
     "scottmcm",
 ]
 alumni = [
     "spastorino",
     "ouz-a",
+    "pnkfelix",
 ]
 
 [website]

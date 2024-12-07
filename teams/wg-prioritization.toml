@@ -12,7 +12,6 @@ members = [
     "hkmatsumoto",
     "inquisitivecrystal",
     "lcnr",
-    "pnkfelix",
     "wesleywiser",
 ]
 alumni = [
@@ -24,6 +23,7 @@ alumni = [
     "mark-i-m",
     "o0Ignition0o",
     "spastorino",
+    "pnkfelix",
     # The following nicknames listed here to pass validation
     # see https://github.com/rust-lang/team/pull/992
     "am-1t",
@@ -52,7 +52,6 @@ excluded-people = [
     "lcnr",
     "Dylan-DPC",
     "camelid",
-    "pnkfelix",
     "hkmatsumoto",
     "inquisitivecrystal",
 ]
