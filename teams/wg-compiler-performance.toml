@@ -8,13 +8,13 @@ members = [
     "Mark-Simulacrum",
     "rylev",
     "tgnottingham",
-    "pnkfelix",
     "Kobzol",
     "lqd",
     "nnethercote",
 ]
 alumni = [
     "michaelwoerister",
+    "pnkfelix",
     "wesleywiser",
 ]
 
