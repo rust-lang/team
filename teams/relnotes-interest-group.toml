@@ -1,0 +1,14 @@
+# Intended to be a ping group on rust-lang/rust for release notes for people who
+# would like to be notified of new relnotes PR and want to double-check.
+
+name = "relnotes-interest-group"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "alex-semenyuk",
+    "jieyouxu",
+    "joshtriplett",
+    "traviscross",
+]
