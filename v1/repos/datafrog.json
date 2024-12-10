@@ -1,0 +1,22 @@
+{
+  "org": "rust-lang",
+  "name": "datafrog",
+  "description": "A lightweight Datalog engine in Rust",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "compiler",
+      "permission": "write"
+    },
+    {
+      "name": "wg-polonius",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

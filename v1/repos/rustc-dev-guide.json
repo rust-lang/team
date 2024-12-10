@@ -1,0 +1,55 @@
+{
+  "org": "rust-lang",
+  "name": "rustc-dev-guide",
+  "description": "A guide to how rustc works and how to contribute to it.",
+  "homepage": "https://rustc-dev-guide.rust-lang.org",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "compiler",
+      "permission": "write"
+    },
+    {
+      "name": "wg-rustc-dev-guide",
+      "permission": "maintain"
+    },
+    {
+      "name": "infra",
+      "permission": "write"
+    },
+    {
+      "name": "bootstrap",
+      "permission": "write"
+    },
+    {
+      "name": "libs-contributors",
+      "permission": "write"
+    },
+    {
+      "name": "libs",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "ci"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,33 @@
+{
+  "org": "rust-lang",
+  "name": "miri-test-libstd",
+  "description": "Testing the Rust standard library with Miri, continuously",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "miri",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "Success"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

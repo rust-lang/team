@@ -1,0 +1,20 @@
+{
+  "org": "rust-lang",
+  "name": "rust-by-example",
+  "description": "Learn Rust with examples (Live code editor included)",
+  "homepage": "https://doc.rust-lang.org/stable/rust-by-example/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "wg-rust-by-example",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

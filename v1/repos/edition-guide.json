@@ -1,0 +1,36 @@
+{
+  "org": "rust-lang",
+  "name": "edition-guide",
+  "description": "A guide to changes between various editions of Rust",
+  "homepage": "https://doc.rust-lang.org/nightly/edition-guide/",
+  "bots": [
+    "rustbot",
+    "rfcbot"
+  ],
+  "teams": [
+    {
+      "name": "project-edition-2024",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "Success gate"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

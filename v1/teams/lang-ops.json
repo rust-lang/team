@@ -1,0 +1,38 @@
+{
+  "name": "lang-ops",
+  "kind": "team",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": true
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "lang-ops",
+        "members": [
+          1076834
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "lang-ops team",
+    "description": "Operations for the lang team: preparing agenda, issue triage, scheduling and documenting meetings",
+    "page": "lang-ops",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": "t-lang/ops",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

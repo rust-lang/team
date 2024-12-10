@@ -1,0 +1,35 @@
+{
+  "name": "docker",
+  "kind": "team",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Scott Schafer",
+      "github": "Muscraft",
+      "github_id": 23045215,
+      "is_lead": false
+    },
+    {
+      "name": "Steven Fackler",
+      "github": "sfackler",
+      "github_id": 1455697,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "docker",
+        "members": [
+          23045215,
+          1455697
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

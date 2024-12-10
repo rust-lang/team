@@ -1,0 +1,87 @@
+{
+  "name": "wg-mir-opt",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": true
+    },
+    {
+      "name": "David Wood",
+      "github": "davidtwco",
+      "github_id": 1295100,
+      "is_lead": false
+    },
+    {
+      "name": "DianQK",
+      "github": "DianQK",
+      "github_id": 10829914,
+      "is_lead": false
+    },
+    {
+      "name": "Eduard-Mihai Burtescu",
+      "github": "eddyb",
+      "github_id": 77424,
+      "is_lead": false
+    },
+    {
+      "name": "Jakob Degen",
+      "github": "JakobDegen",
+      "github_id": 51179609,
+      "is_lead": false
+    },
+    {
+      "name": "Mahmut Bulut",
+      "github": "vertexclique",
+      "github_id": 578559,
+      "is_lead": false
+    },
+    {
+      "name": "Wesley Wiser",
+      "github": "wesleywiser",
+      "github_id": 831192,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-mir-opt",
+        "members": [
+          10829914,
+          51179609,
+          1295100,
+          77424,
+          332036,
+          578559,
+          831192
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "MIR optimizations working group",
+    "description": "Writing MIR optimizations and refactoring the MIR to be more optimizable",
+    "page": "wg-mir-opt",
+    "email": null,
+    "repo": "https://rust-lang.github.io/compiler-team/working-groups/mir-opt/",
+    "discord": null,
+    "zulip_stream": "t-compiler/wg-mir-opt",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

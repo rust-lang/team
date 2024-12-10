@@ -1,0 +1,59 @@
+{
+  "name": "wg-embedded-cortex-a",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [
+    {
+      "name": "Berkus Decker",
+      "github": "berkus",
+      "github_id": 80306,
+      "is_lead": false
+    },
+    {
+      "name": "Nathan Chong",
+      "github": "nchong-at-aws",
+      "github_id": 52972368,
+      "is_lead": false
+    },
+    {
+      "name": "Robin Randhawa",
+      "github": "raw-bin",
+      "github_id": 705890,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Andre Richter",
+      "github": "andre-richter",
+      "github_id": 4130005,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "wg-embedded-cortex-a",
+        "members": [
+          80306,
+          52972368,
+          705890
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded Cortex-A team",
+    "description": "Develops and maintains the core of the Cortex-A crate ecosystem",
+    "page": "wg-embedded-cortex-a",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

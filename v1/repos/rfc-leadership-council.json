@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "rfc-leadership-council",
+  "description": "RFCs for changes to Rust",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

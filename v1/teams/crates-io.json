@@ -1,0 +1,172 @@
+{
+  "name": "crates-io",
+  "kind": "team",
+  "subteam_of": "devtools",
+  "members": [
+    {
+      "name": "Justin Geibel",
+      "github": "jtgeibel",
+      "github_id": 22186,
+      "is_lead": true
+    },
+    {
+      "name": "Tobias Bieniek",
+      "github": "Turbo87",
+      "github_id": 141300,
+      "is_lead": true
+    },
+    {
+      "name": "Carol Nichols",
+      "github": "carols10cents",
+      "github_id": 193874,
+      "is_lead": false
+    },
+    {
+      "name": "eth3lbert",
+      "github": "eth3lbert",
+      "github_id": 2889664,
+      "is_lead": false
+    },
+    {
+      "name": "Adam Harvey",
+      "github": "LawnGnome",
+      "github_id": 229984,
+      "is_lead": false
+    },
+    {
+      "name": "Matthew T",
+      "github": "mdtro",
+      "github_id": 20070360,
+      "is_lead": false
+    },
+    {
+      "name": "Rustin",
+      "github": "Rustin170506",
+      "github_id": 29879298,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Ashley Williams",
+      "github": "ashleygwilliams",
+      "github_id": 1163554,
+      "is_lead": false
+    },
+    {
+      "name": "Tatsuyuki Ishi",
+      "github": "ishitatsuyuki",
+      "github_id": 12389383,
+      "is_lead": false
+    },
+    {
+      "name": "Yuki Okushi",
+      "github": "JohnTitor",
+      "github_id": 25030997,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    },
+    {
+      "name": "Ricardo Mendes",
+      "github": "locks",
+      "github_id": 32344,
+      "is_lead": false
+    },
+    {
+      "name": "Nell Shamrell-Harrington",
+      "github": "nellshamrell",
+      "github_id": 813007,
+      "is_lead": false
+    },
+    {
+      "name": "Florian Pichler",
+      "github": "pichfl",
+      "github_id": 194641,
+      "is_lead": false
+    },
+    {
+      "name": "Pietro Albini",
+      "github": "pietroalbini",
+      "github_id": 2299951,
+      "is_lead": false
+    },
+    {
+      "name": "Sage Griffin",
+      "github": "sgrif",
+      "github_id": 1529387,
+      "is_lead": false
+    },
+    {
+      "name": "Sven Marnach",
+      "github": "smarnach",
+      "github_id": 249196,
+      "is_lead": false
+    },
+    {
+      "name": "Steve Klabnik",
+      "github": "steveklabnik",
+      "github_id": 27786,
+      "is_lead": false
+    },
+    {
+      "name": "Without Boats",
+      "github": "withoutboats",
+      "github_id": 9063376,
+      "is_lead": false
+    },
+    {
+      "name": "Yehuda Katz",
+      "github": "wycats",
+      "github_id": 4,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "conduit-rust",
+        "name": "crates-io",
+        "members": [
+          229984,
+          29879298,
+          141300,
+          193874,
+          2889664,
+          22186,
+          20070360
+        ]
+      },
+      {
+        "org": "rust-lang",
+        "name": "crates-io",
+        "members": [
+          229984,
+          29879298,
+          141300,
+          193874,
+          2889664,
+          22186,
+          20070360
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "crates.io team",
+    "description": "Managing operations, development, and official policies for crates.io",
+    "page": "crates-io",
+    "email": null,
+    "repo": "https://github.com/rust-lang/crates.io",
+    "discord": null,
+    "zulip_stream": "t-crates-io",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}
