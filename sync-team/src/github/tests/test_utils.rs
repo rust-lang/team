@@ -104,7 +104,7 @@ impl DataModel {
         }
 
         let mut repos = HashMap::default();
-        let mut repo_members: HashMap<String, (Vec<RepoTeam>, Vec<RepoUser>)> = HashMap::default();
+        let mut repo_members: HashMap<String, RepoMembers> = HashMap::default();
 
         for repo in &self.repos {
             repos.insert(
@@ -148,7 +148,7 @@ impl DataModel {
                     },
                 })
                 .collect();
-            repo_members.insert(repo.name.clone(), (teams, members));
+            repo_members.insert(repo.name.clone(), RepoMembers { teams, members });
         }
 
         GithubMock {
@@ -353,7 +353,7 @@ pub struct GithubMock {
     // Repo name -> repo data
     repos: HashMap<String, Repo>,
     // Repo name -> (teams, members)
-    repo_members: HashMap<String, (Vec<RepoTeam>, Vec<RepoUser>)>,
+    repo_members: HashMap<String, RepoMembers>,
 }
 
 impl GithubMock {
@@ -444,7 +444,7 @@ impl GithubRead for GithubMock {
             .repo_members
             .get(repo)
             .cloned()
-            .map(|(teams, _)| teams)
+            .map(|members| members.teams)
             .unwrap_or_default())
     }
 
@@ -454,7 +454,7 @@ impl GithubRead for GithubMock {
             .repo_members
             .get(repo)
             .cloned()
-            .map(|(_, members)| members)
+            .map(|members| members.members)
             .unwrap_or_default())
     }
 
@@ -466,4 +466,10 @@ impl GithubRead for GithubMock {
         assert_eq!(org, DEFAULT_ORG);
         Ok(HashMap::default())
     }
+}
+
+#[derive(Clone)]
+pub struct RepoMembers {
+    teams: Vec<RepoTeam>,
+    members: Vec<RepoUser>,
 }
