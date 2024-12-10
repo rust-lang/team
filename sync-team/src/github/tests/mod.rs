@@ -1,4 +1,5 @@
-use crate::github::tests::test_utils::{DataModel, TeamData};
+use crate::github::tests::test_utils::{DataModel, RepoData, TeamData};
+use rust_team_data::v1::RepoPermission;
 
 mod test_utils;
 
@@ -197,4 +198,531 @@ fn team_delete() {
         ),
     ]
     "###);
+}
+
+#[test]
+fn repo_noop() {
+    let model = DataModel::default();
+    let gh = model.gh_model();
+    let diff = model.diff_repos(gh);
+    assert!(diff.is_empty());
+}
+
+#[test]
+fn repo_change_description() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").description("foo".to_string()));
+    let gh = model.gh_model();
+    model.get_repo("repo1").description = "bar".to_string();
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "foo",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "bar",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_change_homepage() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").homepage(Some("https://foo.rs".to_string())));
+    let gh = model.gh_model();
+    model.get_repo("repo1").homepage = Some("https://bar.rs".to_string());
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: Some(
+                            "https://foo.rs",
+                        ),
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: Some(
+                            "https://bar.rs",
+                        ),
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_create() {
+    let mut model = DataModel::default();
+    let gh = model.gh_model();
+
+    model.create_repo(
+        RepoData::new("repo1")
+            .description("foo".to_string())
+            .member("user1", RepoPermission::Write)
+            .team("team1", RepoPermission::Triage),
+    );
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Create(
+            CreateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                settings: RepoSettings {
+                    description: Some(
+                        "foo",
+                    ),
+                    homepage: None,
+                    archived: false,
+                    auto_merge_enabled: false,
+                },
+                permissions: [
+                    RepoPermissionAssignmentDiff {
+                        collaborator: Team(
+                            "team1",
+                        ),
+                        diff: Create(
+                            Triage,
+                        ),
+                    },
+                    RepoPermissionAssignmentDiff {
+                        collaborator: User(
+                            "user1",
+                        ),
+                        diff: Create(
+                            Write,
+                        ),
+                    },
+                ],
+                branch_protections: [],
+                app_installations: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_add_member() {
+    let mut model = DataModel::default();
+    model.create_repo(
+        RepoData::new("repo1")
+            .member("user1", RepoPermission::Write)
+            .team("team1", RepoPermission::Triage),
+    );
+
+    let gh = model.gh_model();
+    model
+        .get_repo("repo1")
+        .add_member("user2", RepoPermission::Admin);
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [
+                    RepoPermissionAssignmentDiff {
+                        collaborator: User(
+                            "user2",
+                        ),
+                        diff: Create(
+                            Admin,
+                        ),
+                    },
+                ],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_change_member_permissions() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").member("user1", RepoPermission::Write));
+
+    let gh = model.gh_model();
+    model
+        .get_repo("repo1")
+        .members
+        .last_mut()
+        .unwrap()
+        .permission = RepoPermission::Triage;
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [
+                    RepoPermissionAssignmentDiff {
+                        collaborator: User(
+                            "user1",
+                        ),
+                        diff: Update(
+                            Write,
+                            Triage,
+                        ),
+                    },
+                ],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_remove_member() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").member("user1", RepoPermission::Write));
+
+    let gh = model.gh_model();
+    model.get_repo("repo1").members.clear();
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [
+                    RepoPermissionAssignmentDiff {
+                        collaborator: User(
+                            "user1",
+                        ),
+                        diff: Delete(
+                            Write,
+                        ),
+                    },
+                ],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_add_team() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").member("user1", RepoPermission::Write));
+
+    let gh = model.gh_model();
+    model
+        .get_repo("repo1")
+        .add_team("team1", RepoPermission::Triage);
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [
+                    RepoPermissionAssignmentDiff {
+                        collaborator: Team(
+                            "team1",
+                        ),
+                        diff: Create(
+                            Triage,
+                        ),
+                    },
+                ],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_change_team_permissions() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Triage));
+
+    let gh = model.gh_model();
+    model.get_repo("repo1").teams.last_mut().unwrap().permission = RepoPermission::Admin;
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [
+                    RepoPermissionAssignmentDiff {
+                        collaborator: Team(
+                            "team1",
+                        ),
+                        diff: Update(
+                            Triage,
+                            Admin,
+                        ),
+                    },
+                ],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_remove_team() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Write));
+
+    let gh = model.gh_model();
+    model.get_repo("repo1").teams.clear();
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [
+                    RepoPermissionAssignmentDiff {
+                        collaborator: Team(
+                            "team1",
+                        ),
+                        diff: Delete(
+                            Write,
+                        ),
+                    },
+                ],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_archive_repo() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1"));
+
+    let gh = model.gh_model();
+    model.get_repo("repo1").archived = true;
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: Some(
+                            "",
+                        ),
+                        homepage: None,
+                        archived: true,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
 }

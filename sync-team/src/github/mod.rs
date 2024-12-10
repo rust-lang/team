@@ -596,7 +596,7 @@ fn bot_user_name(bot: &Bot) -> Option<&str> {
     }
 }
 
-fn convert_permission(p: &rust_team_data::v1::RepoPermission) -> RepoPermission {
+pub fn convert_permission(p: &rust_team_data::v1::RepoPermission) -> RepoPermission {
     use rust_team_data::v1;
     match *p {
         v1::RepoPermission::Write => RepoPermission::Write,
@@ -697,6 +697,7 @@ impl std::fmt::Display for Diff {
     }
 }
 
+#[derive(Debug)]
 enum RepoDiff {
     Create(CreateRepoDiff),
     Update(UpdateRepoDiff),
@@ -720,6 +721,7 @@ impl std::fmt::Display for RepoDiff {
     }
 }
 
+#[derive(Debug)]
 struct CreateRepoDiff {
     org: String,
     name: String,
@@ -785,6 +787,7 @@ impl std::fmt::Display for CreateRepoDiff {
     }
 }
 
+#[derive(Debug)]
 struct UpdateRepoDiff {
     org: String,
     name: String,
@@ -904,6 +907,7 @@ impl std::fmt::Display for UpdateRepoDiff {
     }
 }
 
+#[derive(Debug)]
 struct RepoPermissionAssignmentDiff {
     collaborator: RepoCollaborator,
     diff: RepoPermissionDiff,
@@ -955,18 +959,20 @@ impl std::fmt::Display for RepoPermissionAssignmentDiff {
     }
 }
 
+#[derive(Debug)]
 enum RepoPermissionDiff {
     Create(RepoPermission),
     Update(RepoPermission, RepoPermission),
     Delete(RepoPermission),
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 enum RepoCollaborator {
     Team(String),
     User(String),
 }
 
+#[derive(Debug)]
 struct BranchProtectionDiff {
     pattern: String,
     operation: BranchProtectionDiffOperation,
@@ -1056,12 +1062,14 @@ fn log_branch_protection(
     Ok(())
 }
 
+#[derive(Debug)]
 enum BranchProtectionDiffOperation {
     Create(api::BranchProtection),
     Update(String, api::BranchProtection, api::BranchProtection),
     Delete(String),
 }
 
+#[derive(Debug)]
 enum AppInstallationDiff {
     Add(AppInstallation),
     Remove(AppInstallation),
