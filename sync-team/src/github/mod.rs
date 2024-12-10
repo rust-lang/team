@@ -588,7 +588,7 @@ fn bot_user_name(bot: &Bot) -> Option<&str> {
     }
 }
 
-fn convert_permission(p: &rust_team_data::v1::RepoPermission) -> RepoPermission {
+pub fn convert_permission(p: &rust_team_data::v1::RepoPermission) -> RepoPermission {
     use rust_team_data::v1;
     match *p {
         v1::RepoPermission::Write => RepoPermission::Write,

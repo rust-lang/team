@@ -8,7 +8,7 @@ use crate::github::api::{
     BranchProtection, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation, RepoTeam,
     RepoUser, Team, TeamMember, TeamPrivacy, TeamRole,
 };
-use crate::github::{api, RepoDiff, SyncGitHub, TeamDiff};
+use crate::github::{api, convert_permission, RepoDiff, SyncGitHub, TeamDiff};
 
 const DEFAULT_ORG: &str = "rust-lang";
 
@@ -140,12 +140,7 @@ impl DataModel {
                 .into_iter()
                 .map(|m| api::RepoUser {
                     name: m.name,
-                    permission: match m.permission {
-                        RepoPermission::Write => api::RepoPermission::Write,
-                        RepoPermission::Admin => api::RepoPermission::Admin,
-                        RepoPermission::Maintain => api::RepoPermission::Maintain,
-                        RepoPermission::Triage => api::RepoPermission::Triage,
-                    },
+                    permission: convert_permission(&m.permission),
                 })
                 .collect();
             repo_members.insert(repo.name.clone(), RepoMembers { teams, members });
@@ -175,8 +170,8 @@ impl DataModel {
     }
 
     fn create_sync(&self, github: GithubMock) -> SyncGitHub {
-        let teams = self.teams.iter().map(|t| t.to_data()).collect();
-        let repos = self.repos.iter().map(|r| r.to_data()).collect();
+        let teams = self.teams.iter().cloned().map(|t| t.into()).collect();
+        let repos = self.repos.iter().cloned().map(|r| r.into()).collect();
 
         SyncGitHub::new(Box::new(github), teams, repos).expect("Cannot create SyncGitHub")
     }
@@ -215,14 +210,16 @@ impl TeamData {
             .find(|t| t.name == name)
             .expect("GitHub team not found")
     }
+}
 
-    fn to_data(&self) -> rust_team_data::v1::Team {
+impl From<TeamData> for v1::Team {
+    fn from(value: TeamData) -> Self {
         let TeamData {
             name,
             kind,
             gh_teams,
-        } = self.clone();
-        rust_team_data::v1::Team {
+        } = value;
+        v1::Team {
             name: name.clone(),
             kind,
             subteam_of: None,
@@ -288,8 +285,10 @@ impl RepoData {
             permission,
         });
     }
+}
 
-    fn to_data(&self) -> v1::Repo {
+impl From<RepoData> for v1::Repo {
+    fn from(value: RepoData) -> Self {
         let RepoData {
             name,
             description,
@@ -299,8 +298,8 @@ impl RepoData {
             members,
             archived,
             allow_auto_merge,
-        } = self.clone();
-        v1::Repo {
+        } = value;
+        Self {
             org: DEFAULT_ORG.to_string(),
             name: name.clone(),
             description,
@@ -449,6 +448,7 @@ impl GithubRead for GithubMock {
     }
 
     fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>> {
+        // The mock currently only supports mocking one GitHub organization.
         assert_eq!(org, DEFAULT_ORG);
         Ok(self
             .repo_members
