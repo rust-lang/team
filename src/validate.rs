@@ -1,8 +1,6 @@
 use crate::data::Data;
 use crate::github::GitHubApi;
-use crate::schema::{
-    Bot, Email, MergeBot, Permissions, Team, TeamKind, TeamPeople, ZulipGroupMember,
-};
+use crate::schema::{Bot, Email, MergeBot, Permissions, Team, TeamKind, TeamPeople, ZulipMember};
 use crate::zulip::ZulipApi;
 use anyhow::{bail, Error};
 use log::{error, warn};
@@ -47,6 +45,9 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_unique_zulip_groups,
     validate_zulip_group_ids,
     validate_zulip_group_extra_people,
+    validate_unique_zulip_streams,
+    validate_zulip_stream_ids,
+    validate_zulip_stream_extra_people,
     validate_repos,
     validate_branch_protections,
     validate_member_roles,
@@ -335,9 +336,10 @@ fn validate_inactive_members(data: &Data, errors: &mut Vec<String>) {
         .values()
         .flat_map(|z| z.members())
         .filter_map(|m| match m {
-            ZulipGroupMember::MemberWithId { github, .. }
-            | ZulipGroupMember::MemberWithoutId { github } => Some(github.as_str()),
-            ZulipGroupMember::JustId(_) => None,
+            ZulipMember::MemberWithId { github, .. } | ZulipMember::MemberWithoutId { github } => {
+                Some(github.as_str())
+            }
+            ZulipMember::JustId(_) => None,
         })
         .collect::<HashSet<_>>();
     wrapper(
@@ -688,15 +690,13 @@ fn validate_zulip_users(data: &Data, zulip: &ZulipApi, errors: &mut Vec<String>)
             .members()
             .iter()
             .filter_map(|m| match m {
-                ZulipGroupMember::MemberWithId { github, zulip_id }
-                    if !by_id.contains(zulip_id) =>
-                {
+                ZulipMember::MemberWithId { github, zulip_id } if !by_id.contains(zulip_id) => {
                     Some(github.clone())
                 }
-                ZulipGroupMember::JustId(zulip_id) if !by_id.contains(zulip_id) => {
+                ZulipMember::JustId(zulip_id) if !by_id.contains(zulip_id) => {
                     Some(format!("ID: {zulip_id}"))
                 }
-                ZulipGroupMember::MemberWithoutId { github } => Some(github.clone()),
+                ZulipMember::MemberWithoutId { github } => Some(github.clone()),
                 _ => None,
             })
             .collect::<HashSet<_>>();
@@ -711,7 +711,7 @@ fn validate_zulip_users(data: &Data, zulip: &ZulipApi, errors: &mut Vec<String>)
     })
 }
 
-/// Ensure every member of a team that has a Zulip group either has a Zulip id
+/// Ensure team members in Zulip groups have a Zulip id
 fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
         let groups = team.zulip_groups(data)?;
@@ -724,6 +724,30 @@ fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
                 if member.zulip_id().is_none() {
                     bail!(
                         "person `{}` in '{}' is a member of a Zulip user group but has no Zulip id",
+                        member.github(),
+                        team.name()
+                    );
+                }
+            }
+            Ok(())
+        });
+        Ok(())
+    });
+}
+
+/// Ensure team members in Zulip streams have a Zulip id
+fn validate_zulip_stream_ids(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, errors| {
+        let streams = team.zulip_streams(data)?;
+        // Returns if stream is empty or all the streams don't include the team members
+        if streams.is_empty() || streams.iter().all(|s| !s.includes_team_members()) {
+            return Ok(());
+        }
+        wrapper(team.members(data)?.iter(), errors, |member, _| {
+            if let Some(member) = data.person(member) {
+                if member.zulip_id().is_none() {
+                    bail!(
+                        "person `{}` in '{}' is a member of a Zulip stream but has no Zulip id",
                         member.github(),
                         team.name()
                     );
@@ -758,16 +782,58 @@ fn validate_unique_zulip_groups(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
+/// Ensure there is at most one definition for any given Zulip group
+fn validate_unique_zulip_streams(data: &Data, errors: &mut Vec<String>) {
+    let mut streams = HashMap::new();
+    wrapper(data.teams(), errors, |team, errors| {
+        wrapper(
+            team.zulip_streams(data).iter().flatten(),
+            errors,
+            |stream, _| {
+                if let Some(other_team) = streams.insert(stream.name().to_owned(), team.name()) {
+                    bail!(
+                        "the Zulip stream `{}` is defined in both `{}` and `{}` team definitions",
+                        stream.name(),
+                        team.name(),
+                        other_team
+                    );
+                }
+                Ok(())
+            },
+        );
+        Ok(())
+    });
+}
+
 /// Ensure members of extra-people in a Zulip user group are real people
 fn validate_zulip_group_extra_people(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
         wrapper(team.raw_zulip_groups().iter(), errors, |group, _| {
-            for person in &group.extra_people {
+            for person in &group.common.extra_people {
                 if data.person(person).is_none() {
                     bail!(
                         "person `{}` does not exist (in Zulip group `{}`)",
                         person,
-                        group.name
+                        group.common.name
+                    );
+                }
+            }
+            Ok(())
+        });
+        Ok(())
+    });
+}
+
+/// Ensure members of extra-people in a Zulip user group are real people
+fn validate_zulip_stream_extra_people(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, errors| {
+        wrapper(team.raw_zulip_streams().iter(), errors, |stream, _| {
+            for person in &stream.common.extra_people {
+                if data.person(person).is_none() {
+                    bail!(
+                        "person `{}` does not exist (in Zulip stream `{}`)",
+                        person,
+                        stream.common.name
                     );
                 }
             }
