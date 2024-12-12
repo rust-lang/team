@@ -1,0 +1,45 @@
+{
+  "name": "wg-gcc-backend",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Antoni Boucher",
+      "github": "antoyo",
+      "github_id": 584972,
+      "is_lead": true
+    },
+    {
+      "name": "Guillaume Gomez",
+      "github": "GuillaumeGomez",
+      "github_id": 3050060,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-gcc-backend",
+        "members": [
+          3050060,
+          584972
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "rustc_codegen_gcc",
+    "description": "libgccjit AOT codegen for rustc",
+    "page": "wg-gcc-backend",
+    "email": null,
+    "repo": "https://github.com/rust-lang/rustc_codegen_gcc",
+    "discord": null,
+    "zulip_stream": "rustc-codegen-gcc",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

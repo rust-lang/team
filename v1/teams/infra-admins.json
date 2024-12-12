@@ -1,0 +1,72 @@
+{
+  "name": "infra-admins",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Jan David Nose",
+      "github": "jdno",
+      "github_id": 865550,
+      "is_lead": false
+    },
+    {
+      "name": "Marco Ieni",
+      "github": "MarcoIeni",
+      "github_id": 11428655,
+      "is_lead": false
+    },
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": false
+    },
+    {
+      "name": "Pietro Albini",
+      "github": "pietroalbini",
+      "github_id": 2299951,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Aidan Hobson Sayers",
+      "github": "aidanhs",
+      "github_id": 1050652,
+      "is_lead": false
+    },
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "infra-admins",
+        "members": [
+          11428655,
+          5047365,
+          865550,
+          2299951
+        ]
+      },
+      {
+        "org": "rust-lang-deprecated",
+        "name": "infra-admins",
+        "members": [
+          11428655,
+          5047365,
+          865550,
+          2299951
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

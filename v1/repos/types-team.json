@@ -1,0 +1,20 @@
+{
+  "org": "rust-lang",
+  "name": "types-team",
+  "description": "Home of the \"types team\", affiliated with the compiler and lang teams.",
+  "homepage": "https://rust-lang.github.io/types-team/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "types",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

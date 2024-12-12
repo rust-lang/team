@@ -1,0 +1,29 @@
+{
+  "name": "wg-embedded-cortex-r",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "wg-embedded-cortex-r",
+        "members": []
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded Cortex-R team",
+    "description": "Develops and maintains the core of the Cortex-R crate ecosystem",
+    "page": "wg-embedded-cortex-r",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

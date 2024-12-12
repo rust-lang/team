@@ -1,0 +1,21 @@
+{
+  "org": "rust-lang",
+  "name": "rustc_apfloat",
+  "description": "Rust port of C++ llvm::APFloat library",
+  "homepage": null,
+  "bots": [
+    "rustbot",
+    "rfcbot"
+  ],
+  "teams": [
+    {
+      "name": "compiler",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

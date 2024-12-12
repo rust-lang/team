@@ -1,0 +1,180 @@
+{
+  "name": "libs-contributors",
+  "kind": "team",
+  "subteam_of": "libs",
+  "members": [
+    {
+      "name": "Caleb Zulawski",
+      "github": "calebzulawski",
+      "github_id": 563826,
+      "is_lead": false
+    },
+    {
+      "name": "Chris Denton",
+      "github": "ChrisDenton",
+      "github_id": 4459874,
+      "is_lead": false
+    },
+    {
+      "name": "Taylor Cramer",
+      "github": "cramertj",
+      "github_id": 5963049,
+      "is_lead": false
+    },
+    {
+      "name": "David Tolnay",
+      "github": "dtolnay",
+      "github_id": 1940490,
+      "is_lead": false
+    },
+    {
+      "name": "Ibraheem Ahmed",
+      "github": "ibraheemdev",
+      "github_id": 34988408,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Pratt",
+      "github": "jhpratt",
+      "github_id": 3161395,
+      "is_lead": false
+    },
+    {
+      "name": "Jonas Böttiger",
+      "github": "joboet",
+      "github_id": 25721079,
+      "is_lead": false
+    },
+    {
+      "name": "Yuki Okushi",
+      "github": "JohnTitor",
+      "github_id": 25030997,
+      "is_lead": false
+    },
+    {
+      "name": "kennytm",
+      "github": "kennytm",
+      "github_id": 103023,
+      "is_lead": false
+    },
+    {
+      "name": "Ashley Mannix",
+      "github": "KodrAus",
+      "github_id": 6721458,
+      "is_lead": false
+    },
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": false
+    },
+    {
+      "name": "nora",
+      "github": "Noratrieb",
+      "github_id": 48135649,
+      "is_lead": false
+    },
+    {
+      "name": "Simon Sapin",
+      "github": "SimonSapin",
+      "github_id": 291359,
+      "is_lead": false
+    },
+    {
+      "name": "Dan Gohman",
+      "github": "sunfishcode",
+      "github_id": 4503403,
+      "is_lead": false
+    },
+    {
+      "name": "Trevor Gross",
+      "github": "tgross35",
+      "github_id": 13724985,
+      "is_lead": false
+    },
+    {
+      "name": "Jubilee",
+      "github": "workingjubilee",
+      "github_id": 46493976,
+      "is_lead": false
+    },
+    {
+      "name": "Jane Lusby",
+      "github": "yaahc",
+      "github_id": 1993852,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Jake Goulding",
+      "github": "shepmaster",
+      "github_id": 174509,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "libs-contributors",
+        "members": [
+          4459874,
+          25030997,
+          6721458,
+          5047365,
+          48135649,
+          291359,
+          563826,
+          5963049,
+          1940490,
+          34988408,
+          3161395,
+          25721079,
+          103023,
+          4503403,
+          13724985,
+          46493976,
+          1993852
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "libs-contributors",
+        "members": [
+          4459874,
+          25030997,
+          6721458,
+          5047365,
+          48135649,
+          291359,
+          563826,
+          5963049,
+          1940490,
+          34988408,
+          3161395,
+          25721079,
+          103023,
+          4503403,
+          13724985,
+          46493976,
+          1993852
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Library contributors",
+    "description": "Contributing to the Rust standard library on a regular basis",
+    "page": "libs-contributors",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": -100
+  },
+  "roles": [],
+  "discord": []
+}

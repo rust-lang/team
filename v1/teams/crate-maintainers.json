@@ -1,0 +1,115 @@
+{
+  "name": "crate-maintainers",
+  "kind": "team",
+  "subteam_of": "libs",
+  "members": [
+    {
+      "name": "Amanieu d'Antras",
+      "github": "Amanieu",
+      "github_id": 278509,
+      "is_lead": false
+    },
+    {
+      "name": "Sebastian Thiel",
+      "github": "Byron",
+      "github_id": 63622,
+      "is_lead": false
+    },
+    {
+      "name": "Chris Denton",
+      "github": "ChrisDenton",
+      "github_id": 4459874,
+      "is_lead": false
+    },
+    {
+      "name": "Yuki Okushi",
+      "github": "JohnTitor",
+      "github_id": 25030997,
+      "is_lead": false
+    },
+    {
+      "name": "Jonathan Giddy",
+      "github": "jongiddy",
+      "github_id": 3735327,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    },
+    {
+      "name": "Ashley Mannix",
+      "github": "KodrAus",
+      "github_id": 6721458,
+      "is_lead": false
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": false
+    },
+    {
+      "name": "Trevor Gross",
+      "github": "tgross35",
+      "github_id": 13724985,
+      "is_lead": false
+    },
+    {
+      "name": "The 8472",
+      "github": "the8472",
+      "github_id": 1065730,
+      "is_lead": false
+    },
+    {
+      "name": "Thom Chiovoloni",
+      "github": "thomcc",
+      "github_id": 860665,
+      "is_lead": false
+    },
+    {
+      "name": "Jubilee",
+      "github": "workingjubilee",
+      "github_id": 46493976,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "crate-maintainers",
+        "members": [
+          278509,
+          63622,
+          4459874,
+          25030997,
+          6721458,
+          3735327,
+          162737,
+          29864074,
+          13724985,
+          1065730,
+          860665,
+          46493976
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Crate maintainers",
+    "description": "Maintaining official rust-lang crates such as log, libc, cc, and more.",
+    "page": "crate-maintainers",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": "t-libs/crates",
+    "matrix_room": null,
+    "weight": -200
+  },
+  "roles": [],
+  "discord": []
+}

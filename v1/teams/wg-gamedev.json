@@ -1,0 +1,97 @@
+{
+  "name": "wg-gamedev",
+  "kind": "working_group",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Forest Anderson",
+      "github": "AngelOnFira",
+      "github_id": 14791619,
+      "is_lead": true
+    },
+    {
+      "name": "Erlend Sogge Heggen",
+      "github": "erlend-sh",
+      "github_id": 583842,
+      "is_lead": true
+    },
+    {
+      "name": "Dzmitry Malyshau",
+      "github": "kvark",
+      "github_id": 107301,
+      "is_lead": true
+    },
+    {
+      "name": "Andrey Lesnikov",
+      "github": "ozkriff",
+      "github_id": 662976,
+      "is_lead": true
+    },
+    {
+      "name": "Joe Clay",
+      "github": "17cupsofcoffee",
+      "github_id": 784533,
+      "is_lead": false
+    },
+    {
+      "name": "Philip Degarmo",
+      "github": "aclysma",
+      "github_id": 316070,
+      "is_lead": false
+    },
+    {
+      "name": "Alexandru Ene",
+      "github": "AlexEne",
+      "github_id": 5849037,
+      "is_lead": false
+    },
+    {
+      "name": "Elina Shakhnovich",
+      "github": "logicsoup",
+      "github_id": 20725524,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Gee",
+      "github": "Lokathor",
+      "github_id": 5456384,
+      "is_lead": false
+    },
+    {
+      "name": "Richard Patching",
+      "github": "patchfx",
+      "github_id": 294376,
+      "is_lead": false
+    },
+    {
+      "name": "Johan Andersson",
+      "github": "repi",
+      "github_id": 1262692,
+      "is_lead": false
+    },
+    {
+      "name": "Remco",
+      "github": "Wodann",
+      "github_id": 6917585,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": {
+    "name": "Game development working group",
+    "description": "Focusing on making Rust the default choice for game development",
+    "page": "gamedev",
+    "email": null,
+    "repo": "https://github.com/rust-gamedev",
+    "discord": {
+      "channel": "#wg-gamedev",
+      "url": "https://discord.gg/sG23nSS"
+    },
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}
