@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "staging.crates.io-index"
+description = "Registry index for staging.crates.io"
+bots = []
+
+[access.teams]
+crates-io = "write"
+crates-io-on-call = "write"
+
+[[branch-protections]]
+pattern = "master"
+pr-required = false
