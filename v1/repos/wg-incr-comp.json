@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "wg-incr-comp",
+  "description": "Home repo for the compiler team incremental compilation working group",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-incr-comp",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

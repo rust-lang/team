@@ -1,0 +1,87 @@
+{
+  "name": "mods-discord",
+  "kind": "team",
+  "subteam_of": "mods",
+  "members": [
+    {
+      "name": "Manish Goregaokar",
+      "github": "Manishearth",
+      "github_id": 1617736,
+      "is_lead": false
+    },
+    {
+      "name": "Sage Griffin",
+      "github": "sgrif",
+      "github_id": 1529387,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Gould",
+      "github": "technetos",
+      "github_id": 10949810,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Mazdak Farrokhzad",
+      "github": "Centril",
+      "github_id": 855702,
+      "is_lead": false
+    },
+    {
+      "name": "Khionu Sybiern",
+      "github": "khionu",
+      "github_id": 11195266,
+      "is_lead": false
+    },
+    {
+      "name": "Pietro Albini",
+      "github": "pietroalbini",
+      "github_id": 2299951,
+      "is_lead": false
+    },
+    {
+      "name": "Liv",
+      "github": "shadows-withal",
+      "github_id": 6445316,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "mods-discord",
+        "members": [
+          1617736,
+          1529387,
+          10949810
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Discord moderators",
+    "description": "Moderating the Discord server",
+    "page": "mods-discord",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": [
+    {
+      "name": "mods",
+      "members": [
+        443810603417731092,
+        278623213448331265,
+        232888196063690752
+      ],
+      "color": "#e74c3c"
+    }
+  ]
+}

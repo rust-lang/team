@@ -1,0 +1,40 @@
+{
+  "org": "rust-lang",
+  "name": "mdBook",
+  "description": "Create book from markdown files. Like Gitbook but implemented in Rust",
+  "homepage": "https://rust-lang.github.io/mdBook/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "devtools",
+      "permission": "write"
+    }
+  ],
+  "members": [
+    {
+      "name": "Dylan-DPC",
+      "permission": "write"
+    }
+  ],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "Success gate"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

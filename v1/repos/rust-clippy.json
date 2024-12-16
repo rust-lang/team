@@ -1,0 +1,41 @@
+{
+  "org": "rust-lang",
+  "name": "rust-clippy",
+  "description": "A bunch of lints to catch common mistakes and improve your Rust code. Book: https://doc.rust-lang.org/clippy/",
+  "homepage": "https://rust-lang.github.io/rust-clippy/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "clippy-contributors",
+      "permission": "triage"
+    },
+    {
+      "name": "clippy",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "conclusion",
+            "conclusion_dev",
+            "conclusion_remark"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

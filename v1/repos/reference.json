@@ -1,0 +1,47 @@
+{
+  "org": "rust-lang",
+  "name": "reference",
+  "description": "The Rust Reference",
+  "homepage": "https://doc.rust-lang.org/nightly/reference/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "spec",
+      "permission": "write"
+    },
+    {
+      "name": "spec-contributors",
+      "permission": "write"
+    },
+    {
+      "name": "lang-docs",
+      "permission": "write"
+    },
+    {
+      "name": "lang",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "Success gate"
+          ],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}
