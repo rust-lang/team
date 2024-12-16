@@ -2,7 +2,7 @@ org = "rust-lang"
 name = "compiler-team"
 description = "A home for compiler team planning documents, meeting minutes, and other such things."
 homepage = "https://rust-lang.github.io/compiler-team/"
-bots = ["rustbot"]
+bots = ["rustbot", "rfcbot"]
 
 [access.teams]
 compiler = "write"
