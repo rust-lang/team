@@ -1,0 +1,37 @@
+{
+  "org": "rust-lang",
+  "name": "lang-team",
+  "description": "Home of the Rust lang team",
+  "homepage": "http://lang-team.rust-lang.org/",
+  "bots": [
+    "rustbot",
+    "rfcbot"
+  ],
+  "teams": [
+    {
+      "name": "lang",
+      "permission": "maintain"
+    },
+    {
+      "name": "lang-docs",
+      "permission": "maintain"
+    },
+    {
+      "name": "types",
+      "permission": "maintain"
+    },
+    {
+      "name": "lang-ops",
+      "permission": "maintain"
+    },
+    {
+      "name": "release",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

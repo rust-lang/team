@@ -1,0 +1,40 @@
+{
+  "org": "rust-lang",
+  "name": "crates.io",
+  "description": "The Rust package registry",
+  "homepage": "https://crates.io",
+  "bots": [
+    "renovate",
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "crates-io",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "main",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "Backend / Lint",
+            "Backend / Test",
+            "Frontend / Lint",
+            "Frontend / Test",
+            "Backend / cargo-deny"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

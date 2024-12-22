@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "discord-mods-bot",
+  "description": "discord moderation bot",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "mods-discord",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

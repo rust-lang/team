@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "wg-grammar",
+  "description": "Where the work of WG-grammar, aiming to provide a canonical grammar for Rust, resides",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

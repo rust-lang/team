@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "rfcbot-rs",
+  "description": "Coordinates asynchronous decision making on Rust repositories. Status of tracked issues and PRs can be viewed at https://rfcbot.rs.",
+  "homepage": "https://rfcbot.rs",
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

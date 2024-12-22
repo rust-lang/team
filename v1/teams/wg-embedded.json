@@ -1,0 +1,263 @@
+{
+  "name": "wg-embedded",
+  "kind": "working_group",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Adam Greig",
+      "github": "adamgreig",
+      "github_id": 47219,
+      "is_lead": true
+    },
+    {
+      "name": "Daniel Egger",
+      "github": "therealprof",
+      "github_id": 3321888,
+      "is_lead": true
+    },
+    {
+      "name": "Aleš Katona",
+      "github": "almindor",
+      "github_id": 1950958,
+      "is_lead": false
+    },
+    {
+      "name": "Andre Richter",
+      "github": "andre-richter",
+      "github_id": 4130005,
+      "is_lead": false
+    },
+    {
+      "name": "Zgarbul Andrey",
+      "github": "burrbull",
+      "github_id": 3072754,
+      "is_lead": false
+    },
+    {
+      "name": "William D. Jones",
+      "github": "cr1901",
+      "github_id": 6418027,
+      "is_lead": false
+    },
+    {
+      "name": "Dario Nieuwenhuis",
+      "github": "Dirbaio",
+      "github_id": 1247578,
+      "is_lead": false
+    },
+    {
+      "name": "dkhayes117",
+      "github": "dkhayes117",
+      "github_id": 59458913,
+      "is_lead": false
+    },
+    {
+      "name": "Diego Barrios Romero",
+      "github": "eldruin",
+      "github_id": 43125,
+      "is_lead": false
+    },
+    {
+      "name": "Emil Gardström",
+      "github": "Emilgardis",
+      "github_id": 1502855,
+      "is_lead": false
+    },
+    {
+      "name": "Henrik Böving",
+      "github": "hargoniX",
+      "github_id": 33270164,
+      "is_lead": false
+    },
+    {
+      "name": "Wilfried Chauveau",
+      "github": "ithinuel",
+      "github_id": 4605303,
+      "is_lead": false
+    },
+    {
+      "name": "James Munns",
+      "github": "jamesmunns",
+      "github_id": 2097964,
+      "is_lead": false
+    },
+    {
+      "name": "Nick Stevens",
+      "github": "nastevens",
+      "github_id": 1500008,
+      "is_lead": false
+    },
+    {
+      "name": "Paul Osborne",
+      "github": "posborne",
+      "github_id": 41714,
+      "is_lead": false
+    },
+    {
+      "name": "Robin Randhawa",
+      "github": "raw-bin",
+      "github_id": 705890,
+      "is_lead": false
+    },
+    {
+      "name": "Markus Reiter",
+      "github": "reitermarkus",
+      "github_id": 1309829,
+      "is_lead": false
+    },
+    {
+      "name": "Román Cárdenas",
+      "github": "romancardenas",
+      "github_id": 12596603,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan",
+      "github": "ryankurte",
+      "github_id": 860620,
+      "is_lead": false
+    },
+    {
+      "name": "Thales",
+      "github": "thalesfragoso",
+      "github_id": 46510852,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "awygle",
+      "github": "awygle",
+      "github_id": 7854806,
+      "is_lead": false
+    },
+    {
+      "name": "Brad Campbell",
+      "github": "bradjc",
+      "github_id": 1467890,
+      "is_lead": false
+    },
+    {
+      "name": "Dan Callaghan",
+      "github": "danc86",
+      "github_id": 398575,
+      "is_lead": false
+    },
+    {
+      "name": "Vadim Kaushan",
+      "github": "Disasm",
+      "github_id": 1418749,
+      "is_lead": false
+    },
+    {
+      "name": "David Craven",
+      "github": "dvc94ch",
+      "github_id": 741807,
+      "is_lead": false
+    },
+    {
+      "name": "Dylan McKay",
+      "github": "dylanmckay",
+      "github_id": 7722159,
+      "is_lead": false
+    },
+    {
+      "name": "Hanno Braun",
+      "github": "hannobraun",
+      "github_id": 85732,
+      "is_lead": false
+    },
+    {
+      "name": "Wilfried Chauveau",
+      "github": "ithinuel",
+      "github_id": 4605303,
+      "is_lead": false
+    },
+    {
+      "name": "Jorge Aparicio",
+      "github": "japaric",
+      "github_id": 5018213,
+      "is_lead": false
+    },
+    {
+      "name": "Jonathan Soo",
+      "github": "jcsoo",
+      "github_id": 2399463,
+      "is_lead": false
+    },
+    {
+      "name": "Emil Fresk",
+      "github": "korken89",
+      "github_id": 913109,
+      "is_lead": false
+    },
+    {
+      "name": "Wladimir J. van der Laan",
+      "github": "laanwj",
+      "github_id": 126646,
+      "is_lead": false
+    },
+    {
+      "name": "Levente Kurusa",
+      "github": "levex",
+      "github_id": 849140,
+      "is_lead": false
+    },
+    {
+      "name": "Paolo Teti",
+      "github": "paoloteti",
+      "github_id": 35451649,
+      "is_lead": false
+    },
+    {
+      "name": "James Duley",
+      "github": "parched",
+      "github_id": 5975405,
+      "is_lead": false
+    },
+    {
+      "name": "Vadzim Dambrouski",
+      "github": "pftbest",
+      "github_id": 1573340,
+      "is_lead": false
+    },
+    {
+      "name": "Hideki Sekine",
+      "github": "sekineh",
+      "github_id": 3956266,
+      "is_lead": false
+    },
+    {
+      "name": "Jonathan Pallant",
+      "github": "thejpster",
+      "github_id": 959887,
+      "is_lead": false
+    },
+    {
+      "name": "vaishali Thakkar",
+      "github": "v-thakkar",
+      "github_id": 7105009,
+      "is_lead": false
+    },
+    {
+      "name": "Ioannis Valasakis",
+      "github": "wizofe",
+      "github_id": 22352218,
+      "is_lead": false
+    }
+  ],
+  "github": null,
+  "website_data": {
+    "name": "Embedded devices working group",
+    "description": "Focusing on improving the end-to-end experience of using Rust in resource-constrained environments and non-traditional platforms",
+    "page": "embedded",
+    "email": null,
+    "repo": "https://github.com/rust-embedded/wg",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": "#rust-embedded:matrix.org",
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

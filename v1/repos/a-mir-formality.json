@@ -1,0 +1,34 @@
+{
+  "org": "rust-lang",
+  "name": "a-mir-formality",
+  "description": "a model of MIR and the Rust type/trait system",
+  "homepage": null,
+  "bots": [
+    "rustbot",
+    "rfcbot",
+    "bors"
+  ],
+  "teams": [
+    {
+      "name": "lang-docs",
+      "permission": "maintain"
+    },
+    {
+      "name": "types",
+      "permission": "maintain"
+    },
+    {
+      "name": "lang",
+      "permission": "maintain"
+    },
+    {
+      "name": "lang-ops",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": false
+}

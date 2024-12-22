@@ -1,0 +1,22 @@
+{
+  "org": "rust-lang",
+  "name": "jobserver-rs",
+  "description": "",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "compiler",
+      "permission": "write"
+    },
+    {
+      "name": "cargo",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "rust-marketing",
+  "description": "Rust marketing handbook",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}
