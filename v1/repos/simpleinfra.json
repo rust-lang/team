@@ -1,0 +1,35 @@
+{
+  "org": "rust-lang",
+  "name": "simpleinfra",
+  "description": "Rust Infrastructure automation",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "Rust projects",
+            "Terraform configuration",
+            "GitHub Actions (JS)"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,22 @@
+{
+  "org": "rust-lang",
+  "name": "rustc_codegen_gcc",
+  "description": "libgccjit AOT codegen for rustc",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-gcc-backend",
+      "permission": "maintain"
+    },
+    {
+      "name": "compiler",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

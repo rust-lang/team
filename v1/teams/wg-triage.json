@@ -1,0 +1,171 @@
+{
+  "name": "wg-triage",
+  "kind": "working_group",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Dylan DPC",
+      "github": "Dylan-DPC",
+      "github_id": 99973273,
+      "is_lead": true
+    },
+    {
+      "name": "Alexey Semenyuk",
+      "github": "alex-semenyuk",
+      "github_id": 5480441,
+      "is_lead": false
+    },
+    {
+      "name": "Alex Macleod",
+      "github": "Alexendoo",
+      "github_id": 1830331,
+      "is_lead": false
+    },
+    {
+      "name": "Alice Cecile",
+      "github": "alice-i-cecile",
+      "github_id": 3579909,
+      "is_lead": false
+    },
+    {
+      "name": "André Vennberg",
+      "github": "anden3",
+      "github_id": 1500580,
+      "is_lead": false
+    },
+    {
+      "name": "Ben Striegel",
+      "github": "bstrie",
+      "github_id": 865233,
+      "is_lead": false
+    },
+    {
+      "name": "Noah Lev",
+      "github": "camelid",
+      "github_id": 37223377,
+      "is_lead": false
+    },
+    {
+      "name": "Charles Lew",
+      "github": "crlf0710",
+      "github_id": 451806,
+      "is_lead": false
+    },
+    {
+      "name": "Edmilson Ferreira da Silva",
+      "github": "edmilsonefs",
+      "github_id": 498938,
+      "is_lead": false
+    },
+    {
+      "name": "Martin Nordholts",
+      "github": "Enselic",
+      "github_id": 115040,
+      "is_lead": false
+    },
+    {
+      "name": "Jieyou Xu",
+      "github": "jieyouxu",
+      "github_id": 39484203,
+      "is_lead": false
+    },
+    {
+      "name": "Joel Parmer",
+      "github": "joelpalmer",
+      "github_id": 8049061,
+      "is_lead": false
+    },
+    {
+      "name": "John Simon",
+      "github": "JohnCSimon",
+      "github_id": 1977159,
+      "is_lead": false
+    },
+    {
+      "name": "Yuki Okushi",
+      "github": "JohnTitor",
+      "github_id": 25030997,
+      "is_lead": false
+    },
+    {
+      "name": "Krishna Ramasimha",
+      "github": "KittyBorgX",
+      "github_id": 82328083,
+      "is_lead": false
+    },
+    {
+      "name": "binarycat",
+      "github": "lolbinarycat",
+      "github_id": 19915050,
+      "is_lead": false
+    },
+    {
+      "name": "Cara Salter",
+      "github": "Muirrum",
+      "github_id": 8702646,
+      "is_lead": false
+    },
+    {
+      "name": "Oskar Goldhahn",
+      "github": "oskgo",
+      "github_id": 92018610,
+      "is_lead": false
+    },
+    {
+      "name": "Peter Jaszkowiak",
+      "github": "pitaj",
+      "github_id": 803701,
+      "is_lead": false
+    },
+    {
+      "name": "Tranquillity Codes",
+      "github": "tranquillity-codes",
+      "github_id": 120999089,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-triage",
+        "members": [
+          1830331,
+          99973273,
+          115040,
+          1977159,
+          25030997,
+          82328083,
+          8702646,
+          5480441,
+          3579909,
+          1500580,
+          865233,
+          37223377,
+          451806,
+          498938,
+          39484203,
+          8049061,
+          19915050,
+          92018610,
+          803701,
+          120999089
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Triage working group",
+    "description": "Triaging repositories under the rust-lang organisation",
+    "page": "wg-triage",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": "t-release/triage",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

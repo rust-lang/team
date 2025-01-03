@@ -1,0 +1,104 @@
+{
+  "name": "release",
+  "kind": "team",
+  "subteam_of": "infra",
+  "members": [
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": true
+    },
+    {
+      "name": "Boxy",
+      "github": "BoxyUwU",
+      "github_id": 21149742,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Stone",
+      "github": "cuviper",
+      "github_id": 36186,
+      "is_lead": false
+    },
+    {
+      "name": "Dylan DPC",
+      "github": "Dylan-DPC",
+      "github_id": 99973273,
+      "is_lead": false
+    },
+    {
+      "name": "Pietro Albini",
+      "github": "pietroalbini",
+      "github_id": 2299951,
+      "is_lead": false
+    },
+    {
+      "name": "Tyler Mandry",
+      "github": "tmandry",
+      "github_id": 2280544,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    },
+    {
+      "name": "Kyle J Strand",
+      "github": "BatmanAoD",
+      "github_id": 2313807,
+      "is_lead": false
+    },
+    {
+      "name": "Mazdak Farrokhzad",
+      "github": "Centril",
+      "github_id": 855702,
+      "is_lead": false
+    },
+    {
+      "name": "Sage Griffin",
+      "github": "sgrif",
+      "github_id": 1529387,
+      "is_lead": false
+    },
+    {
+      "name": "Erin Power",
+      "github": "XAMPPRocky",
+      "github_id": 4464295,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "release",
+        "members": [
+          21149742,
+          99973273,
+          5047365,
+          36186,
+          2299951,
+          2280544
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Release team",
+    "description": "Tracking regressions and stabilizations, and producing Rust releases",
+    "page": "release",
+    "email": "release@rust-lang.org",
+    "repo": "https://github.com/rust-lang/release-team",
+    "discord": null,
+    "zulip_stream": "t-release",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}
