@@ -16,3 +16,9 @@ libs-contributors = "write"
 pattern = "master"
 ci-checks = ["ci"]
 required-approvals = 0
+
+# This branch protection exists for historical reasons
+# We had to force-push the whole commit history of rustc-dev-guide
+# This branch contains the old commit graph, to keep commit references working
+[[branch-protections]]
+pattern = "master-old"
