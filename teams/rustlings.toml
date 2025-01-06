@@ -1,5 +1,5 @@
 name = "rustlings"
-kind = "marker-team"
+subteam-of = "lang-docs"
 
 [people]
 leads = ["shadows-withal"]
