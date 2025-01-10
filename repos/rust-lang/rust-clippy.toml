@@ -14,5 +14,6 @@ ci-checks = [
     "conclusion",
     "conclusion_dev",
     "conclusion_remark",
+    "conclusion_changelog",
 ]
 required-approvals = 0
