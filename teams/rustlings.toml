@@ -1,8 +1,8 @@
 name = "rustlings"
-kind = "marker-team"
+subteam-of = "lang-docs"
 
 [people]
-leads = ["shadows-withal"]
+leads = ["mo8it", "shadows-withal"]
 members = [
     "shadows-withal",
     "mo8it",
