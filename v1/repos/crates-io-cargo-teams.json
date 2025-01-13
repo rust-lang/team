@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "crates-io-cargo-teams",
+  "description": "the home of the crates io team",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

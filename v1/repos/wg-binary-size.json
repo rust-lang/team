@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "wg-binary-size",
+  "description": "Improving the binary size of Rust programs and libraries",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-binary-size",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

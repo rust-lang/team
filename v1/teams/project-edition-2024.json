@@ -1,0 +1,49 @@
+{
+  "name": "project-edition-2024",
+  "kind": "project_group",
+  "subteam_of": "leadership-council",
+  "members": [
+    {
+      "name": "Eric Huss",
+      "github": "ehuss",
+      "github_id": 43198,
+      "is_lead": true
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": true
+    },
+    {
+      "name": "Mara Bos",
+      "github": "m-ou-se",
+      "github_id": 783247,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Ben Striegel",
+      "github": "bstrie",
+      "github_id": 865233,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "project-edition-2024",
+        "members": [
+          43198,
+          783247,
+          1076834
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

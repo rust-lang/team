@@ -1,0 +1,37 @@
+{
+  "org": "rust-lang",
+  "name": "rustc_codegen_c",
+  "description": "C based backend for rustc",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "codegen-c-maintainers",
+      "permission": "maintain"
+    },
+    {
+      "name": "compiler",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "main",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "success"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

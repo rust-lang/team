@@ -1,0 +1,25 @@
+{
+  "org": "rust-lang",
+  "name": "spec",
+  "description": "The Rust specification",
+  "homepage": null,
+  "bots": [
+    "rustbot",
+    "rfcbot"
+  ],
+  "teams": [
+    {
+      "name": "spec-contributors",
+      "permission": "write"
+    },
+    {
+      "name": "spec",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

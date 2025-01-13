@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "trait-system-refactor-initiative",
+  "description": "The Rustc Trait System Refactor Initiative",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "initiative-trait-system-refactor",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}
