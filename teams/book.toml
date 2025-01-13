@@ -1,5 +1,5 @@
 name = "book"
-subteam-of = "launching-pad"
+subteam-of = "lang-docs"
 
 [people]
 leads = ["carols10cents", "chriskrycho"]
