@@ -1,6 +1,5 @@
-name = "wg-rust-by-example"
-subteam-of = "launching-pad"
-kind = "working-group"
+name = "rust-by-example"
+subteam-of = "lang-docs"
 
 [people]
 leads = ["marioidival"]
@@ -16,6 +15,6 @@ alumni = [
 orgs = ["rust-lang"]
 
 [website]
-name = "Rust by Example working group"
+name = "Rust by Example team"
 description = "Maintaining and updating the official Rust by Example book"
 repo = "https://github.com/rust-lang/rust-by-example"

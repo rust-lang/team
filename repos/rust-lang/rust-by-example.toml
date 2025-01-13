@@ -5,4 +5,4 @@ homepage = "https://doc.rust-lang.org/stable/rust-by-example/"
 bots = ["rustbot"]
 
 [access.teams]
-wg-rust-by-example = "write"
+rust-by-example = "write"
