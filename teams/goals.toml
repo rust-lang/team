@@ -16,9 +16,6 @@ alumni = [
 team-name = "goals"
 orgs = ["rust-lang"]
 
-[permissions]
-bors.rust.review = true
-
 [rfcbot]
 label = "T-goals"
 name = "Goals"
