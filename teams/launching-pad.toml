@@ -6,3 +6,9 @@ top-level = true
 leads = []
 members = []
 alumni = []
+
+[website]
+page = "launching-pad"
+name = "Launching pad"
+description = "An interim home for teams"
+zulip-stream = "t-launching-pad"
