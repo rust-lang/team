@@ -32,10 +32,6 @@ alumni = [
 [[github]]
 orgs = ["rust-lang", "rust-lang-ci", "rust-lang-nursery"]
 
-[[github]]
-team-name = "rust-infra"
-orgs = ["bors-rs"]
-
 [permissions]
 perf = true
 crater = true
