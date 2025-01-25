@@ -6,3 +6,8 @@ bots = []
 [access.teams]
 compiler = "write"
 wg-gcc-backend = "maintain"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["success"]
+required-approvals = 0
