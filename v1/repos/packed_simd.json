@@ -1,0 +1,30 @@
+{
+  "org": "rust-lang",
+  "name": "packed_simd",
+  "description": "Portable Packed SIMD Vectors for Rust standard library",
+  "homepage": "https://rust-lang.github.io/packed_simd/packed_simd_2/",
+  "bots": [],
+  "teams": [
+    {
+      "name": "libs-api",
+      "permission": "write"
+    },
+    {
+      "name": "libs",
+      "permission": "write"
+    },
+    {
+      "name": "project-portable-simd",
+      "permission": "write"
+    },
+    {
+      "name": "libs-contributors",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

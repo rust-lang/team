@@ -1,0 +1,45 @@
+{
+  "name": "wg-embedded-core",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [
+    {
+      "name": "Adam Greig",
+      "github": "adamgreig",
+      "github_id": 47219,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Egger",
+      "github": "therealprof",
+      "github_id": 3321888,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "core",
+        "members": [
+          47219,
+          3321888
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded core team",
+    "description": "The core team represents the WG in meetings with the Rust teams",
+    "page": "wg-embedded-core",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

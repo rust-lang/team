@@ -1,0 +1,84 @@
+{
+  "name": "twir-reviewers",
+  "kind": "team",
+  "subteam_of": "twir",
+  "members": [
+    {
+      "name": "Nell Shamrell-Harrington",
+      "github": "nellshamrell",
+      "github_id": 813007,
+      "is_lead": true
+    },
+    {
+      "name": "andrewpollack",
+      "github": "andrewpollack",
+      "github_id": 24868505,
+      "is_lead": false
+    },
+    {
+      "name": "Ben Dillon",
+      "github": "bdillo",
+      "github_id": 146687321,
+      "is_lead": false
+    },
+    {
+      "name": "benny Vasquez",
+      "github": "bennyvasquez",
+      "github_id": 13630986,
+      "is_lead": false
+    },
+    {
+      "name": "Colton Donnelly",
+      "github": "cdmistman",
+      "github_id": 23486351,
+      "is_lead": false
+    },
+    {
+      "name": "Eric Seppanen",
+      "github": "ericseppanen",
+      "github_id": 36317762,
+      "is_lead": false
+    },
+    {
+      "name": "Stephan D.",
+      "github": "extrawurst",
+      "github_id": 776816,
+      "is_lead": false
+    },
+    {
+      "name": "M Goldin",
+      "github": "mariannegoldin",
+      "github_id": 23177337,
+      "is_lead": false
+    },
+    {
+      "name": "Brad Gibson",
+      "github": "U007D",
+      "github_id": 2874989,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "twir-reviewers",
+        "members": [
+          2874989,
+          24868505,
+          146687321,
+          13630986,
+          23486351,
+          36317762,
+          776816,
+          23177337,
+          813007
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

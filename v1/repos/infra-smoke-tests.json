@@ -1,0 +1,42 @@
+{
+  "org": "rust-lang",
+  "name": "infra-smoke-tests",
+  "description": "Smoke tests for the infrastructure of the Rust project",
+  "homepage": null,
+  "bots": [
+    "renovate"
+  ],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "main",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "Check Markdown style",
+            "Check JSON style",
+            "Check Rust style",
+            "Check YAML style",
+            "Lint Markdown files",
+            "Lint Rust code",
+            "Lint YAML files",
+            "Run tests"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

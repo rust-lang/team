@@ -1,0 +1,47 @@
+{
+  "org": "rust-lang",
+  "name": "std-dev-guide",
+  "description": "Guide for standard library developers",
+  "homepage": "https://std-dev-guide.rust-lang.org",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "libs-contributors",
+      "permission": "write"
+    },
+    {
+      "name": "libs",
+      "permission": "maintain"
+    },
+    {
+      "name": "wg-rustc-dev-guide",
+      "permission": "write"
+    },
+    {
+      "name": "libs-api",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "book-test"
+          ],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

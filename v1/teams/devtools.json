@@ -1,0 +1,183 @@
+{
+  "name": "devtools",
+  "kind": "team",
+  "subteam_of": null,
+  "top_level": true,
+  "members": [
+    {
+      "name": "Manish Goregaokar",
+      "github": "Manishearth",
+      "github_id": 1617736,
+      "is_lead": true
+    },
+    {
+      "name": "Caleb Cartwright",
+      "github": "calebcartwright",
+      "github_id": 13042488,
+      "is_lead": false
+    },
+    {
+      "name": "Eric Huss",
+      "github": "ehuss",
+      "github_id": 43198,
+      "is_lead": false
+    },
+    {
+      "name": "Guillaume Gomez",
+      "github": "GuillaumeGomez",
+      "github_id": 3050060,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    },
+    {
+      "name": "Robert Collins",
+      "github": "rbtcollins",
+      "github_id": 499678,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    },
+    {
+      "name": "Brian Anderson",
+      "github": "brson",
+      "github_id": 147214,
+      "is_lead": false
+    },
+    {
+      "name": "Carol Nichols",
+      "github": "carols10cents",
+      "github_id": 193874,
+      "is_lead": false
+    },
+    {
+      "name": "Dale Wijnand",
+      "github": "dwijnand",
+      "github_id": 344610,
+      "is_lead": false
+    },
+    {
+      "name": "Nick Fitzgerald",
+      "github": "fitzgen",
+      "github_id": 74571,
+      "is_lead": false
+    },
+    {
+      "name": "Jorge Aparicio",
+      "github": "japaric",
+      "github_id": 5018213,
+      "is_lead": false
+    },
+    {
+      "name": "Pascal Hertleif",
+      "github": "killercup",
+      "github_id": 20063,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Silverstone",
+      "github": "kinnison",
+      "github_id": 1469421,
+      "is_lead": false
+    },
+    {
+      "name": "Aleksey Kladov",
+      "github": "matklad",
+      "github_id": 1711539,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Woerister",
+      "github": "michaelwoerister",
+      "github_id": 1825894,
+      "is_lead": false
+    },
+    {
+      "name": "Nick Cameron",
+      "github": "nrc",
+      "github_id": 762626,
+      "is_lead": false
+    },
+    {
+      "name": "JT",
+      "github": "sophiajt",
+      "github_id": 547158,
+      "is_lead": false
+    },
+    {
+      "name": "Steve Klabnik",
+      "github": "steveklabnik",
+      "github_id": 27786,
+      "is_lead": false
+    },
+    {
+      "name": "Without Boats",
+      "github": "withoutboats",
+      "github_id": 9063376,
+      "is_lead": false
+    },
+    {
+      "name": "Yehuda Katz",
+      "github": "wycats",
+      "github_id": 4,
+      "is_lead": false
+    },
+    {
+      "name": "Igor Matuszewski",
+      "github": "Xanewok",
+      "github_id": 3093213,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-dev-tools",
+        "name": "devtools",
+        "members": [
+          3050060,
+          1617736,
+          13042488,
+          43198,
+          332036,
+          499678
+        ]
+      },
+      {
+        "org": "rust-lang",
+        "name": "devtools",
+        "members": [
+          3050060,
+          1617736,
+          13042488,
+          43198,
+          332036,
+          499678
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Dev tools team",
+    "description": "Contributing to and creating the Rust development tools",
+    "page": "dev-tools",
+    "email": "tools@rust-lang.org",
+    "repo": "https://github.com/rust-dev-tools/dev-tools-team",
+    "discord": null,
+    "zulip_stream": "t-devtools",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

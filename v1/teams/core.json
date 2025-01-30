@@ -1,0 +1,152 @@
+{
+  "name": "core",
+  "kind": "team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan Levick",
+      "github": "rylev",
+      "github_id": 1327285,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Aidan Hobson Sayers",
+      "github": "aidanhs",
+      "github_id": 1050652,
+      "is_lead": false
+    },
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    },
+    {
+      "name": "Ashley Williams",
+      "github": "ashleygwilliams",
+      "github_id": 1163554,
+      "is_lead": false
+    },
+    {
+      "name": "Aaron Turon",
+      "github": "aturon",
+      "github_id": 709807,
+      "is_lead": false
+    },
+    {
+      "name": "Jan-Erik Rediger",
+      "github": "badboy",
+      "github_id": 2129,
+      "is_lead": false
+    },
+    {
+      "name": "Brian Anderson",
+      "github": "brson",
+      "github_id": 147214,
+      "is_lead": false
+    },
+    {
+      "name": "Carol Nichols",
+      "github": "carols10cents",
+      "github_id": 193874,
+      "is_lead": false
+    },
+    {
+      "name": "Erick Tryzelaar",
+      "github": "erickt",
+      "github_id": 84711,
+      "is_lead": false
+    },
+    {
+      "name": "Huon Wilson",
+      "github": "huonw",
+      "github_id": 1203825,
+      "is_lead": false
+    },
+    {
+      "name": "Manish Goregaokar",
+      "github": "Manishearth",
+      "github_id": 1617736,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "Nick Cameron",
+      "github": "nrc",
+      "github_id": 762626,
+      "is_lead": false
+    },
+    {
+      "name": "Patrick Walton",
+      "github": "pcwalton",
+      "github_id": 157897,
+      "is_lead": false
+    },
+    {
+      "name": "Pietro Albini",
+      "github": "pietroalbini",
+      "github_id": 2299951,
+      "is_lead": false
+    },
+    {
+      "name": "Florian Gilcher",
+      "github": "skade",
+      "github_id": 47542,
+      "is_lead": false
+    },
+    {
+      "name": "JT",
+      "github": "sophiajt",
+      "github_id": 547158,
+      "is_lead": false
+    },
+    {
+      "name": "Steve Klabnik",
+      "github": "steveklabnik",
+      "github_id": 27786,
+      "is_lead": false
+    },
+    {
+      "name": "Yehuda Katz",
+      "github": "wycats",
+      "github_id": 4,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "core",
+        "members": [
+          5047365,
+          1327285
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "core",
+        "members": [
+          5047365,
+          1327285
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

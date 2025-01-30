@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "gha-self-hosted",
+  "description": "GitHub Actions self-hosted runners infrastructure",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

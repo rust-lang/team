@@ -1,0 +1,105 @@
+{
+  "name": "cloud-compute",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Albert Larsan",
+      "github": "albertlarsan68",
+      "github_id": 74931857,
+      "is_lead": false
+    },
+    {
+      "name": "asquared31415",
+      "github": "asquared31415",
+      "github_id": 34665709,
+      "is_lead": false
+    },
+    {
+      "name": " Aïssata Maiga",
+      "github": "Dajamante",
+      "github_id": 40670675,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Pratt",
+      "github": "jhpratt",
+      "github_id": 3161395,
+      "is_lead": false
+    },
+    {
+      "name": "Joel Marcey",
+      "github": "JoelMarcey",
+      "github_id": 3757713,
+      "is_lead": false
+    },
+    {
+      "name": "Julian Knodt",
+      "github": "JulianKnodt",
+      "github_id": 7675847,
+      "is_lead": false
+    },
+    {
+      "name": "Nell Shamrell-Harrington",
+      "github": "nellshamrell",
+      "github_id": 813007,
+      "is_lead": false
+    },
+    {
+      "name": "Oguz",
+      "github": "ouz-a",
+      "github_id": 90461915,
+      "is_lead": false
+    },
+    {
+      "name": "Markus Everling",
+      "github": "Sp00ph",
+      "github_id": 61327188,
+      "is_lead": false
+    },
+    {
+      "name": "Vincenzo Palazzo",
+      "github": "vincenzopalazzo",
+      "github_id": 17150045,
+      "is_lead": false
+    },
+    {
+      "name": "Waffle Maybe",
+      "github": "WaffleLapkin",
+      "github_id": 38225716,
+      "is_lead": false
+    },
+    {
+      "name": "Jane Lusby",
+      "github": "yaahc",
+      "github_id": 1993852,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "cloud-compute-team",
+        "members": [
+          40670675,
+          3757713,
+          7675847,
+          61327188,
+          38225716,
+          74931857,
+          34665709,
+          3161395,
+          813007,
+          90461915,
+          17150045,
+          1993852
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}
