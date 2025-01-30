@@ -1,0 +1,20 @@
+name = "types-fcp"
+subteam-of = "types"
+
+[people]
+leads = []
+members = [
+    "BoxyUwU",
+    "compiler-errors",
+    "jackh726",
+    "lcnr",
+    "nikomatsakis",
+    "oli-obk",
+    "spastorino",
+]
+alumni = []
+
+[rfcbot]
+label = "T-types"
+name = "Types"
+ping = "rust-lang/types-fcp"
