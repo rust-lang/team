@@ -9,5 +9,5 @@ wg-gcc-backend = "maintain"
 
 [[branch-protections]]
 pattern = "master"
-ci-checks = ["success"]
+ci-checks = ["success", "success_gcc12", "success_release", "success_failures", "success_m68k", "success_stdarch"]
 required-approvals = 0
