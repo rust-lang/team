@@ -1,0 +1,52 @@
+{
+  "name": "wg-embedded-triage",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [
+    {
+      "name": "Jan Niehusmann",
+      "github": "jannic",
+      "github_id": 232606,
+      "is_lead": false
+    },
+    {
+      "name": "Jesse Braham",
+      "github": "jessebraham",
+      "github_id": 1945813,
+      "is_lead": false
+    },
+    {
+      "name": "Mathieu Suen",
+      "github": "mathk",
+      "github_id": 314381,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "triage",
+        "members": [
+          232606,
+          1945813,
+          314381
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded Triage Team",
+    "description": "The triage team keeps PR queues moving; they ensure no PR is left unattended",
+    "page": "wg-embedded-triage",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

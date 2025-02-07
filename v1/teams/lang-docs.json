@@ -1,0 +1,80 @@
+{
+  "name": "lang-docs",
+  "kind": "team",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "Eric Huss",
+      "github": "ehuss",
+      "github_id": 43198,
+      "is_lead": true
+    },
+    {
+      "name": "Yuki Okushi",
+      "github": "JohnTitor",
+      "github_id": 25030997,
+      "is_lead": true
+    },
+    {
+      "name": "Aria Beingessner",
+      "github": "Gankra",
+      "github_id": 1136864,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan Scheel",
+      "github": "Havvy",
+      "github_id": 731722,
+      "is_lead": false
+    },
+    {
+      "name": "Matthew Jasper",
+      "github": "matthewjasper",
+      "github_id": 20113453,
+      "is_lead": false
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Mazdak Farrokhzad",
+      "github": "Centril",
+      "github_id": 855702,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "lang-docs",
+        "members": [
+          1136864,
+          731722,
+          25030997,
+          43198,
+          20113453,
+          1076834
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "lang-docs team",
+    "description": "Developing and writing the docs related to the lang team",
+    "page": "lang-docs",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": "t-lang/doc",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

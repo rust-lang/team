@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "prev.rust-lang.org",
+  "description": "The previous Rust website. The current website's code is at https://github.com/rust-lang/www.rust-lang.org.",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

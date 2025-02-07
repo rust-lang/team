@@ -1,0 +1,93 @@
+{
+  "name": "libs",
+  "kind": "team",
+  "subteam_of": null,
+  "top_level": true,
+  "members": [
+    {
+      "name": "Amanieu d'Antras",
+      "github": "Amanieu",
+      "github_id": 278509,
+      "is_lead": true
+    },
+    {
+      "name": "Mara Bos",
+      "github": "m-ou-se",
+      "github_id": 783247,
+      "is_lead": true
+    },
+    {
+      "name": "Josh Stone",
+      "github": "cuviper",
+      "github_id": 36186,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    },
+    {
+      "name": "The 8472",
+      "github": "the8472",
+      "github_id": 1065730,
+      "is_lead": false
+    },
+    {
+      "name": "Thom Chiovoloni",
+      "github": "thomcc",
+      "github_id": 860665,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Jane Lusby",
+      "github": "yaahc",
+      "github_id": 1993852,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "libs",
+        "members": [
+          278509,
+          36186,
+          162737,
+          783247,
+          1065730,
+          860665
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "libs",
+        "members": [
+          278509,
+          36186,
+          162737,
+          783247,
+          1065730,
+          860665
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Library team",
+    "description": "Managing and maintaining the Rust standard library and official rust-lang crates",
+    "page": "library",
+    "email": null,
+    "repo": "https://github.com/rust-lang/libs-team",
+    "discord": null,
+    "zulip_stream": "t-libs",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

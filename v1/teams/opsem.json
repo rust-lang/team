@@ -1,0 +1,77 @@
+{
+  "name": "opsem",
+  "kind": "team",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "Jakob Degen",
+      "github": "JakobDegen",
+      "github_id": 51179609,
+      "is_lead": true
+    },
+    {
+      "name": "Ralf Jung",
+      "github": "RalfJung",
+      "github_id": 330628,
+      "is_lead": true
+    },
+    {
+      "name": "Christopher Durham",
+      "github": "CAD97",
+      "github_id": 5992217,
+      "is_lead": false
+    },
+    {
+      "name": "Mario Carneiro",
+      "github": "digama0",
+      "github_id": 868588,
+      "is_lead": false
+    },
+    {
+      "name": "Ben Kimock",
+      "github": "saethlin",
+      "github_id": 12105168,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "opsem",
+        "members": [
+          5992217,
+          51179609,
+          330628,
+          868588,
+          12105168
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "opsem",
+        "members": [
+          5992217,
+          51179609,
+          330628,
+          868588,
+          12105168
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Operational Semantics team",
+    "description": "Working on deciding and specifying the semantics of Rust around unsafe code",
+    "page": "opsem",
+    "email": null,
+    "repo": "https://github.com/rust-lang/opsem-team",
+    "discord": null,
+    "zulip_stream": "t-opsem",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}
