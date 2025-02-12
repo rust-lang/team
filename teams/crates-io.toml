@@ -32,7 +32,7 @@ alumni = [
 crates-io-admin = true
 
 [[github]]
-orgs = ["rust-lang", "conduit-rust"]
+orgs = ["rust-lang"]
 
 [rfcbot]
 label = "T-crates-io"
