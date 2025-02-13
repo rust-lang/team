@@ -1,6 +1,7 @@
 use log::debug;
 use reqwest::Method;
 
+use crate::github::api::url::GitHubUrl;
 use crate::github::api::{
     allow_not_found, BranchProtection, BranchProtectionOp, HttpClient, Login, PushAllowanceActor,
     Repo, RepoPermission, RepoSettings, Team, TeamPrivacy, TeamPushAllowanceActor, TeamRole,
@@ -21,7 +22,7 @@ impl GitHubWrite {
         })
     }
 
-    fn user_id(&self, name: &str) -> anyhow::Result<String> {
+    fn user_id(&self, name: &str, org: &str) -> anyhow::Result<String> {
         #[derive(serde::Serialize)]
         struct Params<'a> {
             name: &'a str,
@@ -42,7 +43,7 @@ impl GitHubWrite {
             id: String,
         }
 
-        let data: Data = self.client.graphql(query, Params { name })?;
+        let data: Data = self.client.graphql(query, Params { name }, org)?;
         Ok(data.user.id)
     }
 
@@ -74,7 +75,9 @@ impl GitHubWrite {
             id: String,
         }
 
-        let data: Data = self.client.graphql(query, Params { org, team: name })?;
+        let data: Data = self
+            .client
+            .graphql(query, Params { org, team: name }, org)?;
         Ok(data.organization.team.id)
     }
 
@@ -111,7 +114,7 @@ impl GitHubWrite {
             };
             Ok(self
                 .client
-                .send(Method::POST, &format!("orgs/{org}/teams"), body)?
+                .send(Method::POST, &GitHubUrl::orgs(org, "teams")?, body)?
                 .json_annotated()?)
         }
     }
@@ -144,8 +147,11 @@ impl GitHubWrite {
             serde_json::to_string(&req).unwrap_or_else(|_| "INVALID_REQUEST".to_string())
         );
         if !self.dry_run {
-            self.client
-                .send(Method::PATCH, &format!("orgs/{org}/teams/{name}"), &req)?;
+            self.client.send(
+                Method::PATCH,
+                &GitHubUrl::orgs(org, &format!("teams/{name}"))?,
+                &req,
+            )?;
         }
 
         Ok(())
@@ -156,9 +162,9 @@ impl GitHubWrite {
         debug!("Deleting team with slug '{slug}' in '{org}'");
         if !self.dry_run {
             let method = Method::DELETE;
-            let url = &format!("orgs/{org}/teams/{slug}");
-            let resp = self.client.req(method.clone(), url)?.send()?;
-            allow_not_found(resp, method, url)?;
+            let url = GitHubUrl::orgs(org, &format!("teams/{slug}"))?;
+            let resp = self.client.req(method.clone(), &url)?.send()?;
+            allow_not_found(resp, method, url.url())?;
         }
         Ok(())
     }
@@ -179,7 +185,7 @@ impl GitHubWrite {
         if !self.dry_run {
             self.client.send(
                 Method::PUT,
-                &format!("orgs/{org}/teams/{team}/memberships/{user}"),
+                &GitHubUrl::orgs(org, &format!("teams/{team}/memberships/{user}"))?,
                 &Req { role },
             )?;
         }
@@ -196,10 +202,10 @@ impl GitHubWrite {
     ) -> anyhow::Result<()> {
         debug!("Removing membership of '{user}' from team '{team}' in org '{org}'");
         if !self.dry_run {
-            let url = &format!("orgs/{org}/teams/{team}/memberships/{user}");
+            let url = &GitHubUrl::orgs(org, &format!("teams/{team}/memberships/{user}"))?;
             let method = Method::DELETE;
             let resp = self.client.req(method.clone(), url)?.send()?;
-            allow_not_found(resp, method, url)?;
+            allow_not_found(resp, method, url.url())?;
         }
 
         Ok(())
@@ -242,7 +248,7 @@ impl GitHubWrite {
         } else {
             Ok(self
                 .client
-                .send(Method::POST, &format!("orgs/{org}/repos"), req)?
+                .send(Method::POST, &GitHubUrl::orgs(org, "repos")?, req)?
                 .json_annotated()?)
         }
     }
@@ -269,7 +275,7 @@ impl GitHubWrite {
         debug!("Editing repo {}/{} with {:?}", org, repo_name, req);
         if !self.dry_run {
             self.client
-                .send(Method::PATCH, &format!("repos/{org}/{repo_name}"), &req)?;
+                .send(Method::PATCH, &GitHubUrl::repos(org, repo_name, "")?, &req)?;
         }
         Ok(())
     }
@@ -278,13 +284,19 @@ impl GitHubWrite {
         &self,
         installation_id: u64,
         repository_id: u64,
+        org: &str,
     ) -> anyhow::Result<()> {
         debug!("Adding repository {repository_id} to installation {installation_id}");
         if !self.dry_run {
             self.client
                 .req(
                     Method::PUT,
-                    &format!("user/installations/{installation_id}/repositories/{repository_id}"),
+                    &GitHubUrl::new_with_org(
+                        format!(
+                            "user/installations/{installation_id}/repositories/{repository_id}"
+                        ),
+                        org,
+                    )?,
                 )?
                 .send()?
                 .custom_error_for_status()?;
@@ -296,13 +308,19 @@ impl GitHubWrite {
         &self,
         installation_id: u64,
         repository_id: u64,
+        org: &str,
     ) -> anyhow::Result<()> {
         debug!("Removing repository {repository_id} from installation {installation_id}");
         if !self.dry_run {
             self.client
                 .req(
                     Method::DELETE,
-                    &format!("user/installations/{installation_id}/repositories/{repository_id}"),
+                    &GitHubUrl::new_with_org(
+                        format!(
+                            "user/installations/{installation_id}/repositories/{repository_id}"
+                        ),
+                        org,
+                    )?,
                 )?
                 .send()?
                 .custom_error_for_status()?;
@@ -326,7 +344,7 @@ impl GitHubWrite {
         if !self.dry_run {
             self.client.send(
                 Method::PUT,
-                &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}"),
+                &GitHubUrl::orgs(org, &format!("teams/{team}/repos/{org}/{repo}"))?,
                 &Req { permission },
             )?;
         }
@@ -350,7 +368,7 @@ impl GitHubWrite {
         if !self.dry_run {
             self.client.send(
                 Method::PUT,
-                &format!("repos/{org}/{repo}/collaborators/{user}"),
+                &GitHubUrl::repos(org, repo, &format!("collaborators/{user}"))?,
                 &Req { permission },
             )?;
         }
@@ -367,9 +385,9 @@ impl GitHubWrite {
         debug!("Removing team {team} from repo {org}/{repo}");
         if !self.dry_run {
             let method = Method::DELETE;
-            let url = &format!("orgs/{org}/teams/{team}/repos/{org}/{repo}");
-            let resp = self.client.req(method.clone(), url)?.send()?;
-            allow_not_found(resp, method, url)?;
+            let url = GitHubUrl::orgs(org, &format!("teams/{team}/repos/{org}/{repo}"))?;
+            let resp = self.client.req(method.clone(), &url)?.send()?;
+            allow_not_found(resp, method, url.url())?;
         }
 
         Ok(())
@@ -385,9 +403,9 @@ impl GitHubWrite {
         debug!("Removing collaborator {collaborator} from repo {org}/{repo}");
         if !self.dry_run {
             let method = Method::DELETE;
-            let url = &format!("repos/{org}/{repo}/collaborators/{collaborator}");
+            let url = &GitHubUrl::repos(org, repo, &format!("collaborators/{collaborator}"))?;
             let resp = self.client.req(method.clone(), url)?.send()?;
-            allow_not_found(resp, method, url)?;
+            allow_not_found(resp, method, url.url())?;
         }
         Ok(())
     }
@@ -398,6 +416,7 @@ impl GitHubWrite {
         op: BranchProtectionOp,
         pattern: &str,
         branch_protection: &BranchProtection,
+        org: &str,
     ) -> anyhow::Result<()> {
         debug!("Updating '{}' branch protection", pattern);
         #[derive(Debug, serde::Serialize)]
@@ -428,15 +447,15 @@ impl GitHubWrite {
         let query = format!("
         mutation($id: ID!, $pattern:String!, $contexts: [String!], $dismissStale: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean, $requiresApprovingReviews: Boolean) {{
             {mutation_name}(input: {{
-                {id_field}: $id, 
-                pattern: $pattern, 
-                requiresStatusChecks: true, 
+                {id_field}: $id,
+                pattern: $pattern,
+                requiresStatusChecks: true,
                 requiredStatusCheckContexts: $contexts,
                 # Disable 'Require branch to be up-to-date before merging'
                 requiresStrictStatusChecks: false,
-                isAdminEnforced: true, 
-                requiredApprovingReviewCount: $reviewCount, 
-                dismissesStaleReviews: $dismissStale, 
+                isAdminEnforced: true,
+                requiredApprovingReviewCount: $reviewCount,
+                dismissesStaleReviews: $dismissStale,
                 requiresApprovingReviews: $requiresApprovingReviews,
                 restrictsPushes: $restrictsPushes,
                 pushActorIds: $pushActorIds
@@ -451,7 +470,7 @@ impl GitHubWrite {
         for actor in &branch_protection.push_allowances {
             match actor {
                 PushAllowanceActor::User(UserPushAllowanceActor { login: name }) => {
-                    push_actor_ids.push(self.user_id(name)?);
+                    push_actor_ids.push(self.user_id(name, org)?);
                 }
                 PushAllowanceActor::Team(TeamPushAllowanceActor {
                     organization: Login { login: org },
@@ -476,6 +495,7 @@ impl GitHubWrite {
                     push_actor_ids: &push_actor_ids,
                     requires_approving_reviews: branch_protection.requires_approving_reviews,
                 },
+                org,
             )?;
         }
         Ok(())
@@ -503,7 +523,7 @@ impl GitHubWrite {
                     }
                 }
             ";
-            let _: serde_json::Value = self.client.graphql(query, Params { id })?;
+            let _: serde_json::Value = self.client.graphql(query, Params { id }, org)?;
         }
         Ok(())
     }

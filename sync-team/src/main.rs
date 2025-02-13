@@ -81,9 +81,7 @@ fn app() -> anyhow::Result<()> {
         info!("synchronizing {}", service);
         match service.as_str() {
             "github" => {
-                let token = get_env("GITHUB_TOKEN")?;
-                let client =
-                    HttpClient::from_url_and_token("https://api.github.com/".to_string(), token)?;
+                let client = HttpClient::new()?;
                 let gh_read = Box::new(GitHubApiRead::from_client(client.clone())?);
                 let teams = team_api.get_teams()?;
                 let repos = team_api.get_repos()?;
