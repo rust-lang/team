@@ -464,6 +464,7 @@ impl GithubRead for GithubMock {
     fn app_installation_repos(
         &self,
         _installation_id: u64,
+        _org: &str,
     ) -> anyhow::Result<Vec<RepoAppInstallation>> {
         Ok(vec![])
     }
@@ -481,7 +482,11 @@ impl GithubRead for GithubMock {
         Ok(self.teams.iter().find(|t| t.name == team).cloned())
     }
 
-    fn team_memberships(&self, team: &Team) -> anyhow::Result<HashMap<UserId, TeamMember>> {
+    fn team_memberships(
+        &self,
+        team: &Team,
+        _org: &str,
+    ) -> anyhow::Result<HashMap<UserId, TeamMember>> {
         let memberships = self
             .team_memberships
             .get(&team.name)

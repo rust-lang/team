@@ -114,7 +114,7 @@ impl SyncGitHub {
                 if let Some(app) = GithubApp::from_id(installation.app_id) {
                     let mut repositories = HashSet::new();
                     for repo_installation in
-                        github.app_installation_repos(installation.installation_id)?
+                        github.app_installation_repos(installation.installation_id, org)?
                     {
                         repositories.insert(repo_installation.name);
                     }
@@ -239,7 +239,7 @@ impl SyncGitHub {
 
         let mut member_diffs = Vec::new();
 
-        let mut current_members = self.github.team_memberships(&team)?;
+        let mut current_members = self.github.team_memberships(&team, &github_team.org)?;
         let invites = self
             .github
             .team_membership_invitations(&github_team.org, &github_team.name)?;
@@ -748,7 +748,7 @@ impl CreateRepoDiff {
         }
 
         for installation in &self.app_installations {
-            installation.apply(sync, repo.repo_id)?;
+            installation.apply(sync, repo.repo_id, &self.org)?;
         }
 
         Ok(())
@@ -839,7 +839,7 @@ impl UpdateRepoDiff {
         }
 
         for app_installation in &self.app_installation_diffs {
-            app_installation.apply(sync, self.repo_id)?;
+            app_installation.apply(sync, self.repo_id, &self.org)?;
         }
         Ok(())
     }
@@ -992,6 +992,7 @@ impl BranchProtectionDiff {
                     BranchProtectionOp::CreateForRepo(repo_id.to_string()),
                     &self.pattern,
                     bp,
+                    org,
                 )?;
             }
             BranchProtectionDiffOperation::Update(id, _, bp) => {
@@ -999,6 +1000,7 @@ impl BranchProtectionDiff {
                     BranchProtectionOp::UpdateBranchProtection(id.clone()),
                     &self.pattern,
                     bp,
+                    org,
                 )?;
             }
             BranchProtectionDiffOperation::Delete(id) => {
@@ -1076,13 +1078,13 @@ enum AppInstallationDiff {
 }
 
 impl AppInstallationDiff {
-    fn apply(&self, sync: &GitHubWrite, repo_id: u64) -> anyhow::Result<()> {
+    fn apply(&self, sync: &GitHubWrite, repo_id: u64, org: &str) -> anyhow::Result<()> {
         match self {
             AppInstallationDiff::Add(app) => {
-                sync.add_repo_to_app_installation(app.installation_id, repo_id)?;
+                sync.add_repo_to_app_installation(app.installation_id, repo_id, org)?;
             }
             AppInstallationDiff::Remove(app) => {
-                sync.remove_repo_from_app_installation(app.installation_id, repo_id)?;
+                sync.remove_repo_from_app_installation(app.installation_id, repo_id, org)?;
             }
         }
         Ok(())

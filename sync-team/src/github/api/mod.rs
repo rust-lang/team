@@ -1,4 +1,5 @@
 mod read;
+mod url;
 mod write;
 
 use crate::utils::ResponseExt;
@@ -14,8 +15,8 @@ use reqwest::{
     Method, StatusCode,
 };
 use serde::{de::DeserializeOwned, Deserialize};
-use std::borrow::Cow;
 use std::fmt;
+use url::GitHubUrl;
 
 pub(crate) use read::{GitHubApiRead, GithubRead};
 pub(crate) use write::GitHubWrite;
@@ -23,47 +24,37 @@ pub(crate) use write::GitHubWrite;
 #[derive(Clone)]
 pub(crate) struct HttpClient {
     client: Client,
-    base_url: String,
 }
 
 impl HttpClient {
-    pub(crate) fn from_url_and_token(mut base_url: String, token: String) -> anyhow::Result<Self> {
+    pub(crate) fn new() -> anyhow::Result<Self> {
         let mut builder = reqwest::blocking::ClientBuilder::default();
         let mut map = HeaderMap::default();
-        let mut auth = HeaderValue::from_str(&format!("token {}", token))?;
-        auth.set_sensitive(true);
 
-        map.insert(header::AUTHORIZATION, auth);
         map.insert(
             header::USER_AGENT,
             HeaderValue::from_static(crate::USER_AGENT),
         );
         builder = builder.default_headers(map);
 
-        if !base_url.ends_with('/') {
-            base_url.push('/');
-        }
-
         Ok(Self {
             client: builder.build()?,
-            base_url,
         })
     }
 
-    fn req(&self, method: Method, url: &str) -> anyhow::Result<RequestBuilder> {
-        let url = if url.starts_with("https://") {
-            Cow::Borrowed(url)
-        } else {
-            Cow::Owned(format!("{}{url}", self.base_url))
-        };
-        trace!("http request: {} {}", method, url);
-        Ok(self.client.request(method, url.as_ref()))
+    fn req(&self, method: Method, url: &GitHubUrl) -> anyhow::Result<RequestBuilder> {
+        trace!("http request: {} {}", method, url.url());
+        let client = self
+            .client
+            .request(method, url.url())
+            .header(header::AUTHORIZATION, url.auth());
+        Ok(client)
     }
 
     fn send<T: serde::Serialize + std::fmt::Debug>(
         &self,
         method: Method,
-        url: &str,
+        url: &GitHubUrl,
         body: &T,
     ) -> Result<Response, anyhow::Error> {
         let resp = self.req(method, url)?.json(body).send()?;
@@ -73,19 +64,22 @@ impl HttpClient {
     fn send_option<T: DeserializeOwned>(
         &self,
         method: Method,
-        url: &str,
+        url: &GitHubUrl,
     ) -> Result<Option<T>, anyhow::Error> {
         let resp = self.req(method.clone(), url)?.send()?;
         match resp.status() {
             StatusCode::OK => Ok(Some(resp.json_annotated().with_context(|| {
-                format!("Failed to decode response body on {method} request to '{url}'")
+                format!(
+                    "Failed to decode response body on {method} request to '{}'",
+                    url.url()
+                )
             })?)),
             StatusCode::NOT_FOUND => Ok(None),
             _ => Err(resp.custom_error_for_status().unwrap_err()),
         }
     }
 
-    fn graphql<R, V>(&self, query: &str, variables: V) -> anyhow::Result<R>
+    fn graphql<R, V>(&self, query: &str, variables: V, org: &str) -> anyhow::Result<R>
     where
         R: serde::de::DeserializeOwned,
         V: serde::Serialize,
@@ -96,7 +90,10 @@ impl HttpClient {
             variables: V,
         }
         let resp = self
-            .req(Method::POST, "graphql")?
+            .req(
+                Method::POST,
+                &GitHubUrl::new_with_org("graphql".to_string(), org)?,
+            )?
             .json(&Request { query, variables })
             .send()?
             .custom_error_for_status()?;
@@ -113,16 +110,17 @@ impl HttpClient {
         }
     }
 
-    fn rest_paginated<F, T>(&self, method: &Method, url: String, mut f: F) -> anyhow::Result<()>
+    fn rest_paginated<F, T>(&self, method: &Method, url: &GitHubUrl, mut f: F) -> anyhow::Result<()>
     where
         F: FnMut(T) -> anyhow::Result<()>,
         T: DeserializeOwned,
     {
-        let mut next = Some(url);
+        let mut next = Some(url.clone());
         while let Some(next_url) = next.take() {
             let resp = self
                 .req(method.clone(), &next_url)?
-                .send()?
+                .send()
+                .with_context(|| format!("failed to send request to {}", next_url.url()))?
                 .custom_error_for_status()?;
 
             // Extract the next page
@@ -134,14 +132,20 @@ impl HttpClient {
                         .map(|r| r.iter().any(|r| *r == RelationType::Next))
                         .unwrap_or(false)
                     {
-                        next = Some(link.link().to_string());
+                        next = Some(GitHubUrl::new(
+                            link.link().to_string(),
+                            next_url.auth().clone(),
+                        ));
                         break;
                     }
                 }
             }
 
             f(resp.json_annotated().with_context(|| {
-                format!("Failed to deserialize response body for {method} request to '{next_url}'")
+                format!(
+                    "Failed to deserialize response body for {method} request to '{}'",
+                    next_url.url()
+                )
             })?)?;
         }
         Ok(())

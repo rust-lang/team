@@ -1,8 +1,9 @@
 use crate::github::api::{
-    team_node_id, user_node_id, BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient,
-    Login, OrgAppInstallation, Repo, RepoAppInstallation, RepoTeam, RepoUser, Team, TeamMember,
-    TeamRole,
+    team_node_id, url::GitHubUrl, user_node_id, BranchProtection, GraphNode, GraphNodes,
+    GraphPageInfo, HttpClient, Login, OrgAppInstallation, Repo, RepoAppInstallation, RepoTeam,
+    RepoUser, Team, TeamMember, TeamRole,
 };
+use anyhow::Context;
 use reqwest::Method;
 use std::collections::{HashMap, HashSet};
 
@@ -20,6 +21,7 @@ pub(crate) trait GithubRead {
     fn app_installation_repos(
         &self,
         installation_id: u64,
+        org: &str,
     ) -> anyhow::Result<Vec<RepoAppInstallation>>;
 
     /// Get all teams associated with a org
@@ -30,7 +32,7 @@ pub(crate) trait GithubRead {
     /// Get the team by name and org
     fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>>;
 
-    fn team_memberships(&self, team: &Team) -> anyhow::Result<HashMap<u64, TeamMember>>;
+    fn team_memberships(&self, team: &Team, org: &str) -> anyhow::Result<HashMap<u64, TeamMember>>;
 
     /// The GitHub names of users invited to the given team
     fn team_membership_invitations(&self, org: &str, team: &str)
@@ -96,6 +98,7 @@ impl GithubRead for GitHubApiRead {
                 Params {
                     ids: chunk.iter().map(|id| user_node_id(*id)).collect(),
                 },
+                "rust-lang", // any of our orgs will work for this query
             )?;
             for node in res.nodes.into_iter().flatten() {
                 result.insert(node.database_id, node.login);
@@ -112,7 +115,7 @@ impl GithubRead for GitHubApiRead {
         let mut owners = HashSet::new();
         self.client.rest_paginated(
             &Method::GET,
-            format!("orgs/{org}/members?role=admin"),
+            &GitHubUrl::orgs(org, "members?role=admin")?,
             |resp: Vec<User>| {
                 owners.extend(resp.into_iter().map(|u| u.id));
                 Ok(())
@@ -130,7 +133,7 @@ impl GithubRead for GitHubApiRead {
         let mut installations = Vec::new();
         self.client.rest_paginated(
             &Method::GET,
-            format!("orgs/{org}/installations"),
+            &GitHubUrl::orgs(org, "installations")?,
             |response: InstallationPage| {
                 installations.extend(response.installations);
                 Ok(())
@@ -142,6 +145,7 @@ impl GithubRead for GitHubApiRead {
     fn app_installation_repos(
         &self,
         installation_id: u64,
+        org: &str,
     ) -> anyhow::Result<Vec<RepoAppInstallation>> {
         #[derive(serde::Deserialize, Debug)]
         struct InstallationPage {
@@ -149,14 +153,24 @@ impl GithubRead for GitHubApiRead {
         }
 
         let mut installations = Vec::new();
-        self.client.rest_paginated(
-            &Method::GET,
-            format!("user/installations/{installation_id}/repositories"),
-            |response: InstallationPage| {
-                installations.extend(response.repositories);
-                Ok(())
-            },
-        )?;
+        let url = if std::env::var("GITHUB_TOKEN").is_ok() {
+            // we are using a PAT
+            format!("user/installations/{installation_id}/repositories")
+        } else {
+            // we are using a GitHub App
+            "installation/repositories".to_string()
+        };
+
+        self.client
+            .rest_paginated(
+                &Method::GET,
+                &GitHubUrl::new_with_org(url.clone(), org)?,
+                |response: InstallationPage| {
+                    installations.extend(response.repositories);
+                    Ok(())
+                },
+            )
+            .with_context(|| format!("failed to send rest paginated request to {url}"))?;
         Ok(installations)
     }
 
@@ -165,7 +179,7 @@ impl GithubRead for GitHubApiRead {
 
         self.client.rest_paginated(
             &Method::GET,
-            format!("orgs/{org}/teams"),
+            &GitHubUrl::orgs(org, "teams")?,
             |resp: Vec<Team>| {
                 teams.extend(resp.into_iter().map(|t| (t.name, t.slug)));
                 Ok(())
@@ -176,11 +190,13 @@ impl GithubRead for GitHubApiRead {
     }
 
     fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
-        self.client
-            .send_option(Method::GET, &format!("orgs/{org}/teams/{team}"))
+        self.client.send_option(
+            Method::GET,
+            &GitHubUrl::orgs(org, &format!("teams/{team}"))?,
+        )
     }
 
-    fn team_memberships(&self, team: &Team) -> anyhow::Result<HashMap<u64, TeamMember>> {
+    fn team_memberships(&self, team: &Team, org: &str) -> anyhow::Result<HashMap<u64, TeamMember>> {
         #[derive(serde::Deserialize)]
         struct RespTeam {
             members: RespMembers,
@@ -240,6 +256,7 @@ impl GithubRead for GitHubApiRead {
                         team: team_node_id(id),
                         cursor: page_info.end_cursor.as_deref(),
                     },
+                    org,
                 )?;
                 if let Some(team) = res.node {
                     page_info = team.members.page_info;
@@ -268,7 +285,7 @@ impl GithubRead for GitHubApiRead {
 
         self.client.rest_paginated(
             &Method::GET,
-            format!("orgs/{org}/teams/{team}/invitations"),
+            &GitHubUrl::orgs(org, &format!("teams/{team}/invitations"))?,
             |resp: Vec<Login>| {
                 invites.extend(resp.into_iter().map(|l| l.login));
                 Ok(())
@@ -280,7 +297,7 @@ impl GithubRead for GitHubApiRead {
 
     fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
         self.client
-            .send_option(Method::GET, &format!("repos/{org}/{repo}"))
+            .send_option(Method::GET, &GitHubUrl::repos(org, repo, "")?)
     }
 
     fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
@@ -288,7 +305,7 @@ impl GithubRead for GitHubApiRead {
 
         self.client.rest_paginated(
             &Method::GET,
-            format!("repos/{org}/{repo}/teams"),
+            &GitHubUrl::repos(org, repo, "teams")?,
             |resp: Vec<RepoTeam>| {
                 teams.extend(resp);
                 Ok(())
@@ -303,7 +320,7 @@ impl GithubRead for GitHubApiRead {
 
         self.client.rest_paginated(
             &Method::GET,
-            format!("repos/{org}/{repo}/collaborators?affiliation=direct"),
+            &GitHubUrl::repos(org, repo, "collaborators?affiliation=direct")?,
             |resp: Vec<RepoUser>| {
                 users.extend(resp);
                 Ok(())
@@ -327,7 +344,7 @@ impl GithubRead for GitHubApiRead {
             query($org:String!,$repo:String!) {
                 repository(owner:$org, name:$repo) {
                     branchProtectionRules(first:100) {
-                        nodes { 
+                        nodes {
                             id,
                             pattern,
                             isAdminEnforced,
@@ -374,7 +391,7 @@ impl GithubRead for GitHubApiRead {
         }
 
         let mut result = HashMap::new();
-        let res: Wrapper = self.client.graphql(QUERY, Params { org, repo })?;
+        let res: Wrapper = self.client.graphql(QUERY, Params { org, repo }, org)?;
         for node in res
             .repository
             .branch_protection_rules
