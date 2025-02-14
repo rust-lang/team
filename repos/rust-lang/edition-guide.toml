@@ -5,7 +5,7 @@ homepage = "https://doc.rust-lang.org/nightly/edition-guide/"
 bots = ["rustbot", "rfcbot"]
 
 [access.teams]
-project-edition-2024 = "maintain"
+edition = "maintain"
 
 [[branch-protections]]
 pattern = "master"

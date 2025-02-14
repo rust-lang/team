@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "edition-team"
+description = "Home of the Rust edition team"
+homepage = "https://edition-team.rust-lang.org/"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+edition = "maintain"

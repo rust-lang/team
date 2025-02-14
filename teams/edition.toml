@@ -1,0 +1,39 @@
+name = "edition"
+subteam-of = "launching-pad"
+
+[people]
+leads = [
+    "traviscross",
+    "ehuss",
+]
+members = [
+    "traviscross",
+    "ehuss",
+]
+alumni = [
+    "bstrie",
+    "m-ou-se",
+]
+
+[permissions]
+perf = true
+crater = true
+dev-desktop = true
+bors.rust.review = true
+
+[[github]]
+orgs = ["rust-lang"]
+
+[rfcbot]
+label = "T-edition"
+name = "Edition"
+ping = "rust-lang/edition"
+
+[website]
+name = "Edition team"
+description = "Managing the editions of Rust"
+repo = "http://github.com/rust-lang/edition-team"
+zulip-stream = "edition"
+
+[[zulip-groups]]
+name = "T-edition"
