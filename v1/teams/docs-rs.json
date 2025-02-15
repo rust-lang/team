@@ -1,0 +1,108 @@
+{
+  "name": "docs-rs",
+  "kind": "team",
+  "subteam_of": "devtools",
+  "members": [
+    {
+      "name": "Denis Cornehl",
+      "github": "syphar",
+      "github_id": 540890,
+      "is_lead": true
+    },
+    {
+      "name": "Sebastian Thiel",
+      "github": "Byron",
+      "github_id": 63622,
+      "is_lead": false
+    },
+    {
+      "name": "Guillaume Gomez",
+      "github": "GuillaumeGomez",
+      "github_id": 3050060,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Hoffman-Andrews",
+      "github": "jsha",
+      "github_id": 220205,
+      "is_lead": false
+    },
+    {
+      "name": "Wim",
+      "github": "Nemo157",
+      "github_id": 81079,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Jynn Nelson",
+      "github": "jyn514",
+      "github_id": 23638587,
+      "is_lead": false
+    },
+    {
+      "name": "Chase Wilson",
+      "github": "Kixiron",
+      "github_id": 25047011,
+      "is_lead": false
+    },
+    {
+      "name": "Onur Aslan",
+      "github": "onur",
+      "github_id": 345828,
+      "is_lead": false
+    },
+    {
+      "name": "Pietro Albini",
+      "github": "pietroalbini",
+      "github_id": 2299951,
+      "is_lead": false
+    },
+    {
+      "name": "QuietMisdreavus",
+      "github": "QuietMisdreavus",
+      "github_id": 5217170,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "docs-rs",
+        "members": [
+          63622,
+          3050060,
+          81079,
+          220205,
+          540890
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "docs-rs",
+        "members": [
+          63622,
+          3050060,
+          81079,
+          220205,
+          540890
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Docs.rs team",
+    "description": "Docs.rs, the documentation hosting service for crates",
+    "page": "docs-rs",
+    "email": null,
+    "repo": "https://github.com/rust-lang/docs.rs",
+    "discord": null,
+    "zulip_stream": "t-docs-rs",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

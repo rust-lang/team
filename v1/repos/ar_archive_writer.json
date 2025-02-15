@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "ar_archive_writer",
+  "description": "A writer for object file ar archives",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "compiler",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}
