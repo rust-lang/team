@@ -4,4 +4,4 @@ description = "discord moderation bot"
 bots = []
 
 [access.teams]
-mods-discord = "write"
+mods = "maintain"
