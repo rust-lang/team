@@ -1,15 +1,9 @@
 # Core has been replaced by the leadership council with RFC#3392
-# While we untangle the remaining parts of infrastructure that are
-# tied to core, we'll leave the team here with just the members of
-# the council that were previously core team members.
 name = "core"
 
 [people]
 leads = []
-members = [
-    "Mark-Simulacrum",
-    "rylev",
-]
+members = []
 alumni = [
     "alexcrichton",
     "aturon",
@@ -29,6 +23,8 @@ alumni = [
     "sophiajt",
     "badboy",
     "wycats",
+    "Mark-Simulacrum",
+    "rylev",
 ]
 
 [[github]]
