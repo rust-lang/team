@@ -1,0 +1,88 @@
+# This workflow executes a dry-run of the sync-team tool after a push to any pull request.
+# This allows us to see which changes would be applied to live services after the PR
+# would be merged.
+#
+# The workflow uses the `workflow_run` trigger, which should always run in the default branch of
+# this repository. This is required so that the workflow has permissions to post PR comments.
+# We should not check out any code from the PR, as it could present a security hazard.
+# Instead, we simply download a GitHub artifact with a directory of JSON files and use that as
+# input for sync-team.
+# This artifact is created and uploaded on PR pushes using the CI workflow in `main.yml`.
+# Details about `workflow_run`:
+# https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run:
+name: sync-team dry-run
+
+on:
+  workflow_run:
+    workflows: [ CI ]
+    types:
+      - completed
+
+concurrency:
+  # Only run this once at a time on any given PR
+  group: dry-run-${{ github.event.workflow_run.pull_requests[0].number }}
+  cancel-in-progress: true
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request' }}
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: rust-lang/sync-team
+          persist-credentials: false
+
+      - name: Install Rust Stable
+        run: |
+          rustc -vV
+          rustup update stable
+          rustup default stable
+          rustc -vV
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Download built JSON API
+        uses: actions/download-artifact@v4
+        with:
+          name: team-api-output
+          path: team-api
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run sync-team dry-run check
+        run: |
+          # Perform build and execution separately to avoid any potential output from
+          # cargo leaking into the output file.
+          cargo build ./target/debug/sync-team print-plan --team-json team-api > output.txt
+
+      - name: Prepare comment
+        run: |
+          cat > comment.txt << EOL
+          <details>
+          <summary>Dry-run check results</summary>
+          <pre><code>
+          EOL
+          cat output.txt >> comment.txt
+          printf "</pre></code>\n</details>\n" >> comment.txt
+
+          cat comment.txt
+
+      - name: Send comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR=${{ github.event.workflow_run.pull_requests[0].number }}
+
+          # --edit-last doesn't work if there is no previous comment, so we have to figure out
+          # if we should create a comment or not
+          if gh issue view ${PR} --json comments \
+            --jq '.comments.[].author.login' | grep --quiet --fixed-strings "github-actions"; then
+            echo "Editing comment"
+            gh pr comment ${PR} --body-file comment.txt --edit-last
+          else
+            echo "Creating new comment"
+            gh pr comment ${PR} --body-file comment.txt
+          fi
