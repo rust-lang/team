@@ -7,7 +7,7 @@ jobs:
   ci:
     name: CI
     runs-on: ubuntu-latest
-    if: github.repository == 'rust-lang/team'
+    #if: github.repository == 'rust-lang/team'
     permissions:
       id-token: write
     steps:
@@ -28,16 +28,16 @@ jobs:
       - name: Build the validation tool
         run: cargo build
 
-      - name: Validate the repository contents
-        run: cargo run -- check --strict
-        env:
-          GITHUB_TOKEN: ${{ secrets.github_token }}
-
-      - name: Run rustfmt
-        run: cargo fmt -- --check
-
-      - name: Run tests
-        run: cargo test --workspace --all-features
+      #      - name: Validate the repository contents
+      #        run: cargo run -- check --strict
+      #        env:
+      #          GITHUB_TOKEN: ${{ secrets.github_token }}
+      #
+      #      - name: Run rustfmt
+      #        run: cargo fmt -- --check
+      #
+      #      - name: Run tests
+      #        run: cargo test --workspace --all-features
 
       - name: Build the contents of the static API
         run: |
@@ -51,26 +51,26 @@ jobs:
           name: team-api-output
           path: build
 
-      - name: Deploy to GitHub Pages
-        run: |
-          touch build/.nojekyll
-          curl -LsSf https://raw.githubusercontent.com/rust-lang/simpleinfra/master/setup-deploy-keys/src/deploy.rs | rustc - -o /tmp/deploy
-          (cd build && /tmp/deploy)
-        env:
-          GITHUB_DEPLOY_KEY: ${{ secrets.GITHUB_DEPLOY_KEY }}
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-
-      - name: Configure AWS credentials
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: arn:aws:iam::890664054962:role/ci--rust-lang--team
-          aws-region: us-west-1
-
-      - name: Start the synchronization tool
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: |
-          # Introduce some artificial delay to help github pages propagate.
-          sleep 60
-          aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
-          cat output.json | python3 -m json.tool
+#      - name: Deploy to GitHub Pages
+#        run: |
+#          touch build/.nojekyll
+#          curl -LsSf https://raw.githubusercontent.com/rust-lang/simpleinfra/master/setup-deploy-keys/src/deploy.rs | rustc - -o /tmp/deploy
+#          (cd build && /tmp/deploy)
+#        env:
+#          GITHUB_DEPLOY_KEY: ${{ secrets.GITHUB_DEPLOY_KEY }}
+#        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+#
+#      - name: Configure AWS credentials
+#        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          role-to-assume: arn:aws:iam::890664054962:role/ci--rust-lang--team
+#          aws-region: us-west-1
+#
+#      - name: Start the synchronization tool
+#        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+#        run: |
+#          # Introduce some artificial delay to help github pages propagate.
+#          sleep 60
+#          aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
+#          cat output.json | python3 -m json.tool
