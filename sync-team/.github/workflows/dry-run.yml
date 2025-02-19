@@ -11,6 +11,7 @@ jobs:
   dry-run:
     name: Run sync-team dry-run
     runs-on: ubuntu-24.04
+    if: ${{ github.repository_owner == 'rust-lang' }}
     steps:
       - uses: actions/checkout@v4
         with:
