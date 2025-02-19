@@ -42,4 +42,4 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
 
 COPY --from=build /tmp/source/target/release/sync-team /usr/local/bin/
 
-CMD ["/usr/local/bin/sync-team", "--live"]
+CMD ["/usr/local/bin/sync-team", "apply"]

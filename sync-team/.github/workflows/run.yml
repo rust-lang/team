@@ -1,6 +1,6 @@
 name: Run
 on:
-  workflow_dispatch: {}
+  workflow_dispatch: { }
 
 jobs:
   run:
@@ -19,4 +19,3 @@ jobs:
         run: |
           aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
           cat output.json | python3 -m json.tool
-          

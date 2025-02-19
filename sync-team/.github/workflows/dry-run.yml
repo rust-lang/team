@@ -105,4 +105,4 @@ jobs:
           GITHUB_TOKEN_RUST_EMBEDDED: ${{ steps.rust-embedded-token.outputs.token }}
           GITHUB_TOKEN_CONDUIT_RUST: ${{ steps.conduit-rust-token.outputs.token }}
           GITHUB_TOKEN_RUST_DEV_TOOLS: ${{ steps.rust-dev-tools-token.outputs.token }}
-        run: cargo run -- --only-print-plan github
+        run: cargo run -- print-plan --services github

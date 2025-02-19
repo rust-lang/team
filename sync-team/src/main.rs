@@ -8,62 +8,57 @@ use crate::github::{create_diff, GitHubApiRead, GitHubWrite, HttpClient};
 use crate::team_api::TeamApi;
 use crate::zulip::SyncZulip;
 use anyhow::Context;
+use clap::Parser;
 use log::{error, info, warn};
+use std::path::PathBuf;
 
 const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun", "zulip"];
 const USER_AGENT: &str = "rust-lang teams sync (https://github.com/rust-lang/sync-team)";
 
-fn usage() {
-    eprintln!("available services:");
-    for service in AVAILABLE_SERVICES {
-        eprintln!("  {service}");
-    }
-    eprintln!("available flags:");
-    eprintln!("  --help              Show this help message");
-    eprintln!("  --live              Apply the proposed changes to the services");
-    eprintln!("  --team-repo <path>  Path to the local team repo to use");
-    eprintln!("  --only-print-plan   Print the execution plan without executing it");
-    eprintln!("environment variables:");
-    eprintln!("  GITHUB_TOKEN          Authentication token with GitHub");
-    eprintln!("  MAILGUN_API_TOKEN     Authentication token with Mailgun");
-    eprintln!("  EMAIL_ENCRYPTION_KEY  Key used to decrypt encrypted emails in the team repo");
-    eprintln!("  ZULIP_USERNAME        Username of the Zulip bot");
-    eprintln!("  ZULIP_API_TOKEN       Autnentication token of the Zulip bot");
+/// Tooling that performs changes on GitHub, MailGun and Zulip.
+///
+/// Environment variables:
+/// - GITHUB_TOKEN          Authentication token with GitHub
+/// - MAILGUN_API_TOKEN     Authentication token with Mailgun
+/// - EMAIL_ENCRYPTION_KEY  Key used to decrypt encrypted emails in the team repo
+/// - ZULIP_USERNAME        Username of the Zulip bot
+/// - ZULIP_API_TOKEN       Authentication token of the Zulip bot
+#[derive(clap::Parser, Debug)]
+#[clap(verbatim_doc_comment)]
+struct Args {
+    /// Comma-separated list of available services
+    #[clap(long, global(true), value_parser = clap::builder::PossibleValuesParser::new(
+        AVAILABLE_SERVICES
+    ), value_delimiter = ',')]
+    services: Vec<String>,
+
+    /// Path to a checkout of `rust-lang/team`, which contains the ground-truth data.
+    #[clap(long, global(true))]
+    team_repo: Option<PathBuf>,
+
+    #[clap(subcommand)]
+    command: Option<SubCommand>,
+}
+
+#[derive(clap::Parser, Debug)]
+enum SubCommand {
+    /// Try to apply changes, but do not send any outgoing API requests.
+    DryRun,
+    /// Only print a diff of what would be changed.
+    PrintPlan,
+    /// Apply the changes to the specified services.
+    Apply,
 }
 
 fn app() -> anyhow::Result<()> {
-    let mut dry_run = true;
-    let mut next_team_repo = false;
-    let mut only_print_plan = false;
-    let mut team_repo = None;
-    let mut services = Vec::new();
-    for arg in std::env::args().skip(1) {
-        if next_team_repo {
-            team_repo = Some(arg);
-            next_team_repo = false;
-            continue;
-        }
-        match arg.as_str() {
-            "--live" => dry_run = false,
-            "--team-repo" => next_team_repo = true,
-            "--help" => {
-                usage();
-                return Ok(());
-            }
-            "--only-print-plan" => only_print_plan = true,
-            service if AVAILABLE_SERVICES.contains(&service) => services.push(service.to_string()),
-            _ => {
-                eprintln!("unknown argument: {arg}");
-                usage();
-                std::process::exit(1);
-            }
-        }
-    }
+    let args = Args::parse();
 
-    let team_api = team_repo
-        .map(|p| TeamApi::Local(p.into()))
+    let team_api = args
+        .team_repo
+        .map(|p| TeamApi::Local(p))
         .unwrap_or(TeamApi::Production);
 
+    let mut services = args.services;
     if services.is_empty() {
         info!("no service to synchronize specified, defaulting to all services");
         services = AVAILABLE_SERVICES
@@ -72,9 +67,12 @@ fn app() -> anyhow::Result<()> {
             .collect();
     }
 
+    let subcmd = args.command.unwrap_or(SubCommand::DryRun);
+    let only_print_plan = matches!(subcmd, SubCommand::PrintPlan);
+    let dry_run = only_print_plan || matches!(subcmd, SubCommand::DryRun);
+
     if dry_run {
         warn!("sync-team is running in dry mode, no changes will be applied.");
-        warn!("run the binary with the --live flag to apply the changes.");
     }
 
     for service in services {
