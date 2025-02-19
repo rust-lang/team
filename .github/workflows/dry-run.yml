@@ -1,0 +1,87 @@
+name: sync-team dry-run
+
+on:
+  workflow_run:
+    workflows: [ CI ]
+    types:
+      - completed
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request' }}
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: rust-lang/sync-team
+
+      - name: Install Rust Stable
+        run: |
+          rustc -vV
+          rustup update stable
+          rustup default stable
+          rustc -vV
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Download built JSON API
+        uses: actions/download-artifact@v4
+        with:
+          name: team-api-output
+          path: team-api
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run sync-team dry-run check
+        run: |
+          cargo build
+          ./target/debug/sync-team print-plan --team-source team-api > output.log
+
+      - uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require("fs");
+
+            // Hide previous comments
+            const pr = context.payload.workflow_run.pull_requests[0].number;
+            const comments = await github.rest.issues.listComments({
+                issue_number: pr,
+                owner: context.repo.owner,
+                repo: context.repo.repo
+            });
+            const botComments = comments.data
+                .filter(comment => {
+                    return comment.user?.login === 'github-actions[bot]' && comment.user?.type === 'Bot';
+                });
+
+            for (const comment of botComments) {
+                const nodeID = comment.node_id;
+                const response = await github.graphql(`
+                mutation {
+                  minimizeComment(input: {classifier: OUTDATED, subjectId: "${nodeID}"}) {
+                    minimizedComment {
+                      isMinimized
+                    }
+                  }
+                }
+              `);
+                
+                if (response.errors) {
+                    throw new Error(`${response.errors[0].message}`);
+                }
+            }
+
+            const log = fs.readFileSync("output.log", "utf8");
+            await github.rest.issues.createComment({
+                issue_number: pr,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `<details>
+            <summary>Dry-run check result</summary>
+            <pre><code>${log}</code></pre>
+            </details>
+            `
+            });
