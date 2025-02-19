@@ -32,9 +32,13 @@ struct Args {
     ), value_delimiter = ',')]
     services: Vec<String>,
 
-    /// Path to a checkout of `rust-lang/team`, which contains the ground-truth data.
-    #[clap(long, global(true))]
+    /// Path to a checkout of `rust-lang/team`.
+    #[clap(long, global(true), conflicts_with = "team_json")]
     team_repo: Option<PathBuf>,
+
+    /// Path to a directory with prebuilt JSON data from the `team` repository.
+    #[clap(long, global(true))]
+    team_json: Option<PathBuf>,
 
     #[clap(subcommand)]
     command: Option<SubCommand>,
@@ -53,10 +57,13 @@ enum SubCommand {
 fn app() -> anyhow::Result<()> {
     let args = Args::parse();
 
-    let team_api = args
-        .team_repo
-        .map(|p| TeamApi::Local(p))
-        .unwrap_or(TeamApi::Production);
+    let team_api = if let Some(path) = args.team_repo {
+        TeamApi::Checkout(path)
+    } else if let Some(path) = args.team_json {
+        TeamApi::Prebuilt(path)
+    } else {
+        TeamApi::Production
+    };
 
     let mut services = args.services;
     if services.is_empty() {
