@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "project-const-generics",
+  "description": "",
+  "homepage": "https://rust-lang.github.io/project-const-generics/",
+  "bots": [],
+  "teams": [
+    {
+      "name": "project-const-generics",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

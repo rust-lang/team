@@ -1,0 +1,30 @@
+{
+  "name": "emscripten",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Burak Emir",
+      "github": "burakemir",
+      "github_id": 10248140,
+      "is_lead": false
+    },
+    {
+      "name": "Hood Chatham",
+      "github": "hoodmane",
+      "github_id": 8739626,
+      "is_lead": false
+    },
+    {
+      "name": "Juniper Tyree",
+      "github": "juntyr",
+      "github_id": 50025784,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

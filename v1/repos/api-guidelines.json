@@ -1,0 +1,22 @@
+{
+  "org": "rust-lang",
+  "name": "api-guidelines",
+  "description": "Rust API guidelines",
+  "homepage": "https://rust-lang.github.io/api-guidelines/",
+  "bots": [],
+  "teams": [
+    {
+      "name": "libs-api",
+      "permission": "write"
+    },
+    {
+      "name": "libs",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,66 @@
+{
+  "name": "testing-devex",
+  "kind": "team",
+  "subteam_of": "devtools",
+  "members": [
+    {
+      "name": "Caleb Cartwright",
+      "github": "calebcartwright",
+      "github_id": 13042488,
+      "is_lead": true
+    },
+    {
+      "name": "Ed Page",
+      "github": "epage",
+      "github_id": 60961,
+      "is_lead": false
+    },
+    {
+      "name": "Scott Schafer",
+      "github": "Muscraft",
+      "github_id": 23045215,
+      "is_lead": false
+    },
+    {
+      "name": "Thom Chiovoloni",
+      "github": "thomcc",
+      "github_id": 860665,
+      "is_lead": false
+    },
+    {
+      "name": "Weihang Lo",
+      "github": "weihanglo",
+      "github_id": 14314532,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "testing-devex",
+        "members": [
+          23045215,
+          13042488,
+          60961,
+          860665,
+          14314532
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Testing DevEx team",
+    "description": "Working on the associated libraries, tooling, strategy, and integration points that support the developer experience with writing, executing, and analyzing tests",
+    "page": "testing-devex",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

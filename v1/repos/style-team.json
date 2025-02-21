@@ -1,0 +1,20 @@
+{
+  "org": "rust-lang",
+  "name": "style-team",
+  "description": "Home of the Rust style team",
+  "homepage": null,
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "style",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,21 @@
+{
+  "org": "rust-lang",
+  "name": "testing-devex-team",
+  "description": "Home of the Rust Testing DevEx team",
+  "homepage": null,
+  "bots": [
+    "rustbot",
+    "rfcbot"
+  ],
+  "teams": [
+    {
+      "name": "testing-devex",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}
