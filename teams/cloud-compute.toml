@@ -7,18 +7,18 @@ leads = []
 # to true in its team toml file, then you do not need to be added to this list.
 # For example, T-compiler and T-infra both have `dev-desktop = true`
 members = [
-    "albertlarsan68",
     "asquared31415",
-    "Dajamante",
-    "jhpratt",
     "JoelMarcey",
     "nellshamrell",
-    "ouz-a",
     "Sp00ph",
     "yaahc",
-    "WaffleLapkin",
     "JulianKnodt",
     "vincenzopalazzo",
+    "hkBst",
+]
+
+alumni = [
+    "Dajamante",
 ]
 
 [permissions]
