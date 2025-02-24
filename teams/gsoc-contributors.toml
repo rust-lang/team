@@ -17,6 +17,8 @@ members = [
 
 [permissions]
 dev-desktop = true
+bors.rust.try = true
+perf = true
 
 [[zulip-groups]]
 name = "gsoc-contributors"
