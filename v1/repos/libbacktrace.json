@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "libbacktrace",
+  "description": "A C library that may be linked into a C/C++ program to produce symbolic backtraces",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

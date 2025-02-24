@@ -1,0 +1,28 @@
+{
+  "org": "rust-lang",
+  "name": "bors-kindergarten",
+  "description": "Experimental repository for testing the behavior of the new bors implementation.",
+  "homepage": null,
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "infra-bors",
+      "permission": "write"
+    },
+    {
+      "name": "infra",
+      "permission": "write"
+    },
+    {
+      "name": "mods",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

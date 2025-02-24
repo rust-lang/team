@@ -1,0 +1,101 @@
+{
+  "name": "types",
+  "kind": "team",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Jack Huey",
+      "github": "jackh726",
+      "github_id": 31162821,
+      "is_lead": true
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": true
+    },
+    {
+      "name": "Ali MJ Al-Nasrawy",
+      "github": "aliemjay",
+      "github_id": 28497461,
+      "is_lead": false
+    },
+    {
+      "name": "Boxy",
+      "github": "BoxyUwU",
+      "github_id": 21149742,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Goulet",
+      "github": "compiler-errors",
+      "github_id": 3674314,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    },
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "types",
+        "members": [
+          21149742,
+          28497461,
+          3674314,
+          31162821,
+          29864074,
+          155238,
+          332036,
+          52642
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "types",
+        "members": [
+          21149742,
+          28497461,
+          3674314,
+          31162821,
+          29864074,
+          155238,
+          332036,
+          52642
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Types team",
+    "description": "Working to implement and formally define the semantics of the Rust language",
+    "page": "types",
+    "email": null,
+    "repo": "https://github.com/rust-lang/types-team",
+    "discord": null,
+    "zulip_stream": "t-types",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

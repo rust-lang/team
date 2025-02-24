@@ -1,0 +1,66 @@
+{
+  "name": "gsoc-contributors",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Demilade Sonuga",
+      "github": "d-sonuga",
+      "github_id": 78101187,
+      "is_lead": false
+    },
+    {
+      "name": "ding-young",
+      "github": "ding-young",
+      "github_id": 88336128,
+      "is_lead": false
+    },
+    {
+      "name": "FractalFir",
+      "github": "FractalFir",
+      "github_id": 75212430,
+      "is_lead": false
+    },
+    {
+      "name": "Apurva Mishra",
+      "github": "mav3ri3k",
+      "github_id": 59974350,
+      "is_lead": false
+    },
+    {
+      "name": "Julien Robert",
+      "github": "Oneirical",
+      "github_id": 96022417,
+      "is_lead": false
+    },
+    {
+      "name": "Shina",
+      "github": "s7tya",
+      "github_id": 53410646,
+      "is_lead": false
+    },
+    {
+      "name": "shanmu",
+      "github": "shannmu",
+      "github_id": 138972944,
+      "is_lead": false
+    },
+    {
+      "name": "Max Carr",
+      "github": "suaviloquence",
+      "github_id": 56054085,
+      "is_lead": false
+    },
+    {
+      "name": "byt",
+      "github": "tiif",
+      "github_id": 55319043,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

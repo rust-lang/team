@@ -1,0 +1,22 @@
+{
+  "org": "rust-lang",
+  "name": "google-summer-of-code",
+  "description": "Rust project ideas for Google Summer of Code",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [
+    {
+      "name": "Kobzol",
+      "permission": "write"
+    },
+    {
+      "name": "jackh726",
+      "permission": "write"
+    }
+  ],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

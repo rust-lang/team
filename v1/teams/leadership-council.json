@@ -1,0 +1,180 @@
+{
+  "name": "leadership-council",
+  "kind": "team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Eric Holk",
+      "github": "eholk",
+      "github_id": 105766,
+      "is_lead": false,
+      "roles": [
+        "council-rep-compiler"
+      ]
+    },
+    {
+      "name": "Eric Huss",
+      "github": "ehuss",
+      "github_id": 43198,
+      "is_lead": false,
+      "roles": [
+        "council-rep-devtools"
+      ]
+    },
+    {
+      "name": "James Munns",
+      "github": "jamesmunns",
+      "github_id": 2097964,
+      "is_lead": false,
+      "roles": [
+        "council-rep-launching-pad"
+      ]
+    },
+    {
+      "name": "Mara Bos",
+      "github": "m-ou-se",
+      "github_id": 783247,
+      "is_lead": false,
+      "roles": [
+        "council-rep-libs"
+      ]
+    },
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": false,
+      "roles": [
+        "council-rep-infra"
+      ]
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false,
+      "roles": [
+        "council-rep-mods"
+      ]
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": false,
+      "roles": [
+        "council-rep-lang"
+      ]
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Carol Nichols",
+      "github": "carols10cents",
+      "github_id": 193874,
+      "is_lead": false
+    },
+    {
+      "name": "Jack Huey",
+      "github": "jackh726",
+      "github_id": 31162821,
+      "is_lead": false
+    },
+    {
+      "name": "Jonathan Pallant",
+      "github": "jonathanpallant",
+      "github_id": 18005923,
+      "is_lead": false
+    },
+    {
+      "name": "Khionu Sybiern",
+      "github": "khionu",
+      "github_id": 11195266,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan Levick",
+      "github": "rylev",
+      "github_id": 1327285,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Gould",
+      "github": "technetos",
+      "github_id": 10949810,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "leadership-council",
+        "members": [
+          5047365,
+          105766,
+          43198,
+          2097964,
+          783247,
+          332036,
+          1076834
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "leadership-council",
+        "members": [
+          5047365,
+          105766,
+          43198,
+          2097964,
+          783247,
+          332036,
+          1076834
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Leadership council",
+    "description": "Charged with the success of the Rust Project as whole, consisting of representatives from top-level teams",
+    "page": "leadership-council",
+    "email": "council@rust-lang.org",
+    "repo": "https://github.com/rust-lang/leadership-council",
+    "discord": null,
+    "zulip_stream": "council",
+    "matrix_room": null,
+    "weight": 1000
+  },
+  "roles": [
+    {
+      "id": "council-rep-compiler",
+      "description": "Compiler team"
+    },
+    {
+      "id": "council-rep-devtools",
+      "description": "Dev tools team"
+    },
+    {
+      "id": "council-rep-infra",
+      "description": "Infrastructure team"
+    },
+    {
+      "id": "council-rep-lang",
+      "description": "Language team"
+    },
+    {
+      "id": "council-rep-launching-pad",
+      "description": "Launching pad"
+    },
+    {
+      "id": "council-rep-libs",
+      "description": "Library team"
+    },
+    {
+      "id": "council-rep-mods",
+      "description": "Moderation team"
+    }
+  ],
+  "discord": []
+}

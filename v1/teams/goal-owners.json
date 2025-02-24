@@ -1,0 +1,224 @@
+{
+  "name": "goal-owners",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Bastian Kersting",
+      "github": "1c3t3a",
+      "github_id": 45260993,
+      "is_lead": false
+    },
+    {
+      "name": "Alejandra González",
+      "github": "blyxyas",
+      "github_id": 73757586,
+      "is_lead": false
+    },
+    {
+      "name": "Boxy",
+      "github": "BoxyUwU",
+      "github_id": 21149742,
+      "is_lead": false
+    },
+    {
+      "name": "Celina G. Val",
+      "github": "celinval",
+      "github_id": 35149715,
+      "is_lead": false
+    },
+    {
+      "name": "Connor Horman",
+      "github": "chorman0773",
+      "github_id": 5026283,
+      "is_lead": false
+    },
+    {
+      "name": "David Wood",
+      "github": "davidtwco",
+      "github_id": 1295100,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Finkelman",
+      "github": "Eh2406",
+      "github_id": 3709504,
+      "is_lead": false
+    },
+    {
+      "name": "Ed Page",
+      "github": "epage",
+      "github_id": 60961,
+      "is_lead": false
+    },
+    {
+      "name": "Folkert de Vries",
+      "github": "folkertdev",
+      "github_id": 7949978,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Pratt",
+      "github": "jhpratt",
+      "github_id": 3161395,
+      "is_lead": false
+    },
+    {
+      "name": "Jieyou Xu",
+      "github": "jieyouxu",
+      "github_id": 39484203,
+      "is_lead": false
+    },
+    {
+      "name": "Joel Marcey",
+      "github": "JoelMarcey",
+      "github_id": 3757713,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    },
+    {
+      "name": "Jack Wrenn",
+      "github": "jswrenn",
+      "github_id": 3820879,
+      "is_lead": false
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": false
+    },
+    {
+      "name": "Rémy Rakic",
+      "github": "lqd",
+      "github_id": 247183,
+      "is_lead": false
+    },
+    {
+      "name": "Mara Bos",
+      "github": "m-ou-se",
+      "github_id": 783247,
+      "is_lead": false
+    },
+    {
+      "name": "Scott Schafer",
+      "github": "Muscraft",
+      "github_id": 23045215,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "Predrag Gruevski",
+      "github": "obi1kenobi",
+      "github_id": 2348618,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    },
+    {
+      "name": "Sparrow Li",
+      "github": "SparrowLii",
+      "github_id": 68270294,
+      "is_lead": false
+    },
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    },
+    {
+      "name": "Tyler Mandry",
+      "github": "tmandry",
+      "github_id": 2280544,
+      "is_lead": false
+    },
+    {
+      "name": "Luca Versari",
+      "github": "veluca93",
+      "github_id": 1896483,
+      "is_lead": false
+    },
+    {
+      "name": "walterhpearce",
+      "github": "walterhpearce",
+      "github_id": 123987141,
+      "is_lead": false
+    },
+    {
+      "name": "Benno Lossin",
+      "github": "y86-dev",
+      "github_id": 94611769,
+      "is_lead": false
+    },
+    {
+      "name": "Jane Lusby",
+      "github": "yaahc",
+      "github_id": 1993852,
+      "is_lead": false
+    },
+    {
+      "name": "Manuel Drehwald",
+      "github": "ZuseZ4",
+      "github_id": 25483084,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "goal-owners",
+        "members": [
+          45260993,
+          21149742,
+          3709504,
+          3757713,
+          23045215,
+          68270294,
+          25483084,
+          73757586,
+          35149715,
+          5026283,
+          1295100,
+          60961,
+          7949978,
+          3161395,
+          39484203,
+          162737,
+          3820879,
+          29864074,
+          247183,
+          783247,
+          155238,
+          2348618,
+          332036,
+          52642,
+          2280544,
+          1896483,
+          123987141,
+          94611769,
+          1993852
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

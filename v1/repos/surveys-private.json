@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "surveys-private",
+  "description": "A private repository for survey data that is only accessible to the survey working group (and admins)",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "community-survey",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": true,
+  "auto_merge_enabled": true
+}

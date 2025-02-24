@@ -1,0 +1,37 @@
+{
+  "org": "rust-lang",
+  "name": "nomicon",
+  "description": "The Dark Arts of Advanced and Unsafe Rust Programming",
+  "homepage": "https://doc.rust-lang.org/nomicon/",
+  "bots": [],
+  "teams": [
+    {
+      "name": "lang",
+      "permission": "write"
+    },
+    {
+      "name": "lang-docs",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "Success gate"
+          ],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,83 @@
+{
+  "name": "community-rustbridge",
+  "kind": "team",
+  "subteam_of": "community",
+  "members": [
+    {
+      "name": "Liv",
+      "github": "shadows-withal",
+      "github_id": 6445316,
+      "is_lead": true
+    },
+    {
+      "name": "Arshia Mufti",
+      "github": "arshiamufti",
+      "github_id": 15066212,
+      "is_lead": false
+    },
+    {
+      "name": "Matt Gathu",
+      "github": "mattgathu",
+      "github_id": 1155192,
+      "is_lead": false
+    },
+    {
+      "name": "Sebastián Magrí",
+      "github": "sebasmagri",
+      "github_id": 11137,
+      "is_lead": false
+    },
+    {
+      "name": "Katharina Fey",
+      "github": "spacekookie",
+      "github_id": 7669898,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Gould",
+      "github": "technetos",
+      "github_id": 10949810,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Ashley Williams",
+      "github": "ashleygwilliams",
+      "github_id": 1163554,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "community-rustbridge",
+        "members": [
+          15066212,
+          1155192,
+          11137,
+          6445316,
+          7669898,
+          10949810
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "RustBridge team",
+    "description": "Helping to bring underrepresented groups into Rust",
+    "page": "community-rustbridge",
+    "email": null,
+    "repo": "https://github.com/rustbridge/team",
+    "discord": {
+      "channel": "#rustbridge",
+      "url": "https://discord.gg/cj5HMXA"
+    },
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}
