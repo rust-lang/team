@@ -1,4 +1,7 @@
-on: [push, pull_request]
+name: CI
+
+on:
+  - pull_request
 
 jobs:
   ci:
@@ -20,6 +23,8 @@ jobs:
           rustup default stable
           rustc -vV
 
+      - uses: Swatinem/rust-cache@v2
+
       - name: Build the validation tool
         run: cargo build
 
@@ -38,6 +43,13 @@ jobs:
         run: |
           cargo run -- static-api build
           echo "team-api.infra.rust-lang.org" > build/CNAME
+
+      - name: Upload the built JSON as a GitHub artifact
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: team-api-output
+          path: build
 
       - name: Deploy to GitHub Pages
         run: |
