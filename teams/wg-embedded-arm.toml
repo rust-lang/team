@@ -1,0 +1,26 @@
+name = "wg-embedded-arm"
+subteam-of = "wg-embedded"
+kind = "working-group"
+
+[people]
+leads = []
+members = [
+    "adamgreig",
+    "berkus",
+    "nchong-at-aws",
+    "newAM",
+    "raw-bin",
+    "thalesfragoso",
+    "therealprof",
+]
+alumni = [
+    "andre-richter",
+]
+
+[website]
+name = "Embedded Arm team"
+description = "Develops and maintains the core of the Arm crate ecosystem"
+
+[[github]]
+orgs = ["rust-embedded"]
+team-name = "Arm"
