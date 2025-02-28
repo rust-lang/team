@@ -4,9 +4,14 @@ use std::borrow::Cow;
 use std::path::PathBuf;
 use std::process::Command;
 
+/// Determines how do we get access to the ground-truth data from `rust-lang/team`.
 pub(crate) enum TeamApi {
+    /// Access the live data from the published production REST API.
     Production,
-    Local(PathBuf),
+    /// Build the JSON data from a checkout of `rust-lang/team`.
+    Checkout(PathBuf),
+    /// Directly access a directory with prebuilt JSON data.
+    Prebuilt(PathBuf),
 }
 
 impl TeamApi {
@@ -52,7 +57,7 @@ impl TeamApi {
                     .error_for_status()?
                     .json_annotated()?)
             }
-            TeamApi::Local(ref path) => {
+            TeamApi::Checkout(ref path) => {
                 let dest = tempfile::tempdir()?;
                 info!(
                     "generating the content of the Team API from {}",
@@ -73,6 +78,10 @@ impl TeamApi {
                 } else {
                     anyhow::bail!("failed to generate the contents of the Team API");
                 }
+            }
+            TeamApi::Prebuilt(directory) => {
+                let contents = std::fs::read(directory.join("v1").join(url))?;
+                Ok(serde_json::from_slice(&contents)?)
             }
         }
     }
