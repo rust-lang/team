@@ -1,0 +1,23 @@
+name = "mentorship-programs"
+subteam-of = "launching-pad"
+
+[people]
+leads = [
+    "Kobzol",
+    "jackh726"
+]
+members = [
+    "Kobzol",
+    "jackh726",
+    "Amanieu",
+    "epage",
+    "jieyouxu",
+    "ytmimi",
+    "oli-obk",
+    "obi1kenobi",
+    "davidlattimore"
+]
+alumni = []
+
+[[zulip-groups]]
+name = "gsoc-mentors"
