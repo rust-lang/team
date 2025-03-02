@@ -1,0 +1,14 @@
+name = "initial-designer"
+kind = "marker-team"
+
+[people]
+leads = []
+members = []
+alumni = [
+    "graydon",
+]
+
+[website]
+name = "Initial designer"
+description = "Graydon Hoare envisioned and created Rust"
+weight = 1000
