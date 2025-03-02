@@ -1,11 +1,9 @@
-name = "mentorship-programs"
-subteam-of = "launching-pad"
+name = "mentors"
+kind = "marker-team"
+subteam-of = "mentorship"
 
 [people]
-leads = [
-    "Kobzol",
-    "jackh726"
-]
+leads = []
 members = [
     "Kobzol",
     "jackh726",

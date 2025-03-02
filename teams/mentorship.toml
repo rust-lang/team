@@ -1,0 +1,29 @@
+name = "mentorship"
+subteam-of = "launching-pad"
+
+[people]
+leads = [
+    "Kobzol",
+    "jackh726"
+]
+members = [
+    "Kobzol",
+    "jackh726",
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[rfcbot]
+label = "T-mentorship"
+name = "Mentorship"
+ping = "rust-lang/mentorship"
+
+[website]
+name = "Mentorship team"
+description = "Manages involvement of Rust in mentorship and internship programs"
+zulip-stream = "gsoc"
+
+[[zulip-groups]]
+name = "T-mentorship"
