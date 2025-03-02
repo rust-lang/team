@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "mentorship-team"
+description = "Home of the Rust mentorship team"
+homepage = "https://www.rust-lang.org/governance/teams/mentorship"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+mentorship = "maintain"
