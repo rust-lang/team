@@ -1,0 +1,14 @@
+name = "initial-design-and-impl"
+kind = "marker-team"
+
+[people]
+leads = []
+members = []
+alumni = [
+    "graydon",
+]
+
+[website]
+name = "Initial design and implementation of Rust"
+description = "Many people contributed to the initial design and implementation of Rust, before the current team hierarchy was established. This team contains some of those people to recognize and honor their contributions."
+weight = 1000
