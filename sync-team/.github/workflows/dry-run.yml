@@ -87,14 +87,6 @@ jobs:
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
           owner: rust-dev-tools
 
-      - name: Generate GitHub token (conduit-rust)
-        uses: actions/create-github-app-token@v1
-        id: conduit-rust-token
-        with:
-          app-id: ${{ secrets.GH_APP_ID }}
-          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
-          owner: conduit-rust
-
       - name: Dry run
         env:
           GITHUB_TOKEN_RUST_LANG: ${{ steps.rust-lang-token.outputs.token }}
@@ -104,6 +96,5 @@ jobs:
           GITHUB_TOKEN_BORS_RS: ${{ steps.bors-rs-token.outputs.token }}
           GITHUB_TOKEN_RUST_ANALYZER: ${{ steps.rust-analyzer-token.outputs.token }}
           GITHUB_TOKEN_RUST_EMBEDDED: ${{ steps.rust-embedded-token.outputs.token }}
-          GITHUB_TOKEN_CONDUIT_RUST: ${{ steps.conduit-rust-token.outputs.token }}
           GITHUB_TOKEN_RUST_DEV_TOOLS: ${{ steps.rust-dev-tools-token.outputs.token }}
         run: cargo run -- print-plan --services github
