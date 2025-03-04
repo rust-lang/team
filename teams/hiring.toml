@@ -1,0 +1,14 @@
+name = "hiring"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "JoelMarcey",
+    "ehuss",
+    "nikomatsakis",
+    "traviscross",
+]
+
+[[lists]]
+address = "hiring@rust-lang.org"
