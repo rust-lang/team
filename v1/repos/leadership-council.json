@@ -1,0 +1,38 @@
+{
+  "org": "rust-lang",
+  "name": "leadership-council",
+  "description": "Home of the Rust Leadership Council",
+  "homepage": null,
+  "bots": [
+    "rustbot",
+    "rfcbot"
+  ],
+  "teams": [
+    {
+      "name": "council-librarians",
+      "permission": "write"
+    },
+    {
+      "name": "leadership-council",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "main",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

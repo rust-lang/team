@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "ferris-says",
+  "description": "A Rust flavored implementation of `cowsay`",
+  "homepage": "https://crates.io/crates/ferris-says",
+  "bots": [],
+  "teams": [
+    {
+      "name": "crate-maintainers",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

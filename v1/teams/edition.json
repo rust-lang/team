@@ -1,0 +1,58 @@
+{
+  "name": "edition",
+  "kind": "team",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Eric Huss",
+      "github": "ehuss",
+      "github_id": 43198,
+      "is_lead": true
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": true
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Ben Striegel",
+      "github": "bstrie",
+      "github_id": 865233,
+      "is_lead": false
+    },
+    {
+      "name": "Mara Bos",
+      "github": "m-ou-se",
+      "github_id": 783247,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "edition",
+        "members": [
+          43198,
+          1076834
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Edition team",
+    "description": "Managing the editions of Rust",
+    "page": "edition",
+    "email": null,
+    "repo": "http://github.com/rust-lang/edition-team",
+    "discord": null,
+    "zulip_stream": "edition",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

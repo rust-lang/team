@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "impl-trait-initiative",
+  "description": "Impl trait lang team initiative",
+  "homepage": "https://rust-lang.github.io/impl-trait-initiative/",
+  "bots": [],
+  "teams": [
+    {
+      "name": "initiative-impl-trait",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

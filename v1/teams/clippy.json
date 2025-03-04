@@ -1,0 +1,163 @@
+{
+  "name": "clippy",
+  "kind": "team",
+  "subteam_of": "devtools",
+  "members": [
+    {
+      "name": "Philipp Krones",
+      "github": "flip1995",
+      "github_id": 9744647,
+      "is_lead": true
+    },
+    {
+      "name": "Manish Goregaokar",
+      "github": "Manishearth",
+      "github_id": 1617736,
+      "is_lead": true
+    },
+    {
+      "name": "Alex Macleod",
+      "github": "Alexendoo",
+      "github_id": 1830331,
+      "is_lead": false
+    },
+    {
+      "name": "Alejandra González",
+      "github": "blyxyas",
+      "github_id": 73757586,
+      "is_lead": false
+    },
+    {
+      "name": "Catherine",
+      "github": "Centri3",
+      "github_id": 114838443,
+      "is_lead": false
+    },
+    {
+      "name": "dswij",
+      "github": "dswij",
+      "github_id": 44697459,
+      "is_lead": false
+    },
+    {
+      "name": "Jason Newcomb",
+      "github": "Jarcho",
+      "github_id": 7761774,
+      "is_lead": false
+    },
+    {
+      "name": "Andre Bogus",
+      "github": "llogiq",
+      "github_id": 4200835,
+      "is_lead": false
+    },
+    {
+      "name": "Matthias Krüger",
+      "github": "matthiaskrgr",
+      "github_id": 476013,
+      "is_lead": false
+    },
+    {
+      "name": "Fridtjof Stoldt",
+      "github": "xFrednet",
+      "github_id": 17087237,
+      "is_lead": false
+    },
+    {
+      "name": "Timo",
+      "github": "y21",
+      "github_id": 30553356,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Georg Brandl",
+      "github": "birkenfeld",
+      "github_id": 144359,
+      "is_lead": false
+    },
+    {
+      "name": "Cameron Steffen",
+      "github": "camsteffen",
+      "github_id": 5565418,
+      "is_lead": false
+    },
+    {
+      "name": "Eduardo Broto",
+      "github": "ebroto",
+      "github_id": 816908,
+      "is_lead": false
+    },
+    {
+      "name": "Takayuki Nakata",
+      "github": "giraffate",
+      "github_id": 17407489,
+      "is_lead": false
+    },
+    {
+      "name": "Pascal Hertleif",
+      "github": "killercup",
+      "github_id": 20063,
+      "is_lead": false
+    },
+    {
+      "name": "Martin Carton",
+      "github": "mcarton",
+      "github_id": 3751788,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    },
+    {
+      "name": "Philipp Hansch",
+      "github": "phansch",
+      "github_id": 2042399,
+      "is_lead": false
+    },
+    {
+      "name": "Jane Lusby",
+      "github": "yaahc",
+      "github_id": 1993852,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "clippy",
+        "members": [
+          1830331,
+          114838443,
+          7761774,
+          1617736,
+          73757586,
+          44697459,
+          9744647,
+          4200835,
+          476013,
+          17087237,
+          30553356
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Clippy team",
+    "description": "Designing and implementing the Clippy linter",
+    "page": "clippy",
+    "email": null,
+    "repo": "https://github.com/rust-lang/rust-clippy",
+    "discord": null,
+    "zulip_stream": "clippy",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

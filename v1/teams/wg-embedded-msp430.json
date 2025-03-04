@@ -1,0 +1,45 @@
+{
+  "name": "wg-embedded-msp430",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [
+    {
+      "name": "William D. Jones",
+      "github": "cr1901",
+      "github_id": 6418027,
+      "is_lead": false
+    },
+    {
+      "name": "Yuhan Lin",
+      "github": "YuhanLiin",
+      "github_id": 15389635,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "msp430",
+        "members": [
+          15389635,
+          6418027
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded MSP430 team",
+    "description": "Develops and maintains the core of the embedded MSP430 crate ecosystem",
+    "page": "wg-embedded-msp430",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

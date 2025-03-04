@@ -1,0 +1,59 @@
+{
+  "org": "rust-lang",
+  "name": "socket2",
+  "description": "Advanced configuration options for sockets.",
+  "homepage": "https://docs.rs/socket2",
+  "bots": [],
+  "teams": [
+    {
+      "name": "crate-maintainers",
+      "permission": "maintain"
+    }
+  ],
+  "members": [
+    {
+      "name": "Thomasdezeeuw",
+      "permission": "maintain"
+    },
+    {
+      "name": "chansuke",
+      "permission": "triage"
+    },
+    {
+      "name": "sfackler",
+      "permission": "maintain"
+    },
+    {
+      "name": "carllerche",
+      "permission": "maintain"
+    },
+    {
+      "name": "Darksonn",
+      "permission": "maintain"
+    }
+  ],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "Rustfmt",
+            "Test (beta)",
+            "Test (macos)",
+            "Test (nightly)",
+            "Test (stable)",
+            "Test (windows)"
+          ],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

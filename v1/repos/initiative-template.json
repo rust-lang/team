@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "initiative-template",
+  "description": "A template for lang-team initiatives",
+  "homepage": "https://nikomatsakis.github.io/initiative-template/",
+  "bots": [],
+  "teams": [
+    {
+      "name": "lang",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

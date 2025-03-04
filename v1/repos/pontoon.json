@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "pontoon",
+  "description": "Localization platform used by Rust",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}
