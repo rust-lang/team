@@ -49,6 +49,8 @@ jobs:
 
       - name: Run sync-team dry-run check
         run: |
+          # Perform build and execution separately to avoid any potential output from
+          # cargo leaking into the output file.
           cargo build
           ./target/debug/sync-team print-plan --team-source team-api > output.log
 
