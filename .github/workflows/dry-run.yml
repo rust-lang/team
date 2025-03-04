@@ -1,3 +1,15 @@
+# This workflow executes a dry-run of the sync-team tool after a push to any pull request.
+# This allows us to see which changes would be applied to live services after the PR
+# would be merged.
+#
+# The workflow uses the `workflow_run` trigger, which should always run in the default branch of
+# this repository. This is required so that the workflow has permissions to post PR comments.
+# We should not check out any code from the PR, as it could present a security hazard.
+# Instead, we simply download a GitHub artifact with a directory of JSON files and use that as
+# input for sync-team.
+# This artifact is created and uploaded on PR pushes using the CI workflow in `main.yml`.
+# Details about `workflow_run`:
+# https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run:
 name: sync-team dry-run
 
 on:
