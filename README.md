@@ -3,6 +3,8 @@
 This repository contains the structure of the Rust teams. The repository is
 automatically synchronized with:
 
+WIP
+
 | Service | Synchronized every | |
 | --- | :---: | --- |
 | [@bors][bors] | *In real time* | [Integration source][bors-src] |
