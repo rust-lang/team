@@ -135,7 +135,7 @@ jobs:
           # Perform build and execution separately to avoid any potential output from
           # cargo leaking into the output file.
           cargo build --release
-          ./target/release/sync-team print-plan --services github --team-json team-api > output.txt
+          ./target/release/sync-team print-plan --services github --team-json team-api 2> output.txt
 
       - name: Prepare comment
         run: |
