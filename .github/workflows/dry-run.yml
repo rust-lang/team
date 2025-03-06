@@ -150,11 +150,24 @@ jobs:
 
           cat comment.txt
 
+      - name: Extract PR number
+        run: |
+          # We read the PR number that is stored in the uploaded archive
+          # and check that it is an integer (as the workflow could upload whatever it wants).
+          UNSANITIZED_PR=`cat team-api/pr.txt`
+          if [[ ${UNSANITIZED_PR} =~ ^[0-9]+$ ]]; then
+            echo "PR_NUMBER=${UNSANITIZED_PR}" >> $GITHUB_ENV
+          else
+            echo "Invalid PR number passed: ${UNSANITIZED_PR}"
+            exit 1
+          fi
+
       - name: Send comment
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          PR=${{ github.event.workflow_run.pull_requests[0].number }}
+          PR=${PR_NUMBER}
+          echo "Pull request ${PR}"
 
           # --edit-last doesn't work if there is no previous comment, so we have to figure out
           # if we should create a comment or not
