@@ -909,8 +909,8 @@ fn repo_update_branch_protection() {
                                 dismisses_stale_reviews: true,
                                 required_approving_review_count: 0,
                                 required_status_check_contexts: [
-                                    "test",
                                     "Test",
+                                    "test",
                                 ],
                                 push_allowances: [],
                                 requires_approving_reviews: true,

@@ -392,13 +392,15 @@ impl GithubRead for GitHubApiRead {
 
         let mut result = HashMap::new();
         let res: Wrapper = self.client.graphql(QUERY, Params { org, repo }, org)?;
-        for node in res
+        for mut node in res
             .repository
             .branch_protection_rules
             .nodes
             .into_iter()
             .flatten()
         {
+            // Normalize check order to avoid diffs based only on the ordering difference
+            node.protection.required_status_check_contexts.sort();
             result.insert(node.protection.pattern.clone(), (node.id, node.protection));
         }
         Ok(result)
