@@ -119,7 +119,7 @@ impl DataModel {
                     node_id: repos.len().to_string(),
                     name: repo.name.clone(),
                     org: DEFAULT_ORG.to_string(),
-                    description: Some(repo.description.clone()),
+                    description: repo.description.clone(),
                     homepage: repo.homepage.clone(),
                     archived: false,
                     allow_auto_merge: None,
