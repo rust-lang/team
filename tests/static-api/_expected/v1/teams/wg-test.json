@@ -28,7 +28,17 @@
     }
   ],
   "github": null,
-  "website_data": null,
+  "website_data": {
+    "name": "WG Test",
+    "description": "test",
+    "page": "wg-test",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
   "roles": [
     {
       "id": "convener",

@@ -12,3 +12,7 @@ alumni = ["user-0", "user-5"]
 [[roles]]
 id = "convener"
 description = "Convener"
+
+[website]
+name = "WG Test"
+description = "test"

@@ -119,7 +119,7 @@ ping = "rust-lang/cargo"
 # Team members to be excluded from FCPs
 exclude-members = ["some-team-member"]
 
-# Information about the team to display on the www.rust-lang.org website.
+# Information about the team to display on the www.rust-lang.org website (required except marker teams).
 [website]
 # The name of the team to display on the website (required).
 name = "Language team"
