@@ -43,6 +43,10 @@ jobs:
           cargo run -- static-api build
           echo "team-api.infra.rust-lang.org" > build/CNAME
 
+      - name: Write PR number into the uploaded archive
+        if: ${{ github.event_name == 'pull_request' }}
+        run: echo "${{ github.event.pull_request.number }}" > build/pr.txt
+
       - name: Upload the built JSON as a GitHub artifact
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v4
