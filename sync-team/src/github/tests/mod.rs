@@ -226,17 +226,13 @@ fn repo_change_description() {
                 repo_id: 0,
                 settings_diff: (
                     RepoSettings {
-                        description: Some(
-                            "foo",
-                        ),
+                        description: "foo",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
                     },
                     RepoSettings {
-                        description: Some(
-                            "bar",
-                        ),
+                        description: "bar",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
@@ -269,9 +265,7 @@ fn repo_change_homepage() {
                 repo_id: 0,
                 settings_diff: (
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: Some(
                             "https://foo.rs",
                         ),
@@ -279,9 +273,7 @@ fn repo_change_homepage() {
                         auto_merge_enabled: false,
                     },
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: Some(
                             "https://bar.rs",
                         ),
@@ -323,9 +315,7 @@ fn repo_create() {
                 org: "rust-lang",
                 name: "repo1",
                 settings: RepoSettings {
-                    description: Some(
-                        "foo",
-                    ),
+                    description: "foo",
                     homepage: None,
                     archived: false,
                     auto_merge_enabled: false,
@@ -396,17 +386,13 @@ fn repo_add_member() {
                 repo_id: 0,
                 settings_diff: (
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
                     },
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
@@ -454,17 +440,13 @@ fn repo_change_member_permissions() {
                 repo_id: 0,
                 settings_diff: (
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
                     },
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
@@ -508,17 +490,13 @@ fn repo_remove_member() {
                 repo_id: 0,
                 settings_diff: (
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
                     },
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
@@ -563,17 +541,13 @@ fn repo_add_team() {
                 repo_id: 0,
                 settings_diff: (
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
                     },
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
@@ -616,17 +590,13 @@ fn repo_change_team_permissions() {
                 repo_id: 0,
                 settings_diff: (
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
                     },
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
@@ -670,17 +640,13 @@ fn repo_remove_team() {
                 repo_id: 0,
                 settings_diff: (
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
                     },
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
@@ -723,17 +689,13 @@ fn repo_archive_repo() {
                 repo_id: 0,
                 settings_diff: (
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
                     },
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: true,
                         auto_merge_enabled: false,
@@ -770,17 +732,13 @@ fn repo_add_branch_protection() {
                 repo_id: 0,
                 settings_diff: (
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
                     },
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
@@ -870,17 +828,13 @@ fn repo_update_branch_protection() {
                 repo_id: 0,
                 settings_diff: (
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
                     },
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
@@ -951,17 +905,13 @@ fn repo_remove_branch_protection() {
                 repo_id: 0,
                 settings_diff: (
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,
                     },
                     RepoSettings {
-                        description: Some(
-                            "",
-                        ),
+                        description: "",
                         homepage: None,
                         archived: false,
                         auto_merge_enabled: false,

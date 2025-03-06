@@ -274,7 +274,8 @@ pub(crate) struct Repo {
     pub(crate) name: String,
     #[serde(alias = "owner", deserialize_with = "repo_owner")]
     pub(crate) org: String,
-    pub(crate) description: Option<String>,
+    #[serde(default)]
+    pub(crate) description: String,
     pub(crate) homepage: Option<String>,
     pub(crate) archived: bool,
     #[serde(default)]
@@ -400,7 +401,7 @@ pub(crate) enum BranchProtectionOp {
 
 #[derive(PartialEq, Debug)]
 pub(crate) struct RepoSettings {
-    pub description: Option<String>,
+    pub description: String,
     pub homepage: Option<String>,
     pub archived: bool,
     pub auto_merge_enabled: bool,

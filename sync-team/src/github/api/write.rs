@@ -228,7 +228,7 @@ impl GitHubWrite {
         }
         let req = &Req {
             name,
-            description: settings.description.as_deref().unwrap_or_default(),
+            description: &settings.description,
             homepage: &settings.homepage.as_deref(),
             auto_init: true,
             allow_auto_merge: settings.auto_merge_enabled,
@@ -261,13 +261,13 @@ impl GitHubWrite {
     ) -> anyhow::Result<()> {
         #[derive(serde::Serialize, Debug)]
         struct Req<'a> {
-            description: &'a Option<&'a str>,
+            description: &'a str,
             homepage: &'a Option<&'a str>,
             archived: bool,
             allow_auto_merge: bool,
         }
         let req = Req {
-            description: &settings.description.as_deref(),
+            description: &settings.description,
             homepage: &settings.homepage.as_deref(),
             archived: settings.archived,
             allow_auto_merge: settings.auto_merge_enabled,

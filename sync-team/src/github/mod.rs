@@ -312,7 +312,7 @@ impl SyncGitHub {
                     org: expected_repo.org.clone(),
                     name: expected_repo.name.clone(),
                     settings: RepoSettings {
-                        description: Some(expected_repo.description.clone()),
+                        description: expected_repo.description.clone(),
                         homepage: expected_repo.homepage.clone(),
                         archived: false,
                         auto_merge_enabled: expected_repo.auto_merge_enabled,
@@ -333,7 +333,7 @@ impl SyncGitHub {
             auto_merge_enabled: actual_repo.allow_auto_merge.unwrap_or(false),
         };
         let new_settings = RepoSettings {
-            description: Some(expected_repo.description.clone()),
+            description: expected_repo.description.clone(),
             homepage: expected_repo.homepage.clone(),
             archived: expected_repo.archived,
             auto_merge_enabled: expected_repo.auto_merge_enabled,
@@ -863,12 +863,11 @@ impl std::fmt::Display for UpdateRepoDiff {
             archived,
             auto_merge_enabled,
         } = settings_old;
-        match (description, &settings_new.description) {
-            (None, Some(new)) => writeln!(f, "  Set description: '{new}'")?,
-            (Some(old), None) => writeln!(f, "  Remove description: '{old}'")?,
-            (Some(old), Some(new)) if old != new => {
-                writeln!(f, "  New description: '{old}' => '{new}'")?
-            }
+        match (description.as_str(), settings_new.description.as_str()) {
+            ("", "") => {}
+            ("", new) => writeln!(f, "  Set description: '{new}'")?,
+            (old, "") => writeln!(f, "  Remove description: '{old}'")?,
+            (old, new) if old != new => writeln!(f, "  New description: '{old}' => '{new}'")?,
             _ => {}
         }
         match (homepage, &settings_new.homepage) {
