@@ -11,3 +11,9 @@ alumni = []
 
 [[github]]
 orgs = ["rust-lang"]
+
+[website]
+name = "Rustlings team"
+description = "Maintains the Rustlings site"
+repo = "https://github.com/rust-lang/rustlings/"
+zulip-stream = "rustlings"

@@ -24,3 +24,9 @@ alumni = []
 label = "T-compiler"
 name = "Compiler"
 ping = "rust-lang/compiler-fcp"
+
+[website]
+name = "Compiler FCP team"
+description = "Compiler team members with responsibility for signing off on major compiler changes"
+repo = "http://github.com/rust-lang/compiler-team"
+zulip-stream = "t-compiler"
