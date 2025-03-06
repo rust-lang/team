@@ -5,3 +5,7 @@ top-level = true
 leads = []
 members = ["user-0"]
 alumni = []
+
+[website]
+name = "Leaderless"
+description = "Test"

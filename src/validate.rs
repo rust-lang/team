@@ -50,6 +50,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_repos,
     validate_branch_protections,
     validate_member_roles,
+    validate_website,
 ];
 
 #[allow(clippy::type_complexity)]
@@ -973,4 +974,17 @@ where
             errors.push(err.to_string());
         }
     }
+}
+
+fn validate_website(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, _| {
+        match team.kind() {
+            TeamKind::MarkerTeam => return Ok(()),
+            TeamKind::Team | TeamKind::WorkingGroup | TeamKind::ProjectGroup => {}
+        };
+        if team.website_data().is_none() {
+            bail!("team `{}` should have a `[website]` table", team.name());
+        }
+        Ok(())
+    })
 }
