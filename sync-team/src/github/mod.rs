@@ -641,17 +641,22 @@ pub fn construct_branch_protection(
             login: "bors".to_owned(),
         }));
     }
+
+    let mut checks = match &branch_protection.mode {
+        BranchProtectionMode::PrRequired { ci_checks, .. } => ci_checks.clone(),
+        BranchProtectionMode::PrNotRequired => {
+            vec![]
+        }
+    };
+    // Normalize check order to avoid diffs based only on the ordering difference
+    checks.sort();
+
     api::BranchProtection {
         pattern: branch_protection.pattern.clone(),
         is_admin_enforced: true,
         dismisses_stale_reviews: branch_protection.dismiss_stale_review,
         required_approving_review_count,
-        required_status_check_contexts: match &branch_protection.mode {
-            BranchProtectionMode::PrRequired { ci_checks, .. } => ci_checks.clone(),
-            BranchProtectionMode::PrNotRequired => {
-                vec![]
-            }
-        },
+        required_status_check_contexts: checks,
         push_allowances,
         requires_approving_reviews: matches!(
             branch_protection.mode,
