@@ -42,7 +42,8 @@ jobs:
           rustup default stable
           rustc -vV
 
-      - uses: Swatinem/rust-cache@v2
+      # Pinning a specific version to avoid surprises
+      - uses: Swatinem/rust-cache@27b8ea9368cf428f0bfe41b0876b1a7e809d9844
 
       - name: Download built JSON API
         uses: actions/download-artifact@v4
