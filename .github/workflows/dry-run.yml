@@ -171,11 +171,11 @@ jobs:
 
           # --edit-last doesn't work if there is no previous comment, so we have to figure out
           # if we should create a comment or not
-          if gh issue view ${PR} --json comments \
+          if gh issue view ${PR} --repo rust-lang/team --json comments \
             --jq '.comments.[].author.login' | grep --quiet --fixed-strings "github-actions"; then
             echo "Editing comment"
-            gh pr comment ${PR} --body-file comment.txt --edit-last
+            gh pr comment ${PR} --repo rust-lang/team --body-file comment.txt --edit-last
           else
             echo "Creating new comment"
-            gh pr comment ${PR} --body-file comment.txt
+            gh pr comment ${PR} --repo rust-lang/team --body-file comment.txt
           fi
