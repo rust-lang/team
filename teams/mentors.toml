@@ -19,3 +19,7 @@ alumni = []
 
 [[zulip-groups]]
 name = "gsoc-mentors"
+
+[website]
+name = "Mentorship Programs"
+description = "Organizes involvement in internship programs such as Google Summer of Code"

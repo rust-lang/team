@@ -20,3 +20,8 @@ orgs = ["rust-lang"]
 
 [[lists]]
 address = "twir@rust-lang.org"
+
+[website]
+name = "TWiR team"
+description = "Publishes This Week in Rust"
+repo = "https://github.com/rust-lang/this-week-in-rust"

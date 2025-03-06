@@ -11,3 +11,8 @@ alumni = []
 
 [[github]]
 orgs = ["rust-lang"]
+
+[website]
+name = "Docker team"
+description = "Maintains the official Docker images published to Docker Hub"
+repo = "https://github.com/rust-lang/docker-rust/"
