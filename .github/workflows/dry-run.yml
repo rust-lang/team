@@ -131,6 +131,8 @@ jobs:
           GITHUB_TOKEN_RUST_ANALYZER: ${{ steps.rust-analyzer-token.outputs.token }}
           GITHUB_TOKEN_RUST_EMBEDDED: ${{ steps.rust-embedded-token.outputs.token }}
           GITHUB_TOKEN_RUST_DEV_TOOLS: ${{ steps.rust-dev-tools-token.outputs.token }}
+        # This applies pipefail, so that the tee pipeline below fails when sync-team fails.
+        shell: bash
         run: |
           # Perform build and execution separately to avoid any potential output from
           # cargo leaking into the output file.
