@@ -840,6 +840,15 @@ but that team does not seem to exist"#,
                         team
                     );
                 }
+                if !repo.access.teams.contains_key(team) {
+                    bail!(
+                        r#"repo '{}' uses a branch protection for {} that has an allowed merge team '{}',
+but that team is not mentioned in [access.teams]"#,
+                        repo.name,
+                        protection.pattern,
+                        team
+                    );
+                }
             }
 
             if !protection.pr_required {

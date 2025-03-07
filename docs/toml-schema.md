@@ -350,6 +350,8 @@ required-approvals = 1
 # Which GitHub teams have access to push/merge to this branch.
 # If unspecified, all teams/contributors with write or higher access
 # can push/merge to the branch.
+# Teams mentioned in this array must also have access to the repo
+# in [access.teams].
 # (optional)
 allowed-merge-teams = ["awesome-team"]
 # Determines the merge queue bot(s) that manage pushes to this branch.
