@@ -5,6 +5,7 @@ bots = []
 
 [access.teams]
 infra = "write"
+infra-admins = "admin"
 
 [[branch-protections]]
 pattern = "master"
