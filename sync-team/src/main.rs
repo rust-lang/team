@@ -4,7 +4,7 @@ mod team_api;
 mod utils;
 mod zulip;
 
-use crate::github::{create_diff, GitHubApiRead, GitHubWrite, HttpClient};
+use crate::github::{GitHubApiRead, GitHubWrite, HttpClient, create_diff};
 use crate::team_api::TeamApi;
 use crate::zulip::SyncZulip;
 use anyhow::Context;

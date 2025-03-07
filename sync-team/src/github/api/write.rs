@@ -3,9 +3,9 @@ use reqwest::Method;
 
 use crate::github::api::url::GitHubUrl;
 use crate::github::api::{
-    allow_not_found, BranchProtection, BranchProtectionOp, HttpClient, Login, PushAllowanceActor,
-    Repo, RepoPermission, RepoSettings, Team, TeamPrivacy, TeamPushAllowanceActor, TeamRole,
-    UserPushAllowanceActor,
+    BranchProtection, BranchProtectionOp, HttpClient, Login, PushAllowanceActor, Repo,
+    RepoPermission, RepoSettings, Team, TeamPrivacy, TeamPushAllowanceActor, TeamRole,
+    UserPushAllowanceActor, allow_not_found,
 };
 use crate::utils::ResponseExt;
 

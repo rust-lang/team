@@ -300,12 +300,9 @@ fn repo_create() {
             .description("foo".to_string())
             .member("user1", RepoPermission::Write)
             .team("team1", RepoPermission::Triage)
-            .branch_protections(vec![BranchProtectionBuilder::pr_required(
-                "main",
-                &["test"],
-                1,
-            )
-            .build()]),
+            .branch_protections(vec![
+                BranchProtectionBuilder::pr_required("main", &["test"], 1).build(),
+            ]),
     );
     let diff = model.diff_repos(gh);
     insta::assert_debug_snapshot!(diff, @r#"
@@ -791,12 +788,9 @@ fn repo_update_branch_protection() {
     model.create_repo(
         RepoData::new("repo1")
             .team("team1", RepoPermission::Write)
-            .branch_protections(vec![BranchProtectionBuilder::pr_required(
-                "master",
-                &["test"],
-                1,
-            )
-            .build()]),
+            .branch_protections(vec![
+                BranchProtectionBuilder::pr_required("master", &["test"], 1).build(),
+            ]),
     );
 
     let gh = model.gh_model();

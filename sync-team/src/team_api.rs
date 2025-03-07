@@ -57,7 +57,7 @@ impl TeamApi {
                     .error_for_status()?
                     .json_annotated()?)
             }
-            TeamApi::Checkout(ref path) => {
+            TeamApi::Checkout(path) => {
                 let dest = tempfile::tempdir()?;
                 info!(
                     "generating the content of the Team API from {}",

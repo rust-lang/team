@@ -2,7 +2,7 @@
 name = "sync-team"
 version = "0.1.0"
 authors = ["Pietro Albini <pietro@pietroalbini.org>"]
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 clap = { version = "4.5", features = ["derive", "env"] }
