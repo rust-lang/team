@@ -1,0 +1,59 @@
+{
+  "name": "wg-llvm",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Nikita Popov",
+      "github": "nikic",
+      "github_id": 216080,
+      "is_lead": true
+    },
+    {
+      "name": "Josh Stone",
+      "github": "cuviper",
+      "github_id": 36186,
+      "is_lead": false
+    },
+    {
+      "name": "DianQK",
+      "github": "DianQK",
+      "github_id": 10829914,
+      "is_lead": false
+    },
+    {
+      "name": "Simonas Kazlauskas",
+      "github": "nagisa",
+      "github_id": 679122,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-llvm",
+        "members": [
+          10829914,
+          36186,
+          679122,
+          216080
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "LLVM working group",
+    "description": "Working with LLVM upstream to represent Rust in its development",
+    "page": "wg-llvm",
+    "email": null,
+    "repo": "https://rust-lang.github.io/compiler-team/working-groups/llvm/",
+    "discord": null,
+    "zulip_stream": "t-compiler/wg-llvm",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

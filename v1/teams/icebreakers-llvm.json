@@ -1,0 +1,127 @@
+{
+  "name": "icebreakers-llvm",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "hafiz",
+      "github": "ayazhafiz",
+      "github_id": 20735482,
+      "is_lead": false
+    },
+    {
+      "name": "Noah Lev",
+      "github": "camelid",
+      "github_id": 37223377,
+      "is_lead": false
+    },
+    {
+      "name": "comex",
+      "github": "comex",
+      "github_id": 47517,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Stone",
+      "github": "cuviper",
+      "github_id": 36186,
+      "is_lead": false
+    },
+    {
+      "name": "DianQK",
+      "github": "DianQK",
+      "github_id": 10829914,
+      "is_lead": false
+    },
+    {
+      "name": "Hoàng Đức Hiếu",
+      "github": "hdhoang",
+      "github_id": 12537,
+      "is_lead": false
+    },
+    {
+      "name": "Henry Boisdequin",
+      "github": "henryboisdequin",
+      "github_id": 65845077,
+      "is_lead": false
+    },
+    {
+      "name": "Rutvik Patel",
+      "github": "heyrutvik",
+      "github_id": 6268538,
+      "is_lead": false
+    },
+    {
+      "name": "Xing GUO",
+      "github": "higuoxing",
+      "github_id": 21099318,
+      "is_lead": false
+    },
+    {
+      "name": "Youngsuk Kim",
+      "github": "JOE1994",
+      "github_id": 10286488,
+      "is_lead": false
+    },
+    {
+      "name": "J. Ryan Stinnett",
+      "github": "jryans",
+      "github_id": 279572,
+      "is_lead": false
+    },
+    {
+      "name": "Luqman Aden",
+      "github": "luqmana",
+      "github_id": 287063,
+      "is_lead": false
+    },
+    {
+      "name": "Miodrag Milenković",
+      "github": "mmilenko",
+      "github_id": 10790773,
+      "is_lead": false
+    },
+    {
+      "name": "Simonas Kazlauskas",
+      "github": "nagisa",
+      "github_id": 679122,
+      "is_lead": false
+    },
+    {
+      "name": "Nikita Popov",
+      "github": "nikic",
+      "github_id": 216080,
+      "is_lead": false
+    },
+    {
+      "name": "Noah Kennedy",
+      "github": "Noah-Kennedy",
+      "github_id": 9875622,
+      "is_lead": false
+    },
+    {
+      "name": "Siavosh Zarrasvand",
+      "github": "SiavoshZarrasvand",
+      "github_id": 492510,
+      "is_lead": false
+    },
+    {
+      "name": "Mahmut Bulut",
+      "github": "vertexclique",
+      "github_id": 578559,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Hanna Kruppe",
+      "github": "hanna-kruppe",
+      "github_id": 2311707,
+      "is_lead": false
+    }
+  ],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

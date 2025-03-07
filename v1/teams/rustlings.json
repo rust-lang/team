@@ -1,0 +1,35 @@
+{
+  "name": "rustlings",
+  "kind": "team",
+  "subteam_of": "lang-docs",
+  "members": [
+    {
+      "name": "Mo",
+      "github": "mo8it",
+      "github_id": 76752051,
+      "is_lead": true
+    },
+    {
+      "name": "Liv",
+      "github": "shadows-withal",
+      "github_id": 6445316,
+      "is_lead": true
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "rustlings",
+        "members": [
+          76752051,
+          6445316
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "getopts",
+  "description": "The getopts repo maintained by the rust-lang project",
+  "homepage": "https://docs.rs/getopts",
+  "bots": [],
+  "teams": [
+    {
+      "name": "crate-maintainers",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

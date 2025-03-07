@@ -1,0 +1,22 @@
+{
+  "org": "rust-lang",
+  "name": "thanks",
+  "description": "Celebrate Rust contributors.",
+  "homepage": "https://thanks.rust-lang.org",
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    },
+    {
+      "name": "website",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}
