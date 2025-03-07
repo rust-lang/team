@@ -274,7 +274,7 @@ pub(crate) struct Repo {
     pub(crate) name: String,
     #[serde(alias = "owner", deserialize_with = "repo_owner")]
     pub(crate) org: String,
-    #[serde(default)]
+    #[serde(deserialize_with = "repo_description")]
     pub(crate) description: String,
     pub(crate) homepage: Option<String>,
     pub(crate) archived: bool,
@@ -288,6 +288,19 @@ where
 {
     let owner = Login::deserialize(deserializer)?;
     Ok(owner.login)
+}
+
+/// We represent repository description with just a string,
+/// to avoid two default states (`None` or `Some("")`) and to simplify code.
+/// However, GitHub can return the description as `null`.
+/// So using this function, we treat both an empty string and `null` as an
+/// empty string.
+fn repo_description<'de, D>(deserializer: D) -> Result<String, D::Error>
+where
+    D: serde::de::Deserializer<'de>,
+{
+    let description = <Option<String>>::deserialize(deserializer)?;
+    Ok(description.unwrap_or_default())
 }
 
 /// An object with a `login` field
