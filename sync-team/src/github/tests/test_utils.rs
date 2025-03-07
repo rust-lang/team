@@ -11,7 +11,7 @@ use crate::github::api::{
     RepoUser, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::github::{
-    api, construct_branch_protection, convert_permission, RepoDiff, SyncGitHub, TeamDiff,
+    RepoDiff, SyncGitHub, TeamDiff, api, construct_branch_protection, convert_permission,
 };
 
 const DEFAULT_ORG: &str = "rust-lang";

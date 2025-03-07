@@ -5,7 +5,7 @@ use std::str;
 
 use self::api::Mailgun;
 use crate::TeamApi;
-use anyhow::{bail, Context};
+use anyhow::{Context, bail};
 use log::info;
 use rust_team_data::{email_encryption, v1 as team_data};
 

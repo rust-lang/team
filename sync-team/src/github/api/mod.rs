@@ -3,18 +3,18 @@ mod url;
 mod write;
 
 use crate::utils::ResponseExt;
-use anyhow::{bail, Context};
-use base64::prelude::BASE64_STANDARD;
+use anyhow::{Context, bail};
 use base64::Engine as _;
+use base64::prelude::BASE64_STANDARD;
 use hyper_old_types::header::{Link, RelationType};
 use log::{debug, trace};
 use reqwest::header::HeaderMap;
 use reqwest::{
+    Method, StatusCode,
     blocking::{Client, RequestBuilder, Response},
     header::{self, HeaderValue},
-    Method, StatusCode,
 };
-use serde::{de::DeserializeOwned, Deserialize};
+use serde::{Deserialize, de::DeserializeOwned};
 use std::fmt;
 use url::GitHubUrl;
 

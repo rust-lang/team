@@ -464,7 +464,11 @@ impl SyncGitHub {
                         .map(|i| i.installation_id)
                 });
             let Some(gh_installation) = gh_installation else {
-                log::warn!("Application {app} should be enabled for repository {}/{}, but it is not installed on GitHub", expected_repo.org, expected_repo.name);
+                log::warn!(
+                    "Application {app} should be enabled for repository {}/{}, but it is not installed on GitHub",
+                    expected_repo.org,
+                    expected_repo.name
+                );
                 continue;
             };
             let installation = AppInstallation {

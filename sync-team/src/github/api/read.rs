@@ -1,7 +1,7 @@
 use crate::github::api::{
-    team_node_id, url::GitHubUrl, user_node_id, BranchProtection, GraphNode, GraphNodes,
-    GraphPageInfo, HttpClient, Login, OrgAppInstallation, Repo, RepoAppInstallation, RepoTeam,
-    RepoUser, Team, TeamMember, TeamRole,
+    BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, OrgAppInstallation,
+    Repo, RepoAppInstallation, RepoTeam, RepoUser, Team, TeamMember, TeamRole, team_node_id,
+    url::GitHubUrl, user_node_id,
 };
 use anyhow::Context;
 use reqwest::Method;
@@ -36,7 +36,7 @@ pub(crate) trait GithubRead {
 
     /// The GitHub names of users invited to the given team
     fn team_membership_invitations(&self, org: &str, team: &str)
-        -> anyhow::Result<HashSet<String>>;
+    -> anyhow::Result<HashSet<String>>;
 
     /// Get a repo by org and name
     fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>>;
