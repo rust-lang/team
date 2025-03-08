@@ -5,10 +5,11 @@ subteam-of = "docs-rs"
 leads = []
 members = [
     "GuillaumeGomez",
-    "Nemo157",
     "syphar",
 ]
-alumni = []
+alumni = [
+    "Nemo157",
+]
 
 [[github]]
 orgs = ["rust-lang"]
