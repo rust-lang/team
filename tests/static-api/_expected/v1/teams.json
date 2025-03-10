@@ -90,7 +90,17 @@
     ],
     "alumni": [],
     "github": null,
-    "website_data": null,
+    "website_data": {
+      "name": "Leaderless",
+      "description": "Test",
+      "page": "leaderless",
+      "email": null,
+      "repo": null,
+      "discord": null,
+      "zulip_stream": null,
+      "matrix_room": null,
+      "weight": 0
+    },
     "roles": [],
     "discord": []
   },
@@ -101,7 +111,17 @@
     "members": [],
     "alumni": [],
     "github": null,
-    "website_data": null,
+    "website_data": {
+      "name": "Leadership council",
+      "description": "test",
+      "page": "leadership-council",
+      "email": null,
+      "repo": null,
+      "discord": null,
+      "zulip_stream": null,
+      "matrix_room": null,
+      "weight": 0
+    },
     "roles": [],
     "discord": []
   },
@@ -132,7 +152,17 @@
     ],
     "alumni": [],
     "github": null,
-    "website_data": null,
+    "website_data": {
+      "name": "Leads permissions",
+      "description": "Test",
+      "page": "leads-permissions",
+      "email": null,
+      "repo": null,
+      "discord": null,
+      "zulip_stream": null,
+      "matrix_room": null,
+      "weight": 0
+    },
     "roles": [],
     "discord": []
   },
@@ -166,7 +196,17 @@
       }
     ],
     "github": null,
-    "website_data": null,
+    "website_data": {
+      "name": "WG Test",
+      "description": "test",
+      "page": "wg-test",
+      "email": null,
+      "repo": null,
+      "discord": null,
+      "zulip_stream": null,
+      "matrix_room": null,
+      "weight": 0
+    },
     "roles": [
       {
         "id": "convener",

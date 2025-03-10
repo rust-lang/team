@@ -16,3 +16,9 @@ alumni = []
 
 [[github]]
 orgs = ["rust-lang"]
+
+[website]
+name = "Const Traits Project Group"
+description = "Project group working on const traits"
+repo = "https://github.com/rust-lang/project-const-traits"
+zulip-stream = "t-compiler/project-const-traits"
