@@ -209,6 +209,37 @@ excluded-people = [
     "rylev",
 ]
 
+# Define the Zulip streams used by the team
+# It's optional, and there can be more than one.
+#
+# This will remove anyone who isn't in the team from the stream
+# so it should only be used for private streams at the moment.
+[[zulip-streams]]
+# The name of the Zulip stream (required)
+name = "t-overlords/private"
+# This can be set to false to avoid including all the team members in the stream
+# It's useful if you want to create the stream with a different set of members
+# It's optional, and the default is `true`.
+include-team-members = true
+# Include the following extra people in the Zulip stream. Their email address
+# or Zulip id will be fetched from their TOML in people/ (optional).
+extra-people = [
+    "alexcrichton",
+]
+# Include the following Zulip ids in the Zulip stream (optional).
+extra-zulip-ids = [
+    1234
+]
+# Include all the members of the following teams in the Zulip stream
+# (optional).
+extra-teams = [
+    "bots-nursery",
+]
+# Exclude the following people in the Zulip stream (optional).
+excluded-people = [
+    "rylev",
+]
+
 # Roles to define in Discord.
 [[discord-roles]]
 # The name of the role.
