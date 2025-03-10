@@ -1,5 +1,7 @@
 name: CI
-on: [push, pull_request]
+on:
+  pull_request:
+  merge_group:
 
 jobs:
   ci:
@@ -23,19 +25,19 @@ jobs:
         run: docker build -t sync-team .
 
       - name: Configure AWS credentials
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'merge_group'
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::890664054962:role/ci--rust-lang--sync-team
           aws-region: us-west-1
 
       - name: Login to Amazon ECR Private
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'merge_group'
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build, tag, and push docker image to Amazon ECR
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'merge_group'
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: sync-team
@@ -44,7 +46,7 @@ jobs:
           docker push $REGISTRY/$REPOSITORY:latest
 
       - name: Start the synchronization tool
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'merge_group'
         run: |
           aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
           cat output.json | python3 -m json.tool
