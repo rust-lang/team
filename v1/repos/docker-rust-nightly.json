@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "docker-rust-nightly",
+  "description": "",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

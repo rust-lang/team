@@ -1,0 +1,45 @@
+{
+  "name": "project-dyn-upcasting",
+  "kind": "project_group",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "Charles Lew",
+      "github": "crlf0710",
+      "github_id": 451806,
+      "is_lead": true
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "initiative-dyn-upcasting",
+        "members": [
+          451806,
+          155238
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Dyn Upcasting Initiative",
+    "description": "Allowing Upcasting between trait objects",
+    "page": "project-dyn-upcasting",
+    "email": null,
+    "repo": "https://github.com/rust-lang/dyn-upcasting-coercion-initiative",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

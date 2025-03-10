@@ -1,0 +1,69 @@
+{
+  "name": "rustdoc-frontend",
+  "kind": "team",
+  "subteam_of": "rustdoc",
+  "members": [
+    {
+      "name": "Noah Lev",
+      "github": "camelid",
+      "github_id": 37223377,
+      "is_lead": false
+    },
+    {
+      "name": "Guillaume Gomez",
+      "github": "GuillaumeGomez",
+      "github_id": 3050060,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Hoffman-Andrews",
+      "github": "jsha",
+      "github_id": 220205,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Howell",
+      "github": "notriddle",
+      "github_id": 1593513,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "rustdoc-frontend",
+        "members": [
+          3050060,
+          37223377,
+          220205,
+          1593513
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "rustdoc-frontend",
+        "members": [
+          3050060,
+          37223377,
+          220205,
+          1593513
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Rustdoc web frontend",
+    "description": "Rustdoc frontend design, UI, UX and development",
+    "page": "rustdoc-frontend",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": "t-rustdoc",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

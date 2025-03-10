@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "async-crashdump-debugging-initiative",
+  "description": "",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "initiative-async-crashdump-debugging",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

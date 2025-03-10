@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "highfive",
+  "description": "Github hooks to provide an encouraging atmosphere for new contributors",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

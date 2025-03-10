@@ -1,0 +1,54 @@
+{
+  "name": "crates-io-admins",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Carol Nichols",
+      "github": "carols10cents",
+      "github_id": 193874,
+      "is_lead": false
+    },
+    {
+      "name": "eth3lbert",
+      "github": "eth3lbert",
+      "github_id": 2889664,
+      "is_lead": false
+    },
+    {
+      "name": "Justin Geibel",
+      "github": "jtgeibel",
+      "github_id": 22186,
+      "is_lead": false
+    },
+    {
+      "name": "Adam Harvey",
+      "github": "LawnGnome",
+      "github_id": 229984,
+      "is_lead": false
+    },
+    {
+      "name": "Matthew T",
+      "github": "mdtro",
+      "github_id": 20070360,
+      "is_lead": false
+    },
+    {
+      "name": "Rustin",
+      "github": "Rustin170506",
+      "github_id": 29879298,
+      "is_lead": false
+    },
+    {
+      "name": "Tobias Bieniek",
+      "github": "Turbo87",
+      "github_id": 141300,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}
