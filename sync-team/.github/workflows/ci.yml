@@ -32,6 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'merge_group'
     steps:
+      - uses: actions/checkout@v4
+
       - name: Build the Docker container
         run: docker build -t sync-team .
 
