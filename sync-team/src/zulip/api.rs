@@ -223,11 +223,11 @@ impl ZulipApi {
             form.insert("subscriptions", subscriptions.as_str());
             form.insert("principals", principals.as_str());
 
-            let response = self.req(method, "/users/me/subscriptions", Some(form))?;
+            let response = self.req(method, "/users/me/subscriptions", Some(form.clone()))?;
 
             if response.status() == 400 {
                 log::warn!(
-                    "failed to update stream membership with a bad request: {}",
+                    "failed to update stream membership with a bad request: {}. Sent form: {form:?}",
                     response
                         .text()
                         .unwrap_or_else(|_| String::from("<BODY NOT DECODABLE>"))
@@ -240,7 +240,10 @@ impl ZulipApi {
         };
 
         if !add_ids.is_empty() {
-            let subscriptions = format!("{{\"name\": \"{stream_name}\", \"description\": \"\"}}");
+            let subscriptions = serde_json::to_string(&serde_json::json!({
+                "name": stream_name,
+                "description": ""
+            }))?;
             let add_ids = serialize_as_array(add_ids);
             submit(reqwest::Method::POST, subscriptions, add_ids)?;
         }
