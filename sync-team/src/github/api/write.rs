@@ -291,12 +291,12 @@ impl GitHubWrite {
             self.client
                 .req(
                     Method::PUT,
-                    &GitHubUrl::new_with_org(
-                        format!(
+                    &GitHubUrl::new(
+                        &format!(
                             "user/installations/{installation_id}/repositories/{repository_id}"
                         ),
                         org,
-                    )?,
+                    ),
                 )?
                 .send()?
                 .custom_error_for_status()?;
@@ -315,12 +315,12 @@ impl GitHubWrite {
             self.client
                 .req(
                     Method::DELETE,
-                    &GitHubUrl::new_with_org(
-                        format!(
+                    &GitHubUrl::new(
+                        &format!(
                             "user/installations/{installation_id}/repositories/{repository_id}"
                         ),
                         org,
-                    )?,
+                    ),
                 )?
                 .send()?
                 .custom_error_for_status()?;

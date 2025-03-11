@@ -1,4 +1,5 @@
 mod read;
+mod tokens;
 mod url;
 mod write;
 
@@ -16,6 +17,7 @@ use reqwest::{
 };
 use serde::{Deserialize, de::DeserializeOwned};
 use std::fmt;
+use tokens::GitHubTokens;
 use url::GitHubUrl;
 
 pub(crate) use read::{GitHubApiRead, GithubRead};
@@ -24,6 +26,7 @@ pub(crate) use write::GitHubWrite;
 #[derive(Clone)]
 pub(crate) struct HttpClient {
     client: Client,
+    github_tokens: GitHubTokens,
 }
 
 impl HttpClient {
@@ -39,15 +42,24 @@ impl HttpClient {
 
         Ok(Self {
             client: builder.build()?,
+            github_tokens: GitHubTokens::from_env()?,
         })
+    }
+
+    fn auth_header(&self, org: &str) -> anyhow::Result<HeaderValue> {
+        let token = self.github_tokens.get_token(org)?;
+        let mut auth = HeaderValue::from_str(&format!("token {}", token))?;
+        auth.set_sensitive(true);
+        Ok(auth)
     }
 
     fn req(&self, method: Method, url: &GitHubUrl) -> anyhow::Result<RequestBuilder> {
         trace!("http request: {} {}", method, url.url());
+        let token = self.auth_header(url.org())?;
         let client = self
             .client
             .request(method, url.url())
-            .header(header::AUTHORIZATION, url.auth());
+            .header(header::AUTHORIZATION, token);
         Ok(client)
     }
 
@@ -90,10 +102,7 @@ impl HttpClient {
             variables: V,
         }
         let resp = self
-            .req(
-                Method::POST,
-                &GitHubUrl::new_with_org("graphql".to_string(), org)?,
-            )?
+            .req(Method::POST, &GitHubUrl::new("graphql", org))?
             .json(&Request { query, variables })
             .send()?
             .custom_error_for_status()?;
@@ -132,10 +141,7 @@ impl HttpClient {
                         .map(|r| r.iter().any(|r| *r == RelationType::Next))
                         .unwrap_or(false)
                     {
-                        next = Some(GitHubUrl::new(
-                            link.link().to_string(),
-                            next_url.auth().clone(),
-                        ));
+                        next = Some(GitHubUrl::new(link.link(), next_url.org()));
                         break;
                     }
                 }
