@@ -120,10 +120,7 @@ impl SyncZulip {
             }
             None => {
                 log::error!("no '{stream_name}' user group found on Zulip");
-                return Err(anyhow::format_err!(
-                    "sync-team does not support creating Zulip stream: {}",
-                    stream_name
-                ));
+                return Ok(None);
             }
         };
         let is_stream_private = self.zulip_controller.is_stream_private(stream_id)?;
