@@ -164,7 +164,7 @@ impl GithubRead for GitHubApiRead {
         self.client
             .rest_paginated(
                 &Method::GET,
-                &GitHubUrl::new_with_org(url.clone(), org)?,
+                &GitHubUrl::new(&url, org),
                 |response: InstallationPage| {
                     installations.extend(response.repositories);
                     Ok(())
