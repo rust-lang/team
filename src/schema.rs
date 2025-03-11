@@ -179,6 +179,8 @@ pub(crate) struct Team {
     lists: Vec<TeamList>,
     #[serde(default)]
     zulip_groups: Vec<RawZulipGroup>,
+    #[serde(default)]
+    zulip_streams: Vec<RawZulipStream>,
     discord_roles: Option<Vec<DiscordRole>>,
 }
 
@@ -364,6 +366,51 @@ impl Team {
         Ok(lists)
     }
 
+    /// `on_exclude_not_included` is a function that is returned when an excluded member
+    /// wasn't included.
+    fn expand_zulip_membership(
+        &self,
+        data: &Data,
+        common: &RawZulipCommon,
+        on_exclude_not_included: impl Fn(&str) -> Error,
+    ) -> Result<Vec<ZulipMember>, Error> {
+        let mut members = if common.include_team_members {
+            self.members(data)?
+        } else {
+            HashSet::new()
+        };
+        for person in &common.extra_people {
+            members.insert(person.as_str());
+        }
+        for team in &common.extra_teams {
+            let team = data
+                .team(team)
+                .ok_or_else(|| format_err!("team {} is missing", team))?;
+            members.extend(team.members(data)?);
+        }
+        for excluded in &common.excluded_people {
+            if !members.remove(excluded.as_str()) {
+                return Err(on_exclude_not_included(excluded));
+            }
+        }
+
+        let mut final_members = Vec::new();
+        for member in members.iter() {
+            let member = data
+                .person(member)
+                .ok_or_else(|| format_err!("{} does not have a person configuration", member))?;
+            let member = match (member.github.clone(), member.zulip_id) {
+                (github, Some(zulip_id)) => ZulipMember::MemberWithId { github, zulip_id },
+                (github, _) => ZulipMember::MemberWithoutId { github },
+            };
+            final_members.push(member);
+        }
+        for &extra in &common.extra_zulip_ids {
+            final_members.push(ZulipMember::JustId(extra));
+        }
+        Ok(final_members)
+    }
+
     pub(crate) fn raw_zulip_groups(&self) -> &[RawZulipGroup] {
         &self.zulip_groups
     }
@@ -373,48 +420,43 @@ impl Team {
         let zulip_groups = &self.zulip_groups;
 
         for raw_group in zulip_groups {
-            let mut group = ZulipGroup {
-                name: raw_group.name.clone(),
-                includes_team_members: raw_group.include_team_members,
-                members: Vec::new(),
-            };
-
-            let mut members = if raw_group.include_team_members {
-                self.members(data)?
-            } else {
-                HashSet::new()
-            };
-            for person in &raw_group.extra_people {
-                members.insert(person.as_str());
-            }
-            for team in &raw_group.extra_teams {
-                let team = data
-                    .team(team)
-                    .ok_or_else(|| format_err!("team {} is missing", team))?;
-                members.extend(team.members(data)?);
-            }
-            for excluded in &raw_group.excluded_people {
-                if !members.remove(excluded.as_str()) {
-                    bail!("'{excluded}' was specifically excluded from the Zulip group '{}' but they were already not included", raw_group.name);
-                }
-            }
-
-            for member in members.iter() {
-                let member = data.person(member).ok_or_else(|| {
-                    format_err!("{} does not have a person configuration", member)
-                })?;
-                let member = match (member.github.clone(), member.zulip_id) {
-                    (github, Some(zulip_id)) => ZulipGroupMember::MemberWithId { github, zulip_id },
-                    (github, _) => ZulipGroupMember::MemberWithoutId { github },
-                };
-                group.members.push(member);
-            }
-            for &extra in &raw_group.extra_zulip_ids {
-                group.members.push(ZulipGroupMember::JustId(extra));
-            }
-            groups.push(group);
+            groups.push(ZulipGroup(ZulipCommon {
+                name: raw_group.common.name.clone(),
+                includes_team_members: raw_group.common.include_team_members,
+                members: self.expand_zulip_membership(
+                    data,
+                    &raw_group.common,
+                    |excluded| {
+                        format_err!("'{excluded}' was specifically excluded from the Zulip group '{}' but they were already not included", raw_group.common.name)
+                    },
+                )?,
+            }));
         }
         Ok(groups)
+    }
+
+    pub(crate) fn raw_zulip_streams(&self) -> &[RawZulipStream] {
+        &self.zulip_streams
+    }
+
+    pub(crate) fn zulip_streams(&self, data: &Data) -> Result<Vec<ZulipStream>, Error> {
+        let mut streams = Vec::new();
+        let zulip_streams = self.raw_zulip_streams();
+
+        for raw_stream in zulip_streams {
+            streams.push(ZulipStream(ZulipCommon {
+                name: raw_stream.common.name.clone(),
+                includes_team_members: raw_stream.common.include_team_members,
+                members: self.expand_zulip_membership(
+                    data,
+                    &raw_stream.common,
+                    |excluded| {
+                        format_err!("'{excluded}' was specifically excluded from the Zulip stream '{}' but they were already not included", raw_stream.common.name)
+                    },
+                )?,
+            }));
+        }
+        Ok(streams)
     }
 
     pub(crate) fn permissions(&self) -> &Permissions {
@@ -677,7 +719,7 @@ pub(crate) struct TeamList {
 
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct RawZulipGroup {
+pub(crate) struct RawZulipCommon {
     pub(crate) name: String,
     #[serde(default = "default_true")]
     pub(crate) include_team_members: bool,
@@ -689,6 +731,20 @@ pub(crate) struct RawZulipGroup {
     pub(crate) extra_teams: Vec<String>,
     #[serde(default)]
     pub(crate) excluded_people: Vec<String>,
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+pub(crate) struct RawZulipGroup {
+    #[serde(flatten)]
+    pub(crate) common: RawZulipCommon,
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+pub(crate) struct RawZulipStream {
+    #[serde(flatten)]
+    pub(crate) common: RawZulipCommon,
 }
 
 #[derive(Debug)]
@@ -708,29 +764,49 @@ impl List {
 }
 
 #[derive(Debug)]
-pub(crate) struct ZulipGroup {
+pub(crate) struct ZulipCommon {
     name: String,
     includes_team_members: bool,
-    members: Vec<ZulipGroupMember>,
+    members: Vec<ZulipMember>,
 }
 
-impl ZulipGroup {
+impl ZulipCommon {
     pub(crate) fn name(&self) -> &str {
         &self.name
     }
 
-    /// Whether the group includes the members of the team its associated
+    /// Whether the group/stream includes the members of the associated team?
     pub(crate) fn includes_team_members(&self) -> bool {
         self.includes_team_members
     }
 
-    pub(crate) fn members(&self) -> &[ZulipGroupMember] {
+    pub(crate) fn members(&self) -> &[ZulipMember] {
         &self.members
     }
 }
 
+#[derive(Debug)]
+pub(crate) struct ZulipGroup(ZulipCommon);
+
+impl std::ops::Deref for ZulipGroup {
+    type Target = ZulipCommon;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+#[derive(Debug)]
+pub(crate) struct ZulipStream(ZulipCommon);
+
+impl std::ops::Deref for ZulipStream {
+    type Target = ZulipCommon;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
 #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
-pub(crate) enum ZulipGroupMember {
+pub(crate) enum ZulipMember {
     MemberWithId { github: String, zulip_id: u64 },
     JustId(u64),
     MemberWithoutId { github: String },

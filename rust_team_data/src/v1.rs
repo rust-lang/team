@@ -127,6 +127,26 @@ pub struct ZulipGroups {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ZulipStream {
+    pub name: String,
+    pub members: Vec<ZulipStreamMember>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum ZulipStreamMember {
+    // TODO(rylev): this variant can be removed once
+    // it is verified that no one is relying on it
+    Email(String),
+    Id(u64),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ZulipStreams {
+    pub streams: IndexMap<String, ZulipStream>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Permission {
     pub people: Vec<PermissionPerson>,
     pub github_users: Vec<String>,
