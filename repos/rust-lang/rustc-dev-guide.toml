@@ -8,8 +8,12 @@ bots = ["rustbot"]
 bootstrap = "write"
 compiler = "write"
 wg-rustc-dev-guide = "maintain"
+edition = "write"
 infra = "write"
+lang = "write"
+lang-ops = "write"
 libs = "write"
+libs-api = "write"
 libs-contributors = "write"
 
 [[branch-protections]]
