@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use reqwest::blocking::Client;
+use secrecy::{ExposeSecret, SecretString};
 use serde::Deserialize;
 
 const ZULIP_BASE_URL: &str = "https://rust-lang.zulipchat.com/api/v1";
@@ -10,13 +11,13 @@ const ZULIP_BASE_URL: &str = "https://rust-lang.zulipchat.com/api/v1";
 pub(crate) struct ZulipApi {
     client: Client,
     username: String,
-    token: String,
+    token: SecretString,
     dry_run: bool,
 }
 
 impl ZulipApi {
     /// Create a new `ZulipApi` instance
-    pub(crate) fn new(username: String, token: String, dry_run: bool) -> Self {
+    pub(crate) fn new(username: String, token: SecretString, dry_run: bool) -> Self {
         Self {
             client: Client::new(),
             username,
@@ -267,7 +268,7 @@ impl ZulipApi {
         let mut req = self
             .client
             .request(method, format!("{ZULIP_BASE_URL}{path}"))
-            .basic_auth(&self.username, Some(&self.token));
+            .basic_auth(&self.username, Some(&self.token.expose_secret()));
         if let Some(form) = form {
             req = req.form(&form);
         }
