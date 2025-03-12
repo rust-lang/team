@@ -10,6 +10,7 @@ use crate::zulip::SyncZulip;
 use anyhow::Context;
 use clap::Parser;
 use log::{error, info, warn};
+use secrecy::SecretString;
 use std::path::PathBuf;
 
 const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun", "zulip"];
@@ -100,13 +101,13 @@ fn app() -> anyhow::Result<()> {
                 }
             }
             "mailgun" => {
-                let token = get_env("MAILGUN_API_TOKEN")?;
+                let token = SecretString::from(get_env("MAILGUN_API_TOKEN")?);
                 let encryption_key = get_env("EMAIL_ENCRYPTION_KEY")?;
-                mailgun::run(&token, &encryption_key, &team_api, dry_run)?;
+                mailgun::run(token, &encryption_key, &team_api, dry_run)?;
             }
             "zulip" => {
                 let username = get_env("ZULIP_USERNAME")?;
-                let token = get_env("ZULIP_API_TOKEN")?;
+                let token = SecretString::from(get_env("ZULIP_API_TOKEN")?);
                 let sync = SyncZulip::new(username, token, &team_api, dry_run)?;
                 let diff = sync.diff_all()?;
                 if !diff.is_empty() {
