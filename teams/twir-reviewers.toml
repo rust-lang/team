@@ -19,3 +19,8 @@ alumni = []
 [[github]]
 orgs = ["rust-lang"]
 team-name = "twir-reviewers"
+
+[website]
+name = "TWiR reviewers"
+description = "Reviewers for This Week in Rust"
+repo = "https://github.com/rust-lang/this-week-in-rust"
