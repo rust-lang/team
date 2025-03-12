@@ -15,6 +15,7 @@ use reqwest::{
     blocking::{Client, RequestBuilder, Response},
     header::{self, HeaderValue},
 };
+use secrecy::ExposeSecret;
 use serde::{Deserialize, de::DeserializeOwned};
 use std::fmt;
 use tokens::GitHubTokens;
@@ -48,7 +49,7 @@ impl HttpClient {
 
     fn auth_header(&self, org: &str) -> anyhow::Result<HeaderValue> {
         let token = self.github_tokens.get_token(org)?;
-        let mut auth = HeaderValue::from_str(&format!("token {}", token))?;
+        let mut auth = HeaderValue::from_str(&format!("token {}", token.expose_secret()))?;
         auth.set_sensitive(true);
         Ok(auth)
     }

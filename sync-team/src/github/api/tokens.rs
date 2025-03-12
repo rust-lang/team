@@ -1,13 +1,14 @@
 use std::collections::HashMap;
 
 use anyhow::Context as _;
+use secrecy::SecretString;
 
 #[derive(Clone)]
 pub enum GitHubTokens {
     /// One token per organization (used with GitHub App).
-    Orgs(HashMap<String, String>),
+    Orgs(HashMap<String, SecretString>),
     /// One token for all API calls (used with Personal Access Token).
-    All(String),
+    All(SecretString),
 }
 
 impl GitHubTokens {
@@ -20,14 +21,14 @@ impl GitHubTokens {
 
         for (key, value) in std::env::vars() {
             if let Some(org_name) = org_name_from_env_var(&key) {
-                tokens.insert(org_name, value);
+                tokens.insert(org_name, SecretString::from(value));
             }
         }
 
         if tokens.is_empty() {
             let pat_token = std::env::var("GITHUB_TOKEN")
                 .context("failed to get any GitHub token environment variable")?;
-            Ok(GitHubTokens::All(pat_token))
+            Ok(GitHubTokens::All(SecretString::from(pat_token)))
         } else {
             Ok(GitHubTokens::Orgs(tokens))
         }
@@ -35,9 +36,9 @@ impl GitHubTokens {
 
     /// Get a token for a GitHub organization.
     /// Return an error if not present.
-    pub fn get_token(&self, org: &str) -> anyhow::Result<&str> {
+    pub fn get_token(&self, org: &str) -> anyhow::Result<&SecretString> {
         match self {
-            GitHubTokens::Orgs(orgs) => orgs.get(org).map(String::as_str).with_context(|| {
+            GitHubTokens::Orgs(orgs) => orgs.get(org).with_context(|| {
                 format!(
                     "failed to get the GitHub token environment variable for organization {org}"
                 )
