@@ -8,6 +8,7 @@ use crate::TeamApi;
 use anyhow::{Context, bail};
 use log::info;
 use rust_team_data::{email_encryption, v1 as team_data};
+use secrecy::SecretString;
 
 const DESCRIPTION: &str = "managed by an automatic script on github";
 
@@ -87,7 +88,7 @@ fn mangle_address(addr: &str) -> anyhow::Result<String> {
 }
 
 pub(crate) fn run(
-    token: &str,
+    token: SecretString,
     email_encryption_key: &str,
     team_api: &TeamApi,
     dry_run: bool,

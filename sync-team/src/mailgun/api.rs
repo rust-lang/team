@@ -5,17 +5,18 @@ use reqwest::{
     blocking::{Client, RequestBuilder},
     header::{self, HeaderValue},
 };
+use secrecy::{ExposeSecret, SecretString};
 
 pub(super) struct Mailgun {
-    token: String,
+    token: SecretString,
     client: Client,
     dry_run: bool,
 }
 
 impl Mailgun {
-    pub(super) fn new(token: &str, dry_run: bool) -> Self {
+    pub(super) fn new(token: SecretString, dry_run: bool) -> Self {
         Self {
-            token: token.into(),
+            token,
             client: Client::new(),
             dry_run,
         }
@@ -108,7 +109,7 @@ impl Mailgun {
 
         self.client
             .request(method, url)
-            .basic_auth("api", Some(&self.token))
+            .basic_auth("api", Some(&self.token.expose_secret()))
             .header(
                 header::USER_AGENT,
                 HeaderValue::from_static(crate::USER_AGENT),
