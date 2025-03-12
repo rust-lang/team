@@ -690,18 +690,28 @@ impl Diff {
 
         Ok(())
     }
+
+    pub(crate) fn is_empty(&self) -> bool {
+        self.team_diffs.is_empty() && self.repo_diffs.is_empty()
+    }
 }
 
 impl std::fmt::Display for Diff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "💻 Team Diffs:")?;
-        for team_diff in &self.team_diffs {
-            write!(f, "{team_diff}")?;
+        if !self.team_diffs.is_empty() {
+            writeln!(f, "💻 Team Diffs:")?;
+            for team_diff in &self.team_diffs {
+                write!(f, "{team_diff}")?;
+            }
         }
-        writeln!(f, "💻 Repo Diffs:")?;
-        for repo_diff in &self.repo_diffs {
-            write!(f, "{repo_diff}")?;
+
+        if !&self.repo_diffs.is_empty() {
+            writeln!(f, "💻 Repo Diffs:")?;
+            for repo_diff in &self.repo_diffs {
+                write!(f, "{repo_diff}")?;
+            }
         }
+
         Ok(())
     }
 }

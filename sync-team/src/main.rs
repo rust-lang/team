@@ -91,7 +91,9 @@ fn app() -> anyhow::Result<()> {
                 let teams = team_api.get_teams()?;
                 let repos = team_api.get_repos()?;
                 let diff = create_diff(gh_read, teams, repos)?;
-                info!("{}", diff);
+                if !diff.is_empty() {
+                    info!("{}", diff);
+                }
                 if !only_print_plan {
                     let gh_write = GitHubWrite::new(client, dry_run)?;
                     diff.apply(&gh_write)?;
@@ -107,7 +109,9 @@ fn app() -> anyhow::Result<()> {
                 let token = get_env("ZULIP_API_TOKEN")?;
                 let sync = SyncZulip::new(username, token, &team_api, dry_run)?;
                 let diff = sync.diff_all()?;
-                info!("{}", diff);
+                if !diff.is_empty() {
+                    info!("{}", diff);
+                }
                 if !only_print_plan {
                     diff.apply(&sync)?;
                 }
