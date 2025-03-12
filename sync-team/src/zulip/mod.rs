@@ -174,18 +174,28 @@ impl Diff {
         }
         Ok(())
     }
+
+    pub(crate) fn is_empty(&self) -> bool {
+        self.user_group_diffs.is_empty() && self.stream_membership_diffs.is_empty()
+    }
 }
 
 impl std::fmt::Display for Diff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "💻 User Group Diffs:")?;
-        for team_diff in &self.user_group_diffs {
-            write!(f, "{team_diff}")?;
+        if !&self.user_group_diffs.is_empty() {
+            writeln!(f, "💻 User Group Diffs:")?;
+            for team_diff in &self.user_group_diffs {
+                write!(f, "{team_diff}")?;
+            }
         }
-        writeln!(f, "💻 Stream Membership Diffs:")?;
-        for stream_membership_diff in &self.stream_membership_diffs {
-            write!(f, "{stream_membership_diff}")?;
+
+        if !&self.stream_membership_diffs.is_empty() {
+            writeln!(f, "💻 Stream Membership Diffs:")?;
+            for stream_membership_diff in &self.stream_membership_diffs {
+                write!(f, "{stream_membership_diff}")?;
+            }
         }
+
         Ok(())
     }
 }
