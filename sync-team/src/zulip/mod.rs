@@ -1,6 +1,7 @@
 mod api;
 
 use crate::team_api::TeamApi;
+use anyhow::Context;
 use api::{ZulipApi, ZulipStream, ZulipUserGroup};
 use rust_team_data::v1::{ZulipGroupMember, ZulipStreamMember};
 
@@ -21,9 +22,15 @@ impl SyncZulip {
         dry_run: bool,
     ) -> anyhow::Result<Self> {
         let zulip_api = ZulipApi::new(username, token, dry_run);
-        let stream_definitions = get_stream_definitions(team_api, &zulip_api)?;
+        let mut stream_definitions = get_stream_definitions(team_api, &zulip_api)?;
         let user_group_definitions = get_user_group_definitions(team_api, &zulip_api)?;
         let zulip_controller = ZulipController::new(zulip_api)?;
+        // rust-lang-owner is the user who owns the Zulip token.
+        // This user needs to be in private streams to be able to
+        // add/remove members.
+        // Since this user is not in the team repo, we need to add
+        // it manually.
+        add_rust_lang_owner_to_private_streams(&mut stream_definitions, &zulip_controller)?;
         Ok(Self {
             zulip_controller,
             stream_definitions,
@@ -158,6 +165,24 @@ impl SyncZulip {
             )))
         }
     }
+}
+
+fn add_rust_lang_owner_to_private_streams(
+    stream_definitions: &mut BTreeMap<String, Vec<u64>>,
+    zulip_controller: &ZulipController,
+) -> anyhow::Result<()> {
+    // Id of the `rust-lang-owner` Zulip user.
+    let rust_lang_owner_id = 494485;
+    for (stream_name, members) in stream_definitions {
+        let stream_id = zulip_controller
+            .stream_id_from_name(stream_name)
+            .with_context(|| format!("id of stream '{stream_name}' not found"))?;
+        let is_stream_private = zulip_controller.zulip_api.is_stream_private(stream_id)?;
+        if is_stream_private {
+            members.insert(0, rust_lang_owner_id);
+        }
+    }
+    Ok(())
 }
 
 pub(crate) struct Diff {

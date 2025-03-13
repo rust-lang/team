@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use anyhow::Context as _;
 use reqwest::blocking::Client;
 use secrecy::{ExposeSecret, SecretString};
 use serde::Deserialize;
@@ -129,6 +130,13 @@ impl ZulipApi {
 
     /// Is a Zulip stream private?
     pub(crate) fn is_stream_private(&self, stream_id: u64) -> anyhow::Result<bool> {
+        let stream = self.get_stream(stream_id).with_context(|| {
+            format!("Failed to determine if stream with id {stream_id} is private")
+        })?;
+        Ok(stream.invite_only)
+    }
+
+    fn get_stream(&self, stream_id: u64) -> anyhow::Result<ZulipStream> {
         #[derive(Deserialize)]
         struct OneZulipStream {
             stream: ZulipStream,
@@ -138,8 +146,7 @@ impl ZulipApi {
             .req(reqwest::Method::GET, &format!("/streams/{stream_id}"), None)?
             .error_for_status()?
             .json::<OneZulipStream>()?
-            .stream
-            .invite_only)
+            .stream)
     }
 
     pub(crate) fn update_user_group_members(
