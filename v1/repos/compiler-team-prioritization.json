@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "compiler-team-prioritization",
+  "description": "Home repository for the compiler team \"prioritization group\"",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-prioritization",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

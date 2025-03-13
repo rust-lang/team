@@ -1,0 +1,23 @@
+{
+  "org": "rust-lang",
+  "name": "pkg-config-rs",
+  "description": "Build library for invoking pkg-config for Rust",
+  "homepage": "https://docs.rs/pkg-config",
+  "bots": [],
+  "teams": [
+    {
+      "name": "crate-maintainers",
+      "permission": "maintain"
+    }
+  ],
+  "members": [
+    {
+      "name": "sdroege",
+      "permission": "write"
+    }
+  ],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

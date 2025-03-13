@@ -1,0 +1,30 @@
+{
+  "org": "rust-lang",
+  "name": "staging.crates.io-index",
+  "description": "Registry index for staging.crates.io",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "crates-io-on-call",
+      "permission": "write"
+    },
+    {
+      "name": "crates-io",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": "pr_not_required",
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

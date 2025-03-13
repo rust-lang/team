@@ -1,0 +1,22 @@
+{
+  "name": "launching-pad",
+  "kind": "team",
+  "subteam_of": null,
+  "top_level": true,
+  "members": [],
+  "alumni": [],
+  "github": null,
+  "website_data": {
+    "name": "Launching pad",
+    "description": "An interim home for teams",
+    "page": "launching-pad",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": "t-launching-pad",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

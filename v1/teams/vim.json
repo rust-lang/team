@@ -1,0 +1,42 @@
+{
+  "name": "vim",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Chris Morgan",
+      "github": "chris-morgan",
+      "github_id": 392868,
+      "is_lead": false
+    },
+    {
+      "name": "Dan Aloni",
+      "github": "da-x",
+      "github_id": 321273,
+      "is_lead": false
+    },
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "vim",
+        "members": [
+          5047365,
+          392868,
+          321273
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

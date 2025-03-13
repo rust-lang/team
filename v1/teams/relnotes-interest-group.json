@@ -1,0 +1,42 @@
+{
+  "name": "relnotes-interest-group",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Alexey Semenyuk",
+      "github": "alex-semenyuk",
+      "github_id": 5480441,
+      "is_lead": false
+    },
+    {
+      "name": "Jieyou Xu",
+      "github": "jieyouxu",
+      "github_id": 39484203,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": false
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

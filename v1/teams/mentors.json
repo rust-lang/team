@@ -1,0 +1,66 @@
+{
+  "name": "mentors",
+  "kind": "marker_team",
+  "subteam_of": "mentorship",
+  "members": [
+    {
+      "name": "Amanieu d'Antras",
+      "github": "Amanieu",
+      "github_id": 278509,
+      "is_lead": false
+    },
+    {
+      "name": "David Lattimore",
+      "github": "davidlattimore",
+      "github_id": 8983542,
+      "is_lead": false
+    },
+    {
+      "name": "Ed Page",
+      "github": "epage",
+      "github_id": 60961,
+      "is_lead": false
+    },
+    {
+      "name": "Jack Huey",
+      "github": "jackh726",
+      "github_id": 31162821,
+      "is_lead": false
+    },
+    {
+      "name": "Jieyou Xu",
+      "github": "jieyouxu",
+      "github_id": 39484203,
+      "is_lead": false
+    },
+    {
+      "name": "Jakub Beránek",
+      "github": "Kobzol",
+      "github_id": 4539057,
+      "is_lead": false
+    },
+    {
+      "name": "Predrag Gruevski",
+      "github": "obi1kenobi",
+      "github_id": 2348618,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    },
+    {
+      "name": "Yacin Tmimi",
+      "github": "ytmimi",
+      "github_id": 29028348,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

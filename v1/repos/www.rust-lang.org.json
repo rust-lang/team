@@ -1,0 +1,37 @@
+{
+  "org": "rust-lang",
+  "name": "www.rust-lang.org",
+  "description": "The home of the Rust website",
+  "homepage": "https://www.rust-lang.org",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "website",
+      "permission": "admin"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": "pr_not_required",
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    },
+    {
+      "pattern": "deploy",
+      "dismiss_stale_review": false,
+      "mode": "pr_not_required",
+      "allowed_merge_teams": [
+        "website"
+      ],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}
