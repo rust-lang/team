@@ -176,7 +176,13 @@ fn add_rust_lang_owner_to_private_streams(
     for (stream_name, members) in stream_definitions {
         let stream_id = zulip_controller
             .stream_id_from_name(stream_name)
-            .with_context(|| format!("id of stream '{stream_name}' not found"))?;
+            .with_context(|| {
+                format!(
+                    "Id of stream '{stream_name}' not found. \
+                     The stream probably doesn't exist and sync-team doesn't support creating it yet. \
+                     Please create the stream manually and add the rust-lang-owner user to it."
+                )
+            })?;
         let is_stream_private = zulip_controller.zulip_api.is_stream_private(stream_id)?;
         if is_stream_private {
             members.insert(0, rust_lang_owner_id);
