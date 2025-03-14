@@ -18,6 +18,8 @@ jobs:
           # We don't need to do authenticated `git` operations, since we use the GitHub API.
           persist-credentials: false
 
+      - uses: Swatinem/rust-cache@v2
+
       # GitHub tokens generated from GitHub Apps can access resources from one organization,
       # so we need to generate a token for each organization.
       - name: Generate GitHub token (rust-lang)
