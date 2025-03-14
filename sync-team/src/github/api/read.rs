@@ -296,8 +296,66 @@ impl GithubRead for GitHubApiRead {
     }
 
     fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
-        self.client
-            .send_option(Method::GET, &GitHubUrl::repos(org, repo, "")?)
+        // We use the GraphQL API instead of REST because of
+        // this bug: https://github.com/orgs/community/discussions/153258
+        #[derive(serde::Serialize)]
+        struct Params<'a> {
+            owner: &'a str,
+            name: &'a str,
+        }
+
+        static QUERY: &str = r#"
+            query($owner: String!, $name: String!) {
+                repository(owner: $owner, name: $name) {
+                    id
+                    databaseId
+                    autoMergeAllowed
+                    description
+                    homepageUrl
+                    isArchived
+                }
+            }
+        "#;
+
+        #[derive(serde::Deserialize)]
+        struct Wrapper {
+            repository: Option<RepoResponse>,
+        }
+
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct RepoResponse {
+            // Equivalent of `node_id` of the Rest API
+            id: String,
+            // Equivalent of `id` of the Rest API
+            database_id: u64,
+            auto_merge_allowed: Option<bool>,
+            description: Option<String>,
+            homepage_url: Option<String>,
+            is_archived: bool,
+        }
+
+        let result: Wrapper = self.client.graphql(
+            QUERY,
+            Params {
+                owner: org,
+                name: repo,
+            },
+            org,
+        )?;
+
+        let repo = result.repository.map(|repo_response| Repo {
+            repo_id: repo_response.database_id,
+            node_id: repo_response.id,
+            name: repo.to_string(),
+            description: repo_response.description.unwrap_or_default(),
+            allow_auto_merge: repo_response.auto_merge_allowed,
+            archived: repo_response.is_archived,
+            homepage: repo_response.homepage_url,
+            org: org.to_string(),
+        });
+
+        Ok(repo)
     }
 
     fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
@@ -375,11 +433,11 @@ impl GithubRead for GitHubApiRead {
 
         #[derive(serde::Deserialize)]
         struct Wrapper {
-            repository: Respository,
+            repository: Repository,
         }
         #[derive(serde::Deserialize)]
         #[serde(rename_all = "camelCase")]
-        struct Respository {
+        struct Repository {
             branch_protection_rules: GraphNodes<BranchProtectionWrapper>,
         }
         #[derive(serde::Deserialize)]
