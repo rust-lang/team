@@ -8,7 +8,7 @@ pub enum GitHubTokens {
     /// One token per organization (used with GitHub App).
     Orgs(HashMap<String, SecretString>),
     /// One token for all API calls (used with Personal Access Token).
-    All(SecretString),
+    Pat(SecretString),
 }
 
 impl GitHubTokens {
@@ -28,7 +28,7 @@ impl GitHubTokens {
         if tokens.is_empty() {
             let pat_token = std::env::var("GITHUB_TOKEN")
                 .context("failed to get any GitHub token environment variable")?;
-            Ok(GitHubTokens::All(SecretString::from(pat_token)))
+            Ok(GitHubTokens::Pat(SecretString::from(pat_token)))
         } else {
             Ok(GitHubTokens::Orgs(tokens))
         }
@@ -43,12 +43,12 @@ impl GitHubTokens {
                     "failed to get the GitHub token environment variable for organization {org}"
                 )
             }),
-            GitHubTokens::All(pat) => Ok(pat),
+            GitHubTokens::Pat(pat) => Ok(pat),
         }
     }
 
     pub fn is_pat(&self) -> bool {
-        matches!(self, GitHubTokens::All(_))
+        matches!(self, GitHubTokens::Pat(_))
     }
 }
 
