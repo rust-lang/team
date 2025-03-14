@@ -1,0 +1,25 @@
+name = "project-vision-doc-2025"
+kind = "project-group"
+subteam-of = "leadership-council"
+
+[people]
+leads = ["nikomatsakis", "jackh726"]
+members = [
+    "nikomatsakis",
+    "jackh726",
+    "Nadrieril",
+    "ernestkissiedu",
+    "baumanj",
+]
+alumni = [
+]
+
+[[github]]
+team-name = "project-vision-doc-2025"
+orgs = ["rust-lang"]
+
+[website]
+name = "Vision doc"
+description = "Authoring the Rust 2025 Vision doc"
+zulip-stream = "vision-doc-2025"
+repo = "https://github.com/rust-lang/vision-doc-2025"
