@@ -153,7 +153,7 @@ impl GithubRead for GitHubApiRead {
         }
 
         let mut installations = Vec::new();
-        let url = if std::env::var("GITHUB_TOKEN").is_ok() {
+        let url = if self.client.github_tokens.is_pat() {
             // we are using a PAT
             format!("user/installations/{installation_id}/repositories")
         } else {
