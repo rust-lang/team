@@ -6,3 +6,4 @@ bots = ["rustbot"]
 
 [access.teams]
 types = "write"
+wg-compiler-performance = "write"
