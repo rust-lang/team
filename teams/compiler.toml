@@ -25,8 +25,10 @@ members = [
     "flodiebold",
     "fmease", 
     { github = "jackh726", roles = ["compiler-maintainer"] },
+    "jdonszelmann",
     "jieyouxu",
     "jswrenn",
+    "Kobzol",
     { github = "lcnr", roles = ["compiler-maintainer"] },
     { github = "lqd", roles = ["compiler-maintainer"] },
     "lukas-code",
@@ -57,6 +59,7 @@ members = [
     { github = "wesleywiser", roles = ["compiler-maintainer"] },
     "workingjubilee",
     "Zalathar",
+    "ZuseZ4",
 ]
 alumni = [
     { github = "Aaron1011", roles = ["compiler-maintainer"] },
