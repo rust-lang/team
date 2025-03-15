@@ -11,6 +11,20 @@ pub fn generate_codeowners_file() -> anyhow::Result<()> {
     Ok(())
 }
 
+/// Check if `.github/CODEOWNERS` are up-to-date, based on the
+/// `infra-admins.toml` file.
+pub fn check_codeowners() -> anyhow::Result<()> {
+    let admins = load_infra_admins()?;
+    let expected_codeowners = generate_codeowners_content(admins);
+    let actual_codeowners =
+        std::fs::read_to_string(codeowners_path()).context("cannot read CODEOWNERS")?;
+    if expected_codeowners != actual_codeowners {
+        return Err(anyhow::anyhow!("CODEOWNERS content is not up-to-date. Regenerate it using `cargo run ci generate-codeowners`."));
+    }
+
+    Ok(())
+}
+
 fn generate_codeowners_content(admins: Vec<String>) -> String {
     use std::fmt::Write;
 
