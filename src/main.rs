@@ -16,7 +16,7 @@ use data::Data;
 use schema::{Email, Team, TeamKind};
 use zulip::ZulipApi;
 
-use crate::ci::generate_codeowners_file;
+use crate::ci::{check_codeowners, generate_codeowners_file};
 use crate::schema::RepoPermission;
 use anyhow::{bail, format_err, Error};
 use log::{error, info, warn};
@@ -121,6 +121,8 @@ enum Cli {
 enum CiOpts {
     #[structopt(help = "Generate the .github/CODEOWNERS file")]
     GenerateCodeowners,
+    #[structopt(help = "Check if the .github/CODEOWNERS file is up-to-date")]
+    CheckCodeowners,
 }
 
 fn main() {
@@ -434,6 +436,7 @@ fn run() -> Result<(), Error> {
         }
         Cli::Ci(opts) => match opts {
             CiOpts::GenerateCodeowners => generate_codeowners_file()?,
+            CiOpts::CheckCodeowners => check_codeowners()?,
         },
     }
 
