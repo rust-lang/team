@@ -3,6 +3,7 @@
 mod data;
 #[macro_use]
 mod permissions;
+mod ci;
 mod github;
 mod schema;
 mod static_api;
@@ -15,6 +16,7 @@ use data::Data;
 use schema::{Email, Team, TeamKind};
 use zulip::ZulipApi;
 
+use crate::ci::generate_codeowners_file;
 use crate::schema::RepoPermission;
 use anyhow::{bail, format_err, Error};
 use log::{error, info, warn};
@@ -111,6 +113,14 @@ enum Cli {
     EncryptEmail,
     #[structopt(name = "decrypt-email", help = "decrypt an email address")]
     DecryptEmail,
+    #[structopt(name = "ci", help = "CI scripts")]
+    Ci(CiOpts),
+}
+
+#[derive(structopt::StructOpt)]
+enum CiOpts {
+    #[structopt(help = "Generate the .github/CODEOWNERS file")]
+    GenerateCodeowners,
 }
 
 fn main() {
@@ -422,6 +432,9 @@ fn run() -> Result<(), Error> {
                 rust_team_data::email_encryption::try_decrypt(&key, &encrypted)?
             );
         }
+        Cli::Ci(opts) => match opts {
+            CiOpts::GenerateCodeowners => generate_codeowners_file()?,
+        },
     }
 
     Ok(())

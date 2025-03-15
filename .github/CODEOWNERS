@@ -1,0 +1,19 @@
+# This is an automatically generated file
+# Run `cargo run ci generate-codeowners` to regenerate it.
+
+/.github/ @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/src/ @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/rust_team_data/ @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/repos/rust-lang/team.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/repos/rust-lang/sync-team.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/teams/infra-admins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/teams/team-repo-admins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+.cargo @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+target @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+Cargo.lock @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+Cargo.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+config.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Mark-Simulacrum.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/pietroalbini.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/jdno.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/marcoieni.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
