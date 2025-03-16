@@ -8,7 +8,6 @@ members = [
     "Manishearth",
     "matthiaskrgr",
     "flip1995",
-    "xFrednet",
     "Alexendoo",
     "dswij",
     "Jarcho",
@@ -26,6 +25,7 @@ alumni = [
     "camsteffen",
     "birkenfeld",
     "giraffate",
+    "xFrednet",
 ]
 
 [permissions]
