@@ -38,6 +38,9 @@ jobs:
       - name: Run tests
         run: cargo test --workspace --all-features
 
+      - name: Check CODEOWNERS
+        run: cargo run ci check-codeowners
+
       - name: Build the contents of the static API
         run: |
           cargo run -- static-api build
