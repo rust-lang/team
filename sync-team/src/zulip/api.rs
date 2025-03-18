@@ -248,16 +248,17 @@ impl ZulipApi {
         };
 
         if !add_ids.is_empty() {
-            let subscriptions = serde_json::to_string(&serde_json::json!({
+            let subscriptions = serde_json::to_string(&serde_json::json!([{
                 "name": stream_name,
-                "description": ""
-            }))?;
+            }]))?;
             let add_ids = serialize_as_array(add_ids);
             submit(reqwest::Method::POST, subscriptions, add_ids)?;
         }
 
         if !remove_ids.is_empty() {
-            let subscriptions = serde_json::to_string(&serde_json::json!([stream_name]))?;
+            let subscriptions = serde_json::to_string(&serde_json::json!([{
+                "name": stream_name,
+            }]))?;
             let remove_ids = serialize_as_array(remove_ids);
             submit(reqwest::Method::DELETE, subscriptions, remove_ids)?;
         }
