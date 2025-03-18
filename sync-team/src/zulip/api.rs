@@ -287,12 +287,7 @@ impl ZulipApi {
 
 /// Serialize a slice of numbers as a JSON array
 fn serialize_as_array(items: &[u64]) -> String {
-    let items = items
-        .iter()
-        .map(|id| id.to_string())
-        .collect::<Vec<_>>()
-        .join(",");
-    format!("[{items}]")
+    serde_json::to_string(&items).expect("cannot serialize JSON array")
 }
 
 /// A collection of Zulip users
