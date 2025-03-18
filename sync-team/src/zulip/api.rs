@@ -248,16 +248,17 @@ impl ZulipApi {
         };
 
         if !add_ids.is_empty() {
-            let subscriptions = serde_json::to_string(&serde_json::json!({
+            let subscriptions = serde_json::to_string(&serde_json::json!([{
                 "name": stream_name,
-                "description": ""
-            }))?;
+            }]))?;
             let add_ids = serialize_as_array(add_ids);
             submit(reqwest::Method::POST, subscriptions, add_ids)?;
         }
 
         if !remove_ids.is_empty() {
-            let subscriptions = serde_json::to_string(&serde_json::json!([stream_name]))?;
+            let subscriptions = serde_json::to_string(&serde_json::json!([{
+                "name": stream_name,
+            }]))?;
             let remove_ids = serialize_as_array(remove_ids);
             submit(reqwest::Method::DELETE, subscriptions, remove_ids)?;
         }
@@ -286,12 +287,7 @@ impl ZulipApi {
 
 /// Serialize a slice of numbers as a JSON array
 fn serialize_as_array(items: &[u64]) -> String {
-    let items = items
-        .iter()
-        .map(|id| id.to_string())
-        .collect::<Vec<_>>()
-        .join(",");
-    format!("[{items}]")
+    serde_json::to_string(&items).expect("cannot serialize JSON array")
 }
 
 /// A collection of Zulip users
