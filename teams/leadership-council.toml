@@ -3,7 +3,7 @@ name = "leadership-council"
 [people]
 leads = []
 members = [
-    { github = "eholk", roles = ["council-rep-compiler"] },
+    { github = "cuviper", roles = ["council-rep-compiler"] },
     { github = "ehuss", roles = ["council-rep-devtools"] },
     { github = "traviscross", roles = ["council-rep-lang"] },
     { github = "jamesmunns", roles = ["council-rep-launching-pad"] },
