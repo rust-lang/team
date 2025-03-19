@@ -16,7 +16,7 @@ members = [
     { github = "compiler-errors", roles = ["compiler-maintainer"] },
     "cuviper",
     { github = "davidtwco", roles = ["compiler-maintainer"] },
-    "DianQK",
+    "dianqk",
     "durin42",
     "eholk",
     "est31",
