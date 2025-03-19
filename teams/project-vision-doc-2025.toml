@@ -1,6 +1,6 @@
 name = "project-vision-doc-2025"
 kind = "project-group"
-subteam-of = "leadership-council"
+subteam-of = "launching-pad"
 
 [people]
 leads = ["nikomatsakis", "jackh726"]
