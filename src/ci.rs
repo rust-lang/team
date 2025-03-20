@@ -1,21 +1,21 @@
-use crate::schema::Team;
+use crate::data::Data;
+use crate::schema::RepoPermission;
 use anyhow::Context;
+use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
 /// Generates the contents of `.github/CODEOWNERS`, based on
 /// the infra admins in `infra-admins.toml`.
-pub fn generate_codeowners_file() -> anyhow::Result<()> {
-    let admins = load_infra_admins()?;
-    let codeowners_content = generate_codeowners_content(admins);
+pub fn generate_codeowners_file(data: Data) -> anyhow::Result<()> {
+    let codeowners_content = generate_codeowners_content(data);
     std::fs::write(codeowners_path(), codeowners_content).context("cannot write CODEOWNERS")?;
     Ok(())
 }
 
 /// Check if `.github/CODEOWNERS` are up-to-date, based on the
 /// `infra-admins.toml` file.
-pub fn check_codeowners() -> anyhow::Result<()> {
-    let admins = load_infra_admins()?;
-    let expected_codeowners = generate_codeowners_content(admins);
+pub fn check_codeowners(data: Data) -> anyhow::Result<()> {
+    let expected_codeowners = generate_codeowners_content(data);
     let actual_codeowners =
         std::fs::read_to_string(codeowners_path()).context("cannot read CODEOWNERS")?;
     if expected_codeowners != actual_codeowners {
@@ -25,17 +25,67 @@ pub fn check_codeowners() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn generate_codeowners_content(admins: Vec<String>) -> String {
+/// We want to allow access to the data files to `team-repo-admins`
+/// (maintainers), while requiring a review from `infra-admins` (admins)
+/// for any other changes.
+///
+/// We also want to explicitly protect special data files.
+fn generate_codeowners_content(data: Data) -> String {
     use std::fmt::Write;
 
-    let mut output = String::new();
+    let mut codeowners = String::new();
     writeln!(
-        output,
+        codeowners,
         r#"# This is an automatically generated file
 # Run `cargo run ci generate-codeowners` to regenerate it.
+# Note that the file is scanned bottom-to-top and the first match wins.
 "#
     )
     .unwrap();
+
+    // For the admins, we use just the people directly listed
+    // in the infra-admins.toml file, without resolving
+    // other included members, just to be extra sure that no one else is included.
+    let admins = data
+        .team("infra-admins")
+        .expect("infra-admins team not found")
+        .raw_people()
+        .members
+        .iter()
+        .map(|m| m.github.as_str())
+        .collect::<Vec<&str>>();
+
+    let team_repo = data
+        .repos()
+        .find(|r| r.org == "rust-lang" && r.name == "team")
+        .expect("team repository not found");
+    let mut maintainers = team_repo
+        .access
+        .individuals
+        .iter()
+        .filter_map(|(user, permission)| match permission {
+            RepoPermission::Triage => None,
+            RepoPermission::Write | RepoPermission::Maintain | RepoPermission::Admin => {
+                Some(user.as_str())
+            }
+        })
+        .collect::<Vec<&str>>();
+    maintainers.extend(
+        team_repo
+            .access
+            .teams
+            .iter()
+            .filter(|(_, permission)| match permission {
+                RepoPermission::Triage => false,
+                RepoPermission::Write | RepoPermission::Maintain | RepoPermission::Admin => true,
+            })
+            .flat_map(|(team, _)| {
+                data.team(team)
+                    .expect(&format!("team {team} not found"))
+                    .members(&data)
+                    .expect(&format!("team {team} members couldn't be loaded"))
+            }),
+    );
 
     let admin_list = admins
         .iter()
@@ -43,49 +93,71 @@ fn generate_codeowners_content(admins: Vec<String>) -> String {
         .collect::<Vec<_>>()
         .join(" ");
 
-    // Set of paths that should only be modifiable by infra-admins
-    let mut secure_paths = vec![
-        "/.github/".to_string(),
-        "/src/".to_string(),
-        "/rust_team_data/".to_string(),
+    // The codeowners content is parsed bottom-to-top, and the first
+    // rule that is matched will be applied. We thus write the most
+    // general rules first, and then include specific exceptions.
+
+    // Any changes in the repo not matched by rules below need to have admin
+    // approval
+    writeln!(
+        codeowners,
+        r#"# If none of the rules below match, we apply this catch-all rule
+# and require admin approval for such a change.
+* {admin_list}"#
+    )
+    .unwrap();
+
+    // Data files have no owner. This means that they can be approved by
+    // maintainers (which we want), but at the same time all maintainers will
+    // not be pinged if a PR modified these files (which we also want).
+    writeln!(
+        codeowners,
+        r#"
+# Data files can be approved by users with write access.
+# We don't list these users explicitly to avoid notifying all of them
+# on every change to the data files.
+people/**/*.toml
+repos/**/*.toml
+teams/**/*.toml
+"#
+    )
+    .unwrap();
+
+    // There are several data files that we want to be protected more
+    // Notably, the properties of the team and sync-team repositories,
+    // the infra-admins and team-repo-admins teams and also the
+    // accounts of the infra-admins and team-repo-admins members.
+
+    writeln!(
+        codeowners,
+        "# Modifying these files requires admin approval."
+    )
+    .unwrap();
+
+    let mut protected_paths = vec![
         "/repos/rust-lang/team.toml".to_string(),
         "/repos/rust-lang/sync-team.toml".to_string(),
         "/teams/infra-admins.toml".to_string(),
         "/teams/team-repo-admins.toml".to_string(),
-        ".cargo".to_string(),
-        "target".to_string(),
-        "Cargo.lock".to_string(),
-        "Cargo.toml".to_string(),
-        "config.toml".to_string(),
     ];
-    for admin in admins {
-        secure_paths.push(format!("/people/{admin}.toml"));
+
+    // Some users can be both admins and maintainers.
+    let all_users = admins
+        .iter()
+        .chain(maintainers.iter())
+        .collect::<BTreeSet<_>>();
+    for user in all_users {
+        protected_paths.push(format!("/people/{user}.toml"));
     }
 
-    for path in secure_paths {
-        writeln!(output, "{path} {admin_list}").unwrap();
+    for path in protected_paths {
+        writeln!(codeowners, "{path} {admin_list}").unwrap();
     }
-    output
+    codeowners
 }
 
 fn codeowners_path() -> PathBuf {
     Path::new(&env!("CARGO_MANIFEST_DIR"))
         .join(".github")
         .join("CODEOWNERS")
-}
-
-fn load_infra_admins() -> anyhow::Result<Vec<String>> {
-    let admins = std::fs::read_to_string(
-        Path::new(&env!("CARGO_MANIFEST_DIR"))
-            .join("teams")
-            .join("infra-admins.toml"),
-    )
-    .context("cannot load infra-admins.toml")?;
-    let team: Team = toml::from_str(&admins).context("cannot deserialize infra-admins")?;
-    Ok(team
-        .raw_people()
-        .members
-        .iter()
-        .map(|member| member.github.clone())
-        .collect())
 }

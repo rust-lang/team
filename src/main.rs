@@ -435,8 +435,8 @@ fn run() -> Result<(), Error> {
             );
         }
         Cli::Ci(opts) => match opts {
-            CiOpts::GenerateCodeowners => generate_codeowners_file()?,
-            CiOpts::CheckCodeowners => check_codeowners()?,
+            CiOpts::GenerateCodeowners => generate_codeowners_file(data)?,
+            CiOpts::CheckCodeowners => check_codeowners(data)?,
         },
     }
 

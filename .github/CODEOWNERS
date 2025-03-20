@@ -1,19 +1,28 @@
 # This is an automatically generated file
 # Run `cargo run ci generate-codeowners` to regenerate it.
+# Note that the file is scanned bottom-to-top and the first match wins.
 
-/.github/ @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/src/ @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/rust_team_data/ @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+# If none of the rules below match, we apply this catch-all rule
+# and require admin approval for such a change.
+* @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+
+# Data files can be approved by users with write access.
+# We don't list these users explicitly to avoid notifying all of them
+# on every change to the data files.
+people/**/*.toml
+repos/**/*.toml
+teams/**/*.toml
+
+# Modifying these files requires admin approval.
 /repos/rust-lang/team.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /repos/rust-lang/sync-team.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /teams/infra-admins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /teams/team-repo-admins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-.cargo @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-target @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-Cargo.lock @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-Cargo.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-config.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/Mark-Simulacrum.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/people/pietroalbini.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/jackh726.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/jdno.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/marcoieni.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/oli-obk.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/pietroalbini.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/rylev.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/technetos.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
