@@ -5,13 +5,13 @@ kind = "marker-team"
 leads = []
 members = [
     "erickt",
-    "P1n3appl3",
     "Nashenas88",
 ]
 alumni = [
     "ComputerDruid",
     "djkoloski",
     "tmandry",
+    "P1n3appl3",
 ]
 
 [permissions]
