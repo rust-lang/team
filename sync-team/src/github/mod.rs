@@ -107,7 +107,10 @@ impl SyncGitHub {
                     // Remove the current team from the collection of unseen GitHub teams
                     unseen_github_teams.remove(&github_team.name);
 
-                    diffs.push(self.diff_team(github_team)?);
+                    let diff_team = self.diff_team(github_team)?;
+                    if !diff_team.noop() {
+                        diffs.push(diff_team);
+                    }
                 }
             }
         }
@@ -222,7 +225,10 @@ impl SyncGitHub {
     fn diff_repos(&self) -> anyhow::Result<Vec<RepoDiff>> {
         let mut diffs = Vec::new();
         for repo in &self.repos {
-            diffs.push(self.diff_repo(repo)?);
+            let repo_diff = self.diff_repo(repo)?;
+            if !repo_diff.noop() {
+                diffs.push(repo_diff);
+            }
         }
         Ok(diffs)
     }
@@ -588,6 +594,13 @@ impl RepoDiff {
             RepoDiff::Update(u) => u.apply(sync),
         }
     }
+
+    fn noop(&self) -> bool {
+        match self {
+            RepoDiff::Create(_c) => false,
+            RepoDiff::Update(u) => u.noop(),
+        }
+    }
 }
 
 impl std::fmt::Display for RepoDiff {
@@ -943,6 +956,13 @@ impl TeamDiff {
         }
 
         Ok(())
+    }
+
+    fn noop(&self) -> bool {
+        match self {
+            TeamDiff::Create(_) | TeamDiff::Delete(_) => false,
+            TeamDiff::Edit(e) => e.noop(),
+        }
     }
 }
 
