@@ -1,9 +1,7 @@
 use crate::github::api::{
-    BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, OrgAppInstallation,
-    Repo, RepoAppInstallation, RepoTeam, RepoUser, Team, TeamMember, TeamRole, team_node_id,
-    url::GitHubUrl, user_node_id,
+    BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, Repo, RepoTeam,
+    RepoUser, Team, TeamMember, TeamRole, team_node_id, url::GitHubUrl, user_node_id,
 };
-use anyhow::Context;
 use reqwest::Method;
 use std::collections::{HashMap, HashSet};
 
@@ -13,16 +11,6 @@ pub(crate) trait GithubRead {
 
     /// Get the owners of an org
     fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<u64>>;
-
-    /// Get the app installations of an org
-    fn org_app_installations(&self, org: &str) -> anyhow::Result<Vec<OrgAppInstallation>>;
-
-    /// Get the repositories enabled for an app installation.
-    fn app_installation_repos(
-        &self,
-        installation_id: u64,
-        org: &str,
-    ) -> anyhow::Result<Vec<RepoAppInstallation>>;
 
     /// Get all teams associated with a org
     ///
@@ -122,56 +110,6 @@ impl GithubRead for GitHubApiRead {
             },
         )?;
         Ok(owners)
-    }
-
-    fn org_app_installations(&self, org: &str) -> anyhow::Result<Vec<OrgAppInstallation>> {
-        #[derive(serde::Deserialize, Debug)]
-        struct InstallationPage {
-            installations: Vec<OrgAppInstallation>,
-        }
-
-        let mut installations = Vec::new();
-        self.client.rest_paginated(
-            &Method::GET,
-            &GitHubUrl::orgs(org, "installations")?,
-            |response: InstallationPage| {
-                installations.extend(response.installations);
-                Ok(())
-            },
-        )?;
-        Ok(installations)
-    }
-
-    fn app_installation_repos(
-        &self,
-        installation_id: u64,
-        org: &str,
-    ) -> anyhow::Result<Vec<RepoAppInstallation>> {
-        #[derive(serde::Deserialize, Debug)]
-        struct InstallationPage {
-            repositories: Vec<RepoAppInstallation>,
-        }
-
-        let mut installations = Vec::new();
-        let url = if self.client.github_tokens.is_pat() {
-            // we are using a PAT
-            format!("user/installations/{installation_id}/repositories")
-        } else {
-            // we are using a GitHub App
-            "installation/repositories".to_string()
-        };
-
-        self.client
-            .rest_paginated(
-                &Method::GET,
-                &GitHubUrl::new(&url, org),
-                |response: InstallationPage| {
-                    installations.extend(response.repositories);
-                    Ok(())
-                },
-            )
-            .with_context(|| format!("failed to send rest paginated request to {url}"))?;
-        Ok(installations)
     }
 
     fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
@@ -308,7 +246,6 @@ impl GithubRead for GitHubApiRead {
             query($owner: String!, $name: String!) {
                 repository(owner: $owner, name: $name) {
                     id
-                    databaseId
                     autoMergeAllowed
                     description
                     homepageUrl
@@ -328,7 +265,6 @@ impl GithubRead for GitHubApiRead {
             // Equivalent of `node_id` of the Rest API
             id: String,
             // Equivalent of `id` of the Rest API
-            database_id: u64,
             auto_merge_allowed: Option<bool>,
             description: Option<String>,
             homepage_url: Option<String>,
@@ -345,7 +281,6 @@ impl GithubRead for GitHubApiRead {
         )?;
 
         let repo = result.repository.map(|repo_response| Repo {
-            repo_id: repo_response.database_id,
             node_id: repo_response.id,
             name: repo.to_string(),
             description: repo_response.description.unwrap_or_default(),
