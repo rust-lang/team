@@ -261,23 +261,9 @@ impl fmt::Display for RepoPermission {
     }
 }
 
-#[derive(serde::Deserialize, Debug)]
-pub(crate) struct OrgAppInstallation {
-    #[serde(rename = "id")]
-    pub(crate) installation_id: u64,
-    pub(crate) app_id: u64,
-}
-
-#[derive(serde::Deserialize, Debug)]
-pub(crate) struct RepoAppInstallation {
-    pub(crate) name: String,
-}
-
 #[derive(serde::Deserialize, Debug, Clone)]
 pub(crate) struct Repo {
     pub(crate) node_id: String,
-    #[serde(rename = "id")]
-    pub(crate) repo_id: u64,
     pub(crate) name: String,
     #[serde(alias = "owner", deserialize_with = "repo_owner")]
     pub(crate) org: String,

@@ -7,8 +7,7 @@ use rust_team_data::v1::{
 };
 
 use crate::github::api::{
-    BranchProtection, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation, RepoTeam,
-    RepoUser, Team, TeamMember, TeamPrivacy, TeamRole,
+    BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::github::{
     RepoDiff, SyncGitHub, TeamDiff, api, construct_branch_protection, convert_permission,
@@ -115,7 +114,6 @@ impl DataModel {
             repos.insert(
                 repo.name.clone(),
                 Repo {
-                    repo_id: repos.len() as u64,
                     node_id: repos.len().to_string(),
                     name: repo.name.clone(),
                     org: DEFAULT_ORG.to_string(),
@@ -455,18 +453,6 @@ impl GithubRead for GithubMock {
             .unwrap_or_default()
             .into_iter()
             .collect())
-    }
-
-    fn org_app_installations(&self, _org: &str) -> anyhow::Result<Vec<OrgAppInstallation>> {
-        Ok(vec![])
-    }
-
-    fn app_installation_repos(
-        &self,
-        _installation_id: u64,
-        _org: &str,
-    ) -> anyhow::Result<Vec<RepoAppInstallation>> {
-        Ok(vec![])
     }
 
     fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
