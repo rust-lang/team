@@ -1,0 +1,21 @@
+name: Run
+on:
+  workflow_dispatch: { }
+
+jobs:
+  run:
+    name: Run the sync-team tool
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::890664054962:role/ci--rust-lang--sync-team
+          aws-region: us-west-1
+
+      - name: Start the synchronization tool
+        run: |
+          aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
+          cat output.json | python3 -m json.tool

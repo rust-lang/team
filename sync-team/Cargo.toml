@@ -1,0 +1,24 @@
+[package]
+name = "sync-team"
+version = "0.1.0"
+authors = ["Pietro Albini <pietro@pietroalbini.org>"]
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive", "env"] }
+reqwest = { version = "0.12.8", features = ["blocking", "json", "rustls-tls", "charset", "http2", "macos-system-configuration"], default-features = false }
+log = "0.4"
+env_logger = "0.11"
+rust_team_data = { git = "https://github.com/rust-lang/team", features = ["email-encryption"] }
+serde = { version = "1.0", features = ["derive"] }
+anyhow = "1.0"
+base64 = "0.22"
+hyper-old-types = "0.11"
+tempfile = "3.13"
+serde_json = "1.0"
+secrecy = "0.10"
+
+[dev-dependencies]
+indexmap = "2.6.0"
+derive_builder = "0.20.2"
+insta = "1.40.0"
