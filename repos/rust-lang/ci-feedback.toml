@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "ci-feedback"
+description = "Repository to collect feedback on how to improve rust-lang/rust CI"
+bots = []
+
+[access.teams]
+infra = "write"
