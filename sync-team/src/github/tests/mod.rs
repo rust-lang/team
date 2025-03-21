@@ -92,29 +92,7 @@ fn team_dont_add_member_if_invitation_is_pending() {
     gh.add_invitation("admins-gh", "jan");
 
     let team_diff = model.diff_teams(gh);
-    insta::assert_debug_snapshot!(team_diff, @r###"
-    [
-        Edit(
-            EditTeamDiff {
-                org: "rust-lang",
-                name: "admins-gh",
-                name_diff: None,
-                description_diff: None,
-                privacy_diff: None,
-                member_diffs: [
-                    (
-                        "mark",
-                        Noop,
-                    ),
-                    (
-                        "jan",
-                        Noop,
-                    ),
-                ],
-            },
-        ),
-    ]
-    "###);
+    insta::assert_debug_snapshot!(team_diff, @"[]");
 }
 
 #[test]
@@ -172,23 +150,8 @@ fn team_delete() {
     model.get_team("admins").remove_gh_team("users-gh");
 
     let team_diff = model.diff_teams(gh);
-    insta::assert_debug_snapshot!(team_diff, @r###"
+    insta::assert_debug_snapshot!(team_diff, @r#"
     [
-        Edit(
-            EditTeamDiff {
-                org: "rust-lang",
-                name: "admins-gh",
-                name_diff: None,
-                description_diff: None,
-                privacy_diff: None,
-                member_diffs: [
-                    (
-                        "mark",
-                        Noop,
-                    ),
-                ],
-            },
-        ),
         Delete(
             DeleteTeamDiff {
                 org: "rust-lang",
@@ -197,7 +160,7 @@ fn team_delete() {
             },
         ),
     ]
-    "###);
+    "#);
 }
 
 #[test]
