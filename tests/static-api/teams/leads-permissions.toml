@@ -8,3 +8,7 @@ alumni = []
 
 [leads-permissions]
 bors.crates-io.review = true
+
+[website]
+name = "Leads permissions"
+description = "Test"

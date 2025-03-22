@@ -79,3 +79,8 @@ extra-people = [
 [[discord-roles]]
 name = "community-team"
 color = "#c27c0e"
+
+[website]
+name = "Community team"
+description = "Engagement with the Rust community"
+repo = "https://github.com/rust-community/team"

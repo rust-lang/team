@@ -15,3 +15,9 @@ alumni = []
 
 [[github]]
 orgs = ["rust-lang"]
+
+[website]
+name = "Release Publishers"
+description = "Release team members with permissions for crate publishing"
+repo = "https://github.com/rust-lang/release-team"
+zulip-stream = "t-release"
