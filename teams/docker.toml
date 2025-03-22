@@ -1,8 +1,8 @@
 name = "docker"
-subteam-of = "launching-pad"
+subteam-of = "infra"
 
 [people]
-leads = []
+leads = ["Muscraft"]
 members = [
     "sfackler",
     "Muscraft",
