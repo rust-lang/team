@@ -7,7 +7,6 @@ bots = ["rustbot"]
 [access.teams]
 bootstrap = "write"
 compiler = "write"
-wg-rustc-dev-guide = "maintain"
 edition = "write"
 infra = "write"
 lang = "write"
@@ -15,6 +14,9 @@ lang-ops = "write"
 libs = "write"
 libs-api = "write"
 libs-contributors = "write"
+rustdoc = "write"
+rustdoc-frontend = "write"
+wg-rustc-dev-guide = "maintain"
 
 [[branch-protections]]
 pattern = "master"
