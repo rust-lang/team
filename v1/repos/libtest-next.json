@@ -1,0 +1,21 @@
+{
+  "org": "rust-lang",
+  "name": "libtest-next",
+  "description": "T-testing-devex experiments for new testing tools for Rust developers",
+  "homepage": "https://docs.rs/pytest-rs",
+  "bots": [
+    "rustbot",
+    "rfcbot"
+  ],
+  "teams": [
+    {
+      "name": "testing-devex",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

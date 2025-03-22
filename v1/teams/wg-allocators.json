@@ -1,0 +1,73 @@
+{
+  "name": "wg-allocators",
+  "kind": "working_group",
+  "subteam_of": "libs",
+  "members": [
+    {
+      "name": "Tim Diekmann",
+      "github": "TimDiekmann",
+      "github_id": 21277928,
+      "is_lead": true
+    },
+    {
+      "name": "Amanieu d'Antras",
+      "github": "Amanieu",
+      "github_id": 278509,
+      "is_lead": false
+    },
+    {
+      "name": "Christopher Durham",
+      "github": "CAD97",
+      "github_id": 5992217,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Gee",
+      "github": "Lokathor",
+      "github_id": 5456384,
+      "is_lead": false
+    },
+    {
+      "name": "Scott J Maddox",
+      "github": "scottjmaddox",
+      "github_id": 28676699,
+      "is_lead": false
+    },
+    {
+      "name": "Remco",
+      "github": "Wodann",
+      "github_id": 6917585,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-allocators",
+        "members": [
+          278509,
+          5992217,
+          5456384,
+          21277928,
+          6917585,
+          28676699
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Allocator working group",
+    "description": "Paving a path for a standard set of allocator traits to be used in collections",
+    "page": "wg-allocators",
+    "email": null,
+    "repo": "https://github.com/rust-lang/wg-allocators",
+    "discord": null,
+    "zulip_stream": "t-libs/wg-allocators",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

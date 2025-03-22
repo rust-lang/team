@@ -1,0 +1,42 @@
+{
+  "org": "rust-lang",
+  "name": "rustc_codegen_gcc",
+  "description": "libgccjit AOT codegen for rustc",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-gcc-backend",
+      "permission": "maintain"
+    },
+    {
+      "name": "compiler",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "success",
+            "success_gcc12",
+            "success_release",
+            "success_failures",
+            "success_m68k",
+            "success_stdarch"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

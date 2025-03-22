@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "project-ffi-unwind",
+  "description": "",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-ffi-unwind",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

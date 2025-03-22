@@ -1,0 +1,21 @@
+{
+  "org": "rust-lang",
+  "name": "unsafe-code-guidelines",
+  "description": "Forum for discussion about what unsafe code can and can't do",
+  "homepage": "https://rust-lang.github.io/unsafe-code-guidelines",
+  "bots": [
+    "rustbot",
+    "rfcbot"
+  ],
+  "teams": [
+    {
+      "name": "opsem",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,45 @@
+{
+  "name": "mentorship",
+  "kind": "team",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Jack Huey",
+      "github": "jackh726",
+      "github_id": 31162821,
+      "is_lead": true
+    },
+    {
+      "name": "Jakub Beránek",
+      "github": "Kobzol",
+      "github_id": 4539057,
+      "is_lead": true
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "mentorship",
+        "members": [
+          4539057,
+          31162821
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Mentorship team",
+    "description": "Manages involvement of Rust in mentorship and internship programs",
+    "page": "mentorship",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": "gsoc",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

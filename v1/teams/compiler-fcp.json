@@ -1,0 +1,90 @@
+{
+  "name": "compiler-fcp",
+  "kind": "team",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Camille Gillot",
+      "github": "cjgillot",
+      "github_id": 1822483,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Goulet",
+      "github": "compiler-errors",
+      "github_id": 3674314,
+      "is_lead": false
+    },
+    {
+      "name": "David Wood",
+      "github": "davidtwco",
+      "github_id": 1295100,
+      "is_lead": false
+    },
+    {
+      "name": "Esteban Kuber",
+      "github": "estebank",
+      "github_id": 1606434,
+      "is_lead": false
+    },
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": false
+    },
+    {
+      "name": "Matthew Jasper",
+      "github": "matthewjasper",
+      "github_id": 20113453,
+      "is_lead": false
+    },
+    {
+      "name": "Simonas Kazlauskas",
+      "github": "nagisa",
+      "github_id": 679122,
+      "is_lead": false
+    },
+    {
+      "name": "nora",
+      "github": "Noratrieb",
+      "github_id": 48135649,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    },
+    {
+      "name": "Vadim Petrochenkov",
+      "github": "petrochenkov",
+      "github_id": 5751617,
+      "is_lead": false
+    },
+    {
+      "name": "Sparrow Li",
+      "github": "SparrowLii",
+      "github_id": 68270294,
+      "is_lead": false
+    },
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    },
+    {
+      "name": "Wesley Wiser",
+      "github": "wesleywiser",
+      "github_id": 831192,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

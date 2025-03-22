@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "governance",
+  "description": "The home for Rust's governance documentation, such as team charters.",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

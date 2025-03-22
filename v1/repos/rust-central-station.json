@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "rust-central-station",
+  "description": "Old home of some infra pieces",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

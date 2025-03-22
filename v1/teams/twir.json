@@ -1,0 +1,70 @@
+{
+  "name": "twir",
+  "kind": "team",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Nell Shamrell-Harrington",
+      "github": "nellshamrell",
+      "github_id": 813007,
+      "is_lead": true
+    },
+    {
+      "name": "andrewpollack",
+      "github": "andrewpollack",
+      "github_id": 24868505,
+      "is_lead": false
+    },
+    {
+      "name": "Colton Donnelly",
+      "github": "cdmistman",
+      "github_id": 23486351,
+      "is_lead": false
+    },
+    {
+      "name": "Stephan D.",
+      "github": "extrawurst",
+      "github_id": 776816,
+      "is_lead": false
+    },
+    {
+      "name": "Joel Marcey",
+      "github": "JoelMarcey",
+      "github_id": 3757713,
+      "is_lead": false
+    },
+    {
+      "name": "Andre Bogus",
+      "github": "llogiq",
+      "github_id": 4200835,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Vikrant Chaudhary",
+      "github": "nasa42",
+      "github_id": 233999,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "twir",
+        "members": [
+          3757713,
+          24868505,
+          23486351,
+          776816,
+          4200835,
+          813007
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

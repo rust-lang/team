@@ -1,0 +1,66 @@
+{
+  "name": "clippy-contributors",
+  "kind": "team",
+  "subteam_of": "clippy",
+  "members": [
+    {
+      "name": "Guillaume Gomez",
+      "github": "GuillaumeGomez",
+      "github_id": 3050060,
+      "is_lead": false
+    },
+    {
+      "name": "Jonathan Lee",
+      "github": "J-ZhengLi",
+      "github_id": 32276130,
+      "is_lead": false
+    },
+    {
+      "name": "Peter Jaszkowiak",
+      "github": "pitaj",
+      "github_id": 803701,
+      "is_lead": false
+    },
+    {
+      "name": "Samuel Tardieu",
+      "github": "samueltardieu",
+      "github_id": 44656,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Quinn Sinclair",
+      "github": "m-rph",
+      "github_id": 52372765,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "clippy-contributors",
+        "members": [
+          3050060,
+          32276130,
+          803701,
+          44656
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Clippy-Contributors",
+    "description": "Regular contributors to the Clippy linter",
+    "page": "clippy-contributors",
+    "email": null,
+    "repo": "https://github.com/rust-lang/rust-clippy",
+    "discord": null,
+    "zulip_stream": "clippy",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}
