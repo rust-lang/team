@@ -31,7 +31,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: rust-lang/sync-team
+          # Always checkout the master branch to avoid checking out
+          # code of untrusted PRs.
+          # This might break the dry-run if code or schema modifications
+          # are performed, we can selectively allow that in the future
+          # e.g. if the author of the PR is trusted.
+          ref: 'master'
           persist-credentials: false
 
       - name: Install Rust Stable
@@ -136,8 +141,10 @@ jobs:
         run: |
           # Perform build and execution separately to avoid any potential output from
           # cargo leaking into the output file.
-          cargo build --release
-          ./target/release/sync-team print-plan --services github --team-json team-api 2>&1 | tee -a output.txt
+          cargo build --manifest-path sync-team/Cargo.toml --release
+          ./sync-team/target/release/sync-team print-plan \
+            --services github \
+            --team-json team-api 2>&1 | tee -a output.txt
 
       - name: Prepare comment
         run: |
