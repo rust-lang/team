@@ -23,7 +23,7 @@ jobs:
           rustup default stable
           rustc -vV
 
-      - uses: Swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6
 
       - name: Build the validation tool
         run: cargo build
