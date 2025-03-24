@@ -13,8 +13,8 @@ impl ResponseExt for Response {
         match self.error_for_status_ref() {
             Ok(_) => Ok(self),
             Err(err) => {
-                let body = self.text()?;
-                Err(err).context(format!("Body: {:?}", body))
+                let body = self.text().context("failed to read response body")?;
+                Err(err).context(format!("Body: {body:?}"))
             }
         }
     }

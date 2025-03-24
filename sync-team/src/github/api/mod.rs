@@ -92,7 +92,46 @@ impl HttpClient {
         }
     }
 
+    /// Send a request to the GitHub API and return the response.
     fn graphql<R, V>(&self, query: &str, variables: V, org: &str) -> anyhow::Result<R>
+    where
+        R: serde::de::DeserializeOwned,
+        V: serde::Serialize,
+    {
+        let res = self.send_graphql_req(query, variables, org)?;
+
+        if let Some(error) = res.errors.first() {
+            bail!("graphql error: {}", error.message);
+        }
+
+        read_graphql_data(res)
+    }
+
+    /// Send a request to the GitHub API and return the response.
+    /// If the request contains the error type `NOT_FOUND`, this method returns `Ok(None)`.
+    fn graphql_opt<R, V>(&self, query: &str, variables: V, org: &str) -> anyhow::Result<Option<R>>
+    where
+        R: serde::de::DeserializeOwned,
+        V: serde::Serialize,
+    {
+        let res = self.send_graphql_req(query, variables, org)?;
+
+        if let Some(error) = res.errors.first() {
+            if error.type_ == Some(GraphErrorType::NotFound) {
+                return Ok(None);
+            }
+            bail!("graphql error: {}", error.message);
+        }
+
+        read_graphql_data(res)
+    }
+
+    fn send_graphql_req<R, V>(
+        &self,
+        query: &str,
+        variables: V,
+        org: &str,
+    ) -> anyhow::Result<GraphResult<R>>
     where
         R: serde::de::DeserializeOwned,
         V: serde::Serialize,
@@ -105,19 +144,13 @@ impl HttpClient {
         let resp = self
             .req(Method::POST, &GitHubUrl::new("graphql", org))?
             .json(&Request { query, variables })
-            .send()?
+            .send()
+            .context("failed to send graphql request")?
             .custom_error_for_status()?;
 
-        let res: GraphResult<R> = resp.json_annotated().with_context(|| {
+        resp.json_annotated().with_context(|| {
             format!("Failed to decode response body on graphql request with query '{query}'")
-        })?;
-        if let Some(error) = res.errors.first() {
-            bail!("graphql error: {}", error.message);
-        } else if let Some(data) = res.data {
-            Ok(data)
-        } else {
-            bail!("missing graphql data");
-        }
+        })
     }
 
     fn rest_paginated<F, T>(&self, method: &Method, url: &GitHubUrl, mut f: F) -> anyhow::Result<()>
@@ -159,6 +192,17 @@ impl HttpClient {
     }
 }
 
+fn read_graphql_data<R>(res: GraphResult<R>) -> anyhow::Result<R>
+where
+    R: serde::de::DeserializeOwned,
+{
+    if let Some(data) = res.data {
+        Ok(data)
+    } else {
+        bail!("missing graphql data");
+    }
+}
+
 fn allow_not_found(resp: Response, method: Method, url: &str) -> Result<(), anyhow::Error> {
     match resp.status() {
         StatusCode::NOT_FOUND => {
@@ -180,7 +224,17 @@ struct GraphResult<T> {
 
 #[derive(Debug, serde::Deserialize)]
 struct GraphError {
+    #[serde(rename = "type")]
+    type_: Option<GraphErrorType>,
     message: String,
+}
+
+#[derive(Debug, serde::Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+enum GraphErrorType {
+    NotFound,
+    #[serde(other)]
+    Other,
 }
 
 #[derive(serde::Deserialize)]
