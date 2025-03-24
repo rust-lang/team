@@ -1,6 +1,8 @@
 name: CI
 
-on: [ push, pull_request ]
+on:
+  pull_request:
+  merge_group:
 
 jobs:
   ci:
@@ -61,24 +63,23 @@ jobs:
         run: touch build/.nojekyll
 
       - name: Upload GitHub pages artifact
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: actions/upload-pages-artifact@v3
         with:
           path: build
 
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'merge_group'
         uses: actions/deploy-pages@v4
 
       - name: Configure AWS credentials
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'merge_group'
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::890664054962:role/ci--rust-lang--team
           aws-region: us-west-1
 
       - name: Start the synchronization tool
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'merge_group'
         run: |
           # Introduce some artificial delay to help github pages propagate.
           sleep 60
