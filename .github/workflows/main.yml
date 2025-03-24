@@ -5,13 +5,10 @@ on:
   merge_group:
 
 jobs:
-  ci:
-    name: CI
+  test:
+    name: Test
     runs-on: ubuntu-latest
     if: github.repository == 'rust-lang/team'
-    permissions:
-      id-token: write
-      pages: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -53,23 +50,32 @@ jobs:
         run: echo "${{ github.event.pull_request.number }}" > build/pr.txt
 
       - name: Upload the built JSON as a GitHub artifact
-        if: ${{ github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v4
         with:
           name: team-api-output
           path: build
-
-      - name: Disable Jekyll
-        run: touch build/.nojekyll
-
-      - name: Upload GitHub pages artifact
-        uses: actions/upload-pages-artifact@v3
+  deploy:
+    name: Deploy
+    needs: [ test ]
+    runs-on: ubuntu-latest
+    environment: deploy
+    concurrency: deploy
+    permissions:
+      id-token: write
+    if: github.event_name == 'merge_group'
+    steps:
+      - name: Download built JSON API
+        uses: actions/download-artifact@v4
         with:
+          name: team-api-output
           path: build
-
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'merge_group'
-        uses: actions/deploy-pages@v4
+        run: |
+          touch build/.nojekyll
+          curl -LsSf https://raw.githubusercontent.com/rust-lang/simpleinfra/master/setup-deploy-keys/src/deploy.rs | rustc - -o /tmp/deploy
+          (cd build && /tmp/deploy)
+        env:
+          GITHUB_DEPLOY_KEY: ${{ secrets.GITHUB_DEPLOY_KEY }}
 
       - name: Configure AWS credentials
         if: github.event_name == 'merge_group'
@@ -85,3 +91,22 @@ jobs:
           sleep 60
           aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
           cat output.json | python3 -m json.tool
+
+  # Summary job for the merge queue.
+  # ALL THE PREVIOUS JOBS NEED TO BE ADDED TO THE `needs` SECTION OF THIS JOB!
+  conclusion:
+    needs: [ test, deploy ]
+    # We need to ensure this job does *not* get skipped if its dependencies fail,
+    # because a skipped job is considered a success by GitHub. So we have to
+    # overwrite `if:`. We use `!cancelled()` to ensure the job does still not get run
+    # when the workflow is canceled manually.
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+      # Manually check the status of all dependencies. `if: failure()` does not work.
+      - name: Conclusion
+        run: |
+          # Print the dependent jobs to see them in the CI log
+          jq -C <<< '${{ toJson(needs) }}'
+          # Check if all jobs that we depend on (in the needs array) were successful.
+          jq --exit-status 'all(.result == "success" or .result == "skipped")' <<< '${{ toJson(needs) }}'
