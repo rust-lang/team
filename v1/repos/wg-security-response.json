@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "wg-security-response",
+  "description": "Documentation for the Rust Security Response WG",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "security",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,90 @@
+{
+  "name": "wg-secure-code",
+  "kind": "working_group",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Sergey Davidoff",
+      "github": "Shnatsel",
+      "github_id": 291257,
+      "is_lead": true
+    },
+    {
+      "name": "Tony Arcieri",
+      "github": "tarcieri",
+      "github_id": 797,
+      "is_lead": true
+    },
+    {
+      "name": "Alex Gaynor",
+      "github": "alex",
+      "github_id": 772,
+      "is_lead": false
+    },
+    {
+      "name": "Alexis Mousset",
+      "github": "amousset",
+      "github_id": 329388,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Daniel Henry-Mantilla",
+      "github": "danielhenrymantilla",
+      "github_id": 9920355,
+      "is_lead": false
+    },
+    {
+      "name": "Joshua Liebow-Feeser",
+      "github": "joshlf",
+      "github_id": 1046063,
+      "is_lead": false
+    },
+    {
+      "name": "pinkforest",
+      "github": "pinkforest",
+      "github_id": 36498018,
+      "is_lead": false
+    },
+    {
+      "name": "Stuart Small",
+      "github": "stusmall",
+      "github_id": 1697444,
+      "is_lead": false
+    },
+    {
+      "name": "Joel Wejdenstål",
+      "github": "xacrimon",
+      "github_id": 21025159,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-secure-code",
+        "members": [
+          291257,
+          772,
+          329388,
+          797
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Secure Code working group",
+    "description": "Making it easy to write secure code in Rust",
+    "page": "wg-secure-code",
+    "email": null,
+    "repo": "https://github.com/rust-secure-code/wg",
+    "discord": null,
+    "zulip_stream": "wg-secure-code",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

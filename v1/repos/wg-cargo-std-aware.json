@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "wg-cargo-std-aware",
+  "description": "Repo for working on \"std aware cargo\"",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "cargo",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

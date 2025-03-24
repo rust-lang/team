@@ -1,0 +1,80 @@
+{
+  "name": "bootstrap",
+  "kind": "team",
+  "subteam_of": "infra",
+  "members": [
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": true
+    },
+    {
+      "name": "Onur Özkan",
+      "github": "onur-ozkan",
+      "github_id": 39852038,
+      "is_lead": true
+    },
+    {
+      "name": "Albert Larsan",
+      "github": "albertlarsan68",
+      "github_id": 74931857,
+      "is_lead": false
+    },
+    {
+      "name": "Jamie Hill-Daniel",
+      "github": "clubby789",
+      "github_id": 13556931,
+      "is_lead": false
+    },
+    {
+      "name": "Jieyou Xu",
+      "github": "jieyouxu",
+      "github_id": 39484203,
+      "is_lead": false
+    },
+    {
+      "name": "Jakub Beránek",
+      "github": "Kobzol",
+      "github_id": 4539057,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Jynn Nelson",
+      "github": "jyn514",
+      "github_id": 23638587,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "bootstrap",
+        "members": [
+          4539057,
+          5047365,
+          74931857,
+          13556931,
+          39484203,
+          39852038
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Bootstrap team",
+    "description": "Maintaining and improving the build system for rust-lang/rust",
+    "page": "bootstrap",
+    "email": "bootstrap@rust-lang.org",
+    "repo": "https://github.com/rust-lang/rust",
+    "discord": null,
+    "zulip_stream": "t-infra/bootstrap",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

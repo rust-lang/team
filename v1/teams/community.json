@@ -1,0 +1,143 @@
+{
+  "name": "community",
+  "kind": "team",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Jan-Erik Rediger",
+      "github": "badboy",
+      "github_id": 2129,
+      "is_lead": false
+    },
+    {
+      "name": "Yuki Okushi",
+      "github": "JohnTitor",
+      "github_id": 25030997,
+      "is_lead": false
+    },
+    {
+      "name": "Manish Goregaokar",
+      "github": "Manishearth",
+      "github_id": 1617736,
+      "is_lead": false
+    },
+    {
+      "name": "Nell Shamrell-Harrington",
+      "github": "nellshamrell",
+      "github_id": 813007,
+      "is_lead": false
+    },
+    {
+      "name": "Sebastián Magrí",
+      "github": "sebasmagri",
+      "github_id": 11137,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Gould",
+      "github": "technetos",
+      "github_id": 10949810,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Ashley Williams",
+      "github": "ashleygwilliams",
+      "github_id": 1163554,
+      "is_lead": false
+    },
+    {
+      "name": "Mark Sta Ana",
+      "github": "booyaa",
+      "github_id": 192864,
+      "is_lead": false
+    },
+    {
+      "name": "Brian Anderson",
+      "github": "brson",
+      "github_id": 147214,
+      "is_lead": false
+    },
+    {
+      "name": "Ben Striegel",
+      "github": "bstrie",
+      "github_id": 865233,
+      "is_lead": false
+    },
+    {
+      "name": "Carol Nichols",
+      "github": "carols10cents",
+      "github_id": 193874,
+      "is_lead": false
+    },
+    {
+      "name": "E. Dunham",
+      "github": "edunham",
+      "github_id": 812892,
+      "is_lead": false
+    },
+    {
+      "name": "Erick Tryzelaar",
+      "github": "erickt",
+      "github_id": 84711,
+      "is_lead": false
+    },
+    {
+      "name": "Liv",
+      "github": "shadows-withal",
+      "github_id": 6445316,
+      "is_lead": false
+    },
+    {
+      "name": "Florian Gilcher",
+      "github": "skade",
+      "github_id": 47542,
+      "is_lead": false
+    },
+    {
+      "name": "JT",
+      "github": "sophiajt",
+      "github_id": 547158,
+      "is_lead": false
+    },
+    {
+      "name": "Steve Klabnik",
+      "github": "steveklabnik",
+      "github_id": 27786,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "community",
+        "members": [
+          25030997,
+          1617736,
+          2129,
+          813007,
+          11137,
+          10949810
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": [
+    {
+      "name": "community-team",
+      "members": [
+        818556851112902657,
+        443810603417731092,
+        244302461718757376,
+        362122860673892353,
+        278623213448331265,
+        347670185806659585
+      ],
+      "color": "#c27c0e"
+    }
+  ]
+}

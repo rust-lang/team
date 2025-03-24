@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "project-thir-unsafeck",
+  "description": "Tracking the project to refactor the unsafe check to operate on THIR",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

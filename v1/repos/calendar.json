@@ -1,0 +1,68 @@
+{
+  "org": "rust-lang",
+  "name": "calendar",
+  "description": "Calendars for Rust project teams",
+  "homepage": null,
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "wg-async",
+      "permission": "maintain"
+    },
+    {
+      "name": "lang-ops",
+      "permission": "maintain"
+    },
+    {
+      "name": "release",
+      "permission": "maintain"
+    },
+    {
+      "name": "lang",
+      "permission": "maintain"
+    },
+    {
+      "name": "docs-rs",
+      "permission": "maintain"
+    },
+    {
+      "name": "crates-io",
+      "permission": "maintain"
+    },
+    {
+      "name": "compiler",
+      "permission": "maintain"
+    },
+    {
+      "name": "infra",
+      "permission": "maintain"
+    },
+    {
+      "name": "leadership-council",
+      "permission": "maintain"
+    },
+    {
+      "name": "cargo",
+      "permission": "maintain"
+    },
+    {
+      "name": "libs",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "main",
+      "dismiss_stale_review": false,
+      "mode": "pr_not_required",
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,45 @@
+{
+  "name": "wg-inline-asm",
+  "kind": "working_group",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "Amanieu d'Antras",
+      "github": "Amanieu",
+      "github_id": 278509,
+      "is_lead": true
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-inline-asm",
+        "members": [
+          278509
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "inline-asm project group",
+    "description": "A working-group project to extend the Rust language to support inline assembly",
+    "page": "wg-inline-asm",
+    "email": null,
+    "repo": "https://github.com/rust-lang/project-inline-asm",
+    "discord": null,
+    "zulip_stream": "project-inline-asm",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

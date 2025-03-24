@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "rust-gha",
+  "description": "GitHub Actions tests for rust-lang/rust",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

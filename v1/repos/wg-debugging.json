@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "wg-debugging",
+  "description": "Work on debugging Rust code, under the compiler team.",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-debugging",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

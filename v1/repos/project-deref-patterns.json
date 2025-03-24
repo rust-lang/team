@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "project-deref-patterns",
+  "description": "",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [
+    {
+      "name": "traviscross",
+      "permission": "write"
+    }
+  ],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "rust-enhanced",
+  "description": "The official Sublime Text 4 package for the Rust Programming Language",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "devtools",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "rustc-reading-club",
+  "description": "Rust Code Reading Clubs",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-rustc-reading-club",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

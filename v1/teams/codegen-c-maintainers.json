@@ -1,0 +1,35 @@
+{
+  "name": "codegen-c-maintainers",
+  "kind": "team",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Amanieu d'Antras",
+      "github": "Amanieu",
+      "github_id": 278509,
+      "is_lead": false
+    },
+    {
+      "name": "Trevor Gross",
+      "github": "tgross35",
+      "github_id": 13724985,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "codegen-c-maintainers",
+        "members": [
+          278509,
+          13724985
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

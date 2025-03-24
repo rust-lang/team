@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "foundation-faq-2020",
+  "description": "Have questions on the Rust Foundation? Ask here!",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

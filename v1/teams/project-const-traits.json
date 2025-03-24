@@ -1,0 +1,49 @@
+{
+  "name": "project-const-traits",
+  "kind": "project_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Deadbeef",
+      "github": "fee1-dead",
+      "github_id": 43851243,
+      "is_lead": true
+    },
+    {
+      "name": "Michael Goulet",
+      "github": "compiler-errors",
+      "github_id": 3674314,
+      "is_lead": false
+    },
+    {
+      "name": "León Orell Valerian Liehr",
+      "github": "fmease",
+      "github_id": 14913065,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "project-const-traits",
+        "members": [
+          3674314,
+          43851243,
+          14913065,
+          332036
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,84 @@
+{
+  "name": "windows",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Albert Larsan",
+      "github": "albertlarsan68",
+      "github_id": 74931857,
+      "is_lead": false
+    },
+    {
+      "name": "Arlo Siemsen",
+      "github": "arlosi",
+      "github_id": 704597,
+      "is_lead": false
+    },
+    {
+      "name": "Chris Denton",
+      "github": "ChrisDenton",
+      "github_id": 4459874,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Frampton",
+      "github": "danielframpton",
+      "github_id": 15899604,
+      "is_lead": false
+    },
+    {
+      "name": "Gabriel Dos Reis",
+      "github": "gdr-at-ms",
+      "github_id": 11031650,
+      "is_lead": false
+    },
+    {
+      "name": "Kenny Kerr",
+      "github": "kennykerr",
+      "github_id": 9845234,
+      "is_lead": false
+    },
+    {
+      "name": "Luqman Aden",
+      "github": "luqmana",
+      "github_id": 287063,
+      "is_lead": false
+    },
+    {
+      "name": "Jason Shirk",
+      "github": "lzybkr",
+      "github_id": 2148248,
+      "is_lead": false
+    },
+    {
+      "name": "Nicolas",
+      "github": "nico-abram",
+      "github_id": 24706838,
+      "is_lead": false
+    },
+    {
+      "name": "Peter Atashian",
+      "github": "retep998",
+      "github_id": 666308,
+      "is_lead": false
+    },
+    {
+      "name": "Arlie Davis",
+      "github": "sivadeilra",
+      "github_id": 4743776,
+      "is_lead": false
+    },
+    {
+      "name": "Wesley Wiser",
+      "github": "wesleywiser",
+      "github_id": 831192,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

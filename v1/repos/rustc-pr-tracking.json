@@ -1,0 +1,20 @@
+{
+  "org": "rust-lang",
+  "name": "rustc-pr-tracking",
+  "description": "Statistics about PRs on the rustc repository.",
+  "homepage": "https://rust-lang.github.io/rustc-pr-tracking/",
+  "bots": [
+    "highfive"
+  ],
+  "teams": [
+    {
+      "name": "release",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

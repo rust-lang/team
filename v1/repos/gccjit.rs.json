@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "gccjit.rs",
+  "description": "Rust bindings for libgccjit",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-gcc-backend",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

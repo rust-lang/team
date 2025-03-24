@@ -1,0 +1,80 @@
+{
+  "name": "goals",
+  "kind": "team",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": true
+    },
+    {
+      "name": "David Wood",
+      "github": "davidtwco",
+      "github_id": 1295100,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    },
+    {
+      "name": "Rémy Rakic",
+      "github": "lqd",
+      "github_id": 247183,
+      "is_lead": false
+    },
+    {
+      "name": "Nandini",
+      "github": "nandsh",
+      "github_id": 16529596,
+      "is_lead": false
+    },
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "goals",
+        "members": [
+          1295100,
+          162737,
+          247183,
+          16529596,
+          155238,
+          52642,
+          1076834
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Goals team",
+    "description": "Administering the Rust goal setting program",
+    "page": "goals",
+    "email": "goals@rust-lang.org",
+    "repo": "https://github.com/rust-lang/rust-project-goals",
+    "discord": null,
+    "zulip_stream": "project goals",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

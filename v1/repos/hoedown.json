@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "hoedown",
+  "description": "Standards compliant, fast, secure markdown processing library in C",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

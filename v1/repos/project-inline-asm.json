@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "project-inline-asm",
+  "description": "Home for the Inline Assembly project group",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-inline-asm",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

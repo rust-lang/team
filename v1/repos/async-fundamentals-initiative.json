@@ -1,0 +1,31 @@
+{
+  "org": "rust-lang",
+  "name": "async-fundamentals-initiative",
+  "description": "",
+  "homepage": "https://rust-lang.github.io/async-fundamentals-initiative/",
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-async",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

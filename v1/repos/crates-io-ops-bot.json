@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "crates-io-ops-bot",
+  "description": "a bot to help assist the crates.io, website, and other rust ops teams",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,65 @@
+{
+  "people": [
+    {
+      "github_id": 22186,
+      "github": "jtgeibel",
+      "name": "Justin Geibel"
+    },
+    {
+      "github_id": 141300,
+      "github": "Turbo87",
+      "name": "Tobias Bieniek"
+    },
+    {
+      "github_id": 193874,
+      "github": "carols10cents",
+      "name": "Carol Nichols"
+    },
+    {
+      "github_id": 229984,
+      "github": "LawnGnome",
+      "name": "Adam Harvey"
+    },
+    {
+      "github_id": 2889664,
+      "github": "eth3lbert",
+      "name": "eth3lbert"
+    },
+    {
+      "github_id": 20070360,
+      "github": "mdtro",
+      "name": "Matthew T"
+    },
+    {
+      "github_id": 29879298,
+      "github": "Rustin170506",
+      "name": "Rustin"
+    }
+  ],
+  "github_users": [
+    "LawnGnome",
+    "Rustin170506",
+    "Turbo87",
+    "carols10cents",
+    "eth3lbert",
+    "jtgeibel",
+    "mdtro"
+  ],
+  "github_ids": [
+    22186,
+    141300,
+    193874,
+    229984,
+    2889664,
+    20070360,
+    29879298
+  ],
+  "discord_ids": [
+    129056090401931264,
+    313625269405745155,
+    388091358901960705,
+    451522714101088258,
+    676243966408261632,
+    771650879836127232
+  ]
+}

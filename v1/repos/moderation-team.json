@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "moderation-team",
+  "description": "Home of the Rust Moderation team.",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "mods",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

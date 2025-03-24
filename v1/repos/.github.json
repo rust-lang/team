@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": ".github",
+  "description": "Special GitHub repository with fallback issue templates and community health files for other repos.",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

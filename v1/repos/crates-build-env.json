@@ -1,0 +1,37 @@
+{
+  "org": "rust-lang",
+  "name": "crates-build-env",
+  "description": "Build environment for third-party Rust crates",
+  "homepage": null,
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    },
+    {
+      "name": "docs-rs",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

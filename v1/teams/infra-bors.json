@@ -1,0 +1,42 @@
+{
+  "name": "infra-bors",
+  "kind": "team",
+  "subteam_of": "infra",
+  "members": [
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": true
+    },
+    {
+      "name": "Jakub Beránek",
+      "github": "Kobzol",
+      "github_id": 4539057,
+      "is_lead": false
+    },
+    {
+      "name": "Pietro Albini",
+      "github": "pietroalbini",
+      "github_id": 2299951,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "infra-bors",
+        "members": [
+          4539057,
+          5047365,
+          2299951
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

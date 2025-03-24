@@ -1,0 +1,33 @@
+{
+  "org": "rust-lang",
+  "name": "thorin",
+  "description": "DWARF packaging utility, written in Rust, supporting GNU extension and DWARF 5 package formats.",
+  "homepage": null,
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "compiler",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "main",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

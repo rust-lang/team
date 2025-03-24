@@ -1,0 +1,66 @@
+{
+  "name": "wg-const-eval",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": true
+    },
+    {
+      "name": "Ralf Jung",
+      "github": "RalfJung",
+      "github_id": 330628,
+      "is_lead": true
+    },
+    {
+      "name": "Deadbeef",
+      "github": "fee1-dead",
+      "github_id": 43851243,
+      "is_lead": false
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Dylan MacKenzie",
+      "github": "ecstatic-morse",
+      "github_id": 29463364,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-const-eval",
+        "members": [
+          330628,
+          43851243,
+          29864074,
+          332036
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Compile-time Function Evaluation Working Group",
+    "description": "Soundly expanding the capabilities of compile-time function evaluation in Rust",
+    "page": "wg-const-eval",
+    "email": null,
+    "repo": "https://github.com/rust-lang/const-eval",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

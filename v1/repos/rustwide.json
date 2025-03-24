@@ -1,0 +1,22 @@
+{
+  "org": "rust-lang",
+  "name": "rustwide",
+  "description": "Execute your code on the Rust ecosystem.",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "docs-rs",
+      "permission": "write"
+    },
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,30 @@
+{
+  "name": "wasi",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    },
+    {
+      "name": "Burak Emir",
+      "github": "burakemir",
+      "github_id": 10248140,
+      "is_lead": false
+    },
+    {
+      "name": "Juniper Tyree",
+      "github": "juntyr",
+      "github_id": 50025784,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,108 @@
+{
+  "name": "wg-ffi-unwind",
+  "kind": "working_group",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "Adam C. Foltzer",
+      "github": "acfoltzer",
+      "github_id": 205266,
+      "is_lead": true
+    },
+    {
+      "name": "Kyle J Strand",
+      "github": "BatmanAoD",
+      "github_id": 2313807,
+      "is_lead": true
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": true
+    },
+    {
+      "name": "Amanieu d'Antras",
+      "github": "Amanieu",
+      "github_id": 278509,
+      "is_lead": false
+    },
+    {
+      "name": "bjorn3",
+      "github": "bjorn3",
+      "github_id": 17426603,
+      "is_lead": false
+    },
+    {
+      "name": "Christopher Durham",
+      "github": "CAD97",
+      "github_id": 5992217,
+      "is_lead": false
+    },
+    {
+      "name": "Connor Horman",
+      "github": "chorman0773",
+      "github_id": 5026283,
+      "is_lead": false
+    },
+    {
+      "name": "Katelyn Martin",
+      "github": "cratelyn",
+      "github_id": 57912822,
+      "is_lead": false
+    },
+    {
+      "name": "gnzlbg",
+      "github": "gnzlbg",
+      "github_id": 904614,
+      "is_lead": false
+    },
+    {
+      "name": "Gary Guo",
+      "github": "nbdd0121",
+      "github_id": 4065244,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-ffi-unwind",
+        "members": [
+          278509,
+          2313807,
+          5992217,
+          205266,
+          17426603,
+          5026283,
+          57912822,
+          904614,
+          4065244,
+          155238
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "ffi-unwind project group",
+    "description": "A working-group project to extend the Rust language to support unwinding that crosses FFI boundaries",
+    "page": "wg-ffi-unwind",
+    "email": null,
+    "repo": "https://github.com/rust-lang/project-ffi-unwind",
+    "discord": null,
+    "zulip_stream": "project-ffi-unwind",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

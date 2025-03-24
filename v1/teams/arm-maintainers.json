@@ -1,0 +1,36 @@
+{
+  "name": "arm-maintainers",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Adam Gemmell",
+      "github": "adamgemmell",
+      "github_id": 3757567,
+      "is_lead": false
+    },
+    {
+      "name": "David Wood",
+      "github": "davidtwco",
+      "github_id": 1295100,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Bramley",
+      "github": "jacobbramley",
+      "github_id": 5206553,
+      "is_lead": false
+    },
+    {
+      "name": "Jamie Cunliffe",
+      "github": "JamieCunliffe",
+      "github_id": 29557119,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

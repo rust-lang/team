@@ -1,0 +1,77 @@
+{
+  "name": "wg-cli",
+  "kind": "working_group",
+  "subteam_of": "launching-pad",
+  "members": [
+    {
+      "name": "Ed Page",
+      "github": "epage",
+      "github_id": 60961,
+      "is_lead": true
+    },
+    {
+      "name": "Daniel Sockwell",
+      "github": "codesections",
+      "github_id": 35405463,
+      "is_lead": false
+    },
+    {
+      "name": "Ricky",
+      "github": "deg4uss3r",
+      "github_id": 15351059,
+      "is_lead": false
+    },
+    {
+      "name": "Dylan DPC",
+      "github": "Dylan-DPC",
+      "github_id": 99973273,
+      "is_lead": false
+    },
+    {
+      "name": "Matthias Beyer",
+      "github": "matthiasbeyer",
+      "github_id": 427866,
+      "is_lead": false
+    },
+    {
+      "name": "Pavan Kumar Sunkara",
+      "github": "pksunkara",
+      "github_id": 174703,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Pascal Hertleif",
+      "github": "killercup",
+      "github_id": 20063,
+      "is_lead": false
+    },
+    {
+      "name": "Katharina Fey",
+      "github": "spacekookie",
+      "github_id": 7669898,
+      "is_lead": false
+    },
+    {
+      "name": "Yoshua Wuyts",
+      "github": "yoshuawuyts",
+      "github_id": 2467194,
+      "is_lead": false
+    }
+  ],
+  "github": null,
+  "website_data": {
+    "name": "Command-line interfaces (CLI) working group",
+    "description": "Focusing on the end-to-end experience of writing terminal apps, both large and small, in Rust.",
+    "page": "cli",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": "wg-cli",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

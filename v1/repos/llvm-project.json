@@ -1,0 +1,33 @@
+{
+  "org": "rust-lang",
+  "name": "llvm-project",
+  "description": "Rust-specific fork of LLVM.",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-llvm",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "rustc/*",
+      "dismiss_stale_review": false,
+      "mode": "pr_not_required",
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    },
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": "pr_not_required",
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

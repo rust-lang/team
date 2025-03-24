@@ -1,0 +1,61 @@
+{
+  "org": "rust-lang",
+  "name": "rust-project-goals",
+  "description": "Rust Project Goals tracker",
+  "homepage": "https://rust-lang.github.io/rust-project-goals/",
+  "bots": [
+    "rustbot",
+    "rfcbot"
+  ],
+  "teams": [
+    {
+      "name": "edition",
+      "permission": "maintain"
+    },
+    {
+      "name": "goals",
+      "permission": "maintain"
+    },
+    {
+      "name": "lang",
+      "permission": "maintain"
+    },
+    {
+      "name": "libs",
+      "permission": "maintain"
+    },
+    {
+      "name": "goal-owners",
+      "permission": "maintain"
+    },
+    {
+      "name": "release",
+      "permission": "maintain"
+    },
+    {
+      "name": "lang-ops",
+      "permission": "maintain"
+    },
+    {
+      "name": "libs-api",
+      "permission": "maintain"
+    },
+    {
+      "name": "lang-docs",
+      "permission": "maintain"
+    },
+    {
+      "name": "leadership-council",
+      "permission": "maintain"
+    },
+    {
+      "name": "types",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

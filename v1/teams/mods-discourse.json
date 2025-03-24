@@ -1,0 +1,53 @@
+{
+  "name": "mods-discourse",
+  "kind": "team",
+  "subteam_of": "mods",
+  "members": [
+    {
+      "name": "Michael Howell",
+      "github": "notriddle",
+      "github_id": 1593513,
+      "is_lead": false
+    },
+    {
+      "name": "Frank Steffahn",
+      "github": "steffahn",
+      "github_id": 3986214,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Gould",
+      "github": "technetos",
+      "github_id": 10949810,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Khionu Sybiern",
+      "github": "khionu",
+      "github_id": 11195266,
+      "is_lead": false
+    },
+    {
+      "name": "Matt Brubeck",
+      "github": "mbrubeck",
+      "github_id": 5920,
+      "is_lead": false
+    }
+  ],
+  "github": null,
+  "website_data": {
+    "name": "Discourse moderators",
+    "description": "Moderating users.rust-lang.org and internals.rust-lang.org",
+    "page": "mods-discourse",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

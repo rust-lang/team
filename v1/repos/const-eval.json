@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "const-eval",
+  "description": "home for proposals in and around compile-time function evaluation",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-const-eval",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

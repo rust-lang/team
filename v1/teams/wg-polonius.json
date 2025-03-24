@@ -1,0 +1,66 @@
+{
+  "name": "wg-polonius",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Rémy Rakic",
+      "github": "lqd",
+      "github_id": 247183,
+      "is_lead": true
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": true
+    },
+    {
+      "name": "Amanda Stjerna",
+      "github": "amandasystems",
+      "github_id": 102855,
+      "is_lead": false
+    },
+    {
+      "name": "Dylan MacKenzie",
+      "github": "ecstatic-morse",
+      "github_id": 29463364,
+      "is_lead": false
+    },
+    {
+      "name": "Matthew Jasper",
+      "github": "matthewjasper",
+      "github_id": 20113453,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-polonius",
+        "members": [
+          102855,
+          29463364,
+          247183,
+          20113453,
+          155238
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Polonius working group",
+    "description": "Working on an experimental new borrow-checker implementation",
+    "page": "wg-polonius",
+    "email": null,
+    "repo": "https://rust-lang.github.io/compiler-team/working-groups/polonius/",
+    "discord": null,
+    "zulip_stream": "t-types/polonius",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

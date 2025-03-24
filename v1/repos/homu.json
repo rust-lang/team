@@ -1,0 +1,31 @@
+{
+  "org": "rust-lang",
+  "name": "homu",
+  "description": "A bot that integrates with GitHub and your favorite continuous integration service",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

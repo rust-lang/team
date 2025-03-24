@@ -1,0 +1,36 @@
+{
+  "name": "android",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Chris Wailes",
+      "github": "chriswailes",
+      "github_id": 530751,
+      "is_lead": false
+    },
+    {
+      "name": "Matthew Maurer",
+      "github": "maurer",
+      "github_id": 136037,
+      "is_lead": false
+    },
+    {
+      "name": "Martin Geisler",
+      "github": "mgeisler",
+      "github_id": 89623,
+      "is_lead": false
+    },
+    {
+      "name": "Stephen Hines",
+      "github": "stephenhines",
+      "github_id": 17790020,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

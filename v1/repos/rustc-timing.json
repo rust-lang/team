@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "rustc-timing",
+  "description": "new rustc-timing repository for freshly collected data",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

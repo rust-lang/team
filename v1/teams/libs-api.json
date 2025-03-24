@@ -1,0 +1,150 @@
+{
+  "name": "libs-api",
+  "kind": "team",
+  "subteam_of": "libs",
+  "members": [
+    {
+      "name": "Amanieu d'Antras",
+      "github": "Amanieu",
+      "github_id": 278509,
+      "is_lead": false
+    },
+    {
+      "name": "Andrew Gallant",
+      "github": "BurntSushi",
+      "github_id": 456674,
+      "is_lead": false
+    },
+    {
+      "name": "David Tolnay",
+      "github": "dtolnay",
+      "github_id": 1940490,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    },
+    {
+      "name": "Mara Bos",
+      "github": "m-ou-se",
+      "github_id": 783247,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    },
+    {
+      "name": "Aaron Turon",
+      "github": "aturon",
+      "github_id": 709807,
+      "is_lead": false
+    },
+    {
+      "name": "Brian Anderson",
+      "github": "brson",
+      "github_id": 147214,
+      "is_lead": false
+    },
+    {
+      "name": "Aria Beingessner",
+      "github": "Gankra",
+      "github_id": 1136864,
+      "is_lead": false
+    },
+    {
+      "name": "Huon Wilson",
+      "github": "huonw",
+      "github_id": 1203825,
+      "is_lead": false
+    },
+    {
+      "name": "Marvin Löbel",
+      "github": "Kimundi",
+      "github_id": 2903206,
+      "is_lead": false
+    },
+    {
+      "name": "Ashley Mannix",
+      "github": "KodrAus",
+      "github_id": 6721458,
+      "is_lead": false
+    },
+    {
+      "name": "Lukas Kalbertodt",
+      "github": "LukasKalbertodt",
+      "github_id": 7419664,
+      "is_lead": false
+    },
+    {
+      "name": "Steven Fackler",
+      "github": "sfackler",
+      "github_id": 1455697,
+      "is_lead": false
+    },
+    {
+      "name": "Simon Sapin",
+      "github": "SimonSapin",
+      "github_id": 291359,
+      "is_lead": false
+    },
+    {
+      "name": "Without Boats",
+      "github": "withoutboats",
+      "github_id": 9063376,
+      "is_lead": false
+    },
+    {
+      "name": "Jane Lusby",
+      "github": "yaahc",
+      "github_id": 1993852,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "libs-api",
+        "members": [
+          278509,
+          456674,
+          1940490,
+          162737,
+          783247
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "libs-api",
+        "members": [
+          278509,
+          456674,
+          1940490,
+          162737,
+          783247
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Library API team",
+    "description": "Designing and maintaining the standard library API and guarding its stability",
+    "page": "libs-api",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 100
+  },
+  "roles": [],
+  "discord": []
+}

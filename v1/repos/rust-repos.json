@@ -1,0 +1,20 @@
+{
+  "org": "rust-lang",
+  "name": "rust-repos",
+  "description": "Dataset of Rust source code repositories",
+  "homepage": null,
+  "bots": [
+    "highfive"
+  ],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

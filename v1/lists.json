@@ -1,0 +1,1575 @@
+{
+  "lists": {
+    "accounting@rust-lang.org": {
+      "address": "accounting@rust-lang.org",
+      "members": [
+        "accounting@rustfoundation.org"
+      ]
+    },
+    "admin@crates.io": {
+      "address": "admin@crates.io",
+      "members": [
+        "jandavidnose@rustfoundation.org",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "admin@rust-lang.org": {
+      "address": "admin@rust-lang.org",
+      "members": [
+        "jandavidnose@rustfoundation.org",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "all@rust-lang.org": {
+      "address": "all@rust-lang.org",
+      "members": [
+        "a.beingessner@gmail.com",
+        "adam@adamharvey.name",
+        "adityadvlp@gmail.com",
+        "albert.larsan@gmail.com",
+        "alex@alexcrichton.com",
+        "alex@macleod.io",
+        "alimjalnasrawy@gmail.com",
+        "amanieu@gmail.com",
+        "amufti16@gmail.com",
+        "andrewpkq@gmail.com",
+        "apiraino@protonmail.com",
+        "arsiem@microsoft.com",
+        "b2b@humanenginuity.com",
+        "b_naber@gmx.de",
+        "bektasali@protonmail.com",
+        "ben.g.dillon@pm.me",
+        "bennycrampton@gmail.com",
+        "berykubik@gmail.com",
+        "bjorn3_gh@protonmail.com",
+        "blyxyas@gmail.com",
+        "bogusandre@gmail.com",
+        "cad97@cad97.com",
+        "caleb.cartwright@outlook.com",
+        "caleb.zulawski@gmail.com",
+        "camelidcamel@gmail.com",
+        "carol.nichols@gmail.com",
+        "catherine3.flores@gmail.com",
+        "celaus@gmail.com",
+        "chayimfr@gmail.com",
+        "chiovolonit@gmail.com",
+        "chorman@lcdev.xyz",
+        "chris@chrisdenton.dev",
+        "colton@donn.io",
+        "contact@alona.page",
+        "contact@onurozkan.dev",
+        "cramertaylorj@gmail.com",
+        "cuviper@gmail.com",
+        "david@davidtw.co",
+        "denis@cornehl.org",
+        "dev@sunfishcode.online",
+        "di.gama@gmail.com",
+        "dianqk@dianqk.net",
+        "dirkjan@ochtman.nl",
+        "dswijj@gmail.com",
+        "dtolnay@gmail.com",
+        "dylan.dpc@gmail.com",
+        "eds@reric.net",
+        "eh2406@wayne.edu",
+        "ent3rm4n@gmail.com",
+        "eopage@gmail.com",
+        "eric@huss.org",
+        "eric@theincredibleholk.org",
+        "est31@protonmail.com",
+        "esteban@kuber.com.ar",
+        "eth3lbert+dev@gmail.com",
+        "fdsteffahn@gmail.com",
+        "flash12561256@gmail.com",
+        "flodiebold@gmail.com",
+        "gillot.camille@gmail.com",
+        "git@manuel.drehwald.info",
+        "graciegregory@rustfoundation.org",
+        "guillaume1.gomez@gmail.com",
+        "hamidrezakalbasi@protonmail.com",
+        "hello@chriskrycho.com",
+        "hello@philkrones.com",
+        "huyuumi.dev@gmail.com",
+        "ibraheem@ibraheem.ca",
+        "jack@wrenn.fyi",
+        "jackh726@gmail.com",
+        "jacob@jhpratt.dev",
+        "jake.goulding@integer32.com",
+        "jakob.e.degen@gmail.com",
+        "james@onevariable.com",
+        "jamie@hill-daniel.co.uk",
+        "jamslam@gmail.com",
+        "jana@donsz.nl",
+        "jandavidnose@rustfoundation.org",
+        "janerik@fnordig.de",
+        "jieyouxu@outlook.com",
+        "jlusby42@gmail.com",
+        "joelmarcey@rustfoundation.org",
+        "jonasboettiger@icloud.com",
+        "jongiddy@gmail.com",
+        "josh@joshtriplett.org",
+        "jsnewcomb@pm.me",
+        "jtgeibel@gmail.com",
+        "kennytm@gmail.com",
+        "kimockb@gmail.com",
+        "kodraus@hey.com",
+        "kookie@spacekookie.de",
+        "liyuan179@huawei.com",
+        "lizhengghengj@gmail.com",
+        "lnicola@dend.ro",
+        "lukas-code@outlook.com",
+        "lukastw97@gmail.com",
+        "m-ou.se@m-ou.se",
+        "mail@rusticorn.com",
+        "manishsmail@gmail.com",
+        "marcoieni@rustfoundation.org",
+        "marianne.goldin@gmail.com",
+        "marioidival@gmail.com",
+        "mark.simulacrum@gmail.com",
+        "mattgathu@gmail.com",
+        "matthias.krueger@famsik.de",
+        "me@davidbarsky.com",
+        "me@fmease.dev",
+        "me@mdtro.dev",
+        "me@ryanlevick.com",
+        "me@technetos.email",
+        "me@weihanglo.tw",
+        "michael@errs.io",
+        "mjjasper1@gmail.com",
+        "mo8it@proton.me",
+        "modulo641@gmail.com",
+        "moorekang@gmail.com",
+        "n.nethercote@gmail.com",
+        "nadrieril+rust@gmail.com",
+        "nandini2@andrew.cmu.edu",
+        "nellshamrell@gmail.com",
+        "nikita.ppv@gmail.com",
+        "notriddle+rust-mod@protonmail.com",
+        "p.jaszkow@gmail.com",
+        "pietro@pietroalbini.org",
+        "post@ralfj.de",
+        "r3usrlnd@gmail.com",
+        "raf@durin42.com",
+        "rami3l@outlook.com",
+        "remo@buenzli.dev",
+        "remy.rakic+rust@gmail.com",
+        "robertc+rust@robertcollins.net",
+        "roifewu@gmail.com",
+        "rust-lang@nemo157.com",
+        "rust@boxyuwu.dev",
+        "rust@flaki.hu",
+        "rust@hoffman-andrews.com",
+        "rust@lcnr.de",
+        "rust@nikomatsakis.com",
+        "rust@noratrieb.dev",
+        "rustc-contact@oli-obk.de",
+        "rustin.liu@gmail.com",
+        "ryan.havvy@gmail.com",
+        "sage@sagetheprogrammer.com",
+        "sam@rfc1149.net",
+        "schaferjscott@gmail.com",
+        "scook0+rustc@gmail.com",
+        "sebasmagri@gmail.com",
+        "sebastian.thiel@icloud.com",
+        "sfackler@gmail.com",
+        "shadows@with.al",
+        "simon.sapin@exyr.org",
+        "simonas+t-compiler@kazlauskas.me",
+        "smcmurray@acm.org",
+        "spastorino@gmail.com",
+        "takoyaki0316@gmail.com",
+        "tc+rust@traviscross.com",
+        "the8472.rs@infinite-source.de",
+        "tmandry@gmail.com",
+        "tmgross@umich.edu",
+        "tobias@bieniek.cloud",
+        "tomasz.miasko@gmail.com",
+        "urgau@numericable.fr",
+        "vadim.petrochenkov@gmail.com",
+        "vertexclique@gmail.com",
+        "waffle.lapkin@gmail.com",
+        "wes@wezm.net",
+        "workingjubilee@gmail.com",
+        "wwiser@gmail.com",
+        "y21x@proton.me",
+        "yacintmimi@gmail.com"
+      ]
+    },
+    "appveyor-libs@rust-lang.org": {
+      "address": "appveyor-libs@rust-lang.org",
+      "members": [
+        "jandavidnose@rustfoundation.org",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "appveyor@rust-lang.org": {
+      "address": "appveyor@rust-lang.org",
+      "members": [
+        "jandavidnose@rustfoundation.org",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "bootstrap@rust-lang.org": {
+      "address": "bootstrap@rust-lang.org",
+      "members": [
+        "albert.larsan@gmail.com",
+        "berykubik@gmail.com",
+        "contact@onurozkan.dev",
+        "jamie@hill-daniel.co.uk",
+        "jieyouxu@outlook.com",
+        "mark.simulacrum@gmail.com"
+      ]
+    },
+    "bors@rust-lang.org": {
+      "address": "bors@rust-lang.org",
+      "members": [
+        "jandavidnose@rustfoundation.org",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "cargo@rust-lang.org": {
+      "address": "cargo@rust-lang.org",
+      "members": [
+        "arsiem@microsoft.com",
+        "eh2406@wayne.edu",
+        "eopage@gmail.com",
+        "eric@huss.org",
+        "josh@joshtriplett.org",
+        "me@weihanglo.tw",
+        "rustin.liu@gmail.com",
+        "schaferjscott@gmail.com"
+      ]
+    },
+    "cli-wg@rust-lang.org": {
+      "address": "cli-wg@rust-lang.org",
+      "members": [
+        "Ricky@Hosfe.lt",
+        "daniel@codesections.com",
+        "dylan.dpc@gmail.com",
+        "eopage@gmail.com",
+        "mail@beyermatthias.de",
+        "mail@beyermatthias.de",
+        "mail@r0tty.org",
+        "msarfati@protonmail.com",
+        "pavan.sss1991@gmail.com",
+        "ricky@hosfe.lt"
+      ]
+    },
+    "clippy@rust-lang.org": {
+      "address": "clippy@rust-lang.org",
+      "members": [
+        "alex@macleod.io",
+        "blyxyas@gmail.com",
+        "bogusandre@gmail.com",
+        "catherine3.flores@gmail.com",
+        "dswijj@gmail.com",
+        "hello@philkrones.com",
+        "jsnewcomb@pm.me",
+        "manishsmail@gmail.com",
+        "matthias.krueger@famsik.de",
+        "sam@rfc1149.net",
+        "y21x@proton.me"
+      ]
+    },
+    "community-team@rust-lang.org": {
+      "address": "community-team@rust-lang.org",
+      "members": [
+        "adityadvlp@gmail.com",
+        "apiraino@protonmail.com",
+        "berykubik@gmail.com",
+        "celaus@gmail.com",
+        "graciegregory@rustfoundation.org",
+        "huyuumi.dev@gmail.com",
+        "janerik@fnordig.de",
+        "manishsmail@gmail.com",
+        "mattgathu@gmail.com",
+        "me@ryanlevick.com",
+        "me@technetos.email",
+        "nellshamrell@gmail.com",
+        "rust@flaki.hu",
+        "sebasmagri@gmail.com",
+        "vertexclique@gmail.com",
+        "wes@wezm.net"
+      ]
+    },
+    "community@rust-lang.org": {
+      "address": "community@rust-lang.org",
+      "members": [
+        "adityadvlp@gmail.com",
+        "apiraino@protonmail.com",
+        "berykubik@gmail.com",
+        "celaus@gmail.com",
+        "graciegregory@rustfoundation.org",
+        "huyuumi.dev@gmail.com",
+        "janerik@fnordig.de",
+        "manishsmail@gmail.com",
+        "mattgathu@gmail.com",
+        "me@ryanlevick.com",
+        "me@technetos.email",
+        "nellshamrell@gmail.com",
+        "rust@flaki.hu",
+        "sebasmagri@gmail.com",
+        "vertexclique@gmail.com",
+        "wes@wezm.net"
+      ]
+    },
+    "compiler-and-subteams@rust-lang.org": {
+      "address": "compiler-and-subteams@rust-lang.org",
+      "members": [
+        "aa1ronham@gmail.com",
+        "alex@alexcrichton.com",
+        "alimjalnasrawy@gmail.com",
+        "amanieu@gmail.com",
+        "apiraino@protonmail.com",
+        "b_naber@gmx.de",
+        "bektasali@protonmail.com",
+        "berykubik@gmail.com",
+        "bjorn3_gh@protonmail.com",
+        "bouanto@zoho.com",
+        "camelidcamel@gmail.com",
+        "celinval@amazon.com",
+        "chayimfr@gmail.com",
+        "chiovolonit@gmail.com",
+        "chris@chrisdenton.dev",
+        "cohenarthur.dev@gmail.com",
+        "cuviper@gmail.com",
+        "daniel.henry.mantilla@gmail.com",
+        "david@davidtw.co",
+        "debi.jones@gmail.com",
+        "dianqk@dianqk.net",
+        "dylan.dpc@gmail.com",
+        "ecstaticmorse@gmail.com",
+        "eddyb@lyken.rs",
+        "ent3rm4n@gmail.com",
+        "eric@theincredibleholk.org",
+        "est31@protonmail.com",
+        "esteban@kuber.com.ar",
+        "flash12561256@gmail.com",
+        "flodiebold@gmail.com",
+        "gary@garyguo.net",
+        "gillot.camille@gmail.com",
+        "git@hkmatsumoto.com",
+        "git@manuel.drehwald.info",
+        "guillaume1.gomez@gmail.com",
+        "hamidrezakalbasi@protonmail.com",
+        "huyuumi.dev@gmail.com",
+        "igarai@gmail.com",
+        "jack@wrenn.fyi",
+        "jackh726@gmail.com",
+        "jacob@jhpratt.dev",
+        "jakob.e.degen@gmail.com",
+        "jana@donsz.nl",
+        "jieyouxu@outlook.com",
+        "kimockb@gmail.com",
+        "kupiakos@gmail.com",
+        "liyuan179@huawei.com",
+        "lnicola@dend.ro",
+        "lukas-code@outlook.com",
+        "lukastw97@gmail.com",
+        "m-ou.se@m-ou.se",
+        "mark.simulacrum@gmail.com",
+        "me@davidbarsky.com",
+        "me@fmease.dev",
+        "me@ryanlevick.com",
+        "michael@errs.io",
+        "mjjasper1@gmail.com",
+        "modulo641@gmail.com",
+        "moorekang@gmail.com",
+        "n.nethercote@gmail.com",
+        "nadrieril+rust@gmail.com",
+        "nikita.ppv@gmail.com",
+        "post@ralfj.de",
+        "r3usrlnd@gmail.com",
+        "raf@durin42.com",
+        "remy.rakic+rust@gmail.com",
+        "roifewu@gmail.com",
+        "rust@boxyuwu.dev",
+        "rust@lcnr.de",
+        "rust@nikomatsakis.com",
+        "rust@noratrieb.dev",
+        "rustc-contact@oli-obk.de",
+        "scook0+rustc@gmail.com",
+        "simonas+t-compiler@kazlauskas.me",
+        "smcmurray@acm.org",
+        "spastorino@gmail.com",
+        "takoyaki0316@gmail.com",
+        "tgnottingham@gmail.com",
+        "the8472.rs@infinite-source.de",
+        "tmandry@gmail.com",
+        "tmgross@umich.edu",
+        "tomasz.miasko@gmail.com",
+        "tshepang@gmail.com",
+        "urgau@numericable.fr",
+        "vadim.petrochenkov@gmail.com",
+        "vertexclique@gmail.com",
+        "vincenzopalazzo@member.fsf.org",
+        "waffle.lapkin@gmail.com",
+        "workingjubilee@gmail.com",
+        "wwiser@gmail.com",
+        "zoxc32@gmail.com"
+      ]
+    },
+    "compiler-private@rust-lang.org": {
+      "address": "compiler-private@rust-lang.org",
+      "members": [
+        "alex@alexcrichton.com",
+        "apiraino@protonmail.com",
+        "b_naber@gmx.de",
+        "berykubik@gmail.com",
+        "bjorn3_gh@protonmail.com",
+        "camelidcamel@gmail.com",
+        "chris@chrisdenton.dev",
+        "cuviper@gmail.com",
+        "david@davidtw.co",
+        "dianqk@dianqk.net",
+        "ent3rm4n@gmail.com",
+        "eric@theincredibleholk.org",
+        "est31@protonmail.com",
+        "esteban@kuber.com.ar",
+        "flodiebold@gmail.com",
+        "gillot.camille@gmail.com",
+        "git@manuel.drehwald.info",
+        "jack@wrenn.fyi",
+        "jackh726@gmail.com",
+        "jana@donsz.nl",
+        "jieyouxu@outlook.com",
+        "kimockb@gmail.com",
+        "liyuan179@huawei.com",
+        "lukas-code@outlook.com",
+        "m-ou.se@m-ou.se",
+        "mark.simulacrum@gmail.com",
+        "me@fmease.dev",
+        "michael@errs.io",
+        "mjjasper1@gmail.com",
+        "moorekang@gmail.com",
+        "n.nethercote@gmail.com",
+        "nadrieril+rust@gmail.com",
+        "nikita.ppv@gmail.com",
+        "post@ralfj.de",
+        "raf@durin42.com",
+        "remy.rakic+rust@gmail.com",
+        "rust@boxyuwu.dev",
+        "rust@lcnr.de",
+        "rust@nikomatsakis.com",
+        "rust@noratrieb.dev",
+        "rustc-contact@oli-obk.de",
+        "scook0+rustc@gmail.com",
+        "simonas+t-compiler@kazlauskas.me",
+        "smcmurray@acm.org",
+        "spastorino@gmail.com",
+        "takoyaki0316@gmail.com",
+        "the8472.rs@infinite-source.de",
+        "tmandry@gmail.com",
+        "tmgross@umich.edu",
+        "tomasz.miasko@gmail.com",
+        "urgau@numericable.fr",
+        "vadim.petrochenkov@gmail.com",
+        "waffle.lapkin@gmail.com",
+        "workingjubilee@gmail.com",
+        "wwiser@gmail.com"
+      ]
+    },
+    "compiler-team@rust-lang.org": {
+      "address": "compiler-team@rust-lang.org",
+      "members": [
+        "alex@alexcrichton.com",
+        "apiraino@protonmail.com",
+        "b_naber@gmx.de",
+        "berykubik@gmail.com",
+        "bjorn3_gh@protonmail.com",
+        "camelidcamel@gmail.com",
+        "chris@chrisdenton.dev",
+        "cuviper@gmail.com",
+        "david@davidtw.co",
+        "dianqk@dianqk.net",
+        "ent3rm4n@gmail.com",
+        "eric@theincredibleholk.org",
+        "est31@protonmail.com",
+        "esteban@kuber.com.ar",
+        "flodiebold@gmail.com",
+        "gillot.camille@gmail.com",
+        "git@manuel.drehwald.info",
+        "jack@wrenn.fyi",
+        "jackh726@gmail.com",
+        "jana@donsz.nl",
+        "jieyouxu@outlook.com",
+        "kimockb@gmail.com",
+        "liyuan179@huawei.com",
+        "lukas-code@outlook.com",
+        "m-ou.se@m-ou.se",
+        "mark.simulacrum@gmail.com",
+        "me@fmease.dev",
+        "michael@errs.io",
+        "mjjasper1@gmail.com",
+        "moorekang@gmail.com",
+        "n.nethercote@gmail.com",
+        "nadrieril+rust@gmail.com",
+        "nikita.ppv@gmail.com",
+        "post@ralfj.de",
+        "raf@durin42.com",
+        "remy.rakic+rust@gmail.com",
+        "rust@boxyuwu.dev",
+        "rust@lcnr.de",
+        "rust@nikomatsakis.com",
+        "rust@noratrieb.dev",
+        "rustc-contact@oli-obk.de",
+        "scook0+rustc@gmail.com",
+        "simonas+t-compiler@kazlauskas.me",
+        "smcmurray@acm.org",
+        "spastorino@gmail.com",
+        "takoyaki0316@gmail.com",
+        "the8472.rs@infinite-source.de",
+        "tmandry@gmail.com",
+        "tmgross@umich.edu",
+        "tomasz.miasko@gmail.com",
+        "urgau@numericable.fr",
+        "vadim.petrochenkov@gmail.com",
+        "waffle.lapkin@gmail.com",
+        "workingjubilee@gmail.com",
+        "wwiser@gmail.com"
+      ]
+    },
+    "compiler@rust-lang.org": {
+      "address": "compiler@rust-lang.org",
+      "members": [
+        "alex@alexcrichton.com",
+        "apiraino@protonmail.com",
+        "b_naber@gmx.de",
+        "berykubik@gmail.com",
+        "bjorn3_gh@protonmail.com",
+        "camelidcamel@gmail.com",
+        "chris@chrisdenton.dev",
+        "cuviper@gmail.com",
+        "david@davidtw.co",
+        "dianqk@dianqk.net",
+        "ent3rm4n@gmail.com",
+        "eric@theincredibleholk.org",
+        "est31@protonmail.com",
+        "esteban@kuber.com.ar",
+        "flodiebold@gmail.com",
+        "gillot.camille@gmail.com",
+        "git@manuel.drehwald.info",
+        "jack@wrenn.fyi",
+        "jackh726@gmail.com",
+        "jana@donsz.nl",
+        "jieyouxu@outlook.com",
+        "kimockb@gmail.com",
+        "liyuan179@huawei.com",
+        "lukas-code@outlook.com",
+        "m-ou.se@m-ou.se",
+        "mark.simulacrum@gmail.com",
+        "me@fmease.dev",
+        "michael@errs.io",
+        "mjjasper1@gmail.com",
+        "moorekang@gmail.com",
+        "n.nethercote@gmail.com",
+        "nadrieril+rust@gmail.com",
+        "nikita.ppv@gmail.com",
+        "post@ralfj.de",
+        "raf@durin42.com",
+        "remy.rakic+rust@gmail.com",
+        "rust@boxyuwu.dev",
+        "rust@lcnr.de",
+        "rust@nikomatsakis.com",
+        "rust@noratrieb.dev",
+        "rustc-contact@oli-obk.de",
+        "scook0+rustc@gmail.com",
+        "simonas+t-compiler@kazlauskas.me",
+        "smcmurray@acm.org",
+        "spastorino@gmail.com",
+        "takoyaki0316@gmail.com",
+        "the8472.rs@infinite-source.de",
+        "tmandry@gmail.com",
+        "tmgross@umich.edu",
+        "tomasz.miasko@gmail.com",
+        "urgau@numericable.fr",
+        "vadim.petrochenkov@gmail.com",
+        "waffle.lapkin@gmail.com",
+        "workingjubilee@gmail.com",
+        "wwiser@gmail.com"
+      ]
+    },
+    "council@rust-lang.org": {
+      "address": "council@rust-lang.org",
+      "members": [
+        "cuviper@gmail.com",
+        "eric@huss.org",
+        "james@onevariable.com",
+        "m-ou.se@m-ou.se",
+        "mark.simulacrum@gmail.com",
+        "rustc-contact@oli-obk.de",
+        "tc+rust@traviscross.com"
+      ]
+    },
+    "craterbot@rust-lang.org": {
+      "address": "craterbot@rust-lang.org",
+      "members": [
+        "berykubik@gmail.com",
+        "jake.goulding@integer32.com",
+        "jandavidnose@rustfoundation.org",
+        "kennytm@gmail.com",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "crates-io-cert@rust-lang.org": {
+      "address": "crates-io-cert@rust-lang.org",
+      "members": [
+        "jandavidnose@rustfoundation.org",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "crates-io@rust-lang.org": {
+      "address": "crates-io@rust-lang.org",
+      "members": [
+        "adam@adamharvey.name",
+        "carol.nichols@gmail.com",
+        "eth3lbert+dev@gmail.com",
+        "jtgeibel@gmail.com",
+        "me@mdtro.dev",
+        "rustin.liu@gmail.com",
+        "tobias@bieniek.cloud"
+      ]
+    },
+    "dev-tools@rust-lang.org": {
+      "address": "dev-tools@rust-lang.org",
+      "members": [
+        "caleb.cartwright@outlook.com",
+        "eric@huss.org",
+        "guillaume1.gomez@gmail.com",
+        "manishsmail@gmail.com",
+        "robertc+rust@robertcollins.net",
+        "rustc-contact@oli-obk.de"
+      ]
+    },
+    "discord-mods@rust-lang.org": {
+      "address": "discord-mods@rust-lang.org",
+      "members": [
+        "manishsmail@gmail.com",
+        "me@technetos.email",
+        "sage@sagetheprogrammer.com"
+      ]
+    },
+    "discourse-mods@rust-lang.org": {
+      "address": "discourse-mods@rust-lang.org",
+      "members": [
+        "fdsteffahn@gmail.com",
+        "me@technetos.email",
+        "notriddle+rust-mod@protonmail.com"
+      ]
+    },
+    "dmarc-rua@rust-lang.org": {
+      "address": "dmarc-rua@rust-lang.org",
+      "members": [
+        "jandavidnose@rustfoundation.org",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "docker-hub-rustci@rust-lang.org": {
+      "address": "docker-hub-rustci@rust-lang.org",
+      "members": [
+        "jandavidnose@rustfoundation.org",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "docs-rs@rust-lang.org": {
+      "address": "docs-rs@rust-lang.org",
+      "members": [
+        "denis@cornehl.org",
+        "guillaume1.gomez@gmail.com",
+        "rust@hoffman-andrews.com"
+      ]
+    },
+    "embedded-wg@rust-lang.org": {
+      "address": "embedded-wg@rust-lang.org",
+      "members": [
+        "adam@adamgreig.com",
+        "ales@katona.me",
+        "alex@thinglab.org",
+        "bart@cs.pdx.edu",
+        "berkus@gmail.com",
+        "christian.meusel@posteo.de",
+        "derust@eggers-club.de",
+        "dirbaio@dirbaio.net",
+        "eldruin@gmail.com",
+        "emil.gardstrom@protonmail.com",
+        "hd@oordt.dev",
+        "james@onevariable.com",
+        "jan@gondor.com",
+        "jesse@beta7.io",
+        "jonathan.pallant@ferrous-systems.com",
+        "me@reitermark.us",
+        "nathan.chong@gmail.com",
+        "nickastevens83@gmail.com",
+        "osbpau@gmail.com",
+        "rmsyn@weathered-steel.dev",
+        "scott@mabez.dev",
+        "yuhanliin+github@protonmail.com",
+        "zgarbul.andrey@gmail.com"
+      ]
+    },
+    "event@rustconf.com": {
+      "address": "event@rustconf.com",
+      "members": [
+        "events@tilde.io"
+      ]
+    },
+    "foundation@rust-lang.org": {
+      "address": "foundation@rust-lang.org",
+      "members": [
+        "foundation@rustfoundation.org"
+      ]
+    },
+    "gamedev-wg@rust-lang.org": {
+      "address": "gamedev-wg@rust-lang.org",
+      "members": [
+        "aclysma@gmail.com",
+        "alexene0x11@gmail.com",
+        "e.soghe@gmail.com",
+        "elinashahzm@gmail.com",
+        "forestkzanderson@gmail.com",
+        "joe@seventeencups.net",
+        "johan@embark-studios.com",
+        "kvark@mozilla.com",
+        "ozkriff@gmail.com",
+        "richard@justaddpixels.com",
+        "wodannson@gmail.com",
+        "zefria@gmail.com"
+      ]
+    },
+    "google-admin@rust-lang.org": {
+      "address": "google-admin@rust-lang.org",
+      "members": [
+        "jandavidnose@rustfoundation.org",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "help@crates.io": {
+      "address": "help@crates.io",
+      "members": [
+        "carol.nichols@gmail.com",
+        "crates.io@rust-lang.zendesk.com",
+        "jtgeibel@gmail.com"
+      ]
+    },
+    "help@docs.rs": {
+      "address": "help@docs.rs",
+      "members": [
+        "denis@cornehl.org",
+        "guillaume1.gomez@gmail.com",
+        "rust@hoffman-andrews.com"
+      ]
+    },
+    "hiring@rust-lang.org": {
+      "address": "hiring@rust-lang.org",
+      "members": [
+        "eric@huss.org",
+        "joelmarcey@rustfoundation.org",
+        "rust@nikomatsakis.com",
+        "tc+rust@traviscross.com"
+      ]
+    },
+    "infra-team@rust-lang.org": {
+      "address": "infra-team@rust-lang.org",
+      "members": [
+        "berykubik@gmail.com",
+        "jake.goulding@integer32.com",
+        "jandavidnose@rustfoundation.org",
+        "kennytm@gmail.com",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "infra@rust-lang.org": {
+      "address": "infra@rust-lang.org",
+      "members": [
+        "berykubik@gmail.com",
+        "jake.goulding@integer32.com",
+        "jandavidnose@rustfoundation.org",
+        "kennytm@gmail.com",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "lang-advisors@rust-lang.org": {
+      "address": "lang-advisors@rust-lang.org",
+      "members": [
+        "alex@alexcrichton.com",
+        "amanieu@gmail.com",
+        "cramertaylorj@gmail.com",
+        "jackh726@gmail.com",
+        "jakob.e.degen@gmail.com",
+        "josh@joshtriplett.org",
+        "mark.simulacrum@gmail.com",
+        "nadrieril+rust@gmail.com",
+        "post@ralfj.de",
+        "rust@nikomatsakis.com",
+        "smcmurray@acm.org",
+        "tc+rust@traviscross.com",
+        "tmandry@gmail.com",
+        "wwiser@gmail.com"
+      ]
+    },
+    "lang-private@rust-lang.org": {
+      "address": "lang-private@rust-lang.org",
+      "members": [
+        "josh@joshtriplett.org",
+        "rust@nikomatsakis.com",
+        "smcmurray@acm.org",
+        "tc+rust@traviscross.com",
+        "tmandry@gmail.com"
+      ]
+    },
+    "lang-team@rust-lang.org": {
+      "address": "lang-team@rust-lang.org",
+      "members": [
+        "josh@joshtriplett.org",
+        "rust@nikomatsakis.com",
+        "smcmurray@acm.org",
+        "tc+rust@traviscross.com",
+        "tmandry@gmail.com"
+      ]
+    },
+    "lang@rust-lang.org": {
+      "address": "lang@rust-lang.org",
+      "members": [
+        "josh@joshtriplett.org",
+        "rust@nikomatsakis.com",
+        "smcmurray@acm.org",
+        "tc+rust@traviscross.com",
+        "tmandry@gmail.com"
+      ]
+    },
+    "language-design-team@rust-lang.org": {
+      "address": "language-design-team@rust-lang.org",
+      "members": [
+        "josh@joshtriplett.org",
+        "rust@nikomatsakis.com",
+        "smcmurray@acm.org",
+        "tc+rust@traviscross.com",
+        "tmandry@gmail.com"
+      ]
+    },
+    "leads@rust-lang.org": {
+      "address": "leads@rust-lang.org",
+      "members": [
+        "acfoltzer@acfoltzer.net",
+        "adam@adamgreig.com",
+        "amanieu@gmail.com",
+        "apiraino@protonmail.com",
+        "batmanaod@gmail.com",
+        "berykubik@gmail.com",
+        "bouanto@zoho.com",
+        "caleb.cartwright@outlook.com",
+        "caleb.zulawski@gmail.com",
+        "carol.nichols@gmail.com",
+        "celinval@amazon.com",
+        "chiovolonit@gmail.com",
+        "contact@onurozkan.dev",
+        "crlf0710@gmail.com",
+        "cuviper@gmail.com",
+        "david@davidtw.co",
+        "debi.jones@gmail.com",
+        "denis@cornehl.org",
+        "derust@eggers-club.de",
+        "dylan.dpc@gmail.com",
+        "e.soghe@gmail.com",
+        "emilio@crisal.io",
+        "ent3rm4n@gmail.com",
+        "eopage@gmail.com",
+        "eric@huss.org",
+        "eric@theincredibleholk.org",
+        "esteban@kuber.com.ar",
+        "forestkzanderson@gmail.com",
+        "gillot.camille@gmail.com",
+        "guillaume1.gomez@gmail.com",
+        "hello@chriskrycho.com",
+        "hello@philkrones.com",
+        "huyuumi.dev@gmail.com",
+        "jack@wrenn.fyi",
+        "jackh726@gmail.com",
+        "jake.goulding@integer32.com",
+        "jakob.e.degen@gmail.com",
+        "james@onevariable.com",
+        "jamslam@gmail.com",
+        "jandavidnose@rustfoundation.org",
+        "joelmarcey@rustfoundation.org",
+        "jtgeibel@gmail.com",
+        "kvark@mozilla.com",
+        "lukastw97@gmail.com",
+        "m-ou.se@m-ou.se",
+        "manishsmail@gmail.com",
+        "marioidival@gmail.com",
+        "mark.simulacrum@gmail.com",
+        "michaelwoerister@gmail.com",
+        "mo8it@proton.me",
+        "nellshamrell@gmail.com",
+        "nfitzgerald@mozilla.com",
+        "nikita.ppv@gmail.com",
+        "ozkriff@gmail.com",
+        "post@ralfj.de",
+        "remy.rakic+rust@gmail.com",
+        "robertc+rust@robertcollins.net",
+        "rust@boxyuwu.dev",
+        "rust@lcnr.de",
+        "rust@nikomatsakis.com",
+        "rust@yosh.is",
+        "rustc-contact@oli-obk.de",
+        "schaferjscott@gmail.com",
+        "shadows@with.al",
+        "shnatsel@gmail.com",
+        "spastorino@gmail.com",
+        "tc+rust@traviscross.com",
+        "tim.diekmann@3dvision.de",
+        "tmandry@gmail.com",
+        "tobias@bieniek.cloud",
+        "tony@iqlusion.io",
+        "vertexclique@gmail.com",
+        "vincenzopalazzo@member.fsf.org",
+        "workingjubilee@gmail.com",
+        "wwiser@gmail.com"
+      ]
+    },
+    "leah@rustconf.com": {
+      "address": "leah@rustconf.com",
+      "members": [
+        "events@tilde.io"
+      ]
+    },
+    "library-team@rust-lang.org": {
+      "address": "library-team@rust-lang.org",
+      "members": [
+        "amanieu@gmail.com",
+        "chiovolonit@gmail.com",
+        "cuviper@gmail.com",
+        "josh@joshtriplett.org",
+        "m-ou.se@m-ou.se",
+        "the8472.rs@infinite-source.de"
+      ]
+    },
+    "libs-api@rust-lang.org": {
+      "address": "libs-api@rust-lang.org",
+      "members": [
+        "amanieu@gmail.com",
+        "dtolnay@gmail.com",
+        "jamslam@gmail.com",
+        "josh@joshtriplett.org",
+        "m-ou.se@m-ou.se"
+      ]
+    },
+    "libs-private@rust-lang.org": {
+      "address": "libs-private@rust-lang.org",
+      "members": [
+        "amanieu@gmail.com",
+        "chiovolonit@gmail.com",
+        "cuviper@gmail.com",
+        "josh@joshtriplett.org",
+        "m-ou.se@m-ou.se",
+        "the8472.rs@infinite-source.de"
+      ]
+    },
+    "libs@rust-lang.org": {
+      "address": "libs@rust-lang.org",
+      "members": [
+        "amanieu@gmail.com",
+        "chiovolonit@gmail.com",
+        "cuviper@gmail.com",
+        "josh@joshtriplett.org",
+        "m-ou.se@m-ou.se",
+        "the8472.rs@infinite-source.de"
+      ]
+    },
+    "localization@rust-lang.org": {
+      "address": "localization@rust-lang.org",
+      "members": [
+        "huyuumi.dev@gmail.com",
+        "manishsmail@gmail.com",
+        "vertexclique@gmail.com"
+      ]
+    },
+    "mods-all@rust-lang.org": {
+      "address": "mods-all@rust-lang.org",
+      "members": [
+        "fdsteffahn@gmail.com",
+        "manishsmail@gmail.com",
+        "me@technetos.email",
+        "notriddle+rust-mod@protonmail.com",
+        "rustc-contact@oli-obk.de",
+        "sage@sagetheprogrammer.com"
+      ]
+    },
+    "mods@rust-lang.org": {
+      "address": "mods@rust-lang.org",
+      "members": [
+        "me@technetos.email",
+        "rustc-contact@oli-obk.de"
+      ]
+    },
+    "ospp@rust-lang.org": {
+      "address": "ospp@rust-lang.org",
+      "members": [
+        "amanieu@gmail.com"
+      ]
+    },
+    "project-directors@rust-lang.org": {
+      "address": "project-directors@rust-lang.org",
+      "members": [
+        "carol.nichols@gmail.com",
+        "jakob.e.degen@gmail.com",
+        "me@ryanlevick.com",
+        "smcmurray@acm.org",
+        "spastorino@gmail.com"
+      ]
+    },
+    "reach@rust-lang.org": {
+      "address": "reach@rust-lang.org",
+      "members": [
+        "aidanhs@cantab.net",
+        "carol.nichols@gmail.com",
+        "dhosfelt@mozilla.com"
+      ]
+    },
+    "release-and-subteams@rust-lang.org": {
+      "address": "release-and-subteams@rust-lang.org",
+      "members": [
+        "cuviper@gmail.com",
+        "dylan.dpc@gmail.com",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org",
+        "rust@boxyuwu.dev"
+      ]
+    },
+    "release@rust-lang.org": {
+      "address": "release@rust-lang.org",
+      "members": [
+        "cuviper@gmail.com",
+        "dylan.dpc@gmail.com",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org",
+        "rust@boxyuwu.dev"
+      ]
+    },
+    "rust-all-hands@rust-lang.org": {
+      "address": "rust-all-hands@rust-lang.org",
+      "members": [
+        "dylan.dpc@gmail.com",
+        "flo@andersground.net",
+        "manishsmail@gmail.com",
+        "rust@nikomatsakis.com",
+        "spastorino@gmail.com"
+      ]
+    },
+    "rust-dev-tools@rust-lang.org": {
+      "address": "rust-dev-tools@rust-lang.org",
+      "members": [
+        "caleb.cartwright@outlook.com",
+        "eric@huss.org",
+        "guillaume1.gomez@gmail.com",
+        "manishsmail@gmail.com",
+        "robertc+rust@robertcollins.net",
+        "rustc-contact@oli-obk.de"
+      ]
+    },
+    "rust-key@rust-lang.org": {
+      "address": "rust-key@rust-lang.org",
+      "members": [
+        "jandavidnose@rustfoundation.org",
+        "marcoieni@rustfoundation.org",
+        "mark.simulacrum@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "rust-mods@rust-lang.org": {
+      "address": "rust-mods@rust-lang.org",
+      "members": [
+        "me@technetos.email",
+        "rustc-contact@oli-obk.de"
+      ]
+    },
+    "rustbridge@rust-lang.org": {
+      "address": "rustbridge@rust-lang.org",
+      "members": [
+        "amufti16@gmail.com",
+        "shadows@with.al"
+      ]
+    },
+    "rustdoc@rust-lang.org": {
+      "address": "rustdoc@rust-lang.org",
+      "members": [
+        "camelidcamel@gmail.com",
+        "contact@alona.page",
+        "guillaume1.gomez@gmail.com",
+        "manishsmail@gmail.com",
+        "me@fmease.dev",
+        "notriddle+rust-mod@protonmail.com",
+        "rust-lang@nemo157.com",
+        "rust@hoffman-andrews.com"
+      ]
+    },
+    "secure-code-wg@rust-lang.org": {
+      "address": "secure-code-wg@rust-lang.org",
+      "members": [
+        "alex.gaynor@gmail.com",
+        "contact@amousset.me",
+        "shnatsel@gmail.com",
+        "tony@iqlusion.io"
+      ]
+    },
+    "security@rust-lang.org": {
+      "address": "security@rust-lang.org",
+      "members": [
+        "cuviper@gmail.com",
+        "manishsmail@gmail.com",
+        "pietro@pietroalbini.org"
+      ]
+    },
+    "social@rust-lang.org": {
+      "address": "social@rust-lang.org",
+      "members": [
+        "m-ou.se@m-ou.se"
+      ]
+    },
+    "speak@rustconf.com": {
+      "address": "speak@rustconf.com",
+      "members": [
+        "events@tilde.io"
+      ]
+    },
+    "sponsor@rustconf.com": {
+      "address": "sponsor@rustconf.com",
+      "members": [
+        "events@tilde.io"
+      ]
+    },
+    "sponsors@rustconf.com": {
+      "address": "sponsors@rustconf.com",
+      "members": [
+        "events@tilde.io"
+      ]
+    },
+    "sponsorship@rustconf.com": {
+      "address": "sponsorship@rustconf.com",
+      "members": [
+        "events@tilde.io"
+      ]
+    },
+    "sponsorships@rustconf.com": {
+      "address": "sponsorships@rustconf.com",
+      "members": [
+        "events@tilde.io"
+      ]
+    },
+    "style-team@rust-lang.org": {
+      "address": "style-team@rust-lang.org",
+      "members": [
+        "caleb.cartwright@outlook.com",
+        "josh@joshtriplett.org",
+        "michael@errs.io"
+      ]
+    },
+    "style@rust-lang.org": {
+      "address": "style@rust-lang.org",
+      "members": [
+        "caleb.cartwright@outlook.com",
+        "josh@joshtriplett.org",
+        "michael@errs.io"
+      ]
+    },
+    "surveys@rust-lang.org": {
+      "address": "surveys@rust-lang.org",
+      "members": [
+        "apiraino@protonmail.com",
+        "berykubik@gmail.com",
+        "graciegregory@rustfoundation.org",
+        "me@ryanlevick.com"
+      ]
+    },
+    "team@rust-lang.org": {
+      "address": "team@rust-lang.org",
+      "members": [
+        "a.beingessner@gmail.com",
+        "adam@adamharvey.name",
+        "adityadvlp@gmail.com",
+        "albert.larsan@gmail.com",
+        "alex@alexcrichton.com",
+        "alex@macleod.io",
+        "alimjalnasrawy@gmail.com",
+        "amanieu@gmail.com",
+        "amufti16@gmail.com",
+        "andrewpkq@gmail.com",
+        "apiraino@protonmail.com",
+        "arsiem@microsoft.com",
+        "b2b@humanenginuity.com",
+        "b_naber@gmx.de",
+        "bektasali@protonmail.com",
+        "ben.g.dillon@pm.me",
+        "bennycrampton@gmail.com",
+        "berykubik@gmail.com",
+        "bjorn3_gh@protonmail.com",
+        "blyxyas@gmail.com",
+        "bogusandre@gmail.com",
+        "cad97@cad97.com",
+        "caleb.cartwright@outlook.com",
+        "caleb.zulawski@gmail.com",
+        "camelidcamel@gmail.com",
+        "carol.nichols@gmail.com",
+        "catherine3.flores@gmail.com",
+        "celaus@gmail.com",
+        "chayimfr@gmail.com",
+        "chiovolonit@gmail.com",
+        "chorman@lcdev.xyz",
+        "chris@chrisdenton.dev",
+        "colton@donn.io",
+        "contact@alona.page",
+        "contact@onurozkan.dev",
+        "cramertaylorj@gmail.com",
+        "cuviper@gmail.com",
+        "david@davidtw.co",
+        "denis@cornehl.org",
+        "dev@sunfishcode.online",
+        "di.gama@gmail.com",
+        "dianqk@dianqk.net",
+        "dirkjan@ochtman.nl",
+        "dswijj@gmail.com",
+        "dtolnay@gmail.com",
+        "dylan.dpc@gmail.com",
+        "eds@reric.net",
+        "eh2406@wayne.edu",
+        "ent3rm4n@gmail.com",
+        "eopage@gmail.com",
+        "eric@huss.org",
+        "eric@theincredibleholk.org",
+        "est31@protonmail.com",
+        "esteban@kuber.com.ar",
+        "eth3lbert+dev@gmail.com",
+        "fdsteffahn@gmail.com",
+        "flash12561256@gmail.com",
+        "flodiebold@gmail.com",
+        "gillot.camille@gmail.com",
+        "git@manuel.drehwald.info",
+        "graciegregory@rustfoundation.org",
+        "guillaume1.gomez@gmail.com",
+        "hamidrezakalbasi@protonmail.com",
+        "hello@chriskrycho.com",
+        "hello@philkrones.com",
+        "huyuumi.dev@gmail.com",
+        "ibraheem@ibraheem.ca",
+        "jack@wrenn.fyi",
+        "jackh726@gmail.com",
+        "jacob@jhpratt.dev",
+        "jake.goulding@integer32.com",
+        "jakob.e.degen@gmail.com",
+        "james@onevariable.com",
+        "jamie@hill-daniel.co.uk",
+        "jamslam@gmail.com",
+        "jana@donsz.nl",
+        "jandavidnose@rustfoundation.org",
+        "janerik@fnordig.de",
+        "jieyouxu@outlook.com",
+        "jlusby42@gmail.com",
+        "joelmarcey@rustfoundation.org",
+        "jonasboettiger@icloud.com",
+        "jongiddy@gmail.com",
+        "josh@joshtriplett.org",
+        "jsnewcomb@pm.me",
+        "jtgeibel@gmail.com",
+        "kennytm@gmail.com",
+        "kimockb@gmail.com",
+        "kodraus@hey.com",
+        "kookie@spacekookie.de",
+        "liyuan179@huawei.com",
+        "lizhengghengj@gmail.com",
+        "lnicola@dend.ro",
+        "lukas-code@outlook.com",
+        "lukastw97@gmail.com",
+        "m-ou.se@m-ou.se",
+        "mail@rusticorn.com",
+        "manishsmail@gmail.com",
+        "marcoieni@rustfoundation.org",
+        "marianne.goldin@gmail.com",
+        "marioidival@gmail.com",
+        "mark.simulacrum@gmail.com",
+        "mattgathu@gmail.com",
+        "matthias.krueger@famsik.de",
+        "me@davidbarsky.com",
+        "me@fmease.dev",
+        "me@mdtro.dev",
+        "me@ryanlevick.com",
+        "me@technetos.email",
+        "me@weihanglo.tw",
+        "michael@errs.io",
+        "mjjasper1@gmail.com",
+        "mo8it@proton.me",
+        "modulo641@gmail.com",
+        "moorekang@gmail.com",
+        "n.nethercote@gmail.com",
+        "nadrieril+rust@gmail.com",
+        "nandini2@andrew.cmu.edu",
+        "nellshamrell@gmail.com",
+        "nikita.ppv@gmail.com",
+        "notriddle+rust-mod@protonmail.com",
+        "p.jaszkow@gmail.com",
+        "pietro@pietroalbini.org",
+        "post@ralfj.de",
+        "r3usrlnd@gmail.com",
+        "raf@durin42.com",
+        "rami3l@outlook.com",
+        "remo@buenzli.dev",
+        "remy.rakic+rust@gmail.com",
+        "robertc+rust@robertcollins.net",
+        "roifewu@gmail.com",
+        "rust-lang@nemo157.com",
+        "rust@boxyuwu.dev",
+        "rust@flaki.hu",
+        "rust@hoffman-andrews.com",
+        "rust@lcnr.de",
+        "rust@nikomatsakis.com",
+        "rust@noratrieb.dev",
+        "rustc-contact@oli-obk.de",
+        "rustin.liu@gmail.com",
+        "ryan.havvy@gmail.com",
+        "sage@sagetheprogrammer.com",
+        "sam@rfc1149.net",
+        "schaferjscott@gmail.com",
+        "scook0+rustc@gmail.com",
+        "sebasmagri@gmail.com",
+        "sebastian.thiel@icloud.com",
+        "sfackler@gmail.com",
+        "shadows@with.al",
+        "simon.sapin@exyr.org",
+        "simonas+t-compiler@kazlauskas.me",
+        "smcmurray@acm.org",
+        "spastorino@gmail.com",
+        "takoyaki0316@gmail.com",
+        "tc+rust@traviscross.com",
+        "the8472.rs@infinite-source.de",
+        "tmandry@gmail.com",
+        "tmgross@umich.edu",
+        "tobias@bieniek.cloud",
+        "tomasz.miasko@gmail.com",
+        "urgau@numericable.fr",
+        "vadim.petrochenkov@gmail.com",
+        "vertexclique@gmail.com",
+        "waffle.lapkin@gmail.com",
+        "wes@wezm.net",
+        "workingjubilee@gmail.com",
+        "wwiser@gmail.com",
+        "y21x@proton.me",
+        "yacintmimi@gmail.com"
+      ]
+    },
+    "tools-all@rust-lang.org": {
+      "address": "tools-all@rust-lang.org",
+      "members": [
+        "adam@adamharvey.name",
+        "alex@macleod.io",
+        "arsiem@microsoft.com",
+        "blyxyas@gmail.com",
+        "bogusandre@gmail.com",
+        "caleb.cartwright@outlook.com",
+        "camelidcamel@gmail.com",
+        "carol.nichols@gmail.com",
+        "catherine3.flores@gmail.com",
+        "chris@chrisdenton.dev",
+        "contact@alona.page",
+        "darren@kulp.ch",
+        "denis@cornehl.org",
+        "dirkjan@ochtman.nl",
+        "dswijj@gmail.com",
+        "eh2406@wayne.edu",
+        "emilio@crisal.io",
+        "eopage@gmail.com",
+        "eric@huss.org",
+        "eth3lbert+dev@gmail.com",
+        "git@pvdrz.com",
+        "guillaume1.gomez@gmail.com",
+        "hello@philkrones.com",
+        "josh@joshtriplett.org",
+        "jsnewcomb@pm.me",
+        "jtgeibel@gmail.com",
+        "kookie@spacekookie.de",
+        "manishsmail@gmail.com",
+        "matthias.krueger@famsik.de",
+        "me@fmease.dev",
+        "me@mdtro.dev",
+        "me@weihanglo.tw",
+        "nfitzgerald@mozilla.com",
+        "notriddle+rust-mod@protonmail.com",
+        "ojeda@kernel.org",
+        "rami3l@outlook.com",
+        "robertc+rust@robertcollins.net",
+        "rust-lang@nemo157.com",
+        "rust@hoffman-andrews.com",
+        "rustc-contact@oli-obk.de",
+        "rustin.liu@gmail.com",
+        "sam@rfc1149.net",
+        "schaferjscott@gmail.com",
+        "tobias@bieniek.cloud",
+        "tshepang@gmail.com",
+        "y21x@proton.me",
+        "yacintmimi@gmail.com"
+      ]
+    },
+    "tools-team@rust-lang.org": {
+      "address": "tools-team@rust-lang.org",
+      "members": [
+        "caleb.cartwright@outlook.com",
+        "eric@huss.org",
+        "guillaume1.gomez@gmail.com",
+        "manishsmail@gmail.com",
+        "robertc+rust@robertcollins.net",
+        "rustc-contact@oli-obk.de"
+      ]
+    },
+    "tools@rust-lang.org": {
+      "address": "tools@rust-lang.org",
+      "members": [
+        "caleb.cartwright@outlook.com",
+        "eric@huss.org",
+        "guillaume1.gomez@gmail.com",
+        "manishsmail@gmail.com",
+        "robertc+rust@robertcollins.net",
+        "rustc-contact@oli-obk.de"
+      ]
+    },
+    "triagebot@rust-lang.org": {
+      "address": "triagebot@rust-lang.org",
+      "members": [
+        "apiraino@protonmail.com",
+        "berykubik@gmail.com",
+        "eric@huss.org",
+        "jackh726@gmail.com",
+        "mark.simulacrum@gmail.com"
+      ]
+    },
+    "twir@rust-lang.org": {
+      "address": "twir@rust-lang.org",
+      "members": [
+        "andrewpkq@gmail.com",
+        "bogusandre@gmail.com",
+        "colton@donn.io",
+        "joelmarcey@rustfoundation.org",
+        "mail@rusticorn.com",
+        "nellshamrell@gmail.com"
+      ]
+    },
+    "underhanded@rust-lang.org": {
+      "address": "underhanded@rust-lang.org",
+      "members": [
+        "rust-underhanded@googlegroups.com"
+      ]
+    },
+    "verification@rust-lang.org": {
+      "address": "verification@rust-lang.org",
+      "members": [
+        "rust-verification@googlegroups.com"
+      ]
+    },
+    "web-presence@rust-lang.org": {
+      "address": "web-presence@rust-lang.org",
+      "members": [
+        "adam@adamharvey.name",
+        "carol.nichols@gmail.com",
+        "denis@cornehl.org",
+        "eth3lbert+dev@gmail.com",
+        "flo@andersground.net",
+        "fp@ylk.gd",
+        "guillaume1.gomez@gmail.com",
+        "jake.goulding@integer32.com",
+        "jtgeibel@gmail.com",
+        "manishsmail@gmail.com",
+        "me@mdtro.dev",
+        "rust@hoffman-andrews.com",
+        "rustin.liu@gmail.com",
+        "tobias@bieniek.cloud"
+      ]
+    },
+    "wg-allocators@rust-lang.org": {
+      "address": "wg-allocators@rust-lang.org",
+      "members": [
+        "amanieu@gmail.com",
+        "cad97@cad97.com",
+        "scottjmaddox@gmail.com",
+        "tim.diekmann@3dvision.de",
+        "wodannson@gmail.com",
+        "zefria@gmail.com"
+      ]
+    },
+    "wg-leads@rust-lang.org": {
+      "address": "wg-leads@rust-lang.org",
+      "members": [
+        "acfoltzer@acfoltzer.net",
+        "adam@adamgreig.com",
+        "amanieu@gmail.com",
+        "apiraino@protonmail.com",
+        "batmanaod@gmail.com",
+        "bouanto@zoho.com",
+        "caleb.zulawski@gmail.com",
+        "celinval@amazon.com",
+        "chiovolonit@gmail.com",
+        "crlf0710@gmail.com",
+        "cuviper@gmail.com",
+        "david@davidtw.co",
+        "debi.jones@gmail.com",
+        "derust@eggers-club.de",
+        "dylan.dpc@gmail.com",
+        "e.soghe@gmail.com",
+        "emilio@crisal.io",
+        "ent3rm4n@gmail.com",
+        "eopage@gmail.com",
+        "eric@huss.org",
+        "eric@theincredibleholk.org",
+        "esteban@kuber.com.ar",
+        "forestkzanderson@gmail.com",
+        "gillot.camille@gmail.com",
+        "huyuumi.dev@gmail.com",
+        "jack@wrenn.fyi",
+        "jackh726@gmail.com",
+        "james@onevariable.com",
+        "kvark@mozilla.com",
+        "m-ou.se@m-ou.se",
+        "mark.simulacrum@gmail.com",
+        "michaelwoerister@gmail.com",
+        "nfitzgerald@mozilla.com",
+        "nikita.ppv@gmail.com",
+        "ozkriff@gmail.com",
+        "post@ralfj.de",
+        "remy.rakic+rust@gmail.com",
+        "rust@boxyuwu.dev",
+        "rust@lcnr.de",
+        "rust@nikomatsakis.com",
+        "rust@yosh.is",
+        "rustc-contact@oli-obk.de",
+        "shnatsel@gmail.com",
+        "spastorino@gmail.com",
+        "tc+rust@traviscross.com",
+        "tim.diekmann@3dvision.de",
+        "tmandry@gmail.com",
+        "tony@iqlusion.io",
+        "vincenzopalazzo@member.fsf.org",
+        "workingjubilee@gmail.com",
+        "wwiser@gmail.com"
+      ]
+    }
+  }
+}

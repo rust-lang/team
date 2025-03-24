@@ -1,0 +1,33 @@
+{
+  "org": "rust-lang",
+  "name": "wg-async",
+  "description": "Working group dedicated to improving the foundations of Async I/O in Rust",
+  "homepage": "https://rust-lang.github.io/wg-async/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "wg-async",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "stacker",
+  "description": "Manual segmented stacks for Rust",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "compiler",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

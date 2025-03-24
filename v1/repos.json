@@ -1,0 +1,5596 @@
+{
+  "rust-lang": [
+    {
+      "org": "rust-lang",
+      "name": ".github",
+      "description": "Special GitHub repository with fallback issue templates and community health files for other repos.",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "a-mir-formality",
+      "description": "a model of MIR and the Rust type/trait system",
+      "homepage": null,
+      "bots": [
+        "rustbot",
+        "rfcbot",
+        "bors"
+      ],
+      "teams": [
+        {
+          "name": "lang-ops",
+          "permission": "maintain"
+        },
+        {
+          "name": "lang",
+          "permission": "maintain"
+        },
+        {
+          "name": "lang-docs",
+          "permission": "maintain"
+        },
+        {
+          "name": "types",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": false
+    },
+    {
+      "org": "rust-lang",
+      "name": "all-hands-2020",
+      "description": "Website for the Rust All Hands 2020",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "annotate-snippets-rs",
+      "description": "Library for snippet annotations",
+      "homepage": null,
+      "bots": [
+        "renovate"
+      ],
+      "teams": [
+        {
+          "name": "wg-diagnostics",
+          "permission": "write"
+        },
+        {
+          "name": "cargo",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "api-guidelines",
+      "description": "Rust API guidelines",
+      "homepage": "https://rust-lang.github.io/api-guidelines/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "libs-api",
+          "permission": "write"
+        },
+        {
+          "name": "libs",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "ar_archive_writer",
+      "description": "A writer for object file ar archives",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "areweasyncyet.rs",
+      "description": "Are we async yet?",
+      "homepage": "https://areweasyncyet.rs",
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-async",
+          "permission": "write"
+        }
+      ],
+      "members": [
+        {
+          "name": "upsuper",
+          "permission": "write"
+        }
+      ],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "arewewebyet",
+      "description": "Are we web yet? A simple reckoning of Rust's readiness for Web-related things.",
+      "homepage": "https://www.arewewebyet.org/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "arewewebyet",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "async-book",
+      "description": "Asynchronous Programming in Rust",
+      "homepage": "https://rust-lang.github.io/async-book/index.html",
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-async",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "async-crashdump-debugging-initiative",
+      "description": "",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "initiative-async-crashdump-debugging",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "async-fundamentals-initiative",
+      "description": "",
+      "homepage": "https://rust-lang.github.io/async-fundamentals-initiative/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-async",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "atom-ide-rust",
+      "description": "Rust IDE support for Atom, powered by the Rust Analyzer or Rust Language Server",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "backtrace-rs",
+      "description": "Backtraces in Rust",
+      "homepage": "https://docs.rs/backtrace",
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "blog.rust-lang.org",
+      "description": "Home of the Rust and Inside Rust blogs",
+      "homepage": "https://blog.rust-lang.org",
+      "bots": [
+        "rustbot",
+        "renovate"
+      ],
+      "teams": [
+        {
+          "name": "inside-rust-reviewers",
+          "permission": "write"
+        },
+        {
+          "name": "website",
+          "permission": "maintain"
+        },
+        {
+          "name": "release",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "lint",
+                "build"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "book",
+      "description": "The Rust Programming Language",
+      "homepage": "https://doc.rust-lang.org/book/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "book",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "bors",
+      "description": "Rust implementation of bors used for various Rust components (e.g. the compiler).",
+      "homepage": null,
+      "bots": [
+        "rustbot",
+        "renovate"
+      ],
+      "teams": [
+        {
+          "name": "mods",
+          "permission": "maintain"
+        },
+        {
+          "name": "infra",
+          "permission": "write"
+        },
+        {
+          "name": "infra-bors",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Test",
+                "Test Docker"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "bors-kindergarten",
+      "description": "Experimental repository for testing the behavior of the new bors implementation.",
+      "homepage": null,
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "mods",
+          "permission": "maintain"
+        },
+        {
+          "name": "infra",
+          "permission": "write"
+        },
+        {
+          "name": "infra-bors",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "calendar",
+      "description": "Calendars for Rust project teams",
+      "homepage": null,
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "wg-async",
+          "permission": "maintain"
+        },
+        {
+          "name": "lang-ops",
+          "permission": "maintain"
+        },
+        {
+          "name": "release",
+          "permission": "maintain"
+        },
+        {
+          "name": "lang",
+          "permission": "maintain"
+        },
+        {
+          "name": "docs-rs",
+          "permission": "maintain"
+        },
+        {
+          "name": "crates-io",
+          "permission": "maintain"
+        },
+        {
+          "name": "compiler",
+          "permission": "maintain"
+        },
+        {
+          "name": "infra",
+          "permission": "maintain"
+        },
+        {
+          "name": "leadership-council",
+          "permission": "maintain"
+        },
+        {
+          "name": "cargo",
+          "permission": "maintain"
+        },
+        {
+          "name": "libs",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": "pr_not_required",
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "calendar-generation",
+      "description": "Generate iCalendar documents from calendar specifications in TOML. See rust-lang/calendar.",
+      "homepage": null,
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "libs",
+          "permission": "write"
+        },
+        {
+          "name": "crates-io",
+          "permission": "write"
+        },
+        {
+          "name": "wg-async",
+          "permission": "write"
+        },
+        {
+          "name": "leadership-council",
+          "permission": "write"
+        },
+        {
+          "name": "docs-rs",
+          "permission": "write"
+        },
+        {
+          "name": "lang-ops",
+          "permission": "write"
+        },
+        {
+          "name": "compiler",
+          "permission": "write"
+        },
+        {
+          "name": "lang",
+          "permission": "write"
+        },
+        {
+          "name": "infra",
+          "permission": "maintain"
+        },
+        {
+          "name": "release",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "cargo",
+      "description": "The Rust package manager",
+      "homepage": "https://doc.rust-lang.org/cargo",
+      "bots": [
+        "rustbot",
+        "rfcbot",
+        "renovate"
+      ],
+      "teams": [
+        {
+          "name": "cargo",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "conclusion"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        },
+        {
+          "pattern": "rust-1.*",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "conclusion"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "cargo-bisect-rustc",
+      "description": "Bisects rustc, either nightlies or CI artifacts",
+      "homepage": "https://rust-lang.github.io/cargo-bisect-rustc/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "write"
+        }
+      ],
+      "members": [
+        {
+          "name": "ehuss",
+          "permission": "write"
+        }
+      ],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "cc-rs",
+      "description": "Rust library for build scripts to compile C/C++ code into a Rust library",
+      "homepage": "https://docs.rs/cc",
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [
+        {
+          "name": "NobodyXu",
+          "permission": "write"
+        },
+        {
+          "name": "madsmtm",
+          "permission": "write"
+        }
+      ],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Tests pass"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "cfg-if",
+      "description": "A if/elif-like macro for Rust #[cfg] statements",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "chalk",
+      "description": "An implementation and definition of the Rust trait system using a PROLOG-like logic solver",
+      "homepage": "https://rust-lang.github.io/chalk/book/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "types",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "ci-feedback",
+      "description": "Repository to collect feedback on how to improve rust-lang/rust CI",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "cmake-rs",
+      "description": "Rust build dependency for running cmake",
+      "homepage": "https://docs.rs/cmake",
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "success"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "community-localization",
+      "description": "",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "community-localization",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "compiler-builtins",
+      "description": "Porting `compiler-rt` intrinsics to Rust",
+      "homepage": "https://github.com/rust-lang/rust/issues/35437",
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "success"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "compiler-rt",
+      "description": "No longer used, use https://github.com/rust-lang/llvm-project instead",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "compiler-team",
+      "description": "A home for compiler team planning documents, meeting minutes, and other such things.",
+      "homepage": "https://rust-lang.github.io/compiler-team/",
+      "bots": [
+        "rustbot",
+        "rfcbot"
+      ],
+      "teams": [
+        {
+          "name": "types",
+          "permission": "write"
+        },
+        {
+          "name": "compiler",
+          "permission": "write"
+        },
+        {
+          "name": "wg-prioritization",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "compiler-team-prioritization",
+      "description": "Home repository for the compiler team \"prioritization group\"",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-prioritization",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "const-eval",
+      "description": "home for proposals in and around compile-time function evaluation",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-const-eval",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "core-team",
+      "description": "A place to house minutes and other documents related to the core team.",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "crater",
+      "description": "Run experiments across parts of the Rust ecosystem!",
+      "homepage": "https://crater.rust-lang.org",
+      "bots": [
+        "highfive"
+      ],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "conclusion"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "crates-build-env",
+      "description": "Build environment for third-party Rust crates",
+      "homepage": null,
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        },
+        {
+          "name": "docs-rs",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "crates-io-cargo-teams",
+      "description": "the home of the crates io team",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "crates-io-heroku-metrics",
+      "description": "Heroku metrics collector for crates.io",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "crates-io-ops-bot",
+      "description": "a bot to help assist the crates.io, website, and other rust ops teams",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "crates.io",
+      "description": "The Rust package registry",
+      "homepage": "https://crates.io",
+      "bots": [
+        "renovate",
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "crates-io",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Backend / Lint",
+                "Backend / Test",
+                "Frontend / Lint",
+                "Frontend / Test",
+                "Backend / dependencies"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "crates.io-index",
+      "description": "Registry index for crates.io",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "crates-io",
+          "permission": "write"
+        },
+        {
+          "name": "crates-io-on-call",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": "pr_not_required",
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "crates.io-index-archive",
+      "description": "Archive of the crates.io-index commit history after squashes",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "crates-io",
+          "permission": "admin"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "snapshot-*",
+          "dismiss_stale_review": false,
+          "mode": "pr_not_required",
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        },
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": "pr_not_required",
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "crates.io-infra",
+      "description": "is ur crates.io running?",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": true,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "ctcft",
+      "description": "Cross Team Collaboration Fun Times",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "datafrog",
+      "description": "A lightweight Datalog engine in Rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-polonius",
+          "permission": "write"
+        },
+        {
+          "name": "compiler",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "discord-mods-bot",
+      "description": "discord moderation bot",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "mods",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "docker-rust",
+      "description": "The official Docker images for Rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "docker",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "docker-rust-nightly",
+      "description": "",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "docs.rs",
+      "description": "crates.io documentation generator",
+      "homepage": "https://docs.rs",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "docs-rs-reviewers",
+          "permission": "write"
+        },
+        {
+          "name": "docs-rs",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "dyn-upcasting-coercion-initiative",
+      "description": "Initiative to support upcasting dyn Trait values to supertraits",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "initiative-dyn-upcasting",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "edition-guide",
+      "description": "A guide to changes between various editions of Rust",
+      "homepage": "https://doc.rust-lang.org/nightly/edition-guide/",
+      "bots": [
+        "rustbot",
+        "rfcbot"
+      ],
+      "teams": [
+        {
+          "name": "edition",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Success gate"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "edition-team",
+      "description": "Home of the Rust edition team",
+      "homepage": "https://edition-team.rust-lang.org/",
+      "bots": [
+        "rustbot",
+        "rfcbot"
+      ],
+      "teams": [
+        {
+          "name": "edition",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "ena",
+      "description": "An implementation of union-find / congruence-closure in Rust. Extracted from rustc for independent experimentation.",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "ferris-says",
+      "description": "A Rust flavored implementation of `cowsay`",
+      "homepage": "https://crates.io/crates/ferris-says",
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "flate2-rs",
+      "description": "DEFLATE, gzip, and zlib bindings for Rust",
+      "homepage": "https://docs.rs/flate2",
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "foundation-faq-2020",
+      "description": "Have questions on the Rust Foundation? Ask here!",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "futures-rs",
+      "description": "Zero-cost asynchronous programming in Rust",
+      "homepage": "https://rust-lang.github.io/futures-rs/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "wg-async",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "gcc",
+      "description": "GCC fork with libgccjit changes needed by rustc_codegen_gcc",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-gcc-backend",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "gccjit.rs",
+      "description": "Rust bindings for libgccjit",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-gcc-backend",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "gedit-config",
+      "description": "Gedit configuration for Rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "generate-manifest-list",
+      "description": "Creates a list of manifests on static.rust-lang.org",
+      "homepage": "https://static.rust-lang.org/manifests.txt",
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "generic-associated-types-initiative",
+      "description": "Generic Associated Types lang team initiative",
+      "homepage": "https://rust-lang.github.io/generic-associated-types-initiative/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "initiative-generic-associated-types",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "getopts",
+      "description": "The getopts repo maintained by the rust-lang project",
+      "homepage": "https://docs.rs/getopts",
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "gha-runner",
+      "description": "Custom fork of the GitHub Actions runner",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "gha-self-hosted",
+      "description": "GitHub Actions self-hosted runners infrastructure",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "ghost-code-initiative",
+      "description": "",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "git2-rs",
+      "description": "libgit2 bindings for Rust",
+      "homepage": "https://docs.rs/git2",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "cargo",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Success gate"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "glacier",
+      "description": "A big 'ol pile of ICE.",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "glob",
+      "description": "Support for matching file paths against Unix shell style patterns.",
+      "homepage": "http://doc.rust-lang.org/glob",
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "success"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "google-summer-of-code",
+      "description": "Rust project ideas for Google Summer of Code",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [
+        {
+          "name": "Kobzol",
+          "permission": "write"
+        },
+        {
+          "name": "jackh726",
+          "permission": "write"
+        }
+      ],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "governance",
+      "description": "The home for Rust's governance documentation, such as team charters.",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "hashbrown",
+      "description": "Rust port of Google's SwissTable hash map",
+      "homepage": "https://rust-lang.github.io/hashbrown",
+      "bots": [],
+      "teams": [
+        {
+          "name": "libs",
+          "permission": "write"
+        },
+        {
+          "name": "libs-contributors",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "conclusion"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "highfive",
+      "description": "Github hooks to provide an encouraging atmosphere for new contributors",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "hoedown",
+      "description": "Standards compliant, fast, secure markdown processing library in C",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "homu",
+      "description": "A bot that integrates with GitHub and your favorite continuous integration service",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "impl-trait-initiative",
+      "description": "Impl trait lang team initiative",
+      "homepage": "https://rust-lang.github.io/impl-trait-initiative/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "initiative-impl-trait",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "impl-trait-utils",
+      "description": "Utilities for working with impl traits in Rust.",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-async",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "infra",
+      "description": "",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": true,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "infra-private",
+      "description": "",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": true,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "infra-smoke-tests",
+      "description": "Smoke tests for the infrastructure of the Rust project",
+      "homepage": null,
+      "bots": [
+        "renovate"
+      ],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Check Markdown style",
+                "Check JSON style",
+                "Check Rust style",
+                "Check YAML style",
+                "Lint Markdown files",
+                "Lint Rust code",
+                "Lint YAML files",
+                "Run tests"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "infra-team",
+      "description": "Coordination repository for the Rust infra team",
+      "homepage": "https://www.rust-lang.org/governance/teams/infra",
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "initiative-template",
+      "description": "A template for lang-team initiatives",
+      "homepage": "https://nikomatsakis.github.io/initiative-template/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "lang",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "jemalloc",
+      "description": "No longer used",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "jobserver-rs",
+      "description": "",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "write"
+        },
+        {
+          "name": "cargo",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "kate-config",
+      "description": "Kate configuration for Rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "keyword-generics-initiative",
+      "description": "Public repository for the Rust keyword generics initiative",
+      "homepage": "https://rust-lang.github.io/keyword-generics-initiative/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "initiative-keyword-generics",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "lang-team",
+      "description": "Home of the Rust lang team",
+      "homepage": "http://lang-team.rust-lang.org/",
+      "bots": [
+        "rustbot",
+        "rfcbot"
+      ],
+      "teams": [
+        {
+          "name": "lang-docs",
+          "permission": "maintain"
+        },
+        {
+          "name": "types",
+          "permission": "maintain"
+        },
+        {
+          "name": "lang-ops",
+          "permission": "maintain"
+        },
+        {
+          "name": "lang",
+          "permission": "maintain"
+        },
+        {
+          "name": "release",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "leadership-council",
+      "description": "Home of the Rust Leadership Council",
+      "homepage": null,
+      "bots": [
+        "rustbot",
+        "rfcbot"
+      ],
+      "teams": [
+        {
+          "name": "council-librarians",
+          "permission": "write"
+        },
+        {
+          "name": "leadership-council",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "libbacktrace",
+      "description": "A C library that may be linked into a C/C++ program to produce symbolic backtraces",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "libc",
+      "description": "Raw bindings to platform APIs for Rust",
+      "homepage": "https://docs.rs/libc",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "success"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        },
+        {
+          "pattern": "libc-0.2",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "success"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "libm",
+      "description": "A port of MUSL's libm to Rust.",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "success"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "libs-team",
+      "description": "The home of the library team",
+      "homepage": null,
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "libs",
+          "permission": "maintain"
+        },
+        {
+          "name": "libs-api",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "libtest",
+      "description": "Rust's built-in testing and benchmarking framework",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "libtest-next",
+      "description": "T-testing-devex experiments for new testing tools for Rust developers",
+      "homepage": "https://docs.rs/pytest-rs",
+      "bots": [
+        "rustbot",
+        "rfcbot"
+      ],
+      "teams": [
+        {
+          "name": "testing-devex",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "libz-sys",
+      "description": "Rust crate package to link to a system libz (zlib)",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "lld",
+      "description": "No longer used, use https://github.com/rust-lang/llvm-project instead",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "lldb",
+      "description": "No longer used, use https://github.com/rust-lang/llvm-project instead",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "llvm",
+      "description": "No longer used, use https://github.com/rust-lang/llvm-project instead",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "llvm-project",
+      "description": "Rust-specific fork of LLVM.",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-llvm",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "rustc/*",
+          "dismiss_stale_review": false,
+          "mode": "pr_not_required",
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        },
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": "pr_not_required",
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "log",
+      "description": "Logging implementation for Rust",
+      "homepage": "https://docs.rs/log",
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [
+        {
+          "name": "Thomasdezeeuw",
+          "permission": "maintain"
+        }
+      ],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "mailgun-mailmap",
+      "description": "Mail configuration for rust-lang domains",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "mdBook",
+      "description": "Create book from markdown files. Like Gitbook but implemented in Rust",
+      "homepage": "https://rust-lang.github.io/mdBook/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "devtools",
+          "permission": "write"
+        }
+      ],
+      "members": [
+        {
+          "name": "Dylan-DPC",
+          "permission": "write"
+        }
+      ],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Success gate"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "measureme",
+      "description": "Support crate for rustc's self-profiling feature",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "success"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        },
+        {
+          "pattern": "stable",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "success"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "meeting-minutes",
+      "description": "Official minutes for Rust-related meetings",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "miri",
+      "description": "An interpreter for Rust's mid-level intermediate representation",
+      "homepage": null,
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "write"
+        },
+        {
+          "name": "miri",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "conclusion"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "miri-test-libstd",
+      "description": "Testing the Rust standard library with Miri, continuously",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "miri",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Success"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "mirror-google-fuchsia-zircon",
+      "description": "Zircon Kernel, Core Drivers, and Services",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "moderation-team",
+      "description": "Home of the Rust Moderation team.",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "mods",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "monitorbot",
+      "description": "Monitoring of external API services Rust infrastructure relies upon",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "nano-config",
+      "description": "Nano configuration for Rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "negative-impls-initiative",
+      "description": "Lang team negative impls initiative",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "initiative-negative-impls",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "never-type-initiative",
+      "description": "In pursuit of the stabilization of never type",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "nomicon",
+      "description": "The Dark Arts of Advanced and Unsafe Rust Programming",
+      "homepage": "https://doc.rust-lang.org/nomicon/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "lang-docs",
+          "permission": "write"
+        },
+        {
+          "name": "lang",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Success gate"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "odht",
+      "description": "An on-disk hash table implementation",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Required Checks Passed"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "opsem-team",
+      "description": "Home of the operational semantics team, used primarily for procedural items",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "opsem",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "packed_simd",
+      "description": "Portable Packed SIMD Vectors for Rust standard library",
+      "homepage": "https://rust-lang.github.io/packed_simd/packed_simd_2/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "libs-contributors",
+          "permission": "write"
+        },
+        {
+          "name": "project-portable-simd",
+          "permission": "write"
+        },
+        {
+          "name": "libs-api",
+          "permission": "write"
+        },
+        {
+          "name": "libs",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "pentest-2019",
+      "description": "Primarily security-related bug tracking",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": true,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "pin-utils",
+      "description": "Utilities for pinning",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-async",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "pkg-config-rs",
+      "description": "Build library for invoking pkg-config for Rust",
+      "homepage": "https://docs.rs/pkg-config",
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [
+        {
+          "name": "sdroege",
+          "permission": "write"
+        }
+      ],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "polonius",
+      "description": "Defines the Rust borrow checker.",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-polonius",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "pontoon",
+      "description": "Localization platform used by Rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "portable-simd",
+      "description": "The testing ground for the future of portable SIMD in Rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "project-portable-simd",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "prev.rust-lang.org",
+      "description": "The previous Rust website. The current website's code is at https://github.com/rust-lang/www.rust-lang.org.",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-const-generics",
+      "description": "",
+      "homepage": "https://rust-lang.github.io/project-const-generics/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "project-const-generics",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-const-traits",
+      "description": "Const Traits Project Group",
+      "homepage": "https://rust-lang.github.io/project-const-traits/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "project-const-traits",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-deref-patterns",
+      "description": "",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [
+        {
+          "name": "traviscross",
+          "permission": "write"
+        }
+      ],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-error-handling",
+      "description": "Error handling project group",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-exploit-mitigations",
+      "description": "Exploit Mitigations Project Group",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "project-exploit-mitigations",
+          "permission": "maintain"
+        },
+        {
+          "name": "mods",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": true,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-ffi-unwind",
+      "description": "",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-ffi-unwind",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-group-template",
+      "description": "Template for creating Project Groups",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "leadership-council",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-inline-asm",
+      "description": "Home for the Inline Assembly project group",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-inline-asm",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-portable-simd",
+      "description": "Portable SIMD project group",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "project-portable-simd",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-rfc-2229",
+      "description": "A repository tracking the planning for implementation and evaluation of RFC 2229.",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-safe-transmute",
+      "description": "Project group working on the \"safe transmute\" feature",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-safe-transmute",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-stable-mir",
+      "description": "Define compiler intermediate representation usable by external tools",
+      "homepage": null,
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "project-stable-mir",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "project-thir-unsafeck",
+      "description": "Tracking the project to refactor the unsafe check to operate on THIR",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "promote-release",
+      "description": "Tooling to publish Rust releases.",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Local release (beta)",
+                "Local release (nightly)",
+                "Local release (stable)",
+                "Build Docker image",
+                "Test"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "reference",
+      "description": "The Rust Reference",
+      "homepage": "https://doc.rust-lang.org/nightly/reference/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "spec",
+          "permission": "write"
+        },
+        {
+          "name": "spec-contributors",
+          "permission": "write"
+        },
+        {
+          "name": "lang-docs",
+          "permission": "write"
+        },
+        {
+          "name": "lang",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Success gate"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "regex",
+      "description": "An implementation of regular expressions for Rust. This implementation uses finite automata and guarantees linear time matching on all inputs.",
+      "homepage": "https://docs.rs/regex",
+      "bots": [],
+      "teams": [
+        {
+          "name": "regex",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "release-team",
+      "description": "This repository contains all the documents related to the Rust release team.",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "release",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "relnotes",
+      "description": "Generate release notes for \"The Rust Programming Language\"",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "release",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "build (macos-latest, beta)",
+                "build (macos-latest, nightly)",
+                "build (macos-latest, stable)",
+                "build (ubuntu-latest, nightly)",
+                "build (ubuntu-latest, beta)",
+                "build (ubuntu-latest, stable)",
+                "build (windows-latest, beta)",
+                "build (windows-latest, nightly)",
+                "build (windows-latest, stable)"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rfc-leadership-council",
+      "description": "RFCs for changes to Rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rfcbot-rs",
+      "description": "Coordinates asynchronous decision making on Rust repositories. Status of tracked issues and PRs can be viewed at https://rfcbot.rs.",
+      "homepage": "https://rfcbot.rs",
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rfcs",
+      "description": "RFCs for changes to Rust",
+      "homepage": "https://rust-lang.github.io/rfcs/",
+      "bots": [
+        "rustbot",
+        "rfcbot",
+        "renovate"
+      ],
+      "teams": [
+        {
+          "name": "all",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rls",
+      "description": "Repository for the Rust Language Server (aka RLS)",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-analyzer",
+      "description": "A Rust compiler front-end for IDEs",
+      "homepage": "https://rust-analyzer.github.io/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "rust-analyzer",
+          "permission": "write"
+        },
+        {
+          "name": "rust-analyzer-contributors",
+          "permission": "triage"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "conclusion"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-artwork",
+      "description": "Official artwork for the Rust project.",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-bindgen",
+      "description": "Automatically generates Rust FFI bindings to C (and some C++) libraries.",
+      "homepage": "https://rust-lang.github.io/rust-bindgen/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "wg-bindgen",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "success"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-by-example",
+      "description": "Learn Rust with examples (Live code editor included)",
+      "homepage": "https://doc.rust-lang.org/stable/rust-by-example/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "rust-by-example",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-central-station",
+      "description": "Old home of some infra pieces",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-clippy",
+      "description": "A bunch of lints to catch common mistakes and improve your Rust code. Book: https://doc.rust-lang.org/clippy/",
+      "homepage": "https://rust-lang.github.io/rust-clippy/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "clippy-contributors",
+          "permission": "triage"
+        },
+        {
+          "name": "clippy",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "conclusion",
+                "conclusion_dev",
+                "conclusion_remark",
+                "conclusion_changelog"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-dbg-ext",
+      "description": "",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "initiative-async-crashdump-debugging",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-enhanced",
+      "description": "The official Sublime Text 4 package for the Rust Programming Language",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "devtools",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-forge",
+      "description": "Information useful to people contributing to Rust",
+      "homepage": "https://forge.rust-lang.org/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "docs-rs",
+          "permission": "maintain"
+        },
+        {
+          "name": "libs",
+          "permission": "maintain"
+        },
+        {
+          "name": "compiler",
+          "permission": "maintain"
+        },
+        {
+          "name": "infra",
+          "permission": "maintain"
+        },
+        {
+          "name": "triagebot",
+          "permission": "maintain"
+        },
+        {
+          "name": "lang-ops",
+          "permission": "maintain"
+        },
+        {
+          "name": "leadership-council",
+          "permission": "maintain"
+        },
+        {
+          "name": "crates-io",
+          "permission": "maintain"
+        },
+        {
+          "name": "edition",
+          "permission": "maintain"
+        },
+        {
+          "name": "community",
+          "permission": "maintain"
+        },
+        {
+          "name": "libs-api",
+          "permission": "maintain"
+        },
+        {
+          "name": "lang",
+          "permission": "maintain"
+        },
+        {
+          "name": "release",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-gha",
+      "description": "GitHub Actions tests for rust-lang/rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-guidelines",
+      "description": "This repository has moved",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-installer",
+      "description": "The Bourne shell installer used by Rust and Cargo",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-lang.github.io",
+      "description": "GitHub Pages redirects",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-log-analyzer",
+      "description": "Analyzing Travis and Azure Pipelines logs to find encountered errors",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-marketing",
+      "description": "Rust marketing handbook",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-memory-model",
+      "description": "Collecting examples and information to help design a memory model for Rust.",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-mode",
+      "description": "Emacs configuration for Rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "emacs",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-playground",
+      "description": "The Rust Playground",
+      "homepage": "https://play.rust-lang.org/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-playpen",
+      "description": "A web interface for running Rust code",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-project-goals",
+      "description": "Rust Project Goals tracker",
+      "homepage": "https://rust-lang.github.io/rust-project-goals/",
+      "bots": [
+        "rustbot",
+        "rfcbot"
+      ],
+      "teams": [
+        {
+          "name": "edition",
+          "permission": "maintain"
+        },
+        {
+          "name": "goals",
+          "permission": "maintain"
+        },
+        {
+          "name": "lang",
+          "permission": "maintain"
+        },
+        {
+          "name": "libs",
+          "permission": "maintain"
+        },
+        {
+          "name": "goal-owners",
+          "permission": "maintain"
+        },
+        {
+          "name": "release",
+          "permission": "maintain"
+        },
+        {
+          "name": "lang-ops",
+          "permission": "maintain"
+        },
+        {
+          "name": "libs-api",
+          "permission": "maintain"
+        },
+        {
+          "name": "lang-docs",
+          "permission": "maintain"
+        },
+        {
+          "name": "leadership-council",
+          "permission": "maintain"
+        },
+        {
+          "name": "types",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-reach-www",
+      "description": "the website for the rust reach program",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-repos",
+      "description": "Dataset of Rust source code repositories",
+      "homepage": null,
+      "bots": [
+        "highfive"
+      ],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-roadmap-2017",
+      "description": "Tracking Rust's roadmap",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-semverver",
+      "description": "Automatic checking for semantic versioning in library crates",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust-wiki-backup",
+      "description": "A backup of the Rust wiki",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rust.vim",
+      "description": "Vim configuration for Rust.",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "vim",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc-demangle",
+      "description": "Rust symbol demangling",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Test (stable)",
+                "Test (beta)",
+                "Test (nightly)",
+                "Fuzz Targets",
+                "Rustfmt",
+                "Publish Documentation"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc-dev-guide",
+      "description": "A guide to how rustc works and how to contribute to it.",
+      "homepage": "https://rustc-dev-guide.rust-lang.org",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "wg-rustc-dev-guide",
+          "permission": "maintain"
+        },
+        {
+          "name": "compiler",
+          "permission": "write"
+        },
+        {
+          "name": "infra",
+          "permission": "write"
+        },
+        {
+          "name": "libs-contributors",
+          "permission": "write"
+        },
+        {
+          "name": "bootstrap",
+          "permission": "write"
+        },
+        {
+          "name": "edition",
+          "permission": "write"
+        },
+        {
+          "name": "lang",
+          "permission": "write"
+        },
+        {
+          "name": "lang-ops",
+          "permission": "write"
+        },
+        {
+          "name": "libs",
+          "permission": "write"
+        },
+        {
+          "name": "rustdoc",
+          "permission": "write"
+        },
+        {
+          "name": "libs-api",
+          "permission": "write"
+        },
+        {
+          "name": "rustdoc-frontend",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "ci"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        },
+        {
+          "pattern": "master-old",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc-hash",
+      "description": "Custom hash algorithm used by rustc (plus hashmap/set aliases): fast, deterministic, not secure",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc-perf",
+      "description": "Website for graphing performance of rustc",
+      "homepage": "https://perf.rust-lang.org",
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-compiler-performance",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Test and deploy",
+                "Test on Windows",
+                "Database Check"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc-pr-tracking",
+      "description": "Statistics about PRs on the rustc repository.",
+      "homepage": "https://rust-lang.github.io/rustc-pr-tracking/",
+      "bots": [
+        "highfive"
+      ],
+      "teams": [
+        {
+          "name": "release",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc-rayon",
+      "description": "Rayon: A data parallelism library for Rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc-reading-club",
+      "description": "Rust Code Reading Clubs",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-rustc-reading-club",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc-stable-hash",
+      "description": "A stable hashing algorithm used by rustc: cross-platform, deterministic, not secure",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc-timing",
+      "description": "new rustc-timing repository for freshly collected data",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc_apfloat",
+      "description": "Rust port of C++ llvm::APFloat library",
+      "homepage": null,
+      "bots": [
+        "rustbot",
+        "rfcbot"
+      ],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc_codegen_c",
+      "description": "C based backend for rustc",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "maintain"
+        },
+        {
+          "name": "codegen-c-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "success"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc_codegen_cranelift",
+      "description": "Cranelift based backend for rustc",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "maintain"
+        }
+      ],
+      "members": [
+        {
+          "name": "bjorn3",
+          "permission": "maintain"
+        }
+      ],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustc_codegen_gcc",
+      "description": "libgccjit AOT codegen for rustc",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-gcc-backend",
+          "permission": "maintain"
+        },
+        {
+          "name": "compiler",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "success",
+                "success_gcc12",
+                "success_release",
+                "success_failures",
+                "success_m68k",
+                "success_stdarch"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustdoc-types",
+      "description": "Rustdoc's JSON output interface",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "rustdoc",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustfix",
+      "description": "Automatically apply the suggestions made by rustc",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustfmt",
+      "description": "Format Rust code",
+      "homepage": "https://rust-lang.github.io/rustfmt/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "rustfmt",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "(x86_64-unknown-linux-gnu, nightly)",
+                "(x86_64-unknown-linux-gnu, stable)",
+                "(x86_64-apple-darwin, nightly)",
+                "(x86_64-apple-darwin, stable)",
+                "(x86_64-pc-windows-msvc, nightly)",
+                "(i686-pc-windows-msvc, nightly)",
+                "(i686-pc-windows-msvc, stable)",
+                "(i686-pc-windows-gnu, stable)",
+                "(i686-pc-windows-gnu, nightly)",
+                "(x86_64-pc-windows-gnu, nightly)",
+                "(x86_64-pc-windows-msvc, stable)",
+                "(x86_64-pc-windows-gnu, stable)",
+                "rustdoc check"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        },
+        {
+          "pattern": "libsyntax",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        },
+        {
+          "pattern": "rust-1.*",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustlings",
+      "description": ":crab: Small exercises to get you used to reading and writing Rust code!",
+      "homepage": "https://rustlings.cool",
+      "bots": [],
+      "teams": [
+        {
+          "name": "rustlings",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustup",
+      "description": "The Rust toolchain installer",
+      "homepage": "https://rust-lang.github.io/rustup/",
+      "bots": [
+        "rustbot",
+        "renovate"
+      ],
+      "teams": [
+        {
+          "name": "rustup",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "conclusion"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustup-components-history",
+      "description": "Rustup package status history",
+      "homepage": "https://rust-lang.github.io/rustup-components-history",
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "rustwide",
+      "description": "Execute your code on the Rust ecosystem.",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "docs-rs",
+          "permission": "write"
+        },
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "simpleinfra",
+      "description": "Rust Infrastructure automation",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Rust projects",
+                "Terraform configuration",
+                "GitHub Actions (JS)"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "socket2",
+      "description": "Advanced configuration options for sockets.",
+      "homepage": "https://docs.rs/socket2",
+      "bots": [],
+      "teams": [
+        {
+          "name": "crate-maintainers",
+          "permission": "maintain"
+        }
+      ],
+      "members": [
+        {
+          "name": "Thomasdezeeuw",
+          "permission": "maintain"
+        },
+        {
+          "name": "chansuke",
+          "permission": "triage"
+        },
+        {
+          "name": "sfackler",
+          "permission": "maintain"
+        },
+        {
+          "name": "carllerche",
+          "permission": "maintain"
+        },
+        {
+          "name": "Darksonn",
+          "permission": "maintain"
+        }
+      ],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Rustfmt",
+                "Test (beta)",
+                "Test (macos)",
+                "Test (nightly)",
+                "Test (stable)",
+                "Test (windows)"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "spec",
+      "description": "The Rust specification",
+      "homepage": null,
+      "bots": [
+        "rustbot",
+        "rfcbot"
+      ],
+      "teams": [
+        {
+          "name": "spec",
+          "permission": "maintain"
+        },
+        {
+          "name": "spec-contributors",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "stacker",
+      "description": "Manual segmented stacks for Rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "staging.crates.io-index",
+      "description": "Registry index for staging.crates.io",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "crates-io-on-call",
+          "permission": "write"
+        },
+        {
+          "name": "crates-io",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": "pr_not_required",
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "std-dev-guide",
+      "description": "Guide for standard library developers",
+      "homepage": "https://std-dev-guide.rust-lang.org",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "libs-api",
+          "permission": "write"
+        },
+        {
+          "name": "libs-contributors",
+          "permission": "write"
+        },
+        {
+          "name": "libs",
+          "permission": "maintain"
+        },
+        {
+          "name": "wg-rustc-dev-guide",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "book-test"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "stdarch",
+      "description": "Rust's standard library vendor-specific APIs and run-time feature detection",
+      "homepage": "https://doc.rust-lang.org/stable/core/arch/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "libs",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "conclusion"
+              ],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "style-team",
+      "description": "Home of the Rust style team",
+      "homepage": null,
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "style",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "subteams",
+      "description": "Artifacts relevant to the various Rust subteams",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "surveys",
+      "description": "Repo for coordinating the creation, distribution, collection, and analysis of surveys for the Rust project. ",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "community-survey",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "surveys-private",
+      "description": "A private repository for survey data that is only accessible to the survey working group (and admins)",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "community-survey",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": true,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "sync-team",
+      "description": "Synchronize the team repository with the services we use",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra-admins",
+          "permission": "admin"
+        },
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "CI"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [
+            "infra-admins"
+          ],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "team",
+      "description": "Rust teams structure",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "triage"
+        },
+        {
+          "name": "team-repo-admins",
+          "permission": "write"
+        },
+        {
+          "name": "mods",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": true,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "CI"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "testing-devex-team",
+      "description": "Home of the Rust Testing DevEx team",
+      "homepage": null,
+      "bots": [
+        "rustbot",
+        "rfcbot"
+      ],
+      "teams": [
+        {
+          "name": "testing-devex",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "thanks",
+      "description": "Celebrate Rust contributors.",
+      "homepage": "https://thanks.rust-lang.org",
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        },
+        {
+          "name": "website",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "this-week-in-rust",
+      "description": "Data for this-week-in-rust.org",
+      "homepage": "https://this-week-in-rust.org/",
+      "bots": [],
+      "teams": [
+        {
+          "name": "twir-reviewers",
+          "permission": "write"
+        },
+        {
+          "name": "twir",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "thorin",
+      "description": "DWARF packaging utility, written in Rust, supporting GNU extension and DWARF 5 package formats.",
+      "homepage": null,
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "compiler",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "trait-system-refactor-initiative",
+      "description": "The Rustc Trait System Refactor Initiative",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "initiative-trait-system-refactor",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "triagebot",
+      "description": "Automation/tooling for Rust spaces",
+      "homepage": "https://triage.rust-lang.org",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "maintain"
+        },
+        {
+          "name": "triagebot",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "types-team",
+      "description": "Home of the \"types team\", affiliated with the compiler and lang teams.",
+      "homepage": "https://rust-lang.github.io/types-team/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "types",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "unsafe-code-guidelines",
+      "description": "Forum for discussion about what unsafe code can and can't do",
+      "homepage": "https://rust-lang.github.io/unsafe-code-guidelines",
+      "bots": [
+        "rustbot",
+        "rfcbot"
+      ],
+      "teams": [
+        {
+          "name": "opsem",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "vscode-rust",
+      "description": "Rust extension for Visual Studio Code",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "web-presence-team",
+      "description": "Home of the Web Presence Team",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "wg-allocators",
+      "description": "Home of the Allocators working group: Paving a path for a standard set of allocator traits to be used in collections!",
+      "homepage": "http://bit.ly/hello-wg-allocators",
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-allocators",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "wg-async",
+      "description": "Working group dedicated to improving the foundations of Async I/O in Rust",
+      "homepage": "https://rust-lang.github.io/wg-async/",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "wg-async",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 0
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "wg-binary-size",
+      "description": "Improving the binary size of Rust programs and libraries",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-binary-size",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "wg-cargo-std-aware",
+      "description": "Repo for working on \"std aware cargo\"",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "cargo",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "wg-debugging",
+      "description": "Work on debugging Rust code, under the compiler team.",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-debugging",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "wg-governance",
+      "description": "",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "wg-grammar",
+      "description": "Where the work of WG-grammar, aiming to provide a canonical grammar for Rust, resides",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "wg-incr-comp",
+      "description": "Home repo for the compiler team incremental compilation working group",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "wg-incr-comp",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "wg-macros",
+      "description": "Home of the Rust Macros Working Gruop",
+      "homepage": null,
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "wg-macros",
+          "permission": "maintain"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "main",
+          "dismiss_stale_review": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "wg-security-response",
+      "description": "Documentation for the Rust Security Response WG",
+      "homepage": null,
+      "bots": [],
+      "teams": [
+        {
+          "name": "security",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "www.rust-lang.org",
+      "description": "The home of the Rust website",
+      "homepage": "https://www.rust-lang.org",
+      "bots": [
+        "rustbot"
+      ],
+      "teams": [
+        {
+          "name": "website",
+          "permission": "admin"
+        }
+      ],
+      "members": [],
+      "branch_protections": [
+        {
+          "pattern": "master",
+          "dismiss_stale_review": false,
+          "mode": "pr_not_required",
+          "allowed_merge_teams": [],
+          "merge_bots": []
+        },
+        {
+          "pattern": "deploy",
+          "dismiss_stale_review": false,
+          "mode": "pr_not_required",
+          "allowed_merge_teams": [
+            "website"
+          ],
+          "merge_bots": []
+        }
+      ],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "zsh-config",
+      "description": "zsh configuration for Rust",
+      "homepage": null,
+      "bots": [],
+      "teams": [],
+      "members": [],
+      "branch_protections": [],
+      "archived": true,
+      "private": false,
+      "auto_merge_enabled": true
+    },
+    {
+      "org": "rust-lang",
+      "name": "zulip_archive",
+      "description": "A tool for archiving and displaying Zulip chat channels.",
+      "homepage": "https://zulip-archive.rust-lang.org",
+      "bots": [],
+      "teams": [
+        {
+          "name": "infra",
+          "permission": "write"
+        }
+      ],
+      "members": [],
+      "branch_protections": [],
+      "archived": false,
+      "private": false,
+      "auto_merge_enabled": true
+    }
+  ]
+}

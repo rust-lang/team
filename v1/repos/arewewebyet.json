@@ -1,0 +1,31 @@
+{
+  "org": "rust-lang",
+  "name": "arewewebyet",
+  "description": "Are we web yet? A simple reckoning of Rust's readiness for Web-related things.",
+  "homepage": "https://www.arewewebyet.org/",
+  "bots": [],
+  "teams": [
+    {
+      "name": "arewewebyet",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

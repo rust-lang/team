@@ -1,0 +1,81 @@
+{
+  "org": "rust-lang",
+  "name": "rust-forge",
+  "description": "Information useful to people contributing to Rust",
+  "homepage": "https://forge.rust-lang.org/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "docs-rs",
+      "permission": "maintain"
+    },
+    {
+      "name": "libs",
+      "permission": "maintain"
+    },
+    {
+      "name": "compiler",
+      "permission": "maintain"
+    },
+    {
+      "name": "infra",
+      "permission": "maintain"
+    },
+    {
+      "name": "triagebot",
+      "permission": "maintain"
+    },
+    {
+      "name": "lang-ops",
+      "permission": "maintain"
+    },
+    {
+      "name": "leadership-council",
+      "permission": "maintain"
+    },
+    {
+      "name": "crates-io",
+      "permission": "maintain"
+    },
+    {
+      "name": "edition",
+      "permission": "maintain"
+    },
+    {
+      "name": "community",
+      "permission": "maintain"
+    },
+    {
+      "name": "libs-api",
+      "permission": "maintain"
+    },
+    {
+      "name": "lang",
+      "permission": "maintain"
+    },
+    {
+      "name": "release",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

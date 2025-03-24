@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "ci-feedback",
+  "description": "Repository to collect feedback on how to improve rust-lang/rust CI",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

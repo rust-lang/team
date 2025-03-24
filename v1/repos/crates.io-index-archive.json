@@ -1,0 +1,33 @@
+{
+  "org": "rust-lang",
+  "name": "crates.io-index-archive",
+  "description": "Archive of the crates.io-index commit history after squashes",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "crates-io",
+      "permission": "admin"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "snapshot-*",
+      "dismiss_stale_review": false,
+      "mode": "pr_not_required",
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    },
+    {
+      "pattern": "main",
+      "dismiss_stale_review": false,
+      "mode": "pr_not_required",
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

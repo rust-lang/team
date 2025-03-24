@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "all-hands-2020",
+  "description": "Website for the Rust All Hands 2020",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

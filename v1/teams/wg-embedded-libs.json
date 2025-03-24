@@ -1,0 +1,52 @@
+{
+  "name": "wg-embedded-libs",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [
+    {
+      "name": "Dario Nieuwenhuis",
+      "github": "Dirbaio",
+      "github_id": 1247578,
+      "is_lead": false
+    },
+    {
+      "name": "Alex Martens",
+      "github": "newAM",
+      "github_id": 7845120,
+      "is_lead": false
+    },
+    {
+      "name": "Markus Reiter",
+      "github": "reitermarkus",
+      "github_id": 1309829,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "libs",
+        "members": [
+          1247578,
+          7845120,
+          1309829
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded libraries team",
+    "description": "Develops and maintains libraries for embedded devices",
+    "page": "wg-embedded-libs",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

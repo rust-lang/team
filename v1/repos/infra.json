@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "infra",
+  "description": "",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": true,
+  "auto_merge_enabled": true
+}

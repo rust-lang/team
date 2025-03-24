@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "rustup-components-history",
+  "description": "Rustup package status history",
+  "homepage": "https://rust-lang.github.io/rustup-components-history",
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

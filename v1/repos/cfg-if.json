@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "cfg-if",
+  "description": "A if/elif-like macro for Rust #[cfg] statements",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "crate-maintainers",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

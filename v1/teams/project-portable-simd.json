@@ -1,0 +1,79 @@
+{
+  "name": "project-portable-simd",
+  "kind": "project_group",
+  "subteam_of": "libs",
+  "members": [
+    {
+      "name": "Caleb Zulawski",
+      "github": "calebzulawski",
+      "github_id": 563826,
+      "is_lead": true
+    },
+    {
+      "name": "Jubilee",
+      "github": "workingjubilee",
+      "github_id": 46493976,
+      "is_lead": true
+    },
+    {
+      "name": "Miguel Raz Guzmán Macedo",
+      "github": "miguelraz",
+      "github_id": 13056181,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Lifshay",
+      "github": "programmerjake",
+      "github_id": 4584340,
+      "is_lead": false
+    },
+    {
+      "name": "Thom Chiovoloni",
+      "github": "thomcc",
+      "github_id": 860665,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Henri Sivonen",
+      "github": "hsivonen",
+      "github_id": 478856,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Gee",
+      "github": "Lokathor",
+      "github_id": 5456384,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "project-portable-simd",
+        "members": [
+          563826,
+          13056181,
+          4584340,
+          860665,
+          46493976
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Portable SIMD Project Group",
+    "description": "Adding portable SIMD to the standard library",
+    "page": "project-portable-simd",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": "project-portable-simd",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

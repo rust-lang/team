@@ -1,0 +1,40 @@
+{
+  "name": "wg-polymorphization",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "David Wood",
+      "github": "davidtwco",
+      "github_id": 1295100,
+      "is_lead": true
+    },
+    {
+      "name": "Eduard-Mihai Burtescu",
+      "github": "eddyb",
+      "github_id": 77424,
+      "is_lead": false
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": {
+    "name": "Polymorphization working group",
+    "description": "Implementing polymorphization to reduce unnecessary monomorphisation in rustc",
+    "page": "wg-polymorphization",
+    "email": null,
+    "repo": "https://rust-lang.github.io/compiler-team/working-groups/polymorphization/",
+    "discord": null,
+    "zulip_stream": "t-compiler/wg-polymorphization",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

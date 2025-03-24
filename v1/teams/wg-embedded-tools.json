@@ -1,0 +1,73 @@
+{
+  "name": "wg-embedded-tools",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [
+    {
+      "name": "Adam Greig",
+      "github": "adamgreig",
+      "github_id": 47219,
+      "is_lead": false
+    },
+    {
+      "name": "Zgarbul Andrey",
+      "github": "burrbull",
+      "github_id": 3072754,
+      "is_lead": false
+    },
+    {
+      "name": "Emil Gardström",
+      "github": "Emilgardis",
+      "github_id": 1502855,
+      "is_lead": false
+    },
+    {
+      "name": "Markus Reiter",
+      "github": "reitermarkus",
+      "github_id": 1309829,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan",
+      "github": "ryankurte",
+      "github_id": 860620,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Egger",
+      "github": "therealprof",
+      "github_id": 3321888,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "tools",
+        "members": [
+          1502855,
+          47219,
+          3072754,
+          1309829,
+          860620,
+          3321888
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded Tools Team",
+    "description": "Develops and maintains core embedded tools",
+    "page": "wg-embedded-tools",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

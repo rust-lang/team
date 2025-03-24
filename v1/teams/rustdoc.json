@@ -1,0 +1,144 @@
+{
+  "name": "rustdoc",
+  "kind": "team",
+  "subteam_of": "devtools",
+  "members": [
+    {
+      "name": "Guillaume Gomez",
+      "github": "GuillaumeGomez",
+      "github_id": 3050060,
+      "is_lead": true
+    },
+    {
+      "name": "Alona Enraght-Moony",
+      "github": "aDotInTheVoid",
+      "github_id": 28781354,
+      "is_lead": false
+    },
+    {
+      "name": "Noah Lev",
+      "github": "camelid",
+      "github_id": 37223377,
+      "is_lead": false
+    },
+    {
+      "name": "León Orell Valerian Liehr",
+      "github": "fmease",
+      "github_id": 14913065,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Hoffman-Andrews",
+      "github": "jsha",
+      "github_id": 220205,
+      "is_lead": false
+    },
+    {
+      "name": "Manish Goregaokar",
+      "github": "Manishearth",
+      "github_id": 1617736,
+      "is_lead": false
+    },
+    {
+      "name": "Wim",
+      "github": "Nemo157",
+      "github_id": 81079,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Howell",
+      "github": "notriddle",
+      "github_id": 1593513,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Jakob Wiesmore",
+      "github": "CraftSpider",
+      "github_id": 13342132,
+      "is_lead": false
+    },
+    {
+      "name": "Jynn Nelson",
+      "github": "jyn514",
+      "github_id": 23638587,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Silverstone",
+      "github": "kinnison",
+      "github_id": 1469421,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Middleton",
+      "github": "ollie27",
+      "github_id": 7189418,
+      "is_lead": false
+    },
+    {
+      "name": "Onur Aslan",
+      "github": "onur",
+      "github_id": 345828,
+      "is_lead": false
+    },
+    {
+      "name": "QuietMisdreavus",
+      "github": "QuietMisdreavus",
+      "github_id": 5217170,
+      "is_lead": false
+    },
+    {
+      "name": "Steve Klabnik",
+      "github": "steveklabnik",
+      "github_id": 27786,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "rustdoc",
+        "members": [
+          3050060,
+          1617736,
+          81079,
+          28781354,
+          37223377,
+          14913065,
+          220205,
+          1593513
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "rustdoc",
+        "members": [
+          3050060,
+          1617736,
+          81079,
+          28781354,
+          37223377,
+          14913065,
+          220205,
+          1593513
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Rustdoc team",
+    "description": "Developing and managing the Rustdoc documentation tool",
+    "page": "rustdoc",
+    "email": null,
+    "repo": "https://github.com/rust-lang/rust",
+    "discord": null,
+    "zulip_stream": "t-rustdoc",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

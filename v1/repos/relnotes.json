@@ -1,0 +1,41 @@
+{
+  "org": "rust-lang",
+  "name": "relnotes",
+  "description": "Generate release notes for \"The Rust Programming Language\"",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "release",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "build (macos-latest, beta)",
+            "build (macos-latest, nightly)",
+            "build (macos-latest, stable)",
+            "build (ubuntu-latest, nightly)",
+            "build (ubuntu-latest, beta)",
+            "build (ubuntu-latest, stable)",
+            "build (windows-latest, beta)",
+            "build (windows-latest, nightly)",
+            "build (windows-latest, stable)"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

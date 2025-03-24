@@ -1,0 +1,23 @@
+{
+  "org": "rust-lang",
+  "name": "log",
+  "description": "Logging implementation for Rust",
+  "homepage": "https://docs.rs/log",
+  "bots": [],
+  "teams": [
+    {
+      "name": "crate-maintainers",
+      "permission": "maintain"
+    }
+  ],
+  "members": [
+    {
+      "name": "Thomasdezeeuw",
+      "permission": "maintain"
+    }
+  ],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

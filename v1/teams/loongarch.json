@@ -1,0 +1,36 @@
+{
+  "name": "loongarch",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "WANG Rui",
+      "github": "heiher",
+      "github_id": 1407733,
+      "is_lead": false
+    },
+    {
+      "name": "WANG Xuerui",
+      "github": "xen0n",
+      "github_id": 1175567,
+      "is_lead": false
+    },
+    {
+      "name": "ZHAI Xiang",
+      "github": "xiangzhai",
+      "github_id": 851100,
+      "is_lead": false
+    },
+    {
+      "name": "Xi Ruoyao",
+      "github": "xry111",
+      "github_id": 8733039,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "project-error-handling",
+  "description": "Error handling project group",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

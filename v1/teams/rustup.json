@@ -1,0 +1,93 @@
+{
+  "name": "rustup",
+  "kind": "team",
+  "subteam_of": "devtools",
+  "members": [
+    {
+      "name": "Robert Collins",
+      "github": "rbtcollins",
+      "github_id": 499678,
+      "is_lead": true
+    },
+    {
+      "name": "Chris Denton",
+      "github": "ChrisDenton",
+      "github_id": 4459874,
+      "is_lead": false
+    },
+    {
+      "name": "Dirkjan Ochtman",
+      "github": "djc",
+      "github_id": 158471,
+      "is_lead": false
+    },
+    {
+      "name": "rami3l",
+      "github": "rami3l",
+      "github_id": 33851577,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    },
+    {
+      "name": "Dale Wijnand",
+      "github": "dwijnand",
+      "github_id": 344610,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Silverstone",
+      "github": "kinnison",
+      "github_id": 1469421,
+      "is_lead": false
+    },
+    {
+      "name": "Nick Cameron",
+      "github": "nrc",
+      "github_id": 762626,
+      "is_lead": false
+    },
+    {
+      "name": "Rustin",
+      "github": "Rustin170506",
+      "github_id": 29879298,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "rustup",
+        "members": [
+          4459874,
+          158471,
+          33851577,
+          499678
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Rustup team",
+    "description": "Designing and implementing rustup",
+    "page": "rustup",
+    "email": null,
+    "repo": "https://github.com/rust-lang/rustup",
+    "discord": {
+      "channel": "#wg-rustup",
+      "url": "https://discord.gg/e6Q3cvu"
+    },
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

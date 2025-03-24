@@ -1,0 +1,90 @@
+{
+  "name": "community-survey",
+  "kind": "team",
+  "subteam_of": "community",
+  "members": [
+    {
+      "name": "apiraino",
+      "github": "apiraino",
+      "github_id": 6098822,
+      "is_lead": true
+    },
+    {
+      "name": "Jakub Beránek",
+      "github": "Kobzol",
+      "github_id": 4539057,
+      "is_lead": true
+    },
+    {
+      "name": "graciegregory",
+      "github": "graciegregory",
+      "github_id": 45044840,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan Levick",
+      "github": "rylev",
+      "github_id": 1327285,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Manish Goregaokar",
+      "github": "Manishearth",
+      "github_id": 1617736,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "Nick Cameron",
+      "github": "nrc",
+      "github_id": 762626,
+      "is_lead": false
+    },
+    {
+      "name": "JT",
+      "github": "sophiajt",
+      "github_id": 547158,
+      "is_lead": false
+    },
+    {
+      "name": "Jane Lusby",
+      "github": "yaahc",
+      "github_id": 1993852,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "community-survey",
+        "members": [
+          4539057,
+          6098822,
+          45044840,
+          1327285
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Survey team",
+    "description": "Running, analysing, and presenting the community survey",
+    "page": "community-survey",
+    "email": null,
+    "repo": "https://github.com/rust-lang/surveys",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

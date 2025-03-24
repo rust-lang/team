@@ -1,0 +1,69 @@
+{
+  "org": "rust-lang",
+  "name": "calendar-generation",
+  "description": "Generate iCalendar documents from calendar specifications in TOML. See rust-lang/calendar.",
+  "homepage": null,
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "libs",
+      "permission": "write"
+    },
+    {
+      "name": "crates-io",
+      "permission": "write"
+    },
+    {
+      "name": "wg-async",
+      "permission": "write"
+    },
+    {
+      "name": "leadership-council",
+      "permission": "write"
+    },
+    {
+      "name": "docs-rs",
+      "permission": "write"
+    },
+    {
+      "name": "lang-ops",
+      "permission": "write"
+    },
+    {
+      "name": "compiler",
+      "permission": "write"
+    },
+    {
+      "name": "lang",
+      "permission": "write"
+    },
+    {
+      "name": "infra",
+      "permission": "maintain"
+    },
+    {
+      "name": "release",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "main",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

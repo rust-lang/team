@@ -1,0 +1,73 @@
+{
+  "name": "wg-embedded-riscv",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [
+    {
+      "name": "Aleš Katona",
+      "github": "almindor",
+      "github_id": 1950958,
+      "is_lead": false
+    },
+    {
+      "name": "dkhayes117",
+      "github": "dkhayes117",
+      "github_id": 59458913,
+      "is_lead": false
+    },
+    {
+      "name": "Jesse Braham",
+      "github": "jessebraham",
+      "github_id": 1945813,
+      "is_lead": false
+    },
+    {
+      "name": "Scott Mabin",
+      "github": "MabezDev",
+      "github_id": 6977289,
+      "is_lead": false
+    },
+    {
+      "name": "rmsyn",
+      "github": "rmsyn",
+      "github_id": 117854522,
+      "is_lead": false
+    },
+    {
+      "name": "Román Cárdenas",
+      "github": "romancardenas",
+      "github_id": 12596603,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "risc-v",
+        "members": [
+          6977289,
+          1950958,
+          59458913,
+          1945813,
+          117854522,
+          12596603
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded RISC-V team",
+    "description": "Develops and maintains the core of the embedded RISC-V crate ecosystem",
+    "page": "wg-embedded-riscv",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

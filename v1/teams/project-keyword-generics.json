@@ -1,0 +1,66 @@
+{
+  "name": "project-keyword-generics",
+  "kind": "project_group",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": true
+    },
+    {
+      "name": "Yoshua Wuyts",
+      "github": "yoshuawuyts",
+      "github_id": 2467194,
+      "is_lead": true
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "initiative-keyword-generics",
+        "members": [
+          29864074,
+          155238,
+          332036,
+          1076834,
+          2467194
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Keyword Generics Initiative",
+    "description": "Extending the type system to support keyword generics",
+    "page": "project-keyword-generics",
+    "email": null,
+    "repo": "https://github.com/rust-lang/keyword-generics-initiative",
+    "discord": null,
+    "zulip_stream": "t-lang/keyword-generics",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "crates-io-heroku-metrics",
+  "description": "Heroku metrics collector for crates.io",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "infra",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

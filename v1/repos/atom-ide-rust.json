@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "atom-ide-rust",
+  "description": "Rust IDE support for Atom, powered by the Rust Analyzer or Rust Language Server",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

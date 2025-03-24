@@ -1,0 +1,35 @@
+{
+  "org": "rust-lang",
+  "name": "rustc-perf",
+  "description": "Website for graphing performance of rustc",
+  "homepage": "https://perf.rust-lang.org",
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-compiler-performance",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "Test and deploy",
+            "Test on Windows",
+            "Database Check"
+          ],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

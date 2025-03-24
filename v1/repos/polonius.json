@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "polonius",
+  "description": "Defines the Rust borrow checker.",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "wg-polonius",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

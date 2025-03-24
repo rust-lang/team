@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "core-team",
+  "description": "A place to house minutes and other documents related to the core team.",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

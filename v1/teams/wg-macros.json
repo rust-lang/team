@@ -1,0 +1,93 @@
+{
+  "name": "wg-macros",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Eric Holk",
+      "github": "eholk",
+      "github_id": 105766,
+      "is_lead": true
+    },
+    {
+      "name": "Vincenzo Palazzo",
+      "github": "vincenzopalazzo",
+      "github_id": 17150045,
+      "is_lead": true
+    },
+    {
+      "name": "Arthur Cohen",
+      "github": "CohenArthur",
+      "github_id": 43524065,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Henry-Mantilla",
+      "github": "danielhenrymantilla",
+      "github_id": 9920355,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Pratt",
+      "github": "jhpratt",
+      "github_id": 3161395,
+      "is_lead": false
+    },
+    {
+      "name": "Trevor Gross",
+      "github": "tgross35",
+      "github_id": 13724985,
+      "is_lead": false
+    },
+    {
+      "name": "Lukas Wirth",
+      "github": "Veykril",
+      "github_id": 3757771,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-macros",
+        "members": [
+          43524065,
+          3757771,
+          9920355,
+          105766,
+          3161395,
+          13724985,
+          17150045
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "wg-macros",
+        "members": [
+          43524065,
+          3757771,
+          9920355,
+          105766,
+          3161395,
+          13724985,
+          17150045
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Macros working group",
+    "description": "Revival and Improving the Rust Macros",
+    "page": "wg-macros",
+    "email": null,
+    "repo": "https://github.com/rust-lang/wg-macros",
+    "discord": null,
+    "zulip_stream": "wg-macros",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

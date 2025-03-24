@@ -1,0 +1,73 @@
+{
+  "name": "wg-diagnostics",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Esteban Kuber",
+      "github": "estebank",
+      "github_id": 1606434,
+      "is_lead": true
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": true
+    },
+    {
+      "name": "Michael Goulet",
+      "github": "compiler-errors",
+      "github_id": 3674314,
+      "is_lead": false
+    },
+    {
+      "name": "David Wood",
+      "github": "davidtwco",
+      "github_id": 1295100,
+      "is_lead": false
+    },
+    {
+      "name": "Yuki Okushi",
+      "github": "JohnTitor",
+      "github_id": 25030997,
+      "is_lead": false
+    },
+    {
+      "name": "Takayuki Maeda",
+      "github": "TaKO8Ki",
+      "github_id": 41065217,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-diagnostics",
+        "members": [
+          25030997,
+          41065217,
+          3674314,
+          1295100,
+          1606434,
+          332036
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Diagnostics working group",
+    "description": "Aiming to make rustc better at telling the user why the compiler isn't smart enough to understand their code yet",
+    "page": "wg-diagnostics",
+    "email": null,
+    "repo": "https://rust-lang.github.io/compiler-team/working-groups/diagnostics/",
+    "discord": null,
+    "zulip_stream": "t-compiler/wg-diagnostics",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

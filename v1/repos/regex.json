@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "regex",
+  "description": "An implementation of regular expressions for Rust. This implementation uses finite automata and guarantees linear time matching on all inputs.",
+  "homepage": "https://docs.rs/regex",
+  "bots": [],
+  "teams": [
+    {
+      "name": "regex",
+      "permission": "maintain"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

@@ -1,0 +1,135 @@
+{
+  "name": "wg-rustc-dev-guide",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Yuki Okushi",
+      "github": "JohnTitor",
+      "github_id": 25030997,
+      "is_lead": true
+    },
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": true
+    },
+    {
+      "name": "Boxy",
+      "github": "BoxyUwU",
+      "github_id": 21149742,
+      "is_lead": false
+    },
+    {
+      "name": "Noah Lev",
+      "github": "camelid",
+      "github_id": 37223377,
+      "is_lead": false
+    },
+    {
+      "name": "Iñaki Garay",
+      "github": "igaray",
+      "github_id": 167193,
+      "is_lead": false
+    },
+    {
+      "name": "Jieyou Xu",
+      "github": "jieyouxu",
+      "github_id": 39484203,
+      "is_lead": false
+    },
+    {
+      "name": "Tshepang Mbambo",
+      "github": "tshepang",
+      "github_id": 588486,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Amanjeev Sethi",
+      "github": "amanjeev",
+      "github_id": 160476,
+      "is_lead": false
+    },
+    {
+      "name": "Chris Simpkins",
+      "github": "chrissimpkins",
+      "github_id": 4249591,
+      "is_lead": false
+    },
+    {
+      "name": "Jynn Nelson",
+      "github": "jyn514",
+      "github_id": 23638587,
+      "is_lead": false
+    },
+    {
+      "name": "Léo Lanteri Thauvin",
+      "github": "LeSeulArtichaut",
+      "github_id": 38361244,
+      "is_lead": false
+    },
+    {
+      "name": "Who? Me?!",
+      "github": "mark-i-m",
+      "github_id": 8827840,
+      "is_lead": false
+    },
+    {
+      "name": "Paul Daniel Faria",
+      "github": "Nashenas88",
+      "github_id": 1673130,
+      "is_lead": false
+    },
+    {
+      "name": "pierwill",
+      "github": "pierwill",
+      "github_id": 19642016,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan Levick",
+      "github": "rylev",
+      "github_id": 1327285,
+      "is_lead": false
+    },
+    {
+      "name": "Togi Sergey",
+      "github": "togiberlin",
+      "github_id": 13764830,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-rustc-dev-guide",
+        "members": [
+          21149742,
+          25030997,
+          37223377,
+          167193,
+          39484203,
+          52642,
+          588486
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Rustc Dev Guide working group",
+    "description": "Making the compiler easier to learn by maintaining and improving the Rustc Dev Guide",
+    "page": "wg-rustc-dev-guide",
+    "email": null,
+    "repo": "https://rust-lang.github.io/compiler-team/working-groups/rustc-dev-guide/",
+    "discord": null,
+    "zulip_stream": "t-compiler/wg-rustc-dev-guide",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,45 @@
+{
+  "name": "wg-rustc-reading-club",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Doc Jones",
+      "github": "doc-jones",
+      "github_id": 37349558,
+      "is_lead": true
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": true
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-rustc-reading-club",
+        "members": [
+          37349558,
+          155238
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Rust Code Reading Club working group",
+    "description": "Helping new and experienced contributors learn more about rustc",
+    "page": "wg-rustc-reading-club",
+    "email": null,
+    "repo": "https://rust-lang.github.io/rustc-reading-club/",
+    "discord": null,
+    "zulip_stream": "rustc-reading-club",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

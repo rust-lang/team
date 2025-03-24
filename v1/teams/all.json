@@ -1,0 +1,1263 @@
+{
+  "name": "all",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Aditya Arora",
+      "github": "adityac8",
+      "github_id": 19192257,
+      "is_lead": false
+    },
+    {
+      "name": "Alona Enraght-Moony",
+      "github": "aDotInTheVoid",
+      "github_id": 28781354,
+      "is_lead": false
+    },
+    {
+      "name": "Albert Larsan",
+      "github": "albertlarsan68",
+      "github_id": 74931857,
+      "is_lead": false
+    },
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    },
+    {
+      "name": "Alex Macleod",
+      "github": "Alexendoo",
+      "github_id": 1830331,
+      "is_lead": false
+    },
+    {
+      "name": "Ali Bektas",
+      "github": "alibektas",
+      "github_id": 20956650,
+      "is_lead": false
+    },
+    {
+      "name": "Ali MJ Al-Nasrawy",
+      "github": "aliemjay",
+      "github_id": 28497461,
+      "is_lead": false
+    },
+    {
+      "name": "Amanieu d'Antras",
+      "github": "Amanieu",
+      "github_id": 278509,
+      "is_lead": false
+    },
+    {
+      "name": "andrewpollack",
+      "github": "andrewpollack",
+      "github_id": 24868505,
+      "is_lead": false
+    },
+    {
+      "name": "apiraino",
+      "github": "apiraino",
+      "github_id": 6098822,
+      "is_lead": false
+    },
+    {
+      "name": "Arlo Siemsen",
+      "github": "arlosi",
+      "github_id": 704597,
+      "is_lead": false
+    },
+    {
+      "name": "Arshia Mufti",
+      "github": "arshiamufti",
+      "github_id": 15066212,
+      "is_lead": false
+    },
+    {
+      "name": "b-naber",
+      "github": "b-naber",
+      "github_id": 71934879,
+      "is_lead": false
+    },
+    {
+      "name": "Jan-Erik Rediger",
+      "github": "badboy",
+      "github_id": 2129,
+      "is_lead": false
+    },
+    {
+      "name": "Ben Dillon",
+      "github": "bdillo",
+      "github_id": 146687321,
+      "is_lead": false
+    },
+    {
+      "name": "benny Vasquez",
+      "github": "bennyvasquez",
+      "github_id": 13630986,
+      "is_lead": false
+    },
+    {
+      "name": "bjorn3",
+      "github": "bjorn3",
+      "github_id": 17426603,
+      "is_lead": false
+    },
+    {
+      "name": "Alejandra González",
+      "github": "blyxyas",
+      "github_id": 73757586,
+      "is_lead": false
+    },
+    {
+      "name": "Boxy",
+      "github": "BoxyUwU",
+      "github_id": 21149742,
+      "is_lead": false
+    },
+    {
+      "name": "Andrew Gallant",
+      "github": "BurntSushi",
+      "github_id": 456674,
+      "is_lead": false
+    },
+    {
+      "name": "Sebastian Thiel",
+      "github": "Byron",
+      "github_id": 63622,
+      "is_lead": false
+    },
+    {
+      "name": "Christopher Durham",
+      "github": "CAD97",
+      "github_id": 5992217,
+      "is_lead": false
+    },
+    {
+      "name": "Caleb Cartwright",
+      "github": "calebcartwright",
+      "github_id": 13042488,
+      "is_lead": false
+    },
+    {
+      "name": "Caleb Zulawski",
+      "github": "calebzulawski",
+      "github_id": 563826,
+      "is_lead": false
+    },
+    {
+      "name": "Noah Lev",
+      "github": "camelid",
+      "github_id": 37223377,
+      "is_lead": false
+    },
+    {
+      "name": "Carol Nichols",
+      "github": "carols10cents",
+      "github_id": 193874,
+      "is_lead": false
+    },
+    {
+      "name": "Colton Donnelly",
+      "github": "cdmistman",
+      "github_id": 23486351,
+      "is_lead": false
+    },
+    {
+      "name": "Claus Matzinger",
+      "github": "celaus",
+      "github_id": 713346,
+      "is_lead": false
+    },
+    {
+      "name": "Catherine",
+      "github": "Centri3",
+      "github_id": 114838443,
+      "is_lead": false
+    },
+    {
+      "name": "Chayim Refael Friedman",
+      "github": "ChayimFriedman2",
+      "github_id": 24700207,
+      "is_lead": false
+    },
+    {
+      "name": "Yukang",
+      "github": "chenyukang",
+      "github_id": 230646,
+      "is_lead": false
+    },
+    {
+      "name": "Connor Horman",
+      "github": "chorman0773",
+      "github_id": 5026283,
+      "is_lead": false
+    },
+    {
+      "name": "Chris Denton",
+      "github": "ChrisDenton",
+      "github_id": 4459874,
+      "is_lead": false
+    },
+    {
+      "name": "Chris Krycho",
+      "github": "chriskrycho",
+      "github_id": 2403023,
+      "is_lead": false
+    },
+    {
+      "name": "Camille Gillot",
+      "github": "cjgillot",
+      "github_id": 1822483,
+      "is_lead": false
+    },
+    {
+      "name": "Jamie Hill-Daniel",
+      "github": "clubby789",
+      "github_id": 13556931,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Goulet",
+      "github": "compiler-errors",
+      "github_id": 3674314,
+      "is_lead": false
+    },
+    {
+      "name": "Taylor Cramer",
+      "github": "cramertj",
+      "github_id": 5963049,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Stone",
+      "github": "cuviper",
+      "github_id": 36186,
+      "is_lead": false
+    },
+    {
+      "name": "David Barsky",
+      "github": "davidbarsky",
+      "github_id": 2067774,
+      "is_lead": false
+    },
+    {
+      "name": "David Wood",
+      "github": "davidtwco",
+      "github_id": 1295100,
+      "is_lead": false
+    },
+    {
+      "name": "dianqk",
+      "github": "dianqk",
+      "github_id": 10829914,
+      "is_lead": false
+    },
+    {
+      "name": "Mario Carneiro",
+      "github": "digama0",
+      "github_id": 868588,
+      "is_lead": false
+    },
+    {
+      "name": "Dirkjan Ochtman",
+      "github": "djc",
+      "github_id": 158471,
+      "is_lead": false
+    },
+    {
+      "name": "DropDemBits",
+      "github": "DropDemBits",
+      "github_id": 13354275,
+      "is_lead": false
+    },
+    {
+      "name": "dswij",
+      "github": "dswij",
+      "github_id": 44697459,
+      "is_lead": false
+    },
+    {
+      "name": "David Tolnay",
+      "github": "dtolnay",
+      "github_id": 1940490,
+      "is_lead": false
+    },
+    {
+      "name": "Augie Fackler",
+      "github": "durin42",
+      "github_id": 20269,
+      "is_lead": false
+    },
+    {
+      "name": "Dylan DPC",
+      "github": "Dylan-DPC",
+      "github_id": 99973273,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Finkelman",
+      "github": "Eh2406",
+      "github_id": 3709504,
+      "is_lead": false
+    },
+    {
+      "name": "Eric Holk",
+      "github": "eholk",
+      "github_id": 105766,
+      "is_lead": false
+    },
+    {
+      "name": "Eric Huss",
+      "github": "ehuss",
+      "github_id": 43198,
+      "is_lead": false
+    },
+    {
+      "name": "Ed Page",
+      "github": "epage",
+      "github_id": 60961,
+      "is_lead": false
+    },
+    {
+      "name": "Eric Seppanen",
+      "github": "ericseppanen",
+      "github_id": 36317762,
+      "is_lead": false
+    },
+    {
+      "name": "est31",
+      "github": "est31",
+      "github_id": 8872119,
+      "is_lead": false
+    },
+    {
+      "name": "Esteban Kuber",
+      "github": "estebank",
+      "github_id": 1606434,
+      "is_lead": false
+    },
+    {
+      "name": "eth3lbert",
+      "github": "eth3lbert",
+      "github_id": 2889664,
+      "is_lead": false
+    },
+    {
+      "name": "Stephan D.",
+      "github": "extrawurst",
+      "github_id": 776816,
+      "is_lead": false
+    },
+    {
+      "name": "Deadbeef",
+      "github": "fee1-dead",
+      "github_id": 43851243,
+      "is_lead": false
+    },
+    {
+      "name": "István Szmozsánszky",
+      "github": "flaki",
+      "github_id": 2089432,
+      "is_lead": false
+    },
+    {
+      "name": "Philipp Krones",
+      "github": "flip1995",
+      "github_id": 9744647,
+      "is_lead": false
+    },
+    {
+      "name": "Florian Diebold",
+      "github": "flodiebold",
+      "github_id": 906069,
+      "is_lead": false
+    },
+    {
+      "name": "León Orell Valerian Liehr",
+      "github": "fmease",
+      "github_id": 14913065,
+      "is_lead": false
+    },
+    {
+      "name": "Aria Beingessner",
+      "github": "Gankra",
+      "github_id": 1136864,
+      "is_lead": false
+    },
+    {
+      "name": "graciegregory",
+      "github": "graciegregory",
+      "github_id": 45044840,
+      "is_lead": false
+    },
+    {
+      "name": "Guillaume Gomez",
+      "github": "GuillaumeGomez",
+      "github_id": 3050060,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan Scheel",
+      "github": "Havvy",
+      "github_id": 731722,
+      "is_lead": false
+    },
+    {
+      "name": "Hamidreza Kalbasi",
+      "github": "HKalbasi",
+      "github_id": 45197576,
+      "is_lead": false
+    },
+    {
+      "name": "Ibraheem Ahmed",
+      "github": "ibraheemdev",
+      "github_id": 34988408,
+      "is_lead": false
+    },
+    {
+      "name": "Jonathan Lee",
+      "github": "J-ZhengLi",
+      "github_id": 32276130,
+      "is_lead": false
+    },
+    {
+      "name": "Jack Huey",
+      "github": "jackh726",
+      "github_id": 31162821,
+      "is_lead": false
+    },
+    {
+      "name": "Jakob Degen",
+      "github": "JakobDegen",
+      "github_id": 51179609,
+      "is_lead": false
+    },
+    {
+      "name": "James Munns",
+      "github": "jamesmunns",
+      "github_id": 2097964,
+      "is_lead": false
+    },
+    {
+      "name": "Jason Newcomb",
+      "github": "Jarcho",
+      "github_id": 7761774,
+      "is_lead": false
+    },
+    {
+      "name": "Jan David Nose",
+      "github": "jdno",
+      "github_id": 865550,
+      "is_lead": false
+    },
+    {
+      "name": "Jana Dönszelmann",
+      "github": "jdonszelmann",
+      "github_id": 22172241,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Pratt",
+      "github": "jhpratt",
+      "github_id": 3161395,
+      "is_lead": false
+    },
+    {
+      "name": "Jieyou Xu",
+      "github": "jieyouxu",
+      "github_id": 39484203,
+      "is_lead": false
+    },
+    {
+      "name": "Jonas Böttiger",
+      "github": "joboet",
+      "github_id": 25721079,
+      "is_lead": false
+    },
+    {
+      "name": "Joel Marcey",
+      "github": "JoelMarcey",
+      "github_id": 3757713,
+      "is_lead": false
+    },
+    {
+      "name": "Yuki Okushi",
+      "github": "JohnTitor",
+      "github_id": 25030997,
+      "is_lead": false
+    },
+    {
+      "name": "Jonathan Giddy",
+      "github": "jongiddy",
+      "github_id": 3735327,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    },
+    {
+      "name": "Jacob Hoffman-Andrews",
+      "github": "jsha",
+      "github_id": 220205,
+      "is_lead": false
+    },
+    {
+      "name": "Jack Wrenn",
+      "github": "jswrenn",
+      "github_id": 3820879,
+      "is_lead": false
+    },
+    {
+      "name": "Justin Geibel",
+      "github": "jtgeibel",
+      "github_id": 22186,
+      "is_lead": false
+    },
+    {
+      "name": "kennytm",
+      "github": "kennytm",
+      "github_id": 103023,
+      "is_lead": false
+    },
+    {
+      "name": "Jakub Beránek",
+      "github": "Kobzol",
+      "github_id": 4539057,
+      "is_lead": false
+    },
+    {
+      "name": "Ashley Mannix",
+      "github": "KodrAus",
+      "github_id": 6721458,
+      "is_lead": false
+    },
+    {
+      "name": "Adam Harvey",
+      "github": "LawnGnome",
+      "github_id": 229984,
+      "is_lead": false
+    },
+    {
+      "name": "lcnr",
+      "github": "lcnr",
+      "github_id": 29864074,
+      "is_lead": false
+    },
+    {
+      "name": "Andre Bogus",
+      "github": "llogiq",
+      "github_id": 4200835,
+      "is_lead": false
+    },
+    {
+      "name": "Laurențiu Nicola",
+      "github": "lnicola",
+      "github_id": 308347,
+      "is_lead": false
+    },
+    {
+      "name": "Rémy Rakic",
+      "github": "lqd",
+      "github_id": 247183,
+      "is_lead": false
+    },
+    {
+      "name": "Lukas Markeffsky",
+      "github": "lukas-code",
+      "github_id": 26522220,
+      "is_lead": false
+    },
+    {
+      "name": "Mara Bos",
+      "github": "m-ou-se",
+      "github_id": 783247,
+      "is_lead": false
+    },
+    {
+      "name": "Manish Goregaokar",
+      "github": "Manishearth",
+      "github_id": 1617736,
+      "is_lead": false
+    },
+    {
+      "name": "Marco Ieni",
+      "github": "marcoieni",
+      "github_id": 11428655,
+      "is_lead": false
+    },
+    {
+      "name": "M Goldin",
+      "github": "mariannegoldin",
+      "github_id": 23177337,
+      "is_lead": false
+    },
+    {
+      "name": "Mário Idival",
+      "github": "marioidival",
+      "github_id": 1129263,
+      "is_lead": false
+    },
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": false
+    },
+    {
+      "name": "Matt Gathu",
+      "github": "mattgathu",
+      "github_id": 1155192,
+      "is_lead": false
+    },
+    {
+      "name": "Matthew Jasper",
+      "github": "matthewjasper",
+      "github_id": 20113453,
+      "is_lead": false
+    },
+    {
+      "name": "Matthias Krüger",
+      "github": "matthiaskrgr",
+      "github_id": 476013,
+      "is_lead": false
+    },
+    {
+      "name": "Matthew T",
+      "github": "mdtro",
+      "github_id": 20070360,
+      "is_lead": false
+    },
+    {
+      "name": "Mo",
+      "github": "mo8it",
+      "github_id": 76752051,
+      "is_lead": false
+    },
+    {
+      "name": "Scott Schafer",
+      "github": "Muscraft",
+      "github_id": 23045215,
+      "is_lead": false
+    },
+    {
+      "name": "Nadrieril",
+      "github": "Nadrieril",
+      "github_id": 6783654,
+      "is_lead": false
+    },
+    {
+      "name": "Simonas Kazlauskas",
+      "github": "nagisa",
+      "github_id": 679122,
+      "is_lead": false
+    },
+    {
+      "name": "Nandini",
+      "github": "nandsh",
+      "github_id": 16529596,
+      "is_lead": false
+    },
+    {
+      "name": "Nell Shamrell-Harrington",
+      "github": "nellshamrell",
+      "github_id": 813007,
+      "is_lead": false
+    },
+    {
+      "name": "Wim",
+      "github": "Nemo157",
+      "github_id": 81079,
+      "is_lead": false
+    },
+    {
+      "name": "Nikita Popov",
+      "github": "nikic",
+      "github_id": 216080,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "Nicholas Nethercote",
+      "github": "nnethercote",
+      "github_id": 1940286,
+      "is_lead": false
+    },
+    {
+      "name": "nora",
+      "github": "Noratrieb",
+      "github_id": 48135649,
+      "is_lead": false
+    },
+    {
+      "name": "Michael Howell",
+      "github": "notriddle",
+      "github_id": 1593513,
+      "is_lead": false
+    },
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    },
+    {
+      "name": "Onur Özkan",
+      "github": "onur-ozkan",
+      "github_id": 39852038,
+      "is_lead": false
+    },
+    {
+      "name": "Vadim Petrochenkov",
+      "github": "petrochenkov",
+      "github_id": 5751617,
+      "is_lead": false
+    },
+    {
+      "name": "Pietro Albini",
+      "github": "pietroalbini",
+      "github_id": 2299951,
+      "is_lead": false
+    },
+    {
+      "name": "Peter Jaszkowiak",
+      "github": "pitaj",
+      "github_id": 803701,
+      "is_lead": false
+    },
+    {
+      "name": "Ralf Jung",
+      "github": "RalfJung",
+      "github_id": 330628,
+      "is_lead": false
+    },
+    {
+      "name": "rami3l",
+      "github": "rami3l",
+      "github_id": 33851577,
+      "is_lead": false
+    },
+    {
+      "name": "Robert Collins",
+      "github": "rbtcollins",
+      "github_id": 499678,
+      "is_lead": false
+    },
+    {
+      "name": "Ramon de C Valle",
+      "github": "rcvalle",
+      "github_id": 3988004,
+      "is_lead": false
+    },
+    {
+      "name": "roife",
+      "github": "roife",
+      "github_id": 17700217,
+      "is_lead": false
+    },
+    {
+      "name": "Rustin",
+      "github": "Rustin170506",
+      "github_id": 29879298,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan Levick",
+      "github": "rylev",
+      "github_id": 1327285,
+      "is_lead": false
+    },
+    {
+      "name": "Ben Kimock",
+      "github": "saethlin",
+      "github_id": 12105168,
+      "is_lead": false
+    },
+    {
+      "name": "Samuel Tardieu",
+      "github": "samueltardieu",
+      "github_id": 44656,
+      "is_lead": false
+    },
+    {
+      "name": "Scott McMurray",
+      "github": "scottmcm",
+      "github_id": 18526288,
+      "is_lead": false
+    },
+    {
+      "name": "Sebastián Magrí",
+      "github": "sebasmagri",
+      "github_id": 11137,
+      "is_lead": false
+    },
+    {
+      "name": "Remo Senekowitsch",
+      "github": "senekor",
+      "github_id": 54984957,
+      "is_lead": false
+    },
+    {
+      "name": "Steven Fackler",
+      "github": "sfackler",
+      "github_id": 1455697,
+      "is_lead": false
+    },
+    {
+      "name": "Sage Griffin",
+      "github": "sgrif",
+      "github_id": 1529387,
+      "is_lead": false
+    },
+    {
+      "name": "Liv",
+      "github": "shadows-withal",
+      "github_id": 6445316,
+      "is_lead": false
+    },
+    {
+      "name": "Jake Goulding",
+      "github": "shepmaster",
+      "github_id": 174509,
+      "is_lead": false
+    },
+    {
+      "name": "Shoyu Vanilla",
+      "github": "ShoyuVanilla",
+      "github_id": 10542892,
+      "is_lead": false
+    },
+    {
+      "name": "Simon Sapin",
+      "github": "SimonSapin",
+      "github_id": 291359,
+      "is_lead": false
+    },
+    {
+      "name": "Katharina Fey",
+      "github": "spacekookie",
+      "github_id": 7669898,
+      "is_lead": false
+    },
+    {
+      "name": "Sparrow Li",
+      "github": "SparrowLii",
+      "github_id": 68270294,
+      "is_lead": false
+    },
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    },
+    {
+      "name": "Frank Steffahn",
+      "github": "steffahn",
+      "github_id": 3986214,
+      "is_lead": false
+    },
+    {
+      "name": "Dan Gohman",
+      "github": "sunfishcode",
+      "github_id": 4503403,
+      "is_lead": false
+    },
+    {
+      "name": "Denis Cornehl",
+      "github": "syphar",
+      "github_id": 540890,
+      "is_lead": false
+    },
+    {
+      "name": "Takayuki Maeda",
+      "github": "TaKO8Ki",
+      "github_id": 41065217,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Gould",
+      "github": "technetos",
+      "github_id": 10949810,
+      "is_lead": false
+    },
+    {
+      "name": "Trevor Gross",
+      "github": "tgross35",
+      "github_id": 13724985,
+      "is_lead": false
+    },
+    {
+      "name": "The 8472",
+      "github": "the8472",
+      "github_id": 1065730,
+      "is_lead": false
+    },
+    {
+      "name": "Thom Chiovoloni",
+      "github": "thomcc",
+      "github_id": 860665,
+      "is_lead": false
+    },
+    {
+      "name": "Tyler Mandry",
+      "github": "tmandry",
+      "github_id": 2280544,
+      "is_lead": false
+    },
+    {
+      "name": "tmiasko",
+      "github": "tmiasko",
+      "github_id": 51362316,
+      "is_lead": false
+    },
+    {
+      "name": "TC",
+      "github": "traviscross",
+      "github_id": 1076834,
+      "is_lead": false
+    },
+    {
+      "name": "Tobias Bieniek",
+      "github": "Turbo87",
+      "github_id": 141300,
+      "is_lead": false
+    },
+    {
+      "name": "Brad Gibson",
+      "github": "U007D",
+      "github_id": 2874989,
+      "is_lead": false
+    },
+    {
+      "name": "Urgau",
+      "github": "Urgau",
+      "github_id": 3616612,
+      "is_lead": false
+    },
+    {
+      "name": "Mahmut Bulut",
+      "github": "vertexclique",
+      "github_id": 578559,
+      "is_lead": false
+    },
+    {
+      "name": "Lukas Wirth",
+      "github": "Veykril",
+      "github_id": 3757771,
+      "is_lead": false
+    },
+    {
+      "name": "Waffle Maybe",
+      "github": "WaffleLapkin",
+      "github_id": 38225716,
+      "is_lead": false
+    },
+    {
+      "name": "Weihang Lo",
+      "github": "weihanglo",
+      "github_id": 14314532,
+      "is_lead": false
+    },
+    {
+      "name": "Wesley Wiser",
+      "github": "wesleywiser",
+      "github_id": 831192,
+      "is_lead": false
+    },
+    {
+      "name": "Wesley Moore",
+      "github": "wezm",
+      "github_id": 21787,
+      "is_lead": false
+    },
+    {
+      "name": "Jubilee",
+      "github": "workingjubilee",
+      "github_id": 46493976,
+      "is_lead": false
+    },
+    {
+      "name": "Timo",
+      "github": "y21",
+      "github_id": 30553356,
+      "is_lead": false
+    },
+    {
+      "name": "Jane Lusby",
+      "github": "yaahc",
+      "github_id": 1993852,
+      "is_lead": false
+    },
+    {
+      "name": "Dongyang Zheng",
+      "github": "Young-Flash",
+      "github_id": 71162630,
+      "is_lead": false
+    },
+    {
+      "name": "Yacin Tmimi",
+      "github": "ytmimi",
+      "github_id": 29028348,
+      "is_lead": false
+    },
+    {
+      "name": "Stuart Cook",
+      "github": "Zalathar",
+      "github_id": 20290842,
+      "is_lead": false
+    },
+    {
+      "name": "Manuel Drehwald",
+      "github": "ZuseZ4",
+      "github_id": 25483084,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "all",
+        "members": [
+          1830331,
+          278509,
+          21149742,
+          456674,
+          63622,
+          5992217,
+          114838443,
+          24700207,
+          4459874,
+          13354275,
+          99973273,
+          3709504,
+          1136864,
+          3050060,
+          45197576,
+          731722,
+          32276130,
+          51179609,
+          7761774,
+          3757713,
+          25030997,
+          4539057,
+          6721458,
+          229984,
+          1617736,
+          5047365,
+          23045215,
+          6783654,
+          81079,
+          48135649,
+          330628,
+          29879298,
+          10542892,
+          291359,
+          68270294,
+          41065217,
+          141300,
+          2874989,
+          3616612,
+          3757771,
+          38225716,
+          71162630,
+          20290842,
+          25483084,
+          28781354,
+          19192257,
+          74931857,
+          64996,
+          20956650,
+          28497461,
+          24868505,
+          6098822,
+          704597,
+          15066212,
+          71934879,
+          2129,
+          146687321,
+          13630986,
+          17426603,
+          73757586,
+          13042488,
+          563826,
+          37223377,
+          193874,
+          23486351,
+          713346,
+          230646,
+          5026283,
+          2403023,
+          1822483,
+          13556931,
+          3674314,
+          5963049,
+          36186,
+          2067774,
+          1295100,
+          10829914,
+          868588,
+          158471,
+          44697459,
+          1940490,
+          20269,
+          105766,
+          43198,
+          60961,
+          36317762,
+          8872119,
+          1606434,
+          2889664,
+          776816,
+          43851243,
+          2089432,
+          9744647,
+          906069,
+          14913065,
+          45044840,
+          34988408,
+          31162821,
+          2097964,
+          865550,
+          22172241,
+          3161395,
+          39484203,
+          25721079,
+          3735327,
+          162737,
+          220205,
+          3820879,
+          22186,
+          103023,
+          29864074,
+          4200835,
+          308347,
+          247183,
+          26522220,
+          783247,
+          11428655,
+          23177337,
+          1129263,
+          1155192,
+          20113453,
+          476013,
+          20070360,
+          76752051,
+          679122,
+          16529596,
+          813007,
+          216080,
+          155238,
+          1940286,
+          1593513,
+          332036,
+          39852038,
+          5751617,
+          2299951,
+          803701,
+          33851577,
+          499678,
+          3988004,
+          17700217,
+          1327285,
+          12105168,
+          44656,
+          18526288,
+          11137,
+          54984957,
+          1455697,
+          1529387,
+          6445316,
+          174509,
+          7669898,
+          52642,
+          3986214,
+          4503403,
+          540890,
+          10949810,
+          13724985,
+          1065730,
+          860665,
+          2280544,
+          51362316,
+          1076834,
+          578559,
+          14314532,
+          831192,
+          21787,
+          46493976,
+          30553356,
+          1993852,
+          29028348
+        ]
+      }
+    ]
+  },
+  "website_data": null,
+  "roles": [],
+  "discord": [
+    {
+      "name": "WGs and Teams",
+      "members": [
+        274907435972427778,
+        401012249436749834,
+        1067068563938095134,
+        468253584421552139,
+        414755070161453076,
+        451522714101088258,
+        446773566478745611,
+        244302461718757376,
+        278623213448331265,
+        453958363152252928,
+        85400548534145024,
+        676243966408261632,
+        818556851112902657,
+        123482303698567168,
+        972581951082999898,
+        442067131769683974,
+        129056090401931264,
+        282164774379192320,
+        635351653226381333,
+        449245991216873475,
+        347670185806659585,
+        650270302198169611,
+        282133495550312450,
+        388091358901960705,
+        119181581033275392,
+        443810603417731092,
+        301677135293186049,
+        521108621115916298,
+        382886245069488129,
+        953562944472510494,
+        300421337103466496,
+        362122860673892353,
+        707155612672196689,
+        453980540824059918,
+        313625269405745155,
+        446765297286774784,
+        434359017515646988,
+        451800670635294731,
+        218496229808668672,
+        232888196063690752,
+        771650879836127232,
+        442403469580566528,
+        446730792933130242,
+        296309029947441155,
+        443825361256448003
+      ],
+      "color": null
+    }
+  ]
+}

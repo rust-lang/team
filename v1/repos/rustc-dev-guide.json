@@ -1,0 +1,91 @@
+{
+  "org": "rust-lang",
+  "name": "rustc-dev-guide",
+  "description": "A guide to how rustc works and how to contribute to it.",
+  "homepage": "https://rustc-dev-guide.rust-lang.org",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "wg-rustc-dev-guide",
+      "permission": "maintain"
+    },
+    {
+      "name": "compiler",
+      "permission": "write"
+    },
+    {
+      "name": "infra",
+      "permission": "write"
+    },
+    {
+      "name": "libs-contributors",
+      "permission": "write"
+    },
+    {
+      "name": "bootstrap",
+      "permission": "write"
+    },
+    {
+      "name": "edition",
+      "permission": "write"
+    },
+    {
+      "name": "lang",
+      "permission": "write"
+    },
+    {
+      "name": "lang-ops",
+      "permission": "write"
+    },
+    {
+      "name": "libs",
+      "permission": "write"
+    },
+    {
+      "name": "rustdoc",
+      "permission": "write"
+    },
+    {
+      "name": "libs-api",
+      "permission": "write"
+    },
+    {
+      "name": "rustdoc-frontend",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "ci"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    },
+    {
+      "pattern": "master-old",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 1
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

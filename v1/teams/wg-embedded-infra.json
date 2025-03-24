@@ -1,0 +1,45 @@
+{
+  "name": "wg-embedded-infra",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [
+    {
+      "name": "Nick Stevens",
+      "github": "nastevens",
+      "github_id": 1500008,
+      "is_lead": false
+    },
+    {
+      "name": "Ryan",
+      "github": "ryankurte",
+      "github_id": 860620,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "infrastructure",
+        "members": [
+          1500008,
+          860620
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded infrastructure team",
+    "description": "Managing infrastructure for wg-embedded",
+    "page": "wg-embedded-infra",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

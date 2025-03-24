@@ -1,0 +1,89 @@
+{
+  "name": "wg-parallel-rustc",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Camille Gillot",
+      "github": "cjgillot",
+      "github_id": 1822483,
+      "is_lead": true
+    },
+    {
+      "name": "bjorn3",
+      "github": "bjorn3",
+      "github_id": 17426603,
+      "is_lead": false
+    },
+    {
+      "name": "Jakub Beránek",
+      "github": "Kobzol",
+      "github_id": 4539057,
+      "is_lead": false
+    },
+    {
+      "name": "Nicholas Nethercote",
+      "github": "nnethercote",
+      "github_id": 1940286,
+      "is_lead": false
+    },
+    {
+      "name": "Sparrow Li",
+      "github": "SparrowLii",
+      "github_id": 68270294,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Alex Crichton",
+      "github": "alexcrichton",
+      "github_id": 64996,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Stone",
+      "github": "cuviper",
+      "github_id": 36186,
+      "is_lead": false
+    },
+    {
+      "name": "Mark Rousskov",
+      "github": "Mark-Simulacrum",
+      "github_id": 5047365,
+      "is_lead": false
+    },
+    {
+      "name": "Niko Matsakis",
+      "github": "nikomatsakis",
+      "github_id": 155238,
+      "is_lead": false
+    },
+    {
+      "name": "Santiago Pastorino",
+      "github": "spastorino",
+      "github_id": 52642,
+      "is_lead": false
+    },
+    {
+      "name": "Zoxc",
+      "github": "Zoxc",
+      "github_id": 25784,
+      "is_lead": false
+    }
+  ],
+  "github": null,
+  "website_data": {
+    "name": "Parallel rustc working group",
+    "description": "Making parallel compilation the default for rustc",
+    "page": "wg-parallel-rustc",
+    "email": null,
+    "repo": "https://rust-lang.github.io/compiler-team/working-groups/parallel-rustc/",
+    "discord": null,
+    "zulip_stream": "t-compiler/wg-parallel-rustc",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

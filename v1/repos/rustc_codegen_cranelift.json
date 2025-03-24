@@ -1,0 +1,23 @@
+{
+  "org": "rust-lang",
+  "name": "rustc_codegen_cranelift",
+  "description": "Cranelift based backend for rustc",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "compiler",
+      "permission": "maintain"
+    }
+  ],
+  "members": [
+    {
+      "name": "bjorn3",
+      "permission": "maintain"
+    }
+  ],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

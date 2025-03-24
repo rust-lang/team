@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "rustfix",
+  "description": "Automatically apply the suggestions made by rustc",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

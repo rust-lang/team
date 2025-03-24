@@ -1,0 +1,115 @@
+{
+  "name": "wg-binary-size",
+  "kind": "working_group",
+  "subteam_of": "compiler",
+  "members": [
+    {
+      "name": "Mara Bos",
+      "github": "m-ou-se",
+      "github_id": 783247,
+      "is_lead": true
+    },
+    {
+      "name": "Thom Chiovoloni",
+      "github": "thomcc",
+      "github_id": 860665,
+      "is_lead": true
+    },
+    {
+      "name": "Antoni Boucher",
+      "github": "antoyo",
+      "github_id": 584972,
+      "is_lead": false
+    },
+    {
+      "name": "David Wood",
+      "github": "davidtwco",
+      "github_id": 1295100,
+      "is_lead": false
+    },
+    {
+      "name": "h1467792822",
+      "github": "h1467792822",
+      "github_id": 8490488,
+      "is_lead": false
+    },
+    {
+      "name": "Jakub Beránek",
+      "github": "Kobzol",
+      "github_id": 4539057,
+      "is_lead": false
+    },
+    {
+      "name": "Alyssa Haroldsen",
+      "github": "kupiakos",
+      "github_id": 3309728,
+      "is_lead": false
+    },
+    {
+      "name": "Gary Guo",
+      "github": "nbdd0121",
+      "github_id": 4065244,
+      "is_lead": false
+    },
+    {
+      "name": "Nicholas Nethercote",
+      "github": "nnethercote",
+      "github_id": 1940286,
+      "is_lead": false
+    },
+    {
+      "name": "Trevor Gross",
+      "github": "tgross35",
+      "github_id": 13724985,
+      "is_lead": false
+    },
+    {
+      "name": "Wayne Wu",
+      "github": "wain303009",
+      "github_id": 38760447,
+      "is_lead": false
+    },
+    {
+      "name": "Jubilee",
+      "github": "workingjubilee",
+      "github_id": 46493976,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-binary-size",
+        "members": [
+          4539057,
+          584972,
+          1295100,
+          8490488,
+          3309728,
+          783247,
+          4065244,
+          1940286,
+          13724985,
+          860665,
+          38760447,
+          46493976
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Binary size working group",
+    "description": "Improving the binary size of Rust programs and libraries",
+    "page": "wg-binary-size",
+    "email": null,
+    "repo": "https://github.com/rust-lang/wg-binary-size",
+    "discord": null,
+    "zulip_stream": "wg-binary-size",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

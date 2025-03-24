@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "rust.vim",
+  "description": "Vim configuration for Rust.",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "vim",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

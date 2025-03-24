@@ -1,0 +1,65 @@
+{
+  "name": "community-localization",
+  "kind": "team",
+  "subteam_of": "community",
+  "members": [
+    {
+      "name": "Manish Goregaokar",
+      "github": "Manishearth",
+      "github_id": 1617736,
+      "is_lead": true
+    },
+    {
+      "name": "Mahmut Bulut",
+      "github": "vertexclique",
+      "github_id": 578559,
+      "is_lead": true
+    },
+    {
+      "name": "Yuki Okushi",
+      "github": "JohnTitor",
+      "github_id": 25030997,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Sebastián Magrí",
+      "github": "sebasmagri",
+      "github_id": 11137,
+      "is_lead": false
+    },
+    {
+      "name": "Erin Power",
+      "github": "XAMPPRocky",
+      "github_id": 4464295,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "community-localization",
+        "members": [
+          25030997,
+          1617736,
+          578559
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Localization team",
+    "description": "Working on localization of compiler, documentation and websites",
+    "page": "community-localization",
+    "email": null,
+    "repo": "https://github.com/rust-lang/community-localization",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "subteams",
+  "description": "Artifacts relevant to the various Rust subteams",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

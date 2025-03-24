@@ -1,0 +1,18 @@
+{
+  "org": "rust-lang",
+  "name": "dyn-upcasting-coercion-initiative",
+  "description": "Initiative to support upcasting dyn Trait values to supertraits",
+  "homepage": null,
+  "bots": [],
+  "teams": [
+    {
+      "name": "initiative-dyn-upcasting",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

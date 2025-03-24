@@ -1,0 +1,71 @@
+{
+  "org": "rust-lang",
+  "name": "rustfmt",
+  "description": "Format Rust code",
+  "homepage": "https://rust-lang.github.io/rustfmt/",
+  "bots": [
+    "rustbot"
+  ],
+  "teams": [
+    {
+      "name": "rustfmt",
+      "permission": "write"
+    }
+  ],
+  "members": [],
+  "branch_protections": [
+    {
+      "pattern": "master",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [
+            "(x86_64-unknown-linux-gnu, nightly)",
+            "(x86_64-unknown-linux-gnu, stable)",
+            "(x86_64-apple-darwin, nightly)",
+            "(x86_64-apple-darwin, stable)",
+            "(x86_64-pc-windows-msvc, nightly)",
+            "(i686-pc-windows-msvc, nightly)",
+            "(i686-pc-windows-msvc, stable)",
+            "(i686-pc-windows-gnu, stable)",
+            "(i686-pc-windows-gnu, nightly)",
+            "(x86_64-pc-windows-gnu, nightly)",
+            "(x86_64-pc-windows-msvc, stable)",
+            "(x86_64-pc-windows-gnu, stable)",
+            "rustdoc check"
+          ],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    },
+    {
+      "pattern": "libsyntax",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    },
+    {
+      "pattern": "rust-1.*",
+      "dismiss_stale_review": false,
+      "mode": {
+        "pr_required": {
+          "ci_checks": [],
+          "required_approvals": 0
+        }
+      },
+      "allowed_merge_teams": [],
+      "merge_bots": []
+    }
+  ],
+  "archived": false,
+  "private": false,
+  "auto_merge_enabled": true
+}

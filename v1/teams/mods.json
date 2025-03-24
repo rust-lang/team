@@ -1,0 +1,109 @@
+{
+  "name": "mods",
+  "kind": "team",
+  "subteam_of": null,
+  "top_level": true,
+  "members": [
+    {
+      "name": "Oliver Scherer",
+      "github": "oli-obk",
+      "github_id": 332036,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Gould",
+      "github": "technetos",
+      "github_id": 10949810,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Andrew Gallant",
+      "github": "BurntSushi",
+      "github_id": 456674,
+      "is_lead": false
+    },
+    {
+      "name": "Erick Tryzelaar",
+      "github": "erickt",
+      "github_id": 84711,
+      "is_lead": false
+    },
+    {
+      "name": "Khionu Sybiern",
+      "github": "khionu",
+      "github_id": 11195266,
+      "is_lead": false
+    },
+    {
+      "name": "Andre Bogus",
+      "github": "llogiq",
+      "github_id": 4200835,
+      "is_lead": false
+    },
+    {
+      "name": "Manish Goregaokar",
+      "github": "Manishearth",
+      "github_id": 1617736,
+      "is_lead": false
+    },
+    {
+      "name": "Matthieu M.",
+      "github": "matthieu-m",
+      "github_id": 2420441,
+      "is_lead": false
+    },
+    {
+      "name": "Matt Brubeck",
+      "github": "mbrubeck",
+      "github_id": 5920,
+      "is_lead": false
+    },
+    {
+      "name": "Nicolette Verlinden",
+      "github": "niconii",
+      "github_id": 10183419,
+      "is_lead": false
+    },
+    {
+      "name": "Felix Klock",
+      "github": "pnkfelix",
+      "github_id": 173127,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "mods",
+        "members": [
+          332036,
+          10949810
+        ]
+      },
+      {
+        "org": "rust-lang-nursery",
+        "name": "mods",
+        "members": [
+          332036,
+          10949810
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Moderation team",
+    "description": "Helping uphold the code of conduct and community standards",
+    "page": "moderation",
+    "email": "rust-mods@rust-lang.org",
+    "repo": "https://github.com/rust-lang/moderation-team",
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

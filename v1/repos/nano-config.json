@@ -1,0 +1,13 @@
+{
+  "org": "rust-lang",
+  "name": "nano-config",
+  "description": "Nano configuration for Rust",
+  "homepage": null,
+  "bots": [],
+  "teams": [],
+  "members": [],
+  "branch_protections": [],
+  "archived": true,
+  "private": false,
+  "auto_merge_enabled": true
+}

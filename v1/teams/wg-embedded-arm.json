@@ -1,0 +1,94 @@
+{
+  "name": "wg-embedded-arm",
+  "kind": "working_group",
+  "subteam_of": "wg-embedded",
+  "members": [
+    {
+      "name": "Adam Greig",
+      "github": "adamgreig",
+      "github_id": 47219,
+      "is_lead": false
+    },
+    {
+      "name": "Berkus Decker",
+      "github": "berkus",
+      "github_id": 80306,
+      "is_lead": false
+    },
+    {
+      "name": "Jonathan Pallant",
+      "github": "jonathanpallant",
+      "github_id": 18005923,
+      "is_lead": false
+    },
+    {
+      "name": "Nathan Chong",
+      "github": "nchong-at-aws",
+      "github_id": 52972368,
+      "is_lead": false
+    },
+    {
+      "name": "Alex Martens",
+      "github": "newAM",
+      "github_id": 7845120,
+      "is_lead": false
+    },
+    {
+      "name": "Robin Randhawa",
+      "github": "raw-bin",
+      "github_id": 705890,
+      "is_lead": false
+    },
+    {
+      "name": "Thales",
+      "github": "thalesfragoso",
+      "github_id": 46510852,
+      "is_lead": false
+    },
+    {
+      "name": "Daniel Egger",
+      "github": "therealprof",
+      "github_id": 3321888,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Andre Richter",
+      "github": "andre-richter",
+      "github_id": 4130005,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-embedded",
+        "name": "Arm",
+        "members": [
+          47219,
+          80306,
+          18005923,
+          52972368,
+          7845120,
+          705890,
+          46510852,
+          3321888
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Embedded Arm team",
+    "description": "Develops and maintains the core of the Arm crate ecosystem",
+    "page": "wg-embedded-arm",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

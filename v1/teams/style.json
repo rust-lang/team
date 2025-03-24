@@ -1,0 +1,89 @@
+{
+  "name": "style",
+  "kind": "team",
+  "subteam_of": "lang",
+  "members": [
+    {
+      "name": "Caleb Cartwright",
+      "github": "calebcartwright",
+      "github_id": 13042488,
+      "is_lead": true
+    },
+    {
+      "name": "Michael Goulet",
+      "github": "compiler-errors",
+      "github_id": 3674314,
+      "is_lead": false
+    },
+    {
+      "name": "Josh Triplett",
+      "github": "joshtriplett",
+      "github_id": 162737,
+      "is_lead": false
+    }
+  ],
+  "alumni": [
+    {
+      "name": "Brian Anderson",
+      "github": "brson",
+      "github_id": 147214,
+      "is_lead": false
+    },
+    {
+      "name": "Jorge Aparicio",
+      "github": "japaric",
+      "github_id": 5018213,
+      "is_lead": false
+    },
+    {
+      "name": "Nick Cameron",
+      "github": "nrc",
+      "github_id": 762626,
+      "is_lead": false
+    },
+    {
+      "name": "Scott Olson",
+      "github": "solson",
+      "github_id": 26806,
+      "is_lead": false
+    },
+    {
+      "name": "Steve Klabnik",
+      "github": "steveklabnik",
+      "github_id": 27786,
+      "is_lead": false
+    },
+    {
+      "name": "Jane Lusby",
+      "github": "yaahc",
+      "github_id": 1993852,
+      "is_lead": false
+    }
+  ],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "style",
+        "members": [
+          13042488,
+          3674314,
+          162737
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Style team",
+    "description": "Defining and evolving the default Rust coding style",
+    "page": "style",
+    "email": null,
+    "repo": "https://github.com/rust-lang/style-team",
+    "discord": null,
+    "zulip_stream": "t-style",
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

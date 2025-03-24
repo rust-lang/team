@@ -1,0 +1,76 @@
+{
+  "name": "wg-bindgen",
+  "kind": "working_group",
+  "subteam_of": "devtools",
+  "members": [
+    {
+      "name": "Emilio Cobos Álvarez",
+      "github": "emilio",
+      "github_id": 1323194,
+      "is_lead": true
+    },
+    {
+      "name": "Nick Fitzgerald",
+      "github": "fitzgen",
+      "github_id": 74571,
+      "is_lead": true
+    },
+    {
+      "name": "Darren Kulp",
+      "github": "kulp",
+      "github_id": 74288,
+      "is_lead": false
+    },
+    {
+      "name": "Miguel Ojeda",
+      "github": "ojeda",
+      "github_id": 1054456,
+      "is_lead": false
+    },
+    {
+      "name": "Christian Poveda Ruiz",
+      "github": "pvdrz",
+      "github_id": 31802960,
+      "is_lead": false
+    },
+    {
+      "name": "Tshepang Mbambo",
+      "github": "tshepang",
+      "github_id": 588486,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": {
+    "teams": [
+      {
+        "org": "rust-lang",
+        "name": "wg-bindgen",
+        "members": [
+          1323194,
+          74571,
+          74288,
+          1054456,
+          31802960,
+          588486
+        ]
+      }
+    ]
+  },
+  "website_data": {
+    "name": "Bindgen working group",
+    "description": "Developing tools for generating FFI bindings",
+    "page": "wg-bindgen",
+    "email": null,
+    "repo": "https://github.com/rust-lang/rust-bindgen",
+    "discord": {
+      "channel": "#wg-bindgen",
+      "url": "https://discord.gg/kgujzMR"
+    },
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [],
+  "discord": []
+}

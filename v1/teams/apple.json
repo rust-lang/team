@@ -1,0 +1,54 @@
+{
+  "name": "apple",
+  "kind": "marker_team",
+  "subteam_of": null,
+  "members": [
+    {
+      "name": "Fox",
+      "github": "BlackHoleFox",
+      "github_id": 20936452,
+      "is_lead": false
+    },
+    {
+      "name": "Hans Kratz",
+      "github": "hkratz",
+      "github_id": 3736990,
+      "is_lead": false
+    },
+    {
+      "name": "Inflation",
+      "github": "inflation",
+      "github_id": 2375962,
+      "is_lead": false
+    },
+    {
+      "name": "Mads Marquart",
+      "github": "madsmtm",
+      "github_id": 10577181,
+      "is_lead": false
+    },
+    {
+      "name": "Nikolai Vazquez",
+      "github": "nvzqz",
+      "github_id": 10367662,
+      "is_lead": false
+    },
+    {
+      "name": "Jake Goulding",
+      "github": "shepmaster",
+      "github_id": 174509,
+      "is_lead": false
+    },
+    {
+      "name": "Thom Chiovoloni",
+      "github": "thomcc",
+      "github_id": 860665,
+      "is_lead": false
+    }
+  ],
+  "alumni": [],
+  "github": null,
+  "website_data": null,
+  "roles": [],
+  "discord": []
+}
