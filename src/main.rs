@@ -19,109 +19,77 @@ use zulip::ZulipApi;
 use crate::ci::{check_codeowners, generate_codeowners_file};
 use crate::schema::RepoPermission;
 use anyhow::{bail, format_err, Error};
+use clap::Parser;
 use log::{error, info, warn};
 use std::collections::{BTreeMap, HashMap};
 use std::path::PathBuf;
-use std::str::FromStr;
-use structopt::StructOpt;
 
-enum DumpIndividuaAccessGroupBy {
+#[derive(clap::ValueEnum, Clone, Debug)]
+enum DumpIndividualAccessGroupBy {
     Person,
     Repo,
 }
 
-impl FromStr for DumpIndividuaAccessGroupBy {
-    type Err = String;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "person" => Ok(Self::Person),
-            "repo" => Ok(Self::Repo),
-            _ => Err(format!(
-                "Invalid group by mode {s}. Valid modes are 'person' or 'repo'"
-            )),
-        }
-    }
-}
-
-#[derive(structopt::StructOpt)]
-#[structopt(name = "team", about = "manage the rust team members")]
+#[derive(clap::Parser, Debug)]
+/// Manage the Rust team members
 enum Cli {
-    #[structopt(name = "check", help = "check if the configuration is correct")]
+    /// Check if the configuration is correct
     Check {
-        #[structopt(long = "strict", help = "fail if optional checks are not executed")]
+        /// Fail if optional checks are not executed
+        #[arg(long)]
         strict: bool,
-        #[structopt(
-            long = "skip",
-            multiple = true,
-            help = "skip one or more validation steps"
-        )]
+        /// Skip one or more validation steps
+        #[arg(long, num_args = 1..)]
         skip: Vec<String>,
     },
-    #[structopt(
-        name = "add-person",
-        help = "add a new person from their GitHub profile"
-    )]
+    /// Add a new person from their GitHub profile
     AddPerson { github_name: String },
-    #[structopt(name = "static-api", help = "generate the static API")]
+    /// Generate the static API
     StaticApi { dest: String },
-    #[structopt(name = "show-person", help = "print information about a person")]
+    /// Print information about a person
     ShowPerson { github_username: String },
-    #[structopt(name = "dump-teams", help = "Lists all teams")]
+    /// List all teams
     DumpTeams {
-        #[structopt(
-            long = "exclude-wgs",
-            help = "whether to exclude listing working groups or not"
-        )]
+        /// Whether to exclude listing working groups or not
+        #[arg(long = "exclude-wgs")]
         exclude_working_groups: bool,
-        #[structopt(
-            long = "exclude-subteams",
-            help = "whether to exclude listing subteams or not"
-        )]
+        /// Whether to exclude listing subteams or not
+        #[arg(long)]
         exclude_subteams: bool,
-        #[structopt(
-            long = "include-pgs",
-            help = "whether to include listing project groups or not"
-        )]
+        /// Whether to include listing project groups or not
+        #[arg(long = "include-pgs")]
         include_project_groups: bool,
-        #[structopt(long = "only-leads", help = "whether to list only leads of the team")]
+        /// Whether to list only leads of the team
+        #[arg(long)]
         only_leads: bool,
     },
-    #[structopt(name = "dump-team", help = "print the members of a team")]
+    /// Print the members of a team
     DumpTeam { name: String },
-    #[structopt(name = "dump-list", help = "print all the emails in a list")]
+    /// Print all the emails in a list
     DumpList { name: String },
-    #[structopt(
-        name = "dump-website",
-        help = "dump website internationalization data as a .ftl file"
-    )]
+    /// Dump website internationalization data as a .ftl file
     DumpWebsite,
-    #[structopt(
-        name = "dump-permission",
-        help = "print all the people with a permission"
-    )]
+    /// Print all the people with a permission
     DumpPermission { name: String },
-    #[structopt(
-        name = "dump-individual-access",
-        help = "print all the people with an individual access to a repository"
-    )]
-    DumpIndividuaAccess {
-        #[structopt(default_value = "repo", long)]
-        group_by: DumpIndividuaAccessGroupBy,
+    /// Print all the people with an individual access to a repository
+    DumpIndividualAccess {
+        #[arg(long, default_value = "repo")]
+        group_by: DumpIndividualAccessGroupBy,
     },
-    #[structopt(name = "encrypt-email", help = "encrypt an email address")]
+    /// Encrypt an email address
     EncryptEmail,
-    #[structopt(name = "decrypt-email", help = "decrypt an email address")]
+    /// Decrypt an email address
     DecryptEmail,
-    #[structopt(name = "ci", help = "CI scripts")]
+    /// CI scripts
+    #[clap(subcommand)]
     Ci(CiOpts),
 }
 
-#[derive(structopt::StructOpt)]
+#[derive(clap::Parser, Debug)]
 enum CiOpts {
-    #[structopt(help = "Generate the .github/CODEOWNERS file")]
+    /// Generate the .github/CODEOWNERS file
     GenerateCodeowners,
-    #[structopt(help = "Check if the .github/CODEOWNERS file is up-to-date")]
+    /// Check if the .github/CODEOWNERS file is up-to-date
     CheckCodeowners,
 }
 
@@ -143,7 +111,7 @@ fn main() {
 }
 
 fn run() -> Result<(), Error> {
-    let cli = Cli::from_args();
+    let cli = Cli::parse();
     let data = Data::load()?;
     match cli {
         Cli::Check { strict, skip } => {
@@ -374,7 +342,7 @@ fn run() -> Result<(), Error> {
                 println!("{}", github_username);
             }
         }
-        Cli::DumpIndividuaAccess { group_by } => {
+        Cli::DumpIndividualAccess { group_by } => {
             // user -> (repo, access)
             let mut users: HashMap<String, Vec<(String, RepoPermission)>> = HashMap::default();
             for repo in data.repos() {
@@ -387,8 +355,8 @@ fn run() -> Result<(), Error> {
                 }
             }
             let output: HashMap<String, Vec<(String, RepoPermission)>> = match group_by {
-                DumpIndividuaAccessGroupBy::Person => users,
-                DumpIndividuaAccessGroupBy::Repo => {
+                DumpIndividualAccessGroupBy::Person => users,
+                DumpIndividualAccessGroupBy::Repo => {
                     let mut repos: HashMap<String, Vec<(String, RepoPermission)>> = HashMap::new();
                     for (user, accesses) in users {
                         for (repo, access) in accesses {
