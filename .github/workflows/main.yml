@@ -11,8 +11,7 @@ jobs:
       id-token: write
       pages: write
     steps:
-
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 50
 
