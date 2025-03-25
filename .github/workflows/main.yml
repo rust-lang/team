@@ -64,7 +64,7 @@ jobs:
       id-token: write
     if: github.event_name == 'merge_group'
     steps:
-      - name: Download built JSON API
+      - name: Download built JSON API and sync-team
         uses: actions/download-artifact@v4
         with:
           name: team-api-output
@@ -78,19 +78,25 @@ jobs:
           GITHUB_DEPLOY_KEY: ${{ secrets.GITHUB_DEPLOY_KEY }}
 
       - name: Configure AWS credentials
-        if: github.event_name == 'merge_group'
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::890664054962:role/ci--rust-lang--team
           aws-region: us-west-1
 
       - name: Start the synchronization tool
-        if: github.event_name == 'merge_group'
         run: |
           # Introduce some artificial delay to help github pages propagate.
           sleep 60
           aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
           cat output.json | python3 -m json.tool
+
+      - uses: actions/checkout@v4
+
+      - name: Run sync-team dry-run
+        run: |
+          cargo run --manifest-path sync-team/Cargo.toml \
+            print-plan \
+            --team-json build
 
   # Summary job for the merge queue.
   # ALL THE PREVIOUS JOBS NEED TO BE ADDED TO THE `needs` SECTION OF THIS JOB!
