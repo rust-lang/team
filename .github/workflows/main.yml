@@ -9,6 +9,7 @@ jobs:
     if: github.repository == 'rust-lang/team'
     permissions:
       id-token: write
+      pages: write
     steps:
 
       - uses: actions/checkout@main
@@ -57,14 +58,18 @@ jobs:
           name: team-api-output
           path: build
 
-      - name: Deploy to GitHub Pages
-        run: |
-          touch build/.nojekyll
-          curl -LsSf https://raw.githubusercontent.com/rust-lang/simpleinfra/master/setup-deploy-keys/src/deploy.rs | rustc - -o /tmp/deploy
-          (cd build && /tmp/deploy)
-        env:
-          GITHUB_DEPLOY_KEY: ${{ secrets.GITHUB_DEPLOY_KEY }}
+      - name: Disable Jekyll
+        run: touch build/.nojekyll
+
+      - name: Upload GitHub pages artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: actions/deploy-pages@v4
 
       - name: Configure AWS credentials
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
