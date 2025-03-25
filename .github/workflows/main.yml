@@ -95,13 +95,90 @@ jobs:
           aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
           cat output.json | python3 -m json.tool
 
+      # GitHub tokens generated from GitHub Apps can access resources from one organization,
+      # so we need to generate a token for each organization.
+      - name: Generate GitHub token (rust-lang)
+        uses: actions/create-github-app-token@v1
+        id: rust-lang-token
+        with:
+          # GitHub App ID secret name
+          app-id: ${{ secrets.SYNC_TEAM_GH_APP_READ_ID }}
+          # GitHub App private key secret name
+          private-key: ${{ secrets.SYNC_TEAM_GH_APP_READ_PRIVATE_KEY }}
+          # Set the owner, so the token can be used in all repositories
+          owner: rust-lang
+
+      - name: Generate GitHub token (rust-lang-ci)
+        uses: actions/create-github-app-token@v1
+        id: rust-lang-ci-token
+        with:
+          app-id: ${{ secrets.SYNC_TEAM_GH_APP_READ_ID }}
+          private-key: ${{ secrets.SYNC_TEAM_GH_APP_READ_PRIVATE_KEY }}
+          owner: rust-lang-ci
+
+      - name: Generate GitHub token (rust-lang-deprecated)
+        uses: actions/create-github-app-token@v1
+        id: rust-lang-deprecated-token
+        with:
+          app-id: ${{ secrets.SYNC_TEAM_GH_APP_READ_ID }}
+          private-key: ${{ secrets.SYNC_TEAM_GH_APP_READ_PRIVATE_KEY }}
+          owner: rust-lang-deprecated
+
+      - name: Generate GitHub token (rust-lang-nursery)
+        uses: actions/create-github-app-token@v1
+        id: rust-lang-nursery-token
+        with:
+          app-id: ${{ secrets.SYNC_TEAM_GH_APP_READ_ID }}
+          private-key: ${{ secrets.SYNC_TEAM_GH_APP_READ_PRIVATE_KEY }}
+          owner: rust-lang-nursery
+
+      - name: Generate GitHub token (bors-rs)
+        uses: actions/create-github-app-token@v1
+        id: bors-rs-token
+        with:
+          app-id: ${{ secrets.SYNC_TEAM_GH_APP_READ_ID }}
+          private-key: ${{ secrets.SYNC_TEAM_GH_APP_READ_PRIVATE_KEY }}
+          owner: bors-rs
+
+      - name: Generate GitHub token (rust-analyzer)
+        uses: actions/create-github-app-token@v1
+        id: rust-analyzer-token
+        with:
+          app-id: ${{ secrets.SYNC_TEAM_GH_APP_READ_ID }}
+          private-key: ${{ secrets.SYNC_TEAM_GH_APP_READ_PRIVATE_KEY }}
+          owner: rust-analyzer
+
+      - name: Generate GitHub token (rust-embedded)
+        uses: actions/create-github-app-token@v1
+        id: rust-embedded-token
+        with:
+          app-id: ${{ secrets.SYNC_TEAM_GH_APP_READ_ID }}
+          private-key: ${{ secrets.SYNC_TEAM_GH_APP_READ_PRIVATE_KEY }}
+          owner: rust-embedded
+
+      - name: Generate GitHub token (rust-dev-tools)
+        uses: actions/create-github-app-token@v1
+        id: rust-dev-tools-token
+        with:
+          app-id: ${{ secrets.SYNC_TEAM_GH_APP_READ_ID }}
+          private-key: ${{ secrets.SYNC_TEAM_GH_APP_READ_PRIVATE_KEY }}
+          owner: rust-dev-tools
+
       - uses: actions/checkout@v4
 
-      - name: Run sync-team dry-run
+      - name: Run sync-team (dry-run)
+        env:
+          GITHUB_TOKEN_RUST_LANG: ${{ steps.rust-lang-token.outputs.token }}
+          GITHUB_TOKEN_RUST_LANG_CI: ${{ steps.rust-lang-ci-token.outputs.token }}
+          GITHUB_TOKEN_RUST_LANG_DEPRECATED: ${{ steps.rust-lang-deprecated-token.outputs.token }}
+          GITHUB_TOKEN_RUST_LANG_NURSERY: ${{ steps.rust-lang-nursery-token.outputs.token }}
+          GITHUB_TOKEN_BORS_RS: ${{ steps.bors-rs-token.outputs.token }}
+          GITHUB_TOKEN_RUST_ANALYZER: ${{ steps.rust-analyzer-token.outputs.token }}
+          GITHUB_TOKEN_RUST_EMBEDDED: ${{ steps.rust-embedded-token.outputs.token }}
+          GITHUB_TOKEN_RUST_DEV_TOOLS: ${{ steps.rust-dev-tools-token.outputs.token }}
         run: |
           cargo run --manifest-path sync-team/Cargo.toml \
-            print-plan \
-            --team-json build
+            print-plan --team-json build
 
   # Summary job for the merge queue.
   # ALL THE PREVIOUS JOBS NEED TO BE ADDED TO THE `needs` SECTION OF THIS JOB!
