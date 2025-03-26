@@ -5,7 +5,17 @@
   "members": [],
   "alumni": [],
   "github": null,
-  "website_data": null,
+  "website_data": {
+    "name": "Leadership council",
+    "description": "test",
+    "page": "leadership-council",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
   "roles": [],
   "discord": []
 }

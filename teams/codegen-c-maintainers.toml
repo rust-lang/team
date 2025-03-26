@@ -11,3 +11,8 @@ alumni = []
 
 [[github]]
 orgs = ["rust-lang"]
+
+[website]
+name = "Codegen C Maintainers"
+description = "Developing the C based backend for rustc"
+repo = "https://github.com/rust-lang/rustc_codegen_c"

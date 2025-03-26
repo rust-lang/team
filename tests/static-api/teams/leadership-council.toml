@@ -4,3 +4,7 @@ name = "leadership-council"
 leads = []
 members = []
 alumni = []
+
+[website]
+name = "Leadership council"
+description = "test"

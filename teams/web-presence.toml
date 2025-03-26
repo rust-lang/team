@@ -18,3 +18,7 @@ extra-people = [
     "shepmaster",
     "pichfl",
 ]
+
+[website]
+name = "Web Presence team"
+description = "Manages the Rust websites"

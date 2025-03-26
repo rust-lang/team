@@ -19,3 +19,7 @@ alumni = []
 
 [[zulip-groups]]
 name = "gsoc-mentors"
+
+[website]
+name = "Mentors team"
+description = "Mentors for the mentorship and internship programs"

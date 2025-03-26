@@ -11,3 +11,8 @@ alumni = []
 
 [[github]]
 orgs = ["rust-lang"]
+
+[website]
+name = "Book team"
+description = "Maintains The Rust Programming Language book"
+repo = "https://github.com/rust-lang/book"
