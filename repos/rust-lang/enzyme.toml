@@ -1,0 +1,22 @@
+org = "rust-lang"
+name = "enzyme"
+description = "Rust-specific fork of Enzyme."
+bots = []
+
+[access.teams]
+bootstrap = "maintain"
+compiler = "maintain"
+lang = "maintain"
+lang-ops = "maintain"
+libs = "maintain"
+libs-api = "maintain"
+release = "maintain"
+wg-llvm = "maintain"
+
+[[branch-protections]]
+pattern = "rustc/*"
+pr-required = false
+
+[[branch-protections]]
+pattern = "master"
+pr-required = false
