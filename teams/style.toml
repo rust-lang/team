@@ -5,11 +5,11 @@ subteam-of = "lang"
 leads = ["calebcartwright"]
 members = [
     "calebcartwright",
-    "compiler-errors",
     "joshtriplett",
 ]
 alumni = [
     "brson",
+    "compiler-errors",
     "japaric",
     "nrc",
     "solson",
