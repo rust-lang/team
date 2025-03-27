@@ -1,6 +1,8 @@
 use crate::data::Data;
 use crate::github::GitHubApi;
-use crate::schema::{Bot, Email, MergeBot, Permissions, Team, TeamKind, TeamPeople, ZulipMember};
+use crate::schema::{
+    Bot, Email, MergeBot, Permissions, RepoPermission, Team, TeamKind, TeamPeople, ZulipMember,
+};
 use crate::zulip::ZulipApi;
 use anyhow::{bail, Error};
 use log::{error, warn};
@@ -51,6 +53,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_repos,
     validate_branch_protections,
     validate_member_roles,
+    validate_admin_access,
     validate_website,
 ];
 
@@ -1022,6 +1025,40 @@ fn validate_member_roles(data: &Data, errors: &mut Vec<String>) {
             Ok(())
         },
     );
+}
+
+/// Validate that admin access is not used anywhere
+fn validate_admin_access(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.all_repos(), errors, |repo, errors| {
+        wrapper(repo.access.teams.iter(), errors, |(team, permission), _| {
+            if let RepoPermission::Admin = permission {
+                bail!(
+                    "Repository {}/{} uses `admin` permission for team `{team}`",
+                    repo.org,
+                    repo.name
+                );
+            } else {
+                Ok(())
+            }
+        });
+        wrapper(
+            repo.access.individuals.iter(),
+            errors,
+            |(member, permission), _| {
+                if let RepoPermission::Admin = permission {
+                    bail!(
+                        "Repository {}/{} uses `admin` permission for member `{member}`",
+                        repo.org,
+                        repo.name
+                    );
+                } else {
+                    Ok(())
+                }
+            },
+        );
+
+        Ok(())
+    });
 }
 
 /// We use Fluent ids which are lowercase alphanumeric with hyphens.
