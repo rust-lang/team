@@ -9,7 +9,7 @@
       "teams": [
         {
           "name": "foo",
-          "permission": "admin"
+          "permission": "maintain"
         }
       ],
       "members": [],
@@ -42,7 +42,7 @@
       "teams": [
         {
           "name": "foo",
-          "permission": "admin"
+          "permission": "maintain"
         }
       ],
       "members": [],
