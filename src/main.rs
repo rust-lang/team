@@ -3,22 +3,22 @@
 mod data;
 #[macro_use]
 mod permissions;
+mod api;
 mod ci;
-mod github;
 mod schema;
 mod static_api;
 mod validate;
-mod zulip;
 
 const USER_AGENT: &str = "https://github.com/rust-lang/team (infra@rust-lang.org)";
 
+use api::zulip::ZulipApi;
 use data::Data;
 use schema::{Email, Team, TeamKind};
-use zulip::ZulipApi;
 
 use crate::ci::{check_codeowners, generate_codeowners_file};
 use crate::schema::RepoPermission;
 use anyhow::{bail, format_err, Error};
+use api::github;
 use clap::Parser;
 use log::{error, info, warn};
 use std::collections::{BTreeMap, HashMap};

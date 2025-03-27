@@ -1,9 +1,9 @@
+use crate::api::github::GitHubApi;
+use crate::api::zulip::ZulipApi;
 use crate::data::Data;
-use crate::github::GitHubApi;
 use crate::schema::{
     Bot, Email, MergeBot, Permissions, RepoPermission, Team, TeamKind, TeamPeople, ZulipMember,
 };
-use crate::zulip::ZulipApi;
 use anyhow::{bail, Error};
 use log::{error, warn};
 use regex::Regex;
