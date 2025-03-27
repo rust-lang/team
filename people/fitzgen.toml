@@ -2,6 +2,3 @@ name = "Nick Fitzgerald"
 github = "fitzgen"
 github-id = 74571
 email = "nfitzgerald@mozilla.com"
-
-[permissions]
-bors.rust.review = true

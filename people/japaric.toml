@@ -2,6 +2,3 @@ name = "Jorge Aparicio"
 github = "japaric"
 github-id = 5018213
 email = "jorge@japaric.io"
-
-[permissions]
-bors.rust.review = true

@@ -1,6 +1,0 @@
-name = "ljedrz"
-github = "ljedrz"
-github-id = 3750347
-
-[permissions]
-bors.rust.try = true
