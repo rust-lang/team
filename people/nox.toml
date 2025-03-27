@@ -2,6 +2,3 @@ name = "Anthony Ramine"
 github = "nox"
 github-id = 123095
 email = "n.oxyde@gmail.com"
-
-[permissions]
-bors.rust.try = true

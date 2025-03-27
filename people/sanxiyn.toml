@@ -1,6 +1,3 @@
 name = "Seo Sanghyeon"
 github = "sanxiyn"
 github-id = 45249
-
-[permissions]
-bors.rust.review = true
