@@ -22,5 +22,3 @@ secrecy = "0.10"
 indexmap = "2.6.0"
 derive_builder = "0.20.2"
 insta = "1.40.0"
-
-[workspace]
