@@ -1,4 +1,6 @@
-use crate::github::tests::test_utils::{BranchProtectionBuilder, DataModel, RepoData, TeamData};
+use crate::github::tests::test_utils::{
+    BranchProtectionBuilder, DEFAULT_ORG, DataModel, RepoData, TeamData,
+};
 use rust_team_data::v1::{BranchProtectionMode, RepoPermission};
 
 mod test_utils;
@@ -17,7 +19,7 @@ fn team_create() {
     let user = model.create_user("mark");
     let user2 = model.create_user("jan");
     let gh = model.gh_model();
-    model.create_team(TeamData::new("admins").gh_team("admins-gh", &[user, user2]));
+    model.create_team(TeamData::new("admins").gh_team(DEFAULT_ORG, "admins-gh", &[user, user2]));
     let team_diff = model.diff_teams(gh);
     insta::assert_debug_snapshot!(team_diff, @r###"
     [
@@ -48,7 +50,7 @@ fn team_add_member() {
     let mut model = DataModel::default();
     let user = model.create_user("mark");
     let user2 = model.create_user("jan");
-    model.create_team(TeamData::new("admins").gh_team("admins-gh", &[user]));
+    model.create_team(TeamData::new("admins").gh_team(DEFAULT_ORG, "admins-gh", &[user]));
     let gh = model.gh_model();
 
     model.get_team("admins").add_gh_member("admins-gh", user2);
@@ -85,11 +87,11 @@ fn team_dont_add_member_if_invitation_is_pending() {
     let mut model = DataModel::default();
     let user = model.create_user("mark");
     let user2 = model.create_user("jan");
-    model.create_team(TeamData::new("admins").gh_team("admins-gh", &[user]));
+    model.create_team(TeamData::new("admins").gh_team(DEFAULT_ORG, "admins-gh", &[user]));
     let mut gh = model.gh_model();
 
     model.get_team("admins").add_gh_member("admins-gh", user2);
-    gh.add_invitation("admins-gh", "jan");
+    gh.add_invitation(DEFAULT_ORG, "admins-gh", "jan");
 
     let team_diff = model.diff_teams(gh);
     insta::assert_debug_snapshot!(team_diff, @"[]");
@@ -100,7 +102,7 @@ fn team_remove_member() {
     let mut model = DataModel::default();
     let user = model.create_user("mark");
     let user2 = model.create_user("jan");
-    model.create_team(TeamData::new("admins").gh_team("admins-gh", &[user, user2]));
+    model.create_team(TeamData::new("admins").gh_team(DEFAULT_ORG, "admins-gh", &[user, user2]));
     let gh = model.gh_model();
 
     model
@@ -142,8 +144,8 @@ fn team_delete() {
     // won't be generated, because no organization is known to scan for existing unmanaged teams.
     model.create_team(
         TeamData::new("admins")
-            .gh_team("admins-gh", &[user])
-            .gh_team("users-gh", &[user]),
+            .gh_team(DEFAULT_ORG, "admins-gh", &[user])
+            .gh_team(DEFAULT_ORG, "users-gh", &[user]),
     );
     let gh = model.gh_model();
 

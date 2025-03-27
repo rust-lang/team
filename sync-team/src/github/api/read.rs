@@ -2,6 +2,7 @@ use crate::github::api::{
     BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, Repo, RepoTeam,
     RepoUser, Team, TeamMember, TeamRole, team_node_id, url::GitHubUrl, user_node_id,
 };
+use anyhow::Context as _;
 use reqwest::Method;
 use std::collections::{HashMap, HashSet};
 
@@ -271,16 +272,19 @@ impl GithubRead for GitHubApiRead {
             is_archived: bool,
         }
 
-        let result: Wrapper = self.client.graphql(
-            QUERY,
-            Params {
-                owner: org,
-                name: repo,
-            },
-            org,
-        )?;
+        let result: Option<Wrapper> = self
+            .client
+            .graphql_opt(
+                QUERY,
+                Params {
+                    owner: org,
+                    name: repo,
+                },
+                org,
+            )
+            .with_context(|| format!("failed to retrieve repo `{org}/{repo}`"))?;
 
-        let repo = result.repository.map(|repo_response| Repo {
+        let repo = result.and_then(|r| r.repository).map(|repo_response| Repo {
             node_id: repo_response.id,
             name: repo.to_string(),
             description: repo_response.description.unwrap_or_default(),

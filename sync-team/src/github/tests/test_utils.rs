@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeSet, HashMap, HashSet};
 
 use derive_builder::Builder;
 use rust_team_data::v1;
@@ -13,7 +13,7 @@ use crate::github::{
     RepoDiff, SyncGitHub, TeamDiff, api, construct_branch_protection, convert_permission,
 };
 
-const DEFAULT_ORG: &str = "rust-lang";
+pub const DEFAULT_ORG: &str = "rust-lang";
 
 type UserId = u64;
 
@@ -74,11 +74,12 @@ impl DataModel {
             .map(|user| (user.github_id, user.name.clone()))
             .collect();
 
-        let mut team_memberships: HashMap<String, HashMap<UserId, TeamMember>> = HashMap::default();
-        let mut teams = vec![];
+        let mut orgs: HashMap<String, GithubOrg> = HashMap::default();
+
         for team in &self.teams {
             for gh_team in &team.gh_teams {
-                let res = team_memberships.insert(
+                let org = orgs.entry(gh_team.org.clone()).or_default();
+                let res = org.team_memberships.insert(
                     gh_team.name.clone(),
                     gh_team
                         .members
@@ -96,27 +97,26 @@ impl DataModel {
                 );
                 assert!(res.is_none());
 
-                teams.push(api::Team {
-                    id: Some(teams.len() as u64),
+                org.teams.push(api::Team {
+                    id: Some(org.teams.len() as u64),
                     name: gh_team.name.clone(),
                     description: Some("Managed by the rust-lang/team repository.".to_string()),
                     privacy: TeamPrivacy::Closed,
                     slug: gh_team.name.clone(),
-                })
+                });
+
+                org.members.extend(gh_team.members.iter().copied());
             }
         }
 
-        let mut repos = HashMap::default();
-        let mut repo_members: HashMap<String, RepoMembers> = HashMap::default();
-        let mut branch_protections = HashMap::new();
-
         for repo in &self.repos {
-            repos.insert(
+            let org = orgs.entry(repo.org.clone()).or_default();
+            org.repos.insert(
                 repo.name.clone(),
                 Repo {
-                    node_id: repos.len().to_string(),
+                    node_id: org.repos.len().to_string(),
                     name: repo.name.clone(),
-                    org: DEFAULT_ORG.to_string(),
+                    org: repo.org.clone(),
                     description: repo.description.clone(),
                     homepage: repo.homepage.clone(),
                     archived: false,
@@ -146,7 +146,8 @@ impl DataModel {
                     permission: convert_permission(&m.permission),
                 })
                 .collect();
-            repo_members.insert(repo.name.clone(), RepoMembers { teams, members });
+            org.repo_members
+                .insert(repo.name.clone(), RepoMembers { teams, members });
 
             let repo_v1: v1::Repo = repo.clone().into();
             let mut protections = vec![];
@@ -156,19 +157,15 @@ impl DataModel {
                     construct_branch_protection(&repo_v1, protection),
                 ));
             }
-            branch_protections.insert(repo.name.clone(), protections);
+            org.branch_protections
+                .insert(repo.name.clone(), protections);
         }
 
-        GithubMock {
-            users,
-            owners: Default::default(),
-            teams,
-            team_memberships,
-            team_invitations: Default::default(),
-            repos,
-            repo_members,
-            branch_protections,
+        if orgs.is_empty() {
+            orgs.insert(DEFAULT_ORG.to_string(), GithubOrg::default());
         }
+
+        GithubMock { users, orgs }
     }
 
     pub fn diff_teams(&self, github: GithubMock) -> Vec<TeamDiff> {
@@ -249,10 +246,10 @@ impl From<TeamData> for v1::Team {
 }
 
 impl TeamDataBuilder {
-    pub fn gh_team(mut self, name: &str, members: &[UserId]) -> Self {
+    pub fn gh_team(mut self, org: &str, name: &str, members: &[UserId]) -> Self {
         let mut gh_teams = self.gh_teams.unwrap_or_default();
         gh_teams.push(GitHubTeam {
-            org: DEFAULT_ORG.to_string(),
+            org: org.to_string(),
             name: name.to_string(),
             members: members.to_vec(),
         });
@@ -265,6 +262,8 @@ impl TeamDataBuilder {
 #[builder(pattern = "owned")]
 pub struct RepoData {
     name: String,
+    #[builder(default = DEFAULT_ORG.to_string())]
+    org: String,
     #[builder(default)]
     pub description: String,
     #[builder(default)]
@@ -307,6 +306,7 @@ impl From<RepoData> for v1::Repo {
     fn from(value: RepoData) -> Self {
         let RepoData {
             name,
+            org,
             description,
             homepage,
             bots,
@@ -317,7 +317,7 @@ impl From<RepoData> for v1::Repo {
             branch_protections,
         } = value;
         Self {
-            org: DEFAULT_ORG.to_string(),
+            org,
             name: name.clone(),
             description,
             homepage,
@@ -411,27 +411,29 @@ impl BranchProtectionBuilder {
 pub struct GithubMock {
     // user ID -> login
     users: HashMap<UserId, String>,
-    // org name -> user ID
-    owners: HashMap<String, Vec<UserId>>,
-    teams: Vec<Team>,
-    // Team name -> members
-    team_memberships: HashMap<String, HashMap<UserId, TeamMember>>,
-    // Team name -> list of invited users
-    team_invitations: HashMap<String, Vec<String>>,
-    // Repo name -> repo data
-    repos: HashMap<String, Repo>,
-    // Repo name -> (teams, members)
-    repo_members: HashMap<String, RepoMembers>,
-    // Repo name -> Vec<(protection ID, branch protection)>
-    branch_protections: HashMap<String, Vec<(String, BranchProtection)>>,
+    // org name -> organization data
+    orgs: HashMap<String, GithubOrg>,
 }
 
 impl GithubMock {
-    pub fn add_invitation(&mut self, repo: &str, user: &str) {
-        self.team_invitations
+    pub fn add_invitation(&mut self, org: &str, repo: &str, user: &str) {
+        self.get_org_mut(org)
+            .team_invitations
             .entry(repo.to_string())
             .or_default()
             .push(user.to_string());
+    }
+
+    fn get_org(&self, org: &str) -> &GithubOrg {
+        self.orgs
+            .get(org)
+            .unwrap_or_else(|| panic!("Org {org} not found"))
+    }
+
+    fn get_org_mut(&mut self, org: &str) -> &mut GithubOrg {
+        self.orgs
+            .get_mut(org)
+            .unwrap_or_else(|| panic!("Org {org} not found"))
     }
 }
 
@@ -446,39 +448,38 @@ impl GithubRead for GithubMock {
     }
 
     fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<UserId>> {
-        Ok(self
-            .owners
-            .get(org)
-            .cloned()
-            .unwrap_or_default()
-            .into_iter()
-            .collect())
+        Ok(self.get_org(org).owners.iter().copied().collect())
     }
 
     fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
-        assert_eq!(org, DEFAULT_ORG);
         Ok(self
+            .get_org(org)
             .teams
             .iter()
             .map(|team| (team.name.clone(), team.slug.clone()))
             .collect())
     }
 
-    fn team(&self, _org: &str, team: &str) -> anyhow::Result<Option<Team>> {
-        Ok(self.teams.iter().find(|t| t.name == team).cloned())
+    fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
+        Ok(self
+            .get_org(org)
+            .teams
+            .iter()
+            .find(|t| t.name == team)
+            .cloned())
     }
 
     fn team_memberships(
         &self,
         team: &Team,
-        _org: &str,
+        org: &str,
     ) -> anyhow::Result<HashMap<UserId, TeamMember>> {
-        let memberships = self
+        Ok(self
+            .get_org(org)
             .team_memberships
             .get(&team.name)
             .cloned()
-            .unwrap_or_default();
-        Ok(memberships)
+            .unwrap_or_default())
     }
 
     fn team_membership_invitations(
@@ -486,8 +487,8 @@ impl GithubRead for GithubMock {
         org: &str,
         team: &str,
     ) -> anyhow::Result<HashSet<String>> {
-        assert_eq!(org, DEFAULT_ORG);
         Ok(self
+            .get_org(org)
             .team_invitations
             .get(team)
             .cloned()
@@ -497,13 +498,15 @@ impl GithubRead for GithubMock {
     }
 
     fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
-        assert_eq!(org, DEFAULT_ORG);
-        Ok(self.repos.get(repo).cloned())
+        Ok(self
+            .orgs
+            .get(org)
+            .and_then(|org| org.repos.get(repo).cloned()))
     }
 
     fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
-        assert_eq!(org, DEFAULT_ORG);
         Ok(self
+            .get_org(org)
             .repo_members
             .get(repo)
             .cloned()
@@ -512,9 +515,8 @@ impl GithubRead for GithubMock {
     }
 
     fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>> {
-        // The mock currently only supports mocking one GitHub organization.
-        assert_eq!(org, DEFAULT_ORG);
         Ok(self
+            .get_org(org)
             .repo_members
             .get(repo)
             .cloned()
@@ -527,9 +529,7 @@ impl GithubRead for GithubMock {
         org: &str,
         repo: &str,
     ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>> {
-        assert_eq!(org, DEFAULT_ORG);
-
-        let Some(protections) = self.branch_protections.get(repo) else {
+        let Some(protections) = self.get_org(org).branch_protections.get(repo) else {
             return Ok(Default::default());
         };
         let mut result = HashMap::default();
@@ -539,6 +539,23 @@ impl GithubRead for GithubMock {
 
         Ok(result)
     }
+}
+
+#[derive(Default)]
+struct GithubOrg {
+    members: BTreeSet<UserId>,
+    owners: BTreeSet<UserId>,
+    teams: Vec<Team>,
+    // Team name -> list of invited users
+    team_invitations: HashMap<String, Vec<String>>,
+    // Team name -> members
+    team_memberships: HashMap<String, HashMap<UserId, TeamMember>>,
+    // Repo name -> repo data
+    repos: HashMap<String, Repo>,
+    // Repo name -> (teams, members)
+    repo_members: HashMap<String, RepoMembers>,
+    // Repo name -> Vec<(protection ID, branch protection)>
+    branch_protections: HashMap<String, Vec<(String, BranchProtection)>>,
 }
 
 #[derive(Clone)]
