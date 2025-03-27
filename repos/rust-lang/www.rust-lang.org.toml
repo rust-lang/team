@@ -5,8 +5,8 @@ homepage = "https://www.rust-lang.org"
 bots = ["rustbot"]
 
 [access.teams]
-# Admin is needed for integrating with external services, e.g. Pontoon
-website = "admin"
+# Maintain is needed for integrating with external services, e.g. Pontoon
+website = "maintain"
 
 [[branch-protections]]
 pattern = "master"

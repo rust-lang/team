@@ -4,7 +4,7 @@ description = "A repo!"
 bots = []
 
 [access.teams]
-foo = "admin"
+foo = "maintain"
 
 [[branch-protections]]
 pattern = "master"

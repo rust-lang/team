@@ -4,7 +4,7 @@ description = "Archive of the crates.io-index commit history after squashes"
 bots = []
 
 [access.teams]
-crates-io = "admin"
+crates-io = "maintain"
 
 [[branch-protections]]
 pattern = "snapshot-*"

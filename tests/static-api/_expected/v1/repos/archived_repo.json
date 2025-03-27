@@ -7,7 +7,7 @@
   "teams": [
     {
       "name": "foo",
-      "permission": "admin"
+      "permission": "maintain"
     }
   ],
   "members": [],
