@@ -141,8 +141,8 @@ jobs:
         run: |
           # Perform build and execution separately to avoid any potential output from
           # cargo leaking into the output file.
-          cargo build --manifest-path sync-team/Cargo.toml --release
-          ./sync-team/target/release/sync-team print-plan \
+          cargo build --release
+          ./target/release/team sync print-plan \
             --services github \
             --team-json team-api 2>&1 | tee -a output.txt
 

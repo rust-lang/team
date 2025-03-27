@@ -97,8 +97,7 @@ jobs:
           ZULIP_API_TOKEN: ${{ secrets.ZULIP_API_TOKEN }}
           ZULIP_USERNAME: ${{ secrets.ZULIP_USERNAME }}
         run: |
-          cargo run --manifest-path sync-team/Cargo.toml \
-            apply --team-json build
+          cargo run sync apply --team-json build
 
       - name: Disable Jekyll
         run: touch build/.nojekyll
