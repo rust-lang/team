@@ -65,11 +65,26 @@ jobs:
       pages: write
     if: github.event_name == 'merge_group'
     steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
       - name: Download built JSON API and sync-team
         uses: actions/download-artifact@v4
         with:
           name: team-api-output
           path: build
+
+      - name: Sync changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.WRITE_GITHUB_TOKEN }}
+          MAILGUN_API_TOKEN: ${{ secrets.MAILGUN_API_TOKEN }}
+          EMAIL_ENCRYPTION_KEY: ${{ secrets.EMAIL_ENCRYPTION_KEY }}
+          ZULIP_API_TOKEN: ${{ secrets.ZULIP_API_TOKEN }}
+          ZULIP_USERNAME: ${{ secrets.ZULIP_USERNAME }}
+        run: |
+          cargo run --manifest-path sync-team/Cargo.toml \
+            apply --team-json build
 
       - name: Disable Jekyll
         run: touch build/.nojekyll
@@ -79,21 +94,10 @@ jobs:
         with:
           path: build
 
+      # Upload the pages only if the sync succeeded, to always keep the
+      # most up-to-date state in the web endpoint. 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: arn:aws:iam::890664054962:role/ci--rust-lang--team
-          aws-region: us-west-1
-
-      - name: Start the synchronization tool
-        run: |
-          # Introduce some artificial delay to help github pages propagate.
-          sleep 60
-          aws --region us-west-1 lambda invoke --function-name start-sync-team output.json
-          cat output.json | python3 -m json.tool
 
   # Summary job for the merge queue.
   # ALL THE PREVIOUS JOBS NEED TO BE ADDED TO THE `needs` SECTION OF THIS JOB!
