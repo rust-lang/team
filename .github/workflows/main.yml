@@ -3,6 +3,20 @@ name: CI
 on:
   pull_request:
   merge_group:
+  workflow_dispatch:
+  schedule:
+    # Run every four hours to make sure that all changes are up-to-date
+    - cron: 0 */4 * * *
+
+concurrency:
+  # We want to make sure that parallel executions (merge queue, cron, manual) of this workflow
+  # do not perform the `deploy` job in parallel.
+  # At the same time, we want to avoid this workflow running in parallel for multiple PRs
+  # (where it only runs tests, without deploy).
+  # If we're in a PR, `head_ref` is set, so we allow parallel runs for different PR HEAD refs.
+  # If we're elsewhere, we use a constant string to use the same concurrency group.
+  group: ${{ github.workflow }}-${{ github.head_ref || 'deploy' }}
+  cancel-in-progress: false
 
 jobs:
   test:
@@ -59,7 +73,6 @@ jobs:
     needs: [ test ]
     runs-on: ubuntu-latest
     environment: deploy
-    concurrency: deploy
     permissions:
       id-token: write
       pages: write
