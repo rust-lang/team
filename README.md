@@ -40,7 +40,7 @@ from all the supported services.
 
 [rfcbot-src]: https://github.com/anp/rfcbot-rs/blob/master/src/teams.rs
 
-[sync-team-src]: https://github.com/rust-lang/sync-team
+[sync-team-src]: sync-team
 
 [crates-io-admin-src]: https://github.com/rust-lang/crates.io/blob/main/src/worker/jobs/sync_admins.rs
 

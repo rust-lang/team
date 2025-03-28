@@ -119,6 +119,9 @@ fn generate_codeowners_content(data: Data) -> String {
 people/**/*.toml
 repos/**/*.toml
 teams/**/*.toml
+
+# Do not require admin approvals for Markdown file modifications.
+*.md
 "#
     )
     .unwrap();
