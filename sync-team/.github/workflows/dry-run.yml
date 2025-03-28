@@ -3,9 +3,6 @@ name: Dry Run
 on:
   push:
   workflow_dispatch:
-  schedule:
-    # Run the dry run every 4 hours
-    - cron: "0 */4 * * *"
 
 jobs:
   dry-run:
