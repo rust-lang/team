@@ -361,6 +361,10 @@ impl GithubRead for GitHubApiRead {
                                             },
                                             name
                                         }
+                                        ... on App {
+                                            id,
+                                            name
+                                        }
                                     }
                                 }
                             }
