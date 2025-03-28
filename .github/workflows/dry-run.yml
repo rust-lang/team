@@ -142,7 +142,7 @@ jobs:
           # Perform build and execution separately to avoid any potential output from
           # cargo leaking into the output file.
           cargo build --release
-          ./target/release/team sync print-plan \
+          ./target/release/rust-team sync print-plan \
             --services github \
             --team-json team-api 2>&1 | tee -a output.txt
 
