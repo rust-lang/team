@@ -154,8 +154,8 @@ service names you want to sync. For example, to synchronize only GitHub and
 Mailgun you can run:
 
 ```
-cargo run sync -- --services github,mailgun
-cargo run sync -- --services github,mailgun apply
+cargo run -- sync --services github,mailgun
+cargo run -- sync --services github,mailgun apply
 ```
 
 By default, the synchronization will be based on data from the live `team` endpoint.
@@ -163,7 +163,7 @@ When making changes to the tool it might be useful to test
 with dummy data though. You can do that by passing the `--team-repo` flag to the CLI:
 
 ```
-cargo run sync -- --team-json <directory>
+cargo run -- sync --team-json <directory>
 ```
 
 The `<directory>` with JSON data can be generated using `cargo run static-api`.
