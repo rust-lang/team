@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "aws-runners-test"
+description = ""
+bots = []
+
+[access.teams]
+infra = "write"
+infra-admins = "maintain"
