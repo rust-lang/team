@@ -77,7 +77,7 @@ jobs:
     permissions:
       id-token: write
       pages: write
-    if: github.event_name == 'merge_group'
+    if: github.event_name != 'pull_request'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -109,7 +109,7 @@ jobs:
           path: build
 
       # Upload the pages only if the sync succeeded, to always keep the
-      # most up-to-date state in the web endpoint. 
+      # most up-to-date state in the web endpoint.
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
 
