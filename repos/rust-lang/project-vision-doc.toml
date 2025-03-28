@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "project-vision-doc"
+description = "Project Vision Doc"
+homepage = "https://rust-lang.github.io/project-vision-doc/"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+project-vision-doc-2025 = "maintain"
