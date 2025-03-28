@@ -321,8 +321,24 @@ impl SyncGitHub {
             .branch_protections(&actual_repo.org, &actual_repo.name)?;
         for branch_protection in &expected_repo.branch_protections {
             let actual_branch_protection = actual_protections.remove(&branch_protection.pattern);
-            let expected_branch_protection =
+            let mut expected_branch_protection =
                 construct_branch_protection(expected_repo, branch_protection);
+
+            // We don't model GitHub App push allowance actors in team.
+            // However, we don't want to remove existing accesses of GH apps to
+            // branches.
+            // So if there is an existing branch protection, we copy its GitHub app
+            // push allowances into the expected branch protection, to roundtrip the app access.
+            if let Some((_, actual_branch_protection)) = &actual_branch_protection {
+                expected_branch_protection.push_allowances.extend(
+                    actual_branch_protection
+                        .push_allowances
+                        .iter()
+                        .filter(|allowance| matches!(allowance, PushAllowanceActor::App(_)))
+                        .cloned(),
+                );
+            }
+
             let operation = {
                 match actual_branch_protection {
                     Some((database_id, bp)) if bp != expected_branch_protection => {
