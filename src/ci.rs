@@ -25,6 +25,16 @@ pub fn check_codeowners(data: Data) -> anyhow::Result<()> {
     Ok(())
 }
 
+/// Sensitive TOML data files.
+/// PRs that modify them need to be approved by an infra-admin.
+const PROTECTED_PATHS: &[&str] = &[
+    "/repos/rust-lang/team.toml",
+    "/repos/rust-lang/sync-team.toml",
+    "/repos/rust-lang/rust.toml",
+    "/teams/infra-admins.toml",
+    "/teams/team-repo-admins.toml",
+];
+
 /// We want to allow access to the data files to `team-repo-admins`
 /// (maintainers), while requiring a review from `infra-admins` (admins)
 /// for any other changes.
@@ -137,12 +147,8 @@ teams/**/*.toml
     )
     .unwrap();
 
-    let mut protected_paths = vec![
-        "/repos/rust-lang/team.toml".to_string(),
-        "/repos/rust-lang/sync-team.toml".to_string(),
-        "/teams/infra-admins.toml".to_string(),
-        "/teams/team-repo-admins.toml".to_string(),
-    ];
+    let mut protected_paths: Vec<String> =
+        PROTECTED_PATHS.iter().map(|&p| String::from(p)).collect();
 
     // Some users can be both admins and maintainers.
     let all_users = admins

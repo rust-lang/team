@@ -19,6 +19,7 @@ teams/**/*.toml
 # Modifying these files requires admin approval.
 /repos/rust-lang/team.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /repos/rust-lang/sync-team.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/repos/rust-lang/rust.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /teams/infra-admins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /teams/team-repo-admins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/Mark-Simulacrum.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
