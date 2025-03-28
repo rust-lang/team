@@ -3,9 +3,9 @@ use reqwest::Method;
 
 use crate::github::api::url::GitHubUrl;
 use crate::github::api::{
-    BranchProtection, BranchProtectionOp, HttpClient, Login, PushAllowanceActor, Repo,
-    RepoPermission, RepoSettings, Team, TeamPrivacy, TeamPushAllowanceActor, TeamRole,
-    UserPushAllowanceActor, allow_not_found,
+    AppPushAllowanceActor, BranchProtection, BranchProtectionOp, HttpClient, Login,
+    PushAllowanceActor, Repo, RepoPermission, RepoSettings, Team, TeamPrivacy,
+    TeamPushAllowanceActor, TeamRole, UserPushAllowanceActor, allow_not_found,
 };
 use crate::utils::ResponseExt;
 
@@ -427,6 +427,9 @@ impl GitHubWrite {
                     organization: Login { login: org },
                     name,
                 }) => push_actor_ids.push(self.team_id(org, name)?),
+                PushAllowanceActor::App(AppPushAllowanceActor { id, .. }) => {
+                    push_actor_ids.push(id.clone())
+                }
             }
         }
 

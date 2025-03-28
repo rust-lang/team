@@ -439,6 +439,7 @@ where
 pub(crate) enum PushAllowanceActor {
     User(UserPushAllowanceActor),
     Team(TeamPushAllowanceActor),
+    App(AppPushAllowanceActor),
 }
 
 /// User who can be allowed to push to a branch in a repo
@@ -452,6 +453,14 @@ pub(crate) struct UserPushAllowanceActor {
 pub(crate) struct TeamPushAllowanceActor {
     pub(crate) organization: Login,
     pub(crate) name: String,
+}
+
+/// GitHub app that can be allowed to push to a branch in a repo
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
+pub(crate) struct AppPushAllowanceActor {
+    pub(crate) name: String,
+    /// Node ID, which can be used as a push actor ID
+    pub(crate) id: String,
 }
 
 pub(crate) enum BranchProtectionOp {
