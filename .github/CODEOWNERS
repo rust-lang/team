@@ -13,6 +13,9 @@ people/**/*.toml
 repos/**/*.toml
 teams/**/*.toml
 
+# Do not require admin approvals for Markdown file modifications.
+*.md
+
 # Modifying these files requires admin approval.
 /repos/rust-lang/team.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /repos/rust-lang/sync-team.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
