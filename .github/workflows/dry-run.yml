@@ -31,12 +31,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # Always checkout the master branch to avoid checking out
-          # code of untrusted PRs.
-          # This might break the dry-run if code or schema modifications
-          # are performed, we can selectively allow that in the future
-          # e.g. if the author of the PR is trusted.
-          ref: 'master'
+          # If the PR is from this repository, checkout the PR sha,
+          # so that we can also test code changes.
+          # If it is from a fork, then always checkout the 'master' branch,
+          # to avoid checking out code of untrusted PRs.
+          ref: ${{ github.event.workflow_run.head_repository.full_name != 'rust-lang/team' && 'master' || github.event.workflow_run.head_sha }}
           persist-credentials: false
 
       - name: Install Rust Stable
