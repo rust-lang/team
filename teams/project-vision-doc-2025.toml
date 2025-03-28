@@ -28,3 +28,6 @@ name = "Vision doc"
 description = "Authoring the Rust 2025 Vision doc"
 zulip-stream = "vision-doc-2025"
 repo = "https://github.com/rust-lang/vision-doc-2025"
+
+[[lists]]
+address = "project-vision-doc-2025@rust-lang.org"
