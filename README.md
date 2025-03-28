@@ -3,34 +3,45 @@
 This repository contains the structure of the Rust teams. The repository is
 automatically synchronized with:
 
-| Service | Synchronized every | |
-| --- | :---: | --- |
-| [@bors][bors] | *In real time* | [Integration source][bors-src] |
-| [Crater and @craterbot][crater] | *In real time* | [Integration source][crater-src] |
-| [Perf and @rust-timer][perf] | *In real time* | [Integration source][perf-src] |
-| [@rfcbot][rfcbot] | 5 minutes | [Integration source][rfcbot-src] |
-| GitHub teams membership | *Shortly after merge* | [Integration source][sync-team-src] |
-| GitHub repositories | *Shortly after merge* | [Integration source][sync-team-src] |
-| Mailing lists and aliases (`@rust-lang.org`, `@crates.io`) | *Shortly after merge* | [Integration source][sync-team-src] |
-| Zulip user group membership | *Shortly after merge* | [Integration source][sync-team-src] |
-| [Governance section on the website][www] | 2 minutes | [Integration source][www-src] |
-| crates.io admin access | 1 hour | [Integration source][crates-io-admin-src] |
+| Service                                                    |  Synchronized every   |                                           |
+|------------------------------------------------------------|:---------------------:|-------------------------------------------|
+| [@bors][bors]                                              |    *In real time*     | [Integration source][bors-src]            |
+| [Crater and @craterbot][crater]                            |    *In real time*     | [Integration source][crater-src]          |
+| [Perf and @rust-timer][perf]                               |    *In real time*     | [Integration source][perf-src]            |
+| [@rfcbot][rfcbot]                                          |       5 minutes       | [Integration source][rfcbot-src]          |
+| GitHub teams membership                                    | *Shortly after merge* | [Integration source][sync-team-src]       |
+| GitHub repositories                                        | *Shortly after merge* | [Integration source][sync-team-src]       |
+| Mailing lists and aliases (`@rust-lang.org`, `@crates.io`) | *Shortly after merge* | [Integration source][sync-team-src]       |
+| Zulip user group membership                                | *Shortly after merge* | [Integration source][sync-team-src]       |
+| [Governance section on the website][www]                   |       2 minutes       | [Integration source][www-src]             |
+| crates.io admin access                                     |        1 hour         | [Integration source][crates-io-admin-src] |
 
 If you need to add or remove a person from a team, send a PR to this
-repository.  After it's merged, their account will be added/removed
+repository. After it's merged, their account will be added/removed
 from all the supported services.
 
 [bors]: https://buildbot2.rust-lang.org/homu
+
 [bors-src]: https://github.com/rust-lang/homu/blob/master/homu/auth.py
+
 [www]: https://www.rust-lang.org/governance
+
 [www-src]: https://github.com/rust-lang/www.rust-lang.org/blob/master/src/teams.rs
+
 [crater]: https://github.com/rust-lang-nursery/crater
+
 [crater-src]: https://github.com/rust-lang-nursery/crater/blob/master/src/server/auth.rs
+
 [perf]: https://perf.rust-lang.org
+
 [perf-src]: https://github.com/rust-lang-nursery/rustc-perf/blob/master/site/src/server.rs
+
 [rfcbot]: https://rfcbot.rs
+
 [rfcbot-src]: https://github.com/anp/rfcbot-rs/blob/master/src/teams.rs
+
 [sync-team-src]: https://github.com/rust-lang/sync-team
+
 [crates-io-admin-src]: https://github.com/rust-lang/crates.io/blob/main/src/worker/jobs/sync_admins.rs
 
 ## Documentation
@@ -94,7 +105,6 @@ You can get a list of all the users with a permission:
 cargo run dump-permission perf
 ```
 
-
 You can generate [www.rust-lang.org](https://github.com/rust-lang/www.rust-lang.org)'s locales/en-US/tools.ftl file by running
 
 ```
@@ -113,7 +123,6 @@ cargo run dump-individual-access --group-mode repo
 cargo run dump-individual-access --group-mode person
 ```
 
-
 ### Building the static API
 
 You can build locally the content of `https://team-api.infra.rust-lang.org/v1/`
@@ -124,6 +133,40 @@ cargo run static-api output-dir/
 ```
 
 The content will be placed in `output-dir/`.
+
+### Syncing the state
+
+You can use the tool to synchronize state to the live services. By default, the tool will run in *dry mode* on all the services we synchronize, meaning that the changes will be previewed on the console output but no actual change will be applied:
+
+```
+cargo run sync
+```
+
+Once you're satisfied with the changes you can run the full synchronization by
+passing the `apply` subcommand:
+
+```
+cargo run sync apply
+```
+
+You can also limit the services to synchronize on by passing a list of all the
+service names you want to sync. For example, to synchronize only GitHub and
+Mailgun you can run:
+
+```
+cargo run sync -- --services github,mailgun
+cargo run sync -- --services github,mailgun apply
+```
+
+By default, the synchronization will be based on data from the live `team` endpoint.
+When making changes to the tool it might be useful to test
+with dummy data though. You can do that by passing the `--team-repo` flag to the CLI:
+
+```
+cargo run sync -- --team-json <directory>
+```
+
+The `<directory>` with JSON data can be generated using `cargo run static-api`.
 
 ### Encrypting email addresses
 

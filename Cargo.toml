@@ -13,7 +13,6 @@ dialoguer = "0.10.1"
 env_logger = { version = "0.9.0", default-features = false }
 indexmap = "2"
 log = "0.4"
-rayon = "1.5"
 regex = "1.5.5"
 reqwest = { version = "0.11.11", features = ["json", "blocking"] }
 rust_team_data = { path = "rust_team_data", features = ["email-encryption"] }
@@ -22,6 +21,8 @@ serde_derive = "1"
 serde_json = "1"
 serde-untagged = "0.1"
 toml = "0.8"
+
+sync-team = { path = "sync-team" }
 
 [dev-dependencies]
 ansi_term = "0.12.1"
@@ -33,6 +34,7 @@ walkdir = "2.3.1"
 [workspace]
 members = [
     "rust_team_data",
+    "sync-team"
 ]
 
 [workspace.package]

@@ -5,7 +5,7 @@ use std::path::PathBuf;
 use std::process::Command;
 
 /// Determines how do we get access to the ground-truth data from `rust-lang/team`.
-pub(crate) enum TeamApi {
+pub enum TeamApi {
     /// Access the live data from the published production REST API.
     Production,
     /// Build the JSON data from a checkout of `rust-lang/team`.

@@ -3,26 +3,30 @@
 mod data;
 #[macro_use]
 mod permissions;
+mod api;
 mod ci;
-mod github;
 mod schema;
 mod static_api;
 mod validate;
-mod zulip;
+
+const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun", "zulip"];
 
 const USER_AGENT: &str = "https://github.com/rust-lang/team (infra@rust-lang.org)";
 
+use api::zulip::ZulipApi;
 use data::Data;
 use schema::{Email, Team, TeamKind};
-use zulip::ZulipApi;
 
 use crate::ci::{check_codeowners, generate_codeowners_file};
 use crate::schema::RepoPermission;
 use anyhow::{bail, format_err, Error};
+use api::github;
 use clap::Parser;
 use log::{error, info, warn};
 use std::collections::{BTreeMap, HashMap};
 use std::path::PathBuf;
+use sync_team::run_sync_team;
+use sync_team::team_api::TeamApi;
 
 #[derive(clap::ValueEnum, Clone, Debug)]
 enum DumpIndividualAccessGroupBy {
@@ -83,6 +87,15 @@ enum Cli {
     /// CI scripts
     #[clap(subcommand)]
     Ci(CiOpts),
+    /// Perform synchronization of the local data to live services.
+    /// Environment variables:
+    /// - GITHUB_TOKEN          Authentication token with GitHub
+    /// - MAILGUN_API_TOKEN     Authentication token with Mailgun
+    /// - EMAIL_ENCRYPTION_KEY  Key used to decrypt encrypted emails in the team repo
+    /// - ZULIP_USERNAME        Username of the Zulip bot
+    /// - ZULIP_API_TOKEN       Authentication token of the Zulip bot
+    #[clap(verbatim_doc_comment)]
+    Sync(SyncOpts),
 }
 
 #[derive(clap::Parser, Debug)]
@@ -93,11 +106,42 @@ enum CiOpts {
     CheckCodeowners,
 }
 
+#[derive(clap::Parser, Debug)]
+struct SyncOpts {
+    /// Comma-separated list of available services
+    #[clap(long, global(true), value_parser = clap::builder::PossibleValuesParser::new(
+        AVAILABLE_SERVICES
+    ), value_delimiter = ',')]
+    services: Vec<String>,
+
+    /// Path to a checkout of `rust-lang/team`.
+    #[clap(long, global(true), conflicts_with = "team_json")]
+    team_repo: Option<PathBuf>,
+
+    /// Path to a directory with prebuilt JSON data from the `team` repository.
+    #[clap(long, global(true))]
+    team_json: Option<PathBuf>,
+
+    #[clap(subcommand)]
+    command: Option<SyncCommand>,
+}
+
+#[derive(clap::Parser, Debug)]
+enum SyncCommand {
+    /// Try to apply changes, but do not send any outgoing API requests.
+    DryRun,
+    /// Only print a diff of what would be changed.
+    PrintPlan,
+    /// Apply the changes to the specified services.
+    Apply,
+}
+
 fn main() {
     let mut env = env_logger::Builder::new();
     env.format_timestamp(None);
     env.format_module_path(false);
     env.filter_module("rust_team", log::LevelFilter::Info);
+    env.filter_module("sync_team", log::LevelFilter::Info);
     if std::env::var("RUST_TEAM_FORCE_COLORS").is_ok() {
         env.write_style(env_logger::WriteStyle::Always);
     }
@@ -406,6 +450,16 @@ fn run() -> Result<(), Error> {
             CiOpts::GenerateCodeowners => generate_codeowners_file(data)?,
             CiOpts::CheckCodeowners => check_codeowners(data)?,
         },
+        Cli::Sync(opts) => {
+            if let Err(err) = perform_sync(opts) {
+                // Display shows just the first element of the chain.
+                error!("failed: {}", err);
+                for cause in err.chain().skip(1) {
+                    error!("caused by: {}", cause);
+                }
+                std::process::exit(1);
+            }
+        }
     }
 
     Ok(())
@@ -436,4 +490,28 @@ fn dump_team_members(
         );
     }
     Ok(())
+}
+
+fn perform_sync(opts: SyncOpts) -> anyhow::Result<()> {
+    let team_api = if let Some(path) = opts.team_repo {
+        TeamApi::Checkout(path)
+    } else if let Some(path) = opts.team_json {
+        TeamApi::Prebuilt(path)
+    } else {
+        TeamApi::Production
+    };
+
+    let mut services = opts.services;
+    if services.is_empty() {
+        info!("no service to synchronize specified, defaulting to all services");
+        services = AVAILABLE_SERVICES
+            .iter()
+            .map(|s| (*s).to_string())
+            .collect();
+    }
+
+    let subcmd = opts.command.unwrap_or(SyncCommand::DryRun);
+    let only_print_plan = matches!(subcmd, SyncCommand::PrintPlan);
+    let dry_run = only_print_plan || matches!(subcmd, SyncCommand::DryRun);
+    run_sync_team(team_api, &services, dry_run, only_print_plan)
 }
