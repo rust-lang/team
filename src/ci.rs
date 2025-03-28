@@ -30,6 +30,7 @@ pub fn check_codeowners(data: Data) -> anyhow::Result<()> {
 const PROTECTED_PATHS: &[&str] = &[
     "/repos/rust-lang/team.toml",
     "/repos/rust-lang/sync-team.toml",
+    "/repos/rust-lang/rust.toml",
     "/teams/infra-admins.toml",
     "/teams/team-repo-admins.toml",
 ];
