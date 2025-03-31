@@ -1,7 +1,8 @@
 org = "rust-lang"
 name = "rust"
 description = "Empowering everyone to build reliable and efficient software."
-bots = ["bors", "rustbot", "rfcbot"]
+homepage = "https://www.rust-lang.org"
+bots = ["bors", "highfive", "rustbot", "rfcbot", "rust-timer"]
 
 [access.teams]
 bootstrap = "write"
