@@ -843,6 +843,9 @@ pub(crate) enum Bot {
     Rustbot,
     RustTimer,
     Rfcbot,
+    Craterbot,
+    Glacierbot,
+    LogAnalyzer,
     Renovate,
 }
 

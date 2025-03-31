@@ -484,6 +484,9 @@ fn bot_user_name(bot: &Bot) -> Option<&str> {
         Bot::RustTimer => Some("rust-timer"),
         Bot::Rustbot => Some("rustbot"),
         Bot::Rfcbot => Some("rfcbot"),
+        Bot::Craterbot => Some("craterbot"),
+        Bot::Glacierbot => Some("rust-lang-glacier-bot"),
+        Bot::LogAnalyzer => Some("rust-log-analyzer"),
         Bot::Renovate => None,
     }
 }
