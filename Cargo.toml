@@ -20,6 +20,7 @@ serde = "1"
 serde_derive = "1"
 serde_json = "1"
 serde-untagged = "0.1"
+tempfile = "3.19.1"
 toml = "0.8"
 
 sync-team = { path = "sync-team" }

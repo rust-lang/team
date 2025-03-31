@@ -143,7 +143,7 @@ jobs:
           cargo build --release
           ./target/release/rust-team sync print-plan \
             --services github \
-            --team-json team-api 2>&1 | tee -a output.txt
+            --src team-api 2>&1 | tee -a output.txt
 
       - name: Prepare comment
         run: |

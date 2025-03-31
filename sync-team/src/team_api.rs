@@ -1,15 +1,12 @@
 use crate::utils::ResponseExt;
-use log::{debug, info, trace};
+use log::{debug, trace};
 use std::borrow::Cow;
 use std::path::PathBuf;
-use std::process::Command;
 
 /// Determines how do we get access to the ground-truth data from `rust-lang/team`.
 pub enum TeamApi {
     /// Access the live data from the published production REST API.
     Production,
-    /// Build the JSON data from a checkout of `rust-lang/team`.
-    Checkout(PathBuf),
     /// Directly access a directory with prebuilt JSON data.
     Prebuilt(PathBuf),
 }
@@ -61,28 +58,6 @@ impl TeamApi {
                 Ok(reqwest::blocking::get(&url)?
                     .error_for_status()?
                     .json_annotated()?)
-            }
-            TeamApi::Checkout(path) => {
-                let dest = tempfile::tempdir()?;
-                info!(
-                    "generating the content of the Team API from {}",
-                    path.display()
-                );
-                let status = Command::new("cargo")
-                    .arg("run")
-                    .arg("--")
-                    .arg("static-api")
-                    .arg(dest.path())
-                    .env("RUST_LOG", "rust_team=warn")
-                    .current_dir(path)
-                    .status()?;
-                if status.success() {
-                    info!("contents of the Team API generated successfully");
-                    let contents = std::fs::read(dest.path().join("v1").join(url))?;
-                    Ok(serde_json::from_slice(&contents)?)
-                } else {
-                    anyhow::bail!("failed to generate the contents of the Team API");
-                }
             }
             TeamApi::Prebuilt(directory) => {
                 let contents = std::fs::read(directory.join("v1").join(url))?;

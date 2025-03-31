@@ -158,12 +158,11 @@ cargo run -- sync --services github,mailgun
 cargo run -- sync --services github,mailgun apply
 ```
 
-By default, the synchronization will be based on data from the live `team` endpoint.
-When making changes to the tool it might be useful to test
-with dummy data though. You can do that by passing the `--team-repo` flag to the CLI:
+By default, the synchronization will be based on data from the current `team` repository checkout.
+You can also perform the sync based on the live `team` endpoint using `--src=production`, or on an existing directory on disk that contains the prebuilt JSON files using `--src=<path>`.
 
 ```
-cargo run -- sync --team-json <directory>
+cargo run -- sync --src=<directory>
 ```
 
 The `<directory>` with JSON data can be generated using `cargo run static-api`.
