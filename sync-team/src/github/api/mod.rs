@@ -47,6 +47,10 @@ impl HttpClient {
         })
     }
 
+    pub fn uses_pat(&self) -> bool {
+        matches!(self.github_tokens, GitHubTokens::Pat(_))
+    }
+
     fn auth_header(&self, org: &str) -> anyhow::Result<HeaderValue> {
         let token = self.github_tokens.get_token(org)?;
         let mut auth = HeaderValue::from_str(&format!("token {}", token.expose_secret()))?;

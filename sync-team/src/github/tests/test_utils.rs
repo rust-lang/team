@@ -438,6 +438,10 @@ impl GithubMock {
 }
 
 impl GithubRead for GithubMock {
+    fn uses_pat(&self) -> bool {
+        true
+    }
+
     fn usernames(&self, ids: &[UserId]) -> anyhow::Result<HashMap<UserId, String>> {
         Ok(self
             .users
