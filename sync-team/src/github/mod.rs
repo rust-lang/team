@@ -315,6 +315,13 @@ impl SyncGitHub {
         actual_repo: &api::Repo,
         expected_repo: &rust_team_data::v1::Repo,
     ) -> anyhow::Result<Vec<BranchProtectionDiff>> {
+        // The rust-lang/rust repository uses GitHub apps push allowance actors for its branch
+        // protections, which cannot be read without a PAT.
+        // To avoid errors, we simply return an empty diff here.
+        if !self.github.uses_pat() && actual_repo.org == "rust-lang" && actual_repo.name == "rust" {
+            return Ok(vec![]);
+        }
+
         let mut branch_protection_diffs = Vec::new();
         let mut actual_protections = self
             .github

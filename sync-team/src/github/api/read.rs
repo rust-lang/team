@@ -7,6 +7,8 @@ use reqwest::Method;
 use std::collections::{HashMap, HashSet};
 
 pub(crate) trait GithubRead {
+    fn uses_pat(&self) -> bool;
+
     /// Get user names by user ids
     fn usernames(&self, ids: &[u64]) -> anyhow::Result<HashMap<u64, String>>;
 
@@ -58,6 +60,10 @@ impl GitHubApiRead {
 }
 
 impl GithubRead for GitHubApiRead {
+    fn uses_pat(&self) -> bool {
+        self.client.uses_pat()
+    }
+
     fn usernames(&self, ids: &[u64]) -> anyhow::Result<HashMap<u64, String>> {
         #[derive(serde::Deserialize)]
         #[serde(rename_all = "camelCase")]
