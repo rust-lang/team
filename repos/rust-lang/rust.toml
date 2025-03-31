@@ -2,7 +2,7 @@ org = "rust-lang"
 name = "rust"
 description = "Empowering everyone to build reliable and efficient software."
 homepage = "https://www.rust-lang.org"
-bots = ["bors", "craterbot", "glacierbot", "highfive", "log-analyzer", "rustbot", "rfcbot", "rust-timer"]
+bots = ["bors", "craterbot", "glacierbot", "log-analyzer", "rustbot", "rfcbot", "rust-timer"]
 
 [access.teams]
 bootstrap = "write"
