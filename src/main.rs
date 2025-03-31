@@ -513,5 +513,6 @@ fn perform_sync(opts: SyncOpts) -> anyhow::Result<()> {
     let subcmd = opts.command.unwrap_or(SyncCommand::DryRun);
     let only_print_plan = matches!(subcmd, SyncCommand::PrintPlan);
     let dry_run = only_print_plan || matches!(subcmd, SyncCommand::DryRun);
+    println!("dry run: {dry_run}");
     run_sync_team(team_api, &services, dry_run, only_print_plan)
 }
