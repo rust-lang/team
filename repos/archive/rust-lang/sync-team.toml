@@ -1,0 +1,6 @@
+org = "rust-lang"
+name = "sync-team"
+description = "Synchronize the team repository with the services we use"
+bots = []
+
+[access.teams]
