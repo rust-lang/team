@@ -18,25 +18,7 @@ allowed-github-orgs = [
 
 permissions-bors-repos = [
     "bors-kindergarten",
-    "cargo",
-    "chalk",
-    "clippy",
-    "compiler-builtins",
-    "crater",
-    "hashbrown",
-    "measureme",
-    "miri",
-    "libc",
-    "regex",
-    "rls",
     "rust",
-    "rust-analyzer",
-    "rustlings",
-    "rustup-rs",
-    "semverver",
-    "stdarch",
-    "team",
-    "vscode-rust",
 ]
 
 permissions-bools = [
