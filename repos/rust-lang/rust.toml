@@ -39,17 +39,29 @@ pattern = "beta"
 merge-bots = ["homu"]
 
 [[branch-protections]]
+pattern = "try"
+merge-bots = ["homu"]
+
+[[branch-protections]]
+pattern = "auto"
+merge-bots = ["homu"]
+
+[[branch-protections]]
 pattern = "*"
 merge-bots = ["homu"]
 
 [[branch-protections]]
 pattern = "*/**/*"
+pr-required = false
 
 [[branch-protections]]
 pattern = "cargo_update"
+pr-required = false
 
 [[branch-protections]]
 pattern = "automation/bors/try-merge"
+pr-required = false
 
 [[branch-protections]]
 pattern = "automation/bors/try"
+pr-required = false
