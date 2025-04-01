@@ -950,9 +950,21 @@ fn log_branch_protection(
     new: Option<&api::BranchProtection>,
     mut result: impl Write,
 ) -> std::fmt::Result {
+    let api::BranchProtection {
+        // Pattern identifies the branch protection, so it has to be same between `current`
+        // and `new`.
+        pattern: _,
+        is_admin_enforced,
+        dismisses_stale_reviews,
+        required_approving_review_count,
+        required_status_check_contexts,
+        push_allowances,
+        requires_approving_reviews,
+    } = current;
+
     macro_rules! log {
         ($str:literal, $field1:ident) => {
-            let old = &current.$field1;
+            let old = $field1;
             let new = new.map(|n| &n.$field1);
             log!($str, old, new);
         };
@@ -968,10 +980,12 @@ fn log_branch_protection(
     }
 
     log!("Dismiss Stale Reviews", dismisses_stale_reviews);
+    log!("Is admin enforced", is_admin_enforced);
     log!(
         "Required Approving Review Count",
         required_approving_review_count
     );
+    log!("Requires PR", requires_approving_reviews);
     log!("Required Checks", required_status_check_contexts);
     log!("Allowances", push_allowances);
     Ok(())
