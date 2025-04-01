@@ -10,3 +10,4 @@ triagebot = "maintain"
 
 [[branch-protections]]
 pattern = "master"
+ci-checks = ["ci"]
