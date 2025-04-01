@@ -732,15 +732,26 @@ impl UpdateRepoDiff {
             return Ok(());
         }
 
-        if self.settings_diff.0 != self.settings_diff.1 {
+        // If we're unarchiving, we have to unarchive first and *then* modify other properties
+        // of the repository. On the other hand, if we're achiving, we need to perform
+        // the archiving *last* (otherwise permissions and branch protections cannot be modified)
+        // anymore. If we're not changing the archival status, the order doesn't really matter.
+        let is_unarchive = self.settings_diff.0.archived && !self.settings_diff.1.archived;
+
+        if is_unarchive {
             sync.edit_repo(&self.org, &self.name, &self.settings_diff.1)?;
         }
+
         for permission in &self.permission_diffs {
             permission.apply(sync, &self.org, &self.name)?;
         }
 
         for branch_protection in &self.branch_protection_diffs {
             branch_protection.apply(sync, &self.org, &self.name, &self.repo_node_id)?;
+        }
+
+        if !is_unarchive && self.settings_diff.0 != self.settings_diff.1 {
+            sync.edit_repo(&self.org, &self.name, &self.settings_diff.1)?;
         }
 
         Ok(())
