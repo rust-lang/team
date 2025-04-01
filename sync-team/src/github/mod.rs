@@ -506,17 +506,21 @@ pub fn construct_branch_protection(
     branch_protection: &rust_team_data::v1::BranchProtection,
 ) -> api::BranchProtection {
     let uses_homu = branch_protection.merge_bots.contains(&MergeBot::Homu);
-    let required_approving_review_count: u8 = if uses_homu {
-        0
+    // When homu manages a branch, we should not require a PR nor approvals
+    // for that branch, because homu pushes to these branches directly.
+    let branch_protection_mode = if uses_homu {
+        BranchProtectionMode::PrNotRequired
     } else {
-        match branch_protection.mode {
-            BranchProtectionMode::PrRequired {
-                required_approvals, ..
-            } => required_approvals
-                .try_into()
-                .expect("Too large required approval count"),
-            BranchProtectionMode::PrNotRequired => 0,
-        }
+        branch_protection.mode.clone()
+    };
+
+    let required_approving_review_count: u8 = match branch_protection_mode {
+        BranchProtectionMode::PrRequired {
+            required_approvals, ..
+        } => required_approvals
+            .try_into()
+            .expect("Too large required approval count"),
+        BranchProtectionMode::PrNotRequired => 0,
     };
     let mut push_allowances: Vec<PushAllowanceActor> = branch_protection
         .allowed_merge_teams
@@ -537,7 +541,7 @@ pub fn construct_branch_protection(
         }));
     }
 
-    let mut checks = match &branch_protection.mode {
+    let mut checks = match &branch_protection_mode {
         BranchProtectionMode::PrRequired { ci_checks, .. } => ci_checks.clone(),
         BranchProtectionMode::PrNotRequired => {
             vec![]
@@ -554,7 +558,7 @@ pub fn construct_branch_protection(
         required_status_check_contexts: checks,
         push_allowances,
         requires_approving_reviews: matches!(
-            branch_protection.mode,
+            branch_protection_mode,
             BranchProtectionMode::PrRequired { .. }
         ),
     }
