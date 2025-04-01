@@ -1,0 +1,67 @@
+org = "rust-lang"
+name = "rust"
+description = "Empowering everyone to build reliable and efficient software."
+homepage = "https://www.rust-lang.org"
+bots = ["bors", "craterbot", "glacierbot", "log-analyzer", "rustbot", "rfcbot", "rust-timer"]
+
+[access.teams]
+bootstrap = "write"
+cargo = "write"
+clippy = "write"
+compiler = "write"
+infra = "write"
+lang = "write"
+lang-ops = "write"
+libs = "write"
+libs-api = "write"
+libs-contributors = "write"
+mods = "write"
+opsem = "write"
+project-exploit-mitigations = "write"
+project-stable-mir = "write"
+release = "write"
+rustdoc = "write"
+style = "write"
+types = "write"
+wg-prioritization = "triage"
+wg-triage = "write"
+
+[[branch-protections]]
+pattern = "master"
+merge-bots = ["homu"]
+
+[[branch-protections]]
+pattern = "stable"
+merge-bots = ["homu"]
+
+[[branch-protections]]
+pattern = "beta"
+merge-bots = ["homu"]
+
+[[branch-protections]]
+pattern = "try"
+merge-bots = ["homu"]
+
+[[branch-protections]]
+pattern = "auto"
+merge-bots = ["homu"]
+
+[[branch-protections]]
+pattern = "*"
+merge-bots = ["homu"]
+
+[[branch-protections]]
+pattern = "*/**/*"
+pr-required = false
+
+[[branch-protections]]
+pattern = "cargo_update"
+pr-required = false
+
+[[branch-protections]]
+pattern = "automation/bors/try-merge"
+pr-required = false
+
+[[branch-protections]]
+pattern = "automation/bors/try"
+pr-required = false
