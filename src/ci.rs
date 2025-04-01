@@ -126,10 +126,10 @@ fn generate_codeowners_content(data: Data) -> String {
 # Data files can be approved by users with write access.
 # We don't list these users explicitly to avoid notifying all of them
 # on every change to the data files.
-people/**/*.toml @team-repo-admins @mods {admin_list}
-repos/**/*.toml  @team-repo-admins @mods {admin_list}
+people/**/*.toml @rust-lang/team-repo-admins @rust-lang/mods {admin_list}
+repos/**/*.toml  @rust-lang/team-repo-admins @rust-lang/mods {admin_list}
 # Useful for teams without leaders.
-teams/**/*.toml  @team-repo-admins @mods {admin_list}
+teams/**/*.toml  @rust-lang/team-repo-admins @rust-lang/mods {admin_list}
 
 # Do not require admin approvals for Markdown file modifications.
 *.md
@@ -147,7 +147,7 @@ teams/**/*.toml  @team-repo-admins @mods {admin_list}
             .join(" ");
         writeln!(
             codeowners,
-            "/teams/{team_name}.toml @team-repo-admins @mods {leads_list}"
+            "/teams/{team_name}.toml @rust-lang/team-repo-admins @rust-lang/mods {leads_list}"
         )
         .unwrap();
     }

@@ -9,95 +9,95 @@
 # Data files can be approved by users with write access.
 # We don't list these users explicitly to avoid notifying all of them
 # on every change to the data files.
-people/**/*.toml @team-repo-admins @mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-repos/**/*.toml  @team-repo-admins @mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+people/**/*.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+repos/**/*.toml  @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 # Useful for teams without leaders.
-teams/**/*.toml  @team-repo-admins @mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+teams/**/*.toml  @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 
 # Do not require admin approvals for Markdown file modifications.
 *.md
 
 # Team leads can approve changes to their own team files.
-/teams/book.toml @team-repo-admins @mods @carols10cents @chriskrycho
-/teams/bootstrap.toml @team-repo-admins @mods @Mark-Simulacrum @onur-ozkan
-/teams/cargo.toml @team-repo-admins @mods @ehuss
-/teams/clippy.toml @team-repo-admins @mods @Manishearth @flip1995
-/teams/community-localization.toml @team-repo-admins @mods @Manishearth @vertexclique
-/teams/community-rustbridge.toml @team-repo-admins @mods @shadows-withal
-/teams/community-survey.toml @team-repo-admins @mods @Kobzol @apiraino
-/teams/compiler.toml @team-repo-admins @mods @davidtwco @wesleywiser
-/teams/crates-io.toml @team-repo-admins @mods @Turbo87 @jtgeibel
-/teams/devtools.toml @team-repo-admins @mods @Manishearth
-/teams/docker.toml @team-repo-admins @mods @Muscraft
-/teams/docs-rs.toml @team-repo-admins @mods @syphar
-/teams/edition.toml @team-repo-admins @mods @ehuss @traviscross
-/teams/goals.toml @team-repo-admins @mods @nikomatsakis
-/teams/infra.toml @team-repo-admins @mods @jdno @shepmaster
-/teams/infra-bors.toml @team-repo-admins @mods @Mark-Simulacrum
-/teams/lang.toml @team-repo-admins @mods @nikomatsakis @tmandry
-/teams/lang-docs.toml @team-repo-admins @mods @JohnTitor @ehuss
-/teams/lang-ops.toml @team-repo-admins @mods @traviscross
-/teams/libs.toml @team-repo-admins @mods @Amanieu @m-ou-se
-/teams/mentorship.toml @team-repo-admins @mods @Kobzol @jackh726
-/teams/miri.toml @team-repo-admins @mods @RalfJung @oli-obk
-/teams/opsem.toml @team-repo-admins @mods @JakobDegen @RalfJung
-/teams/project-async-crashdump-debugging.toml @team-repo-admins @mods @michaelwoerister
-/teams/project-const-generics.toml @team-repo-admins @mods @BoxyUwU @lcnr
-/teams/project-const-traits.toml @team-repo-admins @mods @fee1-dead
-/teams/project-dyn-upcasting.toml @team-repo-admins @mods @crlf0710
-/teams/project-exploit-mitigations.toml @team-repo-admins @mods @rcvalle
-/teams/project-generic-associated-types.toml @team-repo-admins @mods @jackh726
-/teams/project-impl-trait.toml @team-repo-admins @mods @nikomatsakis
-/teams/project-keyword-generics.toml @team-repo-admins @mods @oli-obk @yoshuawuyts
-/teams/project-negative-impls.toml @team-repo-admins @mods @nikomatsakis
-/teams/project-portable-simd.toml @team-repo-admins @mods @calebzulawski @workingjubilee
-/teams/project-stable-mir.toml @team-repo-admins @mods @celinval
-/teams/project-trait-system-refactor.toml @team-repo-admins @mods @lcnr
-/teams/regex.toml @team-repo-admins @mods @BurntSushi
-/teams/release.toml @team-repo-admins @mods @Mark-Simulacrum
-/teams/rust-analyzer.toml @team-repo-admins @mods @Veykril
-/teams/rust-by-example.toml @team-repo-admins @mods @marioidival
-/teams/rustdoc.toml @team-repo-admins @mods @GuillaumeGomez
-/teams/rustfmt.toml @team-repo-admins @mods @calebcartwright
-/teams/rustlings.toml @team-repo-admins @mods @mo8it @shadows-withal
-/teams/rustup.toml @team-repo-admins @mods @rbtcollins
-/teams/social-media.toml @team-repo-admins @mods @m-ou-se
-/teams/spec.toml @team-repo-admins @mods @JoelMarcey
-/teams/style.toml @team-repo-admins @mods @calebcartwright
-/teams/testing-devex.toml @team-repo-admins @mods @calebcartwright
-/teams/triagebot.toml @team-repo-admins @mods @Mark-Simulacrum
-/teams/twir.toml @team-repo-admins @mods @nellshamrell
-/teams/twir-reviewers.toml @team-repo-admins @mods @nellshamrell
-/teams/types.toml @team-repo-admins @mods @jackh726 @lcnr
-/teams/website.toml @team-repo-admins @mods @Manishearth
-/teams/wg-allocators.toml @team-repo-admins @mods @TimDiekmann
-/teams/wg-async.toml @team-repo-admins @mods @nikomatsakis @tmandry
-/teams/wg-binary-size.toml @team-repo-admins @mods @m-ou-se @thomcc
-/teams/wg-bindgen.toml @team-repo-admins @mods @emilio @fitzgen
-/teams/wg-cli.toml @team-repo-admins @mods @epage
-/teams/wg-compiler-performance.toml @team-repo-admins @mods @Mark-Simulacrum
-/teams/wg-const-eval.toml @team-repo-admins @mods @RalfJung @oli-obk
-/teams/wg-debugging.toml @team-repo-admins @mods @wesleywiser
-/teams/wg-diagnostics.toml @team-repo-admins @mods @estebank @oli-obk
-/teams/wg-embedded.toml @team-repo-admins @mods @adamgreig @therealprof
-/teams/wg-ffi-unwind.toml @team-repo-admins @mods @BatmanAoD @acfoltzer @nikomatsakis
-/teams/wg-gamedev.toml @team-repo-admins @mods @AngelOnFira @erlend-sh @kvark @ozkriff
-/teams/wg-gcc-backend.toml @team-repo-admins @mods @antoyo
-/teams/wg-incr-comp.toml @team-repo-admins @mods @wesleywiser
-/teams/wg-inline-asm.toml @team-repo-admins @mods @Amanieu
-/teams/wg-llvm.toml @team-repo-admins @mods @nikic
-/teams/wg-macros.toml @team-repo-admins @mods @eholk @vincenzopalazzo
-/teams/wg-mir-opt.toml @team-repo-admins @mods @oli-obk
-/teams/wg-parallel-rustc.toml @team-repo-admins @mods @cjgillot
-/teams/wg-polonius.toml @team-repo-admins @mods @lqd @nikomatsakis
-/teams/wg-polymorphization.toml @team-repo-admins @mods @davidtwco
-/teams/wg-prioritization.toml @team-repo-admins @mods @apiraino @wesleywiser
-/teams/wg-rustc-dev-guide.toml @team-repo-admins @mods @JohnTitor @spastorino
-/teams/wg-rustc-reading-club.toml @team-repo-admins @mods @doc-jones @nikomatsakis
-/teams/wg-safe-transmute.toml @team-repo-admins @mods @jswrenn
-/teams/wg-secure-code.toml @team-repo-admins @mods @Shnatsel @tarcieri
-/teams/wg-self-profile.toml @team-repo-admins @mods @wesleywiser
-/teams/wg-triage.toml @team-repo-admins @mods @Dylan-DPC
+/teams/book.toml @rust-lang/team-repo-admins @rust-lang/mods @carols10cents @chriskrycho
+/teams/bootstrap.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @onur-ozkan
+/teams/cargo.toml @rust-lang/team-repo-admins @rust-lang/mods @ehuss
+/teams/clippy.toml @rust-lang/team-repo-admins @rust-lang/mods @Manishearth @flip1995
+/teams/community-localization.toml @rust-lang/team-repo-admins @rust-lang/mods @Manishearth @vertexclique
+/teams/community-rustbridge.toml @rust-lang/team-repo-admins @rust-lang/mods @shadows-withal
+/teams/community-survey.toml @rust-lang/team-repo-admins @rust-lang/mods @Kobzol @apiraino
+/teams/compiler.toml @rust-lang/team-repo-admins @rust-lang/mods @davidtwco @wesleywiser
+/teams/crates-io.toml @rust-lang/team-repo-admins @rust-lang/mods @Turbo87 @jtgeibel
+/teams/devtools.toml @rust-lang/team-repo-admins @rust-lang/mods @Manishearth
+/teams/docker.toml @rust-lang/team-repo-admins @rust-lang/mods @Muscraft
+/teams/docs-rs.toml @rust-lang/team-repo-admins @rust-lang/mods @syphar
+/teams/edition.toml @rust-lang/team-repo-admins @rust-lang/mods @ehuss @traviscross
+/teams/goals.toml @rust-lang/team-repo-admins @rust-lang/mods @nikomatsakis
+/teams/infra.toml @rust-lang/team-repo-admins @rust-lang/mods @jdno @shepmaster
+/teams/infra-bors.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum
+/teams/lang.toml @rust-lang/team-repo-admins @rust-lang/mods @nikomatsakis @tmandry
+/teams/lang-docs.toml @rust-lang/team-repo-admins @rust-lang/mods @JohnTitor @ehuss
+/teams/lang-ops.toml @rust-lang/team-repo-admins @rust-lang/mods @traviscross
+/teams/libs.toml @rust-lang/team-repo-admins @rust-lang/mods @Amanieu @m-ou-se
+/teams/mentorship.toml @rust-lang/team-repo-admins @rust-lang/mods @Kobzol @jackh726
+/teams/miri.toml @rust-lang/team-repo-admins @rust-lang/mods @RalfJung @oli-obk
+/teams/opsem.toml @rust-lang/team-repo-admins @rust-lang/mods @JakobDegen @RalfJung
+/teams/project-async-crashdump-debugging.toml @rust-lang/team-repo-admins @rust-lang/mods @michaelwoerister
+/teams/project-const-generics.toml @rust-lang/team-repo-admins @rust-lang/mods @BoxyUwU @lcnr
+/teams/project-const-traits.toml @rust-lang/team-repo-admins @rust-lang/mods @fee1-dead
+/teams/project-dyn-upcasting.toml @rust-lang/team-repo-admins @rust-lang/mods @crlf0710
+/teams/project-exploit-mitigations.toml @rust-lang/team-repo-admins @rust-lang/mods @rcvalle
+/teams/project-generic-associated-types.toml @rust-lang/team-repo-admins @rust-lang/mods @jackh726
+/teams/project-impl-trait.toml @rust-lang/team-repo-admins @rust-lang/mods @nikomatsakis
+/teams/project-keyword-generics.toml @rust-lang/team-repo-admins @rust-lang/mods @oli-obk @yoshuawuyts
+/teams/project-negative-impls.toml @rust-lang/team-repo-admins @rust-lang/mods @nikomatsakis
+/teams/project-portable-simd.toml @rust-lang/team-repo-admins @rust-lang/mods @calebzulawski @workingjubilee
+/teams/project-stable-mir.toml @rust-lang/team-repo-admins @rust-lang/mods @celinval
+/teams/project-trait-system-refactor.toml @rust-lang/team-repo-admins @rust-lang/mods @lcnr
+/teams/regex.toml @rust-lang/team-repo-admins @rust-lang/mods @BurntSushi
+/teams/release.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum
+/teams/rust-analyzer.toml @rust-lang/team-repo-admins @rust-lang/mods @Veykril
+/teams/rust-by-example.toml @rust-lang/team-repo-admins @rust-lang/mods @marioidival
+/teams/rustdoc.toml @rust-lang/team-repo-admins @rust-lang/mods @GuillaumeGomez
+/teams/rustfmt.toml @rust-lang/team-repo-admins @rust-lang/mods @calebcartwright
+/teams/rustlings.toml @rust-lang/team-repo-admins @rust-lang/mods @mo8it @shadows-withal
+/teams/rustup.toml @rust-lang/team-repo-admins @rust-lang/mods @rbtcollins
+/teams/social-media.toml @rust-lang/team-repo-admins @rust-lang/mods @m-ou-se
+/teams/spec.toml @rust-lang/team-repo-admins @rust-lang/mods @JoelMarcey
+/teams/style.toml @rust-lang/team-repo-admins @rust-lang/mods @calebcartwright
+/teams/testing-devex.toml @rust-lang/team-repo-admins @rust-lang/mods @calebcartwright
+/teams/triagebot.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum
+/teams/twir.toml @rust-lang/team-repo-admins @rust-lang/mods @nellshamrell
+/teams/twir-reviewers.toml @rust-lang/team-repo-admins @rust-lang/mods @nellshamrell
+/teams/types.toml @rust-lang/team-repo-admins @rust-lang/mods @jackh726 @lcnr
+/teams/website.toml @rust-lang/team-repo-admins @rust-lang/mods @Manishearth
+/teams/wg-allocators.toml @rust-lang/team-repo-admins @rust-lang/mods @TimDiekmann
+/teams/wg-async.toml @rust-lang/team-repo-admins @rust-lang/mods @nikomatsakis @tmandry
+/teams/wg-binary-size.toml @rust-lang/team-repo-admins @rust-lang/mods @m-ou-se @thomcc
+/teams/wg-bindgen.toml @rust-lang/team-repo-admins @rust-lang/mods @emilio @fitzgen
+/teams/wg-cli.toml @rust-lang/team-repo-admins @rust-lang/mods @epage
+/teams/wg-compiler-performance.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum
+/teams/wg-const-eval.toml @rust-lang/team-repo-admins @rust-lang/mods @RalfJung @oli-obk
+/teams/wg-debugging.toml @rust-lang/team-repo-admins @rust-lang/mods @wesleywiser
+/teams/wg-diagnostics.toml @rust-lang/team-repo-admins @rust-lang/mods @estebank @oli-obk
+/teams/wg-embedded.toml @rust-lang/team-repo-admins @rust-lang/mods @adamgreig @therealprof
+/teams/wg-ffi-unwind.toml @rust-lang/team-repo-admins @rust-lang/mods @BatmanAoD @acfoltzer @nikomatsakis
+/teams/wg-gamedev.toml @rust-lang/team-repo-admins @rust-lang/mods @AngelOnFira @erlend-sh @kvark @ozkriff
+/teams/wg-gcc-backend.toml @rust-lang/team-repo-admins @rust-lang/mods @antoyo
+/teams/wg-incr-comp.toml @rust-lang/team-repo-admins @rust-lang/mods @wesleywiser
+/teams/wg-inline-asm.toml @rust-lang/team-repo-admins @rust-lang/mods @Amanieu
+/teams/wg-llvm.toml @rust-lang/team-repo-admins @rust-lang/mods @nikic
+/teams/wg-macros.toml @rust-lang/team-repo-admins @rust-lang/mods @eholk @vincenzopalazzo
+/teams/wg-mir-opt.toml @rust-lang/team-repo-admins @rust-lang/mods @oli-obk
+/teams/wg-parallel-rustc.toml @rust-lang/team-repo-admins @rust-lang/mods @cjgillot
+/teams/wg-polonius.toml @rust-lang/team-repo-admins @rust-lang/mods @lqd @nikomatsakis
+/teams/wg-polymorphization.toml @rust-lang/team-repo-admins @rust-lang/mods @davidtwco
+/teams/wg-prioritization.toml @rust-lang/team-repo-admins @rust-lang/mods @apiraino @wesleywiser
+/teams/wg-rustc-dev-guide.toml @rust-lang/team-repo-admins @rust-lang/mods @JohnTitor @spastorino
+/teams/wg-rustc-reading-club.toml @rust-lang/team-repo-admins @rust-lang/mods @doc-jones @nikomatsakis
+/teams/wg-safe-transmute.toml @rust-lang/team-repo-admins @rust-lang/mods @jswrenn
+/teams/wg-secure-code.toml @rust-lang/team-repo-admins @rust-lang/mods @Shnatsel @tarcieri
+/teams/wg-self-profile.toml @rust-lang/team-repo-admins @rust-lang/mods @wesleywiser
+/teams/wg-triage.toml @rust-lang/team-repo-admins @rust-lang/mods @Dylan-DPC
 
 # Modifying these files requires admin approval.
 /repos/rust-lang/team.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
