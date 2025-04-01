@@ -135,6 +135,8 @@ impl SyncGitHub {
     }
 
     fn diff_team(&self, github_team: &rust_team_data::v1::GitHubTeam) -> anyhow::Result<TeamDiff> {
+        debug!("Diffing team `{}/{}`", github_team.org, github_team.name);
+
         // Ensure the team exists and is consistent
         let team = match self.github.team(&github_team.org, &github_team.name)? {
             Some(team) => team,
@@ -234,6 +236,11 @@ impl SyncGitHub {
     }
 
     fn diff_repo(&self, expected_repo: &rust_team_data::v1::Repo) -> anyhow::Result<RepoDiff> {
+        debug!(
+            "Diffing repo `{}/{}`",
+            expected_repo.org, expected_repo.name
+        );
+
         let actual_repo = match self.github.repo(&expected_repo.org, &expected_repo.name)? {
             Some(r) => r,
             None => {
