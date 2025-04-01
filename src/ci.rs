@@ -122,19 +122,19 @@ fn generate_codeowners_content(data: Data) -> String {
     // not be pinged if a PR modified these files (which we also want).
     writeln!(
         codeowners,
-        r#"
+        "
 # Data files can be approved by users with write access.
 # We don't list these users explicitly to avoid notifying all of them
 # on every change to the data files.
-people/**/*.toml
-repos/**/*.toml
+people/**/*.toml @team-repo-admins @mods {admin_list}
+repos/**/*.toml  @team-repo-admins @mods {admin_list}
 # Useful for teams without leaders.
-teams/**/*.toml
+teams/**/*.toml  @team-repo-admins @mods {admin_list}
 
 # Do not require admin approvals for Markdown file modifications.
 *.md
 
-# Team leads can approve changes to their own team files."#
+# Team leads can approve changes to their own team files."
     )
     .unwrap();
 

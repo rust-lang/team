@@ -9,10 +9,10 @@
 # Data files can be approved by users with write access.
 # We don't list these users explicitly to avoid notifying all of them
 # on every change to the data files.
-people/**/*.toml
-repos/**/*.toml
+people/**/*.toml @team-repo-admins @mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+repos/**/*.toml  @team-repo-admins @mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 # Useful for teams without leaders.
-teams/**/*.toml
+teams/**/*.toml  @team-repo-admins @mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 
 # Do not require admin approvals for Markdown file modifications.
 *.md
@@ -105,11 +105,46 @@ teams/**/*.toml
 /repos/rust-lang/rust.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /teams/infra-admins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /teams/team-repo-admins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Amanieu.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/BurntSushi.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/GuillaumeGomez.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/JakobDegen.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/JoelMarcey.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/JohnTitor.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Kobzol.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Manishearth.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/Mark-Simulacrum.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Muscraft.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/RalfJung.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Turbo87.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Veykril.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/apiraino.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/calebcartwright.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/carols10cents.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/chriskrycho.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/davidtwco.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/ehuss.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/flip1995.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/jackh726.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/jdno.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/jtgeibel.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/lcnr.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/m-ou-se.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/marcoieni.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/marioidival.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/mo8it.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/nellshamrell.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/nikomatsakis.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/oli-obk.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/onur-ozkan.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/pietroalbini.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/rbtcollins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/rylev.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/shadows-withal.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/shepmaster.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/syphar.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/technetos.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/tmandry.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/traviscross.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/vertexclique.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/wesleywiser.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
