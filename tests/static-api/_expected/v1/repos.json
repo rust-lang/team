@@ -6,12 +6,7 @@
       "description": "An archived repo!",
       "homepage": null,
       "bots": [],
-      "teams": [
-        {
-          "name": "foo",
-          "permission": "maintain"
-        }
-      ],
+      "teams": [],
       "members": [],
       "branch_protections": [
         {
