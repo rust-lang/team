@@ -97,7 +97,7 @@ jobs:
           ZULIP_API_TOKEN: ${{ secrets.ZULIP_API_TOKEN }}
           ZULIP_USERNAME: ${{ secrets.ZULIP_USERNAME }}
         run: |
-          RUST_LOG="sync_team=debug" cargo run sync apply --src build
+          cargo run sync apply --src build
 
       - name: Disable Jekyll
         run: touch build/.nojekyll
