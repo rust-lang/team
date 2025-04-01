@@ -1558,6 +1558,7 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "sync-team",
+ "tempfile",
  "toml",
  "walkdir",
 ]

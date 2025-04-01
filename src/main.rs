@@ -25,6 +25,7 @@ use clap::Parser;
 use log::{error, info, warn};
 use std::collections::{BTreeMap, HashMap};
 use std::path::PathBuf;
+use std::str::FromStr;
 use sync_team::run_sync_team;
 use sync_team::team_api::TeamApi;
 
@@ -88,6 +89,9 @@ enum Cli {
     #[clap(subcommand)]
     Ci(CiOpts),
     /// Perform synchronization of the local data to live services.
+    /// By default, a dry-run against the local team repository data
+    /// is performed.
+    ///
     /// Environment variables:
     /// - GITHUB_TOKEN          Authentication token with GitHub
     /// - MAILGUN_API_TOKEN     Authentication token with Mailgun
@@ -114,19 +118,62 @@ struct SyncOpts {
     ), value_delimiter = ',')]
     services: Vec<String>,
 
-    /// Path to a checkout of `rust-lang/team`.
-    #[clap(long, global(true), conflicts_with = "team_json")]
-    team_repo: Option<PathBuf>,
+    /// Source of the data against which is the sync performed.
+    /// Possible values:
+    /// - in-tree => use the current team checkout
+    /// - production => use the live REST API team endpoint
+    /// - <path> => use prebuilt directory at <path>
+    #[arg(
+        long("src"),
+        global(true),
+        default_value = "in-tree",
+        verbatim_doc_comment
+    )]
+    source: DataSource,
 
-    /// Path to a directory with prebuilt JSON data from the `team` repository.
-    #[clap(long, global(true))]
-    team_json: Option<PathBuf>,
-
+    /// Command that should be performed.
     #[clap(subcommand)]
     command: Option<SyncCommand>,
 }
 
-#[derive(clap::Parser, Debug)]
+#[derive(Clone, Debug)]
+enum DataSource {
+    /// Load data from the current `team` repo checkout.
+    InTree,
+    /// Load data from a prebuilt directory with JSON files.
+    Prebuilt {
+        /// Location of the directory.
+        path: PathBuf,
+    },
+    /// Load data from the production `team` REST API.
+    Production,
+}
+
+impl FromStr for DataSource {
+    type Err = String;
+
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        match input {
+            "in-tree" => Ok(Self::InTree),
+            "production" => Ok(Self::Production),
+            path => {
+                let path = PathBuf::from(path);
+                if path.is_dir() {
+                    Ok(Self::Prebuilt {
+                        path: PathBuf::from(path),
+                    })
+                } else {
+                    Err(
+                        "--src must be a path to an existing directory, `in-tree` or `production`"
+                            .to_string(),
+                    )
+                }
+            }
+        }
+    }
+}
+
+#[derive(clap::Parser, Clone, Debug)]
 enum SyncCommand {
     /// Try to apply changes, but do not send any outgoing API requests.
     DryRun,
@@ -451,7 +498,7 @@ fn run() -> Result<(), Error> {
             CiOpts::CheckCodeowners => check_codeowners(data)?,
         },
         Cli::Sync(opts) => {
-            if let Err(err) = perform_sync(opts) {
+            if let Err(err) = perform_sync(opts, data) {
                 // Display shows just the first element of the chain.
                 error!("failed: {}", err);
                 for cause in err.chain().skip(1) {
@@ -492,13 +539,19 @@ fn dump_team_members(
     Ok(())
 }
 
-fn perform_sync(opts: SyncOpts) -> anyhow::Result<()> {
-    let team_api = if let Some(path) = opts.team_repo {
-        TeamApi::Checkout(path)
-    } else if let Some(path) = opts.team_json {
-        TeamApi::Prebuilt(path)
-    } else {
-        TeamApi::Production
+fn perform_sync(opts: SyncOpts, data: Data) -> anyhow::Result<()> {
+    // We pregenerate the directory here in case we need it, to make sure it lives
+    // long enough.
+    let source_dir = tempfile::tempdir()?;
+
+    let team_api = match opts.source {
+        DataSource::InTree => {
+            // Render the current data to a temporary directory
+            static_api::Generator::new(source_dir.path(), &data)?.generate()?;
+            TeamApi::Prebuilt(source_dir.path().to_path_buf())
+        }
+        DataSource::Prebuilt { path } => TeamApi::Prebuilt(path),
+        DataSource::Production => TeamApi::Production,
     };
 
     let mut services = opts.services;
