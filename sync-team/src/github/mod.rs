@@ -676,25 +676,33 @@ impl CreateRepoDiff {
 
 impl std::fmt::Display for CreateRepoDiff {
     fn fmt(&self, mut f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let CreateRepoDiff {
+            org,
+            name,
+            settings,
+            permissions,
+            branch_protections,
+        } = self;
+
         let RepoSettings {
             description,
             homepage,
             archived: _,
             auto_merge_enabled,
-        } = &self.settings;
+        } = &settings;
 
         writeln!(f, "➕ Creating repo:")?;
-        writeln!(f, "  Org: {}", self.org)?;
-        writeln!(f, "  Name: {}", self.name)?;
-        writeln!(f, "  Description: {:?}", description)?;
-        writeln!(f, "  Homepage: {:?}", homepage)?;
-        writeln!(f, "  Auto-merge: {}", auto_merge_enabled)?;
+        writeln!(f, "  Org: {org}")?;
+        writeln!(f, "  Name: {name}")?;
+        writeln!(f, "  Description: {description}")?;
+        writeln!(f, "  Homepage: {homepage:?}")?;
+        writeln!(f, "  Auto-merge: {auto_merge_enabled}")?;
         writeln!(f, "  Permissions:")?;
-        for diff in &self.permissions {
+        for diff in permissions {
             write!(f, "{diff}")?;
         }
         writeln!(f, "  Branch Protections:")?;
-        for (branch_name, branch_protection) in &self.branch_protections {
+        for (branch_name, branch_protection) in branch_protections {
             writeln!(&mut f, "    {branch_name}")?;
             log_branch_protection(branch_protection, None, &mut f)?;
         }
@@ -719,9 +727,18 @@ impl UpdateRepoDiff {
             return true;
         }
 
-        self.settings_diff.0 == self.settings_diff.1
-            && self.permission_diffs.is_empty()
-            && self.branch_protection_diffs.is_empty()
+        let UpdateRepoDiff {
+            org: _,
+            name: _,
+            repo_node_id: _,
+            settings_diff,
+            permission_diffs,
+            branch_protection_diffs,
+        } = self;
+
+        settings_diff.0 == settings_diff.1
+            && permission_diffs.is_empty()
+            && branch_protection_diffs.is_empty()
     }
 
     fn can_be_modified(&self) -> bool {
@@ -770,8 +787,18 @@ impl std::fmt::Display for UpdateRepoDiff {
         if self.noop() {
             return Ok(());
         }
-        writeln!(f, "📝 Editing repo '{}/{}':", self.org, self.name)?;
-        let (settings_old, settings_new) = &self.settings_diff;
+
+        let UpdateRepoDiff {
+            org,
+            name,
+            repo_node_id: _,
+            settings_diff,
+            permission_diffs,
+            branch_protection_diffs,
+        } = self;
+
+        writeln!(f, "📝 Editing repo '{org}/{name}':")?;
+        let (settings_old, settings_new) = &settings_diff;
         let RepoSettings {
             description,
             homepage,
@@ -803,17 +830,17 @@ impl std::fmt::Display for UpdateRepoDiff {
             (true, false) => writeln!(f, "  Disable auto-merge")?,
             _ => {}
         }
-        if !self.permission_diffs.is_empty() {
+        if !permission_diffs.is_empty() {
             writeln!(f, "  Permission Changes:")?;
+            for permission_diff in permission_diffs {
+                write!(f, "{permission_diff}")?;
+            }
         }
-        for permission_diff in &self.permission_diffs {
-            write!(f, "{permission_diff}")?;
-        }
-        if !self.branch_protection_diffs.is_empty() {
+        if !branch_protection_diffs.is_empty() {
             writeln!(f, "  Branch Protections:")?;
-        }
-        for branch_protection_diff in &self.branch_protection_diffs {
-            write!(f, "{branch_protection_diff}")?;
+            for branch_protection_diff in branch_protection_diffs {
+                write!(f, "{branch_protection_diff}")?;
+            }
         }
 
         Ok(())
@@ -854,11 +881,13 @@ impl RepoPermissionAssignmentDiff {
 
 impl std::fmt::Display for RepoPermissionAssignmentDiff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let name = match &self.collaborator {
+        let RepoPermissionAssignmentDiff { collaborator, diff } = self;
+
+        let name = match &collaborator {
             RepoCollaborator::Team(name) => format!("team '{name}'"),
             RepoCollaborator::User(name) => format!("user '{name}'"),
         };
-        match &self.diff {
+        match &diff {
             RepoPermissionDiff::Create(p) => {
                 writeln!(f, "    Giving {name} {p} permission")
             }
@@ -1056,20 +1085,28 @@ impl CreateTeamDiff {
 
 impl std::fmt::Display for CreateTeamDiff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let CreateTeamDiff {
+            org,
+            name,
+            description,
+            privacy,
+            members,
+        } = self;
+
         writeln!(f, "➕ Creating team:")?;
-        writeln!(f, "  Org: {}", self.org)?;
-        writeln!(f, "  Name: {}", self.name)?;
-        writeln!(f, "  Description: {}", self.description)?;
+        writeln!(f, "  Org: {org}")?;
+        writeln!(f, "  Name: {name}")?;
+        writeln!(f, "  Description: {description}")?;
         writeln!(
             f,
             "  Privacy: {}",
-            match self.privacy {
+            match privacy {
                 TeamPrivacy::Secret => "secret",
                 TeamPrivacy::Closed => "closed",
             }
         )?;
         writeln!(f, "  Members:")?;
-        for (name, role) in &self.members {
+        for (name, role) in members {
             writeln!(f, "    {name}: {role}")?;
         }
         Ok(())
@@ -1109,10 +1146,19 @@ impl EditTeamDiff {
     }
 
     fn noop(&self) -> bool {
-        self.name_diff.is_none()
-            && self.description_diff.is_none()
-            && self.privacy_diff.is_none()
-            && self.member_diffs.iter().all(|(_, d)| d.is_noop())
+        let EditTeamDiff {
+            org: _,
+            name: _,
+            name_diff,
+            description_diff,
+            privacy_diff,
+            member_diffs,
+        } = self;
+
+        name_diff.is_none()
+            && description_diff.is_none()
+            && privacy_diff.is_none()
+            && member_diffs.iter().all(|(_, d)| d.is_noop())
     }
 }
 
@@ -1121,21 +1167,31 @@ impl std::fmt::Display for EditTeamDiff {
         if self.noop() {
             return Ok(());
         }
-        writeln!(f, "📝 Editing team '{}/{}':", self.org, self.name)?;
-        if let Some(n) = &self.name_diff {
+
+        let EditTeamDiff {
+            org,
+            name,
+            name_diff,
+            description_diff,
+            privacy_diff,
+            member_diffs,
+        } = self;
+
+        writeln!(f, "📝 Editing team '{org}/{name}':")?;
+        if let Some(n) = name_diff {
             writeln!(f, "  New name: {n}")?;
         }
-        if let Some((old, new)) = &self.description_diff {
+        if let Some((old, new)) = &description_diff {
             writeln!(f, "  New description: '{old}' => '{new}'")?;
         }
-        if let Some((old, new)) = &self.privacy_diff {
+        if let Some((old, new)) = &privacy_diff {
             let display = |privacy: &TeamPrivacy| match privacy {
                 TeamPrivacy::Secret => "secret",
                 TeamPrivacy::Closed => "closed",
             };
             writeln!(f, "  New privacy: '{}' => '{}'", display(old), display(new))?;
         }
-        for (member, diff) in &self.member_diffs {
+        for (member, diff) in member_diffs {
             match diff {
                 MemberDiff::Create(r) => {
                     writeln!(f, "  Adding member '{member}' with {r} role")?;
