@@ -1,7 +1,7 @@
 use crate::schema::{Config, List, Person, Repo, Team, ZulipGroup, ZulipStream};
 use anyhow::{bail, Context as _, Error};
 use serde::de::DeserializeOwned;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::ffi::OsStr;
 use std::path::Path;
 
@@ -156,6 +156,16 @@ impl Data {
 
     pub(crate) fn teams(&self) -> impl Iterator<Item = &Team> {
         self.teams.values()
+    }
+
+    /// Map of team name to list of leaders
+    pub(crate) fn team_leads(&self) -> BTreeMap<&str, BTreeSet<&str>> {
+        self.teams()
+            .filter_map(|team| {
+                let leads = team.leads();
+                (!leads.is_empty()).then_some((team.name(), leads))
+            })
+            .collect()
     }
 
     pub(crate) fn subteams_of<'a>(

@@ -128,13 +128,29 @@ fn generate_codeowners_content(data: Data) -> String {
 # on every change to the data files.
 people/**/*.toml
 repos/**/*.toml
+# Useful for teams without leaders.
 teams/**/*.toml
 
 # Do not require admin approvals for Markdown file modifications.
 *.md
-"#
+
+# Team leads can approve changes to their own team files."#
     )
     .unwrap();
+
+    // Add team leads as reviewers for their team files
+    for (team_name, leads) in data.team_leads() {
+        let leads_list = leads
+            .iter()
+            .map(|lead| format!("@{lead}"))
+            .collect::<Vec<_>>()
+            .join(" ");
+        writeln!(
+            codeowners,
+            "/teams/{team_name}.toml @team-repo-admins @mods {leads_list}"
+        )
+        .unwrap();
+    }
 
     // There are several data files that we want to be protected more
     // Notably, the properties of the team and sync-team repositories,
@@ -143,7 +159,7 @@ teams/**/*.toml
 
     writeln!(
         codeowners,
-        "# Modifying these files requires admin approval."
+        "\n# Modifying these files requires admin approval."
     )
     .unwrap();
 
