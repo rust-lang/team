@@ -4,7 +4,6 @@ description = "An archived repo!"
 bots = []
 
 [access.teams]
-foo = "maintain"
 
 [[branch-protections]]
 pattern = "master"

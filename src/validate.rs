@@ -51,6 +51,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_zulip_stream_ids,
     validate_zulip_stream_extra_people,
     validate_repos,
+    validate_archived_repos,
     validate_branch_protections,
     validate_member_roles,
     validate_admin_access,
@@ -886,6 +887,15 @@ fn validate_repos(data: &Data, errors: &mut Vec<String>) {
                     name
                 );
             }
+        }
+        Ok(())
+    });
+}
+
+fn validate_archived_repos(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.archived_repos(), errors, |repo, _| {
+        if !repo.access.teams.is_empty() {
+            bail!("archived repo '{}' should not have any teams", repo.name);
         }
         Ok(())
     });

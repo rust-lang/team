@@ -9,10 +9,10 @@
 # Data files can be approved by users with write access.
 # We don't list these users explicitly to avoid notifying all of them
 # on every change to the data files.
-people/**/*.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-repos/**/*.toml  @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/**/*.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/repos/**/*.toml  @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 # Useful for teams without leaders.
-teams/**/*.toml  @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/teams/**/*.toml  @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 
 # Do not require admin approvals for Markdown file modifications.
 *.md
