@@ -126,9 +126,9 @@ fn generate_codeowners_content(data: Data) -> String {
 # Data files can be approved by users with write access.
 # We don't list these users explicitly to avoid notifying all of them
 # on every change to the data files.
-people/**/*.toml
-repos/**/*.toml
-teams/**/*.toml
+/people/**/*.toml
+/repos/**/*.toml
+/teams/**/*.toml
 
 # Do not require admin approvals for Markdown file modifications.
 *.md
