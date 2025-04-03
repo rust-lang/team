@@ -4,4 +4,3 @@ description = "Rust Code Reading Clubs"
 bots = []
 
 [access.teams]
-wg-rustc-reading-club = "write"

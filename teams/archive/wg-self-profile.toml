@@ -4,8 +4,8 @@ kind = "working-group"
 
 [people]
 leads = ["wesleywiser"]
-members = ["wesleywiser"]
-alumni = ["michaelwoerister"]
+members = []
+alumni = ["michaelwoerister","wesleywiser"]
 
 [permissions]
 perf = true
