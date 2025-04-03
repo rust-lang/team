@@ -25,10 +25,10 @@ bors.rust.try = true
 perf = true
 
 [website]
-name = "Parallel rustc working group"
+name = "Parallel rustc working area"
 description = "Making parallel compilation the default for rustc"
-repo = "https://rust-lang.github.io/compiler-team/working-groups/parallel-rustc/"
-zulip-stream = "t-compiler/wg-parallel-rustc"
+repo = "https://forge.rust-lang.org/compiler/working-areas.html"
+zulip-stream = "t-compiler/parallel-rustc"
 
 [[zulip-groups]]
-name = "WG-parallel-rustc"
+name = "parallel-rustc"

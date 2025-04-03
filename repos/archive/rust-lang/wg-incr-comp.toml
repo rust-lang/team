@@ -4,4 +4,3 @@ description = "Home repo for the compiler team incremental compilation working g
 bots = []
 
 [access.teams]
-wg-incr-comp = "write"

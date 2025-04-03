@@ -20,10 +20,10 @@ alumni = [
 orgs = ["rust-lang", "rust-lang-nursery"]
 
 [website]
-name = "Macros working group"
+name = "Macros working area"
 description = "Revival and Improving the Rust Macros"
 repo = "https://github.com/rust-lang/wg-macros"
-zulip-stream = "wg-macros"
+zulip-stream = "macros"
 
 [[zulip-groups]]
 name = "wg-macros"
