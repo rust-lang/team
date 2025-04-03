@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "literal-escaper"
+description = "Provides code to unescape string literals. It is used by rustc_lexer and proc_macro."
+bots = []
+
+[access.teams]
+compiler = "write"
