@@ -1,0 +1,31 @@
+org = "rust-embedded"
+name = "arm-dcc"
+description = "Debug Communication Channel (DCC) API"
+bots = []
+
+[access.teams]
+Arm = "admin"
+triage = "write"
+Highfive = "write"
+
+[access.individuals]
+newAM = "admin"
+jannic = "write"
+raw-bin = "admin"
+posborne = "admin"
+mathk = "write"
+jessebraham = "write"
+nastevens = "admin"
+rust-lang-owner = "admin"
+thalesfragoso = "admin"
+jonathanpallant = "admin"
+adamgreig = "admin"
+therealprof = "admin"
+rust-highfive = "write"
+berkus = "admin"
+nchong-at-aws = "admin"
+
+[[branch-protections]]
+pattern = "main"
+dismiss-stale-review = true
+required-approvals = 0

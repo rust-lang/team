@@ -1,0 +1,26 @@
+org = "rust-embedded"
+name = "rust-sysfs-gpio"
+description = "A Rust Interface to the Linux sysfs GPIO interface (https://www.kernel.org/doc/Documentation/gpio/sysfs.txt)"
+bots = []
+
+[access.teams]
+core-team = "write"
+embedded-linux = "admin"
+Highfive = "write"
+triage = "write"
+
+[access.individuals]
+nastevens = "admin"
+mathk = "write"
+rust-highfive = "write"
+jannic = "write"
+posborne = "admin"
+therealprof = "admin"
+adamgreig = "admin"
+eldruin = "admin"
+sirhcel = "admin"
+rust-embedded-bot = "write"
+ryankurte = "admin"
+jessebraham = "write"
+homu = "write"
+rust-lang-owner = "admin"

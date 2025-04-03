@@ -1,0 +1,29 @@
+org = "rust-lang-nursery"
+name = "wg-verification"
+description = "Verification working group"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+erickt = "admin"
+nrc = "admin"
+nikomatsakis-admin = "admin"
+sfackler = "admin"
+kennytm = "admin"
+nikomatsakis = "admin"
+aturon = "admin"
+huonw = "admin"
+rust-lang-owner = "admin"
+asajeffrey = "admin"
+jdno = "admin"
+steveklabnik = "admin"
+Mark-Simulacrum = "admin"
+avadacatavra = "admin"
+aidanhs = "admin"
+KodrAus = "admin"
+marcoieni = "admin"
+carols10cents = "admin"
+dtolnay = "admin"
+alexcrichton = "admin"
+pietroalbini = "admin"

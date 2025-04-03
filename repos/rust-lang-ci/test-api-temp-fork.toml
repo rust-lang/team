@@ -1,0 +1,13 @@
+org = "rust-lang-ci"
+name = "test-api-temp-fork"
+description = ""
+bots = []
+
+[access.teams]
+
+[access.individuals]
+Mark-Simulacrum = "admin"
+marcoieni = "admin"
+rust-lang-owner = "admin"
+pietroalbini = "admin"
+jdno = "admin"

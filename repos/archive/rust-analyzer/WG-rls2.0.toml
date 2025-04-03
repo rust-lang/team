@@ -1,0 +1,19 @@
+org = "rust-analyzer"
+name = "WG-rls2.0"
+description = "Home for rls2.0 working group"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+rust-lang-owner = "admin"
+Xanewok = "admin"
+pnkfelix = "admin"
+lnicola = "admin"
+Veykril = "admin"
+pietroalbini = "admin"
+flodiebold = "admin"
+matklad = "admin"
+wesleywiser = "admin"
+MissHolmes = "admin"
+skade = "admin"

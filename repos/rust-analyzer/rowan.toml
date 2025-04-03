@@ -1,0 +1,31 @@
+org = "rust-analyzer"
+name = "rowan"
+description = ""
+bots = []
+
+[access.teams]
+triage = "triage"
+
+[access.individuals]
+SomeoneToIgnore = "triage"
+pietroalbini = "admin"
+skade = "admin"
+pnkfelix = "admin"
+matklad = "admin"
+kjeremy = "triage"
+jD91mZM2 = "write"
+JoshMcguigan = "triage"
+wesleywiser = "admin"
+kiljacken = "triage"
+MissHolmes = "admin"
+lnicola = "admin"
+lf- = "triage"
+Veykril = "admin"
+edwin0cheng = "triage"
+Xanewok = "admin"
+dustypomerleau = "triage"
+flodiebold = "admin"
+Veetaha = "triage"
+rust-lang-owner = "admin"
+CAD97 = "write"
+bjorn3 = "triage"

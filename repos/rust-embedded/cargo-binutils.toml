@@ -1,0 +1,29 @@
+org = "rust-embedded"
+name = "cargo-binutils"
+description = "Cargo subcommands to invoke the LLVM tools shipped with the Rust toolchain"
+bots = []
+
+[access.teams]
+Highfive = "write"
+triage = "write"
+tools = "admin"
+
+[access.individuals]
+adamgreig = "admin"
+ryankurte = "admin"
+jessebraham = "write"
+Emilgardis = "admin"
+rust-highfive = "write"
+mathk = "write"
+burrbull = "admin"
+rust-lang-owner = "admin"
+reitermarkus = "admin"
+posborne = "admin"
+nastevens = "admin"
+therealprof = "admin"
+jannic = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["conclusion"]
+dismiss-stale-review = true

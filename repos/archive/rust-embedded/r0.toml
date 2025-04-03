@@ -1,0 +1,40 @@
+org = "rust-embedded"
+name = "r0"
+description = "Initialization code (\"crt0\") written in Rust"
+bots = []
+
+[access.teams]
+Cortex-M = "maintain"
+Cortex-A = "write"
+core = "admin"
+Highfive = "write"
+msp430 = "write"
+RISCV = "write"
+triage = "write"
+
+[access.individuals]
+jannic = "write"
+posborne = "admin"
+YuhanLiin = "write"
+nchong-at-aws = "write"
+dkhayes117 = "write"
+cr1901 = "write"
+berkus = "write"
+adamgreig = "admin"
+rust-highfive = "write"
+romancardenas = "write"
+MabezDev = "write"
+newAM = "maintain"
+jessebraham = "write"
+therealprof = "admin"
+thalesfragoso = "maintain"
+rust-lang-owner = "admin"
+rmsyn = "write"
+mathk = "write"
+nastevens = "admin"
+almindor = "write"
+raw-bin = "write"
+
+[[branch-protections]]
+pattern = "master"
+dismiss-stale-review = true

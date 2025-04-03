@@ -1,0 +1,35 @@
+org = "rust-embedded"
+name = "rust-raspberrypi-OS-tutorials"
+description = ":books: Learn to write an embedded OS in Rust :crab:"
+bots = []
+
+[access.teams]
+resources = "admin"
+Arm = "admin"
+triage = "write"
+
+[access.individuals]
+thalesfragoso = "admin"
+adamgreig = "admin"
+mathk = "write"
+hargoniX = "admin"
+therealprof = "admin"
+jonathanpallant = "admin"
+eldruin = "admin"
+posborne = "admin"
+rust-lang-owner = "admin"
+BartMassey = "admin"
+berkus = "admin"
+hdoordt = "admin"
+jannic = "write"
+raw-bin = "admin"
+nastevens = "admin"
+jamesmunns = "admin"
+nchong-at-aws = "admin"
+newAM = "admin"
+jessebraham = "write"
+
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
+pr-required = false

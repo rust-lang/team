@@ -1,0 +1,28 @@
+org = "rust-lang-nursery"
+name = "helix"
+description = "A post-modern modal text editor."
+bots = []
+
+[access.teams]
+
+[access.individuals]
+Mark-Simulacrum = "admin"
+marcoieni = "admin"
+nikomatsakis-admin = "admin"
+nrc = "admin"
+aturon = "admin"
+jdno = "admin"
+huonw = "admin"
+rust-lang-owner = "admin"
+pietroalbini = "admin"
+erickt = "admin"
+steveklabnik = "admin"
+topecongiro = "admin"
+KodrAus = "admin"
+sfackler = "admin"
+alexcrichton = "admin"
+carols10cents = "admin"
+aidanhs = "admin"
+dtolnay = "admin"
+nikomatsakis = "admin"
+kennytm = "admin"

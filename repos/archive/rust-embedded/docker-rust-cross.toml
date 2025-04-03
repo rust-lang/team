@@ -1,0 +1,15 @@
+org = "rust-embedded"
+name = "docker-rust-cross"
+description = "Docker images for testing rust code on many versions and architecures (DEPRECATED)"
+bots = []
+
+[access.teams]
+core-team = "write"
+
+[access.individuals]
+nastevens = "admin"
+rust-embedded-bot = "write"
+therealprof = "admin"
+posborne = "admin"
+rust-lang-owner = "admin"
+adamgreig = "admin"

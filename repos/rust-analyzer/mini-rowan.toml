@@ -1,0 +1,29 @@
+org = "rust-analyzer"
+name = "mini-rowan"
+description = ""
+bots = []
+
+[access.teams]
+triage = "triage"
+
+[access.individuals]
+Veykril = "admin"
+dustypomerleau = "triage"
+pietroalbini = "admin"
+flodiebold = "admin"
+kiljacken = "triage"
+JoshMcguigan = "triage"
+edwin0cheng = "triage"
+wesleywiser = "admin"
+rust-lang-owner = "admin"
+SomeoneToIgnore = "triage"
+pnkfelix = "admin"
+Xanewok = "admin"
+MissHolmes = "admin"
+lnicola = "admin"
+kjeremy = "triage"
+bjorn3 = "triage"
+lf- = "triage"
+matklad = "admin"
+skade = "admin"
+Veetaha = "triage"

@@ -1,0 +1,27 @@
+org = "rust-embedded"
+name = "panic-semihosting"
+description = "Report panic messages to the host stderr using semihosting"
+bots = []
+
+[access.teams]
+Highfive = "write"
+triage = "write"
+Cortex-M = "maintain"
+
+[access.individuals]
+posborne = "admin"
+rust-lang-owner = "admin"
+thalesfragoso = "maintain"
+jannic = "write"
+jessebraham = "write"
+rust-highfive = "write"
+mathk = "write"
+nastevens = "admin"
+newAM = "maintain"
+adamgreig = "admin"
+therealprof = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]
+dismiss-stale-review = true

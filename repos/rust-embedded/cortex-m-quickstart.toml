@@ -1,0 +1,30 @@
+org = "rust-embedded"
+name = "cortex-m-quickstart"
+description = "Template to develop bare metal applications for Cortex-M microcontrollers"
+bots = []
+
+[access.teams]
+Highfive = "write"
+Arm = "admin"
+triage = "write"
+
+[access.individuals]
+berkus = "admin"
+rust-lang-owner = "admin"
+nastevens = "admin"
+thalesfragoso = "admin"
+jannic = "write"
+posborne = "admin"
+rust-highfive = "write"
+nchong-at-aws = "admin"
+therealprof = "admin"
+mathk = "write"
+raw-bin = "admin"
+newAM = "admin"
+jonathanpallant = "admin"
+jessebraham = "write"
+adamgreig = "admin"
+
+[[branch-protections]]
+pattern = "master"
+dismiss-stale-review = true

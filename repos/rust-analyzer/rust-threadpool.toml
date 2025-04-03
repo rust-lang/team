@@ -1,0 +1,19 @@
+org = "rust-analyzer"
+name = "rust-threadpool"
+description = "A very simple thread pool for parallel task execution"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+pnkfelix = "admin"
+MissHolmes = "admin"
+Xanewok = "admin"
+Veykril = "admin"
+rust-lang-owner = "admin"
+skade = "admin"
+matklad = "admin"
+lnicola = "admin"
+flodiebold = "admin"
+pietroalbini = "admin"
+wesleywiser = "admin"

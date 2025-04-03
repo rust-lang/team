@@ -1,0 +1,31 @@
+org = "rust-embedded"
+name = "cortex-ar"
+description = "Low level access to Cortex-R processors"
+bots = []
+
+[access.teams]
+Highfive = "write"
+triage = "write"
+Arm = "admin"
+
+[access.individuals]
+jannic = "write"
+adamgreig = "admin"
+rust-lang-owner = "admin"
+therealprof = "admin"
+jonathanpallant = "admin"
+mathk = "write"
+thalesfragoso = "admin"
+raw-bin = "admin"
+jessebraham = "write"
+rust-highfive = "write"
+nchong-at-aws = "admin"
+nastevens = "admin"
+newAM = "admin"
+posborne = "admin"
+berkus = "admin"
+
+[[branch-protections]]
+pattern = "main"
+required-approvals = 0
+pr-required = false

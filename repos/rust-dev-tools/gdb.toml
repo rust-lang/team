@@ -1,0 +1,15 @@
+org = "rust-dev-tools"
+name = "gdb"
+description = "Rust's copy of gdb"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+Manishearth = "admin"
+rust-lang-owner = "admin"
+killercup = "admin"
+nrc = "admin"
+tromey = "admin"
+pietroalbini = "admin"
+marcoieni = "admin"

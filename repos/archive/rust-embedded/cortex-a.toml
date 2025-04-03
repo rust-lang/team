@@ -1,0 +1,21 @@
+org = "rust-embedded"
+name = "cortex-a"
+description = "Low level access to Cortex-A processors"
+bots = []
+
+[access.teams]
+triage = "write"
+Cortex-A = "write"
+
+[access.individuals]
+jessebraham = "write"
+rust-lang-owner = "admin"
+nastevens = "admin"
+nchong-at-aws = "write"
+berkus = "write"
+mathk = "write"
+raw-bin = "write"
+posborne = "admin"
+jannic = "write"
+adamgreig = "admin"
+therealprof = "admin"

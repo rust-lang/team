@@ -1,0 +1,29 @@
+org = "rust-analyzer"
+name = "ungrammar"
+description = ""
+bots = []
+
+[access.teams]
+triage = "triage"
+
+[access.individuals]
+matklad = "admin"
+SomeoneToIgnore = "triage"
+lf- = "triage"
+kiljacken = "triage"
+pietroalbini = "admin"
+kjeremy = "triage"
+Veykril = "admin"
+pnkfelix = "admin"
+Veetaha = "triage"
+rust-lang-owner = "admin"
+flodiebold = "admin"
+dustypomerleau = "triage"
+Xanewok = "admin"
+skade = "admin"
+edwin0cheng = "triage"
+bjorn3 = "triage"
+lnicola = "admin"
+JoshMcguigan = "triage"
+MissHolmes = "admin"
+wesleywiser = "admin"

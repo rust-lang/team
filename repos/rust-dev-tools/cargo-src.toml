@@ -1,0 +1,20 @@
+org = "rust-dev-tools"
+name = "cargo-src"
+description = "Semantic code navigation for Rust"
+bots = []
+
+[access.teams]
+devtools = "maintain"
+
+[access.individuals]
+rust-lang-owner = "admin"
+pietroalbini = "admin"
+calebcartwright = "maintain"
+Manishearth = "admin"
+ehuss = "maintain"
+GuillaumeGomez = "maintain"
+oli-obk = "maintain"
+killercup = "admin"
+nrc = "admin"
+rbtcollins = "maintain"
+marcoieni = "admin"

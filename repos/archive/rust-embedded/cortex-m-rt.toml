@@ -1,0 +1,27 @@
+org = "rust-embedded"
+name = "cortex-m-rt"
+description = "Minimal startup / runtime for Cortex-M microcontrollers"
+bots = []
+
+[access.teams]
+Cortex-M = "maintain"
+Highfive = "write"
+triage = "write"
+
+[access.individuals]
+thalesfragoso = "maintain"
+rust-lang-owner = "admin"
+therealprof = "admin"
+adamgreig = "admin"
+jessebraham = "write"
+rust-highfive = "write"
+nastevens = "admin"
+posborne = "admin"
+jannic = "write"
+mathk = "write"
+newAM = "maintain"
+
+[[branch-protections]]
+pattern = "master"
+dismiss-stale-review = true
+required-approvals = 0

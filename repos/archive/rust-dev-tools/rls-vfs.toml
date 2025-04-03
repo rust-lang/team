@@ -1,0 +1,15 @@
+org = "rust-dev-tools"
+name = "rls-vfs"
+description = "Virtual File System for the RLS"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+marcoieni = "admin"
+killercup = "admin"
+pietroalbini = "admin"
+rust-lang-owner = "admin"
+Manishearth = "admin"
+Xanewok = "admin"
+nrc = "admin"

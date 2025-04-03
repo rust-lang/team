@@ -1,0 +1,13 @@
+org = "rust-lang-deprecated"
+name = "error-chain"
+description = "Error boilerplate for Rust"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+marcoieni = "admin"
+Mark-Simulacrum = "admin"
+rust-lang-owner = "admin"
+jdno = "admin"
+pietroalbini = "admin"

@@ -1,0 +1,39 @@
+org = "rust-embedded"
+name = "cortex-m"
+description = "Low level access to Cortex-M processors"
+bots = []
+
+[access.teams]
+Highfive = "write"
+triage = "write"
+Arm = "admin"
+
+[access.individuals]
+nastevens = "admin"
+newAM = "admin"
+jannic = "write"
+nchong-at-aws = "admin"
+thalesfragoso = "admin"
+rust-highfive = "write"
+adamgreig = "admin"
+mathk = "write"
+berkus = "admin"
+jessebraham = "write"
+posborne = "admin"
+jonathanpallant = "admin"
+raw-bin = "admin"
+therealprof = "admin"
+rust-lang-owner = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "ci-linux (stable)",
+    "clippy",
+    "hil-qemu",
+    "rt-ci-other-os (macOS-latest)",
+    "rt-ci-other-os (windows-latest)",
+    "rt-ci-linux (stable)",
+    "rustfmt",
+]
+dismiss-stale-review = true

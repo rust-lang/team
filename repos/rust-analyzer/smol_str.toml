@@ -1,0 +1,30 @@
+org = "rust-analyzer"
+name = "smol_str"
+description = ""
+bots = []
+
+[access.teams]
+triage = "triage"
+
+[access.individuals]
+lf- = "triage"
+wesleywiser = "admin"
+jD91mZM2 = "write"
+Veetaha = "triage"
+skade = "admin"
+Veykril = "admin"
+kjeremy = "triage"
+dustypomerleau = "triage"
+lnicola = "admin"
+kiljacken = "triage"
+flodiebold = "admin"
+pietroalbini = "admin"
+SomeoneToIgnore = "triage"
+pnkfelix = "admin"
+Xanewok = "admin"
+matklad = "admin"
+MissHolmes = "admin"
+JoshMcguigan = "triage"
+edwin0cheng = "triage"
+rust-lang-owner = "admin"
+bjorn3 = "triage"

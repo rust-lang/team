@@ -1,0 +1,15 @@
+org = "rust-dev-tools"
+name = "rustc-version"
+description = "version information for Rust tools"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+rust-lang-owner = "admin"
+killercup = "admin"
+Xanewok = "admin"
+Manishearth = "admin"
+nrc = "admin"
+marcoieni = "admin"
+pietroalbini = "admin"

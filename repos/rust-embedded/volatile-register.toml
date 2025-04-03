@@ -1,0 +1,21 @@
+org = "rust-embedded"
+name = "volatile-register"
+description = "Volatile access to memory mapped hardware registers"
+bots = []
+
+[access.teams]
+libs = "admin"
+
+[access.individuals]
+rust-lang-owner = "admin"
+therealprof = "admin"
+posborne = "admin"
+newAM = "admin"
+adamgreig = "admin"
+reitermarkus = "admin"
+nastevens = "admin"
+Dirbaio = "admin"
+
+[[branch-protections]]
+pattern = "master"
+dismiss-stale-review = true

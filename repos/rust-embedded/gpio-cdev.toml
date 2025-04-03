@@ -1,0 +1,45 @@
+org = "rust-embedded"
+name = "gpio-cdev"
+description = "Rust interface to the Linux GPIO Character Device API (/dev/gpiochip...)"
+bots = []
+
+[access.teams]
+embedded-linux = "admin"
+Highfive = "write"
+core = "write"
+triage = "write"
+
+[access.individuals]
+rust-highfive = "write"
+posborne = "admin"
+jannic = "write"
+mathk = "write"
+rust-lang-owner = "admin"
+sirhcel = "admin"
+nastevens = "admin"
+jessebraham = "write"
+eldruin = "admin"
+ryankurte = "admin"
+therealprof = "admin"
+adamgreig = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "checks",
+    "build (1.65.0, x86_64-unknown-linux-gnu)",
+    "build (stable, aarch64-unknown-linux-musl)",
+    "build (stable, aarch64-unknown-linux-gnu)",
+    "build (stable, arm-unknown-linux-gnueabi)",
+    "build (stable, arm-unknown-linux-gnueabihf)",
+    "build (stable, armv7-unknown-linux-gnueabihf)",
+    "build (stable, i686-unknown-linux-musl)",
+    "build (stable, i686-unknown-linux-gnu)",
+    "build (stable, powerpc-unknown-linux-gnu)",
+    "build (stable, powerpc64le-unknown-linux-gnu)",
+    "build (stable, riscv64gc-unknown-linux-gnu)",
+    "build (stable, s390x-unknown-linux-gnu)",
+    "build (stable, x86_64-unknown-linux-gnu)",
+    "build (stable, x86_64-unknown-linux-musl)",
+]
+dismiss-stale-review = true

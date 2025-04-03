@@ -1,0 +1,23 @@
+org = "rust-embedded"
+name = "mutex-trait"
+description = "Low level API definition of a Mutex"
+bots = []
+
+[access.teams]
+resources = "admin"
+
+[access.individuals]
+adamgreig = "admin"
+nastevens = "admin"
+therealprof = "admin"
+BartMassey = "admin"
+eldruin = "admin"
+posborne = "admin"
+hdoordt = "admin"
+rust-lang-owner = "admin"
+jamesmunns = "admin"
+hargoniX = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]

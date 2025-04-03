@@ -1,0 +1,21 @@
+org = "rust-embedded"
+name = "aarch64-cpu"
+description = "Low level access to processors using the AArch64 execution state."
+bots = []
+
+[access.teams]
+Arm = "admin"
+
+[access.individuals]
+jonathanpallant = "admin"
+thalesfragoso = "admin"
+therealprof = "admin"
+nchong-at-aws = "admin"
+rust-lang-owner = "admin"
+berkus = "admin"
+nastevens = "admin"
+raw-bin = "admin"
+andre-richter = "admin"
+newAM = "admin"
+adamgreig = "admin"
+posborne = "admin"

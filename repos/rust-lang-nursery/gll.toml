@@ -1,0 +1,28 @@
+org = "rust-lang-nursery"
+name = "gll"
+description = "GLL parsing framework."
+bots = []
+
+[access.teams]
+
+[access.individuals]
+erickt = "admin"
+KodrAus = "admin"
+nikomatsakis = "admin"
+dtolnay = "admin"
+Mark-Simulacrum = "admin"
+marcoieni = "admin"
+rust-lang-owner = "admin"
+pietroalbini = "admin"
+kennytm = "admin"
+carols10cents = "admin"
+nrc = "admin"
+huonw = "admin"
+sfackler = "admin"
+alexcrichton = "admin"
+qmx = "admin"
+nikomatsakis-admin = "admin"
+steveklabnik = "admin"
+jdno = "admin"
+aturon = "admin"
+aidanhs = "admin"

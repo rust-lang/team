@@ -1,0 +1,28 @@
+org = "rust-lang-nursery"
+name = "backtrace-rs-1"
+description = "Backtraces in Rust"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+huonw = "admin"
+jdno = "admin"
+aturon = "admin"
+nrc = "admin"
+aidanhs = "admin"
+KodrAus = "admin"
+sfackler = "admin"
+carols10cents = "admin"
+Mark-Simulacrum = "admin"
+alexcrichton = "admin"
+steveklabnik = "admin"
+pietroalbini = "admin"
+erickt = "admin"
+ChrisDenton = "admin"
+rust-lang-owner = "admin"
+kennytm = "admin"
+nikomatsakis = "admin"
+marcoieni = "admin"
+dtolnay = "admin"
+nikomatsakis-admin = "admin"

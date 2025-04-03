@@ -1,0 +1,14 @@
+org = "rust-lang-deprecated"
+name = "url"
+description = "Deprecated url crate (use rust-url instead)"
+bots = []
+
+[access.teams]
+Owners = "admin"
+
+[access.individuals]
+rust-lang-owner = "admin"
+jdno = "admin"
+Mark-Simulacrum = "admin"
+pietroalbini = "admin"
+marcoieni = "admin"

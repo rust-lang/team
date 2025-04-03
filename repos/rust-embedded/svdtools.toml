@@ -1,0 +1,25 @@
+org = "rust-embedded"
+name = "svdtools"
+description = "Python package to handle vendor-supplied, often buggy SVD files."
+bots = []
+
+[access.teams]
+tools = "admin"
+
+[access.individuals]
+burrbull = "admin"
+therealprof = "admin"
+Emilgardis = "admin"
+posborne = "admin"
+nastevens = "admin"
+ryankurte = "admin"
+adamgreig = "admin"
+reitermarkus = "admin"
+rust-lang-owner = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "Rust-CI",
+    "Python-CI",
+]

@@ -1,0 +1,28 @@
+org = "rust-embedded"
+name = "qemu-exit"
+description = "Exit QEMU with user-defined code"
+bots = []
+
+[access.teams]
+libs = "admin"
+
+[access.individuals]
+Dirbaio = "admin"
+adamgreig = "admin"
+posborne = "admin"
+therealprof = "admin"
+nastevens = "admin"
+reitermarkus = "admin"
+newAM = "admin"
+rust-lang-owner = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "Build Library (aarch64-unknown-none-softfloat)",
+    "Build Library (riscv64gc-unknown-none-elf)",
+    "Build Library (x86_64-unknown-linux-gnu)",
+    "Format",
+    "Test QEMU Exit (aarch64-unknown-none-softfloat)",
+    "Test QEMU Exit (riscv64gc-unknown-none-elf)",
+]

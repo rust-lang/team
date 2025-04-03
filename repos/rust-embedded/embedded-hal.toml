@@ -1,0 +1,37 @@
+org = "rust-embedded"
+name = "embedded-hal"
+description = "A Hardware Abstraction Layer (HAL) for embedded systems"
+bots = []
+
+[access.teams]
+HAL = "admin"
+triage = "write"
+Highfive = "write"
+
+[access.individuals]
+jessebraham = "write"
+rust-highfive = "write"
+adamgreig = "admin"
+MabezDev = "admin"
+posborne = "admin"
+mathk = "write"
+jannic = "write"
+eldruin = "admin"
+ryankurte = "admin"
+nastevens = "admin"
+rust-lang-owner = "admin"
+Dirbaio = "admin"
+therealprof = "admin"
+ilya-epifanov = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "clippy",
+    "fmt",
+    "build-nostd",
+    "test",
+    "test-all-features",
+    "msrv-1-81",
+]
+dismiss-stale-review = true

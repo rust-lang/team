@@ -1,0 +1,27 @@
+org = "rust-lang-nursery"
+name = "rust-lang-nursery.github.io"
+description = "GitHub pages redirects"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+Mark-Simulacrum = "admin"
+carols10cents = "admin"
+steveklabnik = "admin"
+aidanhs = "admin"
+nrc = "admin"
+huonw = "admin"
+pietroalbini = "admin"
+erickt = "admin"
+dtolnay = "admin"
+nikomatsakis = "admin"
+kennytm = "admin"
+aturon = "admin"
+KodrAus = "admin"
+jdno = "admin"
+nikomatsakis-admin = "admin"
+marcoieni = "admin"
+rust-lang-owner = "admin"
+alexcrichton = "admin"
+sfackler = "admin"

@@ -1,0 +1,14 @@
+org = "rust-dev-tools"
+name = "strings.rs"
+description = "String data structures for Rust"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+rust-lang-owner = "admin"
+nrc = "admin"
+killercup = "admin"
+Manishearth = "admin"
+pietroalbini = "admin"
+marcoieni = "admin"

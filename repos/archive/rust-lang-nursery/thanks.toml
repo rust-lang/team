@@ -1,0 +1,28 @@
+org = "rust-lang-nursery"
+name = "thanks"
+description = "The first version of thanks.rust-lang.org, succeeded by rust-lang/thanks"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+kennytm = "admin"
+alexcrichton = "admin"
+aidanhs = "admin"
+ashleygwilliams = "admin"
+nikomatsakis = "admin"
+nrc = "admin"
+KodrAus = "admin"
+sfackler = "admin"
+dtolnay = "admin"
+nikomatsakis-admin = "admin"
+carols10cents = "admin"
+steveklabnik = "admin"
+jdno = "admin"
+aturon = "admin"
+huonw = "admin"
+pietroalbini = "admin"
+erickt = "admin"
+rust-lang-owner = "admin"
+Mark-Simulacrum = "admin"
+marcoieni = "admin"

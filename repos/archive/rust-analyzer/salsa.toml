@@ -1,0 +1,19 @@
+org = "rust-analyzer"
+name = "salsa"
+description = "A generic framework for on-demand, incrementalized computation. Inspired by adapton, glimmer, and rustc's query system."
+bots = []
+
+[access.teams]
+
+[access.individuals]
+wesleywiser = "admin"
+rust-lang-owner = "admin"
+pnkfelix = "admin"
+skade = "admin"
+lnicola = "admin"
+flodiebold = "admin"
+MissHolmes = "admin"
+matklad = "admin"
+pietroalbini = "admin"
+Xanewok = "admin"
+Veykril = "admin"

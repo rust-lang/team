@@ -1,0 +1,27 @@
+org = "rust-embedded"
+name = "svd"
+description = "A CMSIS-SVD file parser"
+bots = []
+
+[access.teams]
+tools = "admin"
+
+[access.individuals]
+japaric = "write"
+posborne = "admin"
+Emilgardis = "admin"
+adamgreig = "admin"
+reitermarkus = "admin"
+ryankurte = "admin"
+therealprof = "admin"
+rust-lang-owner = "admin"
+burrbull = "admin"
+nastevens = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "Rustfmt",
+    "CI",
+]
+dismiss-stale-review = true

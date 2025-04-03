@@ -1,0 +1,19 @@
+org = "rust-analyzer"
+name = "rustc-auto-publish"
+description = ""
+bots = []
+
+[access.teams]
+
+[access.individuals]
+rust-lang-owner = "admin"
+pietroalbini = "admin"
+MissHolmes = "admin"
+skade = "admin"
+wesleywiser = "admin"
+flodiebold = "admin"
+matklad = "admin"
+Xanewok = "admin"
+Veykril = "admin"
+pnkfelix = "admin"
+lnicola = "admin"

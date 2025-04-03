@@ -1,0 +1,19 @@
+org = "rust-analyzer"
+name = "bonsai"
+description = ""
+bots = []
+
+[access.teams]
+
+[access.individuals]
+skade = "admin"
+Xanewok = "admin"
+lnicola = "admin"
+rust-lang-owner = "admin"
+flodiebold = "admin"
+pietroalbini = "admin"
+MissHolmes = "admin"
+Veykril = "admin"
+matklad = "admin"
+pnkfelix = "admin"
+wesleywiser = "admin"

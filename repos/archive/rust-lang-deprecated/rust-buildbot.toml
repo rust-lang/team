@@ -1,0 +1,18 @@
+org = "rust-lang-deprecated"
+name = "rust-buildbot"
+description = "Buildbot configs for the Rust project"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+rust-lang-owner = "admin"
+jdno = "admin"
+Mark-Simulacrum = "admin"
+marcoieni = "admin"
+pietroalbini = "admin"
+
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
+pr-required = false

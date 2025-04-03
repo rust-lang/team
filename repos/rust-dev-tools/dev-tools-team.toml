@@ -1,0 +1,31 @@
+org = "rust-dev-tools"
+name = "dev-tools-team"
+description = "resources for the Rust dev-tools team"
+bots = []
+
+[access.teams]
+devtools = "maintain"
+
+[access.individuals]
+jwilm = "write"
+tromey = "write"
+matklad = "write"
+emilio = "write"
+nrc = "admin"
+pietroalbini = "admin"
+fitzgen = "write"
+ehuss = "maintain"
+japaric = "write"
+QuietMisdreavus = "write"
+llogiq = "write"
+oli-obk = "maintain"
+Manishearth = "admin"
+rust-lang-owner = "admin"
+killercup = "admin"
+rbtcollins = "maintain"
+steveklabnik = "write"
+GuillaumeGomez = "maintain"
+calebcartwright = "maintain"
+brson = "write"
+alexcrichton = "write"
+marcoieni = "admin"

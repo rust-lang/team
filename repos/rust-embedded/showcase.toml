@@ -1,0 +1,30 @@
+org = "rust-embedded"
+name = "showcase"
+description = "Awesome embedded projects by the Rust community!"
+bots = []
+
+[access.teams]
+triage = "write"
+Highfive = "write"
+resources = "admin"
+
+[access.individuals]
+rust-highfive = "write"
+rust-lang-owner = "admin"
+jessebraham = "write"
+hargoniX = "admin"
+nastevens = "admin"
+jamesmunns = "admin"
+posborne = "admin"
+eldruin = "admin"
+adamgreig = "admin"
+BartMassey = "admin"
+jannic = "write"
+mathk = "write"
+hdoordt = "admin"
+therealprof = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]
+dismiss-stale-review = true

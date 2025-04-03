@@ -1,0 +1,14 @@
+org = "rust-lang-deprecated"
+name = "rustc-perf-collector"
+description = "Benchmark collection of rustc compile time performance."
+bots = []
+
+[access.teams]
+
+[access.individuals]
+arielb1 = "write"
+jdno = "admin"
+pietroalbini = "admin"
+Mark-Simulacrum = "admin"
+marcoieni = "admin"
+rust-lang-owner = "admin"

@@ -1,0 +1,22 @@
+org = "rust-embedded"
+name = "fixedvec-rs"
+description = "Heapless vector implementation for Rust"
+bots = []
+
+[access.teams]
+core-team = "write"
+embedded-linux = "write"
+
+[access.individuals]
+rust-lang-owner = "admin"
+posborne = "admin"
+adamgreig = "admin"
+therealprof = "admin"
+sirhcel = "write"
+eldruin = "write"
+ryankurte = "write"
+nastevens = "admin"
+rust-embedded-bot = "admin"
+
+[[branch-protections]]
+pattern = "master"

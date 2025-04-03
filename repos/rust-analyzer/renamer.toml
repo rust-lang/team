@@ -1,0 +1,19 @@
+org = "rust-analyzer"
+name = "renamer"
+description = ""
+bots = []
+
+[access.teams]
+
+[access.individuals]
+skade = "admin"
+rust-lang-owner = "admin"
+wesleywiser = "admin"
+MissHolmes = "admin"
+lnicola = "admin"
+Xanewok = "admin"
+pietroalbini = "admin"
+pnkfelix = "admin"
+flodiebold = "admin"
+Veykril = "admin"
+matklad = "admin"

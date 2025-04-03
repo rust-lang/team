@@ -1,0 +1,27 @@
+org = "rust-lang-nursery"
+name = "rustc-timing-archive"
+description = "archived data from rustc-timing"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+marcoieni = "admin"
+nikomatsakis = "admin"
+dtolnay = "admin"
+kennytm = "admin"
+Mark-Simulacrum = "admin"
+alexcrichton = "admin"
+carols10cents = "admin"
+erickt = "admin"
+jdno = "admin"
+pietroalbini = "admin"
+sfackler = "admin"
+rust-lang-owner = "admin"
+nikomatsakis-admin = "admin"
+huonw = "admin"
+steveklabnik = "admin"
+aidanhs = "admin"
+nrc = "admin"
+aturon = "admin"
+KodrAus = "admin"
