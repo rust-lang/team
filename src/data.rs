@@ -210,6 +210,13 @@ impl Data {
         }
         result
     }
+
+    pub(crate) fn is_team_archived(&self, team_name: &str, org: &str) -> bool {
+        self.archived_teams()
+            .filter_map(|team| team.github_teams(self).ok())
+            .flatten()
+            .any(|github_team| github_team.name == team_name && github_team.org == org)
+    }
 }
 
 fn load_file<T: DeserializeOwned>(path: &Path) -> Result<T, Error> {
