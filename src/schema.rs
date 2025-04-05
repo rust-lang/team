@@ -3,7 +3,7 @@ pub(crate) use crate::permissions::Permissions;
 use anyhow::{bail, format_err, Error};
 use serde::de::{Deserialize, Deserializer};
 use serde_untagged::UntaggedEnumVisitor;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeSet, HashMap, HashSet};
 
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
@@ -231,7 +231,7 @@ impl Team {
         false
     }
 
-    pub(crate) fn leads(&self) -> HashSet<&str> {
+    pub(crate) fn leads(&self) -> BTreeSet<&str> {
         self.people.leads.iter().map(|s| s.as_str()).collect()
     }
 
