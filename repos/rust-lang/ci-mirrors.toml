@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "ci-mirrors"
+description = "Upload files to Rust's CI mirrors"
+homepage = "https://ci-mirrors.rust-lang.org"
+bots = []
+
+[access.teams]
+infra = "write"
