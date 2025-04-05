@@ -1,0 +1,38 @@
+org = "rust-embedded"
+name = "rust-i2cdev"
+description = "Rust library for interfacing with i2c devices under Linux"
+bots = []
+
+[access.teams]
+Highfive = "write"
+triage = "write"
+embedded-linux = "admin"
+core-team = "write"
+
+[access.individuals]
+nastevens = "admin"
+adamgreig = "admin"
+jannic = "write"
+ryankurte = "admin"
+eldruin = "admin"
+therealprof = "admin"
+rust-highfive = "write"
+sirhcel = "admin"
+rust-embedded-bot = "write"
+rust-lang-owner = "admin"
+mathk = "write"
+posborne = "admin"
+jessebraham = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "Rustfmt",
+    "clippy_check",
+    "CI (stable, armv7-unknown-linux-gnueabihf)",
+    "CI (stable, x86_64-unknown-linux-gnu)",
+    "CI (1.65.0, x86_64-unknown-linux-gnu)",
+    "CI-macOS (stable, x86_64-apple-darwin)",
+    "CI-macOS (1.65.0, x86_64-apple-darwin)",
+]
+dismiss-stale-review = true

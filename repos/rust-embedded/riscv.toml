@@ -1,0 +1,34 @@
+org = "rust-embedded"
+name = "riscv"
+description = "Low level access to RISC-V processors"
+bots = []
+
+[access.teams]
+risc-v = "admin"
+RISCV = "admin"
+triage = "write"
+
+[access.individuals]
+rmsyn = "admin"
+jannic = "write"
+therealprof = "admin"
+adamgreig = "admin"
+jessebraham = "admin"
+posborne = "admin"
+almindor = "admin"
+MabezDev = "admin"
+romancardenas = "admin"
+rust-lang-owner = "admin"
+dkhayes117 = "admin"
+nastevens = "admin"
+mathk = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "clippy-check",
+    "build-check",
+    "rustfmt",
+    "changelog-check",
+]
+dismiss-stale-review = true

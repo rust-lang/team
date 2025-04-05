@@ -1,0 +1,27 @@
+org = "rust-embedded"
+name = "cortex-m-semihosting"
+description = "Semihosting for ARM Cortex-M processors"
+bots = []
+
+[access.teams]
+triage = "write"
+Cortex-M = "maintain"
+Highfive = "write"
+
+[access.individuals]
+nastevens = "admin"
+therealprof = "admin"
+thalesfragoso = "maintain"
+adamgreig = "admin"
+mathk = "write"
+newAM = "maintain"
+jessebraham = "write"
+rust-lang-owner = "admin"
+rust-highfive = "write"
+jannic = "write"
+posborne = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]
+dismiss-stale-review = true

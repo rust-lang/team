@@ -1,0 +1,28 @@
+org = "rust-embedded"
+name = "not-yet-awesome-embedded-rust"
+description = "A collection of items that are not yet awesome in Embedded Rust"
+bots = []
+
+[access.teams]
+resources = "admin"
+Highfive = "write"
+triage = "write"
+
+[access.individuals]
+nastevens = "admin"
+rust-highfive = "write"
+hargoniX = "admin"
+BartMassey = "admin"
+hdoordt = "admin"
+posborne = "admin"
+jamesmunns = "admin"
+eldruin = "admin"
+jannic = "write"
+therealprof = "admin"
+rust-lang-owner = "admin"
+adamgreig = "admin"
+mathk = "write"
+jessebraham = "write"
+
+[[branch-protections]]
+pattern = "master"

@@ -1,0 +1,19 @@
+org = "rust-analyzer"
+name = "metrics"
+description = ""
+bots = []
+
+[access.teams]
+
+[access.individuals]
+Xanewok = "admin"
+Veykril = "admin"
+pnkfelix = "admin"
+rust-lang-owner = "admin"
+lnicola = "admin"
+skade = "admin"
+MissHolmes = "admin"
+wesleywiser = "admin"
+flodiebold = "admin"
+matklad = "admin"
+pietroalbini = "admin"

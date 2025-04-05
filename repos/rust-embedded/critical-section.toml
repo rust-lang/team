@@ -1,0 +1,32 @@
+org = "rust-embedded"
+name = "critical-section"
+description = "Pluggable critical section"
+bots = []
+
+[access.teams]
+HAL = "admin"
+
+[access.individuals]
+ryankurte = "admin"
+MabezDev = "admin"
+adamgreig = "admin"
+posborne = "admin"
+Dirbaio = "admin"
+nastevens = "admin"
+therealprof = "admin"
+rust-lang-owner = "admin"
+eldruin = "admin"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = [
+    "clippy (1.54)",
+    "clippy (1.63)",
+    "clippy (1.63, std)",
+    "rustfmt",
+    "test (1.54)",
+    "test (1.63)",
+    "test (1.63, std)",
+]
+dismiss-stale-review = true
+required-approvals = 0

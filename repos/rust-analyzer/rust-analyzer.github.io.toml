@@ -1,0 +1,29 @@
+org = "rust-analyzer"
+name = "rust-analyzer.github.io"
+description = ""
+bots = []
+
+[access.teams]
+triage = "triage"
+
+[access.individuals]
+kiljacken = "triage"
+edwin0cheng = "triage"
+lnicola = "admin"
+pietroalbini = "admin"
+pnkfelix = "admin"
+MissHolmes = "admin"
+Veykril = "admin"
+dustypomerleau = "triage"
+matklad = "admin"
+Xanewok = "admin"
+skade = "admin"
+flodiebold = "admin"
+Veetaha = "triage"
+lf- = "triage"
+rust-lang-owner = "admin"
+wesleywiser = "admin"
+JoshMcguigan = "triage"
+bjorn3 = "triage"
+kjeremy = "triage"
+SomeoneToIgnore = "triage"

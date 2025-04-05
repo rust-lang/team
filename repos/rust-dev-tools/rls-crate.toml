@@ -1,0 +1,15 @@
+org = "rust-dev-tools"
+name = "rls-crate"
+description = "A placeholder for the RLS on crates.io"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+rust-lang-owner = "admin"
+pietroalbini = "admin"
+Manishearth = "admin"
+killercup = "admin"
+Xanewok = "admin"
+nrc = "admin"
+marcoieni = "admin"

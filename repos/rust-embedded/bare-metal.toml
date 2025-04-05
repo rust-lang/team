@@ -1,0 +1,37 @@
+org = "rust-embedded"
+name = "bare-metal"
+description = "Abstractions common to microcontrollers"
+bots = []
+
+[access.teams]
+RISCV = "write"
+Cortex-A = "write"
+Cortex-M = "maintain"
+msp430 = "write"
+core = "admin"
+
+[access.individuals]
+korken89 = "write"
+MabezDev = "write"
+rust-lang-owner = "admin"
+berkus = "write"
+romancardenas = "write"
+raw-bin = "write"
+jessebraham = "write"
+newAM = "maintain"
+rmsyn = "write"
+adamgreig = "admin"
+therealprof = "admin"
+nchong-at-aws = "write"
+almindor = "write"
+posborne = "admin"
+cr1901 = "write"
+YuhanLiin = "write"
+thalesfragoso = "maintain"
+nastevens = "admin"
+japaric = "write"
+dkhayes117 = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]

@@ -1,0 +1,28 @@
+org = "rust-lang-nursery"
+name = "rustc-timing-scripts"
+description = "Scripts for measuring rustc performance"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+nikomatsakis = "admin"
+sfackler = "admin"
+edunham = "admin"
+aidanhs = "admin"
+nikomatsakis-admin = "admin"
+alexcrichton = "admin"
+Mark-Simulacrum = "admin"
+kennytm = "admin"
+aturon = "admin"
+nrc = "admin"
+dtolnay = "admin"
+erickt = "admin"
+carols10cents = "admin"
+marcoieni = "admin"
+rust-lang-owner = "admin"
+jdno = "admin"
+huonw = "admin"
+pietroalbini = "admin"
+KodrAus = "admin"
+steveklabnik = "admin"

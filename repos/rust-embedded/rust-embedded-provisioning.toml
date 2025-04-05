@@ -1,0 +1,21 @@
+org = "rust-embedded"
+name = "rust-embedded-provisioning"
+description = "Terraform provisioning for Rust Embedded infrastructure"
+bots = []
+
+[access.teams]
+infrastructure = "admin"
+triage = "write"
+Highfive = "write"
+
+[access.individuals]
+adamgreig = "admin"
+nastevens = "admin"
+therealprof = "admin"
+posborne = "admin"
+rust-lang-owner = "admin"
+jessebraham = "write"
+jannic = "write"
+mathk = "write"
+ryankurte = "admin"
+rust-highfive = "write"
