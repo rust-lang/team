@@ -8,7 +8,7 @@ members = ["doc-jones", "nikomatsakis"]
 alumni = []
 
 [website]
-name = "Rust Code Reading Club working group"
+name = "Rust Code Reading Club"
 description = "Helping new and experienced contributors learn more about rustc"
 repo = "https://rust-lang.github.io/rustc-reading-club/"
 zulip-stream = "rustc-reading-club"

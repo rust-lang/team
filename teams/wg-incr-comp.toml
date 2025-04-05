@@ -11,9 +11,9 @@ alumni = ["michaelwoerister", "pierwill", "pnkfelix", "spastorino"]
 orgs = ["rust-lang"]
 
 [website]
-name = "Incremental compilation working group"
+name = "Incremental compilation"
 description = "Improving incremental compilation in rustc"
-zulip-stream = "t-compiler/wg-incr-comp"
+zulip-stream = "t-compiler/incremental"
 
 [permissions]
 perf = true
