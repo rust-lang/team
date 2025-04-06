@@ -6,3 +6,8 @@ bots = []
 
 [access.teams]
 infra = "write"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = ["Build finished"]
+dismiss-stale-review = true
