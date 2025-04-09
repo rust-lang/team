@@ -3,10 +3,10 @@ subteam-of = "spec"
 
 [people]
 leads = []
-members = [
+members = []
+alumni = [
     "chorman0773",
 ]
-alumni = []
 
 [website]
 name = "Specification team contributors"
