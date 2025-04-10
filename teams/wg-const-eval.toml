@@ -15,12 +15,13 @@ alumni = [
 ]
 
 [website]
-name = "Compile-time Function Evaluation Working Group"
+name = "Compile-time Function Evaluation working area"
 description = "Soundly expanding the capabilities of compile-time function evaluation in Rust"
 repo = "https://github.com/rust-lang/const-eval"
+zulip-stream = "t-compiler/const-eval"
 
 [[github]]
 orgs = ["rust-lang"]
 
 [[zulip-groups]]
-name = "WG-const-eval"
+name = "const-eval"

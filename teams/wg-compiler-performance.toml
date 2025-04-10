@@ -23,9 +23,10 @@ alumni = [
 orgs = ["rust-lang"]
 
 [website]
-name = "Compiler performance working group"
+name = "Compiler performance working area"
 description = "Improving rustc compilation performance (build times)"
 repo = "https://github.com/rust-lang/rustc-perf"
+zulip-stream = "t-compiler/performance"
 
 [permissions]
 perf = true
