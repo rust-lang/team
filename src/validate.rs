@@ -868,20 +868,25 @@ fn validate_repos(data: &Data, errors: &mut Vec<String>) {
         }
         for team_name in repo.access.teams.keys() {
             if !github_teams.contains(&(repo.org.clone(), team_name.clone())) {
+                let error_reason = if data.is_team_archived(team_name, &repo.org) {
+                    "is archived. Please remove the team access from the `[access.teams]` section of the repo"
+                } else {
+                    "is not present in the `/teams/` folder"
+                };
+
                 bail!(
-                        "access for {}/{} is invalid: '{}' is not configured as a GitHub team for the '{}' org",
-                        repo.org,
-                        repo.name,
-                        team_name,
-                        repo.org
-                    )
+                    "Access for the repo {}/{} is invalid: the team '{}/{team_name}' {error_reason}.",
+                    repo.org,
+                    repo.name,
+                    repo.org,
+                );
             }
         }
 
         for name in repo.access.individuals.keys() {
             if data.person(name).is_none() {
                 bail!(
-                    "access for {}/{} is invalid: '{}' is not the name of a person in the team repo",
+                    "Access for the repo {}/{} is invalid: '{}' is not the name of a person in the team repo",
                     repo.org,
                     repo.name,
                     name
