@@ -6,6 +6,7 @@ bots = []
 [access.teams]
 mods = "write"
 team-repo-admins = "write"
+leads = "write"
 infra = "triage"
 
 [[branch-protections]]
