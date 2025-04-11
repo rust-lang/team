@@ -1,0 +1,38 @@
+org = "rust-embedded"
+name = "embedded-alloc"
+description = "A heap allocator for embedded systems"
+bots = []
+
+[access.teams]
+Cortex-M = "maintain"
+libs = "admin"
+triage = "write"
+Highfive = "write"
+
+[access.individuals]
+rust-highfive = "write"
+jannic = "write"
+reitermarkus = "admin"
+therealprof = "admin"
+thalesfragoso = "maintain"
+posborne = "admin"
+mathk = "write"
+rust-lang-owner = "admin"
+adamgreig = "admin"
+Dirbaio = "admin"
+nastevens = "admin"
+jessebraham = "write"
+newAM = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "Clippy",
+    "Format",
+    "check (thumbv6m-none-eabi, nightly)",
+    "check (thumbv6m-none-eabi, stable)",
+    "check (thumbv7m-none-eabi, nightly)",
+    "check (thumbv7m-none-eabi, stable)",
+    "rustdoc",
+]
+dismiss-stale-review = true

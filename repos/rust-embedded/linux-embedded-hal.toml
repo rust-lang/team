@@ -1,0 +1,35 @@
+org = "rust-embedded"
+name = "linux-embedded-hal"
+description = "Implementation of the `embedded-hal` traits for Linux devices"
+bots = []
+
+[access.teams]
+Highfive = "write"
+embedded-linux = "admin"
+triage = "write"
+
+[access.individuals]
+adamgreig = "admin"
+jessebraham = "write"
+rust-lang-owner = "admin"
+posborne = "admin"
+sirhcel = "admin"
+ryankurte = "admin"
+mathk = "write"
+therealprof = "admin"
+rust-highfive = "write"
+jannic = "write"
+nastevens = "admin"
+eldruin = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "CI (stable, armv7-unknown-linux-gnueabihf)",
+    "CI (stable, armv7-unknown-linux-gnueabihf, async-tokio,gpio_cdev,gpio_sysfs,i2c,spi)",
+    "CI (stable, x86_64-unknown-linux-gnu)",
+    "CI (stable, x86_64-unknown-linux-gnu, async-tokio,gpio_cdev,gpio_sysfs,i2c,spi)",
+    "clippy_check",
+    "fmt",
+]
+dismiss-stale-review = true

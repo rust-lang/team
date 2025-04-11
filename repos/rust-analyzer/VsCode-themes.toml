@@ -1,0 +1,20 @@
+org = "rust-analyzer"
+name = "VsCode-themes"
+description = "VsCode themes for rust-analyzer"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+davidbarsky = "admin"
+pietroalbini = "admin"
+skade = "admin"
+pnkfelix = "admin"
+matklad = "admin"
+MissHolmes = "admin"
+rust-lang-owner = "admin"
+wesleywiser = "admin"
+lnicola = "admin"
+flodiebold = "admin"
+Veykril = "admin"
+Xanewok = "admin"

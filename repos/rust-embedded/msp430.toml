@@ -1,0 +1,23 @@
+org = "rust-embedded"
+name = "msp430"
+description = "Low level access to MSP430 microcontrollers"
+bots = []
+
+[access.teams]
+triage = "write"
+msp430 = "admin"
+
+[access.individuals]
+mathk = "write"
+adamgreig = "admin"
+cr1901 = "admin"
+posborne = "admin"
+nastevens = "admin"
+YuhanLiin = "admin"
+rust-lang-owner = "admin"
+jessebraham = "write"
+jannic = "write"
+therealprof = "admin"
+
+[[branch-protections]]
+pattern = "master"

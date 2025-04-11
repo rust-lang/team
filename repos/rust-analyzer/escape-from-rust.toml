@@ -1,0 +1,19 @@
+org = "rust-analyzer"
+name = "escape-from-rust"
+description = ""
+bots = []
+
+[access.teams]
+
+[access.individuals]
+lnicola = "admin"
+Veykril = "admin"
+skade = "admin"
+flodiebold = "admin"
+rust-lang-owner = "admin"
+MissHolmes = "admin"
+pnkfelix = "admin"
+Xanewok = "admin"
+pietroalbini = "admin"
+wesleywiser = "admin"
+matklad = "admin"

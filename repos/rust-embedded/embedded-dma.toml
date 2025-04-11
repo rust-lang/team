@@ -1,0 +1,23 @@
+org = "rust-embedded"
+name = "embedded-dma"
+description = ""
+bots = []
+
+[access.teams]
+HAL = "admin"
+
+[access.individuals]
+MabezDev = "admin"
+nastevens = "admin"
+therealprof = "admin"
+posborne = "admin"
+ryankurte = "admin"
+rust-lang-owner = "admin"
+adamgreig = "admin"
+Dirbaio = "admin"
+eldruin = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]
+dismiss-stale-review = true

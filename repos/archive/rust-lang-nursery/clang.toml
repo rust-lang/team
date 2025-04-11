@@ -1,0 +1,28 @@
+org = "rust-lang-nursery"
+name = "clang"
+description = "No longer used, use https://github.com/rust-lang/llvm-project instead"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+Mark-Simulacrum = "admin"
+carols10cents = "admin"
+alexcrichton = "admin"
+dtolnay = "admin"
+aidanhs = "admin"
+jdno = "admin"
+nrc = "admin"
+aturon = "admin"
+huonw = "admin"
+kennytm = "admin"
+sfackler = "admin"
+pietroalbini = "admin"
+marcoieni = "admin"
+erickt = "admin"
+steveklabnik = "admin"
+nikomatsakis = "admin"
+KodrAus = "admin"
+tromey = "write"
+nikomatsakis-admin = "admin"
+rust-lang-owner = "admin"

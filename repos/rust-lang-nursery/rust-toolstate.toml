@@ -1,0 +1,39 @@
+org = "rust-lang-nursery"
+name = "rust-toolstate"
+description = "Records build and test status of external tools bundled with the Rust repository."
+bots = []
+
+[access.teams]
+bots = "write"
+infra = "admin"
+
+[access.individuals]
+Mark-Simulacrum = "admin"
+alexcrichton = "admin"
+marcoieni = "admin"
+kennytm = "admin"
+aturon = "admin"
+nrc = "admin"
+sfackler = "admin"
+pietroalbini = "admin"
+dtolnay = "admin"
+shepmaster = "admin"
+erickt = "admin"
+jdno = "admin"
+huonw = "admin"
+carols10cents = "admin"
+KodrAus = "admin"
+rust-highfive = "write"
+nikomatsakis-admin = "admin"
+aidanhs = "admin"
+Kobzol = "admin"
+steveklabnik = "admin"
+nikomatsakis = "admin"
+pietroalbini-cat = "write"
+rust-lang-owner = "admin"
+bors = "write"
+
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
+pr-required = false

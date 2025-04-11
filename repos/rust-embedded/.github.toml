@@ -1,0 +1,13 @@
+org = "rust-embedded"
+name = ".github"
+description = ""
+bots = []
+
+[access.teams]
+
+[access.individuals]
+posborne = "admin"
+rust-lang-owner = "admin"
+nastevens = "admin"
+adamgreig = "admin"
+therealprof = "admin"

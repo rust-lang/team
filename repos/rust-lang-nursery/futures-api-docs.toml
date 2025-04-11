@@ -1,0 +1,29 @@
+org = "rust-lang-nursery"
+name = "futures-api-docs"
+description = "API docs for futures-rs"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+pietroalbini = "admin"
+carols10cents = "admin"
+nikomatsakis = "admin"
+MajorBreakfast = "admin"
+aturon = "admin"
+nrc = "admin"
+rust-lang-owner = "admin"
+nikomatsakis-admin = "admin"
+Nemo157 = "admin"
+steveklabnik = "admin"
+alexcrichton = "admin"
+erickt = "admin"
+huonw = "admin"
+kennytm = "admin"
+KodrAus = "admin"
+marcoieni = "admin"
+dtolnay = "admin"
+sfackler = "admin"
+Mark-Simulacrum = "admin"
+aidanhs = "admin"
+jdno = "admin"

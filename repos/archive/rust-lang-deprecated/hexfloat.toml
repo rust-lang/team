@@ -1,0 +1,14 @@
+org = "rust-lang-deprecated"
+name = "hexfloat"
+description = "Syntax extension to create floating point literals from hexadecimal strings"
+bots = []
+
+[access.teams]
+Owners = "admin"
+
+[access.individuals]
+rust-lang-owner = "admin"
+marcoieni = "admin"
+pietroalbini = "admin"
+jdno = "admin"
+Mark-Simulacrum = "admin"

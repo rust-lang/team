@@ -1,0 +1,28 @@
+org = "rust-lang-nursery"
+name = "ecosystem-wg"
+description = "Coordination repository of the ecosystem Working Group (WG)"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+aidanhs = "admin"
+Mark-Simulacrum = "admin"
+sfackler = "admin"
+nrc = "admin"
+dtolnay = "admin"
+KodrAus = "admin"
+steveklabnik = "admin"
+alexcrichton = "admin"
+kennytm = "admin"
+nikomatsakis = "admin"
+carols10cents = "admin"
+aturon = "admin"
+jdno = "admin"
+huonw = "admin"
+Dylan-DPC-zz = "write"
+rust-lang-owner = "admin"
+erickt = "admin"
+marcoieni = "admin"
+nikomatsakis-admin = "admin"
+pietroalbini = "admin"

@@ -1,0 +1,21 @@
+org = "rust-lang-ci"
+name = "rust"
+description = "Empowering everyone to build reliable and efficient software."
+bots = []
+
+[access.teams]
+infra = "write"
+
+[access.individuals]
+shepmaster = "write"
+jdno = "admin"
+rust-monitorbot = "write"
+kennytm = "write"
+Mark-Simulacrum = "admin"
+marcoieni = "admin"
+Kobzol = "write"
+rust-timer = "write"
+bors = "write"
+rust-lang-owner = "admin"
+rust-lang-self-hosted-ci = "admin"
+pietroalbini = "admin"

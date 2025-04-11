@@ -1,0 +1,36 @@
+org = "rust-embedded"
+name = "nb"
+description = "Minimal and reusable non-blocking I/O layer"
+bots = []
+
+[access.teams]
+HAL = "admin"
+Highfive = "write"
+
+[access.individuals]
+Dirbaio = "admin"
+ryankurte = "admin"
+therealprof = "admin"
+adamgreig = "admin"
+eldruin = "admin"
+rust-highfive = "write"
+nastevens = "admin"
+MabezDev = "admin"
+rust-lang-owner = "admin"
+posborne = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "Rustfmt",
+    "clippy_check",
+    "ci-linux (1.62.0, defmt-0-3, thumbv6m-none-eabi)",
+    "ci-linux (1.62.0, defmt-0-3, x86_64-unknown-linux-gnu)",
+    "ci-linux (1.62.0, thumbv6m-none-eabi)",
+    "ci-linux (1.62.0, x86_64-unknown-linux-gnu)",
+    "ci-linux (stable, defmt-0-3, thumbv6m-none-eabi)",
+    "ci-linux (stable, defmt-0-3, x86_64-unknown-linux-gnu)",
+    "ci-linux (stable, thumbv6m-none-eabi)",
+    "ci-linux (stable, x86_64-unknown-linux-gnu)",
+]
+dismiss-stale-review = true

@@ -1,0 +1,26 @@
+org = "rust-embedded"
+name = "rust-embedded.github.io"
+description = "A collection of books and other documents about embedded Rust"
+bots = []
+
+[access.teams]
+resources = "admin"
+Highfive = "write"
+
+[access.individuals]
+posborne = "admin"
+jamesmunns = "admin"
+BartMassey = "admin"
+rust-highfive = "write"
+nastevens = "admin"
+hargoniX = "admin"
+rust-lang-owner = "admin"
+eldruin = "admin"
+therealprof = "admin"
+adamgreig = "admin"
+hdoordt = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]
+dismiss-stale-review = true

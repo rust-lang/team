@@ -1,0 +1,15 @@
+org = "rust-dev-tools"
+name = "rls-span"
+description = "Types for identifying code spans/ranges."
+bots = []
+
+[access.teams]
+
+[access.individuals]
+Xanewok = "admin"
+marcoieni = "admin"
+Manishearth = "admin"
+rust-lang-owner = "admin"
+pietroalbini = "admin"
+nrc = "admin"
+killercup = "admin"

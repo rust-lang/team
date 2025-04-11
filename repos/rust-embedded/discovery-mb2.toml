@@ -1,0 +1,20 @@
+org = "rust-embedded"
+name = "discovery-mb2"
+description = "Rust Discovery Book for BBC micro::bit v2"
+bots = []
+
+[access.teams]
+resources = "admin"
+
+[access.individuals]
+therealprof = "admin"
+guptaarnav = "maintain"
+hargoniX = "admin"
+BartMassey = "admin"
+eldruin = "admin"
+nastevens = "admin"
+adamgreig = "admin"
+rust-lang-owner = "admin"
+jamesmunns = "admin"
+hdoordt = "admin"
+posborne = "admin"

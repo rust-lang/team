@@ -1,0 +1,15 @@
+org = "rust-embedded"
+name = "rust-embedded-www"
+description = "The Rust embedded website: http://www.rust-embedded.org"
+bots = []
+
+[access.teams]
+core-team = "admin"
+
+[access.individuals]
+posborne = "admin"
+adamgreig = "admin"
+nastevens = "admin"
+rust-lang-owner = "admin"
+therealprof = "admin"
+rust-embedded-bot = "admin"

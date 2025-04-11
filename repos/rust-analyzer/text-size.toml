@@ -1,0 +1,30 @@
+org = "rust-analyzer"
+name = "text-size"
+description = ""
+bots = []
+
+[access.teams]
+triage = "triage"
+
+[access.individuals]
+Veetaha = "triage"
+Veykril = "admin"
+matklad = "admin"
+pnkfelix = "admin"
+wesleywiser = "admin"
+pietroalbini = "admin"
+lf- = "triage"
+kiljacken = "triage"
+MissHolmes = "admin"
+edwin0cheng = "triage"
+bjorn3 = "triage"
+CAD97 = "write"
+JoshMcguigan = "triage"
+skade = "admin"
+lnicola = "admin"
+SomeoneToIgnore = "triage"
+Xanewok = "admin"
+rust-lang-owner = "admin"
+dustypomerleau = "triage"
+kjeremy = "triage"
+flodiebold = "admin"

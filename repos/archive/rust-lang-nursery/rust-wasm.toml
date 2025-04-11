@@ -1,0 +1,28 @@
+org = "rust-lang-nursery"
+name = "rust-wasm"
+description = "See rustwasm/team"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+erickt = "admin"
+aturon = "admin"
+jdno = "admin"
+carols10cents = "admin"
+kennytm = "admin"
+rust-lang-owner = "admin"
+sfackler = "admin"
+marcoieni = "admin"
+alexcrichton = "admin"
+pietroalbini = "admin"
+aidanhs = "admin"
+huonw = "admin"
+KodrAus = "admin"
+steveklabnik = "admin"
+nikomatsakis = "admin"
+dtolnay = "admin"
+fitzgen = "admin"
+Mark-Simulacrum = "admin"
+nikomatsakis-admin = "admin"
+nrc = "admin"

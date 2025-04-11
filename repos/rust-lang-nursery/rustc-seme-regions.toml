@@ -1,0 +1,27 @@
+org = "rust-lang-nursery"
+name = "rustc-seme-regions"
+description = "Single Entry Multiple Exit Regions -- A stepping stone for full NLL"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+aturon = "admin"
+erickt = "admin"
+rust-lang-owner = "admin"
+steveklabnik = "admin"
+kennytm = "admin"
+Mark-Simulacrum = "admin"
+nrc = "admin"
+pietroalbini = "admin"
+huonw = "admin"
+KodrAus = "admin"
+alexcrichton = "admin"
+sfackler = "admin"
+nikomatsakis-admin = "admin"
+nikomatsakis = "admin"
+jdno = "admin"
+marcoieni = "admin"
+carols10cents = "admin"
+dtolnay = "admin"
+aidanhs = "admin"
