@@ -1,0 +1,10 @@
+org = "rust-lang-deprecated"
+name = "rust-buildbot"
+description = "Buildbot configs for the Rust project"
+bots = []
+[[branch-protections]]
+pattern = "master"
+required-approvals = 0
+pr-required = false
+
+[access.teams]

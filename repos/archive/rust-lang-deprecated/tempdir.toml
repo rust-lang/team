@@ -1,0 +1,6 @@
+org = "rust-lang-deprecated"
+name = "tempdir"
+description = "Temporary directory management for Rust"
+bots = []
+
+[access.teams]
