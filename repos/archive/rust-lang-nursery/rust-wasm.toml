@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "rust-wasm"
+description = "See rustwasm/team"
+bots = []
+
+[access.teams]
