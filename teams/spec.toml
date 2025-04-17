@@ -8,6 +8,7 @@ members = [
     "ehuss",
     "traviscross",
     "nikomatsakis",
+    "joshtriplett",
 ]
 alumni = [
     "m-ou-se",
