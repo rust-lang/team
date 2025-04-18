@@ -1,0 +1,6 @@
+org = "rust-lang-deprecated"
+name = "libuv"
+description = "Clone of libuv for rust"
+bots = []
+
+[access.teams]

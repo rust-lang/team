@@ -1,0 +1,6 @@
+org = "rust-lang-deprecated"
+name = "error-chain"
+description = "Error boilerplate for Rust"
+bots = []
+
+[access.teams]
