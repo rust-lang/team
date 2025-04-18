@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "taskcluster-crater"
+description = ""
+bots = []
+
+[access.teams]

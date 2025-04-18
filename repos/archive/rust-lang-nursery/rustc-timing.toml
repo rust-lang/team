@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "rustc-timing"
+description = "Data for timing rustc"
+bots = []
+
+[access.teams]
