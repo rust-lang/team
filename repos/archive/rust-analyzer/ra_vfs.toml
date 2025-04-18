@@ -1,0 +1,6 @@
+org = "rust-analyzer"
+name = "ra_vfs"
+description = "VFS used by rust-analyzer"
+bots = []
+
+[access.teams]

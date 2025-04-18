@@ -1,0 +1,6 @@
+org = "rust-analyzer"
+name = "rust-project.json-example"
+description = ""
+bots = []
+
+[access.teams]
