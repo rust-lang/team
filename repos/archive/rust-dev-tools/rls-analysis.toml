@@ -1,0 +1,15 @@
+org = "rust-dev-tools"
+name = "rls-analysis"
+description = "Core functionality for handling rustc's save-analysis data"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+marcoieni = "admin"
+nrc = "admin"
+pietroalbini = "admin"
+Manishearth = "admin"
+killercup = "admin"
+Xanewok = "admin"
+rust-lang-owner = "admin"

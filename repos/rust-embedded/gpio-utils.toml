@@ -1,0 +1,25 @@
+org = "rust-embedded"
+name = "gpio-utils"
+description = "Userspace Utilities for managing GPIOs in Linux"
+bots = []
+
+[access.teams]
+Highfive = "write"
+core-team = "write"
+embedded-linux = "admin"
+triage = "write"
+
+[access.individuals]
+therealprof = "admin"
+posborne = "admin"
+jannic = "write"
+mathk = "write"
+nastevens = "admin"
+rust-highfive = "write"
+eldruin = "admin"
+sirhcel = "admin"
+ryankurte = "admin"
+jessebraham = "write"
+rust-embedded-bot = "write"
+adamgreig = "admin"
+rust-lang-owner = "admin"

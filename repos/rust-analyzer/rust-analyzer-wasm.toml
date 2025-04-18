@@ -1,0 +1,20 @@
+org = "rust-analyzer"
+name = "rust-analyzer-wasm"
+description = ""
+bots = []
+
+[access.teams]
+
+[access.individuals]
+wesleywiser = "admin"
+Xanewok = "admin"
+Veykril = "admin"
+flodiebold = "admin"
+skade = "admin"
+pnkfelix = "admin"
+MissHolmes = "admin"
+pietroalbini = "admin"
+matklad = "admin"
+edwin0cheng = "admin"
+lnicola = "admin"
+rust-lang-owner = "admin"

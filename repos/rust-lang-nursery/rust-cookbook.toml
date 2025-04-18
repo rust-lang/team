@@ -1,0 +1,32 @@
+org = "rust-lang-nursery"
+name = "rust-cookbook"
+description = "https://rust-lang-nursery.github.io/rust-cookbook"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+erickt = "admin"
+marcoieni = "admin"
+trentspi = "write"
+steveklabnik = "admin"
+carols10cents = "admin"
+nrc = "admin"
+nikomatsakis-admin = "admin"
+AndyGauge = "write"
+nikomatsakis = "admin"
+aidanhs = "admin"
+rust-lang-owner = "admin"
+budziq = "write"
+jdno = "admin"
+Mark-Simulacrum = "admin"
+aturon = "admin"
+branderson = "write"
+sfackler = "admin"
+dtolnay = "admin"
+pietroalbini = "admin"
+huonw = "admin"
+KodrAus = "admin"
+kennytm = "admin"
+dhharris = "write"
+alexcrichton = "admin"

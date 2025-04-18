@@ -1,0 +1,19 @@
+org = "rust-analyzer"
+name = "teraron"
+description = ""
+bots = []
+
+[access.teams]
+
+[access.individuals]
+pietroalbini = "admin"
+rust-lang-owner = "admin"
+matklad = "admin"
+lnicola = "admin"
+Xanewok = "admin"
+MissHolmes = "admin"
+flodiebold = "admin"
+Veykril = "admin"
+skade = "admin"
+wesleywiser = "admin"
+pnkfelix = "admin"

@@ -1,0 +1,28 @@
+org = "rust-embedded"
+name = "rust-sysfs-pwm"
+description = "Linux PWM Access via Sysfs in Rust"
+bots = []
+
+[access.teams]
+triage = "write"
+embedded-linux = "admin"
+Highfive = "write"
+#core-team = "pull"
+
+[access.individuals]
+rust-highfive = "write"
+therealprof = "admin"
+posborne = "admin"
+sirhcel = "admin"
+jessebraham = "write"
+ryankurte = "admin"
+rust-lang-owner = "admin"
+eldruin = "admin"
+adamgreig = "admin"
+mathk = "write"
+nastevens = "admin"
+jannic = "write"
+
+[[branch-protections]]
+pattern = "master"
+dismiss-stale-review = true

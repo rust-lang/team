@@ -1,0 +1,31 @@
+org = "rust-embedded"
+name = "awesome-embedded-rust"
+description = "Curated list of resources for Embedded and Low-level development in the Rust programming language"
+bots = []
+
+[access.teams]
+resources = "maintain"
+Highfive = "write"
+triage = "write"
+
+[access.individuals]
+posborne = "admin"
+adamgreig = "admin"
+berkus = "write"
+mathk = "write"
+therealprof = "admin"
+rust-highfive = "write"
+rahul-thakoor = "write"
+jamesmunns = "maintain"
+nastevens = "admin"
+RandomInsano = "write"
+BartMassey = "maintain"
+eldruin = "maintain"
+jannic = "write"
+jessebraham = "write"
+rust-lang-owner = "admin"
+hdoordt = "maintain"
+hargoniX = "maintain"
+
+[[branch-protections]]
+pattern = "master"

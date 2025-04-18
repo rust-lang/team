@@ -1,0 +1,19 @@
+org = "rust-analyzer"
+name = "rust-project.json-example"
+description = ""
+bots = []
+
+[access.teams]
+
+[access.individuals]
+Xanewok = "admin"
+Veykril = "admin"
+pietroalbini = "admin"
+wesleywiser = "admin"
+rust-lang-owner = "admin"
+lnicola = "admin"
+flodiebold = "admin"
+matklad = "admin"
+MissHolmes = "admin"
+pnkfelix = "admin"
+skade = "admin"

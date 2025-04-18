@@ -1,0 +1,13 @@
+org = "rust-lang-deprecated"
+name = "rustup.sh"
+description = "The rustup.sh script for installing Rust from release channels"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+jdno = "admin"
+marcoieni = "admin"
+rust-lang-owner = "admin"
+Mark-Simulacrum = "admin"
+pietroalbini = "admin"

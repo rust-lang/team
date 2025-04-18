@@ -1,0 +1,33 @@
+org = "rust-embedded"
+name = "svd2rust"
+description = "Generate Rust register maps (`struct`s) from SVD files"
+bots = []
+
+[access.teams]
+triage = "write"
+tools = "admin"
+Highfive = "write"
+
+[access.individuals]
+mathk = "write"
+ryankurte = "admin"
+posborne = "admin"
+jamesmunns = "write"
+jannic = "write"
+jessebraham = "write"
+therealprof = "admin"
+adamgreig = "admin"
+Emilgardis = "admin"
+rust-highfive = "write"
+rust-lang-owner = "admin"
+reitermarkus = "admin"
+burrbull = "admin"
+nastevens = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "CI",
+    "Rustfmt",
+]
+dismiss-stale-review = true

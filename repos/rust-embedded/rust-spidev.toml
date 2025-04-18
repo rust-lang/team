@@ -1,0 +1,37 @@
+org = "rust-embedded"
+name = "rust-spidev"
+description = "Rust library providing access to spidev devices under Linux"
+bots = []
+
+[access.teams]
+embedded-linux = "admin"
+triage = "write"
+core-team = "write"
+Highfive = "write"
+
+[access.individuals]
+mathk = "write"
+nastevens = "admin"
+therealprof = "admin"
+sirhcel = "admin"
+posborne = "admin"
+eldruin = "admin"
+jannic = "write"
+ryankurte = "admin"
+jessebraham = "write"
+rust-highfive = "write"
+rust-embedded-bot = "write"
+adamgreig = "admin"
+rust-lang-owner = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "clippy_check",
+    "Rustfmt",
+    "CI (stable, x86_64-unknown-linux-gnu)",
+    "CI (stable, x86_64-unknown-linux-musl)",
+    "CI (beta, x86_64-unknown-linux-musl)",
+    "CI (beta, x86_64-unknown-linux-gnu)",
+]
+dismiss-stale-review = true

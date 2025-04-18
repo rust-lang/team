@@ -1,0 +1,15 @@
+org = "rust-dev-tools"
+name = "rls-rustc"
+description = "A simple shim around rustc to allow using save-analysis with a stable toolchain"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+rust-lang-owner = "admin"
+nrc = "admin"
+killercup = "admin"
+pietroalbini = "admin"
+Manishearth = "admin"
+marcoieni = "admin"
+Xanewok = "admin"

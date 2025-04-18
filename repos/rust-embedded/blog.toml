@@ -1,0 +1,26 @@
+org = "rust-embedded"
+name = "blog"
+description = "The Rust Embedded WG Blog"
+bots = []
+
+[access.teams]
+resources = "admin"
+Highfive = "write"
+
+[access.individuals]
+BartMassey = "admin"
+eldruin = "admin"
+hdoordt = "admin"
+hargoniX = "admin"
+rust-lang-owner = "admin"
+posborne = "admin"
+rust-highfive = "write"
+adamgreig = "admin"
+jamesmunns = "admin"
+nastevens = "admin"
+therealprof = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["build"]
+dismiss-stale-review = true

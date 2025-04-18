@@ -1,0 +1,27 @@
+org = "rust-lang-nursery"
+name = ".github"
+description = "GitHub metadata for this organization"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+erickt = "admin"
+KodrAus = "admin"
+nikomatsakis = "admin"
+aidanhs = "admin"
+alexcrichton = "admin"
+kennytm = "admin"
+huonw = "admin"
+pietroalbini = "admin"
+steveklabnik = "admin"
+carols10cents = "admin"
+sfackler = "admin"
+nrc = "admin"
+marcoieni = "admin"
+Mark-Simulacrum = "admin"
+jdno = "admin"
+rust-lang-owner = "admin"
+nikomatsakis-admin = "admin"
+aturon = "admin"
+dtolnay = "admin"

@@ -1,0 +1,30 @@
+org = "rust-embedded"
+name = "embedonomicon"
+description = "How to bootstrap support for a no_std target"
+bots = []
+
+[access.teams]
+Highfive = "write"
+triage = "write"
+resources = "admin"
+
+[access.individuals]
+rust-lang-owner = "admin"
+jannic = "write"
+adamgreig = "admin"
+eldruin = "admin"
+BartMassey = "admin"
+jessebraham = "write"
+hdoordt = "admin"
+hargoniX = "admin"
+posborne = "admin"
+jamesmunns = "admin"
+rust-highfive = "write"
+mathk = "write"
+nastevens = "admin"
+therealprof = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]
+dismiss-stale-review = true

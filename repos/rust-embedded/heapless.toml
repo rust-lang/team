@@ -1,0 +1,44 @@
+org = "rust-embedded"
+name = "heapless"
+description = "Heapless, `static` friendly data structures"
+bots = []
+
+[access.teams]
+libs = "admin"
+
+[access.individuals]
+reitermarkus = "admin"
+nastevens = "admin"
+newAM = "admin"
+posborne = "admin"
+Dirbaio = "admin"
+adamgreig = "admin"
+rust-lang-owner = "admin"
+therealprof = "admin"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = [
+    "test",
+    "testcfail",
+    "testmiri",
+    "style",
+    "check (x86_64-unknown-linux-gnu)",
+    "check (i686-unknown-linux-musl)",
+    "check (riscv32imc-unknown-none-elf)",
+    "check (armv7r-none-eabi)",
+    "check (thumbv6m-none-eabi)",
+    "check (thumbv7m-none-eabi)",
+    "check (thumbv8m.base-none-eabi)",
+    "check (thumbv8m.main-none-eabi)",
+    "doc (thumbv7m-none-eabi)",
+    "doc (x86_64-unknown-linux-gnu)",
+    "testcpass (i686-unknown-linux-musl)",
+    "testcpass (i686-unknown-linux-musl, --release)",
+    "testcpass (x86_64-unknown-linux-gnu)",
+    "testcpass (x86_64-unknown-linux-gnu, --release)",
+    "testtsan (x86_64-unknown-linux-gnu)",
+    "testtsan (x86_64-unknown-linux-gnu, --release)",
+    "clippy",
+]
+dismiss-stale-review = true
