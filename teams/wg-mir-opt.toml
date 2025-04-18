@@ -11,10 +11,10 @@ alumni = ["spastorino"]
 orgs = ["rust-lang"]
 
 [website]
-name = "MIR optimizations working group"
+name = "MIR optimizations working area"
 description = "Writing MIR optimizations and refactoring the MIR to be more optimizable"
-repo = "https://rust-lang.github.io/compiler-team/working-groups/mir-opt/"
-zulip-stream = "t-compiler/wg-mir-opt"
+repo = "https://forge.rust-lang.org/compiler/working-areas.html"
+zulip-stream = "t-compiler/mir-opts"
 
 [permissions]
 perf = true

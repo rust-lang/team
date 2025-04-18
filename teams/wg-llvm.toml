@@ -16,7 +16,7 @@ alumni = []
 orgs = ["rust-lang"]
 
 [website]
-name = "LLVM working group"
+name = "LLVM working area"
 description = "Working with LLVM upstream to represent Rust in its development"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/llvm/"
-zulip-stream = "t-compiler/wg-llvm"
+zulip-stream = "t-compiler/llvm"

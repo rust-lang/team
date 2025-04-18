@@ -3,9 +3,9 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["wesleywiser"]
-members = ["wesleywiser"]
-alumni = ["michaelwoerister"]
+leads = []
+members = []
+alumni = ["michaelwoerister","wesleywiser"]
 
 [permissions]
 perf = true

@@ -3,21 +3,20 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["wesleywiser"]
-members = [
-    "davidtwco",
-    "wesleywiser",
-]
+leads = []
+members = []
 alumni = [
     "Manishearth",
+    "davidtwco",
     "michaelwoerister",
     "pnkfelix",
+    "wesleywiser",
 ]
 
 [website]
 name = "Debugging Working Group"
 description = "Providing users with a great experience when debugging Rust code"
-zulip-stream = "t-compiler/wg-debugging"
+zulip-stream = "t-compiler/debugging"
 
 [[github]]
 orgs = ["rust-lang"]
