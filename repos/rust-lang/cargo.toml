@@ -6,6 +6,7 @@ bots = ["rustbot", "rfcbot", "renovate"]
 
 [access.teams]
 cargo = "write"
+mods = "write"
 
 [[branch-protections]]
 pattern = "master"
