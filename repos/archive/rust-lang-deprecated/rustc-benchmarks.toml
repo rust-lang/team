@@ -1,0 +1,6 @@
+org = "rust-lang-deprecated"
+name = "rustc-benchmarks"
+description = "Some benchmarks for testing rustc performance"
+bots = []
+
+[access.teams]
