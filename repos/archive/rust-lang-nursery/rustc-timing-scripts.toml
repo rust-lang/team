@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "rustc-timing-scripts"
+description = "Scripts for measuring rustc performance"
+bots = []
+
+[access.teams]

@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "clang"
+description = "No longer used, use https://github.com/rust-lang/llvm-project instead"
+bots = []
+
+[access.teams]
