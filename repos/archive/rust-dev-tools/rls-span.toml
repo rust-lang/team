@@ -1,0 +1,6 @@
+org = "rust-dev-tools"
+name = "rls-span"
+description = "Types for identifying code spans/ranges."
+bots = []
+
+[access.teams]

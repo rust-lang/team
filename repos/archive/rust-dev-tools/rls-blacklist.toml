@@ -1,0 +1,6 @@
+org = "rust-dev-tools"
+name = "rls-blacklist"
+description = "Blacklist of crates for the RLS to skip"
+bots = []
+
+[access.teams]
