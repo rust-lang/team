@@ -26,7 +26,7 @@ members = [
     "fmease", 
     { github = "jackh726", roles = ["compiler-maintainer"] },
     "jdonszelmann",
-    "jieyouxu",
+    { github = "jieyouxu", roles = ["compiler-maintainer"] },
     "jswrenn",
     "Kobzol",
     { github = "lcnr", roles = ["compiler-maintainer"] },
