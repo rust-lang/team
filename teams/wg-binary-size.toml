@@ -30,7 +30,7 @@ perf = true
 orgs = ["rust-lang"]
 
 [website]
-name = "Binary size working group"
+name = "Binary size working area"
 description = "Improving the binary size of Rust programs and libraries"
 repo = "https://github.com/rust-lang/wg-binary-size"
 zulip-stream = "wg-binary-size"

@@ -18,7 +18,7 @@ alumni = []
 orgs = ["rust-lang"]
 
 [website]
-name = "Diagnostics working group"
+name = "Diagnostics working area"
 description = "Aiming to make rustc better at telling the user why the compiler isn't smart enough to understand their code yet"
 repo = "https://rust-lang.github.io/compiler-team/working-groups/diagnostics/"
-zulip-stream = "t-compiler/wg-diagnostics"
+zulip-stream = "t-compiler/diagnostics"

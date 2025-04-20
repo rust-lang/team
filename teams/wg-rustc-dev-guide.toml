@@ -19,10 +19,10 @@ alumni = ["LeSeulArtichaut", "Nashenas88", "amanjeev", "chrissimpkins", "jyn514"
 orgs = ["rust-lang"]
 
 [website]
-name = "Rustc Dev Guide working group"
+name = "Rustc Dev Guide working area"
 description = "Making the compiler easier to learn by maintaining and improving the Rustc Dev Guide"
-repo = "https://rust-lang.github.io/compiler-team/working-groups/rustc-dev-guide/"
-zulip-stream = "t-compiler/wg-rustc-dev-guide"
+repo = "https://forge.rust-lang.org/compiler/working-areas.html"
+zulip-stream = "t-compiler/rustc-dev-guide"
 
 [[zulip-groups]]
 name = "WG-rustc-dev-guide"

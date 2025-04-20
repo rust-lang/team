@@ -1,0 +1,20 @@
+name = "incr-comp"
+subteam-of = "compiler"
+kind = "marker-team"
+
+[people]
+leads = []
+members = []
+alumni = ["davidtwco", "wesleywiser", "Aaron1011", "cjgillot", "michaelwoerister", "pierwill", "pnkfelix", "spastorino"]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Incremental compilation working area"
+description = "Improving incremental compilation in rustc"
+zulip-stream = "t-compiler/incremental"
+
+[permissions]
+perf = true
+bors.rust.try = true

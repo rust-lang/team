@@ -3,9 +3,9 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["davidtwco"]
-members = ["davidtwco", "eddyb", "lcnr"]
-alumni = []
+leads = []
+members = []
+alumni = ["davidtwco", "eddyb", "lcnr"]
 
 [website]
 name = "Polymorphization working group"
