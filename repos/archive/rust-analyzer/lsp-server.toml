@@ -1,0 +1,29 @@
+org = "rust-analyzer"
+name = "lsp-server"
+description = ""
+bots = []
+
+[access.teams]
+triage = "triage"
+
+[access.individuals]
+Xanewok = "admin"
+dustypomerleau = "triage"
+kiljacken = "triage"
+JoshMcguigan = "triage"
+lnicola = "admin"
+bjorn3 = "triage"
+pnkfelix = "admin"
+SomeoneToIgnore = "triage"
+rust-lang-owner = "admin"
+Veykril = "admin"
+kjeremy = "triage"
+MissHolmes = "admin"
+edwin0cheng = "triage"
+wesleywiser = "admin"
+matklad = "admin"
+skade = "admin"
+pietroalbini = "admin"
+lf- = "triage"
+Veetaha = "triage"
+flodiebold = "admin"

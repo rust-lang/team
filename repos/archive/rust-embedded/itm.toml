@@ -1,0 +1,32 @@
+org = "rust-embedded"
+name = "itm"
+description = "Tool to parse and dump ITM packets"
+bots = []
+
+[access.teams]
+Highfive = "write"
+tools = "admin"
+triage = "write"
+Cortex-M = "maintain"
+
+[access.individuals]
+nastevens = "admin"
+rust-lang-owner = "admin"
+posborne = "admin"
+rust-highfive = "write"
+reitermarkus = "admin"
+mathk = "write"
+thalesfragoso = "maintain"
+jannic = "write"
+newAM = "maintain"
+therealprof = "admin"
+jessebraham = "write"
+Emilgardis = "admin"
+ryankurte = "admin"
+adamgreig = "admin"
+burrbull = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]
+dismiss-stale-review = true

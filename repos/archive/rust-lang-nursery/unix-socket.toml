@@ -1,0 +1,27 @@
+org = "rust-lang-nursery"
+name = "unix-socket"
+description = "Unix socket support for Rust"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+aturon = "admin"
+aidanhs = "admin"
+marcoieni = "admin"
+jdno = "admin"
+alexcrichton = "admin"
+huonw = "admin"
+steveklabnik = "admin"
+sfackler = "admin"
+dtolnay = "admin"
+rust-lang-owner = "admin"
+pietroalbini = "admin"
+nikomatsakis-admin = "admin"
+carols10cents = "admin"
+kennytm = "admin"
+Mark-Simulacrum = "admin"
+erickt = "admin"
+KodrAus = "admin"
+nrc = "admin"
+nikomatsakis = "admin"

@@ -1,0 +1,20 @@
+org = "rust-embedded"
+name = "msp430-rt"
+description = "Minimal startup / runtime for MSP430 microcontrollers "
+bots = []
+
+[access.teams]
+msp430 = "admin"
+triage = "write"
+
+[access.individuals]
+YuhanLiin = "admin"
+adamgreig = "admin"
+jannic = "write"
+mathk = "write"
+jessebraham = "write"
+nastevens = "admin"
+posborne = "admin"
+rust-lang-owner = "admin"
+therealprof = "admin"
+cr1901 = "admin"

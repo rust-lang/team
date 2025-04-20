@@ -1,0 +1,20 @@
+org = "rust-analyzer"
+name = "countme"
+description = ""
+bots = []
+
+[access.teams]
+#triage = "pull"
+
+[access.individuals]
+Xanewok = "admin"
+skade = "admin"
+matklad = "admin"
+pnkfelix = "admin"
+rust-lang-owner = "admin"
+lnicola = "admin"
+MissHolmes = "admin"
+pietroalbini = "admin"
+flodiebold = "admin"
+Veykril = "admin"
+wesleywiser = "admin"

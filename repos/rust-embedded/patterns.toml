@@ -1,0 +1,25 @@
+org = "rust-embedded"
+name = "patterns"
+description = "A book capturing different approaches or patterns for solving problems in Embedded Rust"
+bots = []
+
+[access.teams]
+triage = "write"
+resources = "admin"
+Highfive = "write"
+
+[access.individuals]
+jessebraham = "write"
+rust-lang-owner = "admin"
+adamgreig = "admin"
+posborne = "admin"
+BartMassey = "admin"
+nastevens = "admin"
+jamesmunns = "admin"
+rust-highfive = "write"
+jannic = "write"
+hdoordt = "admin"
+eldruin = "admin"
+mathk = "write"
+therealprof = "admin"
+hargoniX = "admin"

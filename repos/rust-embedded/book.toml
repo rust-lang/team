@@ -1,0 +1,31 @@
+org = "rust-embedded"
+name = "book"
+description = "Documentation on how to use the Rust Programming Language to develop firmware for bare metal (microcontroller) devices"
+bots = []
+
+[access.teams]
+resources = "admin"
+Highfive = "write"
+triage = "write"
+
+[access.individuals]
+posborne = "admin"
+therealprof = "admin"
+hargoniX = "admin"
+rust-highfive = "write"
+jannic = "write"
+adamgreig = "admin"
+jessebraham = "write"
+rust-lang-owner = "admin"
+korken89 = "write"
+eldruin = "admin"
+mathk = "write"
+hdoordt = "admin"
+nastevens = "admin"
+BartMassey = "admin"
+jamesmunns = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["build"]
+dismiss-stale-review = true

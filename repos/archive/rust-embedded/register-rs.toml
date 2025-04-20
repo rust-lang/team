@@ -1,0 +1,21 @@
+org = "rust-embedded"
+name = "register-rs"
+description = "Unified interface for type-safe MMIO and CPU register access in Rust"
+bots = []
+
+[access.teams]
+triage = "write"
+Cortex-A = "write"
+
+[access.individuals]
+raw-bin = "write"
+rust-lang-owner = "admin"
+therealprof = "admin"
+mathk = "write"
+adamgreig = "admin"
+berkus = "write"
+posborne = "admin"
+jannic = "write"
+nastevens = "admin"
+jessebraham = "write"
+nchong-at-aws = "write"

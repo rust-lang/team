@@ -1,0 +1,15 @@
+org = "rust-dev-tools"
+name = "rls-data"
+description = "Data structures used by the RLS and Rust compiler"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+killercup = "admin"
+nrc = "admin"
+Manishearth = "admin"
+Xanewok = "admin"
+pietroalbini = "admin"
+marcoieni = "admin"
+rust-lang-owner = "admin"

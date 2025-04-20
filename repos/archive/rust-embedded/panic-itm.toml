@@ -1,0 +1,27 @@
+org = "rust-embedded"
+name = "panic-itm"
+description = "Log panic messages using the ITM (Instrumentation Trace Macrocell)"
+bots = []
+
+[access.teams]
+triage = "write"
+Highfive = "write"
+Cortex-M = "maintain"
+
+[access.individuals]
+jannic = "write"
+newAM = "maintain"
+thalesfragoso = "maintain"
+nastevens = "admin"
+therealprof = "admin"
+adamgreig = "admin"
+posborne = "admin"
+rust-lang-owner = "admin"
+jessebraham = "write"
+mathk = "write"
+rust-highfive = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]
+dismiss-stale-review = true

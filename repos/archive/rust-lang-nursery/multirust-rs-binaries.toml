@@ -1,0 +1,27 @@
+org = "rust-lang-nursery"
+name = "multirust-rs-binaries"
+description = "Binaries for multirust-rs"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+jdno = "admin"
+nrc = "admin"
+pietroalbini = "admin"
+carols10cents = "admin"
+aidanhs = "admin"
+sfackler = "admin"
+steveklabnik = "admin"
+alexcrichton = "admin"
+nikomatsakis = "admin"
+dtolnay = "admin"
+huonw = "admin"
+rust-lang-owner = "admin"
+nikomatsakis-admin = "admin"
+Mark-Simulacrum = "admin"
+KodrAus = "admin"
+erickt = "admin"
+marcoieni = "admin"
+kennytm = "admin"
+aturon = "admin"

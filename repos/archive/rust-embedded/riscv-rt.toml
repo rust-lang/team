@@ -1,0 +1,33 @@
+org = "rust-embedded"
+name = "riscv-rt"
+description = "Minimal runtime / startup for RISC-V CPU's."
+bots = []
+
+[access.teams]
+RISCV = "admin"
+triage = "write"
+
+[access.individuals]
+therealprof = "admin"
+rust-lang-owner = "admin"
+dkhayes117 = "admin"
+rmsyn = "admin"
+mathk = "write"
+jessebraham = "admin"
+jannic = "write"
+MabezDev = "admin"
+posborne = "admin"
+almindor = "admin"
+romancardenas = "admin"
+nastevens = "admin"
+adamgreig = "admin"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = [
+    "build-check",
+    "rustfmt",
+    "changelog-check",
+    "clippy-check",
+]
+dismiss-stale-review = true

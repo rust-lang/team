@@ -1,0 +1,19 @@
+org = "rust-analyzer"
+name = "minimal-rust"
+description = ""
+bots = []
+
+[access.teams]
+
+[access.individuals]
+matklad = "admin"
+wesleywiser = "admin"
+pnkfelix = "admin"
+rust-lang-owner = "admin"
+MissHolmes = "admin"
+pietroalbini = "admin"
+Veykril = "admin"
+Xanewok = "admin"
+flodiebold = "admin"
+lnicola = "admin"
+skade = "admin"

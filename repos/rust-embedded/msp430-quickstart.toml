@@ -1,0 +1,16 @@
+org = "rust-embedded"
+name = "msp430-quickstart"
+description = "Template to develop bare metal applications for MSP430 microcontrollers"
+bots = []
+
+[access.teams]
+msp430 = "admin"
+
+[access.individuals]
+adamgreig = "admin"
+therealprof = "admin"
+rust-lang-owner = "admin"
+nastevens = "admin"
+posborne = "admin"
+cr1901 = "admin"
+YuhanLiin = "admin"

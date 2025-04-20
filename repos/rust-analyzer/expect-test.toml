@@ -1,0 +1,36 @@
+org = "rust-analyzer"
+name = "expect-test"
+description = "Minimalistic snapshot testing for Rust."
+bots = []
+
+[access.teams]
+triage = "triage"
+
+[access.individuals]
+MissHolmes = "admin"
+pnkfelix = "admin"
+skade = "admin"
+Xanewok = "admin"
+kjeremy = "triage"
+edwin0cheng = "triage"
+JoshMcguigan = "triage"
+pietroalbini = "admin"
+wesleywiser = "admin"
+Veykril = "admin"
+kiljacken = "triage"
+lnicola = "admin"
+bjorn3 = "triage"
+flodiebold = "admin"
+matklad = "admin"
+Veetaha = "triage"
+lf- = "triage"
+quad = "write"
+dustypomerleau = "triage"
+rust-lang-owner = "admin"
+SomeoneToIgnore = "triage"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["test"]
+required-approvals = 0
+pr-required = false

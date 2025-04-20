@@ -1,0 +1,39 @@
+org = "rust-embedded"
+name = "wg"
+description = "Coordination repository of the embedded devices Working Group"
+bots = []
+
+[access.teams]
+All = "write"
+
+[access.individuals]
+thalesfragoso = "write"
+jamesmunns = "write"
+burrbull = "write"
+reitermarkus = "write"
+Disasm = "write"
+eldruin = "write"
+nastevens = "admin"
+ryankurte = "write"
+cr1901 = "write"
+romancardenas = "write"
+almindor = "write"
+posborne = "admin"
+raw-bin = "write"
+nchong-at-aws = "write"
+adamgreig = "admin"
+hdoordt = "write"
+BartMassey = "write"
+Dirbaio = "write"
+dkhayes117 = "write"
+berkus = "write"
+MabezDev = "write"
+Emilgardis = "write"
+therealprof = "admin"
+newAM = "write"
+hargoniX = "write"
+rust-lang-owner = "admin"
+
+[[branch-protections]]
+pattern = "master"
+dismiss-stale-review = true

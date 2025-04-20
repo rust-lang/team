@@ -1,0 +1,25 @@
+org = "rust-embedded"
+name = "meta-rust-bin"
+description = "Yocto layer for installing Rust toolchain from pre-built binaries"
+bots = []
+
+[access.teams]
+triage = "write"
+embedded-linux = "write"
+core = "write"
+
+[access.individuals]
+posborne = "admin"
+eldruin = "write"
+mathk = "write"
+sirhcel = "write"
+nastevens = "admin"
+rust-lang-owner = "admin"
+therealprof = "admin"
+ryankurte = "write"
+jessebraham = "write"
+jannic = "write"
+adamgreig = "admin"
+
+[[branch-protections]]
+pattern = "master"

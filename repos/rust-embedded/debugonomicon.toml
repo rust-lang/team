@@ -1,0 +1,25 @@
+org = "rust-embedded"
+name = "debugonomicon"
+description = ""
+bots = []
+
+[access.teams]
+triage = "write"
+resources = "admin"
+
+[access.individuals]
+eldruin = "admin"
+hargoniX = "admin"
+posborne = "admin"
+therealprof = "admin"
+jannic = "write"
+mathk = "write"
+nastevens = "admin"
+ryankurte = "write"
+jamesmunns = "admin"
+korken89 = "write"
+adamgreig = "admin"
+jessebraham = "write"
+hdoordt = "admin"
+rust-lang-owner = "admin"
+BartMassey = "admin"

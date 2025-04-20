@@ -1,0 +1,27 @@
+org = "rust-lang-nursery"
+name = "taskcluster-crater"
+description = ""
+bots = []
+
+[access.teams]
+
+[access.individuals]
+steveklabnik = "admin"
+pietroalbini = "admin"
+aturon = "admin"
+carols10cents = "admin"
+huonw = "admin"
+sfackler = "admin"
+rust-lang-owner = "admin"
+nrc = "admin"
+nikomatsakis = "admin"
+kennytm = "admin"
+erickt = "admin"
+KodrAus = "admin"
+alexcrichton = "admin"
+aidanhs = "admin"
+dtolnay = "admin"
+Mark-Simulacrum = "admin"
+jdno = "admin"
+marcoieni = "admin"
+nikomatsakis-admin = "admin"

@@ -1,0 +1,28 @@
+org = "rust-lang-nursery"
+name = "futures-rfcs"
+description = "RFCs for changes to the `futures` crate"
+bots = []
+
+[access.teams]
+
+[access.individuals]
+sfackler = "admin"
+Mark-Simulacrum = "admin"
+KodrAus = "admin"
+rust-lang-owner = "admin"
+pietroalbini = "admin"
+cramertj = "admin"
+nrc = "admin"
+kennytm = "admin"
+jdno = "admin"
+erickt = "admin"
+huonw = "admin"
+dtolnay = "admin"
+aidanhs = "admin"
+alexcrichton = "admin"
+nikomatsakis = "admin"
+marcoieni = "admin"
+nikomatsakis-admin = "admin"
+aturon = "admin"
+carols10cents = "admin"
+steveklabnik = "admin"
