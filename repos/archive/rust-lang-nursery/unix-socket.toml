@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "unix-socket"
+description = "Unix socket support for Rust"
+bots = []
+
+[access.teams]

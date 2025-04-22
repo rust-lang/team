@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "thanks"
+description = "The first version of thanks.rust-lang.org, succeeded by rust-lang/thanks"
+bots = []
+
+[access.teams]
