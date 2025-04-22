@@ -1,0 +1,6 @@
+org = "rust-analyzer"
+name = "WG-rls2.0"
+description = "Home for rls2.0 working group"
+bots = []
+
+[access.teams]

@@ -1,0 +1,6 @@
+org = "rust-analyzer"
+name = "lsp-server"
+description = ""
+bots = []
+
+[access.teams]

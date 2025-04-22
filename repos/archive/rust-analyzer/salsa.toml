@@ -1,0 +1,6 @@
+org = "rust-analyzer"
+name = "salsa"
+description = "A generic framework for on-demand, incrementalized computation. Inspired by adapton, glimmer, and rustc's query system."
+bots = []
+
+[access.teams]
