@@ -1,0 +1,6 @@
+org = "rust-lang-deprecated"
+name = "failure"
+description = "Error management"
+bots = []
+
+[access.teams]
