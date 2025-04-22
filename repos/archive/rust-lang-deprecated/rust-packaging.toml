@@ -1,0 +1,6 @@
+org = "rust-lang-deprecated"
+name = "rust-packaging"
+description = "Packaging for Rust + Cargo in multiple formats"
+bots = []
+
+[access.teams]
