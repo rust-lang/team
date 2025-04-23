@@ -1,0 +1,18 @@
+name = "compiler-ops"
+subteam-of = "compiler"
+
+[people]
+leads = ["apiraino"]
+members = [
+    "apiraino",
+]
+alumni = [
+]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "compiler-ops team"
+description = "Operations for the compiler team: preparing agenda, issue triage and prioritization, scheduling and documenting meetings"
+zulip-stream = "t-compiler/ops"
