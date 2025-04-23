@@ -4,7 +4,7 @@ kind = "marker-team"
 [people]
 leads = []
 members = []
-included-teams = ["leadership-council", "leads", "project-group-leads"]
+included-teams = ["leadership-council", "leads", "project-group-leads", "foundation-board-project-directors"]
 
 [[github]]
 orgs = ["rust-lang"]
