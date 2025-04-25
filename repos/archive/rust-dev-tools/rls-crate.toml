@@ -1,0 +1,6 @@
+org = "rust-dev-tools"
+name = "rls-crate"
+description = "A placeholder for the RLS on crates.io"
+bots = []
+
+[access.teams]
