@@ -18,5 +18,5 @@ orgs = ["rust-lang"]
 [website]
 name = "LLVM working area"
 description = "Working with LLVM upstream to represent Rust in its development"
-repo = "https://rust-lang.github.io/compiler-team/working-groups/llvm/"
+repo = "https://forge.rust-lang.org/compiler/working-areas.html"
 zulip-stream = "t-compiler/llvm"

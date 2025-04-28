@@ -37,7 +37,7 @@ alumni = [
 [website]
 name = "Prioritization working area"
 description = "Triaging bugs, mainly deciding if there are critical (potential) release blockers"
-repo = "https://rust-lang.github.io/compiler-team/working-groups/prioritization/"
+repo = "https://github.com/rust-lang/compiler-team-prioritization"
 zulip-stream = "t-compiler/prioritization"
 
 [[github]]
