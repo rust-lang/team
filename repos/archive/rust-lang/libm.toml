@@ -4,7 +4,6 @@ description = "A port of MUSL's libm to Rust."
 bots = []
 
 [access.teams]
-crate-maintainers = 'maintain'
 
 [[branch-protections]]
 pattern = "master"

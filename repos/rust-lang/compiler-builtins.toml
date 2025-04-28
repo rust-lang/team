@@ -1,11 +1,10 @@
-org = 'rust-lang'
-name = 'compiler-builtins'
-description = 'Porting `compiler-rt` intrinsics to Rust'
-homepage = "https://github.com/rust-lang/rust/issues/35437"
+org = "rust-lang"
+name = "compiler-builtins"
+description = "Rust implementations of compiler-rt and libm"
 bots = []
 
 [access.teams]
-crate-maintainers = 'maintain'
+crate-maintainers = "maintain"
 
 [[branch-protections]]
 pattern = "master"
