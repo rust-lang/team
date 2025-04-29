@@ -5,7 +5,6 @@ top-level = true
 leads = ["shepmaster", "jdno"]
 members = [
     "Mark-Simulacrum",
-    "kennytm",
     "pietroalbini",
     "shepmaster",
     "jdno",
@@ -27,6 +26,7 @@ alumni = [
     "tomprince",
     "carols10cents",
     "rylev",
+    "kennytm",
 ]
 
 [[github]]
