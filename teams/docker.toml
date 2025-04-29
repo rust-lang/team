@@ -4,8 +4,9 @@ subteam-of = "infra"
 [people]
 leads = ["Muscraft"]
 members = [
-    "sfackler",
+    "Kobzol",
     "Muscraft",
+    "sfackler",
 ]
 alumni = []
 
