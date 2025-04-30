@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "futures-rfcs"
+description = "RFCs for changes to the `futures` crate"
+bots = []
+
+[access.teams]

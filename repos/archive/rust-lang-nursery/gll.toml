@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "gll"
+description = "GLL parsing framework."
+bots = []
+
+[access.teams]

@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "futures-api-docs"
+description = "API docs for futures-rs"
+bots = []
+
+[access.teams]
