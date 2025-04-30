@@ -2,9 +2,9 @@ name = "rustlings"
 subteam-of = "lang-docs"
 
 [people]
-leads = ["mo8it", "shadows-withal"]
+leads = ["mo8it", "manyinsects"]
 members = [
-    "shadows-withal",
+    "manyinsects",
     "mo8it",
 ]
 alumni = []
