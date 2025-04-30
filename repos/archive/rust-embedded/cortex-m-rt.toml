@@ -1,0 +1,11 @@
+org = "rust-embedded"
+name = "cortex-m-rt"
+description = "Minimal startup / runtime for Cortex-M microcontrollers"
+bots = []
+
+[access.teams]
+
+[[branch-protections]]
+pattern = "master"
+dismiss-stale-review = true
+required-approvals = 0
