@@ -1,0 +1,6 @@
+org = "rust-embedded"
+name = "register-rs"
+description = "Unified interface for type-safe MMIO and CPU register access in Rust"
+bots = []
+
+[access.teams]

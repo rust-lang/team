@@ -1,0 +1,11 @@
+org = "rust-embedded"
+name = "riscv-rt"
+description = "Minimal runtime / startup for RISC-V CPU's."
+bots = []
+
+[access.teams]
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["build-check", "rustfmt", "changelog-check", "clippy-check"]
+dismiss-stale-review = true

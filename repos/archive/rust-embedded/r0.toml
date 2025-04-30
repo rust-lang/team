@@ -1,0 +1,10 @@
+org = "rust-embedded"
+name = "r0"
+description = "Initialization code (\"crt0\") written in Rust"
+bots = []
+
+[access.teams]
+
+[[branch-protections]]
+pattern = "master"
+dismiss-stale-review = true

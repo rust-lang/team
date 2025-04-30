@@ -1,0 +1,11 @@
+org = "rust-embedded"
+name = "panic-semihosting"
+description = "Report panic messages to the host stderr using semihosting"
+bots = []
+
+[access.teams]
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]
+dismiss-stale-review = true
