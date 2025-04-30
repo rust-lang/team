@@ -16,7 +16,7 @@ alumni = [
     "edunham",
     "erickt",
     "brson",
-    "shadows-withal",
+    "manyinsects",
     "ashleygwilliams",
     "skade",
     "bstrie",
@@ -61,7 +61,7 @@ extra-emails = [
 address = "rustbridge@rust-lang.org"
 include-team-members = false
 extra-people = [
-    "shadows-withal",
+    "manyinsects",
     "arshiamufti",
 ]
 
