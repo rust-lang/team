@@ -1,0 +1,8 @@
+org = "rust-lang-ci"
+name = "rust"
+description = "Empowering everyone to build reliable and efficient software."
+homepage = "https://www.rust-lang.org"
+bots = ["bors", "rust-timer"]
+
+[access.teams]
+infra = "triage"
