@@ -1,0 +1,7 @@
+org = "rust-analyzer"
+name = "smol_str"
+description = ""
+bots = []
+
+[access.teams]
+rust-analyzer = "write"
