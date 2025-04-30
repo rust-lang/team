@@ -16,7 +16,7 @@ alumni = [
 ]
 
 [[github]]
-orgs = ["rust-lang"]
+orgs = ["rust-lang", "rust-lang-nursery"]
 
 [website]
 name = "lang-docs team"

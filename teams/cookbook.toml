@@ -1,0 +1,15 @@
+name = "cookbook"
+subteam-of = "lang-docs"
+
+[people]
+leads = ["AndyGauge"]
+members = ["AndyGauge"]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang-nursery"]
+
+[website]
+name = "Cookbook team"
+description = "Maintains the Rust Cookbook"
+repo = "https://github.com/rust-lang-nursery/rust-cookbook/"
