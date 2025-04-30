@@ -1,0 +1,6 @@
+org = "rust-analyzer"
+name = "bonsai"
+description = ""
+bots = []
+
+[access.teams]
