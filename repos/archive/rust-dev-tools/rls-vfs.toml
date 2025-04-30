@@ -1,0 +1,6 @@
+org = "rust-dev-tools"
+name = "rls-vfs"
+description = "Virtual File System for the RLS"
+bots = []
+
+[access.teams]
