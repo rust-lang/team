@@ -1,0 +1,7 @@
+org = "rust-analyzer"
+name = "rustc-auto-publish"
+description = ""
+bots = []
+
+[access.teams]
+rust-analyzer = "maintain"

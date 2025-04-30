@@ -1,0 +1,8 @@
+org = "rust-analyzer"
+name = "metrics"
+description = ""
+homepage = "https://rust-analyzer.github.io/metrics/"
+bots = []
+
+[access.teams]
+rust-analyzer = "write"
