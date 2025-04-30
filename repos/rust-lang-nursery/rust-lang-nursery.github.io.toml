@@ -1,0 +1,7 @@
+org = "rust-lang-nursery"
+name = "rust-lang-nursery.github.io"
+description = "GitHub pages redirects"
+bots = []
+
+[access.teams]
+infra = "write"
