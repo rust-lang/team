@@ -1,0 +1,15 @@
+org = "rust-lang"
+name = "fls"
+description = "The FLS"
+homepage = "https://rust-lang.github.io/fls"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+lang = "write"
+lang-docs = "write"
+spec = "write"
+spec-contributors = "write"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = ["CI finished"]
