@@ -1,5 +1,5 @@
 name = "foundation-board-project-directors"
-kind = "marker-team"
+subteam-of = "launching-pad"
 
 [people]
 leads = []
