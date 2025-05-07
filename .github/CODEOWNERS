@@ -9,12 +9,95 @@
 # Data files can be approved by users with write access.
 # We don't list these users explicitly to avoid notifying all of them
 # on every change to the data files.
-/people/**/*.toml
-/repos/**/*.toml
-/teams/**/*.toml
+/people/**/*.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/repos/**/*.toml  @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+# Useful for teams without leaders.
+/teams/**/*.toml  @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 
 # Do not require admin approvals for Markdown file modifications.
 *.md
+
+# Team leads can approve changes to their own team files.
+/teams/book.toml @rust-lang/team-repo-admins @rust-lang/mods @carols10cents @chriskrycho
+/teams/bootstrap.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum @onur-ozkan
+/teams/cargo.toml @rust-lang/team-repo-admins @rust-lang/mods @ehuss
+/teams/clippy.toml @rust-lang/team-repo-admins @rust-lang/mods @Manishearth @flip1995
+/teams/community-localization.toml @rust-lang/team-repo-admins @rust-lang/mods @Manishearth @vertexclique
+/teams/community-rustbridge.toml @rust-lang/team-repo-admins @rust-lang/mods @shadows-withal
+/teams/community-survey.toml @rust-lang/team-repo-admins @rust-lang/mods @Kobzol @apiraino
+/teams/compiler.toml @rust-lang/team-repo-admins @rust-lang/mods @davidtwco @wesleywiser
+/teams/crates-io.toml @rust-lang/team-repo-admins @rust-lang/mods @Turbo87 @jtgeibel
+/teams/devtools.toml @rust-lang/team-repo-admins @rust-lang/mods @Manishearth
+/teams/docker.toml @rust-lang/team-repo-admins @rust-lang/mods @Muscraft
+/teams/docs-rs.toml @rust-lang/team-repo-admins @rust-lang/mods @syphar
+/teams/edition.toml @rust-lang/team-repo-admins @rust-lang/mods @ehuss @traviscross
+/teams/goals.toml @rust-lang/team-repo-admins @rust-lang/mods @nikomatsakis
+/teams/infra.toml @rust-lang/team-repo-admins @rust-lang/mods @jdno @shepmaster
+/teams/infra-bors.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum
+/teams/lang.toml @rust-lang/team-repo-admins @rust-lang/mods @nikomatsakis @tmandry
+/teams/lang-docs.toml @rust-lang/team-repo-admins @rust-lang/mods @JohnTitor @ehuss
+/teams/lang-ops.toml @rust-lang/team-repo-admins @rust-lang/mods @traviscross
+/teams/libs.toml @rust-lang/team-repo-admins @rust-lang/mods @Amanieu @m-ou-se
+/teams/mentorship.toml @rust-lang/team-repo-admins @rust-lang/mods @Kobzol @jackh726
+/teams/miri.toml @rust-lang/team-repo-admins @rust-lang/mods @RalfJung @oli-obk
+/teams/opsem.toml @rust-lang/team-repo-admins @rust-lang/mods @JakobDegen @RalfJung
+/teams/project-async-crashdump-debugging.toml @rust-lang/team-repo-admins @rust-lang/mods @michaelwoerister
+/teams/project-const-generics.toml @rust-lang/team-repo-admins @rust-lang/mods @BoxyUwU @lcnr
+/teams/project-const-traits.toml @rust-lang/team-repo-admins @rust-lang/mods @fee1-dead
+/teams/project-dyn-upcasting.toml @rust-lang/team-repo-admins @rust-lang/mods @crlf0710
+/teams/project-exploit-mitigations.toml @rust-lang/team-repo-admins @rust-lang/mods @rcvalle
+/teams/project-generic-associated-types.toml @rust-lang/team-repo-admins @rust-lang/mods @jackh726
+/teams/project-impl-trait.toml @rust-lang/team-repo-admins @rust-lang/mods @nikomatsakis
+/teams/project-keyword-generics.toml @rust-lang/team-repo-admins @rust-lang/mods @oli-obk @yoshuawuyts
+/teams/project-negative-impls.toml @rust-lang/team-repo-admins @rust-lang/mods @nikomatsakis
+/teams/project-portable-simd.toml @rust-lang/team-repo-admins @rust-lang/mods @calebzulawski @workingjubilee
+/teams/project-stable-mir.toml @rust-lang/team-repo-admins @rust-lang/mods @celinval
+/teams/project-trait-system-refactor.toml @rust-lang/team-repo-admins @rust-lang/mods @lcnr
+/teams/regex.toml @rust-lang/team-repo-admins @rust-lang/mods @BurntSushi
+/teams/release.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum
+/teams/rust-analyzer.toml @rust-lang/team-repo-admins @rust-lang/mods @Veykril
+/teams/rust-by-example.toml @rust-lang/team-repo-admins @rust-lang/mods @marioidival
+/teams/rustdoc.toml @rust-lang/team-repo-admins @rust-lang/mods @GuillaumeGomez
+/teams/rustfmt.toml @rust-lang/team-repo-admins @rust-lang/mods @calebcartwright
+/teams/rustlings.toml @rust-lang/team-repo-admins @rust-lang/mods @mo8it @shadows-withal
+/teams/rustup.toml @rust-lang/team-repo-admins @rust-lang/mods @rbtcollins
+/teams/social-media.toml @rust-lang/team-repo-admins @rust-lang/mods @m-ou-se
+/teams/spec.toml @rust-lang/team-repo-admins @rust-lang/mods @JoelMarcey
+/teams/style.toml @rust-lang/team-repo-admins @rust-lang/mods @calebcartwright
+/teams/testing-devex.toml @rust-lang/team-repo-admins @rust-lang/mods @calebcartwright
+/teams/triagebot.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum
+/teams/twir.toml @rust-lang/team-repo-admins @rust-lang/mods @nellshamrell
+/teams/twir-reviewers.toml @rust-lang/team-repo-admins @rust-lang/mods @nellshamrell
+/teams/types.toml @rust-lang/team-repo-admins @rust-lang/mods @jackh726 @lcnr
+/teams/website.toml @rust-lang/team-repo-admins @rust-lang/mods @Manishearth
+/teams/wg-allocators.toml @rust-lang/team-repo-admins @rust-lang/mods @TimDiekmann
+/teams/wg-async.toml @rust-lang/team-repo-admins @rust-lang/mods @nikomatsakis @tmandry
+/teams/wg-binary-size.toml @rust-lang/team-repo-admins @rust-lang/mods @m-ou-se @thomcc
+/teams/wg-bindgen.toml @rust-lang/team-repo-admins @rust-lang/mods @emilio @fitzgen
+/teams/wg-cli.toml @rust-lang/team-repo-admins @rust-lang/mods @epage
+/teams/wg-compiler-performance.toml @rust-lang/team-repo-admins @rust-lang/mods @Mark-Simulacrum
+/teams/wg-const-eval.toml @rust-lang/team-repo-admins @rust-lang/mods @RalfJung @oli-obk
+/teams/wg-debugging.toml @rust-lang/team-repo-admins @rust-lang/mods @wesleywiser
+/teams/wg-diagnostics.toml @rust-lang/team-repo-admins @rust-lang/mods @estebank @oli-obk
+/teams/wg-embedded.toml @rust-lang/team-repo-admins @rust-lang/mods @adamgreig @therealprof
+/teams/wg-ffi-unwind.toml @rust-lang/team-repo-admins @rust-lang/mods @BatmanAoD @acfoltzer @nikomatsakis
+/teams/wg-gamedev.toml @rust-lang/team-repo-admins @rust-lang/mods @AngelOnFira @erlend-sh @kvark @ozkriff
+/teams/wg-gcc-backend.toml @rust-lang/team-repo-admins @rust-lang/mods @antoyo
+/teams/wg-incr-comp.toml @rust-lang/team-repo-admins @rust-lang/mods @wesleywiser
+/teams/wg-inline-asm.toml @rust-lang/team-repo-admins @rust-lang/mods @Amanieu
+/teams/wg-llvm.toml @rust-lang/team-repo-admins @rust-lang/mods @nikic
+/teams/wg-macros.toml @rust-lang/team-repo-admins @rust-lang/mods @eholk @vincenzopalazzo
+/teams/wg-mir-opt.toml @rust-lang/team-repo-admins @rust-lang/mods @oli-obk
+/teams/wg-parallel-rustc.toml @rust-lang/team-repo-admins @rust-lang/mods @cjgillot
+/teams/wg-polonius.toml @rust-lang/team-repo-admins @rust-lang/mods @lqd @nikomatsakis
+/teams/wg-polymorphization.toml @rust-lang/team-repo-admins @rust-lang/mods @davidtwco
+/teams/wg-prioritization.toml @rust-lang/team-repo-admins @rust-lang/mods @apiraino @wesleywiser
+/teams/wg-rustc-dev-guide.toml @rust-lang/team-repo-admins @rust-lang/mods @JohnTitor @spastorino
+/teams/wg-rustc-reading-club.toml @rust-lang/team-repo-admins @rust-lang/mods @doc-jones @nikomatsakis
+/teams/wg-safe-transmute.toml @rust-lang/team-repo-admins @rust-lang/mods @jswrenn
+/teams/wg-secure-code.toml @rust-lang/team-repo-admins @rust-lang/mods @Shnatsel @tarcieri
+/teams/wg-self-profile.toml @rust-lang/team-repo-admins @rust-lang/mods @wesleywiser
+/teams/wg-triage.toml @rust-lang/team-repo-admins @rust-lang/mods @Dylan-DPC
 
 # Modifying these files requires admin approval.
 /repos/rust-lang/team.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
@@ -22,11 +105,46 @@
 /repos/rust-lang/rust.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /teams/infra-admins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /teams/team-repo-admins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Amanieu.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/BurntSushi.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/GuillaumeGomez.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/JakobDegen.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/JoelMarcey.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/JohnTitor.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Kobzol.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Manishearth.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/Mark-Simulacrum.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Muscraft.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/RalfJung.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Turbo87.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/Veykril.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/apiraino.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/calebcartwright.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/carols10cents.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/chriskrycho.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/davidtwco.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/ehuss.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/flip1995.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/jackh726.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/jdno.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/jtgeibel.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/lcnr.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/m-ou-se.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/marcoieni.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/marioidival.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/mo8it.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/nellshamrell.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/nikomatsakis.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/oli-obk.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/onur-ozkan.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/pietroalbini.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/rbtcollins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/rylev.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/shadows-withal.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/shepmaster.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/syphar.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
 /people/technetos.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/tmandry.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/traviscross.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/vertexclique.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/people/wesleywiser.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
