@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "wg-verification"
+description = "Verification working group"
+bots = []
+
+[access.teams]

@@ -1,0 +1,7 @@
+org = "rust-lang-nursery"
+name = "lazy-static.rs"
+description = "A small macro for defining lazy evaluated static variables in Rust."
+bots = []
+
+[access.teams]
+libs = "write"
