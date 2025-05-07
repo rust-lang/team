@@ -1,0 +1,11 @@
+org = "rust-analyzer"
+name = "expect-test"
+description = "Minimalistic snapshot testing for Rust."
+bots = []
+
+[access.teams]
+rust-analyzer = "write"
+
+[[branch-protections]]
+pattern = "master"
+pr-required = false
