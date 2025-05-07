@@ -1,0 +1,6 @@
+org = "rust-dev-tools"
+name = "rustc-version"
+description = "version information for Rust tools"
+bots = []
+
+[access.teams]
