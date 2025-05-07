@@ -1,0 +1,7 @@
+org = "rust-lang-nursery"
+name = ".github"
+description = "GitHub metadata for this organization"
+bots = []
+
+[access.teams]
+infra = "write"
