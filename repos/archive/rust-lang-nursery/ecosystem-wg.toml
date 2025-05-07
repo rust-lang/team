@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "ecosystem-wg"
+description = "Coordination repository of the ecosystem Working Group (WG)"
+bots = []
+
+[access.teams]
