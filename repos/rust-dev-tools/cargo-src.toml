@@ -1,0 +1,7 @@
+org = "rust-dev-tools"
+name = "cargo-src"
+description = "Semantic code navigation for Rust"
+bots = []
+
+[access.teams]
+devtools = "write"
