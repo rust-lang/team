@@ -10,13 +10,13 @@ members = [
     "Nadrieril",
     "ernestkissiedu",
     "baumanj",
-    "spastorino",
     "joshtriplett",
     "workingjubilee",
     "timClicks",
     "traviscross",
 ]
 alumni = [
+    "spastorino",
 ]
 
 [[github]]

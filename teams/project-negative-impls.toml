@@ -8,10 +8,10 @@ leads = [
 ]
 members = [
     "nikomatsakis",
-    "spastorino",
 ]
 alumni = [
     "pnkfelix",
+    "spastorino",
 ]
 
 [website]
