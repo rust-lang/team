@@ -19,7 +19,7 @@ use schema::{Email, Team, TeamKind};
 
 use crate::ci::{check_codeowners, generate_codeowners_file};
 use crate::schema::RepoPermission;
-use anyhow::{bail, format_err, Error};
+use anyhow::{bail, format_err, Context, Error};
 use api::github;
 use clap::Parser;
 use log::{error, info, warn};
@@ -48,7 +48,12 @@ enum Cli {
         skip: Vec<String>,
     },
     /// Add a new person from their GitHub profile
-    AddPerson { github_name: String },
+    AddPerson {
+        github_name: String,
+        /// Try to fetch the Zulip ID of the user, based on their GitHub handle or e-mail.
+        #[arg(long)]
+        fetch_zulip_id: bool,
+    },
     /// Generate the static API
     StaticApi { dest: String },
     /// Print information about a person
@@ -212,8 +217,11 @@ fn run() -> Result<(), Error> {
                 &skip.iter().map(|s| s.as_ref()).collect::<Vec<_>>(),
             )?;
         }
-        Cli::AddPerson { ref github_name } => {
-            #[derive(serde::Serialize)]
+        Cli::AddPerson {
+            ref github_name,
+            fetch_zulip_id,
+        } => {
+            #[derive(serde::Serialize, Debug)]
             #[serde(rename_all = "kebab-case")]
             struct PersonToAdd<'a> {
                 name: &'a str,
@@ -221,12 +229,29 @@ fn run() -> Result<(), Error> {
                 github_id: u64,
                 #[serde(skip_serializing_if = "Option::is_none")]
                 email: Option<&'a str>,
+                #[serde(skip_serializing_if = "Option::is_none")]
+                zulip_id: Option<u64>,
             }
 
             let github = github::GitHubApi::new();
             let user = github.user(github_name)?;
             let github_name = user.login;
             let github_id = user.id;
+
+            let mut zulip_id: Option<u64> = None;
+            if fetch_zulip_id {
+                let zulip = ZulipApi::new();
+                let users = zulip.get_users(true).context("Cannot get user data from Zulip. Configure ZULIP_USER and ZULIP_TOKEN environment variables")?;
+
+                // Try to find user by GitHub handle
+                if let Some(zulip_user) = users.iter().find(|u| {
+                    u.get_github_username().map(|login| login.to_lowercase())
+                        == Some(github_name.to_lowercase())
+                }) {
+                    info!("Found Zulip ID {}", zulip_user.user_id);
+                    zulip_id = Some(zulip_user.user_id);
+                }
+            }
 
             if data.person(&github_name).is_some() {
                 bail!("person already in the repo: {}", github_name);
@@ -248,6 +273,7 @@ fn run() -> Result<(), Error> {
                         warn!("the person is missing the email on GitHub, leaving the field empty");
                         None
                     }),
+                    zulip_id,
                 })?
                 .as_bytes(),
             )?;

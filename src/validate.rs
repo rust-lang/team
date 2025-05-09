@@ -676,7 +676,7 @@ fn validate_discord_team_members_have_discord_ids(data: &Data, errors: &mut Vec<
 
 /// Ensure every member of a team that has a Zulip group has a Zulip id
 fn validate_zulip_users(data: &Data, zulip: &ZulipApi, errors: &mut Vec<String>) {
-    let by_id = match zulip.get_users() {
+    let by_id = match zulip.get_users(false) {
         Ok(u) => u.iter().map(|u| u.user_id).collect::<HashSet<_>>(),
         Err(err) => {
             errors.push(format!("couldn't verify Zulip users: {}", err));

@@ -42,9 +42,14 @@ impl ZulipApi {
     }
 
     /// Get all users of the Rust Zulip instance
-    pub(crate) fn get_users(&self) -> Result<Vec<ZulipUser>, Error> {
+    pub(crate) fn get_users(&self, include_profile_fields: bool) -> Result<Vec<ZulipUser>, Error> {
+        let url = if include_profile_fields {
+            "/users?include_custom_profile_fields=true"
+        } else {
+            "/users"
+        };
         let response = self
-            .req(Method::GET, "/users", None)?
+            .req(Method::GET, url, None)?
             .error_for_status()?
             .json::<ZulipUsers>()?
             .members;
@@ -97,10 +102,24 @@ struct ZulipOneUser {
     user: ZulipUser,
 }
 
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
+pub(crate) struct ProfileValue {
+    value: String,
+}
+
 /// A single Zulip user
-#[derive(Clone, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
 pub(crate) struct ZulipUser {
     pub(crate) user_id: u64,
     #[serde(rename = "full_name")]
     pub(crate) name: String,
+    #[serde(default)]
+    pub(crate) profile_data: HashMap<String, ProfileValue>,
+}
+
+impl ZulipUser {
+    // The GitHub profile data key is 3873
+    pub(crate) fn get_github_username(&self) -> Option<&str> {
+        self.profile_data.get("3873").map(|v| v.value.as_str())
+    }
 }

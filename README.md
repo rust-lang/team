@@ -74,7 +74,12 @@ cargo run add-person <github-username>
 
 You can also add additional information, such as someone's Discord or Zulip ID by adding additional fields to their `.toml` file.
 
-To determine someone's Zulip ID, find them in the list of people on the
+You can use the `--fetch-zulip-id` flag to automatically try to find the Zulip ID for the added user based on their GitHub login. This will only work if the user has linked their Zulip and GitHub accounts. You will need to get a [Zulip API key](https://zulip.com/api/api-keys#get-your-api-key) for this to work, and set the following environment variables:
+
+- `ZULIP_USER`: should be set to the e-mail address of your Zulip account
+- `ZULIP_TOKEN`: should be set to your API key
+
+If you need to determine someone's Zulip ID manually, find them in the list of people on the
 right-hand side in Zulip, click the "three dots" menu and then "View profile", and copy the 'User ID'
 into the toml file:
 
