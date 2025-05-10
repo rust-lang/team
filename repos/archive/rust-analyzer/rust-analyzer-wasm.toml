@@ -1,0 +1,7 @@
+org = "rust-analyzer"
+name = "rust-analyzer-wasm"
+description = ""
+homepage = "https://ra-wasm.netlify.app"
+bots = []
+
+[access.teams]

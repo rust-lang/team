@@ -1,0 +1,7 @@
+org = "rust-analyzer"
+name = "rust-threadpool"
+description = "A very simple thread pool for parallel task execution"
+homepage = "https://crates.io/crates/threadpool"
+bots = []
+
+[access.teams]
