@@ -5,3 +5,8 @@ bots = []
 
 [access.teams]
 infra = "write"
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["CI"]
+required-approvals = 0
