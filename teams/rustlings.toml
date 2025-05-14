@@ -16,4 +16,4 @@ orgs = ["rust-lang"]
 name = "Rustlings team"
 description = "Maintaining and updating the Rustlings course"
 repo = "https://github.com/rust-lang/rustlings/"
-zulip-stream = "rustlings"
+zulip-stream = "t-lang/rustlings"
