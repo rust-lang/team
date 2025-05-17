@@ -1,0 +1,11 @@
+org = "rust-embedded"
+name = "panic-itm"
+description = "Log panic messages using the ITM (Instrumentation Trace Macrocell)"
+bots = []
+
+[access.teams]
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]
+dismiss-stale-review = true
