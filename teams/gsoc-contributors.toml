@@ -22,7 +22,10 @@ members = [
     "DriedYellowPeach",
     "makai410",
     "Pyr0de",
-    "secona"
+    "secona",
+    # KMJ-007 is participating in LLVM GSoC 2025, but they are working on Rust related things
+    # Therefore, we include them here to give them access to the dev desktops
+    { github = "KMJ-007", roles = ["guest"] },
 ]
 alumni = [
     "d-sonuga",
@@ -38,6 +41,10 @@ alumni = [
 dev-desktop = true
 bors.rust.try = true
 perf = true
+
+[[roles]]
+id = "guest"
+description = "External GSoC contributor"
 
 [[zulip-groups]]
 name = "gsoc-contributors"
