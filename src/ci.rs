@@ -122,19 +122,35 @@ fn generate_codeowners_content(data: Data) -> String {
     // not be pinged if a PR modified these files (which we also want).
     writeln!(
         codeowners,
-        r#"
+        "
 # Data files can be approved by users with write access.
 # We don't list these users explicitly to avoid notifying all of them
 # on every change to the data files.
-/people/**/*.toml
-/repos/**/*.toml
-/teams/**/*.toml
+/people/**/*.toml @rust-lang/team-repo-admins @rust-lang/mods {admin_list}
+/repos/**/*.toml  @rust-lang/team-repo-admins @rust-lang/mods {admin_list}
+# Useful for teams without leaders.
+/teams/**/*.toml  @rust-lang/team-repo-admins @rust-lang/mods {admin_list}
 
 # Do not require admin approvals for Markdown file modifications.
 *.md
-"#
+
+# Team leads can approve changes to their own team files."
     )
     .unwrap();
+
+    // Add team leads as reviewers for their team files
+    for (team_name, leads) in data.team_leads() {
+        let leads_list = leads
+            .iter()
+            .map(|lead| format!("@{lead}"))
+            .collect::<Vec<_>>()
+            .join(" ");
+        writeln!(
+            codeowners,
+            "/teams/{team_name}.toml @rust-lang/team-repo-admins @rust-lang/mods {leads_list}"
+        )
+        .unwrap();
+    }
 
     // There are several data files that we want to be protected more
     // Notably, the properties of the team and sync-team repositories,
@@ -143,7 +159,7 @@ fn generate_codeowners_content(data: Data) -> String {
 
     writeln!(
         codeowners,
-        "# Modifying these files requires admin approval."
+        "\n# Modifying these files requires admin approval."
     )
     .unwrap();
 
