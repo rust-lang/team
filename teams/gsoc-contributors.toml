@@ -1,4 +1,5 @@
 name = "gsoc-contributors"
+subteam-of = "launching-pad"
 kind = "marker-team"
 
 [people]
