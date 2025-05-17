@@ -4,7 +4,7 @@ top-level = true
 [people]
 leads = []
 members = [
-    "technetos",
+    "steffahn",
     "oli-obk",
 ]
 alumni = [
@@ -17,6 +17,7 @@ alumni = [
     "Manishearth",
     "mbrubeck",
     "pnkfelix",
+    "technetos",
 ]
 
 [[github]]
