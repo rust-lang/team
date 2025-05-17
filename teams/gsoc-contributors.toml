@@ -48,3 +48,7 @@ description = "External GSoC contributor"
 
 [[zulip-groups]]
 name = "gsoc-contributors"
+
+[website]
+name = "Rust Google Summer of Code contributors"
+description = "Contributors that have participated in Rust GSoC projects"
