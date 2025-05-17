@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "portability-wg"
+description = "Coordination repository of the portability Working Group (WG)"
+bots = []
+
+[access.teams]
