@@ -1,0 +1,6 @@
+org = "rust-lang-deprecated"
+name = "rustc-perf-collector"
+description = "Benchmark collection of rustc compile time performance."
+bots = []
+
+[access.teams]
