@@ -39,14 +39,6 @@ pattern = "beta"
 merge-bots = ["homu"]
 
 [[branch-protections]]
-pattern = "try"
-merge-bots = ["homu"]
-
-[[branch-protections]]
-pattern = "auto"
-merge-bots = ["homu"]
-
-[[branch-protections]]
 pattern = "*"
 merge-bots = ["homu"]
 
@@ -65,3 +57,27 @@ pr-required = false
 [[branch-protections]]
 pattern = "automation/bors/try"
 pr-required = false
+
+# Required for running try builds created by homu.
+# Must support force-pushes.
+[[branch-protections]]
+pattern = "try"
+merge-bots = ["homu"]
+
+# Required for running auto (merge) builds created by homu.
+# Must support force-pushes.
+[[branch-protections]]
+pattern = "auto"
+merge-bots = ["homu"]
+
+# Required for unrolled PR builds created by perfbot.
+# Must support force-pushes.
+[[branch-protections]]
+pattern = "try-perf"
+merge-bots = ["rust-timer"]
+
+# Required for unrolled PR builds created by perfbot.
+# Must support force-pushes.
+[[branch-protections]]
+pattern = "perf-tmp"
+merge-bots = ["rust-timer"]
