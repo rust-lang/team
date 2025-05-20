@@ -246,6 +246,7 @@ pub enum BranchProtectionMode {
 #[serde(rename_all = "snake_case")]
 pub enum MergeBot {
     Homu,
+    RustTimer,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

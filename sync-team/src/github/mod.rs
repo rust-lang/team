@@ -512,10 +512,10 @@ pub fn construct_branch_protection(
     expected_repo: &rust_team_data::v1::Repo,
     branch_protection: &rust_team_data::v1::BranchProtection,
 ) -> api::BranchProtection {
-    let uses_homu = branch_protection.merge_bots.contains(&MergeBot::Homu);
-    // When homu manages a branch, we should not require a PR nor approvals
-    // for that branch, because homu pushes to these branches directly.
-    let branch_protection_mode = if uses_homu {
+    let uses_merge_bot = !branch_protection.merge_bots.is_empty();
+    // When a merge bot manages a branch, we should not require a PR nor approvals
+    // for that branch, because it will (force) push to these branches directly.
+    let branch_protection_mode = if uses_merge_bot {
         BranchProtectionMode::PrNotRequired
     } else {
         branch_protection.mode.clone()
@@ -542,10 +542,16 @@ pub fn construct_branch_protection(
         })
         .collect();
 
-    if uses_homu {
-        push_allowances.push(PushAllowanceActor::User(api::UserPushAllowanceActor {
-            login: "bors".to_owned(),
-        }));
+    for merge_bot in &branch_protection.merge_bots {
+        let allowance = match merge_bot {
+            MergeBot::Homu => PushAllowanceActor::User(api::UserPushAllowanceActor {
+                login: "bors".to_owned(),
+            }),
+            MergeBot::RustTimer => PushAllowanceActor::User(api::UserPushAllowanceActor {
+                login: "rust-timer".to_owned(),
+            }),
+        };
+        push_allowances.push(allowance);
     }
 
     let mut checks = match &branch_protection_mode {

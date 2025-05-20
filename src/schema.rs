@@ -870,6 +870,7 @@ pub(crate) enum RepoPermission {
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum MergeBot {
     Homu,
+    RustTimer,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
