@@ -45,12 +45,33 @@ impl Data {
             Ok(())
         }
 
-        data.load_dir("repos", true, |this, org, repo: Repo, path: &Path| {
+        fn inject_mods(repo: &mut Repo) -> anyhow::Result<()> {
+            if repo.private_non_synced.is_some() {
+                return Ok(());
+            }
+            match repo
+                .access
+                .teams
+                .insert("mods".to_owned(), crate::RepoPermission::Write)
+            {
+                Some(permission) => {
+                    bail!(
+                        "repos/{}/{}.toml explicitly gives `mods` permission `{permission:?}`, but they automatically have `write` permission",
+                        repo.org,
+                        repo.name
+                    )
+                }
+                None => Ok(()),
+            }
+        }
+
+        data.load_dir("repos", true, |this, org, mut repo: Repo, path: &Path| {
             if org == "archive" {
                 bail!("repo '{}' is located in the 'archive/' directory. Move it into the org subdirectory, e.g. 'archive/rust-lang/'", repo.name);
             }
 
             validate_repo(org, &repo, path)?;
+            inject_mods(&mut repo)?;
             this.repos.push(repo);
             Ok(())
         })?;

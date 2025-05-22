@@ -89,6 +89,7 @@ fn generate_codeowners_content(data: Data) -> String {
                 RepoPermission::Triage => false,
                 RepoPermission::Write | RepoPermission::Maintain | RepoPermission::Admin => true,
             })
+            .filter(|&(team, _)| team != "mods")
             .flat_map(|(team, _)| {
                 data.team(team)
                     .expect(&format!("team {team} not found"))

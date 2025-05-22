@@ -311,6 +311,7 @@ private-non-synced = false
 ### Repository access
 
 Access to a repository is given on a per-team basis. Teams who are responsible for a repository may give access to other teams at their discretion.
+Moderators (`mods` team) have `write` access to all repositories automatically and do not need to be added.
 
 See [GitHub's documentation][github-roles] for information on what each role is allowed to do. The recommendations for choosing a role are:
 
@@ -331,7 +332,6 @@ See [GitHub's documentation][github-roles] for information on what each role is 
 # - "admin"
 [access.teams]
 compiler = "write"
-mods = "maintain"
 
 # Access granted to individuals. DO NOT USE! Access should only be given based
 # on teams.
