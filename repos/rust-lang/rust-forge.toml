@@ -5,19 +5,7 @@ homepage = "https://forge.rust-lang.org/"
 bots = ["rustbot"]
 
 [access.teams]
-community = "maintain"
-compiler = "maintain"
-crates-io = "maintain"
-docs-rs = "maintain"
-infra = "maintain"
-lang = "maintain"
-lang-ops = "maintain"
-leadership-council = "maintain"
-libs = "maintain"
-libs-api = "maintain"
-edition = "maintain"
-release = "maintain"
-triagebot = "maintain"
+all = "maintain"
 
 [[branch-protections]]
 pattern = "master"
