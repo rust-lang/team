@@ -18,6 +18,10 @@ alumni = [
     "QuietMisdreavus",
 ]
 
+[permissions]
+dev-desktop = true
+
+
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
 
