@@ -1,0 +1,11 @@
+org = "rust-embedded"
+name = "cortex-m-semihosting"
+description = "Semihosting for ARM Cortex-M processors"
+bots = []
+
+[access.teams]
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]
+dismiss-stale-review = true

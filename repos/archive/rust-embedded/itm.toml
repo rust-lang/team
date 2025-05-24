@@ -1,0 +1,11 @@
+org = "rust-embedded"
+name = "itm"
+description = "Tool to parse and dump ITM packets"
+bots = []
+
+[access.teams]
+
+[[branch-protections]]
+pattern = "master"
+ci-checks = ["bors"]
+dismiss-stale-review = true
