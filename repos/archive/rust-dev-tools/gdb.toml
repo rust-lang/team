@@ -1,0 +1,6 @@
+org = "rust-dev-tools"
+name = "gdb"
+description = "Rust's copy of gdb"
+bots = []
+
+[access.teams]
