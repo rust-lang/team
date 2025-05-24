@@ -1,0 +1,6 @@
+org = "rust-analyzer"
+name = "renamer"
+description = ""
+bots = []
+
+[access.teams]
