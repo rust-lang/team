@@ -69,14 +69,6 @@ jobs:
           # Set the owner, so the token can be used in all repositories
           owner: rust-lang
 
-      - name: Generate GitHub token (rust-lang-ci)
-        uses: actions/create-github-app-token@v1
-        id: rust-lang-ci-token
-        with:
-          app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
-          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
-          owner: rust-lang-ci
-
       - name: Generate GitHub token (rust-lang-deprecated)
         uses: actions/create-github-app-token@v1
         id: rust-lang-deprecated-token
@@ -128,7 +120,6 @@ jobs:
       - name: Run sync-team dry-run check
         env:
           GITHUB_TOKEN_RUST_LANG: ${{ steps.rust-lang-token.outputs.token }}
-          GITHUB_TOKEN_RUST_LANG_CI: ${{ steps.rust-lang-ci-token.outputs.token }}
           GITHUB_TOKEN_RUST_LANG_DEPRECATED: ${{ steps.rust-lang-deprecated-token.outputs.token }}
           GITHUB_TOKEN_RUST_LANG_NURSERY: ${{ steps.rust-lang-nursery-token.outputs.token }}
           GITHUB_TOKEN_BORS_RS: ${{ steps.bors-rs-token.outputs.token }}
