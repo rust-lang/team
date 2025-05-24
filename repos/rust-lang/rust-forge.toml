@@ -5,7 +5,8 @@ homepage = "https://forge.rust-lang.org/"
 bots = ["rustbot"]
 
 [access.teams]
-all = "maintain"
+all = "write"
+infra = "maintain"
 
 [[branch-protections]]
 pattern = "master"
