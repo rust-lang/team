@@ -7,10 +7,12 @@ leads = []
 members = [
     "adamgreig",
     "berkus",
+    "ithinuel",
     "jonathanpallant",
     "nchong-at-aws",
     "newAM",
     "raw-bin",
+    "robamu",
     "thalesfragoso",
     "therealprof",
 ]
