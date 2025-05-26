@@ -4,9 +4,9 @@ description = "A bot that integrates with GitHub and your favorite continuous in
 bots = []
 
 [access.teams]
-infra = "write"
+infra = "triage"
+infra-admins = "write"
 
 [[branch-protections]]
 pattern = "master"
 ci-checks = []
-required-approvals = 0
