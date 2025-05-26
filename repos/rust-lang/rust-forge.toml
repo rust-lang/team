@@ -17,6 +17,7 @@ libs = "maintain"
 libs-api = "maintain"
 edition = "maintain"
 release = "maintain"
+rustdoc = "maintain"
 triagebot = "maintain"
 
 [[branch-protections]]
