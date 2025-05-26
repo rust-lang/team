@@ -29,6 +29,7 @@ alumni = [
 [permissions]
 bors.rust.review = true
 crater = true
+dev-desktop = true
 perf = true
 
 [[github]]
