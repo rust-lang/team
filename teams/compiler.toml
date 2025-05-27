@@ -33,6 +33,8 @@ members = [
     { github = "lqd", roles = ["compiler-maintainer"] },
     "lukas-code",
     "m-ou-se",
+    "madsmtm",
+    "mati865",
     { github = "Mark-Simulacrum", roles = ["compiler-maintainer"] },
     { github = "matthewjasper", roles = ["compiler-maintainer"] },
     { github = "Nadrieril", roles = ["compiler-maintainer"] },
