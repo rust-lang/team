@@ -8,4 +8,4 @@ rust-analyzer = "write"
 
 [[branch-protections]]
 pattern = "master"
-pr-required = false
+ci-checks = ["test"]
