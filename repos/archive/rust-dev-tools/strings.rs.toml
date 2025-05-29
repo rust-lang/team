@@ -1,0 +1,6 @@
+org = "rust-dev-tools"
+name = "strings.rs"
+description = "String data structures for Rust"
+bots = []
+
+[access.teams]
