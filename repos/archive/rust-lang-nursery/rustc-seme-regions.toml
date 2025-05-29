@@ -1,0 +1,6 @@
+org = "rust-lang-nursery"
+name = "rustc-seme-regions"
+description = "Single Entry Multiple Exit Regions -- A stepping stone for full NLL"
+bots = []
+
+[access.teams]
