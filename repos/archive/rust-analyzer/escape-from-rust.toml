@@ -1,0 +1,6 @@
+org = "rust-analyzer"
+name = "escape-from-rust"
+description = ""
+bots = []
+
+[access.teams]

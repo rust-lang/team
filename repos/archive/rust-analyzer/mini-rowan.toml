@@ -1,0 +1,6 @@
+org = "rust-analyzer"
+name = "mini-rowan"
+description = ""
+bots = []
+
+[access.teams]

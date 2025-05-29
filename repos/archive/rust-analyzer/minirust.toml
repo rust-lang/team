@@ -1,0 +1,6 @@
+org = "rust-analyzer"
+name = "minirust"
+description = ""
+bots = []
+
+[access.teams]
