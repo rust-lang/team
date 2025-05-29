@@ -1,6 +1,7 @@
 org = "rust-lang-nursery"
 name = "futures-api-docs"
 description = "API docs for futures-rs"
+homepage = "https://rust-lang-nursery.github.io/futures-api-docs"
 bots = []
 
 [access.teams]

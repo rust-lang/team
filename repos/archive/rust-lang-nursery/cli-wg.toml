@@ -1,6 +1,7 @@
 org = "rust-lang-nursery"
 name = "cli-wg"
 description = "The only purpose of this is to redirect old links to"
+homepage = "https://rust-cli.github.io/book/index.html"
 bots = []
 
 [access.teams]
