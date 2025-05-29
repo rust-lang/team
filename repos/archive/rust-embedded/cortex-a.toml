@@ -1,0 +1,6 @@
+org = "rust-embedded"
+name = "cortex-a"
+description = "Low level access to Cortex-A processors"
+bots = []
+
+[access.teams]
