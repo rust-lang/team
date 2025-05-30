@@ -1,0 +1,12 @@
+org = "rust-lang-nursery"
+name = "rust-toolstate"
+description = "Records build and test status of external tools bundled with the Rust repository."
+homepage = "https://rust-lang-nursery.github.io/rust-toolstate/"
+bots = ["highfive"]
+
+[access.teams]
+infra = "write"
+
+[[branch-protections]]
+pattern = "master"
+pr-required = false
