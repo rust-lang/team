@@ -5,6 +5,7 @@ bots = []
 
 [access.teams]
 rust-analyzer = "write"
+expect-test = "write"
 
 [[branch-protections]]
 pattern = "master"

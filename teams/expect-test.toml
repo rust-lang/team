@@ -1,0 +1,10 @@
+name = "expect-test"
+kind = "marker-team"
+
+[people]
+leads = ["quad"]
+members = ["quad"]
+alumni = []
+
+[[github]]
+orgs = ["rust-analyzer"]
