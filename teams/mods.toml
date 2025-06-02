@@ -6,6 +6,8 @@ leads = []
 members = [
     "steffahn",
     "oli-obk",
+    "Nadrieril",
+    "rylev",
 ]
 alumni = [
     "erickt",
@@ -21,6 +23,7 @@ alumni = [
 ]
 
 [[github]]
+team-name = "moderation"
 orgs = ["rust-lang", "rust-lang-nursery"]
 
 [rfcbot]
@@ -31,7 +34,7 @@ ping = "rust-lang/moderation"
 [website]
 page = "moderation"
 name = "Moderation team"
-description = "Helping uphold the code of conduct and community standards"
+description = "Helping uphold the code of conduct and community standards and mediating conflicts between team members"
 email = "rust-mods@rust-lang.org"
 repo = "https://github.com/rust-lang/moderation-team"
 
@@ -44,9 +47,9 @@ address = "mods@rust-lang.org"
 [[lists]]
 address = "mods-all@rust-lang.org"
 extra-teams = [
-    "mods-discord",
+    "mods-venue",
     "mods-discourse",
 ]
 
 [[zulip-groups]]
-name = "T-mods"
+name = "T-moderation"
