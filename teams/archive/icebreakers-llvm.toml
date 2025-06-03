@@ -3,26 +3,25 @@ kind = "marker-team"
 
 [people]
 leads = []
-members = [
+members = []
+alumni = [
+    "JOE1994",
+    "Noah-Kennedy",
+    "SiavoshZarrasvand",
     "ayazhafiz",
     "camelid",
     "comex",
     "cuviper",
+    "dianqk",
+    "hanna-kruppe",
     "hdhoang",
     "henryboisdequin",
     "heyrutvik",
-    "JOE1994",
+    "higuoxing",
     "jryans",
     "luqmana",
     "mmilenko",
     "nagisa",
     "nikic",
-    "Noah-Kennedy",
-    "SiavoshZarrasvand",
     "vertexclique",
-    "higuoxing",
-    "dianqk",
-]
-alumni = [
-    "hanna-kruppe",
 ]
