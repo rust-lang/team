@@ -19,6 +19,7 @@ edition = "maintain"
 release = "maintain"
 rustdoc = "maintain"
 triagebot = "maintain"
+wg-rustc-dev-guide = "maintain"
 
 [[branch-protections]]
 pattern = "master"
