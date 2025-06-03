@@ -6,7 +6,7 @@ bots = ["rustbot", "rfcbot"]
 
 [access.teams]
 compiler = "write"
-wg-prioritization = "write"
+compiler-ops = "write"
 types = "write"
 
 [[branch-protections]]

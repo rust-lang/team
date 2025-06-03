@@ -1,7 +1,7 @@
 org = "rust-lang"
 name = "compiler-team-prioritization"
-description = "Home repository for the compiler team \"prioritization group\""
+description = "Home repository for compiler team operations"
 bots = []
 
 [access.teams]
-wg-prioritization = "maintain"
+compiler-ops = "maintain"
