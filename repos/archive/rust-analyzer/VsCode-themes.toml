@@ -1,0 +1,6 @@
+org = "rust-analyzer"
+name = "VsCode-themes"
+description = "VsCode themes for rust-analyzer"
+bots = []
+
+[access.teams]
