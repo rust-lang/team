@@ -295,6 +295,9 @@ fn validate_archived_teams(data: &Data, errors: &mut Vec<String>) {
         if !team.members(data)?.is_empty() {
             bail!("archived team '{}' must not have current members; please move members to that team's alumni", team.name());
         }
+        if !team.leads().is_empty() {
+            bail!("archived team '{}' must not have team leads; please move members to that team's alumni", team.name());
+        }
         Ok(())
     })
 }
