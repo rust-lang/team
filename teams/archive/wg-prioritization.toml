@@ -3,35 +3,34 @@ subteam-of = "compiler"
 kind = "working-group"
 
 [people]
-leads = ["apiraino", "wesleywiser"]
-members = [
-    "Dylan-DPC",
-    "apiraino",
-    "camelid",
-    "hameerabbasi",
-    "hkmatsumoto",
-    "inquisitivecrystal",
-    "lcnr",
-    "wesleywiser",
-]
+leads = []
+members = []
 alumni = [
+    # The following nickname listed here to pass validation
+    # see https://github.com/rust-lang/team/pull/992
+    "am-1t",
     "Centril",
+    "Dylan-DPC",
     "JohnTitor",
     "LeSeulArtichaut",
     "Stupremee",
-    "jyn514",
-    "mark-i-m",
-    "o0Ignition0o",
-    "spastorino",
-    "pnkfelix",
-    # The following nicknames listed here to pass validation
-    # see https://github.com/rust-lang/team/pull/992
-    "am-1t",
+    "apiraino",
     "bawerd",
+    "camelid",
     "djcarpe",
     "frxstrem",
+    "hameerabbasi",
+    "hkmatsumoto",
+    "inquisitivecrystal",
     "jechasteen",
+    "jyn514",
+    "lcnr",
+    "mark-i-m",
     "mstallmo",
+    "o0Ignition0o",
+    "pnkfelix",
+    "spastorino",
+    "wesleywiser",
 ]
 
 [website]

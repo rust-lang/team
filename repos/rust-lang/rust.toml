@@ -24,7 +24,7 @@ rustdoc = "write"
 rust-analyzer = "write"
 style = "write"
 types = "write"
-wg-prioritization = "triage"
+compiler-ops = "triage"
 wg-triage = "write"
 
 [[branch-protections]]
