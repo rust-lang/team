@@ -1,0 +1,9 @@
+org = "rust-lang"
+name = "github-feedback"
+description = "Feedback and feature requests for GitHub"
+bots = []
+private-non-synced = true
+
+[access.teams]
+infra = "maintain"
+all = "triage"
