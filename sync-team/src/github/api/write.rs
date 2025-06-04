@@ -344,6 +344,18 @@ impl GitHubWrite {
         Ok(())
     }
 
+    /// Remove a member from an org
+    pub(crate) fn remove_gh_member_from_org(&self, org: &str, user: &str) -> anyhow::Result<()> {
+        debug!("Removing user {user} from org {org}");
+        if !self.dry_run {
+            let method = Method::DELETE;
+            let url = GitHubUrl::orgs(org, &format!("members/{user}"))?;
+            let resp = self.client.req(method.clone(), &url)?.send()?;
+            allow_not_found(resp, method, url.url())?;
+        }
+        Ok(())
+    }
+
     /// Remove a collaborator from a repo
     pub(crate) fn remove_collaborator_from_repo(
         &self,

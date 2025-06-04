@@ -6,7 +6,7 @@ use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
 use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings};
 use log::debug;
 use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot};
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::fmt::Write;
 
 pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
@@ -31,6 +31,7 @@ struct SyncGitHub {
     repos: Vec<rust_team_data::v1::Repo>,
     usernames_cache: HashMap<u64, String>,
     org_owners: HashMap<OrgName, HashSet<u64>>,
+    org_members: HashMap<OrgName, HashMap<u64, String>>,
 }
 
 impl SyncGitHub {
@@ -60,9 +61,11 @@ impl SyncGitHub {
             .collect::<HashSet<_>>();
 
         let mut org_owners = HashMap::new();
+        let mut org_members = HashMap::new();
 
         for org in &orgs {
             org_owners.insert((*org).to_string(), github.org_owners(org)?);
+            org_members.insert((*org).to_string(), github.org_members(org)?);
         }
 
         Ok(SyncGitHub {
@@ -71,17 +74,72 @@ impl SyncGitHub {
             repos,
             usernames_cache,
             org_owners,
+            org_members,
         })
     }
 
     pub(crate) fn diff_all(&self) -> anyhow::Result<Diff> {
         let team_diffs = self.diff_teams()?;
         let repo_diffs = self.diff_repos()?;
+        let org_membership_diffs = self.diff_org_memberships()?;
 
         Ok(Diff {
             team_diffs,
             repo_diffs,
+            org_membership_diffs,
         })
+    }
+
+    // Collect all org members from the respective teams
+    fn get_org_members_from_teams(&self) -> HashMap<OrgName, HashSet<u64>> {
+        let mut org_team_members: HashMap<OrgName, HashSet<u64>> = HashMap::new();
+
+        for team in &self.teams {
+            if let Some(gh) = &team.github {
+                for toml_gh_team in &gh.teams {
+                    org_team_members
+                        .entry(toml_gh_team.org.clone())
+                        .or_default()
+                        .extend(toml_gh_team.members.iter().copied());
+                }
+            }
+        }
+        org_team_members
+    }
+
+    // Diff organization memberships between TOML teams and GitHub
+    fn diff_org_memberships(&self) -> anyhow::Result<Vec<OrgMembershipDiff>> {
+        let toml_org_team_members = self.get_org_members_from_teams();
+
+        let mut org_diffs: BTreeMap<String, OrgMembershipDiff> = BTreeMap::new();
+
+        for (org, toml_members) in toml_org_team_members {
+            let Some(gh_org_members) = self.org_members.get(&org) else {
+                panic!("GitHub organization {org} not found");
+            };
+
+            // Remove all members that are in TOML teams
+            let mut members_to_remove = gh_org_members.clone();
+            for member in toml_members {
+                members_to_remove.remove(&member);
+            }
+
+            // The rest are members that should be removed
+            if !members_to_remove.is_empty() {
+                let mut members_to_remove: Vec<String> = members_to_remove.into_values().collect();
+                members_to_remove.sort();
+
+                org_diffs.insert(
+                    org.clone(),
+                    OrgMembershipDiff {
+                        org,
+                        members_to_remove,
+                    },
+                );
+            }
+        }
+
+        Ok(org_diffs.into_values().collect())
     }
 
     fn diff_teams(&self) -> anyhow::Result<Vec<TeamDiff>> {
@@ -584,6 +642,7 @@ const BOTS_TEAMS: &[&str] = &["bors", "highfive", "rfcbot", "bots"];
 pub(crate) struct Diff {
     team_diffs: Vec<TeamDiff>,
     repo_diffs: Vec<RepoDiff>,
+    org_membership_diffs: Vec<OrgMembershipDiff>,
 }
 
 impl Diff {
@@ -595,12 +654,17 @@ impl Diff {
         for repo_diff in self.repo_diffs {
             repo_diff.apply(sync)?;
         }
+        for org_diff in self.org_membership_diffs {
+            org_diff.apply(sync)?;
+        }
 
         Ok(())
     }
 
     pub(crate) fn is_empty(&self) -> bool {
-        self.team_diffs.is_empty() && self.repo_diffs.is_empty()
+        self.team_diffs.is_empty()
+            && self.repo_diffs.is_empty()
+            && self.org_membership_diffs.is_empty()
     }
 }
 
@@ -617,6 +681,13 @@ impl std::fmt::Display for Diff {
             writeln!(f, "💻 Repo Diffs:")?;
             for repo_diff in &self.repo_diffs {
                 write!(f, "{repo_diff}")?;
+            }
+        }
+
+        if !&self.org_membership_diffs.is_empty() {
+            writeln!(f, "💻 Org membership Diffs:")?;
+            for org_diff in &self.org_membership_diffs {
+                write!(f, "{org_diff}")?;
             }
         }
 
@@ -652,6 +723,34 @@ impl std::fmt::Display for RepoDiff {
             Self::Create(c) => write!(f, "{c}"),
             Self::Update(u) => write!(f, "{u}"),
         }
+    }
+}
+
+#[derive(Debug)]
+struct OrgMembershipDiff {
+    org: OrgName,
+    members_to_remove: Vec<String>,
+}
+
+impl OrgMembershipDiff {
+    fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
+        for member in &self.members_to_remove {
+            sync.remove_gh_member_from_org(&self.org, &member)?;
+        }
+
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for OrgMembershipDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if !self.members_to_remove.is_empty() {
+            writeln!(f, "❌ Removing the following members from `{}`:", self.org)?;
+            for member in &self.members_to_remove {
+                writeln!(f, "  - {member}",)?;
+            }
+        }
+        Ok(())
     }
 }
 
