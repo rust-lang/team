@@ -6,7 +6,6 @@ bots = ["rustbot", "renovate"]
 [access.teams]
 infra = "write"
 infra-bors = "write"
-mods = "maintain"
 
 [[branch-protections]]
 pattern = "main"

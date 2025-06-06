@@ -331,7 +331,6 @@ See [GitHub's documentation][github-roles] for information on what each role is 
 # - "admin"
 [access.teams]
 compiler = "write"
-mods = "maintain"
 
 # Access granted to individuals. DO NOT USE! Access should only be given based
 # on teams.
