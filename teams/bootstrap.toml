@@ -2,10 +2,9 @@ name = "bootstrap"
 subteam-of = "infra"
 
 [people]
-leads = ["Mark-Simulacrum", "onur-ozkan"]
+leads = ["Mark-Simulacrum"]
 members = [
     "Mark-Simulacrum",
-    "onur-ozkan",
     "albertlarsan68",
     "clubby789",
     "Kobzol",
@@ -13,6 +12,7 @@ members = [
 ]
 alumni = [
     "jyn514",
+    "onur-ozkan",
 ]
 
 [permissions]
