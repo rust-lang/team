@@ -96,7 +96,7 @@ impl Person {
         }
     }
 
-    pub(crate) fn email(&self) -> Email {
+    pub(crate) fn email(&self) -> Email<'_> {
         match &self.email {
             EmailField::Disabled(false) => Email::Disabled,
             EmailField::Disabled(true) => Email::Missing,
@@ -674,7 +674,7 @@ impl WebsiteData {
         self.repo.as_deref()
     }
 
-    pub(crate) fn discord(&self) -> Option<DiscordInvite> {
+    pub(crate) fn discord(&self) -> Option<DiscordInvite<'_>> {
         if let (Some(url), Some(channel)) = (&self.discord_invite, &self.discord_name) {
             Some(DiscordInvite {
                 url: url.as_ref(),
