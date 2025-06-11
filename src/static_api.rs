@@ -485,7 +485,7 @@ impl<'a> Generator<'a> {
     where
         T: serde::Serialize + serde::de::DeserializeOwned + PartialEq,
     {
-        info!("writing API object {}...", path);
+        info!("writing API object {path}...");
         let json = serde_json::to_string_pretty(obj)?;
         self.write(path, json.as_bytes())?;
 

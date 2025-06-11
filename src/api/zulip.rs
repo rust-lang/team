@@ -77,7 +77,7 @@ impl ZulipApi {
     ) -> Result<Response, Error> {
         let mut req = self
             .client
-            .request(method, format!("{}{}", ZULIP_BASE_URL, path));
+            .request(method, format!("{ZULIP_BASE_URL}{path}"));
 
         if let Some((username, token)) = &self.auth {
             req = req.basic_auth(username, Some(token))

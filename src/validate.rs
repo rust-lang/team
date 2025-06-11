@@ -89,7 +89,7 @@ pub(crate) fn validate(data: &Data, strict: bool, skip: &[&str]) -> Result<(), E
             return Err(err);
         } else {
             warn!("couldn't perform checks relying on the GitHub API, some errors will not be detected");
-            warn!("cause: {}", err);
+            warn!("cause: {err}");
         }
     } else {
         for check in GITHUB_CHECKS {
@@ -105,7 +105,7 @@ pub(crate) fn validate(data: &Data, strict: bool, skip: &[&str]) -> Result<(), E
     let zulip = ZulipApi::new();
     if let Err(err) = zulip.require_auth() {
         warn!("couldn't perform checks relying on the Zulip API, some errors will not be detected");
-        warn!("cause: {}", err);
+        warn!("cause: {err}");
     } else {
         for check in ZULIP_CHECKS {
             if skip.contains(&check.name) {
@@ -122,7 +122,7 @@ pub(crate) fn validate(data: &Data, strict: bool, skip: &[&str]) -> Result<(), E
         errors.dedup_by(|a, b| a == b);
 
         for err in &errors {
-            error!("validation error: {}", err);
+            error!("validation error: {err}");
         }
 
         bail!("{} validation errors found", errors.len());
@@ -603,7 +603,7 @@ fn validate_github_usernames(data: &Data, github: &GitHubApi, errors: &mut Vec<S
             }
             Ok(())
         }),
-        Err(err) => errors.push(format!("couldn't verify GitHub usernames: {}", err)),
+        Err(err) => errors.push(format!("couldn't verify GitHub usernames: {err}")),
     }
 }
 
@@ -682,14 +682,14 @@ fn validate_zulip_users(data: &Data, zulip: &ZulipApi, errors: &mut Vec<String>)
     let by_id = match zulip.get_users(false) {
         Ok(u) => u.iter().map(|u| u.user_id).collect::<HashSet<_>>(),
         Err(err) => {
-            errors.push(format!("couldn't verify Zulip users: {}", err));
+            errors.push(format!("couldn't verify Zulip users: {err}"));
             return;
         }
     };
     let zulip_groups = match data.zulip_groups() {
         Ok(zgs) => zgs,
         Err(err) => {
-            errors.push(format!("couldn't get all the Zulip groups: {}", err));
+            errors.push(format!("couldn't get all the Zulip groups: {err}"));
             return;
         }
     };

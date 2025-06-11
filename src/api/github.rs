@@ -58,7 +58,7 @@ impl GitHubApi {
         let url = if url.starts_with("https://") {
             Cow::Borrowed(url)
         } else {
-            Cow::Owned(format!("{}{}", API_BASE, url))
+            Cow::Owned(format!("{API_BASE}{url}"))
         };
         if require_auth {
             self.require_auth()?;
@@ -68,7 +68,7 @@ impl GitHubApi {
         if let Some(token) = &self.token {
             req = req.header(
                 header::AUTHORIZATION,
-                HeaderValue::from_str(&format!("token {}", token))?,
+                HeaderValue::from_str(&format!("token {token}"))?,
             );
         }
         Ok(req)
@@ -108,7 +108,7 @@ impl GitHubApi {
 
     pub(crate) fn user(&self, login: &str) -> Result<User, Error> {
         Ok(self
-            .prepare(false, Method::GET, &format!("users/{}", login))?
+            .prepare(false, Method::GET, &format!("users/{login}"))?
             .send()?
             .error_for_status()?
             .json()?)

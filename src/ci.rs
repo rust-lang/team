@@ -91,9 +91,9 @@ fn generate_codeowners_content(data: Data) -> String {
             })
             .flat_map(|(team, _)| {
                 data.team(team)
-                    .expect(&format!("team {team} not found"))
+                    .unwrap_or_else(|| panic!("team {team} not found"))
                     .members(&data)
-                    .expect(&format!("team {team} members couldn't be loaded"))
+                    .unwrap_or_else(|_| panic!("team {team} members couldn't be loaded"))
             }),
     );
 

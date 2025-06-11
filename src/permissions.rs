@@ -47,8 +47,8 @@ impl Permissions {
             result.push(boolean.to_string());
         }
         for repo in config.permissions_bors_repos() {
-            result.push(format!("bors.{}.review", repo));
-            result.push(format!("bors.{}.try", repo));
+            result.push(format!("bors.{repo}.review"));
+            result.push(format!("bors.{repo}.try"));
         }
 
         result

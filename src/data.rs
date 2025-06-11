@@ -95,7 +95,7 @@ impl Data {
     {
         for entry in std::fs::read_dir(&dir).with_context(|| {
             let dir = dir.as_ref().display();
-            format!("`load_dir` failed to read directory '{}'", dir)
+            format!("`load_dir` failed to read directory '{dir}'")
         })? {
             let path = entry?.path();
             if nested && path.is_dir() {

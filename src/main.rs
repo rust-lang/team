@@ -164,9 +164,7 @@ impl FromStr for DataSource {
             path => {
                 let path = PathBuf::from(path);
                 if path.is_dir() {
-                    Ok(Self::Prebuilt {
-                        path: PathBuf::from(path),
-                    })
+                    Ok(Self::Prebuilt { path })
                 } else {
                     Err(
                         "--src must be a path to an existing directory, `in-tree` or `production`"
@@ -201,7 +199,7 @@ fn main() {
     env.init();
 
     if let Err(e) = run() {
-        error!("{:?}", e);
+        error!("{e:?}");
         std::process::exit(1);
     }
 }
@@ -257,7 +255,7 @@ fn run() -> Result<(), Error> {
                 bail!("person already in the repo: {}", github_name);
             }
 
-            let file = format!("people/{}.toml", github_name);
+            let file = format!("people/{github_name}.toml");
             std::fs::write(
                 &file,
                 toml::to_string_pretty(&PersonToAdd {
@@ -278,7 +276,7 @@ fn run() -> Result<(), Error> {
                 .as_bytes(),
             )?;
 
-            info!("written data to {}", file);
+            info!("written data to {file}");
         }
         Cli::StaticApi { ref dest } => {
             let dest = PathBuf::from(dest);
@@ -312,7 +310,7 @@ fn run() -> Result<(), Error> {
                 }
             }
             if let Email::Present(email) = person.email() {
-                println!("email: {}", email);
+                println!("email: {email}");
             }
             println!();
 
@@ -352,7 +350,7 @@ fn run() -> Result<(), Error> {
                 println!("  (none)");
             } else {
                 for (repo, perms) in bors_permissions {
-                    println!("  - {}", repo);
+                    println!("  - {repo}");
                     if perms.review() {
                         println!("    - review");
                     }
@@ -373,7 +371,7 @@ fn run() -> Result<(), Error> {
                 println!("  (none)");
             } else {
                 for key in other_permissions {
-                    println!("  - {}", key);
+                    println!("  - {key}");
                 }
             }
         }
@@ -399,7 +397,7 @@ fn run() -> Result<(), Error> {
                 }
                 println!("{} ({}):", team.name(), team.kind());
                 if let Some(parent) = team.subteam_of() {
-                    println!("  parent team: {}", parent);
+                    println!("  parent team: {parent}");
                 }
 
                 println!("  members: ");
@@ -418,7 +416,7 @@ fn run() -> Result<(), Error> {
             let mut emails = list.emails().iter().collect::<Vec<_>>();
             emails.sort();
             for email in emails {
-                println!("{}", email);
+                println!("{email}");
             }
         }
         Cli::DumpWebsite => {
@@ -456,7 +454,7 @@ fn run() -> Result<(), Error> {
                 .collect::<Vec<_>>();
             allowed.sort_unstable();
             for github_username in &allowed {
-                println!("{}", github_username);
+                println!("{github_username}");
             }
         }
         Cli::DumpIndividualAccess { group_by } => {
@@ -526,9 +524,9 @@ fn run() -> Result<(), Error> {
         Cli::Sync(opts) => {
             if let Err(err) = perform_sync(opts, data) {
                 // Display shows just the first element of the chain.
-                error!("failed: {}", err);
+                error!("failed: {err}");
                 for cause in err.chain().skip(1) {
-                    error!("caused by: {}", cause);
+                    error!("caused by: {cause}");
                 }
                 std::process::exit(1);
             }
