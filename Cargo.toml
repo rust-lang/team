@@ -1,6 +1,5 @@
 [package]
 name = "rust-team"
-authors = ["Alex Crichton <alex@alexcrichton.com>", "Pietro Albini <pietro@pietroalbini.org>"]
 edition = '2018'
 license.workspace = true
 
