@@ -164,9 +164,7 @@ impl FromStr for DataSource {
             path => {
                 let path = PathBuf::from(path);
                 if path.is_dir() {
-                    Ok(Self::Prebuilt {
-                        path: path,
-                    })
+                    Ok(Self::Prebuilt { path })
                 } else {
                     Err(
                         "--src must be a path to an existing directory, `in-tree` or `production`"
