@@ -1,4 +1,4 @@
-name = "mods"
+name = "mods-mediators"
 top-level = true
 
 [people]
@@ -6,6 +6,8 @@ leads = []
 members = [
     "steffahn",
     "oli-obk",
+    "Nadrieril",
+    "rylev",
 ]
 alumni = [
     "erickt",
@@ -26,12 +28,12 @@ orgs = ["rust-lang", "rust-lang-nursery"]
 [rfcbot]
 label = "T-moderation"
 name = "Moderation"
-ping = "rust-lang/moderation"
+ping = "rust-lang/mods-core"
 
 [website]
 page = "moderation"
 name = "Moderation team"
-description = "Helping uphold the code of conduct and community standards"
+description = "Helping uphold the code of conduct and community standards and mediating conflicts between team members"
 email = "rust-mods@rust-lang.org"
 repo = "https://github.com/rust-lang/moderation-team"
 
@@ -44,9 +46,9 @@ address = "mods@rust-lang.org"
 [[lists]]
 address = "mods-all@rust-lang.org"
 extra-teams = [
-    "mods-discord",
     "mods-discourse",
+    "mods-venue",
 ]
 
 [[zulip-groups]]
-name = "T-mods"
+name = "T-mods-mediators"

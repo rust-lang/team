@@ -1,16 +1,18 @@
 name = "mods-discourse"
-subteam-of = "mods"
+subteam-of = "mods-mediators"
 
 [people]
 leads = []
 members = [
-    "technetos",
     "notriddle",
     "steffahn",
+    "oli-obk",
+    "Manishearth",
 ]
 alumni = [
     "mbrubeck",
     "khionu",
+    "technetos",
 ]
 
 [website]
