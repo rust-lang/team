@@ -4,4 +4,3 @@ description = "Improving the binary size of Rust programs and libraries"
 bots = []
 
 [access.teams]
-wg-binary-size = "write"
