@@ -4,31 +4,31 @@ edition = '2021'
 license.workspace = true
 
 [dependencies]
-anyhow = { version = "1", features = ["backtrace"] }
-base64 = "0.22"
-clap = { version = "4.5", features = ["derive"] }
-dialoguer = "0.10.1"
-env_logger = { version = "0.9.0", default-features = false }
-indexmap = "2"
-log = "0.4"
-regex = "1.5.5"
-reqwest = { version = "0.12", features = ["json", "blocking"] }
-rust_team_data = { path = "rust_team_data", features = ["email-encryption"] }
-serde = "1"
-serde_derive = "1"
-serde_json = "1"
-serde-untagged = "0.1"
-tempfile = "3.19.1"
-toml = "0.8"
+anyhow = { workspace = true, features = ["backtrace"] }
+base64.workspace = true
+clap = { workspace = true, features = ["derive"] }
+dialoguer.workspace = true
+env_logger = { workspace = true, default-features = false }
+indexmap.workspace = true
+log.workspace = true
+regex.workspace = true
+reqwest = { workspace = true, features = ["json", "blocking"], default-features = true }
+rust_team_data = { workspace = true, features = ["email-encryption"] }
+serde.workspace = true
+serde_derive.workspace = true
+serde_json.workspace = true
+serde-untagged.workspace = true
+tempfile.workspace = true
+toml.workspace = true
 
-sync-team = { path = "sync-team" }
+sync-team.workspace = true
 
 [dev-dependencies]
-ansi_term = "0.12.1"
-atty = "0.2.14"
-difference = "2.0.0"
-duct = "0.13.4"
-walkdir = "2.3.1"
+ansi_term.workspace = true
+atty.workspace = true
+difference.workspace = true
+duct.workspace = true
+walkdir.workspace = true
 
 [workspace]
 members = [
@@ -38,3 +38,34 @@ members = [
 
 [workspace.package]
 license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+anyhow = "1.0"
+ansi_term = "0.12.1"
+atty = "0.2.14"
+base64 = "0.22"
+chacha20poly1305 = "0.9.0"
+clap = "4.5"
+derive_builder = "0.20.2"
+dialoguer = "0.10.1"
+difference = "2.0.0"
+duct = "0.13.4"
+env_logger = { version = "0.9.0", default-features = false }
+getrandom = "0.2.1"
+hex = "0.4.2"
+hyper-old-types = "0.11"
+indexmap = "2.6.0"
+insta = "1.40.0"
+log = "0.4"
+regex = "1.5.5"
+reqwest = { version = "0.12.8", default-features = false }
+rust_team_data = { path = "rust_team_data" }
+secrecy = "0.10"
+serde = "1.0.85"
+serde_derive = "1.0"
+serde_json = "1.0"
+serde-untagged = "0.1"
+sync-team = { path = "sync-team" }
+tempfile = "3.19.1"
+toml = "0.8"
+walkdir = "2.3.1"
