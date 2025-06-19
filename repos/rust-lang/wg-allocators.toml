@@ -5,4 +5,6 @@ homepage = "http://bit.ly/hello-wg-allocators"
 bots = []
 
 [access.teams]
+libs = "write"
+libs-contributors = "write"
 wg-allocators = "maintain"
