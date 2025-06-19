@@ -1,4 +1,6 @@
 use anyhow::{bail, Error};
+use base64::prelude::BASE64_STANDARD;
+use base64::Engine;
 use reqwest::blocking::{Client, ClientBuilder, RequestBuilder};
 use reqwest::header::{self, HeaderValue};
 use reqwest::Method;
@@ -188,5 +190,5 @@ impl GitHubApi {
 }
 
 fn user_node_id(id: u64) -> String {
-    base64::encode(format!("04:User{id}"))
+    BASE64_STANDARD.encode(format!("04:User{id}"))
 }
