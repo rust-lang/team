@@ -3,23 +3,19 @@ kind = "working-group"
 subteam-of = "compiler"
 
 [people]
-leads = ["thomcc", "m-ou-se"]
-members = [
-    "davidtwco",
-    "h1467792822",
+leads = []
+members = []
+
+alumni = [
     "Kobzol",
-    "kupiakos",
+    "antoyo",
+    "davidtwco",
     "m-ou-se",
     "nbdd0121",
     "nnethercote",
-    "thomcc",
-    "wain303009",
-    "workingjubilee",
-    "antoyo",
     "tgross35",
-]
-
-alumni = [
+    "thomcc",
+    "workingjubilee"
 ]
 
 [permissions]
