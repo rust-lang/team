@@ -5,17 +5,17 @@ authors = ["Pietro Albini <pietro@pietroalbini.org>"]
 edition = "2024"
 
 [dependencies]
-reqwest = { version = "0.12.8", features = ["blocking", "json", "rustls-tls", "charset", "http2", "macos-system-configuration"], default-features = false }
-log = "0.4"
-rust_team_data = { path = "../rust_team_data", features = ["email-encryption"] }
-serde = { version = "1.0", features = ["derive"] }
-anyhow = "1.0"
-base64 = "0.22"
-hyper-old-types = "0.11"
-serde_json = "1.0"
-secrecy = "0.10"
+reqwest = { workspace = true, features = ["blocking", "json", "rustls-tls", "charset", "http2", "macos-system-configuration"], default-features = false }
+log.workspace = true
+rust_team_data = { workspace = true, features = ["email-encryption"] }
+serde = { workspace = true, features = ["derive"] }
+anyhow.workspace = true
+base64.workspace = true
+hyper-old-types.workspace = true
+serde_json.workspace = true
+secrecy.workspace = true
 
 [dev-dependencies]
-indexmap = "2.6.0"
-derive_builder = "0.20.2"
-insta = "1.40.0"
+indexmap.workspace = true
+derive_builder.workspace = true
+insta.workspace = true
