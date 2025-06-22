@@ -28,13 +28,13 @@ from all the supported services.
 
 [www-src]: https://github.com/rust-lang/www.rust-lang.org/blob/master/src/teams.rs
 
-[crater]: https://github.com/rust-lang-nursery/crater
+[crater]: https://github.com/rust-lang/crater
 
-[crater-src]: https://github.com/rust-lang-nursery/crater/blob/master/src/server/auth.rs
+[crater-src]: https://github.com/rust-lang/crater/blob/master/src/server/auth.rs
 
 [perf]: https://perf.rust-lang.org
 
-[perf-src]: https://github.com/rust-lang-nursery/rustc-perf/blob/master/site/src/server.rs
+[perf-src]: https://github.com/rust-lang/rustc-perf/blob/master/site/src/server.rs
 
 [rfcbot]: https://rfcbot.rs
 
