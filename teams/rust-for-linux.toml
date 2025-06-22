@@ -4,10 +4,11 @@ kind = "marker-team"
 [people]
 leads = []
 members = [
+    "BennoLossin",
+    "Darksonn",
     "alex",
     "bjorn3",
     "dakr",
-    "Darksonn",
     "dingxiangfei2009",
     "fbq",
     "maurer",
@@ -16,7 +17,6 @@ members = [
     "ojeda",
     "tgross35",
     "vincenzopalazzo",
-    "y86-dev",
 ]
 
 [permissions]

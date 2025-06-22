@@ -6,7 +6,10 @@ kind = "marker-team"
 leads = []
 members = [
     "1c3t3a",
+    "BennoLossin",
     "BoxyUwU",
+    "Eh2406",
+    "JoelMarcey",
     "Muscraft",
     "SparrowLii",
     "ZuseZ4",
@@ -14,12 +17,10 @@ members = [
     "celinval",
     "chorman0773",
     "davidtwco",
-    "Eh2406",
     "epage",
     "folkertdev",
     "jhpratt",
     "jieyouxu",
-    "JoelMarcey",
     "joshtriplett",
     "jswrenn",
     "lcnr",
@@ -32,7 +33,6 @@ members = [
     "tmandry",
     "veluca93",
     "walterhpearce",
-    "y86-dev",
     "yaahc",
 ]
 included-teams = []
