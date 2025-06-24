@@ -4,6 +4,7 @@ subteam-of = "devtools"
 [people]
 leads = [
     "rbtcollins",
+    "rami3l",
 ]
 members = [
     "rbtcollins",
