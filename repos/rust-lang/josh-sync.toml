@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "josh-sync"
+description = "Utilities for synchronizing Josh subtrees to the Rust compiler repo"
+bots = []
+
+[access.teams]
+compiler = "write"
+infra = "write"
+
+[[branch-protections]]
+pattern = "main"
+required-approvals = 0
