@@ -6,6 +6,8 @@ bots = ["rustbot"]
 
 [access.teams]
 libs = "write"
+libs-api = "write"
+libs-contributors = "write"
 
 [[branch-protections]]
 pattern = "master"
