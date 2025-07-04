@@ -5,4 +5,3 @@ homepage = "https://static.rust-lang.org/manifests.txt"
 bots = []
 
 [access.teams]
-infra = "write"
