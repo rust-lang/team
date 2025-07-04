@@ -9,4 +9,5 @@ infra = "write"
 
 [[branch-protections]]
 pattern = "main"
+ci-checks = ["Test"]
 required-approvals = 0
