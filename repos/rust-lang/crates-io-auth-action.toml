@@ -6,3 +6,8 @@ bots = []
 [access.teams]
 infra-admins = "write"
 infra = "triage"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = ["Conclusion"]
+required-approvals = 0
