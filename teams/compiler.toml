@@ -60,6 +60,7 @@ members = [
     "WaffleLapkin",
     { github = "wesleywiser", roles = ["compiler-maintainer"] },
     "workingjubilee",
+    "yaahc",
     "Zalathar",
     "ZuseZ4",
 ]
