@@ -10,10 +10,10 @@ members = [
     "nandsh",
     "davidtwco",
     "traviscross",
-    "spastorino",
     "tomassedovic",
 ]
 alumni = [
+    "spastorino",
 ]
 
 [[github]]
