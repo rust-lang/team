@@ -21,6 +21,8 @@ members = [
     "calebzulawski", # std::simd
     "tgross35",
     "ibraheemdev",
+    "folkertdev",
+    "sayantn",
 ]
 alumni = [
     "shepmaster",
