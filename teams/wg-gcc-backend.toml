@@ -9,6 +9,7 @@ alumni = []
 
 [permissions]
 perf = true
+dev-desktop = true
 
 [website]
 name = "rustc_codegen_gcc"
