@@ -1,0 +1,13 @@
+org = "rust-lang"
+name = "crates_io_og_image"
+description = "OpenGraph image generation for crates.io packages"
+homepage = "https://crates.io/crates/crates_io_og_image"
+bots = ["renovate", "rustbot"]
+
+[access.teams]
+crates-io = "write"
+
+[[branch-protections]]
+pattern = "main"
+ci-checks = ["CI"]
+required-approvals = 0
