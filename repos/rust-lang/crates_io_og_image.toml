@@ -11,3 +11,4 @@ crates-io = "write"
 pattern = "main"
 ci-checks = ["CI"]
 required-approvals = 0
+pr-required = false
