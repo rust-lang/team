@@ -949,12 +949,14 @@ but that team is not mentioned in [access.teams]"#,
                         protection.pattern,
                     );
                 }
-                if protection.required_approvals.is_some() {
-                    bail!(
-                        r#"repo '{}' uses a branch protection for {} that does not require a PR, but sets the `required-approvals` attribute"#,
-                        repo.name,
-                        protection.pattern,
-                    );
+                if let Some(required_approvals) = protection.required_approvals {
+                    if required_approvals > 0 {
+                        bail!(
+                            r#"repo '{}' uses a branch protection for {} that does not require a PR, but `required-approvals` is greater than 0"#,
+                            repo.name,
+                            protection.pattern,
+                        );
+                    }
                 }
             }
 
