@@ -89,7 +89,7 @@ impl Mailgun {
     }
 
     pub(super) fn delete_route(&self, id: &str) -> Result<(), Error> {
-        info!("deleting route with ID {}", id);
+        info!("deleting route with ID {id}");
         if self.dry_run {
             return Ok(());
         }

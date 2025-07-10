@@ -19,7 +19,11 @@ fn team_create() {
     let user = model.create_user("mark");
     let user2 = model.create_user("jan");
     let gh = model.gh_model();
-    model.create_team(TeamData::new("admins").gh_team(DEFAULT_ORG, "admins-gh", &[user, user2]));
+    model.create_team(TeamData::new_builder("admins").gh_team(
+        DEFAULT_ORG,
+        "admins-gh",
+        &[user, user2],
+    ));
     let team_diff = model.diff_teams(gh);
     insta::assert_debug_snapshot!(team_diff, @r###"
     [
@@ -50,7 +54,7 @@ fn team_add_member() {
     let mut model = DataModel::default();
     let user = model.create_user("mark");
     let user2 = model.create_user("jan");
-    model.create_team(TeamData::new("admins").gh_team(DEFAULT_ORG, "admins-gh", &[user]));
+    model.create_team(TeamData::new_builder("admins").gh_team(DEFAULT_ORG, "admins-gh", &[user]));
     let gh = model.gh_model();
 
     model.get_team("admins").add_gh_member("admins-gh", user2);
@@ -87,7 +91,7 @@ fn team_dont_add_member_if_invitation_is_pending() {
     let mut model = DataModel::default();
     let user = model.create_user("mark");
     let user2 = model.create_user("jan");
-    model.create_team(TeamData::new("admins").gh_team(DEFAULT_ORG, "admins-gh", &[user]));
+    model.create_team(TeamData::new_builder("admins").gh_team(DEFAULT_ORG, "admins-gh", &[user]));
     let mut gh = model.gh_model();
 
     model.get_team("admins").add_gh_member("admins-gh", user2);
@@ -102,7 +106,11 @@ fn team_remove_member() {
     let mut model = DataModel::default();
     let user = model.create_user("mark");
     let user2 = model.create_user("jan");
-    model.create_team(TeamData::new("admins").gh_team(DEFAULT_ORG, "admins-gh", &[user, user2]));
+    model.create_team(TeamData::new_builder("admins").gh_team(
+        DEFAULT_ORG,
+        "admins-gh",
+        &[user, user2],
+    ));
     let gh = model.gh_model();
 
     model
@@ -143,7 +151,7 @@ fn team_delete() {
     // We need at least two github teams, otherwise the diff for removing the last GH team
     // won't be generated, because no organization is known to scan for existing unmanaged teams.
     model.create_team(
-        TeamData::new("admins")
+        TeamData::new_builder("admins")
             .gh_team(DEFAULT_ORG, "admins-gh", &[user])
             .gh_team(DEFAULT_ORG, "users-gh", &[user]),
     );
@@ -176,7 +184,7 @@ fn repo_noop() {
 #[test]
 fn repo_change_description() {
     let mut model = DataModel::default();
-    model.create_repo(RepoData::new("repo1").description("foo".to_string()));
+    model.create_repo(RepoData::new_builder("repo1").description("foo".to_string()));
     let gh = model.gh_model();
     model.get_repo("repo1").description = "bar".to_string();
 
@@ -213,7 +221,7 @@ fn repo_change_description() {
 #[test]
 fn repo_change_homepage() {
     let mut model = DataModel::default();
-    model.create_repo(RepoData::new("repo1").homepage(Some("https://foo.rs".to_string())));
+    model.create_repo(RepoData::new_builder("repo1").homepage(Some("https://foo.rs".to_string())));
     let gh = model.gh_model();
     model.get_repo("repo1").homepage = Some("https://bar.rs".to_string());
 
@@ -257,7 +265,7 @@ fn repo_create() {
     let gh = model.gh_model();
 
     model.create_repo(
-        RepoData::new("repo1")
+        RepoData::new_builder("repo1")
             .description("foo".to_string())
             .member("user1", RepoPermission::Write)
             .team("team1", RepoPermission::Triage)
@@ -322,7 +330,7 @@ fn repo_create() {
 fn repo_add_member() {
     let mut model = DataModel::default();
     model.create_repo(
-        RepoData::new("repo1")
+        RepoData::new_builder("repo1")
             .member("user1", RepoPermission::Write)
             .team("team1", RepoPermission::Triage),
     );
@@ -374,7 +382,7 @@ fn repo_add_member() {
 #[test]
 fn repo_change_member_permissions() {
     let mut model = DataModel::default();
-    model.create_repo(RepoData::new("repo1").member("user1", RepoPermission::Write));
+    model.create_repo(RepoData::new_builder("repo1").member("user1", RepoPermission::Write));
 
     let gh = model.gh_model();
     model
@@ -427,7 +435,7 @@ fn repo_change_member_permissions() {
 #[test]
 fn repo_remove_member() {
     let mut model = DataModel::default();
-    model.create_repo(RepoData::new("repo1").member("user1", RepoPermission::Write));
+    model.create_repo(RepoData::new_builder("repo1").member("user1", RepoPermission::Write));
 
     let gh = model.gh_model();
     model.get_repo("repo1").members.clear();
@@ -474,7 +482,7 @@ fn repo_remove_member() {
 #[test]
 fn repo_add_team() {
     let mut model = DataModel::default();
-    model.create_repo(RepoData::new("repo1").member("user1", RepoPermission::Write));
+    model.create_repo(RepoData::new_builder("repo1").member("user1", RepoPermission::Write));
 
     let gh = model.gh_model();
     model
@@ -523,7 +531,7 @@ fn repo_add_team() {
 #[test]
 fn repo_change_team_permissions() {
     let mut model = DataModel::default();
-    model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Triage));
+    model.create_repo(RepoData::new_builder("repo1").team("team1", RepoPermission::Triage));
 
     let gh = model.gh_model();
     model.get_repo("repo1").teams.last_mut().unwrap().permission = RepoPermission::Admin;
@@ -571,7 +579,7 @@ fn repo_change_team_permissions() {
 #[test]
 fn repo_remove_team() {
     let mut model = DataModel::default();
-    model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Write));
+    model.create_repo(RepoData::new_builder("repo1").team("team1", RepoPermission::Write));
 
     let gh = model.gh_model();
     model.get_repo("repo1").teams.clear();
@@ -618,7 +626,7 @@ fn repo_remove_team() {
 #[test]
 fn repo_archive_repo() {
     let mut model = DataModel::default();
-    model.create_repo(RepoData::new("repo1"));
+    model.create_repo(RepoData::new_builder("repo1"));
 
     let gh = model.gh_model();
     model.get_repo("repo1").archived = true;
@@ -656,7 +664,7 @@ fn repo_archive_repo() {
 #[test]
 fn repo_add_branch_protection() {
     let mut model = DataModel::default();
-    model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Write));
+    model.create_repo(RepoData::new_builder("repo1").team("team1", RepoPermission::Write));
 
     let gh = model.gh_model();
     model.get_repo("repo1").branch_protections.extend([
@@ -730,7 +738,7 @@ fn repo_add_branch_protection() {
 fn repo_update_branch_protection() {
     let mut model = DataModel::default();
     model.create_repo(
-        RepoData::new("repo1")
+        RepoData::new_builder("repo1")
             .team("team1", RepoPermission::Write)
             .branch_protections(vec![
                 BranchProtectionBuilder::pr_required("master", &["test"], 1).build(),
@@ -819,7 +827,7 @@ fn repo_update_branch_protection() {
 fn repo_remove_branch_protection() {
     let mut model = DataModel::default();
     model.create_repo(
-        RepoData::new("repo1")
+        RepoData::new_builder("repo1")
             .team("team1", RepoPermission::Write)
             .branch_protections(vec![
                 BranchProtectionBuilder::pr_required("main", &["test"], 1).build(),
