@@ -5,6 +5,8 @@ bots = ["rustbot", "renovate"]
 
 [access.teams]
 infra = "write"
+# So that infra admins can approve production deployments of bors
+infra-admins = "write"
 infra-bors = "write"
 
 [[branch-protections]]
