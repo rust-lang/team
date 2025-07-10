@@ -199,7 +199,7 @@ pub struct TeamData {
 }
 
 impl TeamData {
-    pub fn new(name: &str) -> TeamDataBuilder {
+    pub fn new_builder(name: &str) -> TeamDataBuilder {
         TeamDataBuilder::default().name(name.to_string())
     }
 
@@ -283,7 +283,7 @@ pub struct RepoData {
 }
 
 impl RepoData {
-    pub fn new(name: &str) -> RepoDataBuilder {
+    pub fn new_builder(name: &str) -> RepoDataBuilder {
         RepoDataBuilder::default().name(name.to_string())
     }
 
