@@ -23,9 +23,13 @@ alumni = [
 [website]
 name = "Rustup team"
 description = "Designing and implementing rustup"
+zulip-stream = "rustup"
 discord-invite = "https://discord.gg/e6Q3cvu"
 discord-name = "#wg-rustup"
 repo = "https://github.com/rust-lang/rustup"
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "T-rustup"
