@@ -79,8 +79,8 @@ pub enum Error {
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
-            Error::GetRandom(e) => write!(f, "{}", e),
-            Error::Hex(e) => write!(f, "{}", e),
+            Error::GetRandom(e) => write!(f, "{e}"),
+            Error::Hex(e) => write!(f, "{e}"),
             Error::EncryptionFailed => write!(f, "encryption failed"),
             Error::DecryptionFailed => write!(f, "encryption failed"),
             Error::InvalidUtf8 => write!(f, "invalid UTF-8"),

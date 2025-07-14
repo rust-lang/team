@@ -199,6 +199,7 @@ pub struct TeamData {
 }
 
 impl TeamData {
+    #[allow(clippy::new_ret_no_self)]
     pub fn new(name: &str) -> TeamDataBuilder {
         TeamDataBuilder::default().name(name.to_string())
     }
@@ -283,6 +284,7 @@ pub struct RepoData {
 }
 
 impl RepoData {
+    #[allow(clippy::new_ret_no_self)]
     pub fn new(name: &str) -> RepoDataBuilder {
         RepoDataBuilder::default().name(name.to_string())
     }

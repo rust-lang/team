@@ -389,7 +389,7 @@ fn get_user_group_definitions(
                     ZulipGroupMember::Email(e) => {
                         let id = email_map.get(e);
                         if id.is_none() {
-                            log::warn!("no Zulip id found for '{}'", e);
+                            log::warn!("no Zulip id found for '{e}'");
                         }
                         id.copied()
                     }
@@ -424,7 +424,7 @@ fn get_stream_definitions(
                     ZulipStreamMember::Email(e) => {
                         let id = email_map.get(e);
                         if id.is_none() {
-                            log::warn!("no Zulip id found for '{}'", e);
+                            log::warn!("no Zulip id found for '{e}'");
                         }
                         id.copied()
                     }

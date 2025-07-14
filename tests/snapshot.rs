@@ -56,10 +56,10 @@ fn static_api() -> Result<(), Error> {
                 ansi_term::Color::Red.bold().paint("!!! the file"),
                 ansi_term::Color::White
                     .bold()
-                    .paint(&file.to_str().unwrap().to_string()),
+                    .paint(file.to_str().unwrap().to_string()),
                 ansi_term::Color::Red.bold().paint("does not match"),
             );
-            println!("{}", changeset);
+            println!("{changeset}");
         }
     }
     if failed {
@@ -90,9 +90,7 @@ fn dir_valid() -> PathBuf {
 fn step(name: &str) {
     println!(
         "{}",
-        ansi_term::Color::White
-            .bold()
-            .paint(&format!("==> {}", name))
+        ansi_term::Color::White.bold().paint(format!("==> {name}"))
     );
 }
 

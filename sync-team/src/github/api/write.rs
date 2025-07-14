@@ -271,7 +271,7 @@ impl GitHubWrite {
             archived: settings.archived,
             allow_auto_merge: settings.auto_merge_enabled,
         };
-        debug!("Editing repo {}/{} with {:?}", org, repo_name, req);
+        debug!("Editing repo {org}/{repo_name} with {req:?}");
         if !self.dry_run {
             self.client
                 .send(Method::PATCH, &GitHubUrl::repos(org, repo_name, "")?, &req)?;
@@ -369,7 +369,7 @@ impl GitHubWrite {
         branch_protection: &BranchProtection,
         org: &str,
     ) -> anyhow::Result<()> {
-        debug!("Updating '{}' branch protection", pattern);
+        debug!("Updating '{pattern}' branch protection");
         #[derive(Debug, serde::Serialize)]
         #[serde(rename_all = "camelCase")]
         struct Params<'a> {
@@ -462,7 +462,7 @@ impl GitHubWrite {
         repo_name: &str,
         id: &str,
     ) -> anyhow::Result<()> {
-        debug!("Removing protection in {}/{}", org, repo_name);
+        debug!("Removing protection in {org}/{repo_name}");
         println!("Remove protection {id}");
         if !self.dry_run {
             #[derive(serde::Serialize)]

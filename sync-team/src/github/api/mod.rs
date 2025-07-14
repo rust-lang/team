@@ -176,7 +176,7 @@ impl HttpClient {
                 for link in links.values() {
                     if link
                         .rel()
-                        .map(|r| r.iter().any(|r| *r == RelationType::Next))
+                        .map(|r| r.contains(&RelationType::Next))
                         .unwrap_or(false)
                     {
                         next = Some(GitHubUrl::new(link.link(), next_url.org()));

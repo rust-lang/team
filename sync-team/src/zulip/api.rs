@@ -37,10 +37,7 @@ impl ZulipApi {
         member_ids: &[u64],
     ) -> anyhow::Result<()> {
         log::info!(
-            "creating Zulip user group '{}' with description '{}' and member ids: {:?}",
-            user_group_name,
-            description,
-            member_ids
+            "creating Zulip user group '{user_group_name}' with description '{description}' and member ids: {member_ids:?}"
         );
         if self.dry_run {
             return Ok(());
@@ -64,7 +61,7 @@ impl ZulipApi {
             };
             let error = body.get("msg").ok_or_else(err)?.as_str().ok_or_else(err)?;
             if error.contains("already exists") {
-                log::debug!("Zulip user group '{}' already existed", user_group_name);
+                log::debug!("Zulip user group '{user_group_name}' already existed");
                 return Ok(());
             } else {
                 return Err(err());
@@ -157,17 +154,13 @@ impl ZulipApi {
     ) -> anyhow::Result<()> {
         if add_ids.is_empty() && remove_ids.is_empty() {
             log::debug!(
-                "user group {} does not need to have its group members updated",
-                user_group_id
+                "user group {user_group_id} does not need to have its group members updated"
             );
             return Ok(());
         }
 
         log::info!(
-            "updating user group {} by adding {:?} and removing {:?}",
-            user_group_id,
-            add_ids,
-            remove_ids
+            "updating user group {user_group_id} by adding {add_ids:?} and removing {remove_ids:?}"
         );
 
         if self.dry_run {
@@ -205,19 +198,11 @@ impl ZulipApi {
         remove_ids: &[u64],
     ) -> anyhow::Result<()> {
         if add_ids.is_empty() && remove_ids.is_empty() {
-            log::debug!(
-                "stream {} does not need to have its members updated",
-                stream_id
-            );
+            log::debug!("stream {stream_id} does not need to have its members updated");
             return Ok(());
         }
 
-        log::info!(
-            "updating stream {} by adding {:?} and removing {:?}",
-            stream_id,
-            add_ids,
-            remove_ids
-        );
+        log::info!("updating stream {stream_id} by adding {add_ids:?} and removing {remove_ids:?}");
 
         if self.dry_run {
             return Ok(());
