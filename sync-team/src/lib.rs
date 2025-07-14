@@ -24,7 +24,7 @@ pub fn run_sync_team(
     }
 
     for service in services {
-        info!("synchronizing {}", service);
+        info!("synchronizing {service}");
         match service.as_str() {
             "github" => {
                 let client = HttpClient::new()?;
@@ -33,7 +33,7 @@ pub fn run_sync_team(
                 let repos = team_api.get_repos()?;
                 let diff = create_diff(gh_read, teams, repos)?;
                 if !diff.is_empty() {
-                    info!("{}", diff);
+                    info!("{diff}");
                 }
                 if !only_print_plan {
                     let gh_write = GitHubWrite::new(client, dry_run)?;
@@ -51,7 +51,7 @@ pub fn run_sync_team(
                 let sync = SyncZulip::new(username, token, &team_api, dry_run)?;
                 let diff = sync.diff_all()?;
                 if !diff.is_empty() {
-                    info!("{}", diff);
+                    info!("{diff}");
                 }
                 if !only_print_plan {
                     diff.apply(&sync)?;
