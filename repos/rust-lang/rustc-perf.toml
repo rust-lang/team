@@ -12,5 +12,7 @@ pattern = "master"
 ci-checks = [
     "Test and deploy",
     "Test on Windows",
+    "Test benchmarks",
+    "Test runtime benchmarks",
     "Database Check",
 ]
