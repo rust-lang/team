@@ -12,7 +12,10 @@ pattern = "master"
 ci-checks = [
     "Test and deploy",
     "Test on Windows",
-    "Test benchmarks",
+    "Test benchmarks (--include cargo-0.87.1,stm32f4-0.15.1, Check,Debug,Doc)",
+    "Test benchmarks (--exclude cargo-0.87.1,stm32f4-0.15.1, Check,Debug,Doc)",
+    "Test benchmarks (--include cargo-0.87.1,stm32f4-0.15.1, Opt)",
+    "Test benchmarks (--exclude cargo-0.87.1,stm32f4-0.15.1, Opt)",
     "Test runtime benchmarks",
     "Database Check",
 ]
