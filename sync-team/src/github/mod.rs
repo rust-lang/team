@@ -3,6 +3,7 @@ mod api;
 mod tests;
 
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
+use crate::Config;
 use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings};
 use log::debug;
 use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot};
@@ -18,8 +19,9 @@ pub(crate) fn create_diff(
     github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
     repos: Vec<rust_team_data::v1::Repo>,
+    config: Config,
 ) -> anyhow::Result<Diff> {
-    let github = SyncGitHub::new(github, teams, repos)?;
+    let github = SyncGitHub::new(github, teams, repos, config)?;
     github.diff_all()
 }
 
@@ -29,6 +31,7 @@ struct SyncGitHub {
     github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
     repos: Vec<rust_team_data::v1::Repo>,
+    config: Config,
     usernames_cache: HashMap<u64, String>,
     org_owners: HashMap<OrgName, HashSet<u64>>,
     org_members: HashMap<OrgName, HashMap<u64, String>>,
@@ -39,6 +42,7 @@ impl SyncGitHub {
         github: Box<dyn GithubRead>,
         teams: Vec<rust_team_data::v1::Team>,
         repos: Vec<rust_team_data::v1::Repo>,
+        config: Config,
     ) -> anyhow::Result<Self> {
         debug!("caching mapping between user ids and usernames");
         let users = teams
@@ -72,6 +76,7 @@ impl SyncGitHub {
             github,
             teams,
             repos,
+            config,
             usernames_cache,
             org_owners,
             org_members,
@@ -90,7 +95,7 @@ impl SyncGitHub {
         })
     }
 
-    // Collect all org members from the respective teams
+    /// Collect all org members from the respective teams
     fn get_org_members_from_teams(&self) -> HashMap<OrgName, HashSet<u64>> {
         let mut org_team_members: HashMap<OrgName, HashSet<u64>> = HashMap::new();
 
@@ -107,22 +112,24 @@ impl SyncGitHub {
         org_team_members
     }
 
-    // Diff organization memberships between TOML teams and GitHub
+    /// Diff organization memberships between TOML teams and GitHub
     fn diff_org_memberships(&self) -> anyhow::Result<Vec<OrgMembershipDiff>> {
         let toml_org_team_members = self.get_org_members_from_teams();
 
         let mut org_diffs: BTreeMap<String, OrgMembershipDiff> = BTreeMap::new();
 
         for (org, toml_members) in toml_org_team_members {
+            // Skip independent organizations - they manage their own members
+            if self.config.independent_github_orgs.contains(&org) {
+                debug!("Skipping member sync for independent organization: {}", org);
+                continue;
+            }
+
             let Some(gh_org_members) = self.org_members.get(&org) else {
                 panic!("GitHub organization {org} not found");
             };
 
-            // Remove all members that are in TOML teams
-            let mut members_to_remove = gh_org_members.clone();
-            for member in toml_members {
-                members_to_remove.remove(&member);
-            }
+            let members_to_remove = self.members_to_remove(toml_members, gh_org_members);
 
             // The rest are members that should be removed
             if !members_to_remove.is_empty() {
@@ -140,6 +147,34 @@ impl SyncGitHub {
         }
 
         Ok(org_diffs.into_values().collect())
+    }
+
+    /// Return GitHub members that should be removed from the organization.
+    fn members_to_remove(
+        &self,
+        toml_members: HashSet<u64>,
+        gh_org_members: &HashMap<u64, String>,
+    ) -> HashMap<u64, String> {
+        // Initialize `members_to_remove` to all GitHub members in the org.
+        // Next, we'll delete members from `members_to_remove` that don't respect certain criteria.
+        let mut members_to_remove = gh_org_members.clone();
+
+        // People who belong to a team should stay in the org.
+        for member in toml_members {
+            members_to_remove.remove(&member);
+        }
+
+        // Members that are explicitly allowed in the `config.toml` file should stay in the org.
+        for allowed_member in &self.config.special_org_members {
+            if let Some(member_to_retain) = members_to_remove
+                .iter()
+                .find(|(_, username)| username == &allowed_member)
+                .map(|(id, _)| *id)
+            {
+                members_to_remove.remove(&member_to_retain);
+            }
+        }
+        members_to_remove
     }
 
     fn diff_teams(&self) -> anyhow::Result<Vec<TeamDiff>> {
@@ -755,7 +790,7 @@ struct OrgMembershipDiff {
 impl OrgMembershipDiff {
     fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
         for member in &self.members_to_remove {
-            sync.remove_gh_member_from_org(&self.org, &member)?;
+            sync.remove_gh_member_from_org(&self.org, member)?;
         }
 
         Ok(())
