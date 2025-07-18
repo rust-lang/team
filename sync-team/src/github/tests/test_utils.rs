@@ -1,11 +1,12 @@
 use std::collections::{BTreeSet, HashMap, HashSet};
 
 use derive_builder::Builder;
-use rust_team_data::v1;
 use rust_team_data::v1::{
-    Bot, BranchProtectionMode, GitHubTeam, MergeBot, Person, RepoPermission, TeamGitHub, TeamKind,
+    self, Bot, BranchProtectionMode, GitHubTeam, MergeBot, Person, RepoPermission, TeamGitHub,
+    TeamKind,
 };
 
+use crate::Config;
 use crate::github::api::{
     BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Team, TeamMember, TeamPrivacy, TeamRole,
 };
@@ -28,6 +29,7 @@ pub struct DataModel {
     people: Vec<Person>,
     teams: Vec<TeamData>,
     repos: Vec<RepoData>,
+    config: Config,
 }
 
 impl DataModel {
@@ -63,6 +65,14 @@ impl DataModel {
             .iter_mut()
             .find(|r| r.name == name)
             .expect("Repo not found")
+    }
+
+    pub fn add_allowed_org_member(&mut self, member: &str) {
+        self.config.special_org_members.insert(member.to_string());
+    }
+
+    pub fn add_independent_github_org(&mut self, org: &str) {
+        self.config.independent_github_orgs.insert(org.to_string());
     }
 
     /// Creates a GitHub model from the current team data mock.
@@ -196,8 +206,9 @@ impl DataModel {
     fn create_sync(&self, github: GithubMock) -> SyncGitHub {
         let teams = self.teams.iter().cloned().map(|t| t.into()).collect();
         let repos = self.repos.iter().cloned().map(|r| r.into()).collect();
+        let config = self.config.clone();
 
-        SyncGitHub::new(Box::new(github), teams, repos).expect("Cannot create SyncGitHub")
+        SyncGitHub::new(Box::new(github), teams, repos, config).expect("Cannot create SyncGitHub")
     }
 }
 
@@ -435,8 +446,8 @@ impl GithubMock {
         let user_id = self.users.len() as UserId;
         self.users.insert(user_id, username.to_string());
         self.orgs
-            .get_mut(org)
-            .unwrap()
+            .entry(org.to_string())
+            .or_default()
             .members
             .insert((user_id, username.to_string()));
     }

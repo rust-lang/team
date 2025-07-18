@@ -100,10 +100,16 @@ fn team_dont_add_member_if_invitation_is_pending() {
 #[test]
 fn remove_org_members() {
     let mut model = DataModel::default();
+    let rust_lang_org = "rust-lang";
     let user = model.create_user("sakura");
-    model.create_team(TeamData::new("team-1").gh_team("rust-lang", "members-gh", &[user]));
+    model.create_team(TeamData::new("team-1").gh_team(rust_lang_org, "members-gh", &[user]));
     let mut gh = model.gh_model();
-    gh.add_member("rust-lang", "martin");
+    gh.add_member(rust_lang_org, "martin");
+
+    // Add a bot that shouldn't be removed from the org.
+    let bot = "my-bot";
+    gh.add_member(rust_lang_org, bot);
+    model.add_allowed_org_member(bot);
 
     let gh_org_diff = model.diff_org_membership(gh);
 
@@ -887,4 +893,27 @@ fn repo_remove_branch_protection() {
         ),
     ]
     "#);
+}
+
+#[test]
+fn independent_orgs_are_not_synced() {
+    let mut model = DataModel::default();
+    let user = model.create_user("sakura");
+
+    let independent_org = "independent-org";
+
+    // Create a team, so that membership is synced.
+    model.create_team(TeamData::new("team").gh_team(independent_org, "team-gh", &[user]));
+
+    let mut gh = model.gh_model();
+
+    // Add a member who is not part of any team.
+    gh.add_member(independent_org, "independent-user-1");
+
+    model.add_independent_github_org(independent_org);
+
+    let gh_org_diff = model.diff_org_membership(gh);
+
+    // No members should be removed for independent organizations
+    insta::assert_debug_snapshot!(gh_org_diff, @"[]");
 }
