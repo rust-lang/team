@@ -28,6 +28,13 @@ jobs:
         with:
           fetch-depth: 50
 
+      - name: Print concurrency group
+        run: |
+          echo "Concurrency group: ${GITHUB_WORKFLOW}-${GITHUB_HEAD_REF}"
+        env:
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_HEAD_REF: ${{ github.head_ref || 'deploy' }}
+
       - name: Install Rust Stable
         env:
           RUST_VERSION: "1.85.0"
