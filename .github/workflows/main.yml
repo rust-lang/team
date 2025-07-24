@@ -5,8 +5,10 @@ on:
   merge_group:
   workflow_dispatch:
   schedule:
-    # Run every four hours to make sure that all changes are up-to-date
-    - cron: 0 */4 * * *
+    # Run at 4 AM UTC daily to make sure that all changes are up-to-date
+    # We run the cron job at a time where merges don't usually happen, in order to avoid race
+    # conditions with the `merge_group` workflow exeecution.
+    - cron: 0 4 * * *
 
 concurrency:
   # We want to make sure that parallel executions (merge queue, cron, manual) of this workflow
