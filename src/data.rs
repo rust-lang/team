@@ -217,6 +217,26 @@ impl Data {
             .flatten()
             .any(|github_team| github_team.name == team_name && github_team.org == org)
     }
+
+    pub(crate) fn get_sync_team_config(&self) -> anyhow::Result<sync_team::Config> {
+        let mut special_org_members = self.config.special_org_members().clone();
+
+        // Add infra admins from the infra-admins team
+        let infra_admins_team = self
+            .team("infra-admins")
+            .context("cannot find infra-admins team")?;
+        let infra_admins_usernames = infra_admins_team
+            .raw_people()
+            .members
+            .iter()
+            .map(|m| m.github.clone());
+        special_org_members.extend(infra_admins_usernames);
+
+        Ok(sync_team::Config {
+            special_org_members,
+            independent_github_orgs: self.config.independent_github_orgs().clone(),
+        })
+    }
 }
 
 fn load_file<T: DeserializeOwned>(path: &Path) -> Result<T, Error> {
