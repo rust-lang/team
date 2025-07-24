@@ -24,6 +24,7 @@ members = [
     { github = "fee1-dead", roles = ["compiler-maintainer"] },
     "flodiebold",
     "fmease", 
+    "GuillaumeGomez",
     { github = "jackh726", roles = ["compiler-maintainer"] },
     "jdonszelmann",
     { github = "jieyouxu", roles = ["compiler-maintainer"] },
