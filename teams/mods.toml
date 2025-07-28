@@ -1,55 +1,28 @@
 name = "mods"
-top-level = true
+subteam-of = "moderation"
 
 [people]
 leads = []
 members = [
-    "steffahn",
     "oli-obk",
-    "Nadrieril",
+    "steffahn",
     "rylev",
+    "Nadrieril",
+    "jieyouxu",
+    "rylev",
+    "Noratrieb",
+    "apiraino",
 ]
 alumni = [
-    "erickt",
-    "niconii",
-    "BurntSushi",
-    "llogiq",
-    "matthieu-m",
-    "khionu",
-    "Manishearth",
-    "mbrubeck",
-    "pnkfelix",
-    "technetos",
 ]
 
 [[github]]
-team-name = "moderation"
+team-name = "mods"
 orgs = ["rust-lang", "rust-lang-nursery"]
 
-[rfcbot]
-label = "T-moderation"
-name = "Moderation"
-ping = "rust-lang/moderation"
-
 [website]
-page = "moderation"
-name = "Moderation team"
-description = "Helping uphold the code of conduct and community standards and mediating conflicts between team members"
-email = "rust-mods@rust-lang.org"
-repo = "https://github.com/rust-lang/moderation-team"
-
-[[lists]]
-address = "rust-mods@rust-lang.org"
-
-[[lists]]
-address = "mods@rust-lang.org"
-
-[[lists]]
-address = "mods-all@rust-lang.org"
-extra-teams = [
-    "mods-venue",
-    "mods-discourse",
-]
+name = "Venue moderators"
+description = "Moderating rust-lang github repositories and the rust-lang zulip"
 
 [[zulip-groups]]
-name = "T-moderation"
+name = "T-mods-venue"
