@@ -4,7 +4,7 @@ description = "Rust teams structure"
 bots = []
 
 [access.teams]
-mods = "write"
+moderation = "write"
 team-repo-admins = "write"
 infra = "triage"
 

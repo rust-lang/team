@@ -4,4 +4,4 @@ description = "Home of the Rust Moderation team."
 bots = []
 
 [access.teams]
-mods = "write"
+moderation = "write"
