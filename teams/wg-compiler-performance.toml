@@ -6,18 +6,18 @@ kind = "working-group"
 leads = ["Mark-Simulacrum"]
 members = [
     "Mark-Simulacrum",
-    "rylev",
     "tgnottingham",
     "Kobzol",
     "lqd",
     "nnethercote",
     "Zoxc",
     "panstromek",
-    "Jamesbarford"
+    "Jamesbarford",
 ]
 alumni = [
     "michaelwoerister",
     "pnkfelix",
+    "rylev",
     "wesleywiser",
 ]
 

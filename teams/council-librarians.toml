@@ -3,7 +3,8 @@ kind = "marker-team"
 
 [people]
 leads = []
-members = ["rylev", "ehuss"]
+members = ["ehuss"]
+alumni = ["rylev"]
 
 [[github]]
 orgs = ["rust-lang"]
