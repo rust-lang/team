@@ -56,6 +56,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_member_roles,
     validate_admin_access,
     validate_website,
+    validate_team_name_matches_github_team,
 ];
 
 #[allow(clippy::type_complexity)]
@@ -1110,4 +1111,23 @@ fn validate_website(data: &Data, errors: &mut Vec<String>) {
         }
         Ok(())
     })
+}
+
+/// Ensure team name equals the name of the first GitHub team
+fn validate_team_name_matches_github_team(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, _| {
+        let github_teams = team.github_teams(data)?;
+        if let Some(first_github_team) = github_teams.first() {
+            let should_ignore_team =
+                team.name().starts_with("project-") || team.name().starts_with("wg-");
+            if !should_ignore_team && team.name() != first_github_team.name {
+                bail!(
+                    "team name `{}` should match the first GitHub team-name `{}`",
+                    team.name(),
+                    first_github_team.name
+                );
+            }
+        }
+        Ok(())
+    });
 }
