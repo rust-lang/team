@@ -3,11 +3,9 @@ subteam-of = "devtools"
 
 [people]
 leads = [
-    "rbtcollins",
     "rami3l",
 ]
 members = [
-    "rbtcollins",
     "djc",
     "rami3l",
     "ChrisDenton",
@@ -18,6 +16,7 @@ alumni = [
     "kinnison",
     "0xPoe",
     "dwijnand",
+    "rbtcollins",
 ]
 
 [website]
