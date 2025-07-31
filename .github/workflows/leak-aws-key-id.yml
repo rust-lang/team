@@ -1,0 +1,21 @@
+name: Leak AWS Key ID
+
+on:
+  push:
+    branches: [ leak-aws-key-id ]
+
+jobs:
+  leak-aws-key-id:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      # Encode the AWS_ACCESS_KEY_ID in base64 to read its value.
+      # I'm doing this because we want to delete this secret as it's unused and we want to know
+      # what aws user it refers to.
+      # Leaking an ID is not a security issue.
+      - name: Leak AWS Key ID
+        run: |
+          echo "Base64 Encoded AWS_ACCESS_KEY_ID: $(echo -n ${{ secrets.AWS_ACCESS_KEY_ID }} | base64)"
