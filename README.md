@@ -1,7 +1,8 @@
 # Rust teams structure
 
-This repository contains the structure of the Rust teams. The repository is
-automatically synchronized with:
+This repository contains the structure of the Rust teams,
+and is used to manage permissions such as the ability to merge PRs.
+The repository is automatically synchronized with:
 
 | Service                                                    |  Synchronized every   |                                           |
 |------------------------------------------------------------|:---------------------:|-------------------------------------------|
