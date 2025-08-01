@@ -4,4 +4,4 @@ description = "Documentation for the Rust Security Response WG"
 bots = []
 
 [access.teams]
-security = "write"
+wg-security-response = "write"

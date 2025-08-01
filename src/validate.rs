@@ -2,9 +2,10 @@ use crate::api::github::GitHubApi;
 use crate::api::zulip::ZulipApi;
 use crate::data::Data;
 use crate::schema::{
-    Bot, Email, MergeBot, Permissions, RepoPermission, Team, TeamKind, TeamPeople, ZulipMember,
+    Bot, Email, MergeBot, Permissions, Repo, RepoPermission, Team, TeamKind, TeamPeople,
+    ZulipMember,
 };
-use anyhow::{bail, Error};
+use anyhow::{bail, Context as _, Error};
 use log::{error, warn};
 use regex::Regex;
 use std::collections::hash_map::{Entry, HashMap};
@@ -854,7 +855,6 @@ fn validate_zulip_stream_extra_people(data: &Data, errors: &mut Vec<String>) {
 /// Ensure repos reference valid teams and that they are unique
 fn validate_repos(data: &Data, errors: &mut Vec<String>) {
     let allowed_orgs = data.config().allowed_github_orgs();
-    let github_teams = data.github_teams();
     let mut repo_map = HashSet::new();
 
     wrapper(data.all_repos(), errors, |repo, _| {
@@ -870,20 +870,9 @@ fn validate_repos(data: &Data, errors: &mut Vec<String>) {
             );
         }
         for team_name in repo.access.teams.keys() {
-            if !github_teams.contains(&(repo.org.clone(), team_name.clone())) {
-                let error_reason = if data.is_team_archived(team_name, &repo.org) {
-                    "is archived. Please remove the team access from the `[access.teams]` section of the repo"
-                } else {
-                    "is not present in the `/teams/` folder"
-                };
-
-                bail!(
-                    "Access for the repo {}/{} is invalid: the team '{}/{team_name}' {error_reason}.",
-                    repo.org,
-                    repo.name,
-                    repo.org,
-                );
-            }
+            check_team_access(data, repo, team_name).with_context(|| {
+                format!("Access for the repo {}/{} is invalid", repo.org, repo.name)
+            })?;
         }
 
         for name in repo.access.individuals.keys() {
@@ -898,6 +887,23 @@ fn validate_repos(data: &Data, errors: &mut Vec<String>) {
         }
         Ok(())
     });
+}
+
+fn check_team_access(data: &Data, repo: &Repo, team_name: &str) -> anyhow::Result<()> {
+    let team = data
+        .team(team_name)
+        .with_context(|| format!("The file 'teams/{team_name}.toml' does not exist."))?;
+    if data.is_team_archived(team.name(), &repo.org) {
+        bail!("The team '{}/{team_name}' is archived. Please remove the team access from the `[access.teams]` section of the repo", repo.org);
+    }
+
+    let are_gh_teams_in_org = team.github_teams(data)?.iter().any(|t| t.org == repo.org);
+    anyhow::ensure!(
+        are_gh_teams_in_org,
+        "The team '{team_name}' does not have any GitHub teams in the org '{}'.",
+        repo.org
+    );
+    Ok(())
 }
 
 fn validate_archived_repos(data: &Data, errors: &mut Vec<String>) {

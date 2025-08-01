@@ -4,4 +4,4 @@ description = "The Rustc Trait System Refactor Initiative"
 bots = []
 
 [access.teams]
-initiative-trait-system-refactor = "maintain"
+project-trait-system-refactor = "maintain"
