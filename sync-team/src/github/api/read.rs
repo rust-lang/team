@@ -15,6 +15,9 @@ pub(crate) trait GithubRead {
     /// Get the owners of an org
     fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<u64>>;
 
+    /// Get the members of an org
+    fn org_members(&self, org: &str) -> anyhow::Result<HashMap<u64, String>>;
+
     /// Get all teams associated with a org
     ///
     /// Returns a list of tuples of team name and slug
@@ -117,6 +120,26 @@ impl GithubRead for GitHubApiRead {
             },
         )?;
         Ok(owners)
+    }
+
+    fn org_members(&self, org: &str) -> anyhow::Result<HashMap<u64, String>> {
+        #[derive(serde::Deserialize, Eq, PartialEq, Hash)]
+        struct User {
+            id: u64,
+            login: String,
+        }
+        let mut members = HashMap::new();
+        self.client.rest_paginated(
+            &Method::GET,
+            &GitHubUrl::orgs(org, "members")?,
+            |resp: Vec<User>| {
+                for user in resp {
+                    members.insert(user.id, user.login);
+                }
+                Ok(())
+            },
+        )?;
+        Ok(members)
     }
 
     fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
