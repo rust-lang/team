@@ -368,6 +368,10 @@ Admins cannot override these branch protections. If an admin needs to do that, t
 pattern = "master"
 # Which CI checks to are required for merging (optional)
 # Cannot be set if `pr-required` is `false`.
+#
+# For regular GitHub Actions, this is the name of the *job* that is required,
+# not the name of the workflow or the workflow filename. The name of the job
+# defaults to its YAML key name, or can be overridden with the `name` field.
 ci-checks = ["CI"]
 # Whether new commits after a reviewer's approval of a PR
 # merging into this branch require another review.
