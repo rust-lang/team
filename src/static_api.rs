@@ -93,23 +93,35 @@ impl<'a> Generator<'a> {
                         Bot::Renovate => v1::Bot::Renovate,
                     })
                     .collect(),
-                teams: r
-                    .access
-                    .teams
-                    .iter()
-                    .map(|(name, permission)| {
+                teams: {
+                    let mut teams = Vec::new();
+                    for (team_name, permission) in &r.access.teams {
                         let permission = match permission {
                             RepoPermission::Admin => v1::RepoPermission::Admin,
                             RepoPermission::Write => v1::RepoPermission::Write,
                             RepoPermission::Maintain => v1::RepoPermission::Maintain,
                             RepoPermission::Triage => v1::RepoPermission::Triage,
                         };
-                        v1::RepoTeam {
-                            name: name.clone(),
-                            permission,
+
+                        // Look up the team by name and get all its GitHub teams
+                        let team = self.data.team(team_name).with_context(|| {
+                            format!("failed to find team '{team_name}' in teams directory")
+                        })?;
+                        let github_teams = team.github_teams(self.data).with_context(|| {
+                            format!("failed to get GitHub teams for '{team_name}'")
+                        })?;
+                        for gh_team in github_teams {
+                            if gh_team.org == r.org {
+                                let new_team = v1::RepoTeam {
+                                    name: gh_team.name.to_string(),
+                                    permission: permission.clone(),
+                                };
+                                teams.push(new_team);
+                            }
                         }
-                    })
-                    .collect(),
+                    }
+                    teams
+                },
                 members: r
                     .access
                     .individuals

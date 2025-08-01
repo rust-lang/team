@@ -4,4 +4,4 @@ description = "Initiative to support upcasting dyn Trait values to supertraits"
 bots = []
 
 [access.teams]
-initiative-dyn-upcasting = "write"
+project-dyn-upcasting = "write"

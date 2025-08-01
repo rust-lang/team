@@ -329,6 +329,10 @@ See [GitHub's documentation][github-roles] for information on what each role is 
 # - "write"
 # - "maintain"
 # - "admin"
+#
+# Instead of showing the team name, the API contains the names of all the GitHub teams
+# in the `[[github]]` list of the team TOML file.
+# In other words, the teams are "expanded" to their corresponding GitHub teams.
 [access.teams]
 compiler = "write"
 
@@ -365,8 +369,8 @@ pattern = "master"
 # Which CI checks to are required for merging (optional)
 # Cannot be set if `pr-required` is `false`.
 ci-checks = ["CI"]
-# Whether new commits after a reviewer's approval of a PR 
-# merging into this branch require another review. 
+# Whether new commits after a reviewer's approval of a PR
+# merging into this branch require another review.
 # (optional - default `false`)
 dismiss-stale-review = false
 # Is a PR required when making changes to this branch?

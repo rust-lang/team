@@ -4,4 +4,4 @@ description = "Lang team negative impls initiative"
 bots = []
 
 [access.teams]
-initiative-negative-impls = "write"
+project-negative-impls = "write"

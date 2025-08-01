@@ -5,4 +5,4 @@ homepage = "https://rust-lang.github.io/generic-associated-types-initiative/"
 bots = []
 
 [access.teams]
-initiative-generic-associated-types = "write"
+project-generic-associated-types = "write"

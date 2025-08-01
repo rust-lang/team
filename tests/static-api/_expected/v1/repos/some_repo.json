@@ -8,6 +8,10 @@
     {
       "name": "foo",
       "permission": "maintain"
+    },
+    {
+      "name": "renamed-team",
+      "permission": "maintain"
     }
   ],
   "members": [],

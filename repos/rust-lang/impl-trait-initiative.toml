@@ -5,4 +5,4 @@ homepage = "https://rust-lang.github.io/impl-trait-initiative/"
 bots = []
 
 [access.teams]
-initiative-impl-trait = "maintain"
+project-impl-trait = "maintain"

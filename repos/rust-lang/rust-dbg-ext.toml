@@ -4,4 +4,4 @@ description = ""
 bots = []
 
 [access.teams]
-initiative-async-crashdump-debugging = "maintain"
+project-async-crashdump-debugging = "maintain"
