@@ -7,17 +7,17 @@ leads = ["nikomatsakis", "jackh726"]
 members = [
     "nikomatsakis",
     "jackh726",
-    "Nadrieril",
     "ernestkissiedu",
-    "baumanj",
-    "joshtriplett",
-    "workingjubilee",
     "timClicks",
     "PLeVasseur",
 ]
 alumni = [
+    "baumanj",
+    "joshtriplett",
+    "Nadrieril",
     "spastorino",
     "traviscross",
+    "workingjubilee",
 ]
 
 [[github]]
