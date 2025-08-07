@@ -4,7 +4,7 @@ subteam-of = "lang"
 [people]
 leads = ["nikomatsakis"]
 members = [
-    { github = "JoelMarcey", roles = ["spec-editor"] },
+    "JoelMarcey",
     "ehuss",
     "traviscross",
     "nikomatsakis",
