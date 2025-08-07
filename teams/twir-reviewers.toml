@@ -5,14 +5,13 @@ subteam-of = "twir"
 leads = ["nellshamrell"]
 members = [
     "nellshamrell",
-    "cdmistman",
-    "bennyvasquez",
     "ericseppanen",
     "extrawurst",
-    "andrewpollack",
     "mariannegoldin",
     "U007D",
-    "bdillo"
+    "bdillo",
+    "bnchi",
+    "KannanPalani57"
 ]
 alumni = []
 
