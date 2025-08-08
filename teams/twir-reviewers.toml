@@ -13,7 +13,11 @@ members = [
     "bnchi",
     "KannanPalani57"
 ]
-alumni = []
+alumni = [
+    "andrewpollack",
+    "bennyvasquez",
+    "cdmistman",
+]
 
 [[github]]
 orgs = ["rust-lang"]
