@@ -495,6 +495,7 @@ fn bot_user_name(bot: &Bot) -> Option<&str> {
         Bot::Glacierbot => Some("rust-lang-glacier-bot"),
         Bot::LogAnalyzer => Some("rust-log-analyzer"),
         Bot::Renovate => None,
+        Bot::HerokuDeployAccess => Some("rust-heroku-deploy-access"),
     }
 }
 
