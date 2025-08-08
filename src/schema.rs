@@ -847,6 +847,7 @@ pub(crate) enum Bot {
     Glacierbot,
     LogAnalyzer,
     Renovate,
+    HerokuDeployAccess,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
