@@ -1,0 +1,9 @@
+name = "initial-designer"
+kind = "marker-team"
+
+[people]
+leads = []
+members = []
+alumni = [
+    "graydon",
+]
