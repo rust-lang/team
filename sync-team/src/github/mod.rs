@@ -425,11 +425,16 @@ fn calculate_permission_diffs(
         permissions.push(diff);
     }
     // Bot permissions
-    let bots = expected_repo.bots.iter().filter_map(|b| {
-        let bot_user_name = bot_user_name(b)?;
-        actual_teams.remove(bot_user_name);
-        Some((bot_user_name, RepoPermission::Write))
-    });
+    let bots = expected_repo
+        .bots
+        .iter()
+        .filter_map(|b| match BotDetails::from(b) {
+            BotDetails::User { name, permission } => {
+                actual_teams.remove(name);
+                Some((name, permission))
+            }
+            BotDetails::GitHubApp => None,
+        });
     // Member permissions
     let members = expected_repo
         .members
@@ -482,20 +487,34 @@ fn calculate_permission_diffs(
     Ok(permissions)
 }
 
-/// Returns `None` if the bot is not an actual bot user, but rather a GitHub app.
-fn bot_user_name(bot: &Bot) -> Option<&str> {
-    match bot {
-        // FIXME: set this to `None` once homu is removed completely
-        Bot::Bors => Some("bors"),
-        Bot::Highfive => Some("rust-highfive"),
-        Bot::RustTimer => Some("rust-timer"),
-        Bot::Rustbot => Some("rustbot"),
-        Bot::Rfcbot => Some("rfcbot"),
-        Bot::Craterbot => Some("craterbot"),
-        Bot::Glacierbot => Some("rust-lang-glacier-bot"),
-        Bot::LogAnalyzer => Some("rust-log-analyzer"),
-        Bot::Renovate => None,
-        Bot::HerokuDeployAccess => Some("rust-heroku-deploy-access"),
+enum BotDetails {
+    User {
+        name: &'static str,
+        permission: RepoPermission,
+    },
+    GitHubApp,
+}
+
+impl From<&Bot> for BotDetails {
+    fn from(bot: &Bot) -> Self {
+        let user = |name, permission| BotDetails::User { name, permission };
+        let write_access = |name| user(name, RepoPermission::Write);
+        let admin_access = |name| user(name, RepoPermission::Admin);
+
+        match bot {
+            Bot::Bors => write_access("bors"),
+            Bot::Highfive => write_access("rust-highfive"),
+            Bot::Rustbot => write_access("rustbot"),
+            Bot::RustTimer => write_access("rust-timer"),
+            Bot::Rfcbot => write_access("rfcbot"),
+            Bot::Craterbot => write_access("craterbot"),
+            Bot::Glacierbot => write_access("rust-lang-glacier-bot"),
+            Bot::LogAnalyzer => write_access("rust-log-analyzer"),
+            Bot::Renovate => BotDetails::GitHubApp,
+            // Unfortunately linking to Heroku requires admin access, since the integration creates
+            // GitHub webhooks, which require admin access.
+            Bot::HerokuDeployAccess => admin_access("rust-heroku-deploy-access"),
+        }
     }
 }
 
