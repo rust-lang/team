@@ -8,11 +8,12 @@ members = [
     "emilio",
     "fitzgen",
     "pvdrz",
-    "tshepang",
     "kulp",
     "ojeda",
 ]
-alumni = []
+alumni = [
+    "tshepang",
+]
 
 [website]
 name = "Bindgen working group"
