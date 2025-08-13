@@ -4,8 +4,8 @@ kind = "working-group"
 
 [people]
 leads = ["oli-obk"]
-members = ["oli-obk", "eddyb", "davidtwco", "wesleywiser", "vertexclique", "JakobDegen", "dianqk"]
-alumni = ["spastorino"]
+members = ["oli-obk", "eddyb", "wesleywiser", "vertexclique", "JakobDegen", "dianqk"]
+alumni = ["davidtwco", "spastorino"]
 
 [[github]]
 orgs = ["rust-lang"]

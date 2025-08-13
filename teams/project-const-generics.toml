@@ -7,13 +7,13 @@ leads = ["BoxyUwU", "lcnr"]
 members = [
     "lcnr",
     "nikomatsakis",
-    "davidtwco",
     "oli-obk",
     "BoxyUwU",
     "camelid",
     "compiler-errors",
 ]
 alumni = [
+    "davidtwco",
     "varkor",
     "withoutboats",
 ]
