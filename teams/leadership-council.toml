@@ -60,5 +60,11 @@ description = "Moderation team"
 [[lists]]
 address = "council@rust-lang.org"
 
+[[lists]]
+address = "contact@rust-lang.org"
+extra-emails = [
+    "council@rust-lang.org",
+]
+
 [[zulip-groups]]
 name = "council"
