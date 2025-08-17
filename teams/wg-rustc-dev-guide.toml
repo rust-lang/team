@@ -14,7 +14,16 @@ members = [
     "jieyouxu",
     "jyn514",
 ]
-alumni = ["LeSeulArtichaut", "Nashenas88", "amanjeev", "chrissimpkins", "mark-i-m", "rylev", "togiberlin", "pierwill"]
+alumni = [
+    "LeSeulArtichaut",
+    "Nashenas88",
+    "amanjeev",
+    "chrissimpkins",
+    "mark-i-m",
+    "rylev",
+    "togiberlin",
+    "pierwill",
+]
 
 [[github]]
 orgs = ["rust-lang"]
