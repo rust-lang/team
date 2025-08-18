@@ -5,16 +5,25 @@ kind = "working-group"
 [people]
 leads = ["BoxyUwU", "tshepang"]
 members = [
+    "BoxyUwU",
     "JohnTitor",
     "camelid",
-    "igaray",
-    "spastorino",
-    "tshepang",
-    "BoxyUwU",
     "jieyouxu",
     "jyn514",
+    "spastorino",
+    "tshepang",
 ]
-alumni = ["LeSeulArtichaut", "Nashenas88", "amanjeev", "chrissimpkins", "mark-i-m", "rylev", "togiberlin", "pierwill"]
+alumni = [
+    "LeSeulArtichaut",
+    "Nashenas88",
+    "amanjeev",
+    "chrissimpkins",
+    "igaray",
+    "mark-i-m",
+    "pierwill",
+    "rylev",
+    "togiberlin",
+]
 
 [[github]]
 orgs = ["rust-lang"]
