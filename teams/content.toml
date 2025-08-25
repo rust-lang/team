@@ -1,0 +1,34 @@
+name = "content"
+subteam-of = "launching-pad"
+
+[people]
+leads = [
+    "PLeVasseur",
+    "traviscross",
+]
+members = [
+    "traviscross",
+    "PLeVasseur",
+    "tomassedovic",
+    "MerrimanInd",
+    "cldershem",
+    "LoriLorusso",
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[rfcbot]
+label = "T-content"
+name = "Content"
+ping = "rust-lang/content"
+
+[website]
+name = "Content team"
+description = "Produces publishable content"
+zulip-stream = "t-content"
+repo = "https://github.com/rust-lang/content-team"
+
+[[zulip-groups]]
+name = "T-content"

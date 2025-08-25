@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "content-team"
+description = "Home of the Rust Content Team"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+content = "maintain"
