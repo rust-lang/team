@@ -6,6 +6,10 @@ allowed-github-orgs = [
     "test-org",
 ]
 
+independent-github-orgs = [
+    "org-independent",
+]
+
 permissions-bors-repos = [
     "crates-io",
     "crater",
@@ -13,4 +17,8 @@ permissions-bors-repos = [
 
 permissions-bools = [
     "crater",
+]
+
+special-org-members = [
+    "test-bot",
 ]

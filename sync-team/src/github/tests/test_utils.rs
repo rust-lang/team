@@ -1,16 +1,18 @@
 use std::collections::{BTreeSet, HashMap, HashSet};
 
 use derive_builder::Builder;
-use rust_team_data::v1;
 use rust_team_data::v1::{
-    Bot, BranchProtectionMode, GitHubTeam, MergeBot, Person, RepoPermission, TeamGitHub, TeamKind,
+    self, Bot, BranchProtectionMode, GitHubTeam, MergeBot, Person, RepoPermission, TeamGitHub,
+    TeamKind,
 };
 
+use crate::Config;
 use crate::github::api::{
     BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::github::{
-    RepoDiff, SyncGitHub, TeamDiff, api, construct_branch_protection, convert_permission,
+    OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_branch_protection,
+    convert_permission,
 };
 
 pub const DEFAULT_ORG: &str = "rust-lang";
@@ -27,6 +29,7 @@ pub struct DataModel {
     people: Vec<Person>,
     teams: Vec<TeamData>,
     repos: Vec<RepoData>,
+    config: Config,
 }
 
 impl DataModel {
@@ -62,6 +65,14 @@ impl DataModel {
             .iter_mut()
             .find(|r| r.name == name)
             .expect("Repo not found")
+    }
+
+    pub fn add_allowed_org_member(&mut self, member: &str) {
+        self.config.special_org_members.insert(member.to_string());
+    }
+
+    pub fn add_independent_github_org(&mut self, org: &str) {
+        self.config.independent_github_orgs.insert(org.to_string());
     }
 
     /// Creates a GitHub model from the current team data mock.
@@ -105,7 +116,13 @@ impl DataModel {
                     slug: gh_team.name.clone(),
                 });
 
-                org.members.extend(gh_team.members.iter().copied());
+                org.members.extend(
+                    gh_team
+                        .members
+                        .iter()
+                        .copied()
+                        .map(|user_id| (user_id, users[&user_id].clone())),
+                );
             }
         }
 
@@ -168,6 +185,12 @@ impl DataModel {
         GithubMock { users, orgs }
     }
 
+    pub fn diff_org_membership(&self, github: GithubMock) -> Vec<OrgMembershipDiff> {
+        self.create_sync(github)
+            .diff_org_memberships()
+            .expect("Cannot diff org membership")
+    }
+
     pub fn diff_teams(&self, github: GithubMock) -> Vec<TeamDiff> {
         self.create_sync(github)
             .diff_teams()
@@ -183,8 +206,9 @@ impl DataModel {
     fn create_sync(&self, github: GithubMock) -> SyncGitHub {
         let teams = self.teams.iter().cloned().map(|t| t.into()).collect();
         let repos = self.repos.iter().cloned().map(|r| r.into()).collect();
+        let config = self.config.clone();
 
-        SyncGitHub::new(Box::new(github), teams, repos).expect("Cannot create SyncGitHub")
+        SyncGitHub::new(Box::new(github), teams, repos, config).expect("Cannot create SyncGitHub")
     }
 }
 
@@ -418,6 +442,16 @@ pub struct GithubMock {
 }
 
 impl GithubMock {
+    pub fn add_member(&mut self, org: &str, username: &str) {
+        let user_id = self.users.len() as UserId;
+        self.users.insert(user_id, username.to_string());
+        self.orgs
+            .entry(org.to_string())
+            .or_default()
+            .members
+            .insert((user_id, username.to_string()));
+    }
+
     pub fn add_invitation(&mut self, org: &str, repo: &str, user: &str) {
         self.get_org_mut(org)
             .team_invitations
@@ -455,6 +489,10 @@ impl GithubRead for GithubMock {
 
     fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<UserId>> {
         Ok(self.get_org(org).owners.iter().copied().collect())
+    }
+
+    fn org_members(&self, org: &str) -> anyhow::Result<HashMap<u64, String>> {
+        Ok(self.get_org(org).members.iter().cloned().collect())
     }
 
     fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
@@ -549,7 +587,7 @@ impl GithubRead for GithubMock {
 
 #[derive(Default)]
 struct GithubOrg {
-    members: BTreeSet<UserId>,
+    members: BTreeSet<(UserId, String)>,
     owners: BTreeSet<UserId>,
     teams: Vec<Team>,
     // Team name -> list of invited users

@@ -75,6 +75,24 @@
     "roles": [],
     "discord": []
   },
+  "infra-admins": {
+    "name": "infra-admins",
+    "kind": "marker_team",
+    "subteam_of": null,
+    "members": [
+      {
+        "name": "Test Admin",
+        "github": "test-admin",
+        "github_id": 7,
+        "is_lead": false
+      }
+    ],
+    "alumni": [],
+    "github": null,
+    "website_data": null,
+    "roles": [],
+    "discord": []
+  },
   "leaderless": {
     "name": "leaderless",
     "kind": "team",

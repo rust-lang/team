@@ -4,6 +4,8 @@ pub mod team_api;
 mod utils;
 mod zulip;
 
+use std::collections::BTreeSet;
+
 use crate::github::{GitHubApiRead, GitHubWrite, HttpClient, create_diff};
 use crate::team_api::TeamApi;
 use crate::zulip::SyncZulip;
@@ -13,11 +15,18 @@ use secrecy::SecretString;
 
 const USER_AGENT: &str = "rust-lang teams sync (https://github.com/rust-lang/sync-team)";
 
+#[derive(Debug, Clone, Default)]
+pub struct Config {
+    pub special_org_members: BTreeSet<String>,
+    pub independent_github_orgs: BTreeSet<String>,
+}
+
 pub fn run_sync_team(
     team_api: TeamApi,
     services: &[String],
     dry_run: bool,
     only_print_plan: bool,
+    config: Config,
 ) -> anyhow::Result<()> {
     if dry_run {
         warn!("sync-team is running in dry mode, no changes will be applied.");
@@ -31,7 +40,7 @@ pub fn run_sync_team(
                 let gh_read = Box::new(GitHubApiRead::from_client(client.clone())?);
                 let teams = team_api.get_teams()?;
                 let repos = team_api.get_repos()?;
-                let diff = create_diff(gh_read, teams, repos)?;
+                let diff = create_diff(gh_read, teams, repos, config.clone())?;
                 if !diff.is_empty() {
                     info!("{diff}");
                 }

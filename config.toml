@@ -15,6 +15,12 @@ allowed-github-orgs = [
     "rust-analyzer",
 ]
 
+# GitHub organizations where member management is independent
+# and should not be automatically synchronized
+independent-github-orgs = [
+    "rust-embedded",
+]
+
 permissions-bors-repos = [
     "bors-kindergarten",
     "rust",
@@ -26,4 +32,26 @@ permissions-bools = [
     "crates-io-admin",
     "dev-desktop",
     "sync-team-confirmation",
+]
+
+# GitHub accounts that are allowed to stay in the GitHub organizations,
+# even if they may not be members of any team.
+# Note: Infra admins are automatically included from the infra-admins team.
+special-org-members = [
+    # Bots.
+    "bors",
+    "craterbot",
+    "rust-embedded-bot",
+    "rust-highfive",
+    "rust-lang-core-team-agenda-bot",
+    "rust-lang-glacier-bot",
+    "rust-lang-owner",
+    "rust-log-analyzer",
+    "rust-timer",
+    "rustbot",
+
+    # Ferrous systems employees who manage the github sponsors
+    # for rust-analyzer.
+    "MissHolmes",
+    "skade",
 ]
