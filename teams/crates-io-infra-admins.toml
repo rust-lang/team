@@ -1,0 +1,17 @@
+# This team defines which members of the crates-io team have administrative access to the
+# crates.io infrastructure, such as the database.
+
+name = "crates-io-infra-admins"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "carols10cents",
+    "jtgeibel",
+    "Turbo87",
+    "LawnGnome",
+]
+
+[[github]]
+orgs = ["rust-lang"]
