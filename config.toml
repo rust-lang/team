@@ -41,7 +41,9 @@ special-org-members = [
     # Bots.
     "bors",
     "craterbot",
+    "rfcbot",
     "rust-embedded-bot",
+    "rust-heroku-deploy-access",
     "rust-highfive",
     "rust-lang-core-team-agenda-bot",
     "rust-lang-glacier-bot",
