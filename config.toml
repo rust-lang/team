@@ -42,6 +42,7 @@ special-org-members = [
     "bors",
     "craterbot",
     "rfcbot",
+    "rust-rfcbot",
     "rust-embedded-bot",
     "rust-heroku-deploy-access",
     "rust-highfive",
