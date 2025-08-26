@@ -599,7 +599,7 @@ impl From<&Bot> for BotDetails {
             Bot::Highfive => write_access("rust-highfive"),
             Bot::Rustbot => write_access("rustbot"),
             Bot::RustTimer => write_access("rust-timer"),
-            Bot::Rfcbot => write_access("rfcbot"),
+            Bot::Rfcbot => write_access("rust-rfcbot"),
             Bot::Craterbot => write_access("craterbot"),
             Bot::Glacierbot => write_access("rust-lang-glacier-bot"),
             Bot::LogAnalyzer => write_access("rust-log-analyzer"),
