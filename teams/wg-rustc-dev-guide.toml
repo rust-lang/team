@@ -25,6 +25,10 @@ alumni = [
     "togiberlin",
 ]
 
+[leads-permissions]
+# Intended primarily for subtree syncs.
+bors.rust.review = true
+
 [[github]]
 orgs = ["rust-lang"]
 
