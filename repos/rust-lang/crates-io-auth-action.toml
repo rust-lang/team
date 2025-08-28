@@ -4,6 +4,7 @@ description = "Get a crates.io temporary access token"
 bots = []
 
 [access.teams]
+crates-io-infra-admins = "write"
 infra-admins = "write"
 infra = "triage"
 

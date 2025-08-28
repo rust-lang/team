@@ -209,6 +209,7 @@ pub enum Bot {
     Glacierbot,
     LogAnalyzer,
     Renovate,
+    HerokuDeployAccess,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

@@ -3,15 +3,18 @@ pub(crate) use crate::permissions::Permissions;
 use anyhow::{bail, format_err, Error};
 use serde::de::{Deserialize, Deserializer};
 use serde_untagged::UntaggedEnumVisitor;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeSet, HashMap, HashSet};
 
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Config {
     allowed_mailing_lists_domains: HashSet<String>,
     allowed_github_orgs: HashSet<String>,
+    independent_github_orgs: BTreeSet<String>,
     permissions_bors_repos: HashSet<String>,
     permissions_bools: HashSet<String>,
+    // Use a BTreeSet for consistent ordering in tests
+    special_org_members: BTreeSet<String>,
 }
 
 impl Config {
@@ -29,6 +32,14 @@ impl Config {
 
     pub(crate) fn permissions_bools(&self) -> &HashSet<String> {
         &self.permissions_bools
+    }
+
+    pub(crate) fn independent_github_orgs(&self) -> &BTreeSet<String> {
+        &self.independent_github_orgs
+    }
+
+    pub(crate) fn special_org_members(&self) -> &BTreeSet<String> {
+        &self.special_org_members
     }
 }
 
@@ -847,6 +858,7 @@ pub(crate) enum Bot {
     Glacierbot,
     LogAnalyzer,
     Renovate,
+    HerokuDeployAccess,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]

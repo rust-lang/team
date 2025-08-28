@@ -1,7 +1,8 @@
 # Rust teams structure
 
-This repository contains the structure of the Rust teams. The repository is
-automatically synchronized with:
+This repository contains the structure of the Rust teams,
+and is used to manage permissions such as the ability to merge PRs.
+The repository is automatically synchronized with:
 
 | Service                                                    |  Synchronized every   |                                           |
 |------------------------------------------------------------|:---------------------:|-------------------------------------------|
@@ -46,7 +47,11 @@ from all the supported services.
 
 ## Documentation
 
+* [Threat model](docs/threat-model.md)
 * [TOML schema reference](docs/toml-schema.md)
+* [Team maintenance](https://forge.rust-lang.org/infra/team-maintenance.html).
+    * In particular, refer to [*Rules for changes to team repo*](https://forge.rust-lang.org/infra/team-maintenance.html#rules-for-changes-to-team-repo).
+* [Labels applied to issues and PRs](docs/labels.md)
 
 ## Using the CLI tool
 

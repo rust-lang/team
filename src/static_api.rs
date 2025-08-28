@@ -91,6 +91,7 @@ impl<'a> Generator<'a> {
                         Bot::Glacierbot => v1::Bot::Glacierbot,
                         Bot::LogAnalyzer => v1::Bot::LogAnalyzer,
                         Bot::Renovate => v1::Bot::Renovate,
+                        Bot::HerokuDeployAccess => v1::Bot::HerokuDeployAccess,
                     })
                     .collect(),
                 teams: {

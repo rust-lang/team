@@ -6,7 +6,6 @@ kind = "working-group"
 leads = ["Mark-Simulacrum"]
 members = [
     "Mark-Simulacrum",
-    "tgnottingham",
     "Kobzol",
     "lqd",
     "nnethercote",
@@ -19,6 +18,7 @@ alumni = [
     "pnkfelix",
     "rylev",
     "wesleywiser",
+    "tgnottingham",
 ]
 
 [[github]]

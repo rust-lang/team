@@ -2,21 +2,21 @@ name = "lang-docs"
 subteam-of = "lang"
 
 [people]
-leads = ["ehuss", "JohnTitor"]
+leads = ["ehuss", "traviscross"]
 members = [
     "ehuss",
-    "Gankra",
-    "Havvy",
     "JohnTitor",
-    "matthewjasper",
     "traviscross",
 ]
 alumni = [
     "Centril",
+    "Gankra",
+    "Havvy",
+    "matthewjasper",
 ]
 
 [[github]]
-orgs = ["rust-lang"]
+orgs = ["rust-lang", "rust-lang-nursery"]
 
 [website]
 name = "lang-docs team"

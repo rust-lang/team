@@ -1,7 +1,0 @@
-org = "rust-lang"
-name = "discord-mods-bot"
-description = "discord moderation bot"
-bots = []
-
-[access.teams]
-mods-venue = "maintain"

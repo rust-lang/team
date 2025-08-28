@@ -5,17 +5,20 @@ subteam-of = "twir"
 leads = ["nellshamrell"]
 members = [
     "nellshamrell",
-    "cdmistman",
-    "bennyvasquez",
     "ericseppanen",
     "extrawurst",
-    "andrewpollack",
     "mariannegoldin",
     "U007D",
     "bdillo",
     "opeolluwa",
+    "bnchi",
+    "KannanPalani57"
 ]
-alumni = []
+alumni = [
+    "andrewpollack",
+    "bennyvasquez",
+    "cdmistman",
+]
 
 [[github]]
 orgs = ["rust-lang"]

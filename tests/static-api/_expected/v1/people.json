@@ -1,5 +1,10 @@
 {
   "people": {
+    "test-admin": {
+      "name": "Test Admin",
+      "email": "test-admin@example.com",
+      "github_id": 7
+    },
     "user-0": {
       "name": "Zeroth user",
       "email": "user0@example.com",
