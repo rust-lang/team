@@ -65,17 +65,6 @@ extra-people = [
     "arshiamufti",
 ]
 
-[[lists]]
-address = "rust-all-hands@rust-lang.org"
-include-team-members = false
-extra-people = [
-    "Manishearth",
-    "nikomatsakis",
-    "Dylan-DPC",
-    "spastorino",
-    "skade",
-]
-
 [[discord-roles]]
 name = "community-team"
 color = "#c27c0e"
