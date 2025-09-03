@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "project-goal-reference-expansion"
+description = "Project Goal coordination repository for expansion of the Rust Reference"
+homepage = "https://github.com/rust-lang/rust-project-goals/blob/main/src/2025h2/reference-expansion.md"
+bots = []
+
+[access.teams]
+project-goal-reference-expansion = "write"
