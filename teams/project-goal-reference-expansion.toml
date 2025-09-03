@@ -1,0 +1,33 @@
+name = "project-goal-reference-expansion"
+kind = "project-group"
+subteam-of = "lang-docs"
+
+[people]
+leads = [
+    "joshtriplett",
+    "jackh726",
+]
+members = [
+    "joshtriplett",
+    "jackh726",
+    "Amanieu",
+    "GuillaumeGomez",
+    "SparrowLii",
+    "borsakv",
+    "epage",
+    "lcnr",
+    "lucarlig",
+    "m-ou-se",
+    "midiareshadi",
+    "petrochenkov",
+    "yaahc",
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+team-name = "project-goal-reference-expansion"
+
+[website]
+name = "Project Goal for expansion of the Rust Reference"
+description = "Project Goal for expansion of the Rust Reference"
