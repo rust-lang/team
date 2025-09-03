@@ -31,3 +31,6 @@ extra-emails = [
 
 [[discord-roles]]
 name = "WGs and Teams"
+
+[[zulip-groups]]
+name = "T-all"
