@@ -728,18 +728,29 @@ fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
         if groups.is_empty() || groups.iter().all(|g| !g.includes_team_members()) {
             return Ok(());
         }
-        wrapper(team.members(data)?.iter(), errors, |member, _| {
-            if let Some(member) = data.person(member) {
-                if member.zulip_id().is_none() {
-                    bail!(
-                        "person `{}` in '{}' is a member of a Zulip user group but has no Zulip id",
-                        member.github(),
-                        team.name()
-                    );
+
+        for group in groups {
+            wrapper(group.members().iter(), errors, |member, _| {
+                match member {
+                    ZulipMember::MemberWithId { .. } | ZulipMember::JustId(_) => {
+                        // Okay, have zulip IDs.
+                    }
+                    ZulipMember::MemberWithoutId { github } => {
+                        // Bad, only github handle, no zulip ID, even though included in zulip user
+                        // group
+                        bail!(
+                            "person `{}` in '{}' is a member of a Zulip user group '{}' but has no \
+                            Zulip id",
+                            github,
+                            team.name(),
+                            group.name()
+                        );
+                    }
                 }
-            }
-            Ok(())
-        });
+                Ok(())
+            });
+        }
+
         Ok(())
     });
 }
@@ -752,6 +763,7 @@ fn validate_zulip_stream_ids(data: &Data, errors: &mut Vec<String>) {
         if streams.is_empty() || streams.iter().all(|s| !s.includes_team_members()) {
             return Ok(());
         }
+
         wrapper(team.members(data)?.iter(), errors, |member, _| {
             if let Some(member) = data.person(member) {
                 if member.zulip_id().is_none() {
