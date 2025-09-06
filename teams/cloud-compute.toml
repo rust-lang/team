@@ -33,3 +33,7 @@ orgs = ["rust-lang"]
 
 [[zulip-groups]]
 name = "cloud-compute"
+excluded-people = [
+    "Kivooeo",
+    "asquared31415",
+]
