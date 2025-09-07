@@ -4,7 +4,8 @@ description = "Tooling to publish Rust releases."
 bots = []
 
 [access.teams]
-infra = "write"
+infra = "triage"
+infra-admins = "write"
 
 [[branch-protections]]
 pattern = "master"
