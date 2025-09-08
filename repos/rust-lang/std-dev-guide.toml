@@ -8,7 +8,7 @@ bots = ["rustbot"]
 libs-contributors = "write"
 libs-api = "write"
 libs = "maintain"
-wg-rustc-dev-guide = "write"
+rustc-dev-guide = "write"
 
 [[branch-protections]]
 pattern = "master"

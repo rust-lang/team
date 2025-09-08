@@ -16,7 +16,7 @@ libs-api = "write"
 libs-contributors = "write"
 rustdoc = "write"
 rustdoc-frontend = "write"
-wg-rustc-dev-guide = "maintain"
+rustc-dev-guide = "maintain"
 
 [[branch-protections]]
 pattern = "master"
