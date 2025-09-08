@@ -1,6 +1,5 @@
-name = "wg-rustc-dev-guide"
+name = "rustc-dev-guide"
 subteam-of = "compiler"
-kind = "working-group"
 
 [people]
 leads = ["BoxyUwU", "tshepang"]
@@ -39,4 +38,4 @@ repo = "https://forge.rust-lang.org/compiler/working-areas.html"
 zulip-stream = "t-compiler/rustc-dev-guide"
 
 [[zulip-groups]]
-name = "WG-rustc-dev-guide"
+name = "T-rustc-dev-guide"
