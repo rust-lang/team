@@ -38,9 +38,10 @@ members = [
     "yaahc",
 ]
 included-teams = []
+alumni = [
+    "veluca93"
+]
 
 [[github]]
 orgs = ["rust-lang"]
 
-[[lists]]
-address = "goal-owners@rust-lang.org"
