@@ -11,7 +11,7 @@ website = "maintain"
 release = "write"
 
 [[branch-protections]]
-pattern = "master"
+pattern = "main"
 ci-checks = [
     "lint",
     "build",
