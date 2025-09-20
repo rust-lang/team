@@ -4,7 +4,7 @@ use anyhow::{ensure, Context as _, Error};
 use indexmap::IndexMap;
 use log::info;
 use rust_team_data::v1;
-use rust_team_data::v1::BranchProtectionMode;
+use rust_team_data::v1::{BranchProtectionMode, RepoMember};
 use std::collections::HashMap;
 use std::path::Path;
 
@@ -121,25 +121,30 @@ impl<'a> Generator<'a> {
                             }
                         }
                     }
+                    teams.sort_by_key(|t| t.name.clone());
                     teams
                 },
-                members: r
-                    .access
-                    .individuals
-                    .iter()
-                    .map(|(name, permission)| {
-                        let permission = match permission {
-                            RepoPermission::Admin => v1::RepoPermission::Admin,
-                            RepoPermission::Write => v1::RepoPermission::Write,
-                            RepoPermission::Maintain => v1::RepoPermission::Maintain,
-                            RepoPermission::Triage => v1::RepoPermission::Triage,
-                        };
-                        v1::RepoMember {
-                            name: name.clone(),
-                            permission,
-                        }
-                    })
-                    .collect(),
+                members: {
+                    let mut members: Vec<RepoMember> = r
+                        .access
+                        .individuals
+                        .iter()
+                        .map(|(name, permission)| {
+                            let permission = match permission {
+                                RepoPermission::Admin => v1::RepoPermission::Admin,
+                                RepoPermission::Write => v1::RepoPermission::Write,
+                                RepoPermission::Maintain => v1::RepoPermission::Maintain,
+                                RepoPermission::Triage => v1::RepoPermission::Triage,
+                            };
+                            v1::RepoMember {
+                                name: name.clone(),
+                                permission,
+                            }
+                        })
+                        .collect();
+                    members.sort_by_key(|m| m.name.clone());
+                    members
+                },
                 branch_protections,
                 archived,
                 auto_merge_enabled: !managed_by_bors,
@@ -204,7 +209,8 @@ impl<'a> Generator<'a> {
             let mut github_teams = team.github_teams(self.data)?;
             github_teams.sort();
 
-            let member_discord_ids = team.discord_ids(self.data)?;
+            let mut member_discord_ids = team.discord_ids(self.data)?;
+            member_discord_ids.sort();
 
             let team_data = v1::Team {
                 name: team.name().into(),
