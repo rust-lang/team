@@ -209,7 +209,8 @@ impl<'a> Generator<'a> {
             let mut github_teams = team.github_teams(self.data)?;
             github_teams.sort();
 
-            let member_discord_ids = team.discord_ids(self.data)?;
+            let mut member_discord_ids = team.discord_ids(self.data)?;
+            member_discord_ids.sort();
 
             let team_data = v1::Team {
                 name: team.name().into(),
