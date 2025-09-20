@@ -1,0 +1,16 @@
+name = "wg-test"
+kind = "working-group"
+subteam-of = "foo"
+
+[people]
+leads = []
+members = []
+alumni = ["user-0", "user-5"]
+
+[[roles]]
+id = "convener"
+description = "Convener"
+
+[website]
+name = "WG Test"
+description = "test"

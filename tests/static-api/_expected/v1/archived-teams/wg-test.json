@@ -1,0 +1,39 @@
+{
+  "name": "wg-test",
+  "kind": "working_group",
+  "subteam_of": "foo",
+  "members": [],
+  "alumni": [
+    {
+      "name": "Zeroth user",
+      "github": "user-0",
+      "github_id": 0,
+      "is_lead": false
+    },
+    {
+      "name": "Fifth user",
+      "github": "user-5",
+      "github_id": 5,
+      "is_lead": false
+    }
+  ],
+  "github": null,
+  "website_data": {
+    "name": "WG Test",
+    "description": "test",
+    "page": "wg-test",
+    "email": null,
+    "repo": null,
+    "discord": null,
+    "zulip_stream": null,
+    "matrix_room": null,
+    "weight": 0
+  },
+  "roles": [
+    {
+      "id": "convener",
+      "description": "Convener"
+    }
+  ],
+  "discord": []
+}
