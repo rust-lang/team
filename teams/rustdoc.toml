@@ -6,7 +6,6 @@ leads = ["GuillaumeGomez"]
 members = [
     "GuillaumeGomez",
     "Manishearth",
-    "Nemo157",
     "camelid",
     "jsha",
     "notriddle",
@@ -15,6 +14,7 @@ members = [
     "lolbinarycat",
 ]
 alumni = [
+    "Nemo157",
     "jyn514",
     "kinnison",
     "ollie27",
