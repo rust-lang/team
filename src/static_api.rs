@@ -121,6 +121,7 @@ impl<'a> Generator<'a> {
                             }
                         }
                     }
+                    teams.sort_by_key(|t| t.name.clone());
                     teams
                 },
                 members: r
