@@ -168,6 +168,17 @@ impl<'a> Generator<'a> {
             self.add(&format!("v1/teams/{name}.json"), team)?;
         }
         self.add("v1/teams.json", &v1::Teams { teams })?;
+
+        let archived_teams = convert_teams(&self.data, self.data.archived_teams())?;
+        for (name, team) in &archived_teams {
+            self.add(&format!("v1/archived-teams/{name}.json"), team)?;
+        }
+        self.add(
+            "v1/archived-teams.json",
+            &v1::Teams {
+                teams: archived_teams,
+            },
+        )?;
         Ok(())
     }
 
