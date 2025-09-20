@@ -29,6 +29,7 @@ atty.workspace = true
 difference.workspace = true
 duct.workspace = true
 walkdir.workspace = true
+dir-diff = "0.3"
 
 [workspace]
 members = [
