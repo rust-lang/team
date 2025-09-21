@@ -77,6 +77,24 @@ fn static_api() -> Result<(), Error> {
     Ok(())
 }
 
+#[test]
+fn static_api_determinism() -> Result<(), Error> {
+    // Ensure that the output of `static-api` is deterministic
+    let dir = tempfile::TempDir::new()?;
+    let reference_dir = dir.path().join("reference");
+    cmd!(bin(), "static-api", &reference_dir).assert_success()?;
+
+    for i in 0..10 {
+        let out = dir.path().join(format!("output-{i}"));
+        cmd!(bin(), "static-api", &out).assert_success()?;
+        assert!(
+            !dir_diff::is_different(&reference_dir, &out)?,
+            "static-api produced non-deterministic output"
+        );
+    }
+    Ok(())
+}
+
 fn bin() -> &'static str {
     env!("CARGO_BIN_EXE_rust-team")
 }
