@@ -49,6 +49,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_zulip_group_ids,
     validate_zulip_group_extra_people,
     validate_unique_zulip_streams,
+    validate_unique_zulip_user_ids,
     validate_zulip_stream_ids,
     validate_zulip_stream_extra_people,
     validate_repos,
@@ -715,6 +716,22 @@ fn validate_zulip_users(data: &Data, zulip: &ZulipApi, errors: &mut Vec<String>)
                 group_name,
                 missing_members.into_iter().collect::<Vec<_>>().join(", ")
             );
+        }
+        Ok(())
+    })
+}
+
+/// Ensure that no two users have the same Zulip ID
+fn validate_unique_zulip_user_ids(data: &Data, errors: &mut Vec<String>) {
+    let mut zulip_ids = HashMap::new();
+    wrapper(data.people(), errors, |person, _| {
+        if let Some(zulip_id) = person.zulip_id() {
+            if let Some(previous) = zulip_ids.insert(zulip_id, person.github()) {
+                return Err(anyhow::anyhow!(
+                    "{previous} and {} have the same Zulip user ID: {zulip_id}",
+                    person.github()
+                ));
+            }
         }
         Ok(())
     })
