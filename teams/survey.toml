@@ -1,5 +1,5 @@
-name = "community-survey"
-subteam-of = "community"
+name = "survey"
+subteam-of = "launching-pad"
 
 [people]
 leads = ["Kobzol", "apiraino"]
@@ -15,7 +15,7 @@ alumni = [
 
 [website]
 name = "Survey team"
-description = "Running, analysing, and presenting the community survey"
+description = "Running, analysing, and presenting various Rust surveys"
 repo = "https://github.com/rust-lang/surveys"
 
 [[github]]

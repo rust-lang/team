@@ -5,4 +5,4 @@ bots = []
 private-non-synced = true
 
 [access.teams]
-community-survey = "maintain"
+survey = "maintain"
