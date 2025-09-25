@@ -31,7 +31,6 @@ orgs = ["rust-lang"]
 [[lists]]
 address = "community@rust-lang.org"
 extra-teams = [
-    "community-content",
     "community-events",
     "community-survey",
     "community-localization",
@@ -40,7 +39,6 @@ extra-teams = [
 [[lists]]
 address = "community-team@rust-lang.org"
 extra-teams = [
-    "community-content",
     "community-events",
     "community-survey",
     "community-localization",
