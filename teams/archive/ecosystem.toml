@@ -12,3 +12,7 @@ alumni = [
 
 [[lists]]
 address = "ecosystem@rust-lang.org"
+
+[website]
+name = "Ecosystem team"
+description = ""

@@ -44,3 +44,7 @@ address = "user-logos@rust-lang.org"
 
 [[lists]]
 address = "legal@crates.io"
+
+[website]
+name = "Core team"
+description = "A former governing body of Rust. It was replaced by the Leadership Council with RFC 3392."

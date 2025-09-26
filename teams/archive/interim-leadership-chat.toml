@@ -33,3 +33,7 @@ orgs = ["rust-lang"]
 label = "T-interim-leadership-chat"
 name = "Interim Leadership Chat"
 ping = "rust-lang/interim-leadership-chat"
+
+[website]
+name = "Interim Leadership Chat"
+description = "A temporary governing body used to ratify RFC 3392"
