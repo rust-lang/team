@@ -1,4 +1,5 @@
 use crate::data::Data;
+use crate::schema;
 use crate::schema::{Bot, Email, MergeBot, Permissions, RepoPermission, TeamKind, ZulipMember};
 use anyhow::{ensure, Context as _, Error};
 use indexmap::IndexMap;
@@ -162,122 +163,22 @@ impl<'a> Generator<'a> {
     }
 
     fn generate_teams(&self) -> Result<(), Error> {
-        let mut teams = IndexMap::new();
-
-        for team in self.data.teams() {
-            let mut website_roles = HashMap::new();
-            for member in team.explicit_members().iter().cloned() {
-                website_roles.insert(member.github, member.roles);
-            }
-            for alum in team.explicit_alumni().iter().cloned() {
-                website_roles.insert(alum.github, alum.roles);
-            }
-
-            let leads = team.leads();
-            let mut members = Vec::new();
-            for github_name in &team.members(self.data)? {
-                if let Some(person) = self.data.person(github_name) {
-                    members.push(v1::TeamMember {
-                        name: person.name().into(),
-                        github: (*github_name).into(),
-                        github_id: person.github_id(),
-                        is_lead: leads.contains(github_name),
-                        roles: website_roles.get(*github_name).cloned().unwrap_or_default(),
-                    });
-                }
-            }
-            members.sort_by_key(|member| member.github.to_lowercase());
-            members.sort_by_key(|member| !member.is_lead);
-
-            let mut alumni = Vec::new();
-            for alum in team.explicit_alumni() {
-                if let Some(person) = self.data.person(&alum.github) {
-                    alumni.push(v1::TeamMember {
-                        name: person.name().into(),
-                        github: alum.github.to_string(),
-                        github_id: person.github_id(),
-                        is_lead: false,
-                        roles: website_roles
-                            .get(alum.github.as_str())
-                            .cloned()
-                            .unwrap_or_default(),
-                    });
-                }
-            }
-            alumni.sort_by_key(|member| member.github.to_lowercase());
-
-            let mut github_teams = team.github_teams(self.data)?;
-            github_teams.sort();
-
-            let mut member_discord_ids = team.discord_ids(self.data)?;
-            member_discord_ids.sort();
-
-            let team_data = v1::Team {
-                name: team.name().into(),
-                kind: match team.kind() {
-                    TeamKind::Team => v1::TeamKind::Team,
-                    TeamKind::WorkingGroup => v1::TeamKind::WorkingGroup,
-                    TeamKind::ProjectGroup => v1::TeamKind::ProjectGroup,
-                    TeamKind::MarkerTeam => v1::TeamKind::MarkerTeam,
-                },
-                subteam_of: team.subteam_of().map(|st| st.into()),
-                top_level: team.top_level(),
-                members,
-                alumni,
-                github: Some(v1::TeamGitHub {
-                    teams: github_teams
-                        .into_iter()
-                        .map(|team| v1::GitHubTeam {
-                            org: team.org.to_string(),
-                            name: team.name.to_string(),
-                            members: team.members.into_iter().map(|(_, id)| id).collect(),
-                        })
-                        .collect::<Vec<_>>(),
-                })
-                .filter(|gh| !gh.teams.is_empty()),
-                website_data: team.website_data().map(|ws| v1::TeamWebsite {
-                    name: ws.name().into(),
-                    description: ws.description().into(),
-                    page: ws.page().unwrap_or_else(|| team.name()).into(),
-                    email: ws.email().map(|e| e.into()),
-                    repo: ws.repo().map(|e| e.into()),
-                    discord: ws.discord().map(|i| v1::DiscordInvite {
-                        channel: i.channel.into(),
-                        url: i.url.into(),
-                    }),
-                    zulip_stream: ws.zulip_stream().map(|s| s.into()),
-                    matrix_room: ws.matrix_room().map(|s| s.into()),
-                    weight: ws.weight(),
-                }),
-                roles: team
-                    .roles()
-                    .iter()
-                    .map(|role| v1::MemberRole {
-                        id: role.id.clone(),
-                        description: role.description.clone(),
-                    })
-                    .collect(),
-                discord: team
-                    .discord_roles()
-                    .map(|roles| {
-                        roles
-                            .iter()
-                            .map(|role| v1::TeamDiscord {
-                                name: role.name().into(),
-                                color: role.color().map(String::from),
-                                members: member_discord_ids.clone(),
-                            })
-                            .collect()
-                    })
-                    .unwrap_or_else(Vec::new),
-            };
-
-            self.add(&format!("v1/teams/{}.json", team.name()), &team_data)?;
-            teams.insert(team.name().into(), team_data);
+        let teams = convert_teams(self.data, self.data.teams())?;
+        for (name, team) in &teams {
+            self.add(&format!("v1/teams/{name}.json"), team)?;
         }
-
-        teams.sort_keys();
         self.add("v1/teams.json", &v1::Teams { teams })?;
+
+        let archived_teams = convert_teams(self.data, self.data.archived_teams())?;
+        for (name, team) in &archived_teams {
+            self.add(&format!("v1/archived-teams/{name}.json"), team)?;
+        }
+        self.add(
+            "v1/archived-teams.json",
+            &v1::Teams {
+                teams: archived_teams,
+            },
+        )?;
         Ok(())
     }
 
@@ -528,4 +429,124 @@ impl<'a> Generator<'a> {
         std::fs::write(&dest, bytes)?;
         Ok(())
     }
+}
+
+fn convert_teams<'a>(
+    data: &Data,
+    teams: impl Iterator<Item = &'a schema::Team>,
+) -> anyhow::Result<IndexMap<String, v1::Team>> {
+    let mut team_map = IndexMap::new();
+
+    for team in teams {
+        let mut website_roles = HashMap::new();
+        for member in team.explicit_members().iter().cloned() {
+            website_roles.insert(member.github, member.roles);
+        }
+        for alum in team.explicit_alumni().iter().cloned() {
+            website_roles.insert(alum.github, alum.roles);
+        }
+
+        let leads = team.leads();
+        let mut members = Vec::new();
+        for github_name in &team.members(data)? {
+            if let Some(person) = data.person(github_name) {
+                members.push(v1::TeamMember {
+                    name: person.name().into(),
+                    github: (*github_name).into(),
+                    github_id: person.github_id(),
+                    is_lead: leads.contains(github_name),
+                    roles: website_roles.get(*github_name).cloned().unwrap_or_default(),
+                });
+            }
+        }
+        members.sort_by_key(|member| member.github.to_lowercase());
+        members.sort_by_key(|member| !member.is_lead);
+
+        let mut alumni = Vec::new();
+        for alum in team.explicit_alumni() {
+            if let Some(person) = data.person(&alum.github) {
+                alumni.push(v1::TeamMember {
+                    name: person.name().into(),
+                    github: alum.github.to_string(),
+                    github_id: person.github_id(),
+                    is_lead: false,
+                    roles: website_roles
+                        .get(alum.github.as_str())
+                        .cloned()
+                        .unwrap_or_default(),
+                });
+            }
+        }
+        alumni.sort_by_key(|member| member.github.to_lowercase());
+
+        let mut github_teams = team.github_teams(data)?;
+        github_teams.sort();
+
+        let mut member_discord_ids = team.discord_ids(data)?;
+        member_discord_ids.sort();
+
+        let team_data = v1::Team {
+            name: team.name().into(),
+            kind: match team.kind() {
+                TeamKind::Team => v1::TeamKind::Team,
+                TeamKind::WorkingGroup => v1::TeamKind::WorkingGroup,
+                TeamKind::ProjectGroup => v1::TeamKind::ProjectGroup,
+                TeamKind::MarkerTeam => v1::TeamKind::MarkerTeam,
+            },
+            subteam_of: team.subteam_of().map(|st| st.into()),
+            top_level: team.top_level(),
+            members,
+            alumni,
+            github: Some(v1::TeamGitHub {
+                teams: github_teams
+                    .into_iter()
+                    .map(|team| v1::GitHubTeam {
+                        org: team.org.to_string(),
+                        name: team.name.to_string(),
+                        members: team.members.into_iter().map(|(_, id)| id).collect(),
+                    })
+                    .collect::<Vec<_>>(),
+            })
+            .filter(|gh| !gh.teams.is_empty()),
+            website_data: team.website_data().map(|ws| v1::TeamWebsite {
+                name: ws.name().into(),
+                description: ws.description().into(),
+                page: ws.page().unwrap_or_else(|| team.name()).into(),
+                email: ws.email().map(|e| e.into()),
+                repo: ws.repo().map(|e| e.into()),
+                discord: ws.discord().map(|i| v1::DiscordInvite {
+                    channel: i.channel.into(),
+                    url: i.url.into(),
+                }),
+                zulip_stream: ws.zulip_stream().map(|s| s.into()),
+                matrix_room: ws.matrix_room().map(|s| s.into()),
+                weight: ws.weight(),
+            }),
+            roles: team
+                .roles()
+                .iter()
+                .map(|role| v1::MemberRole {
+                    id: role.id.clone(),
+                    description: role.description.clone(),
+                })
+                .collect(),
+            discord: team
+                .discord_roles()
+                .map(|roles| {
+                    roles
+                        .iter()
+                        .map(|role| v1::TeamDiscord {
+                            name: role.name().into(),
+                            color: role.color().map(String::from),
+                            members: member_discord_ids.clone(),
+                        })
+                        .collect()
+                })
+                .unwrap_or_else(Vec::new),
+        };
+        team_map.insert(team.name().into(), team_data);
+    }
+
+    team_map.sort_keys();
+    Ok(team_map)
 }
