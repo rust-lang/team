@@ -16,3 +16,7 @@ orgs = ["rust-lang"]
 
 [[lists]]
 address = "ctcft@rust-lang.org"
+
+[website]
+name = "Cross-Team Collaboration Fun Times"
+description = "Fostering cross-team collaboration in the Rust project"
