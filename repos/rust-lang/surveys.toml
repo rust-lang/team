@@ -4,4 +4,4 @@ description = "Repo for coordinating the creation, distribution, collection, and
 bots = []
 
 [access.teams]
-community-survey = "write"
+survey = "write"

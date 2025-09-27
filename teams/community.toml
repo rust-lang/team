@@ -32,7 +32,6 @@ orgs = ["rust-lang"]
 address = "community@rust-lang.org"
 extra-teams = [
     "community-events",
-    "community-survey",
     "community-localization",
 ]
 
@@ -40,7 +39,6 @@ extra-teams = [
 address = "community-team@rust-lang.org"
 extra-teams = [
     "community-events",
-    "community-survey",
     "community-localization",
 ]
 
