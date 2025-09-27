@@ -49,3 +49,6 @@ orgs = ["rust-lang"]
 
 [[zulip-groups]]
 name = "WG-triage"
+
+[permissions]
+bors.rust.try = true
