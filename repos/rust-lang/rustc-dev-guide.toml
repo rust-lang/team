@@ -19,7 +19,7 @@ rustdoc-frontend = "write"
 rustc-dev-guide = "maintain"
 
 [[branch-protections]]
-pattern = "master"
+pattern = "main"
 ci-checks = ["ci"]
 required-approvals = 0
 
