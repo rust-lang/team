@@ -3,18 +3,17 @@ top-level = true
 
 [people]
 leads = [
-    "m-ou-se",
     "Amanieu",
 ]
 members = [
     "Amanieu",
-    "m-ou-se",
     "joshtriplett",
     "cuviper",
     "the8472",
     "thomcc",
 ]
 alumni = [
+    "m-ou-se",
     "yaahc",
 ]
 
