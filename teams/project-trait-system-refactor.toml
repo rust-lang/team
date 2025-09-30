@@ -11,11 +11,12 @@ leads = [
 members = [
     "BoxyUwU",
     "cjgillot",
-    "compiler-errors",
     "lcnr",
     "lqd",
 ]
-alumni = []
+alumni = [
+    "compiler-errors",
+]
 
 [website]
 name = "Rustc Trait System Refactor Initiative"

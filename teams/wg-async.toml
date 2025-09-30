@@ -5,7 +5,6 @@ kind = "working-group"
 [people]
 leads = ["nikomatsakis", "tmandry"]
 members = [
-    "compiler-errors",
     "eholk",
     "estebank",
     "guswynn",
@@ -24,6 +23,7 @@ alumni = [
     "bIgBV",
     "betamos",
     "cramertj",
+    "compiler-errors",
     "csmoe",
     "doc-jones",
     "eminence",

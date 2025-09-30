@@ -5,7 +5,6 @@ subteam-of = "compiler"
 leads = []
 members = [
     "cjgillot",
-    "compiler-errors",
     "davidtwco",
     "estebank",
     "jieyouxu",
@@ -19,7 +18,9 @@ members = [
     "spastorino",
     "wesleywiser",
 ]
-alumni = []
+alumni = [
+    "compiler-errors",
+]
 
 [rfcbot]
 label = "T-compiler"

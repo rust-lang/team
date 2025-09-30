@@ -10,9 +10,9 @@ members = [
     "oli-obk",
     "BoxyUwU",
     "camelid",
-    "compiler-errors",
 ]
 alumni = [
+    "compiler-errors",
     "davidtwco",
     "varkor",
     "withoutboats",

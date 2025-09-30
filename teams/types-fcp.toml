@@ -5,14 +5,15 @@ subteam-of = "types"
 leads = []
 members = [
     "BoxyUwU",
-    "compiler-errors",
     "jackh726",
     "lcnr",
     "nikomatsakis",
     "oli-obk",
     "spastorino",
 ]
-alumni = []
+alumni = [
+    "compiler-errors",
+]
 
 [rfcbot]
 label = "T-types"
