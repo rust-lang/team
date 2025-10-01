@@ -7,12 +7,13 @@ leads = ["estebank", "oli-obk"]
 members = [
     "JohnTitor",
     "TaKO8Ki",
-    "compiler-errors",
     "davidtwco",
     "estebank",
     "oli-obk",
 ]
-alumni = []
+alumni = [
+    "compiler-errors",
+]
 
 [[github]]
 orgs = ["rust-lang"]

@@ -14,7 +14,7 @@ members = [
     { github = "chenyukang", roles = ["compiler-maintainer"] },
     "ChrisDenton",
     { github = "cjgillot",  roles = ["compiler-maintainer"] },
-    { github = "compiler-errors", roles = ["compiler-maintainer"] },
+    "compiler-errors",
     "cuviper",
     { github = "davidtwco", roles = ["compiler-maintainer"] },
     "dianqk",
