@@ -5,7 +5,9 @@ subteam-of = "rustfmt"
 leads = ["Manishearth"]
 members = [
     "Manishearth",
-    "fee1-dead"
+    "fee1-dead",
+    "camsteffen",
+    "jieyouxu"
 ]
 alumni = []
 
