@@ -15,8 +15,8 @@ alumni = []
 orgs = ["rust-lang"]
 
 [website]
-name = "Rustfmt-Contributors"
-description = "This is a temporary team to help bootstrap Rustfmt membership. It may change into a triage-access team in the future."
+name = "Rustfmt contributors"
+description = "Helping the rustdoc team with reviews and planning."
 zulip-stream = "t-rustfmt"
 repo = "https://github.com/rust-lang/rustfmt"
 
