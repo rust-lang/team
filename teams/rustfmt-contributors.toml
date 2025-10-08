@@ -1,0 +1,22 @@
+name = "rustfmt-contributors"
+subteam-of = "rustfmt"
+
+[people]
+leads = ["Manishearth"]
+members = [
+    "Manishearth",
+    "fee1-dead"
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Rustfmt-Contributors"
+description = "This is a temporary team to help bootstrap Rustfmt membership. It may change into a triage-access team in the future."
+zulip-stream = "t-rustfmt"
+repo = "https://github.com/rust-lang/rustfmt"
+
+[[zulip-groups]]
+name = "T-rustfmt-contributors"
