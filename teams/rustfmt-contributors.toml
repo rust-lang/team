@@ -1,0 +1,24 @@
+name = "rustfmt-contributors"
+subteam-of = "rustfmt"
+
+[people]
+leads = ["Manishearth"]
+members = [
+    "Manishearth",
+    "fee1-dead",
+    "camsteffen",
+    "jieyouxu"
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Rustfmt contributors"
+description = "Helping the rustdoc team with reviews and planning."
+zulip-stream = "t-rustfmt"
+repo = "https://github.com/rust-lang/rustfmt"
+
+[[zulip-groups]]
+name = "T-rustfmt-contributors"
