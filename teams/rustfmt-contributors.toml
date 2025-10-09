@@ -7,7 +7,7 @@ members = [
     "Manishearth",
     "fee1-dead",
     "camsteffen",
-    "jieyouxu"
+    "jieyouxu",
 ]
 alumni = []
 
@@ -16,7 +16,7 @@ orgs = ["rust-lang"]
 
 [website]
 name = "Rustfmt contributors"
-description = "Helping the rustdoc team with reviews and planning."
+description = "Helping the Rustfmt team with reviews and planning"
 zulip-stream = "t-rustfmt"
 repo = "https://github.com/rust-lang/rustfmt"
 
