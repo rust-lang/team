@@ -2,9 +2,11 @@ org = "rust-lang"
 name = "stdarch"
 description = "Rust's standard library vendor-specific APIs and run-time feature detection"
 homepage = "https://doc.rust-lang.org/stable/core/arch/"
-bots = ["rustbot"]
+bots = ["rustbot", "rfcbot"]
 
 [access.teams]
+lang = "write"
+lang-ops = "write"
 libs = "write"
 libs-api = "write"
 libs-contributors = "write"
