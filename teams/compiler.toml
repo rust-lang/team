@@ -4,6 +4,7 @@ top-level = true
 [people]
 leads = ["davidtwco", "wesleywiser"]
 members = [
+    "Amanieu",
     "alexcrichton",
     "antoyo",
     "apiraino",
@@ -17,8 +18,10 @@ members = [
     "compiler-errors",
     "cuviper",
     { github = "davidtwco", roles = ["compiler-maintainer"] },
+    "dianne",
     "dianqk",
     "durin42",
+    "Enselic",
     "eholk",
     "est31",
     { github = "estebank", roles = ["compiler-maintainer"] },
@@ -26,6 +29,7 @@ members = [
     "flodiebold",
     "fmease", 
     "GuillaumeGomez",
+    "JonathanBrouwer",
     { github = "jackh726", roles = ["compiler-maintainer"] },
     "jdonszelmann",
     { github = "jieyouxu", roles = ["compiler-maintainer"] },
@@ -56,6 +60,7 @@ members = [
     "TaKO8Ki",
     "tgross35",
     "the8472",
+    "tiif",
     "tmandry",
     "tmiasko",
     "Urgau",
