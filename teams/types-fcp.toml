@@ -7,12 +7,13 @@ members = [
     "BoxyUwU",
     "jackh726",
     "lcnr",
-    "nikomatsakis",
     "oli-obk",
     "spastorino",
 ]
 alumni = [
+    "aliemjay",
     "compiler-errors",
+    "nikomatsakis",
 ]
 
 [rfcbot]

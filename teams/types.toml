@@ -6,16 +6,16 @@ subteam-of = "compiler"
 [people]
 leads = ["jackh726", "lcnr"]
 members = [
-    "aliemjay",
     "BoxyUwU",
     "compiler-errors",
     "jackh726",
     "lcnr",
+    "lqd",
     "nikomatsakis",
     "oli-obk",
     "spastorino",
 ]
-alumni = []
+alumni = ["aliemjay"]
 
 [website]
 name = "Types team"
