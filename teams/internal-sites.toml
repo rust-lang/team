@@ -17,3 +17,6 @@ orgs = ["rust-lang"]
 [website]
 name = "Internal sites team"
 description = "Supports the Forge and RFC internal websites"
+
+[[zulip-groups]]
+name = "T-internal-sites"
