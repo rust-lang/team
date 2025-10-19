@@ -7,7 +7,6 @@ leads = ["AngelOnFira", "erlend-sh", "kvark", "ozkriff"]
 
 members = [
     "17cupsofcoffee",
-    "aclysma",
     "AngelOnFira",
     "AlexEne",
     "erlend-sh",
@@ -19,7 +18,9 @@ members = [
     "repi",
     "Wodann",
 ]
-alumni = []
+alumni = [
+    "aclysma",
+]
 
 [website]
 page = "gamedev"
