@@ -4,6 +4,7 @@ subteam-of = "rust-analyzer"
 [people]
 leads = []
 members = [
+    "A4-Tacks",
     "alibektas",
     "bjorn3",
     "DropDemBits",
