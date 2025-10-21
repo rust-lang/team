@@ -5,10 +5,13 @@ homepage = "https://rust-lang.github.io/fls"
 bots = ["rustbot", "rfcbot"]
 
 [access.teams]
+fls = "write"
+fls-contributors = "triage"
 lang = "write"
 lang-docs = "write"
+lang-ops = "write"
 spec = "write"
-spec-contributors = "write"
+spec-contributors = "triage"
 
 [[branch-protections]]
 pattern = "main"

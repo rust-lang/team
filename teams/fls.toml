@@ -1,0 +1,29 @@
+name = "fls"
+subteam-of = "spec"
+
+[people]
+leads = ["PLeVasseur"]
+members = [
+    "PLeVasseur",
+    "traviscross",
+    "tshepang",
+    "AlexCeleste",
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[rfcbot]
+label = "T-fls"
+name = "FLS"
+ping = "rust-lang/fls"
+
+[website]
+name = "FLS team"
+description = "Maintaining and improving the FLS"
+repo = "http://github.com/rust-lang/fls-team"
+zulip-stream = "t-lang/fls"
+
+[[zulip-groups]]
+name = "T-fls"
