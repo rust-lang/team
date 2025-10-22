@@ -220,17 +220,29 @@ fn validate_team_leads(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
-/// Ensure team members are people
+/// Ensure team members are people and don't contain duplicates
 fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
+        let mut seen = std::collections::HashSet::new();
         wrapper(team.members(data)?.iter(), errors, |member, _| {
+            // Check if member exists
             if data.person(member).is_none() {
                 bail!(
-                    "person `{}` is member of team `{}` but doesn't exist",
+                    "person {} is member of team {} but doesn't exist",
                     member,
                     team.name()
                 );
             }
+
+            // Check for duplicates
+            if !seen.insert(member) {
+                bail!(
+                    "person {} is listed multiple times in team {}",
+                    member,
+                    team.name()
+                );
+            }
+
             Ok(())
         });
         Ok(())
