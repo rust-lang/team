@@ -7,10 +7,6 @@ bots = []
 [access.teams]
 crate-maintainers = 'maintain'
 
-[access.individuals]
-NobodyXu = 'write'
-madsmtm = 'write'
-
 [[branch-protections]]
 pattern = 'main'
 required-approvals = 0
