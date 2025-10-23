@@ -1,0 +1,19 @@
+name = "fls-contributors"
+subteam-of = "fls"
+
+[people]
+leads = []
+members = [
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "FLS team contributors"
+description = "Regular contributors to the FLS"
+zulip-stream = "t-lang/fls"
+
+[[zulip-groups]]
+name = "T-fls-contributors"

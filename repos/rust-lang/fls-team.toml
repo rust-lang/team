@@ -1,0 +1,13 @@
+org = "rust-lang"
+name = "fls-team"
+description = "Home of the Rust FLS team"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+fls = "maintain"
+fls-contributors = "triage"
+lang = "maintain"
+lang-docs = "maintain"
+lang-ops = "maintain"
+spec = "maintain"
+spec-contributors = "triage"
