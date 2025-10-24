@@ -58,4 +58,24 @@ special-org-members = [
     "skade",
 ]
 
-members-without-zulip-id = []
+members-without-zulip-id = [
+    "Nashenas88",
+    "brotzeit",
+    "KannanPalani57",
+    "gdr-at-ms",
+    "arshiamufti",
+    "codesections",
+    "bnchi",
+    "retep998",
+    "eldruin",
+    "patchfx",
+    "kennykerr",
+    "xry111",
+    "reitermarkus",
+    "chris-morgan",
+    "nico-abram",
+    "opeolluwa",
+    "celaus",
+    "xiangzhai",
+    "mathk",
+]
