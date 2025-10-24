@@ -10,8 +10,3 @@ kind = "marker-team"
 leads = []
 members = []
 include-all-alumni = true
-
-[website]
-name = "Rust team alumni"
-description = "Enjoying a leisurely retirement"
-weight = -1000
