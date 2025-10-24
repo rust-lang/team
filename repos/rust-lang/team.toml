@@ -9,6 +9,6 @@ team-repo-admins = "write"
 infra = "triage"
 
 [[branch-protections]]
-pattern = "master"
+pattern = "main"
 ci-checks = ["CI"]
 dismiss-stale-review = true
