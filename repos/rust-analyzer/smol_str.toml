@@ -5,3 +5,4 @@ bots = []
 
 [access.teams]
 rust-analyzer = "write"
+smol-str = "write"
