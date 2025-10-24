@@ -365,7 +365,7 @@ Admins cannot override these branch protections. If an admin needs to do that, t
 # The branch protections (optional)
 [[branch-protections]]
 # The pattern matching the branches to be protected (required)
-pattern = "master"
+pattern = "main"
 # Which CI checks to are required for merging (optional)
 # Cannot be set if `pr-required` is `false`.
 #

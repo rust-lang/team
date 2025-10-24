@@ -33,9 +33,9 @@ jobs:
         with:
           # If the PR is from this repository, checkout the PR sha,
           # so that we can also test code changes.
-          # If it is from a fork, then always checkout the 'master' branch,
+          # If it is from a fork, then always checkout the 'main' branch,
           # to avoid checking out code of untrusted PRs.
-          ref: ${{ github.event.workflow_run.head_repository.full_name != 'rust-lang/team' && 'master' || github.event.workflow_run.head_sha }}
+          ref: ${{ github.event.workflow_run.head_repository.full_name != 'rust-lang/team' && 'main' || github.event.workflow_run.head_sha }}
           persist-credentials: false
 
       - name: Install Rust Stable
