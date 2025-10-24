@@ -1,0 +1,12 @@
+name = "smol-str"
+kind = "marker-team"
+
+[people]
+leads = ["alexheretic"]
+members = [
+    "alexheretic",
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-analyzer"]
