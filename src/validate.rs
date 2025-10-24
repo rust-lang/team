@@ -50,6 +50,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_unique_zulip_streams,
     validate_unique_zulip_user_ids,
     validate_present_zulip_id,
+    validate_zulip_id_allowlist,
     validate_zulip_stream_ids,
     validate_zulip_stream_extra_people,
     validate_repos,
@@ -737,6 +738,30 @@ fn validate_present_zulip_id(data: &Data, errors: &mut Vec<String>) {
             Ok(())
         },
     )
+}
+
+/// Ensure people in the missing Zulip ID allowlist do not actually have Zulip ID configured.
+fn validate_zulip_id_allowlist(data: &Data, errors: &mut Vec<String>) {
+    // Sort for deterministic output
+    let mut members = data
+        .config()
+        .members_without_zulip_id()
+        .into_iter()
+        .collect::<Vec<_>>();
+    members.sort();
+    for member in members {
+        let Some(person) = data.person(member) else {
+            errors.push(format!(
+                "Person {member} in Zulip ID allowlist does not exist"
+            ));
+            continue;
+        };
+        if person.zulip_id().is_some() {
+            errors.push(format!(
+                "Person {member} in Zulip ID allowlist has Zulip ID configured. Please remove them from the `members-without-zulip-id` list in `config.toml`"
+            ));
+        }
+    }
 }
 
 /// Ensure team members in Zulip groups have a Zulip id
