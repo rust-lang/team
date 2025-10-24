@@ -49,6 +49,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_zulip_group_extra_people,
     validate_unique_zulip_streams,
     validate_unique_zulip_user_ids,
+    validate_present_zulip_id,
     validate_zulip_stream_ids,
     validate_zulip_stream_extra_people,
     validate_repos,
@@ -713,6 +714,29 @@ fn validate_unique_zulip_user_ids(data: &Data, errors: &mut Vec<String>) {
         }
         Ok(())
     })
+}
+
+/// Ensure that every active member except a few remaining people on an allowlist have a Zulip ID.
+fn validate_present_zulip_id(data: &Data, errors: &mut Vec<String>) {
+    wrapper(
+        data.active_members().unwrap().iter(),
+        errors,
+        |person, _| {
+            let person = data.person(person).expect("Person not found");
+            if person.zulip_id().is_none()
+                && !data
+                    .config()
+                    .members_without_zulip_id()
+                    .contains(person.github())
+            {
+                return Err(anyhow::anyhow!(
+                    "User {} does not have a Zulip ID",
+                    person.github()
+                ));
+            }
+            Ok(())
+        },
+    )
 }
 
 /// Ensure team members in Zulip groups have a Zulip id
