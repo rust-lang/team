@@ -36,6 +36,7 @@ To give a few more specific examples, here is a non-exhaustive list of scenarios
 - Changing the code of `sync-team` or `team` to give themselves special permissions.
 - Changing the code of CI workflows.
 - Adding or modifying a file that affects what gets executed on CI. For example `.cargo/config.toml` (affects Cargo) or `rust-toolchain.toml` file (affects Rustup).
+- Upgrading dependencies in `Cargo.lock` to a compromised version.
 
 ### Content attacks
 The second category is "content attacks", which can be done without changing code, only by modifying the TOML data files. This kind of attack could be performed by a maintainer, unless we explicitly protect against it.
