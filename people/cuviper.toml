@@ -2,6 +2,5 @@ name = "Josh Stone"
 github = "cuviper"
 github-id = 36186
 email = "cuviper@gmail.com"
-irc = "jistone"
-discord-id = 443825361256448003
 zulip-id = 138448
+matrix = "@jistone:fedora.im"
