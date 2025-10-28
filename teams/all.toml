@@ -31,3 +31,32 @@ extra-emails = [
 
 [[discord-roles]]
 name = "WGs and Teams"
+
+[[zulip-groups]]
+name = "T-all"
+excluded-people = [
+    "adityac8",
+    "andrewpollack",
+    "arshiamufti",
+    "badboy",
+    "bdillo",
+    "bnchi",
+    "cdmistman",
+    "celaus",
+    "ericseppanen",
+    "extrawurst",
+    "flaki",
+    "ibraheemdev",
+    "KannanPalani57",
+    "manyinsects",
+    "mariannegoldin",
+    "marioidival",
+    "mattgathu",
+    "opeolluwa",
+    "sebasmagri",
+    "SimonSapin",
+    "spacekookie",
+    "sunfishcode",
+    "U007D",
+    "wezm",
+]
