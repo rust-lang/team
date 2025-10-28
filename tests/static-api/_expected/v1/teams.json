@@ -63,7 +63,6 @@
       "page": "demo",
       "email": "foo@example.com",
       "repo": "https://github.com/ghost/foo",
-      "discord": null,
       "zulip_stream": "t-foo",
       "matrix_room": "#t-foo:example.com",
       "weight": 1000
@@ -108,7 +107,6 @@
       "page": "leaderless",
       "email": null,
       "repo": null,
-      "discord": null,
       "zulip_stream": null,
       "matrix_room": null,
       "weight": 0
@@ -128,7 +126,6 @@
       "page": "leadership-council",
       "email": null,
       "repo": null,
-      "discord": null,
       "zulip_stream": null,
       "matrix_room": null,
       "weight": 0
@@ -168,7 +165,6 @@
       "page": "leads-permissions",
       "email": null,
       "repo": null,
-      "discord": null,
       "zulip_stream": null,
       "matrix_room": null,
       "weight": 0
@@ -211,7 +207,6 @@
       "page": "wg-test",
       "email": null,
       "repo": null,
-      "discord": null,
       "zulip_stream": null,
       "matrix_room": null,
       "weight": 0

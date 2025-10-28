@@ -57,7 +57,6 @@ pub struct TeamWebsite {
     pub page: String,
     pub email: Option<String>,
     pub repo: Option<String>,
-    pub discord: Option<DiscordInvite>,
     pub zulip_stream: Option<String>,
     pub matrix_room: Option<String>,
     pub weight: i64,
@@ -67,12 +66,6 @@ pub struct TeamWebsite {
 pub struct MemberRole {
     pub id: String,
     pub description: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct DiscordInvite {
-    pub channel: String,
-    pub url: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
