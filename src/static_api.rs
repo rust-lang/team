@@ -147,6 +147,15 @@ impl<'a> Generator<'a> {
                     members
                 },
                 branch_protections,
+                trusted_publishing: r
+                    .trusted_publishing
+                    .iter()
+                    .map(|p| v1::TrustedPublishing {
+                        krate: p.krate.clone(),
+                        workflow_file: p.workflow_filename.clone(),
+                        environment: p.environment.clone(),
+                    })
+                    .collect(),
                 archived,
                 auto_merge_enabled: !managed_by_bors,
             };

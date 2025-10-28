@@ -174,6 +174,7 @@ pub struct Repo {
     pub teams: Vec<RepoTeam>,
     pub members: Vec<RepoMember>,
     pub branch_protections: Vec<BranchProtection>,
+    pub trusted_publishing: Vec<TrustedPublishing>,
     pub archived: bool,
     // This attribute is not synced by sync-team.
     pub private: bool,
@@ -242,6 +243,14 @@ pub struct BranchProtection {
     pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,
     pub merge_bots: Vec<MergeBot>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct TrustedPublishing {
+    #[serde(rename = "crate")]
+    pub krate: String,
+    pub workflow_file: String,
+    pub environment: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

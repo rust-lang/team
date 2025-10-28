@@ -24,6 +24,7 @@
           "merge_bots": []
         }
       ],
+      "trusted_publishing": [],
       "archived": true,
       "private": false,
       "auto_merge_enabled": true
@@ -61,6 +62,13 @@
             "foo"
           ],
           "merge_bots": []
+        }
+      ],
+      "trusted_publishing": [
+        {
+          "crate": "my-crate",
+          "workflow_file": "ci.yml",
+          "environment": "deploy"
         }
       ],
       "archived": false,
