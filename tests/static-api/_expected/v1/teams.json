@@ -64,10 +64,7 @@
       "page": "demo",
       "email": "foo@example.com",
       "repo": "https://github.com/ghost/foo",
-      "discord": {
-        "channel": "#foo",
-        "url": "https://discord.gg/AAAAA"
-      },
+      "discord": null,
       "zulip_stream": "t-foo",
       "matrix_room": "#t-foo:example.com",
       "weight": 1000

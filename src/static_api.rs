@@ -511,10 +511,7 @@ fn convert_teams<'a>(
                 page: ws.page().unwrap_or_else(|| team.name()).into(),
                 email: ws.email().map(|e| e.into()),
                 repo: ws.repo().map(|e| e.into()),
-                discord: ws.discord().map(|i| v1::DiscordInvite {
-                    channel: i.channel.into(),
-                    url: i.url.into(),
-                }),
+                discord: None,
                 zulip_stream: ws.zulip_stream().map(|s| s.into()),
                 matrix_room: ws.matrix_room().map(|s| s.into()),
                 weight: ws.weight(),

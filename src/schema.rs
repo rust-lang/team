@@ -608,11 +608,6 @@ pub(crate) struct RfcbotData {
     pub(crate) exclude_members: Vec<String>,
 }
 
-pub(crate) struct DiscordInvite<'a> {
-    pub(crate) url: &'a str,
-    pub(crate) channel: &'a str,
-}
-
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct WebsiteData {
@@ -621,8 +616,6 @@ pub(crate) struct WebsiteData {
     page: Option<String>,
     email: Option<String>,
     repo: Option<String>,
-    discord_invite: Option<String>,
-    discord_name: Option<String>,
     matrix_room: Option<String>,
     zulip_stream: Option<String>,
     #[serde(default)]
@@ -652,17 +645,6 @@ impl WebsiteData {
 
     pub(crate) fn repo(&self) -> Option<&str> {
         self.repo.as_deref()
-    }
-
-    pub(crate) fn discord(&self) -> Option<DiscordInvite<'_>> {
-        if let (Some(url), Some(channel)) = (&self.discord_invite, &self.discord_name) {
-            Some(DiscordInvite {
-                url: url.as_ref(),
-                channel: channel.as_ref(),
-            })
-        } else {
-            None
-        }
     }
 
     pub(crate) fn zulip_stream(&self) -> Option<&str> {
