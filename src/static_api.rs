@@ -524,7 +524,6 @@ fn convert_teams<'a>(
                     description: role.description.clone(),
                 })
                 .collect(),
-            discord: vec![],
         };
         team_map.insert(team.name().into(), team_data);
     }

@@ -14,8 +14,7 @@
     "alumni": [],
     "github": null,
     "website_data": null,
-    "roles": [],
-    "discord": []
+    "roles": []
   },
   "foo": {
     "name": "foo",
@@ -69,8 +68,7 @@
       "matrix_room": "#t-foo:example.com",
       "weight": 1000
     },
-    "roles": [],
-    "discord": []
+    "roles": []
   },
   "infra-admins": {
     "name": "infra-admins",
@@ -87,8 +85,7 @@
     "alumni": [],
     "github": null,
     "website_data": null,
-    "roles": [],
-    "discord": []
+    "roles": []
   },
   "leaderless": {
     "name": "leaderless",
@@ -116,8 +113,7 @@
       "matrix_room": null,
       "weight": 0
     },
-    "roles": [],
-    "discord": []
+    "roles": []
   },
   "leadership-council": {
     "name": "leadership-council",
@@ -137,8 +133,7 @@
       "matrix_room": null,
       "weight": 0
     },
-    "roles": [],
-    "discord": []
+    "roles": []
   },
   "leads-permissions": {
     "name": "leads-permissions",
@@ -178,8 +173,7 @@
       "matrix_room": null,
       "weight": 0
     },
-    "roles": [],
-    "discord": []
+    "roles": []
   },
   "wg-test": {
     "name": "wg-test",
@@ -227,7 +221,6 @@
         "id": "convener",
         "description": "Convener"
       }
-    ],
-    "discord": []
+    ]
   }
 }

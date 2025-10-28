@@ -50,6 +50,5 @@
     "matrix_room": "#t-foo:example.com",
     "weight": 1000
   },
-  "roles": [],
-  "discord": []
+  "roles": []
 }

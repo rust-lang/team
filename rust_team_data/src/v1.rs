@@ -26,7 +26,6 @@ pub struct Team {
     pub github: Option<TeamGitHub>,
     pub website_data: Option<TeamWebsite>,
     pub roles: Vec<MemberRole>,
-    pub discord: Vec<TeamDiscord>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -68,13 +67,6 @@ pub struct TeamWebsite {
 pub struct MemberRole {
     pub id: String,
     pub description: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct TeamDiscord {
-    pub name: String,
-    pub members: Vec<u64>,
-    pub color: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
