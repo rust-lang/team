@@ -61,10 +61,6 @@ extra-people = [
     "arshiamufti",
 ]
 
-[[discord-roles]]
-name = "community-team"
-color = "#c27c0e"
-
 [website]
 name = "Community team"
 description = "Engagement with the Rust community"

@@ -482,9 +482,6 @@ fn convert_teams<'a>(
         let mut github_teams = team.github_teams(data)?;
         github_teams.sort();
 
-        let mut member_discord_ids = team.discord_ids(data)?;
-        member_discord_ids.sort();
-
         let team_data = v1::Team {
             name: team.name().into(),
             kind: match team.kind() {
@@ -530,19 +527,7 @@ fn convert_teams<'a>(
                     description: role.description.clone(),
                 })
                 .collect(),
-            discord: team
-                .discord_roles()
-                .map(|roles| {
-                    roles
-                        .iter()
-                        .map(|role| v1::TeamDiscord {
-                            name: role.name().into(),
-                            color: role.color().map(String::from),
-                            members: member_discord_ids.clone(),
-                        })
-                        .collect()
-                })
-                .unwrap_or_else(Vec::new),
+            discord: vec![],
         };
         team_map.insert(team.name().into(), team_data);
     }

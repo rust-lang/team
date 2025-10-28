@@ -239,13 +239,6 @@ extra-teams = [
 excluded-people = [
     "rylev",
 ]
-
-# Roles to define in Discord.
-[[discord-roles]]
-# The name of the role.
-name = "security"
-# The color for the role.
-color = "#e91e63"
 ```
 
 ## Permissions

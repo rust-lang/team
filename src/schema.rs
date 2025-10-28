@@ -192,7 +192,6 @@ pub(crate) struct Team {
     zulip_groups: Vec<RawZulipGroup>,
     #[serde(default)]
     zulip_streams: Vec<RawZulipStream>,
-    discord_roles: Option<Vec<DiscordRole>>,
 }
 
 impl Team {
@@ -256,10 +255,6 @@ impl Team {
 
     pub(crate) fn roles(&self) -> &[MemberRole] {
         &self.roles
-    }
-
-    pub(crate) fn discord_roles(&self) -> Option<&Vec<DiscordRole>> {
-        self.discord_roles.as_ref()
     }
 
     /// Exposed only for validation.
@@ -509,15 +504,6 @@ impl Team {
         Ok(result)
     }
 
-    pub(crate) fn discord_ids(&self, data: &Data) -> Result<Vec<u64>, Error> {
-        Ok(self
-            .members(data)?
-            .iter()
-            .flat_map(|name| data.person(name).map(|p| p.discord_id()))
-            .flatten()
-            .collect())
-    }
-
     pub(crate) fn is_alumni_team(&self) -> bool {
         self.people.include_all_alumni
     }
@@ -534,23 +520,6 @@ impl Team {
     pub(crate) fn contains_person(&self, data: &Data, person: &Person) -> Result<bool, Error> {
         let members = self.members(data)?;
         Ok(members.contains(person.github()))
-    }
-}
-
-#[derive(serde_derive::Deserialize, Debug)]
-#[serde(rename_all = "kebab-case", deny_unknown_fields)]
-pub(crate) struct DiscordRole {
-    name: String,
-    color: Option<String>,
-}
-
-impl DiscordRole {
-    pub(crate) fn name(&self) -> &str {
-        &self.name
-    }
-
-    pub(crate) fn color(&self) -> Option<&str> {
-        self.color.as_ref().map(|s| &s[..])
     }
 }
 
