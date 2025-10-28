@@ -10,3 +10,8 @@ foo = "maintain"
 pattern = "master"
 ci-checks = ["CI"]
 allowed-merge-teams = ["foo"]
+
+[[trusted-publishing]]
+crate = "my-crate"
+workflow-filename = "ci.yml"
+environment = "deploy"
