@@ -28,6 +28,3 @@ include-team-members = false
 extra-emails = [
     "rust-verification@googlegroups.com",
 ]
-
-[[discord-roles]]
-name = "WGs and Teams"

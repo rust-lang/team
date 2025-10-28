@@ -14,8 +14,7 @@
     "alumni": [],
     "github": null,
     "website_data": null,
-    "roles": [],
-    "discord": []
+    "roles": []
   },
   "foo": {
     "name": "foo",
@@ -64,16 +63,11 @@
       "page": "demo",
       "email": "foo@example.com",
       "repo": "https://github.com/ghost/foo",
-      "discord": {
-        "channel": "#foo",
-        "url": "https://discord.gg/AAAAA"
-      },
       "zulip_stream": "t-foo",
       "matrix_room": "#t-foo:example.com",
       "weight": 1000
     },
-    "roles": [],
-    "discord": []
+    "roles": []
   },
   "infra-admins": {
     "name": "infra-admins",
@@ -90,8 +84,7 @@
     "alumni": [],
     "github": null,
     "website_data": null,
-    "roles": [],
-    "discord": []
+    "roles": []
   },
   "leaderless": {
     "name": "leaderless",
@@ -114,13 +107,11 @@
       "page": "leaderless",
       "email": null,
       "repo": null,
-      "discord": null,
       "zulip_stream": null,
       "matrix_room": null,
       "weight": 0
     },
-    "roles": [],
-    "discord": []
+    "roles": []
   },
   "leadership-council": {
     "name": "leadership-council",
@@ -135,13 +126,11 @@
       "page": "leadership-council",
       "email": null,
       "repo": null,
-      "discord": null,
       "zulip_stream": null,
       "matrix_room": null,
       "weight": 0
     },
-    "roles": [],
-    "discord": []
+    "roles": []
   },
   "leads-permissions": {
     "name": "leads-permissions",
@@ -176,13 +165,11 @@
       "page": "leads-permissions",
       "email": null,
       "repo": null,
-      "discord": null,
       "zulip_stream": null,
       "matrix_room": null,
       "weight": 0
     },
-    "roles": [],
-    "discord": []
+    "roles": []
   },
   "wg-test": {
     "name": "wg-test",
@@ -220,7 +207,6 @@
       "page": "wg-test",
       "email": null,
       "repo": null,
-      "discord": null,
       "zulip_stream": null,
       "matrix_room": null,
       "weight": 0
@@ -230,7 +216,6 @@
         "id": "convener",
         "description": "Convener"
       }
-    ],
-    "discord": []
+    ]
   }
 }

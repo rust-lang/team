@@ -133,10 +133,6 @@ page = "lang"
 email = "example@rust-lang.org"
 # The GitHub repository where this team does their work.
 repo = "http://github.com/rust-lang/lang-team"
-# A link to access the team's Discord channel.
-discord-invite = "https://discord.gg/e6Q3cvu"
-# The name of the team's channel on Discord.
-discord-name = "#wg-rustup"
 # The name of the team's stream on Zulip.
 zulip-stream = "t-lang"
 # An alias for the team's matrix room.
@@ -239,13 +235,6 @@ extra-teams = [
 excluded-people = [
     "rylev",
 ]
-
-# Roles to define in Discord.
-[[discord-roles]]
-# The name of the role.
-name = "security"
-# The color for the role.
-color = "#e91e63"
 ```
 
 ## Permissions

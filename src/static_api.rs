@@ -482,9 +482,6 @@ fn convert_teams<'a>(
         let mut github_teams = team.github_teams(data)?;
         github_teams.sort();
 
-        let mut member_discord_ids = team.discord_ids(data)?;
-        member_discord_ids.sort();
-
         let team_data = v1::Team {
             name: team.name().into(),
             kind: match team.kind() {
@@ -514,10 +511,6 @@ fn convert_teams<'a>(
                 page: ws.page().unwrap_or_else(|| team.name()).into(),
                 email: ws.email().map(|e| e.into()),
                 repo: ws.repo().map(|e| e.into()),
-                discord: ws.discord().map(|i| v1::DiscordInvite {
-                    channel: i.channel.into(),
-                    url: i.url.into(),
-                }),
                 zulip_stream: ws.zulip_stream().map(|s| s.into()),
                 matrix_room: ws.matrix_room().map(|s| s.into()),
                 weight: ws.weight(),
@@ -530,19 +523,6 @@ fn convert_teams<'a>(
                     description: role.description.clone(),
                 })
                 .collect(),
-            discord: team
-                .discord_roles()
-                .map(|roles| {
-                    roles
-                        .iter()
-                        .map(|role| v1::TeamDiscord {
-                            name: role.name().into(),
-                            color: role.color().map(String::from),
-                            members: member_discord_ids.clone(),
-                        })
-                        .collect()
-                })
-                .unwrap_or_else(Vec::new),
         };
         team_map.insert(team.name().into(), team_data);
     }

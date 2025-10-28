@@ -19,8 +19,6 @@ alumni = [
 name = "Events team"
 description = "Supporting and organizing community events"
 repo = "https://github.com/rust-community/events-team"
-discord-invite = "https://discord.gg/cj5HMXA"
-discord-name = "#events"
 
 [[github]]
 orgs = ["rust-lang"]

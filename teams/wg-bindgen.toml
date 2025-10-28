@@ -19,8 +19,6 @@ alumni = [
 name = "Bindgen working group"
 description = "Developing tools for generating FFI bindings"
 repo = "https://github.com/rust-lang/rust-bindgen"
-discord-invite = "https://discord.gg/kgujzMR"
-discord-name = "#wg-bindgen"
 
 [[github]]
 orgs = ["rust-lang"]

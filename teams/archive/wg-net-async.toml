@@ -10,5 +10,3 @@ alumni = ["cramertj", "MajorBreakfast"]
 [website]
 name = "Async foundations working group"
 description = "Stabilizing and documenting the async features of Rust"
-discord-invite = "https://discord.gg/JebCvj5"
-discord-name = "#wg-net-async"

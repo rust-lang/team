@@ -13,8 +13,6 @@ alumni = [
 page = "networking"
 name = "Networking working group"
 description = "Focusing on improving the end-to-end experience with both sync and async networking code, in coordination with the growing web ecosystem"
-discord-invite = "https://discord.gg/ueak2ds"
-discord-name = "#wg-net"
 
 [[lists]]
 address = "net@rust-lang.org"

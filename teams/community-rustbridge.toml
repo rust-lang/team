@@ -20,8 +20,6 @@ alumni = [
 name = "RustBridge team"
 description = "Helping to bring underrepresented groups into Rust"
 repo = "https://github.com/rustbridge/team"
-discord-invite = "https://discord.gg/cj5HMXA"
-discord-name = "#rustbridge"
 
 [[github]]
 orgs = ["rust-lang"]

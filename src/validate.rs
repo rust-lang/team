@@ -44,7 +44,6 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_github_teams,
     validate_zulip_stream_name,
     validate_subteam_of_required,
-    validate_discord_team_members_have_discord_ids,
     validate_unique_zulip_groups,
     validate_zulip_group_ids,
     validate_zulip_group_extra_people,
@@ -655,28 +654,6 @@ fn validate_subteam_of_required(data: &Data, errors: &mut Vec<String>) {
         }
         Ok(())
     })
-}
-
-fn validate_discord_team_members_have_discord_ids(data: &Data, errors: &mut Vec<String>) {
-    wrapper(data.teams(), errors, |team, _| {
-        if team.discord_roles().is_some() && team.name() != "all" {
-            let team_members = team.members(data)?;
-            if team_members.len() != team.discord_ids(data)?.len() {
-                let missing_discord_id = team_members
-                    .into_iter()
-                    .filter(|name| data.person(name).map(|p| p.discord_id()) == Some(None))
-                    .collect::<Vec<_>>();
-
-                bail!(
-                    "the following members of the \"{}\" team do not have discord_ids: {}",
-                    team.name(),
-                    missing_discord_id.join(", "),
-                );
-            }
-        }
-
-        Ok(())
-    });
 }
 
 /// Ensure every member of a team that has a Zulip group has a Zulip id

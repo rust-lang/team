@@ -10,5 +10,3 @@ alumni = ["aturon", "yoshuawuyts"]
 [website]
 name = "Web foundations working group"
 description = "Improving web development with Rust"
-discord-invite = "https://discord.gg/NKHgJpq"
-discord-name = "#wg-net-web"
