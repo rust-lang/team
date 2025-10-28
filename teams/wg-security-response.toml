@@ -28,9 +28,5 @@ repo = "https://github.com/rust-lang/wg-security-response"
 [[lists]]
 address = "security@rust-lang.org"
 
-[[discord-roles]]
-name = "security"
-color = "#e91e63"
-
 [[zulip-groups]]
 name = "WG-security-response"
