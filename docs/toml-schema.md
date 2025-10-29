@@ -6,7 +6,7 @@ Every member of a Rust team is represented by a file in the `people` directory.
 The file structure is this:
 
 ```toml
-name = "John Doe"  # Real name of the person (required)
+name = "John Doe"  # Display name of the person for the website (required)
 github = "johndoe"  # GitHub username of the person (required)
 github-id = 123456  # GitHub ID of the person (required)
 zulip-id = 123456   # Zulip ID of the person (optional)
