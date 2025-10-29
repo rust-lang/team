@@ -6,14 +6,3 @@ bots = ["renovate", "rustbot", "heroku-deploy-access"]
 
 [access.teams]
 crates-io = "write"
-
-[[branch-protections]]
-pattern = "main"
-ci-checks = [
-    "Backend / Lint",
-    "Backend / Test",
-    "Frontend / Lint",
-    "Frontend / Test",
-    "Backend / dependencies",
-]
-required-approvals = 0
