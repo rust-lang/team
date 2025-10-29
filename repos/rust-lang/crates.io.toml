@@ -17,3 +17,4 @@ ci-checks = [
     "Backend / dependencies",
 ]
 required-approvals = 0
+pr-required = false
