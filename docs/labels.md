@@ -5,7 +5,7 @@ contributors to filter issues/PRs by labels.
 
 ## Labels are currently manually applied
 
-[`triagebot`][triagebot] is not currently set up for the `team` repository, as it would need write
+[`triagebot`][triagebot] is not currently set up for the `team` repository with write
 access (which needs to be tightly controlled). Thus, labels are currently manually applied and
 adjusted. See [threat model](./threat-model.md).
 
