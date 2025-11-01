@@ -9,7 +9,7 @@ The file structure is this:
 name = "John Doe"  # Display name of the person for the website (required)
 github = "johndoe"  # GitHub username of the person (required)
 github-id = 123456  # GitHub ID of the person (required)
-zulip-id = 123456   # Zulip ID of the person (optional)
+zulip-id = 123456   # Zulip ID of the person (required)
 discord-id = 123456 # Discord ID of the person (optional)
 # You can also set `email = false` to explicitly disable the email for the user.
 # This will, for example, avoid adding the person to the mailing lists.
