@@ -1,0 +1,22 @@
+# This file's format is documented at
+# https://forge.rust-lang.org/triagebot/pr-assignment.html#configuration
+
+# NOTE: Due to this repository security requirements, triagebot/rustbot can't have
+# write permissions. This means that any features that requires write permissions
+# (like adding labels, updating comments, ...) WILL not work.
+#
+# Posting comments is fine though.
+
+[mentions."rust_team_data/src/v1.rs"]
+message = """
+`rust_team_data/src/v1.rs` has been modified, it is used (as a git dependency) by multiple sub-projects like \
+[triagebot](https://github.com/rust-lang/triagebot), the [www.rust-lang.org](https://github.com/rust-lang/www.rust-lang.org) website and others.
+
+If you are changing the data structures, please make sure that the changes are not going to break serde deserialization \
+(adding a field is fine; removing or renaming a field isn't).
+
+If you must do a breaking change to the format, make sure to coordinate it with \
+[all the users](https://github.com/search?q=org%3Arust-lang+%2Fname+%3D+%22rust_team_data%22%2F+NOT+repo%3Arust-lang%2Fteam+NOT+repo%3Arust-lang%2Fsync-team&type=code) \
+of the `rust_team_data` crate.
+"""
+cc = ["@Urgau"]
