@@ -20,3 +20,4 @@ orgs = ["rust-lang"]
 name = "Website team"
 description = "Manages the www.rust-lang.org website"
 repo = "https://github.com/rust-lang/www.rust-lang.org/"
+zulip-stream = "t-website"
