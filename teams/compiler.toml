@@ -34,6 +34,7 @@ members = [
     "jdonszelmann",
     { github = "jieyouxu", roles = ["compiler-maintainer"] },
     "jswrenn",
+    "Kivooeo",
     "Kobzol",
     { github = "lcnr", roles = ["compiler-maintainer"] },
     { github = "lqd", roles = ["compiler-maintainer"] },
