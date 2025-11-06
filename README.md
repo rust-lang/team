@@ -14,7 +14,7 @@ The repository is automatically synchronized with:
 | GitHub repositories                                        | *Shortly after merge* | [Integration source][sync-team-src]       |
 | Mailing lists and aliases (`@rust-lang.org`, `@crates.io`) | *Shortly after merge* | [Integration source][sync-team-src]       |
 | Zulip user group membership                                | *Shortly after merge* | [Integration source][sync-team-src]       |
-| [Governance section on the website][www]                   |       2 minutes       | [Integration source][www-src]             |
+| [Governance section on the website][www]                   |     Once per day      | [Integration source][www-src]             |
 | crates.io admin access                                     |        1 hour         | [Integration source][crates-io-admin-src] |
 
 If you need to add or remove a person from a team, send a PR to this
@@ -27,7 +27,7 @@ from all the supported services.
 
 [www]: https://www.rust-lang.org/governance
 
-[www-src]: https://github.com/rust-lang/www.rust-lang.org/blob/master/src/teams.rs
+[www-src]: https://github.com/rust-lang/www.rust-lang.org/blob/HEAD/src/teams.rs
 
 [crater]: https://github.com/rust-lang/crater
 
