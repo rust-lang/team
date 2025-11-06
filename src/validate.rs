@@ -219,9 +219,22 @@ fn validate_team_leads(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
-/// Ensure team members are people
+/// Ensure team members are real people and not duplicated
 fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
+        // Check for duplicate members in explicit_members
+        let mut seen = HashSet::new();
+        for member in team.explicit_members() {
+            if !seen.insert(&member.github) {
+                bail!(
+                    "person `{}` is duplicated in team `{}`",
+                    member.github,
+                    team.name()
+                );
+            }
+        }
+        
+        // Existing validation: ensure members are real people
         wrapper(team.members(data)?.iter(), errors, |member, _| {
             if data.person(member).is_none() {
                 bail!(
