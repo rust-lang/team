@@ -1,7 +1,6 @@
 org = "rust-analyzer"
-name = "ungrammar"
+name = "text-size"
 description = ""
 bots = []
 
 [access.teams]
-rust-analyzer = "write"
