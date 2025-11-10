@@ -28,7 +28,7 @@ types = "write"
 wg-triage = "write"
 
 [[branch-protections]]
-pattern = "master"
+pattern = "main"
 merge-bots = ["homu"]
 
 [[branch-protections]]
