@@ -39,6 +39,7 @@ impl DataModel {
             name: name.to_string(),
             email: Some(format!("{name}@rust.com")),
             github_id,
+            github_sponsors: false,
         });
         github_id
     }

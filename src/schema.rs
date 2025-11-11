@@ -65,6 +65,12 @@ pub(crate) enum Email<'a> {
     Present(&'a str),
 }
 
+#[derive(serde_derive::Deserialize, Debug, Default)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub(crate) struct Funding {
+    github_sponsors: bool,
+}
+
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Person {
@@ -77,6 +83,8 @@ pub(crate) struct Person {
     email: EmailField,
     discord_id: Option<u64>,
     matrix: Option<String>,
+    #[serde(default)]
+    funding: Funding,
     #[serde(default)]
     permissions: Permissions,
 }
@@ -96,6 +104,10 @@ impl Person {
 
     pub(crate) fn zulip_id(&self) -> Option<u64> {
         self.zulip_id
+    }
+
+    pub(crate) fn has_github_sponsors(&self) -> bool {
+        self.funding.github_sponsors
     }
 
     #[allow(unused)]

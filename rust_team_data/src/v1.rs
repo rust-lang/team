@@ -249,6 +249,7 @@ pub struct Person {
     pub name: String,
     pub email: Option<String>,
     pub github_id: u64,
+    pub github_sponsors: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

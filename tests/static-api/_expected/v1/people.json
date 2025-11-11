@@ -3,42 +3,50 @@
     "test-admin": {
       "name": "Test Admin",
       "email": "test-admin@example.com",
-      "github_id": 7
+      "github_id": 7,
+      "github_sponsors": false
     },
     "user-0": {
       "name": "Zeroth user",
       "email": "user0@example.com",
-      "github_id": 0
+      "github_id": 0,
+      "github_sponsors": false
     },
     "user-1": {
       "name": "First user",
       "email": "user1@example.com",
-      "github_id": 0
+      "github_id": 0,
+      "github_sponsors": false
     },
     "user-2": {
       "name": "Second user",
       "email": "user2@example.com",
-      "github_id": 2
+      "github_id": 2,
+      "github_sponsors": false
     },
     "user-3": {
       "name": "Third user",
       "email": "user3@example.com",
-      "github_id": 3
+      "github_id": 3,
+      "github_sponsors": false
     },
     "user-4": {
       "name": "Fourth user",
       "email": "user4@example.com",
-      "github_id": 4
+      "github_id": 4,
+      "github_sponsors": false
     },
     "user-5": {
       "name": "Fifth user",
       "email": "user5@example.com",
-      "github_id": 5
+      "github_id": 5,
+      "github_sponsors": false
     },
     "user-6": {
       "name": "Sixth user",
       "email": "user6@example.com",
-      "github_id": 6
+      "github_id": 6,
+      "github_sponsors": false
     }
   }
 }

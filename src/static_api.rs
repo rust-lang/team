@@ -367,6 +367,7 @@ impl<'a> Generator<'a> {
                         Email::Present(s) => Some(s.into()),
                     },
                     github_id: person.github_id(),
+                    github_sponsors: person.has_github_sponsors(),
                 },
             );
         }
