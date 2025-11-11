@@ -17,6 +17,11 @@ email = "john@doe.com"  # Email address used for mailing lists (optional)
 irc = "jdoe"  # Nickname of the person on IRC, if different than the GitHub one (optional)
 matrix = "@john:doe.com" # Matrix username (MXID) of the person (optional)
 
+[funding]
+# Optional, specify that you have GitHub Sponsors enabled and you
+# are looking for sponsors to fund your work on Rust.
+github-sponsors = true
+
 [permissions]
 # Optional, see the permissions documentation
 ```
