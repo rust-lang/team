@@ -12,3 +12,10 @@ orgs = ["rust-lang"]
 [[lists]]
 address = "leads@rust-lang.org"
 extra-teams = ["wg-leads", "leadership-council"]
+
+[[zulip-streams]]
+name = "project leads (private)"
+extra-teams = [
+    "leadership-council",
+    "foundation-board-project-directors"
+]
