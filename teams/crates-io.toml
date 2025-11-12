@@ -61,3 +61,26 @@ extra-people = [
 
 [[zulip-groups]]
 name = "T-crates-io"
+
+[[zulip-streams]]
+name = "t-crates-io/incident-response"
+extra-teams = [
+    "crates-io-on-call",
+    "infra",
+]
+
+[[zulip-streams]]
+name = "t-crates-io/moderation"
+extra-teams = [
+    "mods-venue",
+]
+
+[[zulip-streams]]
+name = "t-crates-io/operations"
+extra-teams = [
+    "crates-io-on-call",
+    "infra",
+]
+
+[[zulip-streams]]
+name = "t-crates-io/private"
