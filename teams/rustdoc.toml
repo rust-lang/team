@@ -50,3 +50,6 @@ address = "rustdoc@rust-lang.org"
 
 [[zulip-groups]]
 name = "T-rustdoc"
+
+[[zulip-streams]]
+name = "t-rustdoc/private"
