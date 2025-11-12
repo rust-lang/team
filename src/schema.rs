@@ -517,6 +517,10 @@ impl Team {
         self.people.alumni.as_ref().map_or(&[], Vec::as_slice)
     }
 
+    pub(crate) fn explicit_leads(&self) -> &[String] {
+        &self.people.leads
+    }
+
     pub(crate) fn contains_person(&self, data: &Data, person: &Person) -> Result<bool, Error> {
         let members = self.members(data)?;
         Ok(members.contains(person.github()))
