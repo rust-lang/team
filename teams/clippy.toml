@@ -48,3 +48,6 @@ address = "clippy@rust-lang.org"
 
 [[zulip-groups]]
 name = "T-clippy"
+
+[[zulip-streams]]
+name = "clippy/private"
