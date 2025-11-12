@@ -2,17 +2,10 @@ org = "rust-lang"
 name = "www.rust-lang.org"
 description = "The home of the Rust website"
 homepage = "https://www.rust-lang.org"
-bots = ["rustbot", "heroku-deploy-access"]
+bots = ["rustbot"]
 
 [access.teams]
-# Maintain is needed for integrating with external services, e.g. Pontoon
-website = "maintain"
+website = "write"
 
 [[branch-protections]]
 pattern = "main"
-pr-required = false
-
-[[branch-protections]]
-pattern = "deploy"
-pr-required = false
-allowed-merge-teams = ["website"]
