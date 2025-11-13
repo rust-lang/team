@@ -440,6 +440,6 @@ Configure crates.io Trusted Publishing for crates published from a given reposit
 crates = ["regex"]
 # Name of a GitHub Actions workflow file that will publish the crate (required)
 workflow-filename = "ci.yml"
-# GitHub Actions environment that has to be used for the publishing (optional)
+# GitHub Actions environment that has to be used for the publishing (required)
 environment = "deploy"
 ```

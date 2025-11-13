@@ -873,6 +873,5 @@ pub(crate) struct BranchProtection {
 pub(crate) struct CratesIoPublishing {
     pub crates: Vec<String>,
     pub workflow_filename: String,
-    #[serde(default)]
-    pub environment: Option<String>,
+    pub environment: String,
 }

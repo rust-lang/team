@@ -71,7 +71,7 @@ impl CratesIoApi {
             config.repo_name,
             config.repo_name,
             config.workflow_file,
-            config.environment.as_deref().unwrap_or("(none)")
+            config.environment
         );
 
         if self.dry_run {
@@ -99,7 +99,7 @@ impl CratesIoApi {
                 repository_name: &config.repo_name,
                 krate: &config.krate.0,
                 workflow_filename: &config.workflow_file,
-                environment: config.environment.as_deref(),
+                environment: Some(&config.environment),
             },
         };
 

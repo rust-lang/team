@@ -254,7 +254,7 @@ pub struct BranchProtection {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CratesIoPublishing {
     pub workflow_file: String,
-    pub environment: Option<String>,
+    pub environment: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

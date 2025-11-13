@@ -16,7 +16,7 @@ struct CratesIoPublishingConfig {
     repo_org: String,
     repo_name: String,
     workflow_file: String,
-    environment: Option<String>,
+    environment: String,
 }
 
 pub(crate) struct SyncCratesIo {
@@ -84,7 +84,7 @@ impl SyncCratesIo {
                     *repository_owner.to_lowercase() == desired.repo_org.to_lowercase()
                         && *repository_name.to_lowercase() == desired.repo_name.to_lowercase()
                         && *workflow_filename == desired.workflow_file
-                        && *environment == desired.environment
+                        && environment.as_deref() == Some(&desired.environment)
                 })
                 .collect::<Vec<_>>();
 
@@ -174,11 +174,7 @@ impl std::fmt::Display for ConfigDiff {
                 )?;
                 writeln!(f, "    Repo: {}/{}", config.repo_org, config.repo_name)?;
                 writeln!(f, "    Workflow file: {}", config.workflow_file)?;
-                writeln!(
-                    f,
-                    "    Environment: {}",
-                    config.environment.as_deref().unwrap_or("(none)")
-                )?;
+                writeln!(f, "    Environment: {}", config.environment)?;
             }
             ConfigDiff::Delete(config) => {
                 writeln!(
