@@ -147,13 +147,17 @@ impl<'a> Generator<'a> {
                     members
                 },
                 branch_protections,
-                trusted_publishing: r
-                    .trusted_publishing
+                crates: r
+                    .crates_io_publishing
                     .iter()
-                    .map(|p| v1::TrustedPublishing {
-                        krate: p.krate.clone(),
-                        workflow_file: p.workflow_filename.clone(),
-                        environment: p.environment.clone(),
+                    .flat_map(|p| {
+                        p.crates.iter().map(|krate| v1::Crate {
+                            name: krate.to_string(),
+                            crates_io_publishing: Some(v1::CratesIoPublishing {
+                                workflow_file: p.workflow_filename.clone(),
+                                environment: p.environment.clone(),
+                            }),
+                        })
                     })
                     .collect(),
                 archived,

@@ -1,4 +1,4 @@
-use crate::crates_io::TrustedPublishingConfig;
+use crate::crates_io::CratesIoPublishingConfig;
 use crate::utils::ResponseExt;
 use anyhow::{Context, anyhow};
 use log::debug;
@@ -63,7 +63,7 @@ impl CratesIoApi {
     /// Create a new trusted publishing configuration for a given crate.
     pub(crate) fn create_trusted_publishing_github_config(
         &self,
-        config: &TrustedPublishingConfig,
+        config: &CratesIoPublishingConfig,
     ) -> anyhow::Result<()> {
         debug!(
             "Creating trusted publishing config for '{}' in repo '{}/{}', workflow file '{}' and environment '{}'",

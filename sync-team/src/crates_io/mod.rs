@@ -8,11 +8,11 @@ use secrecy::SecretString;
 use std::collections::HashMap;
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
-struct Crate(String);
+struct CrateName(String);
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
-struct TrustedPublishingConfig {
-    krate: Crate,
+struct CratesIoPublishingConfig {
+    krate: CrateName,
     repo_org: String,
     repo_name: String,
     workflow_file: String,
@@ -21,7 +21,7 @@ struct TrustedPublishingConfig {
 
 pub(crate) struct SyncCratesIo {
     crates_io_api: CratesIoApi,
-    crates: HashMap<Crate, TrustedPublishingConfig>,
+    crates: HashMap<CrateName, CratesIoPublishingConfig>,
 }
 
 impl SyncCratesIo {
@@ -31,23 +31,26 @@ impl SyncCratesIo {
         dry_run: bool,
     ) -> anyhow::Result<Self> {
         let crates_io_api = CratesIoApi::new(token, dry_run);
-        let crates: HashMap<Crate, TrustedPublishingConfig> = team_api
+        let crates: HashMap<CrateName, CratesIoPublishingConfig> = team_api
             .get_repos()?
             .into_iter()
             .flat_map(|repo| {
-                repo.trusted_publishing
+                repo.crates
                     .iter()
-                    .map(|publishing| {
-                        (
-                            Crate(publishing.krate.clone()),
-                            TrustedPublishingConfig {
-                                krate: Crate(publishing.krate.clone()),
+                    .filter_map(|krate| {
+                        let Some(publishing) = &krate.crates_io_publishing else {
+                            return None;
+                        };
+                        Some((
+                            CrateName(krate.name.clone()),
+                            CratesIoPublishingConfig {
+                                krate: CrateName(krate.name.clone()),
                                 repo_org: repo.org.clone(),
                                 repo_name: repo.name.clone(),
                                 workflow_file: publishing.workflow_file.clone(),
                                 environment: publishing.environment.clone(),
                             },
-                        )
+                        ))
                     })
                     .collect::<Vec<_>>()
             })
@@ -144,7 +147,7 @@ impl std::fmt::Display for Diff {
 }
 
 enum ConfigDiff {
-    Create(TrustedPublishingConfig),
+    Create(CratesIoPublishingConfig),
     Delete(TrustedPublishingGitHubConfig),
 }
 impl ConfigDiff {
