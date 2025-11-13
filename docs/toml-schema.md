@@ -435,11 +435,11 @@ merge-bots = ["homu"]
 Configure crates.io Trusted Publishing for crates published from a given repository from GitHub Actions.
 
 ```toml
-[[trusted-publishing]]
-# Name of the crate that will be published from this repository (required)
-crate = "regex"
+[[crates-io-publishing]]
+# Crates that will be published with the given workflow file from this repository (required)
+crates = ["regex"]
 # Name of a GitHub Actions workflow file that will publish the crate (required)
 workflow-filename = "ci.yml"
-# GitHub Actions environment that has to be used for the publishing (optional)
+# GitHub Actions environment that has to be used for the publishing (required)
 environment = "deploy"
 ```

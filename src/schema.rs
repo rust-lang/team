@@ -808,7 +808,7 @@ pub(crate) struct Repo {
     #[serde(default)]
     pub branch_protections: Vec<BranchProtection>,
     #[serde(default)]
-    pub trusted_publishing: Vec<TrustedPublishing>,
+    pub crates_io_publishing: Vec<CratesIoPublishing>,
 }
 
 #[derive(serde_derive::Deserialize, Debug, Clone, PartialEq)]
@@ -870,10 +870,8 @@ pub(crate) struct BranchProtection {
 
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
-pub(crate) struct TrustedPublishing {
-    #[serde(rename = "crate")]
-    pub krate: String,
+pub(crate) struct CratesIoPublishing {
+    pub crates: Vec<String>,
     pub workflow_filename: String,
-    #[serde(default)]
-    pub environment: Option<String>,
+    pub environment: String,
 }

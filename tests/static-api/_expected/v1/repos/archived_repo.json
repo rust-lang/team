@@ -22,7 +22,7 @@
       "merge_bots": []
     }
   ],
-  "trusted_publishing": [],
+  "crates": [],
   "archived": true,
   "private": false,
   "auto_merge_enabled": true

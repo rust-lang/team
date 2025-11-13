@@ -24,7 +24,7 @@
           "merge_bots": []
         }
       ],
-      "trusted_publishing": [],
+      "crates": [],
       "archived": true,
       "private": false,
       "auto_merge_enabled": true
@@ -64,11 +64,20 @@
           "merge_bots": []
         }
       ],
-      "trusted_publishing": [
+      "crates": [
         {
-          "crate": "my-crate",
-          "workflow_file": "ci.yml",
-          "environment": "deploy"
+          "name": "my-crate",
+          "crates_io_publishing": {
+            "workflow_file": "ci.yml",
+            "environment": "deploy"
+          }
+        },
+        {
+          "name": "my-crate-2",
+          "crates_io_publishing": {
+            "workflow_file": "ci.yml",
+            "environment": "deploy"
+          }
         }
       ],
       "archived": false,
