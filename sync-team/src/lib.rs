@@ -1,3 +1,4 @@
+mod crates_io;
 mod github;
 mod mailgun;
 pub mod team_api;
@@ -6,6 +7,7 @@ mod zulip;
 
 use std::collections::BTreeSet;
 
+use crate::crates_io::SyncCratesIo;
 use crate::github::{GitHubApiRead, GitHubWrite, HttpClient, create_diff};
 use crate::team_api::TeamApi;
 use crate::zulip::SyncZulip;
@@ -58,6 +60,17 @@ pub fn run_sync_team(
                 let username = get_env("ZULIP_USERNAME")?;
                 let token = SecretString::from(get_env("ZULIP_API_TOKEN")?);
                 let sync = SyncZulip::new(username, token, &team_api, dry_run)?;
+                let diff = sync.diff_all()?;
+                if !diff.is_empty() {
+                    info!("{diff}");
+                }
+                if !only_print_plan {
+                    diff.apply(&sync)?;
+                }
+            }
+            "crates-io" => {
+                let token = SecretString::from(get_env("CRATES_IO_TOKEN")?);
+                let sync = SyncCratesIo::new(token, &team_api, dry_run)?;
                 let diff = sync.diff_all()?;
                 if !diff.is_empty() {
                     info!("{diff}");
