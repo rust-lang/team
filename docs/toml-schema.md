@@ -210,8 +210,10 @@ excluded-people = [
     "rylev",
 ]
 
-# Define the Zulip streams used by the team
+# Define the Zulip streams used by the team.
 # It's optional, and there can be more than one.
+# Please refer to the Configuring Zulip streams subsection
+# below for more details.
 #
 # This will remove anyone who isn't in the team from the stream
 # so it should only be used for private streams at the moment.
@@ -241,6 +243,39 @@ excluded-people = [
     "rylev",
 ]
 ```
+
+### Configuring Zulip streams
+
+> [!TIP]
+>
+> The `[[zulip-stream]]` configuration is only suitable for managing membership
+> and thus access of **private** Zulip streams, as otherwise public streams need
+> no such managing.
+
+To let the `team` repository automation manage the membership and access of a
+private Zulip stream, there are two scenarios:
+
+1. The private Zulip stream is pre-existing.
+2. The private Zulip stream does not yet exist.
+
+#### Case 1: Pre-existing private Zulip stream
+
+An existing member of the private Zulip stream must manually invite [Rust Owner
+Account] to the private stream. This is because even owners of the Zulip
+instance cannot access private streams unless invited, and so even `infra-admin`s
+cannot perform this action for privacy reasons.
+
+> [!WARNING]
+>
+> Please double-check that the Rust Owner Account Zulip user being invited has
+> the "Owner" role -- and is not an impersonating user.
+
+#### Case 2: The private Zulip stream does not yet exist
+
+In this case, no manual intervention is necessary, because [Rust Owner Account]
+can be added alongside stream creation.
+
+[Rust Owner Account]: https://rust-lang.zulipchat.com/#user/494485
 
 ## Permissions
 
