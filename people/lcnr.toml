@@ -3,3 +3,6 @@ email = "rust@lcnr.de"
 github = 'lcnr'
 github-id = 29864074
 zulip-id = 216206
+
+[funding]
+github-sponsors = true
