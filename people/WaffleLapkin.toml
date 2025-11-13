@@ -1,6 +1,9 @@
-name = 'Waffle Maybe'
+name = 'waffle'
 github = 'WaffleLapkin'
 github-id = 38225716
 email = 'waffle.lapkin@gmail.com'
 zulip-id = 273349
 discord-id = 123482303698567168
+
+[funding]
+github-sponsors = true
