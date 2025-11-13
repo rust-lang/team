@@ -144,10 +144,7 @@ impl CratesIoApi {
         let mut req = self
             .client
             .request(method, format!("{CRATES_IO_BASE_URL}{path}"))
-            .header(
-                "Authorization",
-                format!("Bearer {}", self.token.expose_secret()),
-            );
+            .bearer_auth(self.token.expose_secret());
         if let Some(data) = data {
             req = req.json(data);
         }

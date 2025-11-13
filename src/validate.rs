@@ -1007,9 +1007,9 @@ fn validate_trusted_publishing(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.repos(), errors, |repo, _| {
         let repo_name = format!("{}/{}", repo.org, repo.name);
         for publishing in &repo.trusted_publishing {
-            if let Some(prev_crate) = crates.insert(&publishing.krate, repo_name.clone()) {
+            if let Some(prev_repo) = crates.insert(&publishing.krate, repo_name.clone()) {
                 return Err(anyhow::anyhow!(
-                    "Repository `{repo_name}` configures trusted publishing for crate `{}` that is also configured in `{prev_crate}`. Each crate can only be configured once.",
+                    "Repository `{repo_name}` configures trusted publishing for crate `{}` that is also configured in `{prev_repo}`. Each crate can only be configured once.",
                     publishing.krate
                 ));
             }
