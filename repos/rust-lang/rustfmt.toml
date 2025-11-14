@@ -9,7 +9,7 @@ rustfmt = "write"
 rustfmt-contributors = "write"
 
 [[branch-protections]]
-pattern = "master"
+pattern = "main"
 required-approvals = 0
 ci-checks = [
     "(x86_64-unknown-linux-gnu, nightly)",
