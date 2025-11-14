@@ -54,6 +54,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_repos,
     validate_archived_repos,
     validate_branch_protections,
+    validate_trusted_publishing,
     validate_member_roles,
     validate_admin_access,
     validate_website,
@@ -993,6 +994,30 @@ Please remove the attributes when using bors"#,
                         repo.name,
                         protection.pattern,
                     );
+                }
+            }
+        }
+        Ok(())
+    })
+}
+
+/// Validate that trusted publishing configuration has unique crates across all repositories.
+fn validate_trusted_publishing(data: &Data, errors: &mut Vec<String>) {
+    let mut crates = HashMap::new();
+    wrapper(data.repos(), errors, |repo, _| {
+        let repo_name = format!("{}/{}", repo.org, repo.name);
+        for publishing in &repo.crates_io_publishing {
+            if publishing.crates.is_empty() {
+                return Err(anyhow::anyhow!(
+                    "Repository `{repo_name}` has trusted publishing for an empty set of crates.",
+                ));
+            }
+
+            for krate in &publishing.crates {
+                if let Some(prev_repo) = crates.insert(krate.clone(), repo_name.clone()) {
+                    return Err(anyhow::anyhow!(
+                        "Repository `{repo_name}` configures trusted publishing for crate `{krate}` that is also configured in `{prev_repo}`. Each crate can only be configured once.",
+                    ));
                 }
             }
         }

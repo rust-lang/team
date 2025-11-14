@@ -807,6 +807,8 @@ pub(crate) struct Repo {
     pub access: RepoAccess,
     #[serde(default)]
     pub branch_protections: Vec<BranchProtection>,
+    #[serde(default)]
+    pub crates_io_publishing: Vec<CratesIoPublishing>,
 }
 
 #[derive(serde_derive::Deserialize, Debug, Clone, PartialEq)]
@@ -864,4 +866,12 @@ pub(crate) struct BranchProtection {
     pub allowed_merge_teams: Vec<String>,
     #[serde(default)]
     pub merge_bots: Vec<MergeBot>,
+}
+
+#[derive(serde_derive::Deserialize, Debug)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub(crate) struct CratesIoPublishing {
+    pub crates: Vec<String>,
+    pub workflow_filename: String,
+    pub environment: String,
 }

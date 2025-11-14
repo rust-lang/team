@@ -16,6 +16,7 @@ The repository is automatically synchronized with:
 | Zulip user group membership                                | *Shortly after merge* | [Integration source][sync-team-src]       |
 | [Governance section on the website][www]                   |     Once per day      | [Integration source][www-src]             |
 | crates.io admin access                                     |        1 hour         | [Integration source][crates-io-admin-src] |
+| crates.io trusted publishing config                        | *Shortly after merge* | [Integration source][sync-team-src]       |
 
 If you need to add or remove a person from a team, send a PR to this
 repository. After it's merged, their account will be added/removed

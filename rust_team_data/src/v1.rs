@@ -174,12 +174,19 @@ pub struct Repo {
     pub teams: Vec<RepoTeam>,
     pub members: Vec<RepoMember>,
     pub branch_protections: Vec<BranchProtection>,
+    pub crates: Vec<Crate>,
     pub archived: bool,
     // This attribute is not synced by sync-team.
     pub private: bool,
     // Is the GitHub "Auto-merge" option enabled?
     // https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request
     pub auto_merge_enabled: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Crate {
+    pub name: String,
+    pub crates_io_publishing: Option<CratesIoPublishing>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
@@ -242,6 +249,12 @@ pub struct BranchProtection {
     pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,
     pub merge_bots: Vec<MergeBot>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CratesIoPublishing {
+    pub workflow_file: String,
+    pub environment: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

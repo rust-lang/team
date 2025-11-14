@@ -351,6 +351,7 @@ impl From<RepoData> for v1::Repo {
             teams: teams.clone(),
             members: members.clone(),
             branch_protections,
+            crates: vec![],
             archived,
             private: false,
             auto_merge_enabled: allow_auto_merge,
