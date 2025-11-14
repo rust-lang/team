@@ -28,3 +28,17 @@ include-team-members = false
 extra-emails = [
     "rust-verification@googlegroups.com",
 ]
+
+[[zulip-groups]]
+name = "T-all"
+# Exclude the following people from the Zulip group for grandfathering purposes,
+# where previously we didn't require all project team members to have Zulip IDs
+# (since there wasn't a `T-all` Zulip group previously).
+excluded-people = [
+    "U007D",
+    "andrewpollack",
+    "arshiamufti",
+    "bnchi",
+    "celaus",
+    "opeolluwa",
+]
