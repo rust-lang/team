@@ -4,3 +4,7 @@ github-id = 456674
 irc = "burntsushi"
 email = "jamslam@gmail.com"
 zulip-id = 222471
+discord-id = 433395793635049472
+
+[funding]
+github-sponsors = true
