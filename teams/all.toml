@@ -42,3 +42,15 @@ excluded-people = [
     "celaus",
     "opeolluwa",
 ]
+
+# Private channel with all team members, so that we can have an easy way of reaching them.
+[[zulip-streams]]
+name = "rust project"
+excluded-people = [
+    "U007D",
+    "andrewpollack",
+    "arshiamufti",
+    "bnchi",
+    "celaus",
+    "opeolluwa",
+]
