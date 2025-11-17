@@ -758,16 +758,20 @@ fn validate_zulip_stream_ids(data: &Data, errors: &mut Vec<String>) {
             return Ok(());
         }
 
-        wrapper(team.members(data)?.iter(), errors, |member, _| {
-            if let Some(member) = data.person(member) {
-                if member.zulip_id().is_none() {
-                    bail!(
-                        "person `{}` in '{}' is a member of a Zulip stream but has no Zulip id",
-                        member.github(),
-                        team.name()
-                    );
+        wrapper(streams.iter(), errors, |stream, errors| {
+            wrapper(stream.members().iter(), errors, |member, _| {
+                match member {
+                    ZulipMember::MemberWithId { .. } | ZulipMember::JustId(_) => {}
+                    ZulipMember::MemberWithoutId { github } => {
+                        bail!(
+                            "person `{github}` is a member of a Zulip stream `{}` defined in team `{}`, but has no Zulip id",
+                            stream.name(),
+                            team.name()
+                        );
+                    }
                 }
-            }
+                Ok(())
+            });
             Ok(())
         });
         Ok(())
