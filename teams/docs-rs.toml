@@ -44,3 +44,12 @@ address = "help@docs.rs"
 
 [[zulip-groups]]
 name = "T-docs-rs"
+
+[[zulip-streams]]
+name = "t-docs-rs/private"
+extra-teams = [
+    "infra",
+]
+extra-people = [
+    "walterhpearce",
+]
