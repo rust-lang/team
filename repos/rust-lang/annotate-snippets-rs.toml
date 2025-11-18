@@ -8,6 +8,6 @@ cargo = "write"
 wg-diagnostics = "write"
 
 [[branch-protections]]
-pattern = "master"
+pattern = "main"
 ci-checks = ["CI"]
 required-approvals = 0
