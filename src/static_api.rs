@@ -147,6 +147,19 @@ impl<'a> Generator<'a> {
                     members
                 },
                 branch_protections,
+                crates: r
+                    .crates_io_publishing
+                    .iter()
+                    .flat_map(|p| {
+                        p.crates.iter().map(|krate| v1::Crate {
+                            name: krate.to_string(),
+                            crates_io_publishing: Some(v1::CratesIoPublishing {
+                                workflow_file: p.workflow_filename.clone(),
+                                environment: p.environment.clone(),
+                            }),
+                        })
+                    })
+                    .collect(),
                 archived,
                 auto_merge_enabled: !managed_by_bors,
             };

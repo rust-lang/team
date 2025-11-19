@@ -9,7 +9,7 @@ mod schema;
 mod static_api;
 mod validate;
 
-const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun", "zulip"];
+const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun", "zulip", "crates-io"];
 
 const USER_AGENT: &str = "https://github.com/rust-lang/team (infra@rust-lang.org)";
 
