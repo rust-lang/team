@@ -13,3 +13,8 @@ ci-checks = ["success"]
 [[branch-protections]]
 pattern = "stable"
 ci-checks = ["success"]
+
+[[crates-io-publishing]]
+crates = ["analyzeme", "decodeme", "measureme"]
+workflow-filename = "publish.yml"
+environment = "publish"
