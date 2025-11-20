@@ -443,3 +443,7 @@ workflow-filename = "ci.yml"
 # GitHub Actions environment that has to be used for the publishing (required)
 environment = "deploy"
 ```
+
+> [!TIP]
+> To list the public crates of a workspace, run:
+> `cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.publish == null or .publish != false) | .name'`
