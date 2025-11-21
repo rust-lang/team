@@ -1,6 +1,5 @@
-name = "wg-security-response"
+name = "security-response"
 subteam-of = "launching-pad"
-kind = "working-group"
 
 [people]
 leads = []
@@ -20,7 +19,7 @@ team-name = "security"
 orgs = ["rust-lang"]
 
 [website]
-name = "Security Response WG"
+name = "Security Response Subteam"
 description = "Triaging and responding to incoming vulnerability reports"
 email = "security@rust-lang.org"
 repo = "https://github.com/rust-lang/wg-security-response"
