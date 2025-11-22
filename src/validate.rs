@@ -881,8 +881,12 @@ fn validate_repos(data: &Data, errors: &mut Vec<String>) {
             );
         }
         for team_name in repo.access.teams.keys() {
-            check_team_access(data, repo, team_name).with_context(|| {
-                format!("Access for the repo {}/{} is invalid", repo.org, repo.name)
+            check_team_access(data, repo, team_name).map_err(|e| {
+                anyhow::anyhow!(
+                    "Access for the repo {}/{} is invalid: {e}",
+                    repo.org,
+                    repo.name
+                )
             })?;
         }
 
