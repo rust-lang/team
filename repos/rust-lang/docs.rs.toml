@@ -9,5 +9,5 @@ docs-rs = 'write'
 docs-rs-reviewers = 'write'
 
 [[branch-protections]]
-pattern = 'master'
+pattern = 'main'
 required-approvals = 0
