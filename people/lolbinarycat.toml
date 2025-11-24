@@ -3,3 +3,6 @@ github = "lolbinarycat"
 github-id = 19915050
 zulip-id = 735670
 email = "dogedoge61@gmail.com"
+
+[funding]
+github-sponsors = true
