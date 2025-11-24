@@ -8,3 +8,8 @@ compiler = 'maintain'
 
 [[branch-protections]]
 pattern = "main"
+
+[[crates-io-publishing]]
+crates = ["thorin-dwp", "thorin-dwp-bin"]
+workflow-filename = "release-plz.yml"
+environment = "publish"
