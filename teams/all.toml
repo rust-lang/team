@@ -37,7 +37,6 @@ name = "T-all"
 excluded-people = [
     "U007D",
     "andrewpollack",
-    "arshiamufti",
     "bnchi",
     "celaus",
     "opeolluwa",
@@ -51,7 +50,6 @@ name = "all/private"
 excluded-people = [
     "U007D",
     "andrewpollack",
-    "arshiamufti",
     "bnchi",
     "celaus",
     "opeolluwa",
