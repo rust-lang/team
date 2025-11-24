@@ -446,4 +446,4 @@ environment = "deploy"
 
 > [!TIP]
 > To list the public crates of a workspace, run:
-> `cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.publish == null or .publish != false) | .name'`
+> `cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.publish == null or .publish == true) | .name'`
