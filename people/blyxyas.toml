@@ -3,3 +3,6 @@ github = "blyxyas"
 github-id = 73757586
 zulip-id = 560802
 email = "blyxyas@goose.love"
+
+[funding]
+github-sponsors = true
