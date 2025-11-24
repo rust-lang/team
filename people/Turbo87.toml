@@ -4,3 +4,6 @@ github-id = 141300
 email = "tobias@bieniek.cloud"
 discord-id = 313625269405745155
 zulip-id = 282338
+
+[funding]
+github-sponsors = true
