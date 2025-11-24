@@ -1131,7 +1131,7 @@ where
 {
     for item in iter {
         if let Err(err) = func(item, errors) {
-            errors.push(err.to_string());
+            errors.push(format!("{err:?}"));
         }
     }
 }
