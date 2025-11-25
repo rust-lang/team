@@ -16,3 +16,17 @@ Dylan-DPC = "write"
 pattern = "master"
 ci-checks = ["Success gate"]
 required-approvals = 0
+
+[[crates-io-publishing]]
+crates = [
+    "mdbook",
+    "mdbook-core",
+    "mdbook-driver",
+    "mdbook-html",
+    "mdbook-markdown",
+    "mdbook-preprocessor",
+    "mdbook-renderer",
+    "mdbook-summary",
+]
+workflow-filename = "deploy.yml"
+environment = "publish"
