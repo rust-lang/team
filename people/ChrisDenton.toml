@@ -3,3 +3,6 @@ github = 'ChrisDenton'
 github-id = 4459874
 email = 'chris@chrisdenton.dev'
 zulip-id = 260325
+
+[funding]
+github-sponsors = true
