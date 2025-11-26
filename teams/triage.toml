@@ -1,5 +1,4 @@
-name = "wg-triage"
-kind = "working-group"
+name = "triage"
 subteam-of = "launching-pad"
 
 [people]
@@ -40,7 +39,7 @@ members = [
 alumni = []
 
 [website]
-name = "Triage working group"
+name = "Triage Team"
 description = "Triaging repositories under the rust-lang organisation"
 zulip-stream = "t-release/triage"
 
