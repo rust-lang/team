@@ -6,3 +6,7 @@ bots = []
 [access.teams]
 cargo = "write"
 compiler = "write"
+
+[[environments]]
+name = "github-pages"
+

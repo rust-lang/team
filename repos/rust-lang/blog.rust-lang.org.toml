@@ -16,3 +16,7 @@ ci-checks = [
     "lint",
     "build",
 ]
+
+[[environments]]
+name = "github-pages"
+

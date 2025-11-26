@@ -86,6 +86,8 @@ enum Cli {
         #[arg(long, default_value = "repo")]
         group_by: DumpIndividualAccessGroupBy,
     },
+    /// Dump all repositories with their environments
+    DumpEnvironments,
     /// Encrypt an email address
     EncryptEmail,
     /// Decrypt an email address
@@ -490,6 +492,19 @@ fn run() -> Result<(), Error> {
                 println!("{key}");
                 for (name, permission) in values {
                     println!("\t {name}: {permission:?}");
+                }
+            }
+        }
+        Cli::DumpEnvironments => {
+            for repo in data.all_repos() {
+                let repo_name = format!("{}/{}", repo.org, repo.name);
+                if !repo.environments.is_empty() {
+                    println!("{repo_name}:");
+                    for env in &repo.environments {
+                        println!("  - {}", env.name);
+                    }
+                } else {
+                    println!("{repo_name}: (no environments)");
                 }
             }
         }

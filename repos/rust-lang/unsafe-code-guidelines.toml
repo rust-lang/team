@@ -6,3 +6,7 @@ bots = ["rustbot", "rfcbot"]
 
 [access.teams]
 opsem = 'maintain'
+
+[[environments]]
+name = "github-pages"
+

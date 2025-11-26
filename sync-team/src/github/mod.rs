@@ -361,12 +361,18 @@ impl SyncGitHub {
                     },
                     permissions,
                     branch_protections,
+                    environments: expected_repo
+                        .environments
+                        .iter()
+                        .map(|e| e.name.clone())
+                        .collect(),
                 }));
             }
         };
 
         let permission_diffs = self.diff_permissions(expected_repo)?;
         let branch_protection_diffs = self.diff_branch_protections(&actual_repo, expected_repo)?;
+        let environment_diffs = self.diff_environments(expected_repo)?;
         let old_settings = RepoSettings {
             description: actual_repo.description.clone(),
             homepage: actual_repo.homepage.clone(),
@@ -387,6 +393,7 @@ impl SyncGitHub {
             settings_diff: (old_settings, new_settings),
             permission_diffs,
             branch_protection_diffs,
+            environment_diffs,
         }))
     }
 
@@ -476,6 +483,48 @@ impl SyncGitHub {
         }));
 
         Ok(branch_protection_diffs)
+    }
+
+    fn diff_environments(
+        &self,
+        expected_repo: &rust_team_data::v1::Repo,
+    ) -> anyhow::Result<Vec<EnvironmentDiff>> {
+        let mut environment_diffs = Vec::new();
+
+        let actual_environments: HashSet<String> = self
+            .github
+            .repo_environments(&expected_repo.org, &expected_repo.name)?
+            .into_iter()
+            .map(|e| e.name)
+            .collect();
+
+        let expected_environments: HashSet<String> = expected_repo
+            .environments
+            .iter()
+            .map(|e| e.name.clone())
+            .collect();
+
+        // Environments to create (sorted for deterministic output)
+        let mut to_create: Vec<_> = expected_environments
+            .difference(&actual_environments)
+            .cloned()
+            .collect();
+        to_create.sort();
+        for env in to_create {
+            environment_diffs.push(EnvironmentDiff::Create(env));
+        }
+
+        // Environments to delete (sorted for deterministic output)
+        let mut to_delete: Vec<_> = actual_environments
+            .difference(&expected_environments)
+            .cloned()
+            .collect();
+        to_delete.sort();
+        for env in to_delete {
+            environment_diffs.push(EnvironmentDiff::Delete(env));
+        }
+
+        Ok(environment_diffs)
     }
 
     fn expected_role(&self, org: &str, user: u64) -> TeamRole {
@@ -816,6 +865,7 @@ struct CreateRepoDiff {
     settings: RepoSettings,
     permissions: Vec<RepoPermissionAssignmentDiff>,
     branch_protections: Vec<(String, api::BranchProtection)>,
+    environments: Vec<String>,
 }
 
 impl CreateRepoDiff {
@@ -834,6 +884,10 @@ impl CreateRepoDiff {
             .apply(sync, &self.org, &self.name, &repo.node_id)?;
         }
 
+        for env in &self.environments {
+            sync.create_environment(&self.org, &self.name, env)?;
+        }
+
         Ok(())
     }
 }
@@ -846,6 +900,7 @@ impl std::fmt::Display for CreateRepoDiff {
             settings,
             permissions,
             branch_protections,
+            environments,
         } = self;
 
         let RepoSettings {
@@ -870,6 +925,12 @@ impl std::fmt::Display for CreateRepoDiff {
             writeln!(&mut f, "    {branch_name}")?;
             log_branch_protection(branch_protection, None, &mut f)?;
         }
+        if !environments.is_empty() {
+            writeln!(f, "  Environments:")?;
+            for env in environments {
+                writeln!(f, "    - {env}")?;
+            }
+        }
         Ok(())
     }
 }
@@ -883,6 +944,13 @@ struct UpdateRepoDiff {
     settings_diff: (RepoSettings, RepoSettings),
     permission_diffs: Vec<RepoPermissionAssignmentDiff>,
     branch_protection_diffs: Vec<BranchProtectionDiff>,
+    environment_diffs: Vec<EnvironmentDiff>,
+}
+
+#[derive(Debug)]
+enum EnvironmentDiff {
+    Create(String),
+    Delete(String),
 }
 
 impl UpdateRepoDiff {
@@ -898,11 +966,13 @@ impl UpdateRepoDiff {
             settings_diff,
             permission_diffs,
             branch_protection_diffs,
+            environment_diffs,
         } = self;
 
         settings_diff.0 == settings_diff.1
             && permission_diffs.is_empty()
             && branch_protection_diffs.is_empty()
+            && environment_diffs.is_empty()
     }
 
     fn can_be_modified(&self) -> bool {
@@ -938,6 +1008,17 @@ impl UpdateRepoDiff {
             branch_protection.apply(sync, &self.org, &self.name, &self.repo_node_id)?;
         }
 
+        for env_diff in &self.environment_diffs {
+            match env_diff {
+                EnvironmentDiff::Create(name) => {
+                    sync.create_environment(&self.org, &self.name, name)?;
+                }
+                EnvironmentDiff::Delete(name) => {
+                    sync.delete_environment(&self.org, &self.name, name)?;
+                }
+            }
+        }
+
         if !is_unarchive && self.settings_diff.0 != self.settings_diff.1 {
             sync.edit_repo(&self.org, &self.name, &self.settings_diff.1)?;
         }
@@ -959,6 +1040,7 @@ impl std::fmt::Display for UpdateRepoDiff {
             settings_diff,
             permission_diffs,
             branch_protection_diffs,
+            environment_diffs,
         } = self;
 
         writeln!(f, "📝 Editing repo '{org}/{name}':")?;
@@ -1004,6 +1086,15 @@ impl std::fmt::Display for UpdateRepoDiff {
             writeln!(f, "  Branch Protections:")?;
             for branch_protection_diff in branch_protection_diffs {
                 write!(f, "{branch_protection_diff}")?;
+            }
+        }
+        if !environment_diffs.is_empty() {
+            writeln!(f, "  Environments:")?;
+            for env_diff in environment_diffs {
+                match env_diff {
+                    EnvironmentDiff::Create(name) => writeln!(f, "    ➕ Create: {name}")?,
+                    EnvironmentDiff::Delete(name) => writeln!(f, "    ❌ Delete: {name}")?,
+                }
             }
         }
 

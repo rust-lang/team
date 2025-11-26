@@ -2,8 +2,8 @@ use std::collections::{BTreeSet, HashMap, HashSet};
 
 use derive_builder::Builder;
 use rust_team_data::v1::{
-    self, Bot, BranchProtectionMode, GitHubTeam, MergeBot, Person, RepoPermission, TeamGitHub,
-    TeamKind,
+    self, Bot, BranchProtectionMode, Environment, GitHubTeam, MergeBot, Person, RepoPermission,
+    TeamGitHub, TeamKind,
 };
 
 use crate::Config;
@@ -177,6 +177,10 @@ impl DataModel {
             }
             org.branch_protections
                 .insert(repo.name.clone(), protections);
+
+            let environments: Vec<Environment> = repo.environments.clone().into_iter().collect();
+            org.repo_environments
+                .insert(repo.name.clone(), environments);
         }
 
         if orgs.is_empty() {
@@ -305,6 +309,8 @@ pub struct RepoData {
     pub allow_auto_merge: bool,
     #[builder(default)]
     pub branch_protections: Vec<v1::BranchProtection>,
+    #[builder(default)]
+    pub environments: Vec<v1::Environment>,
 }
 
 impl RepoData {
@@ -341,6 +347,7 @@ impl From<RepoData> for v1::Repo {
             archived,
             allow_auto_merge,
             branch_protections,
+            environments,
         } = value;
         Self {
             org,
@@ -352,6 +359,7 @@ impl From<RepoData> for v1::Repo {
             members: members.clone(),
             branch_protections,
             crates: vec![],
+            environments,
             archived,
             private: false,
             auto_merge_enabled: allow_auto_merge,
@@ -377,6 +385,15 @@ impl RepoDataBuilder {
             permission,
         });
         self.members = Some(members);
+        self
+    }
+
+    pub fn environment(mut self, name: &str) -> Self {
+        let mut environments = self.environments.clone().unwrap_or_default();
+        environments.push(v1::Environment {
+            name: name.to_string(),
+        });
+        self.environments = Some(environments);
         self
     }
 }
@@ -584,6 +601,15 @@ impl GithubRead for GithubMock {
 
         Ok(result)
     }
+
+    fn repo_environments(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Environment>> {
+        Ok(self
+            .get_org(org)
+            .repo_environments
+            .get(repo)
+            .cloned()
+            .unwrap_or_default())
+    }
 }
 
 #[derive(Default)]
@@ -601,6 +627,8 @@ struct GithubOrg {
     repo_members: HashMap<String, RepoMembers>,
     // Repo name -> Vec<(protection ID, branch protection)>
     branch_protections: HashMap<String, Vec<(String, BranchProtection)>>,
+    // Repo name -> Vec<environment>
+    repo_environments: HashMap<String, Vec<Environment>>,
 }
 
 #[derive(Clone)]

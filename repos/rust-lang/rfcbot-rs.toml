@@ -6,3 +6,7 @@ bots = []
 
 [access.teams]
 infra = "write"
+
+[[environments]]
+name = "rfcbot-rs"
+

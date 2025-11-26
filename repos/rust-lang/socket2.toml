@@ -24,3 +24,7 @@ ci-checks = [
     'Test (stable)',
     'Test (windows)',
 ]
+
+[[environments]]
+name = "github-pages"
+

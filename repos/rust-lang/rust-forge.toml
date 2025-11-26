@@ -26,3 +26,7 @@ rustc-dev-guide = "maintain"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["test"]
+
+[[environments]]
+name = "github-pages"
+

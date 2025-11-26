@@ -6,3 +6,7 @@ bots = []
 
 [access.teams]
 rust-analyzer = "write"
+
+[[environments]]
+name = "github-pages"
+

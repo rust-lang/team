@@ -11,3 +11,7 @@ wg-bindgen = "write"
 pattern = "main"
 required-approvals = 0
 ci-checks = ["success"]
+
+[[environments]]
+name = "github-pages"
+

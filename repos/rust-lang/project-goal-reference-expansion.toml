@@ -6,3 +6,7 @@ bots = []
 
 [access.teams]
 project-goal-reference-expansion = "write"
+
+[[environments]]
+name = "github-pages"
+

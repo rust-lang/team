@@ -16,3 +16,7 @@ ci-checks = [
     "Rustfmt",
     "Publish Documentation"
 ]
+
+[[environments]]
+name = "github-pages"
+

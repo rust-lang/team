@@ -6,3 +6,10 @@ bots = ["renovate", "rustbot", "heroku-deploy-access"]
 
 [access.teams]
 crates-io = "write"
+
+[[environments]]
+name = "crates-io"
+
+[[environments]]
+name = "staging-crates-io"
+

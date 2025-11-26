@@ -6,3 +6,7 @@ bots = []
 
 [access.teams]
 project-const-generics = "maintain"
+
+[[environments]]
+name = "github-pages"
+

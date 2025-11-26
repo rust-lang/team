@@ -5,3 +5,7 @@ bots = []
 
 [access.teams]
 crate-maintainers = 'maintain'
+
+[[environments]]
+name = "github-pages"
+
