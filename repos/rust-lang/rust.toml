@@ -25,7 +25,7 @@ rustfmt = "write"
 rust-analyzer = "write"
 style = "write"
 types = "write"
-wg-triage = "write"
+triage = "write"
 
 [[branch-protections]]
 pattern = "main"
