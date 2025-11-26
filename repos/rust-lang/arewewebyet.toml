@@ -9,3 +9,6 @@ arewewebyet = "maintain"
 
 [[branch-protections]]
 pattern = 'master'
+
+[[environments]]
+name = ""

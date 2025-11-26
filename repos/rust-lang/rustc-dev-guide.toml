@@ -28,3 +28,6 @@ required-approvals = 0
 # This branch contains the old commit graph, to keep commit references working
 [[branch-protections]]
 pattern = "master-old"
+
+[[environments]]
+name = ""

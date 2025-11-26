@@ -10,3 +10,6 @@ wg-compiler-performance = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["conclusion"]
+
+[[environments]]
+name = ""

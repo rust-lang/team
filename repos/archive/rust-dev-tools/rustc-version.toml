@@ -4,3 +4,6 @@ description = "version information for Rust tools"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

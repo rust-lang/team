@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 release = "write"
+
+[[environments]]
+name = ""

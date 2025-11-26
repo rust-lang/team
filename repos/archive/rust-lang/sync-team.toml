@@ -4,3 +4,6 @@ description = "Synchronize the team repository with the services we use"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

@@ -18,3 +18,6 @@ ci-checks = ["success"]
 crates = ["analyzeme", "decodeme", "measureme"]
 workflow-filename = "publish.yml"
 environment = "publish"
+
+[[environments]]
+name = ""

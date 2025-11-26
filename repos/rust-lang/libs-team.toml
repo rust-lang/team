@@ -7,3 +7,6 @@ bots = ["rustbot"]
 libs = "maintain"
 libs-api = "maintain"
 libs-contributors = "maintain"
+
+[[environments]]
+name = ""

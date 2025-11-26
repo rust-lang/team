@@ -5,3 +5,6 @@ bots = []
 
 # There is no current clear owner of this repository, so the access is left empty for now.
 [access.teams]
+
+[[environments]]
+name = ""

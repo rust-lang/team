@@ -11,3 +11,6 @@ lang-docs = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["Success gate"]
+
+[[environments]]
+name = ""

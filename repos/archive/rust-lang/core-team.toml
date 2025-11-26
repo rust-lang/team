@@ -4,3 +4,6 @@ description = "A place to house minutes and other documents related to the core 
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

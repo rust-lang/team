@@ -10,3 +10,6 @@ infra-admins = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = []
+
+[[environments]]
+name = ""

@@ -6,3 +6,6 @@ bots = []
 [access.teams]
 wg-polonius = "write"
 compiler = "write"
+
+[[environments]]
+name = ""

@@ -4,3 +4,6 @@ description = "Data structures used by the RLS and Rust compiler"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

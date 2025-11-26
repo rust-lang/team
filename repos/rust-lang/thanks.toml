@@ -7,3 +7,6 @@ bots = []
 [access.teams]
 website = "write"
 infra = "write"
+
+[[environments]]
+name = ""

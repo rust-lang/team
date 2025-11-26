@@ -4,3 +4,6 @@ description = "Official minutes for Rust-related meetings"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

@@ -4,3 +4,6 @@ description = "Nano configuration for Rust"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

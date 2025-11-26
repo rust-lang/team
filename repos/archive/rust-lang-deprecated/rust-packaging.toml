@@ -4,3 +4,6 @@ description = "Packaging for Rust + Cargo in multiple formats"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

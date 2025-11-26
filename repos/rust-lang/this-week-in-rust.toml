@@ -11,3 +11,6 @@ twir = "write"
 [[branch-protections]]
 pattern = "main"
 required-approvals = 0
+
+[[environments]]
+name = ""

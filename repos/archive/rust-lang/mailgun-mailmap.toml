@@ -4,3 +4,6 @@ description = "Mail configuration for rust-lang domains"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

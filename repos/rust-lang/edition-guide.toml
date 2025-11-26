@@ -11,3 +11,6 @@ edition = "maintain"
 pattern = "master"
 ci-checks = ["Success gate"]
 required-approvals = 0
+
+[[environments]]
+name = ""

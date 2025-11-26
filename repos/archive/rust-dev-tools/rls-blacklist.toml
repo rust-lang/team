@@ -4,3 +4,6 @@ description = "Blacklist of crates for the RLS to skip"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

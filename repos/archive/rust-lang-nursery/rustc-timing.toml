@@ -4,3 +4,6 @@ description = "Data for timing rustc"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

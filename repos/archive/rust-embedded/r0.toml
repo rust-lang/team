@@ -8,3 +8,6 @@ bots = []
 [[branch-protections]]
 pattern = "master"
 dismiss-stale-review = true
+
+[[environments]]
+name = ""

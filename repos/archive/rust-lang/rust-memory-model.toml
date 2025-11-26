@@ -4,3 +4,6 @@ description = "Collecting examples and information to help design a memory model
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

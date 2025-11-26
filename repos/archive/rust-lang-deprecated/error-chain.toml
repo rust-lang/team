@@ -4,3 +4,6 @@ description = "Error boilerplate for Rust"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

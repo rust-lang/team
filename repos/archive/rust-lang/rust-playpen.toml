@@ -4,3 +4,6 @@ description = "A web interface for running Rust code"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

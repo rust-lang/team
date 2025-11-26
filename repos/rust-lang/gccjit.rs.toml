@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 wg-gcc-backend = "maintain"
+
+[[environments]]
+name = ""

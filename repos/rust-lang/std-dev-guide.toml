@@ -13,3 +13,6 @@ rustc-dev-guide = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["book-test"]
+
+[[environments]]
+name = ""

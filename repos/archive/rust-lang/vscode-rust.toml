@@ -4,3 +4,6 @@ description = "Rust extension for Visual Studio Code"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

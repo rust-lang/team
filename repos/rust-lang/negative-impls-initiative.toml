@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 project-negative-impls = "write"
+
+[[environments]]
+name = ""

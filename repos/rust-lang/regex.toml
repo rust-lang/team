@@ -6,3 +6,6 @@ bots = []
 
 [access.teams]
 regex = "maintain"
+
+[[environments]]
+name = ""

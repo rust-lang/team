@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 project-dyn-upcasting = "write"
+
+[[environments]]
+name = ""

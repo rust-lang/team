@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 leadership-council = "maintain"
+
+[[environments]]
+name = ""

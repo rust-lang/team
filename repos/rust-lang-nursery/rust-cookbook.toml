@@ -6,3 +6,6 @@ bots = []
 [access.teams]
 cookbook = "write"
 lang-docs = "write"
+
+[[environments]]
+name = ""

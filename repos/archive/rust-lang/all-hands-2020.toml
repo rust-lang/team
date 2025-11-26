@@ -4,3 +4,6 @@ description = "Website for the Rust All Hands 2020"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

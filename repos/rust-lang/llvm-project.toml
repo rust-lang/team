@@ -10,6 +10,9 @@ wg-llvm = "maintain"
 pattern = "rustc/*"
 pr-required = false
 
+[[environments]]
+name = ""
+
 [[branch-protections]]
 pattern = "master"
 pr-required = false

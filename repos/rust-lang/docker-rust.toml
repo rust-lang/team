@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 docker = "maintain"
+
+[[environments]]
+name = ""

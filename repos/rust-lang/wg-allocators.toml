@@ -9,3 +9,6 @@ libs = "write"
 libs-api = "write"
 libs-contributors = "write"
 wg-allocators = "maintain"
+
+[[environments]]
+name = ""

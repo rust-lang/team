@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 survey = "write"
+
+[[environments]]
+name = ""

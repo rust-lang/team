@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 emacs = "write"
+
+[[environments]]
+name = ""

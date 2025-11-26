@@ -4,3 +4,6 @@ description = "Verification working group"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

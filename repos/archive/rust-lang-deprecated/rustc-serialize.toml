@@ -4,3 +4,6 @@ description = "Deprecated serialization/deserialization for Rust"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

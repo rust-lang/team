@@ -4,3 +4,6 @@ description = "Artifacts relevant to the various Rust subteams"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

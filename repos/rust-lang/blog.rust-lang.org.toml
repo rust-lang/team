@@ -16,3 +16,6 @@ ci-checks = [
     "lint",
     "build",
 ]
+
+[[environments]]
+name = ""

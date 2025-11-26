@@ -12,3 +12,6 @@ infra = "triage"
 pattern = "main"
 ci-checks = ["Conclusion"]
 required-approvals = 0
+
+[[environments]]
+name = ""

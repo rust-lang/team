@@ -82,3 +82,6 @@ merge-bots = ["rust-timer"]
 [[branch-protections]]
 pattern = "perf-tmp"
 merge-bots = ["rust-timer"]
+
+[[environments]]
+name = ""

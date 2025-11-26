@@ -9,3 +9,6 @@ bots = []
 pattern = "master"
 ci-checks = ['success']
 required-approvals = 0
+
+[[environments]]
+name = ""

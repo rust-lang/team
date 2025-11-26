@@ -4,3 +4,6 @@ description = "Deprecated url crate (use rust-url instead)"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

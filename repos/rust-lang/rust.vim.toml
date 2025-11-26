@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 vim = "write"
+
+[[environments]]
+name = ""

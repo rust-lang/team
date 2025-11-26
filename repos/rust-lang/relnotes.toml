@@ -20,3 +20,6 @@ ci-checks = [
     "build (windows-latest, stable)",
 ]
 required-approvals = 0
+
+[[environments]]
+name = ""

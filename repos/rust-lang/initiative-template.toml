@@ -6,3 +6,6 @@ bots = []
 
 [access.teams]
 lang = "maintain"
+
+[[environments]]
+name = ""

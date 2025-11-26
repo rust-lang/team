@@ -4,3 +4,6 @@ description = "Unix socket support for Rust"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

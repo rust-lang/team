@@ -5,3 +5,6 @@ bots = ["highfive"]
 
 [access.teams]
 infra = "write"
+
+[[environments]]
+name = ""

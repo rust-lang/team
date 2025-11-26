@@ -6,3 +6,6 @@ bots = ["rustbot", "rfcbot"]
 
 [access.teams]
 opsem = 'maintain'
+
+[[environments]]
+name = ""

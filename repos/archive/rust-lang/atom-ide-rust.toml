@@ -4,3 +4,6 @@ description = "Rust IDE support for Atom, powered by the Rust Analyzer or Rust L
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

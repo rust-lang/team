@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 project-trait-system-refactor = "maintain"
+
+[[environments]]
+name = ""

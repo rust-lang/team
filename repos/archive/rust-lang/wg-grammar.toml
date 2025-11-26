@@ -4,3 +4,6 @@ description = "Where the work of WG-grammar, aiming to provide a canonical gramm
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

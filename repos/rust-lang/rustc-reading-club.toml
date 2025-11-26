@@ -4,3 +4,6 @@ description = "Rust Code Reading Clubs"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

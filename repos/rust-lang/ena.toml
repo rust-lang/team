@@ -8,3 +8,6 @@ compiler = "write"
 
 [[branch-protections]]
 pattern = 'master'
+
+[[environments]]
+name = ""

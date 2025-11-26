@@ -8,3 +8,6 @@ required-approvals = 0
 pr-required = false
 
 [access.teams]
+
+[[environments]]
+name = ""

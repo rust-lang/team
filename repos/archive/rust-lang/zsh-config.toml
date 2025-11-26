@@ -4,3 +4,6 @@ description = "zsh configuration for Rust"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

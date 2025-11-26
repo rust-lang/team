@@ -4,3 +4,6 @@ description = "Binaries for multirust-rs"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

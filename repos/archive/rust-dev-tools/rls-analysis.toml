@@ -4,3 +4,6 @@ description = "Core functionality for handling rustc's save-analysis data"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

@@ -4,3 +4,6 @@ description = "Custom fork of the GitHub Actions runner"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

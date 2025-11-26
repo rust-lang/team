@@ -429,6 +429,8 @@ allowed-merge-teams = ["awesome-team"]
 # When "homu" is used, "bors" has to be in the `bots` array.
 # (optional)
 merge-bots = ["homu"]
+# Supported environments
+[[environments]]
 ```
 
 ### Crates.io trusted publishing

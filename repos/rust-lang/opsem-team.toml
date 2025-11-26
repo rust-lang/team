@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 opsem = 'maintain'
+
+[[environments]]
+name = ""

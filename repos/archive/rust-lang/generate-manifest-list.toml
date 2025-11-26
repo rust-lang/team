@@ -5,3 +5,6 @@ homepage = "https://static.rust-lang.org/manifests.txt"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

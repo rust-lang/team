@@ -6,3 +6,6 @@ bots = []
 [access.teams]
 infra = "write"
 infra-admins = "maintain"
+
+[[environments]]
+name = ""

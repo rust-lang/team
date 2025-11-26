@@ -4,3 +4,6 @@ description = "VFS used by rust-analyzer"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

@@ -4,3 +4,6 @@ description = "The home for Rust's governance documentation, such as team charte
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

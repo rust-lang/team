@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 infra = "maintain"
+
+[[environments]]
+name = ""

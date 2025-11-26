@@ -10,3 +10,6 @@ expect-test = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["test"]
+
+[[environments]]
+name = ""

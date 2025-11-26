@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 cargo = "write"
+
+[[environments]]
+name = ""

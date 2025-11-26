@@ -4,3 +4,6 @@ description = "Single Entry Multiple Exit Regions -- A stepping stone for full N
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

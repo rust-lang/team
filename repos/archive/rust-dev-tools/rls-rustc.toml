@@ -4,3 +4,6 @@ description = "A simple shim around rustc to allow using save-analysis with a st
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

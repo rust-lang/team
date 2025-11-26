@@ -6,3 +6,6 @@ bots = []
 
 [access.teams]
 project-const-traits = "maintain"
+
+[[environments]]
+name = ""

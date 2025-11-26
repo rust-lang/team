@@ -6,3 +6,6 @@ bots = ["rustbot", "rfcbot"]
 
 [access.teams]
 project-vision-doc-2025 = "maintain"
+
+[[environments]]
+name = ""

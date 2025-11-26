@@ -4,3 +4,6 @@ description = "Coordination repository of the ecosystem Working Group (WG)"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

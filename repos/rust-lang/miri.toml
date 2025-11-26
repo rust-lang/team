@@ -11,3 +11,6 @@ miri = "write"
 pattern = "master"
 ci-checks = ["conclusion"]
 required-approvals = 0
+
+[[environments]]
+name = ""

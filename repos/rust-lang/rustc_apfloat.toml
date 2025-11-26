@@ -12,3 +12,6 @@ compiler = 'maintain'
 
 # Likewise, eventually we may want a branch protections section, but we will
 # tackle that later.
+
+[[environments]]
+name = ""

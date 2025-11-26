@@ -11,3 +11,6 @@ lang-docs = "maintain"
 lang-ops = "maintain"
 spec = "maintain"
 spec-contributors = "triage"
+
+[[environments]]
+name = ""

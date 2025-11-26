@@ -4,3 +4,6 @@ description = "Error handling project group"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

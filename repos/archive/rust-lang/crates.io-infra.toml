@@ -5,3 +5,6 @@ bots = []
 private-non-synced = true
 
 [access.teams]
+
+[[environments]]
+name = ""

@@ -5,3 +5,6 @@ homepage = "https://rust-lang-nursery.github.io/futures-api-docs"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

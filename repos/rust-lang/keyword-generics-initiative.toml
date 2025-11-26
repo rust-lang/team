@@ -6,3 +6,6 @@ bots = []
 
 [access.teams]
 project-keyword-generics = "write"
+
+[[environments]]
+name = ""

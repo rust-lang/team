@@ -4,3 +4,6 @@ description = "Temporary directory management for Rust"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

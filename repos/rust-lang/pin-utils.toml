@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 wg-async = "write"
+
+[[environments]]
+name = ""

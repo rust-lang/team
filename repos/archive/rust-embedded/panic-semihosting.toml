@@ -9,3 +9,6 @@ bots = []
 pattern = "master"
 ci-checks = ["bors"]
 dismiss-stale-review = true
+
+[[environments]]
+name = ""

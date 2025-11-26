@@ -5,3 +5,6 @@ homepage = "https://rust-cli.github.io/book/index.html"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

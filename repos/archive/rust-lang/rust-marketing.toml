@@ -4,3 +4,6 @@ description = "Rust marketing handbook"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

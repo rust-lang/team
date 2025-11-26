@@ -4,3 +4,6 @@ description = "Have questions on the Rust Foundation? Ask here!"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

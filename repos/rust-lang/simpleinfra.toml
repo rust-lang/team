@@ -10,3 +10,6 @@ infra = "write"
 pattern = "master"
 ci-checks = ["Rust projects", "Terraform configuration", "GitHub Actions (JS)"]
 required-approvals = 0
+
+[[environments]]
+name = ""

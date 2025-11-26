@@ -9,3 +9,6 @@ libs-contributors = "write"
 libs-api = "write"
 libs = "write"
 project-portable-simd = "write"
+
+[[environments]]
+name = ""

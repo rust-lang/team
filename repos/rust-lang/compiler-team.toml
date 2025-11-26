@@ -12,3 +12,6 @@ types = "write"
 [[branch-protections]]
 pattern = "master"
 required-approvals = 0
+
+[[environments]]
+name = ""

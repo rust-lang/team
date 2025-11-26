@@ -4,3 +4,6 @@ description = "Scripts for measuring rustc performance"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

@@ -11,3 +11,6 @@ crates-io = "write"
 pattern = "main"
 required-approvals = 0
 pr-required = false
+
+[[environments]]
+name = ""

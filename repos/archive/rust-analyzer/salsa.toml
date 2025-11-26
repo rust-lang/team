@@ -4,3 +4,6 @@ description = "A generic framework for on-demand, incrementalized computation. I
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

@@ -4,3 +4,6 @@ description = "GitHub Actions tests for rust-lang/rust"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

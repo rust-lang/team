@@ -7,3 +7,6 @@ bots = []
 [access.teams]
 libs-api = "write"
 libs = "write"
+
+[[environments]]
+name = ""

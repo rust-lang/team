@@ -30,3 +30,6 @@ crates = [
 ]
 workflow-filename = "deploy.yml"
 environment = "publish"
+
+[[environments]]
+name = ""

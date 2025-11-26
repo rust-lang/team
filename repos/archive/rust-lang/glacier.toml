@@ -4,3 +4,6 @@ description = "A big 'ol pile of ICE."
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

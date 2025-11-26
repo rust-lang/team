@@ -4,3 +4,6 @@ description = "Automatically apply the suggestions made by rustc"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

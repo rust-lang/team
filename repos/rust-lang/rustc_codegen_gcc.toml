@@ -11,3 +11,6 @@ wg-gcc-backend = "maintain"
 pattern = "master"
 ci-checks = ["success", "success_gcc12", "success_release", "success_failures", "success_m68k", "success_stdarch"]
 required-approvals = 0
+
+[[environments]]
+name = ""

@@ -4,3 +4,6 @@ description = "String data structures for Rust"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

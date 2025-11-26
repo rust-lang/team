@@ -4,3 +4,6 @@ description = "new rustc-timing repository for freshly collected data"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

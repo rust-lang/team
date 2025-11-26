@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 wg-safe-transmute = "write"
+
+[[environments]]
+name = ""

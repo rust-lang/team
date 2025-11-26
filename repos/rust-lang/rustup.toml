@@ -10,3 +10,6 @@ rustup = "maintain"
 [[branch-protections]]
 pattern = "main"
 ci-checks = ["conclusion"]
+
+[[environments]]
+name = ""

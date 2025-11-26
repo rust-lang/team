@@ -8,3 +8,6 @@ compiler = "write"
 
 [[branch-protections]]
 pattern = "main"
+
+[[environments]]
+name = ""

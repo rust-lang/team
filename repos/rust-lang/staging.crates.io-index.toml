@@ -10,3 +10,6 @@ crates-io-on-call = "write"
 [[branch-protections]]
 pattern = "master"
 pr-required = false
+
+[[environments]]
+name = ""

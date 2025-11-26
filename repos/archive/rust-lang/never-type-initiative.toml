@@ -4,3 +4,6 @@ description = "In pursuit of the stabilization of never type"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

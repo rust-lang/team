@@ -4,3 +4,6 @@ description = "a bot to help assist the crates.io, website, and other rust ops t
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

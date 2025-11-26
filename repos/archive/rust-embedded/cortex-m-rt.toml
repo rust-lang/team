@@ -9,3 +9,6 @@ bots = []
 pattern = "master"
 dismiss-stale-review = true
 required-approvals = 0
+
+[[environments]]
+name = ""

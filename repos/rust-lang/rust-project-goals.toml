@@ -16,3 +16,6 @@ libs-api = "maintain"
 edition = "maintain"
 goals = "maintain"
 goal-owners = "maintain"
+
+[[environments]]
+name = ""

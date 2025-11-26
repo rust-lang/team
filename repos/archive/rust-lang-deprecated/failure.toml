@@ -4,3 +4,6 @@ description = "Error management"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

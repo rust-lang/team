@@ -4,3 +4,6 @@ description = "Cross Team Collaboration Fun Times"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

@@ -4,3 +4,6 @@ description = "Clone of gyp for Rust"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

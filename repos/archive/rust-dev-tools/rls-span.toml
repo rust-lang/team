@@ -4,3 +4,6 @@ description = "Types for identifying code spans/ranges."
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

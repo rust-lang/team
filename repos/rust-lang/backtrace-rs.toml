@@ -9,3 +9,6 @@ crate-maintainers = 'maintain'
 
 [[branch-protections]]
 pattern = 'master'
+
+[[environments]]
+name = ""

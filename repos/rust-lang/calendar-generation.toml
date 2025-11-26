@@ -17,3 +17,6 @@ wg-async = "write"
 
 [[branch-protections]]
 pattern = "main"
+
+[[environments]]
+name = ""

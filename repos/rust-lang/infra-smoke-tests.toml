@@ -19,3 +19,6 @@ ci-checks = [
     "Lint YAML files",
     "Run tests",
 ]
+
+[[environments]]
+name = ""

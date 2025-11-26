@@ -5,3 +5,6 @@ bots = ["rustbot", "rfcbot"]
 
 [access.teams]
 testing-devex = "maintain"
+
+[[environments]]
+name = ""

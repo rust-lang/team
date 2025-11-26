@@ -20,3 +20,6 @@ pr-required = false
 [[branch-protections]]
 pattern = "master"
 pr-required = false
+
+[[environments]]
+name = ""

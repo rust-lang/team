@@ -5,3 +5,6 @@ bots = []
 
 [access.teams]
 mods-venue = "write"
+
+[[environments]]
+name = ""

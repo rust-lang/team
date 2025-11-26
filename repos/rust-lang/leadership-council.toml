@@ -9,3 +9,6 @@ council-librarians = "write"
 
 [[branch-protections]]
 pattern = "main"
+
+[[environments]]
+name = ""

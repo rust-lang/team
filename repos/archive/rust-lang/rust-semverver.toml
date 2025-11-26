@@ -4,3 +4,6 @@ description = "Automatic checking for semantic versioning in library crates"
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

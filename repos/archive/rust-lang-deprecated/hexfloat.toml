@@ -4,3 +4,6 @@ description = "Syntax extension to create floating point literals from hexadecim
 bots = []
 
 [access.teams]
+
+[[environments]]
+name = ""

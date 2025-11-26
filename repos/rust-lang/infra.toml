@@ -6,3 +6,6 @@ private-non-synced = true
 
 [access.teams]
 infra = "write"
+
+[[environments]]
+name = ""

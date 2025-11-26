@@ -9,3 +9,6 @@ crate-maintainers = 'maintain'
 
 [access.individuals]
 Thomasdezeeuw = 'maintain'
+
+[[environments]]
+name = ""
