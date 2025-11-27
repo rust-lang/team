@@ -32,7 +32,7 @@ jobs:
 
       - name: Install Rust Stable
         env:
-          RUST_VERSION: "1.87.0"
+          RUST_VERSION: "1.91.1"
         run: |
           rustc -vV
           rustup toolchain install $RUST_VERSION
