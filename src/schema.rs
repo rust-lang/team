@@ -15,6 +15,7 @@ pub(crate) struct Config {
     permissions_bools: HashSet<String>,
     // Use a BTreeSet for consistent ordering in tests
     special_org_members: BTreeSet<String>,
+    members_without_zulip_id: BTreeSet<String>,
 }
 
 impl Config {
@@ -40,6 +41,10 @@ impl Config {
 
     pub(crate) fn special_org_members(&self) -> &BTreeSet<String> {
         &self.special_org_members
+    }
+
+    pub(crate) fn members_without_zulip_id(&self) -> &BTreeSet<String> {
+        &self.members_without_zulip_id
     }
 }
 

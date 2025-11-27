@@ -52,9 +52,32 @@ special-org-members = [
     "rust-log-analyzer",
     "rust-timer",
     "rustbot",
-
     # Ferrous systems employees who manage the github sponsors
     # for rust-analyzer.
     "MissHolmes",
     "skade",
+]
+
+members-without-zulip-id = [
+    "arshiamufti",
+    "bnchi",
+    "brotzeit",
+    "celaus",
+    "chris-morgan",
+    "codesections",
+    "da-x",
+    "ecstatic-morse",
+    "gdr-at-ms",
+    "kennykerr",
+    "mathk",
+    "nico-abram",
+    "opeolluwa",
+    "patchfx",
+    "pvdrz",
+    "reitermarkus",
+    "ryankurte",
+    "Stammark",
+    "therealprof",
+    "U007D",
+    "zeenix"
 ]

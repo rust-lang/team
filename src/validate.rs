@@ -49,6 +49,8 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_zulip_group_extra_people,
     validate_unique_zulip_streams,
     validate_unique_zulip_user_ids,
+    validate_present_zulip_id,
+    validate_zulip_id_allowlist,
     validate_zulip_stream_ids,
     validate_zulip_stream_extra_people,
     validate_repos,
@@ -715,6 +717,53 @@ fn validate_unique_zulip_user_ids(data: &Data, errors: &mut Vec<String>) {
     })
 }
 
+/// Ensure that every active member except a few remaining people on an allowlist have a Zulip ID.
+fn validate_present_zulip_id(data: &Data, errors: &mut Vec<String>) {
+    wrapper(
+        data.active_members().unwrap().iter(),
+        errors,
+        |person, _| {
+            let person = data.person(person).expect("Person not found");
+            if person.zulip_id().is_none()
+                && !data
+                    .config()
+                    .members_without_zulip_id()
+                    .contains(person.github())
+            {
+                return Err(anyhow::anyhow!(
+                    "User {} does not have a Zulip ID",
+                    person.github()
+                ));
+            }
+            Ok(())
+        },
+    )
+}
+
+/// Ensure people in the missing Zulip ID allowlist do not actually have Zulip ID configured.
+fn validate_zulip_id_allowlist(data: &Data, errors: &mut Vec<String>) {
+    // Sort for deterministic output
+    let mut members = data
+        .config()
+        .members_without_zulip_id()
+        .iter()
+        .collect::<Vec<_>>();
+    members.sort();
+    for member in members {
+        let Some(person) = data.person(member) else {
+            errors.push(format!(
+                "Person {member} in Zulip ID allowlist does not exist"
+            ));
+            continue;
+        };
+        if person.zulip_id().is_some() {
+            errors.push(format!(
+                "Person {member} in Zulip ID allowlist has Zulip ID configured. Please remove them from the `members-without-zulip-id` list in `config.toml`"
+            ));
+        }
+    }
+}
+
 /// Ensure team members in Zulip groups have a Zulip id
 fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
@@ -731,15 +780,17 @@ fn validate_zulip_group_ids(data: &Data, errors: &mut Vec<String>) {
                         // Okay, have zulip IDs.
                     }
                     ZulipMember::MemberWithoutId { github } => {
-                        // Bad, only github handle, no zulip ID, even though included in zulip user
-                        // group
-                        bail!(
-                            "person `{}` in '{}' is a member of a Zulip user group '{}' but has no \
-                            Zulip id",
-                            github,
-                            team.name(),
-                            group.name()
-                        );
+                        if !data.config().members_without_zulip_id().contains(github) {
+                            // Bad, only github handle, no zulip ID, even though included in zulip user
+                            // group
+                            bail!(
+                                "person `{}` in '{}' is a member of a Zulip user group '{}' but has no \
+                                Zulip id",
+                                github,
+                                team.name(),
+                                group.name()
+                            );
+                        }
                     }
                 }
                 Ok(())
@@ -764,11 +815,13 @@ fn validate_zulip_stream_ids(data: &Data, errors: &mut Vec<String>) {
                 match member {
                     ZulipMember::MemberWithId { .. } | ZulipMember::JustId(_) => {}
                     ZulipMember::MemberWithoutId { github } => {
-                        bail!(
-                            "person `{github}` is a member of a Zulip stream `{}` defined in team `{}`, but has no Zulip id",
-                            stream.name(),
-                            team.name()
-                        );
+                        if !data.config().members_without_zulip_id().contains(github) {
+                            bail!(
+                                "person `{github}` is a member of a Zulip stream `{}` defined in team `{}`, but has no Zulip id",
+                                stream.name(),
+                                team.name()
+                            );
+                        }
                     }
                 }
                 Ok(())

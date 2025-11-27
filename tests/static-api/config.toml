@@ -22,3 +22,9 @@ permissions-bools = [
 special-org-members = [
     "test-bot",
 ]
+
+members-without-zulip-id = [
+    "test-admin",
+    "user-3",
+    "user-4"
+]
