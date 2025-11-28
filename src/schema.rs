@@ -154,9 +154,10 @@ impl Person {
     }
 }
 
-#[derive(serde_derive::Deserialize, Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(serde_derive::Deserialize, Debug, Default, Copy, Clone, PartialEq, Eq)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum TeamKind {
+    #[default]
     Team,
     WorkingGroup,
     ProjectGroup,
@@ -175,12 +176,6 @@ impl std::fmt::Display for TeamKind {
                 Self::MarkerTeam => "marker team",
             }
         )
-    }
-}
-
-impl Default for TeamKind {
-    fn default() -> Self {
-        Self::Team
     }
 }
 
