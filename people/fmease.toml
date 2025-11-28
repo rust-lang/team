@@ -3,3 +3,6 @@ github = "fmease"
 github-id = 14913065
 email = "me@fmease.dev"
 zulip-id = 348675
+
+[funding]
+github-sponsors = true
