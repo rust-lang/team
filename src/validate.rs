@@ -28,6 +28,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_subteam_of,
     validate_team_leads,
     validate_team_members,
+    validate_duplicate_team_entries,
     validate_alumni,
     validate_archived_teams,
     validate_inactive_members,
@@ -236,6 +237,67 @@ fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
             }
             Ok(())
         });
+        Ok(())
+    });
+}
+
+/// Helper for checking duplicates in a list
+fn check_duplicates<'a, I>(team_name: &str, label: &str, items: I) -> Result<(), Error>
+where
+    I: IntoIterator<Item = &'a str>,
+{
+    let mut seen = HashSet::new();
+    let mut duplicates = HashSet::new();
+
+    for item in items {
+        if !seen.insert(item) {
+            duplicates.insert(item);
+        }
+    }
+
+    if !duplicates.is_empty() {
+        let dup_list: Vec<&str> = duplicates.into_iter().collect();
+        bail!(
+            "team `{}` has duplicate {}: {}",
+            team_name,
+            label,
+            dup_list.join(", ")
+        );
+    }
+
+    Ok(())
+}
+
+/// Ensure no duplicate entries in team leads, members and alumni
+fn validate_duplicate_team_entries(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, errors| {
+        // Check leads for duplicates
+        if let Err(e) = check_duplicates(
+            team.name(),
+            "leads",
+            team.explicit_leads().iter().map(|s| s.as_str()),
+        ) {
+            errors.push(e.to_string());
+        }
+
+        // Check members for duplicates
+        if let Err(e) = check_duplicates(
+            team.name(),
+            "members",
+            team.explicit_members().iter().map(|m| m.github.as_str()),
+        ) {
+            errors.push(e.to_string());
+        }
+
+        // Check alumni for duplicates
+        if let Err(e) = check_duplicates(
+            team.name(),
+            "alumni",
+            team.explicit_alumni().iter().map(|a| a.github.as_str()),
+        ) {
+            errors.push(e.to_string());
+        }
+
         Ok(())
     });
 }
