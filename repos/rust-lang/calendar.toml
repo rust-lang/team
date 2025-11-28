@@ -19,3 +19,7 @@ wg-async = "maintain"
 [[branch-protections]]
 pattern = "main"
 pr-required = false
+
+[[environments]]
+name = "github-pages"
+

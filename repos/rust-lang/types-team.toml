@@ -6,3 +6,7 @@ bots = ["rustbot"]
 
 [access.teams]
 types = "write"
+
+[[environments]]
+name = "github-pages"
+

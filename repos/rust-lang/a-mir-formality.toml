@@ -8,3 +8,7 @@ lang = "maintain"
 lang-ops = "maintain"
 lang-docs = "maintain"
 types = "maintain"
+
+[[environments]]
+name = "github-pages"
+

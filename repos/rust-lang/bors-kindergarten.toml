@@ -6,3 +6,16 @@ bots = ["rustbot"]
 [access.teams]
 infra = "write"
 infra-bors = "write"
+
+[[environments]]
+name = "bors"
+
+[[environments]]
+name = "ci"
+
+[[environments]]
+name = "production"
+
+[[environments]]
+name = "staging"
+

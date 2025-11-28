@@ -9,3 +9,7 @@ wg-async = "write"
 
 [access.individuals]
 upsuper = "write"
+
+[[environments]]
+name = "github-pages"
+

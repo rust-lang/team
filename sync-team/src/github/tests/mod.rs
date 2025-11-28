@@ -1,7 +1,7 @@
 use crate::github::tests::test_utils::{
     BranchProtectionBuilder, DEFAULT_ORG, DataModel, RepoData, TeamData,
 };
-use rust_team_data::v1::{BranchProtectionMode, RepoPermission};
+use rust_team_data::v1::{self, BranchProtectionMode, RepoPermission};
 
 mod test_utils;
 
@@ -232,6 +232,7 @@ fn repo_change_description() {
                 ),
                 permission_diffs: [],
                 branch_protection_diffs: [],
+                environment_diffs: [],
             },
         ),
     ]
@@ -273,6 +274,7 @@ fn repo_change_homepage() {
                 ),
                 permission_diffs: [],
                 branch_protection_diffs: [],
+                environment_diffs: [],
             },
         ),
     ]
@@ -340,6 +342,7 @@ fn repo_create() {
                         },
                     ),
                 ],
+                environments: [],
             },
         ),
     ]
@@ -393,6 +396,7 @@ fn repo_add_member() {
                     },
                 ],
                 branch_protection_diffs: [],
+                environment_diffs: [],
             },
         ),
     ]
@@ -446,6 +450,7 @@ fn repo_change_member_permissions() {
                     },
                 ],
                 branch_protection_diffs: [],
+                environment_diffs: [],
             },
         ),
     ]
@@ -493,6 +498,7 @@ fn repo_remove_member() {
                     },
                 ],
                 branch_protection_diffs: [],
+                environment_diffs: [],
             },
         ),
     ]
@@ -542,6 +548,7 @@ fn repo_add_team() {
                     },
                 ],
                 branch_protection_diffs: [],
+                environment_diffs: [],
             },
         ),
     ]
@@ -590,6 +597,7 @@ fn repo_change_team_permissions() {
                     },
                 ],
                 branch_protection_diffs: [],
+                environment_diffs: [],
             },
         ),
     ]
@@ -637,6 +645,7 @@ fn repo_remove_team() {
                     },
                 ],
                 branch_protection_diffs: [],
+                environment_diffs: [],
             },
         ),
     ]
@@ -675,6 +684,7 @@ fn repo_archive_repo() {
                 ),
                 permission_diffs: [],
                 branch_protection_diffs: [],
+                environment_diffs: [],
             },
         ),
     ]
@@ -748,6 +758,7 @@ fn repo_add_branch_protection() {
                         ),
                     },
                 ],
+                environment_diffs: [],
             },
         ),
     ]
@@ -837,6 +848,7 @@ fn repo_update_branch_protection() {
                         ),
                     },
                 ],
+                environment_diffs: [],
             },
         ),
     ]
@@ -889,6 +901,7 @@ fn repo_remove_branch_protection() {
                         ),
                     },
                 ],
+                environment_diffs: [],
             },
         ),
     ]
@@ -916,4 +929,176 @@ fn independent_orgs_are_not_synced() {
 
     // No members should be removed for independent organizations
     insta::assert_debug_snapshot!(gh_org_diff, @"[]");
+}
+
+#[test]
+fn repo_environment_noop() {
+    let mut model = DataModel::default();
+    model.create_repo(
+        RepoData::new("repo1")
+            .environment("production")
+            .environment("staging"),
+    );
+    let gh = model.gh_model();
+    let diff = model.diff_repos(gh);
+    assert!(diff.is_empty());
+}
+
+#[test]
+fn repo_environment_create() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1"));
+    let gh = model.gh_model();
+
+    model.get_repo("repo1").environments.push(v1::Environment {
+        name: "production".to_string(),
+    });
+    model.get_repo("repo1").environments.push(v1::Environment {
+        name: "staging".to_string(),
+    });
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                environment_diffs: [
+                    Create(
+                        "production",
+                    ),
+                    Create(
+                        "staging",
+                    ),
+                ],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_environment_delete() {
+    let mut model = DataModel::default();
+    model.create_repo(
+        RepoData::new("repo1")
+            .environment("production")
+            .environment("staging"),
+    );
+    let gh = model.gh_model();
+
+    model.get_repo("repo1").environments.clear();
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                environment_diffs: [
+                    Delete(
+                        "production",
+                    ),
+                    Delete(
+                        "staging",
+                    ),
+                ],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_environment_update() {
+    let mut model = DataModel::default();
+    model.create_repo(
+        RepoData::new("repo1")
+            .environment("production")
+            .environment("staging"),
+    );
+    let gh = model.gh_model();
+
+    // Remove staging, keep production, add dev
+    model.get_repo("repo1").environments = vec![
+        v1::Environment {
+            name: "production".to_string(),
+        },
+        v1::Environment {
+            name: "dev".to_string(),
+        },
+    ];
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                environment_diffs: [
+                    Create(
+                        "dev",
+                    ),
+                    Delete(
+                        "staging",
+                    ),
+                ],
+            },
+        ),
+    ]
+    "#);
 }

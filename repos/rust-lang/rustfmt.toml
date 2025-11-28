@@ -34,3 +34,7 @@ required-approvals = 0
 [[branch-protections]]
 pattern = "rust-1.*"
 required-approvals = 0
+
+[[environments]]
+name = "github-pages"
+

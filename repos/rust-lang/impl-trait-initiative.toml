@@ -6,3 +6,7 @@ bots = []
 
 [access.teams]
 project-impl-trait = "maintain"
+
+[[environments]]
+name = "github-pages"
+

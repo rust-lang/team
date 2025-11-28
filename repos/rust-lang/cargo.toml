@@ -14,3 +14,10 @@ ci-checks = ["conclusion"]
 [[branch-protections]]
 pattern = "rust-1.*"
 ci-checks = ["conclusion"]
+
+[[environments]]
+name = "github-pages"
+
+[[environments]]
+name = "release"
+

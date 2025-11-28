@@ -6,3 +6,7 @@ bots = []
 
 [access.teams]
 rustlings = "maintain"
+
+[[environments]]
+name = "github-pages"
+

@@ -4,6 +4,7 @@ use crate::github::api::{
 };
 use anyhow::Context as _;
 use reqwest::Method;
+use rust_team_data::v1::Environment;
 use std::collections::{HashMap, HashSet};
 
 pub(crate) trait GithubRead {
@@ -50,6 +51,10 @@ pub(crate) trait GithubRead {
         org: &str,
         repo: &str,
     ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>>;
+
+    /// Get environments for a repository
+    /// Returns a list of environment names
+    fn repo_environments(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Environment>>;
 }
 
 pub(crate) struct GitHubApiRead {
@@ -434,5 +439,29 @@ impl GithubRead for GitHubApiRead {
             result.insert(node.protection.pattern.clone(), (node.id, node.protection));
         }
         Ok(result)
+    }
+
+    fn repo_environments(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Environment>> {
+        #[derive(serde::Deserialize)]
+        struct EnvironmentsResponse {
+            environments: Vec<Environment>,
+        }
+
+        let mut environments: Vec<Environment> = Vec::new();
+
+        // REST API endpoint for environments
+        // https://docs.github.com/en/rest/deployments/environments#list-environments
+        self.client.rest_paginated(
+            &Method::GET,
+            &GitHubUrl::repos(org, repo, "environments")?,
+            |resp: EnvironmentsResponse| {
+                for env in resp.environments {
+                    environments.push(env);
+                }
+                Ok(())
+            },
+        )?;
+
+        Ok(environments)
     }
 }

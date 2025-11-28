@@ -9,3 +9,7 @@ infra = "write"
 [[branch-protections]]
 pattern = "main"
 ci-checks = ["CI finished"]
+
+[[environments]]
+name = "upload"
+

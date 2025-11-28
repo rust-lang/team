@@ -175,6 +175,7 @@ pub struct Repo {
     pub members: Vec<RepoMember>,
     pub branch_protections: Vec<BranchProtection>,
     pub crates: Vec<Crate>,
+    pub environments: Vec<Environment>,
     pub archived: bool,
     // This attribute is not synced by sync-team.
     pub private: bool,
@@ -255,6 +256,11 @@ pub struct BranchProtection {
 pub struct CratesIoPublishing {
     pub workflow_file: String,
     pub environment: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Environment {
+    pub name: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

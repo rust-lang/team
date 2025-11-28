@@ -493,4 +493,40 @@ impl GitHubWrite {
         }
         Ok(())
     }
+
+    /// Create an environment in a repository
+    pub(crate) fn create_environment(
+        &self,
+        org: &str,
+        repo: &str,
+        name: &str,
+    ) -> anyhow::Result<()> {
+        debug!("Creating environment '{name}' in '{org}/{repo}'");
+        if !self.dry_run {
+            // REST API: PUT /repos/{owner}/{repo}/environments/{environment_name}
+            // https://docs.github.com/en/rest/deployments/environments#create-or-update-an-environment
+            let url = GitHubUrl::repos(org, repo, &format!("environments/{}", name))?;
+            self.client
+                .send(Method::PUT, &url, &serde_json::json!({}))?;
+        }
+        Ok(())
+    }
+
+    /// Delete an environment from a repository
+    pub(crate) fn delete_environment(
+        &self,
+        org: &str,
+        repo: &str,
+        name: &str,
+    ) -> anyhow::Result<()> {
+        debug!("Deleting environment '{name}' from '{org}/{repo}'");
+        if !self.dry_run {
+            // REST API: DELETE /repos/{owner}/{repo}/environments/{environment_name}
+            // https://docs.github.com/en/rest/deployments/environments#delete-an-environment
+            let url = GitHubUrl::repos(org, repo, &format!("environments/{}", name))?;
+            self.client
+                .send(Method::DELETE, &url, &serde_json::json!({}))?;
+        }
+        Ok(())
+    }
 }

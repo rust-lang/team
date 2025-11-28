@@ -13,3 +13,10 @@ infra-bors = "write"
 pattern = "main"
 ci-checks = ["Test", "Test Docker"]
 required-approvals = 0
+
+[[environments]]
+name = "production"
+
+[[environments]]
+name = "staging"
+

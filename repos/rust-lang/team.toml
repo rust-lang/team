@@ -12,3 +12,10 @@ infra = "triage"
 pattern = "main"
 ci-checks = ["CI"]
 dismiss-stale-review = true
+
+[[environments]]
+name = "deploy"
+
+[[environments]]
+name = "github-pages"
+

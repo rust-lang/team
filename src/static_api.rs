@@ -160,6 +160,13 @@ impl<'a> Generator<'a> {
                         })
                     })
                     .collect(),
+                environments: r
+                    .environments
+                    .iter()
+                    .map(|e| v1::Environment {
+                        name: e.name.clone(),
+                    })
+                    .collect(),
                 archived,
                 auto_merge_enabled: !managed_by_bors,
             };

@@ -431,6 +431,20 @@ allowed-merge-teams = ["awesome-team"]
 merge-bots = ["homu"]
 ```
 
+### Repository environments
+
+GitHub environments are used to configure deployment protection rules and secrets for GitHub Actions workflows. This repository can manage environment names for repositories.
+
+```toml
+# The environments in this repository (optional)
+[[environments]]
+# The name of the environment (required)
+name = "production"
+
+[[environments]]
+name = "staging"
+```
+
 ### Crates.io trusted publishing
 Configure crates.io Trusted Publishing for crates published from a given repository from GitHub Actions.
 

@@ -16,3 +16,10 @@ ci-checks = ['Tests pass']
 crates = ["cc", "find-msvc-tools"]
 workflow-filename = "publish.yml"
 environment = "publish"
+
+[[environments]]
+name = "github-pages"
+
+[[environments]]
+name = "publish"
+

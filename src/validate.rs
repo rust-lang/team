@@ -56,6 +56,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_repos,
     validate_archived_repos,
     validate_branch_protections,
+    validate_environments,
     validate_trusted_publishing,
     validate_member_roles,
     validate_admin_access,
@@ -974,6 +975,48 @@ fn validate_archived_repos(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.archived_repos(), errors, |repo, _| {
         if !repo.access.teams.is_empty() {
             bail!("archived repo '{}' should not have any teams", repo.name);
+        }
+        Ok(())
+    });
+}
+
+/// Validate that environments have valid names (non-empty)
+fn validate_environments(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.all_repos(), errors, |repo, _| {
+        for env in &repo.environments {
+            if env.name.is_empty() {
+                bail!(
+                    "repo {}/{} has an environment with an empty name",
+                    repo.org,
+                    repo.name
+                );
+            }
+            // Environment names should not contain special characters that could cause issues
+            // with GitHub API URLs or shell commands. Forward and backward slashes are particularly
+            // problematic as they can be interpreted as path separators
+            //in URLs (/repos/{owner}/{repo}/environments/{name}) and file systems,
+            //potentially leading to security vulnerabilities or API routing issues.
+            if env.name.contains('/') || env.name.contains('\\') {
+                bail!(
+                    "repo {}/{} has an environment '{}' with invalid characters (/, \\)",
+                    repo.org,
+                    repo.name,
+                    env.name
+                );
+            }
+        }
+
+        // Check for duplicate environment names
+        let mut seen = HashSet::new();
+        for env in &repo.environments {
+            if !seen.insert(&env.name) {
+                bail!(
+                    "repo {}/{} has duplicate environment '{}'",
+                    repo.org,
+                    repo.name,
+                    env.name
+                );
+            }
         }
         Ok(())
     });

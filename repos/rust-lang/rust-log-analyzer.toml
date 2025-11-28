@@ -10,3 +10,7 @@ infra = "write"
 pattern = "master"
 ci-checks = ["CI"]
 required-approvals = 0
+
+[[environments]]
+name = "github-pages"
+

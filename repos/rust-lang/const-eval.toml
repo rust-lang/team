@@ -5,3 +5,7 @@ bots = []
 
 [access.teams]
 wg-const-eval = "write"
+
+[[environments]]
+name = "github-pages"
+

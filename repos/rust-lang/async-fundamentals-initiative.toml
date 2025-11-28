@@ -10,3 +10,7 @@ wg-async = "maintain"
 [[branch-protections]]
 pattern = "master"
 required-approvals = 0
+
+[[environments]]
+name = "github-pages"
+
