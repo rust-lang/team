@@ -880,6 +880,8 @@ pub(crate) struct CratesIoPublishing {
     pub crates: Vec<String>,
     pub workflow_filename: String,
     pub environment: String,
+    #[serde(default)]
+    pub disable_other_publish_methods: bool,
 }
 
 #[derive(serde_derive::Deserialize, Debug, Clone)]
