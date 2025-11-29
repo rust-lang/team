@@ -1,4 +1,4 @@
-use crate::crates_io::CratesIoPublishingConfig;
+use crate::crates_io::CrateConfig;
 use crate::utils::ResponseExt;
 use anyhow::{Context, anyhow};
 use log::debug;
@@ -63,7 +63,7 @@ impl CratesIoApi {
     /// Create a new trusted publishing configuration for a given crate.
     pub(crate) fn create_trusted_publishing_github_config(
         &self,
-        config: &CratesIoPublishingConfig,
+        config: &CrateConfig,
     ) -> anyhow::Result<()> {
         debug!(
             "Creating trusted publishing config for '{}' in repo '{}/{}', workflow file '{}' and environment '{}'",
@@ -134,6 +134,57 @@ impl CratesIoApi {
         Ok(())
     }
 
+    /// Get information about a crate.
+    pub(crate) fn get_crate(&self, krate: &str) -> anyhow::Result<CratesIoCrate> {
+        #[derive(serde::Deserialize)]
+        struct CrateResponse {
+            #[serde(rename = "crate")]
+            krate: CratesIoCrate,
+        }
+
+        let response: CrateResponse = self
+            .req::<()>(reqwest::Method::GET, &format!("/crates/{krate}"), None)?
+            .error_for_status()?
+            .json_annotated()?;
+
+        Ok(response.krate)
+    }
+
+    /// Enable or disable the `trustpub_only` crate option, which specifies whether a crate
+    /// has to be published **only** through trusted publishing.
+    pub(crate) fn set_trusted_publishing_only(
+        &self,
+        krate: &str,
+        value: bool,
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize)]
+        struct PatchCrateRequest {
+            #[serde(rename = "crate")]
+            krate: Crate,
+        }
+
+        #[derive(serde::Serialize)]
+        struct Crate {
+            trustpub_only: bool,
+        }
+
+        if !self.dry_run {
+            self.req(
+                reqwest::Method::PATCH,
+                &format!("/crates/{krate}"),
+                Some(&PatchCrateRequest {
+                    krate: Crate {
+                        trustpub_only: value,
+                    },
+                }),
+            )?
+            .error_for_status()
+            .with_context(|| anyhow::anyhow!("Cannot patch crate {krate}"))?;
+        }
+
+        Ok(())
+    }
+
     /// Perform a request against the crates.io API
     fn req<T: Serialize>(
         &self,
@@ -169,4 +220,10 @@ pub(crate) struct TrustedPublishingGitHubConfig {
     pub(crate) repository_name: String,
     pub(crate) workflow_filename: String,
     pub(crate) environment: Option<String>,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct CratesIoCrate {
+    #[serde(rename = "trustpub_only")]
+    pub(crate) trusted_publishing_only: bool,
 }
