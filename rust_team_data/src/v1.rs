@@ -188,6 +188,7 @@ pub struct Repo {
 pub struct Crate {
     pub name: String,
     pub crates_io_publishing: Option<CratesIoPublishing>,
+    pub trusted_publishing_only: bool,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]

@@ -71,14 +71,16 @@
           "crates_io_publishing": {
             "workflow_file": "ci.yml",
             "environment": "deploy"
-          }
+          },
+          "trusted_publishing_only": false
         },
         {
           "name": "my-crate-2",
           "crates_io_publishing": {
             "workflow_file": "ci.yml",
             "environment": "deploy"
-          }
+          },
+          "trusted_publishing_only": false
         }
       ],
       "environments": [],

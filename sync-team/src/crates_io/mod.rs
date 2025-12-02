@@ -7,22 +7,30 @@ use crate::crates_io::api::{CratesIoApi, TrustedPublishingGitHubConfig};
 use anyhow::Context;
 use secrecy::SecretString;
 use std::collections::HashMap;
+use std::fmt::{Display, Formatter};
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 struct CrateName(String);
 
+impl Display for CrateName {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
-struct CratesIoPublishingConfig {
+struct CrateConfig {
     krate: CrateName,
     repo_org: String,
     repo_name: String,
     workflow_file: String,
     environment: String,
+    trusted_publishing_only: bool,
 }
 
 pub(crate) struct SyncCratesIo {
     crates_io_api: CratesIoApi,
-    crates: HashMap<CrateName, CratesIoPublishingConfig>,
+    crates: HashMap<CrateName, CrateConfig>,
 }
 
 impl SyncCratesIo {
@@ -32,7 +40,7 @@ impl SyncCratesIo {
         dry_run: bool,
     ) -> anyhow::Result<Self> {
         let crates_io_api = CratesIoApi::new(token, dry_run);
-        let crates: HashMap<CrateName, CratesIoPublishingConfig> = team_api
+        let crates: HashMap<CrateName, CrateConfig> = team_api
             .get_repos()?
             .into_iter()
             .flat_map(|repo| {
@@ -44,12 +52,13 @@ impl SyncCratesIo {
                         };
                         Some((
                             CrateName(krate.name.clone()),
-                            CratesIoPublishingConfig {
+                            CrateConfig {
                                 krate: CrateName(krate.name.clone()),
                                 repo_org: repo.org.clone(),
                                 repo_name: repo.name.clone(),
                                 workflow_file: publishing.workflow_file.clone(),
                                 environment: publishing.environment.clone(),
+                                trusted_publishing_only: krate.trusted_publishing_only,
                             },
                         ))
                     })
@@ -65,6 +74,7 @@ impl SyncCratesIo {
 
     pub(crate) fn diff_all(&self) -> anyhow::Result<Diff> {
         let mut config_diffs: Vec<ConfigDiff> = vec![];
+        let mut crate_diffs: Vec<CrateDiff> = vec![];
 
         // Note: we currently only support one trusted publishing configuration per crate
         for (krate, desired) in &self.crates {
@@ -102,6 +112,18 @@ impl SyncCratesIo {
 
             // Non-matching configs should be deleted
             config_diffs.extend(configs.into_iter().map(ConfigDiff::Delete));
+
+            let trusted_publish_only_expected = desired.trusted_publishing_only;
+            let crates_io_crate = self
+                .crates_io_api
+                .get_crate(&krate.0)
+                .with_context(|| anyhow::anyhow!("Cannot load crate {krate}"))?;
+            if crates_io_crate.trusted_publishing_only != trusted_publish_only_expected {
+                crate_diffs.push(CrateDiff::SetTrustedPublishingOnly {
+                    krate: krate.to_string(),
+                    value: trusted_publish_only_expected,
+                });
+            }
         }
 
         // We want to apply deletions first, and only then create new configs, to ensure that we
@@ -114,17 +136,29 @@ impl SyncCratesIo {
             (ConfigDiff::Create(a), ConfigDiff::Create(b)) => a.cmp(b),
         });
 
-        Ok(Diff { config_diffs })
+        Ok(Diff {
+            config_diffs,
+            crate_diffs,
+        })
     }
 }
 
 pub(crate) struct Diff {
     config_diffs: Vec<ConfigDiff>,
+    crate_diffs: Vec<CrateDiff>,
 }
 
 impl Diff {
     pub(crate) fn apply(&self, sync: &SyncCratesIo) -> anyhow::Result<()> {
-        for diff in &self.config_diffs {
+        let Diff {
+            config_diffs,
+            crate_diffs,
+        } = self;
+
+        for diff in config_diffs {
+            diff.apply(sync)?;
+        }
+        for diff in crate_diffs {
             diff.apply(sync)?;
         }
         Ok(())
@@ -149,9 +183,10 @@ impl std::fmt::Display for Diff {
 }
 
 enum ConfigDiff {
-    Create(CratesIoPublishingConfig),
+    Create(CrateConfig),
     Delete(TrustedPublishingGitHubConfig),
 }
+
 impl ConfigDiff {
     fn apply(&self, sync: &SyncCratesIo) -> anyhow::Result<()> {
         match self {
@@ -194,6 +229,34 @@ impl std::fmt::Display for ConfigDiff {
                     f,
                     "    Environment: {}",
                     config.environment.as_deref().unwrap_or("(none)")
+                )?;
+            }
+        }
+        Ok(())
+    }
+}
+
+enum CrateDiff {
+    SetTrustedPublishingOnly { krate: String, value: bool },
+}
+
+impl CrateDiff {
+    fn apply(&self, sync: &SyncCratesIo) -> anyhow::Result<()> {
+        match self {
+            Self::SetTrustedPublishingOnly { krate, value } => sync
+                .crates_io_api
+                .set_trusted_publishing_only(krate, *value),
+        }
+    }
+}
+
+impl std::fmt::Display for CrateDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::SetTrustedPublishingOnly { krate, value } => {
+                writeln!(
+                    f,
+                    "  Setting trusted publishing only option for krate `{krate}` to `{value}`",
                 )?;
             }
         }
