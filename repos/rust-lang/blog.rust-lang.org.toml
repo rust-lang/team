@@ -17,6 +17,5 @@ ci-checks = [
     "build",
 ]
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 
