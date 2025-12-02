@@ -6,6 +6,5 @@ bots = []
 [access.teams]
 libs = "write"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

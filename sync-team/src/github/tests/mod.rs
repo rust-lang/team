@@ -950,12 +950,20 @@ fn repo_environment_create() {
     model.create_repo(RepoData::new("repo1"));
     let gh = model.gh_model();
 
-    model.get_repo("repo1").environments.push(v1::Environment {
-        name: "production".to_string(),
-    });
-    model.get_repo("repo1").environments.push(v1::Environment {
-        name: "staging".to_string(),
-    });
+    model.get_repo("repo1").environments.insert(
+        "production".to_string(),
+        v1::Environment {
+            branches: vec![],
+            tags: vec![],
+        },
+    );
+    model.get_repo("repo1").environments.insert(
+        "staging".to_string(),
+        v1::Environment {
+            branches: vec![],
+            tags: vec![],
+        },
+    );
 
     let diff = model.diff_repos(gh);
     insta::assert_debug_snapshot!(diff, @r#"
@@ -982,12 +990,16 @@ fn repo_environment_create() {
                 permission_diffs: [],
                 branch_protection_diffs: [],
                 environment_diffs: [
-                    Create(
-                        "production",
-                    ),
-                    Create(
-                        "staging",
-                    ),
+                    Create {
+                        name: "production",
+                        branches: [],
+                        tags: [],
+                    },
+                    Create {
+                        name: "staging",
+                        branches: [],
+                        tags: [],
+                    },
                 ],
             },
         ),
@@ -1032,12 +1044,12 @@ fn repo_environment_delete() {
                 permission_diffs: [],
                 branch_protection_diffs: [],
                 environment_diffs: [
-                    Delete(
-                        "production",
-                    ),
-                    Delete(
-                        "staging",
-                    ),
+                    Delete {
+                        name: "production",
+                    },
+                    Delete {
+                        name: "staging",
+                    },
                 ],
             },
         ),
@@ -1056,14 +1068,21 @@ fn repo_environment_update() {
     let gh = model.gh_model();
 
     // Remove staging, keep production, add dev
-    model.get_repo("repo1").environments = vec![
+    model.get_repo("repo1").environments.clear();
+    model.get_repo("repo1").environments.insert(
+        "production".to_string(),
         v1::Environment {
-            name: "production".to_string(),
+            branches: vec![],
+            tags: vec![],
         },
+    );
+    model.get_repo("repo1").environments.insert(
+        "dev".to_string(),
         v1::Environment {
-            name: "dev".to_string(),
+            branches: vec![],
+            tags: vec![],
         },
-    ];
+    );
 
     let diff = model.diff_repos(gh);
     insta::assert_debug_snapshot!(diff, @r#"
@@ -1090,12 +1109,79 @@ fn repo_environment_update() {
                 permission_diffs: [],
                 branch_protection_diffs: [],
                 environment_diffs: [
-                    Create(
-                        "dev",
-                    ),
-                    Delete(
-                        "staging",
-                    ),
+                    Create {
+                        name: "dev",
+                        branches: [],
+                        tags: [],
+                    },
+                    Delete {
+                        name: "staging",
+                    },
+                ],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[test]
+fn repo_environment_update_branches() {
+    let mut model = DataModel::default();
+    model.create_repo(
+        RepoData::new("repo1").environment_with_branches("production", &["main", "release/*"]),
+    );
+    let gh = model.gh_model();
+
+    // Update branches for production environment
+    model.get_repo("repo1").environments.insert(
+        "production".to_string(),
+        v1::Environment {
+            branches: vec!["main".to_string(), "stable".to_string()],
+            tags: vec![],
+        },
+    );
+
+    let diff = model.diff_repos(gh);
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_node_id: "0",
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                environment_diffs: [
+                    Update {
+                        name: "production",
+                        add_branches: [
+                            "stable",
+                        ],
+                        remove_branches: [
+                            "release/*",
+                        ],
+                        add_tags: [],
+                        remove_tags: [],
+                        new_branches: [
+                            "main",
+                            "stable",
+                        ],
+                        new_tags: [],
+                    },
                 ],
             },
         ),

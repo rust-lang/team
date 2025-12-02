@@ -35,6 +35,6 @@ required-approvals = 0
 pattern = "rust-1.*"
 required-approvals = 0
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = ["main"]
 

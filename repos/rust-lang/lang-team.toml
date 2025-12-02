@@ -11,6 +11,6 @@ lang-docs = "maintain"
 types = "maintain"
 release = "maintain"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = ["gh-pages", "master"]
 

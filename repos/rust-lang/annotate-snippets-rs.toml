@@ -17,5 +17,4 @@ crates = ["annotate-snippets"]
 publish-workflow = "release.yml"
 publish-environment = "publish"
 
-[[environments]]
-name = "publish"
+[environments.publish]

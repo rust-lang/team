@@ -182,13 +182,23 @@ impl<'a> Generator<'a> {
                         })
                         .collect::<anyhow::Result<Vec<Crate>>>()?
                 },
-                environments: r
-                    .environments
-                    .iter()
-                    .map(|e| v1::Environment {
-                        name: e.name.clone(),
-                    })
-                    .collect(),
+                environments: {
+                    let mut envs: Vec<_> = r
+                        .environments
+                        .iter()
+                        .map(|(name, env)| {
+                            (
+                                name.clone(),
+                                v1::Environment {
+                                    branches: env.branches.clone(),
+                                    tags: env.tags.clone(),
+                                },
+                            )
+                        })
+                        .collect();
+                    envs.sort_by(|a, b| a.0.cmp(&b.0));
+                    envs.into_iter().collect()
+                },
                 archived,
                 auto_merge_enabled: !managed_by_bors,
             };

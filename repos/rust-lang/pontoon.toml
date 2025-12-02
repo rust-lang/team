@@ -6,6 +6,5 @@ bots = []
 [access.teams]
 infra = "write"
 
-[[environments]]
-name = "rust-pontoon"
+[environments.rust-pontoon]
 

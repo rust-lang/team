@@ -502,8 +502,20 @@ fn run() -> Result<(), Error> {
                 let repo_name = format!("{}/{}", repo.org, repo.name);
                 if !repo.environments.is_empty() {
                     println!("{repo_name}:");
-                    for env in &repo.environments {
-                        println!("  - {}", env.name);
+                    for (env_name, env) in &repo.environments {
+                        print!("  - {env_name}");
+
+                        // Show branches if present
+                        if !env.branches.is_empty() {
+                            print!(" (branches: {})", env.branches.join(", "));
+                        }
+
+                        // Show tags if present
+                        if !env.tags.is_empty() {
+                            print!(" (tags: {})", env.tags.join(", "));
+                        }
+
+                        println!();
                     }
                 } else {
                     println!("{repo_name}: (no environments)");

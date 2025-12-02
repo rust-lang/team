@@ -15,6 +15,6 @@ publish-workflow = "release-plz.yml"
 publish-environment = "publish"
 teams = ["compiler"]
 
-[[environments]]
-name = "publish"
+[environments.publish]
+branches = ["main"]
 

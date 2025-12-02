@@ -19,6 +19,7 @@ crates = ["analyzeme", "decodeme", "measureme"]
 publish-workflow = "publish.yml"
 publish-environment = "publish"
 
-[[environments]]
-name = "publish"
+[environments.publish]
+branches = ["master"]
+tags = ["*"]
 

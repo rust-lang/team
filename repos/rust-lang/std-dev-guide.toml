@@ -14,6 +14,5 @@ rustc-dev-guide = "write"
 pattern = "master"
 ci-checks = ["book-test"]
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

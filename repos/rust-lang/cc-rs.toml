@@ -18,9 +18,8 @@ publish-workflow = "publish.yml"
 publish-environment = "publish"
 teams = ["libs"]
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 
-[[environments]]
-name = "publish"
+[environments.publish]
+branches = ["main"]
 

@@ -6,6 +6,5 @@ bots = []
 [access.teams]
 project-async-crashdump-debugging = "write"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

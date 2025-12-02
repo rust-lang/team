@@ -11,6 +11,5 @@ rustup = "maintain"
 pattern = "main"
 ci-checks = ["conclusion"]
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

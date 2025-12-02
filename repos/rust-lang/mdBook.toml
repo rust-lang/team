@@ -31,9 +31,9 @@ crates = [
 publish-workflow = "deploy.yml"
 publish-environment = "publish"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 
-[[environments]]
-name = "publish"
+[environments.publish]
+branches = ["master"]
+tags = ["*"]
 
