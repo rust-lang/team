@@ -453,18 +453,6 @@ impl GithubRead for GitHubApiRead {
         #[derive(serde::Deserialize)]
         struct GitHubEnvironment {
             name: String,
-            #[serde(default)]
-            #[allow(dead_code)]
-            deployment_branch_policy: Option<DeploymentBranchPolicy>,
-        }
-
-        #[derive(serde::Deserialize)]
-        #[allow(dead_code)]
-        struct DeploymentBranchPolicy {
-            #[serde(default)]
-            protected_branches: bool,
-            #[serde(default)]
-            custom_branch_policies: bool,
         }
 
         #[derive(serde::Deserialize)]
