@@ -29,6 +29,6 @@ required-approvals = 0
 [[branch-protections]]
 pattern = "master-old"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = []
 

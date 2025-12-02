@@ -10,6 +10,6 @@ crate-maintainers = 'maintain'
 [[branch-protections]]
 pattern = 'main'
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = []
 

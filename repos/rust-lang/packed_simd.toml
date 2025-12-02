@@ -10,6 +10,6 @@ libs-api = "write"
 libs = "write"
 project-portable-simd = "write"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = []
 

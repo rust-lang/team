@@ -25,6 +25,6 @@ ci-checks = [
     'Test (windows)',
 ]
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = []
 

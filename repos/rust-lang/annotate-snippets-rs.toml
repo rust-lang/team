@@ -17,5 +17,5 @@ crates = ["annotate-snippets"]
 workflow-filename = "release.yml"
 environment = "publish"
 
-[[environments]]
-name = "publish"
+[environments.publish]
+branches = []
