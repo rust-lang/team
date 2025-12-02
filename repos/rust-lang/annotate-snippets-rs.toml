@@ -16,3 +16,6 @@ required-approvals = 0
 crates = ["annotate-snippets"]
 workflow-filename = "release.yml"
 environment = "publish"
+
+[[environments]]
+name = "publish"
