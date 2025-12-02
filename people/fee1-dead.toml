@@ -4,3 +4,6 @@ github-id = 43851243
 zulip-id = 361356
 discord-id = 468253584421552139
 email = "ent3rm4n@gmail.com"
+
+[funding]
+github-sponsors = true
