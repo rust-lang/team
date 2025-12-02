@@ -19,4 +19,3 @@ If you must do a breaking change to the format, make sure to coordinate it with 
 [all the users](https://github.com/search?q=org%3Arust-lang+%2Fname+%3D+%22rust_team_data%22%2F+NOT+repo%3Arust-lang%2Fteam+NOT+repo%3Arust-lang%2Fsync-team&type=code) \
 of the `rust_team_data` crate.
 """
-cc = ["@Urgau"]
