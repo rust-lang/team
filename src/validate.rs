@@ -1042,11 +1042,11 @@ fn validate_archived_repos(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
-/// Validate that environments have valid names (non-empty)
+/// Validate that environments have valid names (non-empty) and branches
 fn validate_environments(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.all_repos(), errors, |repo, _| {
-        for env in &repo.environments {
-            if env.name.is_empty() {
+        for (env_name, env) in &repo.environments {
+            if env_name.is_empty() {
                 bail!(
                     "repo {}/{} has an environment with an empty name",
                     repo.org,
@@ -1058,28 +1058,29 @@ fn validate_environments(data: &Data, errors: &mut Vec<String>) {
             // problematic as they can be interpreted as path separators
             //in URLs (/repos/{owner}/{repo}/environments/{name}) and file systems,
             //potentially leading to security vulnerabilities or API routing issues.
-            if env.name.contains('/') || env.name.contains('\\') {
+            if env_name.contains('/') || env_name.contains('\\') {
                 bail!(
                     "repo {}/{} has an environment '{}' with invalid characters (/, \\)",
                     repo.org,
                     repo.name,
-                    env.name
+                    env_name
                 );
+            }
+
+            // Validate branch names are not empty
+            for branch in &env.branches {
+                if branch.is_empty() {
+                    bail!(
+                        "repo {}/{} environment '{}' has an empty branch name",
+                        repo.org,
+                        repo.name,
+                        env_name
+                    );
+                }
             }
         }
 
-        // Check for duplicate environment names
-        let mut seen = HashSet::new();
-        for env in &repo.environments {
-            if !seen.insert(&env.name) {
-                bail!(
-                    "repo {}/{} has duplicate environment '{}'",
-                    repo.org,
-                    repo.name,
-                    env.name
-                );
-            }
-        }
+        // No need to check for duplicate environment names since HashMap keys are unique
         Ok(())
     });
 }

@@ -814,7 +814,7 @@ pub(crate) struct Repo {
     #[serde(default)]
     pub crates_io_publishing: Vec<CratesIoPublishing>,
     #[serde(default)]
-    pub environments: Vec<Environment>,
+    pub environments: HashMap<String, Environment>,
 }
 
 #[derive(serde_derive::Deserialize, Debug, Clone, PartialEq)]
@@ -887,5 +887,6 @@ pub(crate) struct CratesIoPublishing {
 #[derive(serde_derive::Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Environment {
-    pub name: String,
+    #[serde(default)]
+    pub branches: Vec<String>,
 }

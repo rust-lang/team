@@ -433,16 +433,22 @@ merge-bots = ["homu"]
 
 ### Repository environments
 
-GitHub environments are used to configure deployment protection rules and secrets for GitHub Actions workflows. This repository can manage environment names for repositories.
+GitHub environments are used to configure deployment protection rules and secrets for GitHub Actions workflows. This repository can manage environment names and deployment branch policies for repositories.
 
 ```toml
 # The environments in this repository (optional)
-[[environments]]
-# The name of the environment (required)
-name = "production"
+# Use table-of-tables syntax where the key is the environment name
+[environments.production]
+# List of branch names that can deploy to this environment (optional)
+# If empty or omitted, any branch can deploy
+branches = ["main", "release/*"]
 
-[[environments]]
-name = "staging"
+[environments.staging]
+# Empty branches list means any branch can deploy
+branches = []
+
+[environments.development]
+# No branches specified - any branch can deploy
 ```
 
 ### Crates.io trusted publishing

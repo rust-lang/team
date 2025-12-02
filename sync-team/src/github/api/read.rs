@@ -53,8 +53,12 @@ pub(crate) trait GithubRead {
     ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>>;
 
     /// Get environments for a repository
-    /// Returns a list of environment names
-    fn repo_environments(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Environment>>;
+    /// Returns a map of environment names to their Environment data
+    fn repo_environments(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<HashMap<String, Environment>>;
 }
 
 pub(crate) struct GitHubApiRead {
@@ -441,13 +445,34 @@ impl GithubRead for GitHubApiRead {
         Ok(result)
     }
 
-    fn repo_environments(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Environment>> {
+    fn repo_environments(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<HashMap<String, Environment>> {
         #[derive(serde::Deserialize)]
-        struct EnvironmentsResponse {
-            environments: Vec<Environment>,
+        struct GitHubEnvironment {
+            name: String,
+            #[serde(default)]
+            #[allow(dead_code)]
+            deployment_branch_policy: Option<DeploymentBranchPolicy>,
         }
 
-        let mut environments: Vec<Environment> = Vec::new();
+        #[derive(serde::Deserialize)]
+        #[allow(dead_code)]
+        struct DeploymentBranchPolicy {
+            #[serde(default)]
+            protected_branches: bool,
+            #[serde(default)]
+            custom_branch_policies: bool,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct EnvironmentsResponse {
+            environments: Vec<GitHubEnvironment>,
+        }
+
+        let mut environments: HashMap<String, Environment> = HashMap::new();
 
         // REST API endpoint for environments
         // https://docs.github.com/en/rest/deployments/environments#list-environments
@@ -456,7 +481,14 @@ impl GithubRead for GitHubApiRead {
             &GitHubUrl::repos(org, repo, "environments")?,
             |resp: EnvironmentsResponse| {
                 for env in resp.environments {
-                    environments.push(env);
+                    // For now, we'll fetch the custom branch policies in a future enhancement
+                    // GitHub API requires a separate call to get custom branch policies
+                    environments.insert(
+                        env.name,
+                        Environment {
+                            branches: Vec::new(), // Will be populated when we fetch branch policies
+                        },
+                    );
                 }
                 Ok(())
             },
