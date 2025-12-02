@@ -1,5 +1,6 @@
 use log::debug;
 use reqwest::Method;
+use std::collections::HashSet;
 
 use crate::github::api::url::GitHubUrl;
 use crate::github::api::{
@@ -8,6 +9,12 @@ use crate::github::api::{
     TeamPushAllowanceActor, TeamRole, UserPushAllowanceActor, allow_not_found,
 };
 use crate::utils::ResponseExt;
+
+#[derive(Debug)]
+struct BranchPolicyInfo {
+    id: u64,
+    name: String,
+}
 
 pub(crate) struct GitHubWrite {
     client: HttpClient,
@@ -572,7 +579,69 @@ impl GitHubWrite {
         Ok(())
     }
 
+    /// Get existing branch policies for an environment
+    fn get_environment_branch_policies(
+        &self,
+        org: &str,
+        repo: &str,
+        environment: &str,
+    ) -> anyhow::Result<Vec<BranchPolicyInfo>> {
+        #[derive(serde::Deserialize)]
+        struct BranchPolicy {
+            id: u64,
+            name: String,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct BranchPoliciesResponse {
+            branch_policies: Vec<BranchPolicy>,
+        }
+
+        let url = GitHubUrl::repos(
+            org,
+            repo,
+            &format!("environments/{}/deployment-branch-policies", environment),
+        )?;
+
+        let response: BranchPoliciesResponse =
+            self.client.req(Method::GET, &url)?.send()?.json()?;
+
+        Ok(response
+            .branch_policies
+            .into_iter()
+            .map(|bp| BranchPolicyInfo {
+                id: bp.id,
+                name: bp.name,
+            })
+            .collect())
+    }
+
+    /// Delete a specific branch policy by ID
+    fn delete_environment_branch_policy(
+        &self,
+        org: &str,
+        repo: &str,
+        environment: &str,
+        policy_id: u64,
+    ) -> anyhow::Result<()> {
+        let url = GitHubUrl::repos(
+            org,
+            repo,
+            &format!(
+                "environments/{}/deployment-branch-policies/{}",
+                environment, policy_id
+            ),
+        )?;
+        self.client
+            .send(Method::DELETE, &url, &serde_json::json!({}))?;
+        Ok(())
+    }
+
     /// Set custom branch policies for an environment
+    /// This method properly handles updates by:
+    /// 1. Fetching all existing policies
+    /// 2. Deleting policies that are no longer needed
+    /// 3. Adding new policies that don't exist
     fn set_environment_branch_policies(
         &self,
         org: &str,
@@ -580,22 +649,44 @@ impl GitHubWrite {
         environment: &str,
         branches: &[String],
     ) -> anyhow::Result<()> {
-        // Note: This is a simplified implementation
-        // The actual GitHub API requires fetching existing policies, deleting them, and adding new ones
-        // For now, we'll add the branches (the API will handle duplicates)
+        // 1. Fetch existing policies
+        let existing_policies = self.get_environment_branch_policies(org, repo, environment)?;
+
+        let existing_branches: HashSet<String> =
+            existing_policies.iter().map(|p| p.name.clone()).collect();
+        let new_branches: HashSet<String> = branches.iter().cloned().collect();
+
+        // 2. Delete policies that are no longer needed
+        for policy in &existing_policies {
+            if !new_branches.contains(&policy.name) {
+                debug!(
+                    "Deleting branch policy '{}' (id: {}) from environment '{}' in '{}/{}'",
+                    policy.name, policy.id, environment, org, repo
+                );
+                self.delete_environment_branch_policy(org, repo, environment, policy.id)?;
+            }
+        }
+
+        // 3. Add new policies that don't exist yet
         for branch in branches {
-            let url = GitHubUrl::repos(
-                org,
-                repo,
-                &format!("environments/{}/deployment-branch-policies", environment),
-            )?;
-            self.client.send(
-                Method::POST,
-                &url,
-                &serde_json::json!({
-                    "name": branch
-                }),
-            )?;
+            if !existing_branches.contains(branch) {
+                debug!(
+                    "Adding branch policy '{}' to environment '{}' in '{}/{}'",
+                    branch, environment, org, repo
+                );
+                let url = GitHubUrl::repos(
+                    org,
+                    repo,
+                    &format!("environments/{}/deployment-branch-policies", environment),
+                )?;
+                self.client.send(
+                    Method::POST,
+                    &url,
+                    &serde_json::json!({
+                        "name": branch
+                    }),
+                )?;
+            }
         }
         Ok(())
     }
