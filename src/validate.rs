@@ -1067,7 +1067,8 @@ fn validate_environments(data: &Data, errors: &mut Vec<String>) {
                 );
             }
 
-            // Validate branch names are not empty
+            // Validate branch names are not empty and not duplicated
+            let mut seen_branches = HashSet::new();
             for branch in &env.branches {
                 if branch.is_empty() {
                     bail!(
@@ -1075,6 +1076,15 @@ fn validate_environments(data: &Data, errors: &mut Vec<String>) {
                         repo.org,
                         repo.name,
                         env_name
+                    );
+                }
+                if !seen_branches.insert(branch) {
+                    bail!(
+                        "repo {}/{} environment '{}' has duplicate branch name '{}'",
+                        repo.org,
+                        repo.name,
+                        env_name,
+                        branch
                     );
                 }
             }

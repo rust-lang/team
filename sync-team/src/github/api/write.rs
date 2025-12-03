@@ -571,10 +571,8 @@ impl GitHubWrite {
 
             self.client.send(Method::PUT, &url, &body)?;
 
-            // Clear and set branch policies
-            if !branches.is_empty() {
-                self.set_environment_branch_policies(org, repo, name, branches)?;
-            }
+            // This ensures old policies are cleaned up when transitioning to unrestricted deployments
+            self.set_environment_branch_policies(org, repo, name, branches)?;
         }
         Ok(())
     }
