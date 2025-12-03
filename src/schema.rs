@@ -880,7 +880,7 @@ pub(crate) struct CratesIoPublishing {
     pub crates: Vec<String>,
     pub workflow_filename: String,
     pub environment: String,
-    #[serde(default)]
+    #[serde(default = "default_true")]
     pub disable_other_publish_methods: bool,
 }
 

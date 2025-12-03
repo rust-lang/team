@@ -456,9 +456,9 @@ crates = ["regex"]
 workflow-filename = "ci.yml"
 # GitHub Actions environment that has to be used for the publishing (required)
 environment = "deploy"
-# Disable other mechanisms for publishing this set of crates (optional, default is false)
+# Disable other mechanisms for publishing this set of crates (optional, default is true)
 # If set to `true`, the crates will only be publishable through trusted publishing
-disable-other-publish-methods = false
+disable-other-publish-methods = true
 ```
 
 > [!TIP]

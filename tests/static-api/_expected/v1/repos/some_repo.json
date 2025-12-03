@@ -40,7 +40,7 @@
         "workflow_file": "ci.yml",
         "environment": "deploy"
       },
-      "trusted_publishing_only": false
+      "trusted_publishing_only": true
     },
     {
       "name": "my-crate-2",
@@ -48,7 +48,7 @@
         "workflow_file": "ci.yml",
         "environment": "deploy"
       },
-      "trusted_publishing_only": false
+      "trusted_publishing_only": true
     }
   ],
   "environments": [],
