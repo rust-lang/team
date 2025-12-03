@@ -11,5 +11,4 @@ crate-maintainers = 'maintain'
 pattern = 'main'
 
 [environments.github-pages]
-branches = []
 

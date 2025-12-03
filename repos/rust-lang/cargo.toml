@@ -16,8 +16,6 @@ pattern = "rust-1.*"
 ci-checks = ["conclusion"]
 
 [environments.github-pages]
-branches = []
 
 [environments.release]
-branches = []
 

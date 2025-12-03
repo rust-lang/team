@@ -11,5 +11,4 @@ crate-maintainers = 'maintain'
 Thomasdezeeuw = 'maintain'
 
 [environments.github-pages]
-branches = []
 

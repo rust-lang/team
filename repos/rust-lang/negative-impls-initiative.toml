@@ -7,5 +7,4 @@ bots = []
 project-negative-impls = "write"
 
 [environments.github-pages]
-branches = []
 

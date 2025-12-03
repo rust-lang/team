@@ -11,5 +11,4 @@ libs = "write"
 project-portable-simd = "write"
 
 [environments.github-pages]
-branches = []
 

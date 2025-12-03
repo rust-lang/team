@@ -8,5 +8,4 @@ bots = []
 rust-analyzer = "write"
 
 [environments.github-pages]
-branches = []
 

@@ -7,5 +7,4 @@ bots = []
 infra = "write"
 
 [environments.rust-pontoon]
-branches = []
 

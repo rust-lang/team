@@ -8,5 +8,4 @@ bots = []
 infra = "write"
 
 [environments.rfcbot-rs]
-branches = []
 

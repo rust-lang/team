@@ -8,5 +8,4 @@ cargo = "write"
 compiler = "write"
 
 [environments.github-pages]
-branches = []
 

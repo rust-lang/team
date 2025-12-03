@@ -6,5 +6,4 @@ bots = []
 [access.teams]
 
 [environments.github-pages]
-branches = []
 

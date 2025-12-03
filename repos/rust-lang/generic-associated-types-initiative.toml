@@ -8,5 +8,4 @@ bots = []
 project-generic-associated-types = "write"
 
 [environments.github-pages]
-branches = []
 

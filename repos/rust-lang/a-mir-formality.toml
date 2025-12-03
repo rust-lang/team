@@ -10,5 +10,4 @@ lang-docs = "maintain"
 types = "maintain"
 
 [environments.github-pages]
-branches = []
 

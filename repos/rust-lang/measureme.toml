@@ -20,5 +20,4 @@ workflow-filename = "publish.yml"
 environment = "publish"
 
 [environments.publish]
-branches = []
 

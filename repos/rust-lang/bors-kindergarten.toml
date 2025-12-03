@@ -8,14 +8,10 @@ infra = "write"
 infra-bors = "write"
 
 [environments.bors]
-branches = []
 
 [environments.ci]
-branches = []
 
 [environments.production]
-branches = []
 
 [environments.staging]
-branches = []
 

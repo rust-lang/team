@@ -8,8 +8,6 @@ bots = ["renovate", "rustbot", "heroku-deploy-access"]
 crates-io = "write"
 
 [environments.crates-io]
-branches = []
 
 [environments.staging-crates-io]
-branches = []
 

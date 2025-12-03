@@ -12,5 +12,4 @@ pattern = "main"
 ci-checks = ["conclusion"]
 
 [environments.github-pages]
-branches = []
 

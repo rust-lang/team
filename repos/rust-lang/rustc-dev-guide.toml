@@ -30,5 +30,4 @@ required-approvals = 0
 pattern = "master-old"
 
 [environments.github-pages]
-branches = []
 

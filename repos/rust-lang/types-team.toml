@@ -8,5 +8,4 @@ bots = ["rustbot"]
 types = "write"
 
 [environments.github-pages]
-branches = []
 

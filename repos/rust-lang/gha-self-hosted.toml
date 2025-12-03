@@ -11,5 +11,4 @@ pattern = "main"
 ci-checks = ["CI finished"]
 
 [environments.upload]
-branches = []
 

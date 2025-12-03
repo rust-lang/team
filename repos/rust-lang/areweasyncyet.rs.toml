@@ -11,5 +11,4 @@ wg-async = "write"
 upsuper = "write"
 
 [environments.github-pages]
-branches = []
 

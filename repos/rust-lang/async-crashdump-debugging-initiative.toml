@@ -7,5 +7,4 @@ bots = []
 project-async-crashdump-debugging = "write"
 
 [environments.github-pages]
-branches = []
 

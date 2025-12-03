@@ -8,5 +8,4 @@ cookbook = "write"
 lang-docs = "write"
 
 [environments.github-pages]
-branches = []
 

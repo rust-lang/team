@@ -18,4 +18,3 @@ workflow-filename = "release.yml"
 environment = "publish"
 
 [environments.publish]
-branches = []

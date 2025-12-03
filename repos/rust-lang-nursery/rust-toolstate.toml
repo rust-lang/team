@@ -12,5 +12,4 @@ pattern = "master"
 pr-required = false
 
 [environments.github-pages]
-branches = []
 

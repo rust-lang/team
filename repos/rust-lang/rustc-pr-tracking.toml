@@ -8,5 +8,4 @@ bots = ["highfive"]
 release = "write"
 
 [environments.github-pages]
-branches = []
 

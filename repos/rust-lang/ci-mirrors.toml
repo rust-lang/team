@@ -13,5 +13,4 @@ ci-checks = ["Build finished"]
 dismiss-stale-review = true
 
 [environments.upload]
-branches = []
 

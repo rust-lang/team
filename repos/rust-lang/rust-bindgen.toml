@@ -13,5 +13,4 @@ required-approvals = 0
 ci-checks = ["success"]
 
 [environments.github-pages]
-branches = []
 

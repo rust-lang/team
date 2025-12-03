@@ -11,14 +11,10 @@ website = "write"
 pattern = "main"
 
 [environments.github-pages]
-branches = []
 
 [environments.new-rust-www]
-branches = []
 
 [environments.rust-www-staging]
-branches = []
 
 [environments.rust-www-try]
-branches = []
 

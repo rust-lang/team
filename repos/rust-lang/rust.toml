@@ -84,5 +84,4 @@ pattern = "perf-tmp"
 merge-bots = ["rust-timer"]
 
 [environments.bors]
-branches = []
 

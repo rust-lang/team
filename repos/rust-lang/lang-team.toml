@@ -12,5 +12,4 @@ types = "maintain"
 release = "maintain"
 
 [environments.github-pages]
-branches = []
 

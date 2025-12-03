@@ -14,8 +14,6 @@ ci-checks = ["CI"]
 dismiss-stale-review = true
 
 [environments.deploy]
-branches = []
 
 [environments.github-pages]
-branches = []
 

@@ -26,5 +26,4 @@ ci-checks = [
 ]
 
 [environments.github-pages]
-branches = []
 

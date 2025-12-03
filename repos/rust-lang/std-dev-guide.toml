@@ -15,5 +15,4 @@ pattern = "master"
 ci-checks = ["book-test"]
 
 [environments.github-pages]
-branches = []
 

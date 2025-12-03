@@ -11,5 +11,4 @@ crate-maintainers = "maintain"
 sdroege = "write"
 
 [environments.github-pages]
-branches = []
 

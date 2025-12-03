@@ -7,5 +7,4 @@ bots = []
 wg-const-eval = "write"
 
 [environments.github-pages]
-branches = []
 

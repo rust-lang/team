@@ -7,5 +7,4 @@ bots = []
 leadership-council = "maintain"
 
 [environments.github-pages]
-branches = []
 

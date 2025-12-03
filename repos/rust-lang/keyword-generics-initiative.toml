@@ -8,5 +8,4 @@ bots = []
 project-keyword-generics = "write"
 
 [environments.github-pages]
-branches = []
 

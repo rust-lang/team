@@ -10,5 +10,4 @@ project-stable-mir = "write"
 pattern = "main"
 
 [environments.github-pages]
-branches = []
 

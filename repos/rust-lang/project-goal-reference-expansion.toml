@@ -8,5 +8,4 @@ bots = []
 project-goal-reference-expansion = "write"
 
 [environments.github-pages]
-branches = []
 

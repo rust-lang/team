@@ -8,5 +8,4 @@ bots = []
 crate-maintainers = 'maintain'
 
 [environments.github-pages]
-branches = []
 

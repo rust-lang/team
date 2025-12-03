@@ -9,5 +9,4 @@ libs-api = "write"
 libs = "write"
 
 [environments.github-pages]
-branches = []
 

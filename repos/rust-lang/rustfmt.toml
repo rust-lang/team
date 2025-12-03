@@ -36,5 +36,4 @@ pattern = "rust-1.*"
 required-approvals = 0
 
 [environments.github-pages]
-branches = []
 

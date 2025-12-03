@@ -9,5 +9,4 @@ website = "write"
 infra = "write"
 
 [environments.github-pages]
-branches = []
 

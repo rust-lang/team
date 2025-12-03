@@ -7,5 +7,4 @@ bots = []
 libs = "write"
 
 [environments.github-pages]
-branches = []
 

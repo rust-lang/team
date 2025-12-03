@@ -32,8 +32,6 @@ workflow-filename = "deploy.yml"
 environment = "publish"
 
 [environments.github-pages]
-branches = []
 
 [environments.publish]
-branches = []
 

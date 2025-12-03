@@ -15,5 +15,4 @@ pattern = "master"
 required-approvals = 0
 
 [environments.github-pages]
-branches = []
 

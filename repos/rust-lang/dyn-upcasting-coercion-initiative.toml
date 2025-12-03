@@ -7,5 +7,4 @@ bots = []
 project-dyn-upcasting = "write"
 
 [environments.github-pages]
-branches = []
 
