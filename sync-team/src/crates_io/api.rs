@@ -90,6 +90,84 @@ impl CratesIoApi {
         Ok(configs)
     }
 
+    /// List owners of a given crate.
+    pub(crate) fn list_crate_owners(&self, krate: &str) -> anyhow::Result<Vec<CratesIoOwner>> {
+        #[derive(serde::Deserialize)]
+        struct OwnersResponse {
+            users: Vec<CratesIoOwner>,
+        }
+
+        let response: OwnersResponse = self
+            .req::<()>(
+                reqwest::Method::GET,
+                &format!("/crates/{krate}/owners"),
+                HashMap::new(),
+                None,
+            )?
+            .error_for_status()?
+            .json_annotated()?;
+
+        Ok(response.users)
+    }
+
+    /// Invite the specified user(s) or team(s) to own a given crate.
+    pub(crate) fn invite_crate_owners(
+        &self,
+        krate: &str,
+        owners: &[CratesIoOwner],
+    ) -> anyhow::Result<()> {
+        debug!("Inviting owners {owners:?} to crate {krate}");
+
+        #[derive(serde::Serialize)]
+        struct InviteOwnersRequest<'a> {
+            owners: Vec<&'a str>,
+        }
+
+        let owners = owners.iter().map(|o| o.login.as_str()).collect::<Vec<_>>();
+
+        if !self.dry_run {
+            self.req(
+                reqwest::Method::PUT,
+                &format!("/crates/{krate}/owners"),
+                HashMap::new(),
+                Some(&InviteOwnersRequest { owners }),
+            )?
+            .error_for_status()?;
+        }
+
+        Ok(())
+    }
+
+    /// Delete the specified owner(s) of a given crate.
+    pub(crate) fn delete_crate_owners(
+        &self,
+        krate: &str,
+        owners: &[CratesIoOwner],
+    ) -> anyhow::Result<()> {
+        debug!("Deleting owners {owners:?} from crate {krate}");
+
+        #[derive(serde::Serialize)]
+        struct DeleteOwnersRequest<'a> {
+            owners: &'a [&'a str],
+        }
+
+        let owners = owners.iter().map(|o| o.login.as_str()).collect::<Vec<_>>();
+
+        if !self.dry_run {
+            self.req(
+                reqwest::Method::DELETE,
+                &format!("/crates/{krate}/owners"),
+                HashMap::new(),
+                Some(&DeleteOwnersRequest { owners: &owners }),
+            )?
+            .error_for_status()
+            .with_context(|| {
+                anyhow::anyhow!("Cannot delete owner(s) {owners:?} from krate {krate}")
+            })?;
+        }
+        Ok(())
+    }
+
     /// Create a new trusted publishing configuration for a given crate.
     pub(crate) fn create_trusted_publishing_github_config(
         &self,
@@ -322,4 +400,34 @@ pub(crate) struct CratesIoCrate {
     pub(crate) name: String,
     #[serde(rename = "trustpub_only")]
     pub(crate) trusted_publishing_only: bool,
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Eq, Hash, Copy, Clone)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum OwnerKind {
+    User,
+    Team,
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Eq, Hash, Clone)]
+pub(crate) struct CratesIoOwner {
+    login: String,
+    kind: OwnerKind,
+}
+
+impl CratesIoOwner {
+    pub(crate) fn team(org: String, name: String) -> Self {
+        Self {
+            login: format!("github:{org}:{name}"),
+            kind: OwnerKind::Team,
+        }
+    }
+
+    pub(crate) fn kind(&self) -> OwnerKind {
+        self.kind
+    }
+
+    pub(crate) fn login(&self) -> &str {
+        &self.login
+    }
 }
