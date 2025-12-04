@@ -5,9 +5,6 @@ on:
     - cron: '0 */6 * * *'
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
   check-untracked-repos:
     runs-on: ubuntu-latest
