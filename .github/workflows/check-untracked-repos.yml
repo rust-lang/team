@@ -10,13 +10,20 @@ permissions:
 
 jobs:
   check-untracked-repos:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
+      - name: Setup Rust and GitHub tokens
+        uses: ./.github/actions/setup-rust-and-tokens
+        with:
+          app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
+          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
 
       - name: Check for untracked repositories
-        run: cargo run --bin rust-team ci check-untracked-repos
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          cargo build --release
+          ./target/release/rust-team ci check-untracked-repos
