@@ -13,6 +13,7 @@ pattern = "main"
 crates = ["thorin-dwp", "thorin-dwp-bin"]
 publish-workflow = "release-plz.yml"
 publish-environment = "publish"
+teams = ["compiler"]
 
 [[environments]]
 name = "publish"
