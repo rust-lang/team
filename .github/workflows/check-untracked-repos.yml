@@ -1,0 +1,42 @@
+name: Check Untracked Repositories
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-untracked-repos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust Stable
+        env:
+          RUST_VERSION: "1.91.1"
+        run: |
+          rustc -vV
+          rustup toolchain install $RUST_VERSION
+          rustup default $RUST_VERSION
+          rustup component add rustfmt clippy
+          rustc -vV
+
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Check for untracked repositories
+        run: cargo run --bin rust-team ci check-untracked-repos
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
