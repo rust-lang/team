@@ -87,20 +87,14 @@ impl CratesIoApi {
     pub(crate) fn invite_crate_owners(
         &self,
         krate: &str,
-        owners: &[CrateOwner],
+        owners: &[CratesIoOwner],
     ) -> anyhow::Result<()> {
         #[derive(serde::Serialize)]
-        struct InviteOwnersRequest {
-            owners: Vec<String>,
+        struct InviteOwnersRequest<'a> {
+            owners: Vec<&'a str>,
         }
 
-        let owners = owners
-            .iter()
-            .map(|o| match o {
-                CrateOwner::GitHubUser(login) => login.clone(),
-                CrateOwner::GitHubTeam { org, name } => format!("github:{org}:{name}"),
-            })
-            .collect::<Vec<_>>();
+        let owners = owners.iter().map(|o| o.login.as_str()).collect::<Vec<_>>();
 
         self.req(
             reqwest::Method::PUT,
@@ -108,6 +102,30 @@ impl CratesIoApi {
             Some(&InviteOwnersRequest { owners }),
         )?
         .error_for_status()?;
+
+        Ok(())
+    }
+
+    /// Delete the specified owner(s) of a given crate.
+    pub(crate) fn delete_crate_owners(
+        &self,
+        krate: &str,
+        owners: &[CratesIoOwner],
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize)]
+        struct DeleteOwnersRequest<'a> {
+            owners: &'a [&'a str],
+        }
+
+        let owners = owners.iter().map(|o| o.login.as_str()).collect::<Vec<_>>();
+
+        self.req(
+            reqwest::Method::DELETE,
+            &format!("/crates/{krate}/owners"),
+            Some(&DeleteOwnersRequest { owners: &owners }),
+        )?
+        .error_for_status()
+        .with_context(|| anyhow::anyhow!("Cannot delete owner(s) {owners:?} from krate {krate}"))?;
 
         Ok(())
     }
@@ -280,20 +298,39 @@ pub(crate) struct CratesIoCrate {
     pub(crate) trusted_publishing_only: bool,
 }
 
-pub(crate) enum CrateOwner {
-    GitHubUser(String),
-    GitHubTeam { org: String, name: String },
-}
-
-#[derive(serde::Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde::Deserialize, Debug, PartialEq, Eq, Hash, Copy, Clone)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum OwnerKind {
     User,
     Team,
 }
 
-#[derive(serde::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug, PartialEq, Eq, Hash, Clone)]
 pub(crate) struct CratesIoOwner {
-    pub(crate) login: String,
-    pub(crate) kind: OwnerKind,
+    login: String,
+    kind: OwnerKind,
+}
+
+impl CratesIoOwner {
+    pub(crate) fn user(login: String) -> Self {
+        Self {
+            login,
+            kind: OwnerKind::User,
+        }
+    }
+
+    pub(crate) fn team(org: String, name: String) -> Self {
+        Self {
+            login: format!("github:{org}:{name}"),
+            kind: OwnerKind::Team,
+        }
+    }
+
+    pub(crate) fn kind(&self) -> OwnerKind {
+        self.kind
+    }
+
+    pub(crate) fn login(&self) -> &str {
+        &self.login
+    }
 }
