@@ -12,10 +12,10 @@ pattern = 'main'
 required-approvals = 0
 ci-checks = ['Tests pass']
 
-[[crates-io-publishing]]
+[[crates-io]]
 crates = ["cc", "find-msvc-tools"]
-workflow-filename = "publish.yml"
-environment = "publish"
+publish-workflow = "publish.yml"
+publish-environment = "publish"
 
 [[environments]]
 name = "github-pages"
