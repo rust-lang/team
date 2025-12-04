@@ -445,17 +445,17 @@ name = "production"
 name = "staging"
 ```
 
-### Crates.io trusted publishing
-Configure crates.io Trusted Publishing for crates published from a given repository from GitHub Actions.
+### Crates.io crate management
+Configure properties of crates.io crates that are deployed using Trusted Publishing from the given repository.
 
 ```toml
-[[crates-io-publishing]]
+[[crates-io]]
 # Crates that will be published with the given workflow file from this repository (required)
 crates = ["regex"]
-# Name of a GitHub Actions workflow file that will publish the crate (required)
-workflow-filename = "ci.yml"
+# Name of a GitHub Actions workflow file that will publish the crates (required)
+publish-workflow = "ci.yml"
 # GitHub Actions environment that has to be used for the publishing (required)
-environment = "deploy"
+publish-environment = "deploy"
 # Disable other mechanisms for publishing this set of crates (optional, default is true)
 # If set to `true`, the crates will only be publishable through trusted publishing
 disable-other-publish-methods = true
