@@ -175,8 +175,6 @@ fn codeowners_path() -> PathBuf {
 #[derive(Debug, serde::Deserialize)]
 struct GitHubRepo {
     name: String,
-    #[allow(dead_code)]
-    description: Option<String>,
     archived: bool,
     fork: bool,
 }
@@ -237,13 +235,6 @@ pub fn check_untracked_repos(data: &Data) -> anyhow::Result<()> {
     warn!("❌ Found {} untracked repositories:", untracked.len());
     for repo in &untracked {
         warn!("  - {}/{}", repo.org, repo.name);
-    }
-    warn!("");
-    warn!("Repository details:");
-    for repo in &untracked {
-        warn!("  Organization: {}", repo.org);
-        warn!("  Repository: {}", repo.name);
-        warn!("  ---");
     }
 
     bail!(
