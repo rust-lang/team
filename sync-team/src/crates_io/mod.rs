@@ -165,15 +165,34 @@ impl Diff {
     }
 
     pub(crate) fn is_empty(&self) -> bool {
-        self.config_diffs.is_empty()
+        // Destructure struct to get compiler errors when new fields are added
+        let Diff {
+            config_diffs,
+            crate_diffs,
+        } = self;
+
+        config_diffs.is_empty() && crate_diffs.is_empty()
     }
 }
 
 impl std::fmt::Display for Diff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if !&self.config_diffs.is_empty() {
+        // Destructure struct to get compiler errors when new fields are added
+        let Diff {
+            config_diffs,
+            crate_diffs,
+        } = self;
+
+        if !config_diffs.is_empty() {
             writeln!(f, "💻 Trusted Publishing Config Diffs:")?;
-            for diff in &self.config_diffs {
+            for diff in config_diffs {
+                write!(f, "{diff}")?;
+            }
+        }
+
+        if !crate_diffs.is_empty() {
+            writeln!(f, "💻 Trusted Publishing Crate Diffs:")?;
+            for diff in crate_diffs {
                 write!(f, "{diff}")?;
             }
         }
