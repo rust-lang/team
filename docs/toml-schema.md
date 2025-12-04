@@ -459,6 +459,10 @@ publish-environment = "deploy"
 # Disable other mechanisms for publishing this set of crates (optional, default is true)
 # If set to `true`, the crates will only be publishable through trusted publishing
 disable-other-publish-methods = true
+# Set of GitHub teams that will have yank/unyank access to these crates. (optional, defaults to empty array)
+# Note that teams can only be specified if `disable-other-publish-methods` is set to `true`,
+# as we only want to give teams access if they cannot actually publish new crate versions.
+teams = ["awesome-team"]
 ```
 
 > [!TIP]

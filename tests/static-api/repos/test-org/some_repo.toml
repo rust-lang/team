@@ -15,3 +15,4 @@ allowed-merge-teams = ["foo"]
 crates = ["my-crate", "my-crate-2"]
 publish-workflow = "ci.yml"
 publish-environment = "deploy"
+teams = ["foo"]

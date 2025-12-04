@@ -884,6 +884,8 @@ pub(crate) struct CratesIoConfiguration {
     pub environment: String,
     #[serde(default = "default_true")]
     pub disable_other_publish_methods: bool,
+    #[serde(default)]
+    pub teams: Vec<String>,
 }
 
 #[derive(serde_derive::Deserialize, Debug, Clone)]
