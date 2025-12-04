@@ -5,7 +5,7 @@ use anyhow::{ensure, Context as _, Error};
 use indexmap::IndexMap;
 use log::info;
 use rust_team_data::v1;
-use rust_team_data::v1::{BranchProtectionMode, RepoMember};
+use rust_team_data::v1::{BranchProtectionMode, Crate, CrateTeamOwner, RepoMember};
 use std::collections::HashMap;
 use std::path::Path;
 
@@ -147,20 +147,41 @@ impl<'a> Generator<'a> {
                     members
                 },
                 branch_protections,
-                crates: r
-                    .crates_io
-                    .iter()
-                    .flat_map(|p| {
-                        p.crates.iter().map(|krate| v1::Crate {
-                            name: krate.to_string(),
-                            crates_io_publishing: Some(v1::CratesIoPublishing {
-                                workflow_file: p.workflow_filename.clone(),
-                                environment: p.environment.clone(),
-                            }),
-                            trusted_publishing_only: p.disable_other_publish_methods,
+                crates: {
+                    r.crates_io
+                        .iter()
+                        .flat_map(|p| {
+                            p.crates.iter().map(|krate| {
+                                let mut team_owners = vec![];
+                                for team in &p.teams {
+                                    let Some(team) = self.data.team(team) else {
+                                        return Err(anyhow::anyhow!("Cannot find team `{team}` that should own krate `{krate}`"))
+                                    };
+                                    let github_teams =
+                                        team.github_teams(self.data).with_context(|| {
+                                            format!("failed to get GitHub teams for `{}`", team.name())
+                                        })?.into_iter()
+                                            .filter(|team| team.org == r.org)
+                                            .map(|team| CrateTeamOwner {
+                                                org: team.org.to_owned(),
+                                                name: team.name.to_owned(),
+                                            });
+                                    team_owners.extend(github_teams);
+                                }
+
+                                Ok(v1::Crate {
+                                    name: krate.to_string(),
+                                    crates_io_publishing: Some(v1::CratesIoPublishing {
+                                        workflow_file: p.workflow_filename.clone(),
+                                        environment: p.environment.clone(),
+                                    }),
+                                    trusted_publishing_only: p.disable_other_publish_methods,
+                                    teams: team_owners,
+                                })
+                            })
                         })
-                    })
-                    .collect(),
+                        .collect::<anyhow::Result<Vec<Crate>>>()?
+                },
                 environments: r
                     .environments
                     .iter()

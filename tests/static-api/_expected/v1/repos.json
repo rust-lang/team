@@ -72,7 +72,17 @@
             "workflow_file": "ci.yml",
             "environment": "deploy"
           },
-          "trusted_publishing_only": true
+          "trusted_publishing_only": true,
+          "teams": [
+            {
+              "org": "test-org",
+              "name": "foo"
+            },
+            {
+              "org": "test-org",
+              "name": "renamed-team"
+            }
+          ]
         },
         {
           "name": "my-crate-2",
@@ -80,7 +90,17 @@
             "workflow_file": "ci.yml",
             "environment": "deploy"
           },
-          "trusted_publishing_only": true
+          "trusted_publishing_only": true,
+          "teams": [
+            {
+              "org": "test-org",
+              "name": "foo"
+            },
+            {
+              "org": "test-org",
+              "name": "renamed-team"
+            }
+          ]
         }
       ],
       "environments": [],
