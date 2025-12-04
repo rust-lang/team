@@ -6,7 +6,7 @@ use std::cmp::Ordering;
 use crate::crates_io::api::{CratesIoApi, TrustedPublishingGitHubConfig};
 use anyhow::Context;
 use secrecy::SecretString;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::fmt::{Display, Formatter};
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
@@ -30,7 +30,7 @@ struct CrateConfig {
 
 pub(crate) struct SyncCratesIo {
     crates_io_api: CratesIoApi,
-    crates: HashMap<CrateName, CrateConfig>,
+    crates: BTreeMap<CrateName, CrateConfig>,
 }
 
 impl SyncCratesIo {
@@ -40,7 +40,7 @@ impl SyncCratesIo {
         dry_run: bool,
     ) -> anyhow::Result<Self> {
         let crates_io_api = CratesIoApi::new(token, dry_run);
-        let crates: HashMap<CrateName, CrateConfig> = team_api
+        let crates: BTreeMap<CrateName, CrateConfig> = team_api
             .get_repos()?
             .into_iter()
             .flat_map(|repo| {
