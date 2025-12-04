@@ -89,6 +89,8 @@ impl CratesIoApi {
         krate: &str,
         owners: &[CratesIoOwner],
     ) -> anyhow::Result<()> {
+        debug!("Inviting owners {owners:?} to crate {krate}");
+
         #[derive(serde::Serialize)]
         struct InviteOwnersRequest<'a> {
             owners: Vec<&'a str>,
@@ -96,12 +98,14 @@ impl CratesIoApi {
 
         let owners = owners.iter().map(|o| o.login.as_str()).collect::<Vec<_>>();
 
-        self.req(
-            reqwest::Method::PUT,
-            &format!("/crates/{krate}/owners"),
-            Some(&InviteOwnersRequest { owners }),
-        )?
-        .error_for_status()?;
+        if !self.dry_run {
+            self.req(
+                reqwest::Method::PUT,
+                &format!("/crates/{krate}/owners"),
+                Some(&InviteOwnersRequest { owners }),
+            )?
+            .error_for_status()?;
+        }
 
         Ok(())
     }
@@ -112,6 +116,8 @@ impl CratesIoApi {
         krate: &str,
         owners: &[CratesIoOwner],
     ) -> anyhow::Result<()> {
+        debug!("Deleting owners {owners:?} from crate {krate}");
+
         #[derive(serde::Serialize)]
         struct DeleteOwnersRequest<'a> {
             owners: &'a [&'a str],
@@ -119,13 +125,17 @@ impl CratesIoApi {
 
         let owners = owners.iter().map(|o| o.login.as_str()).collect::<Vec<_>>();
 
-        self.req(
-            reqwest::Method::DELETE,
-            &format!("/crates/{krate}/owners"),
-            Some(&DeleteOwnersRequest { owners: &owners }),
-        )?
-        .error_for_status()
-        .with_context(|| anyhow::anyhow!("Cannot delete owner(s) {owners:?} from krate {krate}"))?;
+        if !self.dry_run {
+            self.req(
+                reqwest::Method::DELETE,
+                &format!("/crates/{krate}/owners"),
+                Some(&DeleteOwnersRequest { owners: &owners }),
+            )?
+            .error_for_status()
+            .with_context(|| {
+                anyhow::anyhow!("Cannot delete owner(s) {owners:?} from krate {krate}")
+            })?;
+        }
 
         Ok(())
     }
