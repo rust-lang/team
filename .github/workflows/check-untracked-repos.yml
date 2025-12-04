@@ -1,0 +1,29 @@
+name: Check Untracked Repositories
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-untracked-repos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install Rust stable
+        uses: ./.github/actions/setup-rust
+
+      - name: Generate GitHub tokens
+        uses: ./.github/actions/generate-tokens
+        with:
+          app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
+          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
+
+      - name: Check for untracked repositories
+        shell: bash
+        run: |
+          cargo build --release
+          ./target/release/rust-team ci check-untracked-repos
