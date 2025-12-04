@@ -16,6 +16,7 @@ ci-checks = ['Tests pass']
 crates = ["cc", "find-msvc-tools"]
 publish-workflow = "publish.yml"
 publish-environment = "publish"
+teams = ["libs"]
 
 [[environments]]
 name = "github-pages"
