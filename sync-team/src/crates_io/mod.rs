@@ -3,11 +3,14 @@ mod api;
 use crate::team_api::TeamApi;
 use std::cmp::Ordering;
 
-use crate::crates_io::api::{CratesIoApi, TrustedPublishingGitHubConfig};
+use crate::crates_io::api::{CrateOwner, CratesIoApi, OwnerKind, TrustedPublishingGitHubConfig};
 use anyhow::Context;
 use secrecy::SecretString;
 use std::collections::BTreeMap;
 use std::fmt::{Display, Formatter};
+
+/// Special account that should own our managed crates.
+const RUST_LANG_OWNER_ACCOUNT: &str = "rust-lang-owner";
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 struct CrateName(String);
@@ -85,6 +88,7 @@ impl SyncCratesIo {
             // to enable doing a crates.io dry-run without a privileged token.
             // Because crates.io does not currently support read-only token
             if !is_ci_dry_run {
+                // Sync trusted publishing configs
                 let mut configs = self
                     .crates_io_api
                     .list_trusted_publishing_github_configs(&krate.0)
@@ -121,6 +125,7 @@ impl SyncCratesIo {
                 config_diffs.extend(configs.into_iter().map(ConfigDiff::Delete));
             }
 
+            // Sync "trusted publishing only" crate option
             let trusted_publish_only_expected = desired.trusted_publishing_only;
             let crates_io_crate = self
                 .crates_io_api
@@ -132,11 +137,25 @@ impl SyncCratesIo {
                     value: trusted_publish_only_expected,
                 });
             }
+
+            // Sync crate owners
+            let owners = self
+                .crates_io_api
+                .list_crate_owners(&krate.0)
+                .with_context(|| anyhow::anyhow!("Cannot list crate owners of {krate}"))?;
+            // Make sure that `rust-lang-owner` is an owner of each managed crate
+            if !owners.iter().any(|owner| {
+                owner.login == RUST_LANG_OWNER_ACCOUNT && owner.kind == OwnerKind::User
+            }) {
+                crate_diffs.push(CrateDiff::AddOwners {
+                    krate: krate.to_string(),
+                    owners: vec![CrateOwner::GitHubUser(RUST_LANG_OWNER_ACCOUNT.to_string())],
+                })
+            }
         }
 
         // We want to apply deletions first, and only then create new configs, to ensure that we
-        // don't try to create a duplicate config where e.g. only the environment differs, which
-        // would be an error in crates.io.
+        // don't try to create a duplicate config where e.g. only the environment differs.
         config_diffs.sort_by(|a, b| match &(a, b) {
             (ConfigDiff::Delete(_), ConfigDiff::Create(_)) => Ordering::Less,
             (ConfigDiff::Create(_), ConfigDiff::Delete(_)) => Ordering::Greater,
@@ -263,7 +282,14 @@ impl std::fmt::Display for ConfigDiff {
 }
 
 enum CrateDiff {
-    SetTrustedPublishingOnly { krate: String, value: bool },
+    SetTrustedPublishingOnly {
+        krate: String,
+        value: bool,
+    },
+    AddOwners {
+        krate: String,
+        owners: Vec<CrateOwner>,
+    },
 }
 
 impl CrateDiff {
@@ -272,6 +298,9 @@ impl CrateDiff {
             Self::SetTrustedPublishingOnly { krate, value } => sync
                 .crates_io_api
                 .set_trusted_publishing_only(krate, *value),
+            CrateDiff::AddOwners { krate, owners } => {
+                sync.crates_io_api.invite_crate_owners(krate, owners)
+            }
         }
     }
 }
@@ -284,6 +313,15 @@ impl std::fmt::Display for CrateDiff {
                     f,
                     "  Setting trusted publishing only option for krate `{krate}` to `{value}`",
                 )?;
+            }
+            CrateDiff::AddOwners { krate, owners } => {
+                for owner in owners {
+                    let (kind, owner) = match owner {
+                        CrateOwner::GitHubUser(login) => ("user", login.clone()),
+                        CrateOwner::GitHubTeam { org, name } => ("team", format!("{org}/{name}")),
+                    };
+                    writeln!(f, "  Adding `{kind}` owner `{owner}` to krate `{krate}`")?;
+                }
             }
         }
         Ok(())

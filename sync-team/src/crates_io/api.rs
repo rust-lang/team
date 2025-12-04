@@ -64,6 +64,54 @@ impl CratesIoApi {
         Ok(response.github_configs)
     }
 
+    /// List owners of a given crate.
+    pub(crate) fn list_crate_owners(&self, krate: &str) -> anyhow::Result<Vec<CratesIoOwner>> {
+        #[derive(serde::Deserialize)]
+        struct OwnersResponse {
+            users: Vec<CratesIoOwner>,
+        }
+
+        let response: OwnersResponse = self
+            .req::<()>(
+                reqwest::Method::GET,
+                &format!("/crates/{krate}/owners"),
+                None,
+            )?
+            .error_for_status()?
+            .json_annotated()?;
+
+        Ok(response.users)
+    }
+
+    /// Invite the specified user(s) or team(s) to own a given crate.
+    pub(crate) fn invite_crate_owners(
+        &self,
+        krate: &str,
+        owners: &[CrateOwner],
+    ) -> anyhow::Result<()> {
+        #[derive(serde::Serialize)]
+        struct InviteOwnersRequest {
+            owners: Vec<String>,
+        }
+
+        let owners = owners
+            .iter()
+            .map(|o| match o {
+                CrateOwner::GitHubUser(login) => login.clone(),
+                CrateOwner::GitHubTeam { org, name } => format!("github:{org}:{name}"),
+            })
+            .collect::<Vec<_>>();
+
+        self.req(
+            reqwest::Method::PUT,
+            &format!("/crates/{krate}/owners"),
+            Some(&InviteOwnersRequest { owners }),
+        )?
+        .error_for_status()?;
+
+        Ok(())
+    }
+
     /// Create a new trusted publishing configuration for a given crate.
     pub(crate) fn create_trusted_publishing_github_config(
         &self,
@@ -230,4 +278,22 @@ pub(crate) struct TrustedPublishingGitHubConfig {
 pub(crate) struct CratesIoCrate {
     #[serde(rename = "trustpub_only")]
     pub(crate) trusted_publishing_only: bool,
+}
+
+pub(crate) enum CrateOwner {
+    GitHubUser(String),
+    GitHubTeam { org: String, name: String },
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Eq)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum OwnerKind {
+    User,
+    Team,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub(crate) struct CratesIoOwner {
+    pub(crate) login: String,
+    pub(crate) kind: OwnerKind,
 }
