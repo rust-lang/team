@@ -83,7 +83,11 @@
           "trusted_publishing_only": false
         }
       ],
-      "environments": {},
+      "environments": {
+        "deploy": {
+          "branches": []
+        }
+      },
       "archived": false,
       "private": false,
       "auto_merge_enabled": true
