@@ -14,10 +14,10 @@ ci-checks = ["success"]
 pattern = "stable"
 ci-checks = ["success"]
 
-[[crates-io-publishing]]
+[[crates-io]]
 crates = ["analyzeme", "decodeme", "measureme"]
-workflow-filename = "publish.yml"
-environment = "publish"
+publish-workflow = "publish.yml"
+publish-environment = "publish"
 
 [[environments]]
 name = "publish"

@@ -148,7 +148,7 @@ impl<'a> Generator<'a> {
                 },
                 branch_protections,
                 crates: r
-                    .crates_io_publishing
+                    .crates_io
                     .iter()
                     .flat_map(|p| {
                         p.crates.iter().map(|krate| v1::Crate {

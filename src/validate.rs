@@ -1170,7 +1170,7 @@ fn validate_trusted_publishing(data: &Data, errors: &mut Vec<String>) {
     let mut crates = HashMap::new();
     wrapper(data.repos(), errors, |repo, _| {
         let repo_name = format!("{}/{}", repo.org, repo.name);
-        for publishing in &repo.crates_io_publishing {
+        for publishing in &repo.crates_io {
             if publishing.crates.is_empty() {
                 return Err(anyhow::anyhow!(
                     "Repository `{repo_name}` has trusted publishing for an empty set of crates.",
