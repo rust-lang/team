@@ -116,6 +116,17 @@ impl GitHubApi {
             .json()?)
     }
 
+    pub(crate) fn get<T>(&self, url: &str) -> Result<T, Error>
+    where
+        T: serde::de::DeserializeOwned,
+    {
+        Ok(self
+            .prepare(false, Method::GET, url)?
+            .send()?
+            .error_for_status()?
+            .json()?)
+    }
+
     pub(crate) fn usernames(&self, ids: &[u64]) -> Result<HashMap<u64, String>, Error> {
         #[derive(serde::Deserialize)]
         #[serde(rename_all = "camelCase")]
