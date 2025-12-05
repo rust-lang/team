@@ -42,10 +42,30 @@ impl CratesIoApi {
         self.dry_run
     }
 
+    /// Return the user ID based on the username.
+    pub(crate) fn get_user_id(&self, username: &str) -> anyhow::Result<UserId> {
+        #[derive(serde::Deserialize)]
+        struct User {
+            id: u32,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct UserResponse {
+            user: User,
+        }
+
+        let response: UserResponse = self
+            .req::<()>(reqwest::Method::GET, &format!("/users/{username}"), None)?
+            .error_for_status()?
+            .json_annotated()?;
+
+        Ok(UserId(response.user.id))
+    }
+
     /// List existing trusted publishing configurations for a given crate.
     pub(crate) fn list_trusted_publishing_github_configs(
         &self,
-        krate: &str,
+        user_id: UserId,
     ) -> anyhow::Result<Vec<TrustedPublishingGitHubConfig>> {
         #[derive(serde::Deserialize)]
         struct GetTrustedPublishing {
@@ -55,7 +75,7 @@ impl CratesIoApi {
         let response: GetTrustedPublishing = self
             .req::<()>(
                 reqwest::Method::GET,
-                &format!("/trusted_publishing/github_configs?crate={krate}"),
+                &format!("/trusted_publishing/github_configs?user_id={}", user_id.0),
                 None,
             )?
             .error_for_status()?
@@ -208,6 +228,9 @@ impl CratesIoApi {
     }
 }
 
+#[derive(Copy, Clone, Debug)]
+pub struct UserId(pub u32);
+
 #[derive(serde::Deserialize, Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct TrustedPublishingId(u64);
 
@@ -217,8 +240,10 @@ impl Display for TrustedPublishingId {
     }
 }
 
-#[derive(serde::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug, Clone)]
 pub(crate) struct TrustedPublishingGitHubConfig {
+    #[serde(rename = "crate")]
+    pub(crate) krate: String,
     pub(crate) id: TrustedPublishingId,
     pub(crate) repository_owner: String,
     pub(crate) repository_name: String,
