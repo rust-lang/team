@@ -10,13 +10,27 @@ inputs:
     required: true
 
 outputs:
-  rust-lang-token: ${{ steps.rust-lang-token.outputs.token }}
-  rust-lang-deprecated-token: ${{ steps.rust-lang-deprecated-token.outputs.token }}
-  rust-lang-nursery-token: ${{ steps.rust-lang-nursery-token.outputs.token }}
-  bors-rs-token: ${{ steps.bors-rs-token.outputs.token }}
-  rust-analyzer-token: ${{ steps.rust-analyzer-token.outputs.token }}
-  rust-embedded-token: ${{ steps.rust-embedded-token.outputs.token }}
-  rust-dev-tools-token: ${{ steps.rust-dev-tools-token.outputs.token }}
+  rust-lang-token:
+    description: Token for the rust-lang organization
+    value: ${{ steps.rust-lang-token.outputs.token }}
+  rust-lang-deprecated-token:
+    description: Token for the rust-lang-deprecated organization
+    value: ${{ steps.rust-lang-deprecated-token.outputs.token }}
+  rust-lang-nursery-token:
+    description: Token for the rust-lang-nursery organization
+    value: ${{ steps.rust-lang-nursery-token.outputs.token }}
+  bors-rs-token:
+    description: Token for the bors-rs organization
+    value: ${{ steps.bors-rs-token.outputs.token }}
+  rust-analyzer-token:
+    description: Token for the rust-analyzer organization
+    value: ${{ steps.rust-analyzer-token.outputs.token }}
+  rust-embedded-token:
+    description: Token for the rust-embedded organization
+    value: ${{ steps.rust-embedded-token.outputs.token }}
+  rust-dev-tools-token:
+    description: Token for the rust-dev-tools organization
+    value: ${{ steps.rust-dev-tools-token.outputs.token }}
 
 runs:
   using: composite
