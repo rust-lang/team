@@ -7,6 +7,6 @@ bots = ["rustbot"]
 crate-maintainers = "maintain"
 
 [[branch-protections]]
-pattern = "master"
+pattern = "main"
 ci-checks = ["success"]
 required-approvals = 0
