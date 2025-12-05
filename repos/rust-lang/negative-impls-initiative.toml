@@ -6,6 +6,5 @@ bots = []
 [access.teams]
 project-negative-impls = "write"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

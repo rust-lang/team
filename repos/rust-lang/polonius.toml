@@ -6,6 +6,5 @@ bots = []
 [access.teams]
 wg-polonius = "write"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

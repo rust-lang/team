@@ -364,7 +364,7 @@ impl SyncGitHub {
                     environments: expected_repo
                         .environments
                         .iter()
-                        .map(|e| e.name.clone())
+                        .map(|(name, env)| (name.clone(), env.branches.clone()))
                         .collect(),
                 }));
             }
@@ -491,32 +491,45 @@ impl SyncGitHub {
     ) -> anyhow::Result<Vec<EnvironmentDiff>> {
         let mut environment_diffs = Vec::new();
 
-        let actual_environments: HashSet<String> = self
+        let actual_environments = self
             .github
-            .repo_environments(&expected_repo.org, &expected_repo.name)?
-            .into_iter()
-            .map(|e| e.name)
-            .collect();
+            .repo_environments(&expected_repo.org, &expected_repo.name)?;
 
-        let expected_environments: HashSet<String> = expected_repo
-            .environments
-            .iter()
-            .map(|e| e.name.clone())
-            .collect();
+        let expected_env_names: HashSet<String> =
+            expected_repo.environments.keys().cloned().collect();
 
-        // Environments to create (sorted for deterministic output)
-        let mut to_create: Vec<_> = expected_environments
-            .difference(&actual_environments)
-            .cloned()
-            .collect();
-        to_create.sort();
-        for env in to_create {
-            environment_diffs.push(EnvironmentDiff::Create(env));
+        let actual_env_names: HashSet<String> = actual_environments.keys().cloned().collect();
+
+        // Environments to create or update (sorted for deterministic output)
+        let mut to_create_or_update: Vec<_> = expected_repo.environments.iter().collect();
+        to_create_or_update.sort_by_key(|(name, _)| name.as_str());
+
+        for (env_name, expected_env) in to_create_or_update {
+            match actual_environments.get(env_name) {
+                Some(actual_env) if actual_env.branches == expected_env.branches => {
+                    // No change needed
+                    continue;
+                }
+                Some(_actual_env) => {
+                    // Environment exists but branches differ - update it
+                    environment_diffs.push(EnvironmentDiff::Update(
+                        env_name.clone(),
+                        expected_env.branches.clone(),
+                    ));
+                }
+                None => {
+                    // Environment doesn't exist - create it
+                    environment_diffs.push(EnvironmentDiff::Create(
+                        env_name.clone(),
+                        expected_env.branches.clone(),
+                    ));
+                }
+            }
         }
 
         // Environments to delete (sorted for deterministic output)
-        let mut to_delete: Vec<_> = actual_environments
-            .difference(&expected_environments)
+        let mut to_delete: Vec<_> = actual_env_names
+            .difference(&expected_env_names)
             .cloned()
             .collect();
         to_delete.sort();
@@ -865,7 +878,7 @@ struct CreateRepoDiff {
     settings: RepoSettings,
     permissions: Vec<RepoPermissionAssignmentDiff>,
     branch_protections: Vec<(String, api::BranchProtection)>,
-    environments: Vec<String>,
+    environments: Vec<(String, Vec<String>)>,
 }
 
 impl CreateRepoDiff {
@@ -884,8 +897,8 @@ impl CreateRepoDiff {
             .apply(sync, &self.org, &self.name, &repo.node_id)?;
         }
 
-        for env in &self.environments {
-            sync.create_environment(&self.org, &self.name, env)?;
+        for (env_name, branches) in &self.environments {
+            sync.create_environment(&self.org, &self.name, env_name, branches)?;
         }
 
         Ok(())
@@ -927,8 +940,11 @@ impl std::fmt::Display for CreateRepoDiff {
         }
         if !environments.is_empty() {
             writeln!(f, "  Environments:")?;
-            for env in environments {
-                writeln!(f, "    - {env}")?;
+            for (env_name, branches) in environments {
+                writeln!(f, "    - {env_name}")?;
+                if !branches.is_empty() {
+                    writeln!(f, "        Branches: {}", branches.join(", "))?;
+                }
             }
         }
         Ok(())
@@ -949,7 +965,8 @@ struct UpdateRepoDiff {
 
 #[derive(Debug)]
 enum EnvironmentDiff {
-    Create(String),
+    Create(String, Vec<String>),
+    Update(String, Vec<String>),
     Delete(String),
 }
 
@@ -1010,8 +1027,11 @@ impl UpdateRepoDiff {
 
         for env_diff in &self.environment_diffs {
             match env_diff {
-                EnvironmentDiff::Create(name) => {
-                    sync.create_environment(&self.org, &self.name, name)?;
+                EnvironmentDiff::Create(name, branches) => {
+                    sync.create_environment(&self.org, &self.name, name, branches)?;
+                }
+                EnvironmentDiff::Update(name, branches) => {
+                    sync.update_environment(&self.org, &self.name, name, branches)?;
                 }
                 EnvironmentDiff::Delete(name) => {
                     sync.delete_environment(&self.org, &self.name, name)?;
@@ -1092,7 +1112,18 @@ impl std::fmt::Display for UpdateRepoDiff {
             writeln!(f, "  Environments:")?;
             for env_diff in environment_diffs {
                 match env_diff {
-                    EnvironmentDiff::Create(name) => writeln!(f, "    ➕ Create: {name}")?,
+                    EnvironmentDiff::Create(name, branches) => {
+                        writeln!(f, "    ➕ Create: {name}")?;
+                        if !branches.is_empty() {
+                            writeln!(f, "        Branches: {}", branches.join(", "))?;
+                        }
+                    }
+                    EnvironmentDiff::Update(name, branches) => {
+                        writeln!(f, "    🔄 Update: {name}")?;
+                        if !branches.is_empty() {
+                            writeln!(f, "        Branches: {}", branches.join(", "))?;
+                        }
+                    }
                     EnvironmentDiff::Delete(name) => writeln!(f, "    ❌ Delete: {name}")?,
                 }
             }
