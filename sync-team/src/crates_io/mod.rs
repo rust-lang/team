@@ -76,42 +76,50 @@ impl SyncCratesIo {
         let mut config_diffs: Vec<ConfigDiff> = vec![];
         let mut crate_diffs: Vec<CrateDiff> = vec![];
 
+        let is_ci_dry_run = std::env::var("CI").is_ok() && self.crates_io_api.is_dry_run();
+
         // Note: we currently only support one trusted publishing configuration per crate
         for (krate, desired) in &self.crates {
-            let mut configs = self
-                .crates_io_api
-                .list_trusted_publishing_github_configs(&krate.0)
-                .with_context(|| format!("Failed to list configs for crate '{}'", krate.0))?;
+            // Reading trusted publishing configs requires an authenticated token
+            // We skip generating a diff for publishing configs on CI when dry-run is enabled,
+            // to enable doing a crates.io dry-run without a privileged token.
+            // Because crates.io does not currently support read-only token
+            if !is_ci_dry_run {
+                let mut configs = self
+                    .crates_io_api
+                    .list_trusted_publishing_github_configs(&krate.0)
+                    .with_context(|| format!("Failed to list configs for crate '{}'", krate.0))?;
 
-            // Find if there are config(s) that match what we need
-            let matching_configs = configs
-                .extract_if(.., |config| {
-                    let TrustedPublishingGitHubConfig {
-                        id: _,
-                        repository_owner,
-                        repository_name,
-                        workflow_filename,
-                        environment,
-                    } = config;
-                    *repository_owner.to_lowercase() == desired.repo_org.to_lowercase()
-                        && *repository_name.to_lowercase() == desired.repo_name.to_lowercase()
-                        && *workflow_filename == desired.workflow_file
-                        && environment.as_deref() == Some(&desired.environment)
-                })
-                .collect::<Vec<_>>();
+                // Find if there are config(s) that match what we need
+                let matching_configs = configs
+                    .extract_if(.., |config| {
+                        let TrustedPublishingGitHubConfig {
+                            id: _,
+                            repository_owner,
+                            repository_name,
+                            workflow_filename,
+                            environment,
+                        } = config;
+                        *repository_owner.to_lowercase() == desired.repo_org.to_lowercase()
+                            && *repository_name.to_lowercase() == desired.repo_name.to_lowercase()
+                            && *workflow_filename == desired.workflow_file
+                            && environment.as_deref() == Some(&desired.environment)
+                    })
+                    .collect::<Vec<_>>();
 
-            if !matching_configs.is_empty() {
-                // If we found a matching config, we don't need to do anything with it
-                // It shouldn't be possible to have multiple configs with the same repo, workflow
-                // and environment for a single crate.
-                assert_eq!(matching_configs.len(), 1);
-            } else {
-                // If no match was found, we want to create this config
-                config_diffs.push(ConfigDiff::Create(desired.clone()));
+                if !matching_configs.is_empty() {
+                    // If we found a matching config, we don't need to do anything with it
+                    // It shouldn't be possible to have multiple configs with the same repo, workflow
+                    // and environment for a single crate.
+                    assert_eq!(matching_configs.len(), 1);
+                } else {
+                    // If no match was found, we want to create this config
+                    config_diffs.push(ConfigDiff::Create(desired.clone()));
+                }
+
+                // Non-matching configs should be deleted
+                config_diffs.extend(configs.into_iter().map(ConfigDiff::Delete));
             }
-
-            // Non-matching configs should be deleted
-            config_diffs.extend(configs.into_iter().map(ConfigDiff::Delete));
 
             let trusted_publish_only_expected = desired.trusted_publishing_only;
             let crates_io_crate = self
@@ -196,7 +204,6 @@ impl std::fmt::Display for Diff {
                 write!(f, "{diff}")?;
             }
         }
-
         Ok(())
     }
 }
