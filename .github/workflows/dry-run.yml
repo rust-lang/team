@@ -51,11 +51,20 @@ jobs:
 
       - name: Generate GitHub App tokens
         uses: ./.github/actions/generate-tokens
+        id: generate-tokens
         with:
           app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
           private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
 
       - name: Run sync-team dry-run check
+        env:
+          GITHUB_TOKEN_RUST_LANG: ${{ steps.generate-tokens.outputs.rust-lang-token }}
+          GITHUB_TOKEN_RUST_LANG_DEPRECATED: ${{ steps.generate-tokens.outputs.rust-lang-deprecated-token }}
+          GITHUB_TOKEN_RUST_LANG_NURSERY: ${{ steps.generate-tokens.outputs.rust-lang-nursery-token }}
+          GITHUB_TOKEN_BORS_RS: ${{ steps.generate-tokens.outputs.bors-rs-token }}
+          GITHUB_TOKEN_RUST_ANALYZER: ${{ steps.generate-tokens.outputs.rust-analyzer-token }}
+          GITHUB_TOKEN_RUST_EMBEDDED: ${{ steps.generate-tokens.outputs.rust-embedded-token }}
+          GITHUB_TOKEN_RUST_DEV_TOOLS: ${{ steps.generate-tokens.outputs.rust-dev-tools-token }}
         # This applies pipefail, so that the tee pipeline below fails when sync-team fails.
         shell: bash
         run: |

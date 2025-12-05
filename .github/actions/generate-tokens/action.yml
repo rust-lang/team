@@ -9,6 +9,15 @@ inputs:
     description: GitHub App private key
     required: true
 
+outputs:
+  rust-lang-token: ${{ steps.rust-lang-token.outputs.token }}
+  rust-lang-deprecated-token: ${{ steps.rust-lang-deprecated-token.outputs.token }}
+  rust-lang-nursery-token: ${{ steps.rust-lang-nursery-token.outputs.token }}
+  bors-rs-token: ${{ steps.bors-rs-token.outputs.token }}
+  rust-analyzer-token: ${{ steps.rust-analyzer-token.outputs.token }}
+  rust-embedded-token: ${{ steps.rust-embedded-token.outputs.token }}
+  rust-dev-tools-token: ${{ steps.rust-dev-tools-token.outputs.token }}
+
 runs:
   using: composite
   steps:
@@ -69,14 +78,3 @@ runs:
         app-id: ${{ inputs.app-id }}
         private-key: ${{ inputs.private-key }}
         owner: rust-dev-tools
-
-    - name: Export tokens as environment variables
-      shell: bash
-      run: |
-        echo "GITHUB_TOKEN_RUST_LANG=${{ steps.rust-lang-token.outputs.token }}" >> $GITHUB_ENV
-        echo "GITHUB_TOKEN_RUST_LANG_DEPRECATED=${{ steps.rust-lang-deprecated-token.outputs.token }}" >> $GITHUB_ENV
-        echo "GITHUB_TOKEN_RUST_LANG_NURSERY=${{ steps.rust-lang-nursery-token.outputs.token }}" >> $GITHUB_ENV
-        echo "GITHUB_TOKEN_BORS_RS=${{ steps.bors-rs-token.outputs.token }}" >> $GITHUB_ENV
-        echo "GITHUB_TOKEN_RUST_ANALYZER=${{ steps.rust-analyzer-token.outputs.token }}" >> $GITHUB_ENV
-        echo "GITHUB_TOKEN_RUST_EMBEDDED=${{ steps.rust-embedded-token.outputs.token }}" >> $GITHUB_ENV
-        echo "GITHUB_TOKEN_RUST_DEV_TOOLS=${{ steps.rust-dev-tools-token.outputs.token }}" >> $GITHUB_ENV
