@@ -70,7 +70,8 @@ pub fn run_sync_team(
             }
             "crates-io" => {
                 let token = SecretString::from(get_env("CRATES_IO_TOKEN")?);
-                let sync = SyncCratesIo::new(token, &team_api, dry_run)?;
+                let username = get_env("CRATES_IO_USERNAME")?;
+                let sync = SyncCratesIo::new(token, username, &team_api, dry_run)?;
                 let diff = sync.diff_all()?;
                 if !diff.is_empty() {
                     info!("{diff}");
