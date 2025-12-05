@@ -38,15 +38,8 @@ jobs:
           ref: ${{ github.event.workflow_run.head_repository.full_name != 'rust-lang/team' && 'main' || github.event.workflow_run.head_sha }}
           persist-credentials: false
 
-      - name: Install Rust Stable
-        run: |
-          rustc -vV
-          rustup update stable
-          rustup default stable
-          rustc -vV
-
-      # Pinning a specific version to avoid surprises
-      - uses: Swatinem/rust-cache@27b8ea9368cf428f0bfe41b0876b1a7e809d9844
+      - name: Setup Rust
+        uses: ./.github/actions/setup-rust
 
       - name: Download built JSON API
         uses: actions/download-artifact@v4
@@ -56,76 +49,13 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # GitHub tokens generated from GitHub Apps can access resources from one organization,
-      # so we need to generate a token for each organization.
-      - name: Generate GitHub token (rust-lang)
-        uses: actions/create-github-app-token@v1
-        id: rust-lang-token
-        with:
-          # GitHub App ID secret name
-          app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
-          # GitHub App private key secret name
-          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
-          # Set the owner, so the token can be used in all repositories
-          owner: rust-lang
-
-      - name: Generate GitHub token (rust-lang-deprecated)
-        uses: actions/create-github-app-token@v1
-        id: rust-lang-deprecated-token
+      - name: Generate GitHub App tokens
+        uses: ./.github/actions/generate-tokens
         with:
           app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
           private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
-          owner: rust-lang-deprecated
-
-      - name: Generate GitHub token (rust-lang-nursery)
-        uses: actions/create-github-app-token@v1
-        id: rust-lang-nursery-token
-        with:
-          app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
-          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
-          owner: rust-lang-nursery
-
-      - name: Generate GitHub token (bors-rs)
-        uses: actions/create-github-app-token@v1
-        id: bors-rs-token
-        with:
-          app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
-          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
-          owner: bors-rs
-
-      - name: Generate GitHub token (rust-analyzer)
-        uses: actions/create-github-app-token@v1
-        id: rust-analyzer-token
-        with:
-          app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
-          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
-          owner: rust-analyzer
-
-      - name: Generate GitHub token (rust-embedded)
-        uses: actions/create-github-app-token@v1
-        id: rust-embedded-token
-        with:
-          app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
-          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
-          owner: rust-embedded
-
-      - name: Generate GitHub token (rust-dev-tools)
-        uses: actions/create-github-app-token@v1
-        id: rust-dev-tools-token
-        with:
-          app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
-          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
-          owner: rust-dev-tools
 
       - name: Run sync-team dry-run check
-        env:
-          GITHUB_TOKEN_RUST_LANG: ${{ steps.rust-lang-token.outputs.token }}
-          GITHUB_TOKEN_RUST_LANG_DEPRECATED: ${{ steps.rust-lang-deprecated-token.outputs.token }}
-          GITHUB_TOKEN_RUST_LANG_NURSERY: ${{ steps.rust-lang-nursery-token.outputs.token }}
-          GITHUB_TOKEN_BORS_RS: ${{ steps.bors-rs-token.outputs.token }}
-          GITHUB_TOKEN_RUST_ANALYZER: ${{ steps.rust-analyzer-token.outputs.token }}
-          GITHUB_TOKEN_RUST_EMBEDDED: ${{ steps.rust-embedded-token.outputs.token }}
-          GITHUB_TOKEN_RUST_DEV_TOOLS: ${{ steps.rust-dev-tools-token.outputs.token }}
         # This applies pipefail, so that the tee pipeline below fails when sync-team fails.
         shell: bash
         run: |

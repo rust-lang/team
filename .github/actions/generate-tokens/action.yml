@@ -1,0 +1,82 @@
+name: Generate GitHub App Tokens
+description: Generate organization-scoped GitHub tokens using GitHub App credentials
+
+inputs:
+  app-id:
+    description: GitHub App ID
+    required: true
+  private-key:
+    description: GitHub App private key
+    required: true
+
+runs:
+  using: composite
+  steps:
+    # GitHub tokens generated from GitHub Apps can access resources from one organization,
+    # so we need to generate a token for each organization.
+    - name: Generate GitHub token (rust-lang)
+      uses: actions/create-github-app-token@v1
+      id: rust-lang-token
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.private-key }}
+        owner: rust-lang
+
+    - name: Generate GitHub token (rust-lang-deprecated)
+      uses: actions/create-github-app-token@v1
+      id: rust-lang-deprecated-token
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.private-key }}
+        owner: rust-lang-deprecated
+
+    - name: Generate GitHub token (rust-lang-nursery)
+      uses: actions/create-github-app-token@v1
+      id: rust-lang-nursery-token
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.private-key }}
+        owner: rust-lang-nursery
+
+    - name: Generate GitHub token (bors-rs)
+      uses: actions/create-github-app-token@v1
+      id: bors-rs-token
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.private-key }}
+        owner: bors-rs
+
+    - name: Generate GitHub token (rust-analyzer)
+      uses: actions/create-github-app-token@v1
+      id: rust-analyzer-token
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.private-key }}
+        owner: rust-analyzer
+
+    - name: Generate GitHub token (rust-embedded)
+      uses: actions/create-github-app-token@v1
+      id: rust-embedded-token
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.private-key }}
+        owner: rust-embedded
+
+    - name: Generate GitHub token (rust-dev-tools)
+      uses: actions/create-github-app-token@v1
+      id: rust-dev-tools-token
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.private-key }}
+        owner: rust-dev-tools
+
+    - name: Export tokens as environment variables
+      shell: bash
+      run: |
+        echo "GITHUB_TOKEN_RUST_LANG=${{ steps.rust-lang-token.outputs.token }}" >> $GITHUB_ENV
+        echo "GITHUB_TOKEN_RUST_LANG_DEPRECATED=${{ steps.rust-lang-deprecated-token.outputs.token }}" >> $GITHUB_ENV
+        echo "GITHUB_TOKEN_RUST_LANG_NURSERY=${{ steps.rust-lang-nursery-token.outputs.token }}" >> $GITHUB_ENV
+        echo "GITHUB_TOKEN_BORS_RS=${{ steps.bors-rs-token.outputs.token }}" >> $GITHUB_ENV
+        echo "GITHUB_TOKEN_RUST_ANALYZER=${{ steps.rust-analyzer-token.outputs.token }}" >> $GITHUB_ENV
+        echo "GITHUB_TOKEN_RUST_EMBEDDED=${{ steps.rust-embedded-token.outputs.token }}" >> $GITHUB_ENV
+        echo "GITHUB_TOKEN_RUST_DEV_TOOLS=${{ steps.rust-dev-tools-token.outputs.token }}" >> $GITHUB_ENV

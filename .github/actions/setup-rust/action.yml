@@ -1,0 +1,16 @@
+name: Setup Rust
+description: Install Rust stable toolchain and setup caching
+
+runs:
+  using: composite
+  steps:
+    - name: Install Rust Stable
+      shell: bash
+      run: |
+        rustc -vV
+        rustup update stable
+        rustup default stable
+        rustc -vV
+
+    # Pinning a specific version to avoid surprises
+    - uses: Swatinem/rust-cache@27b8ea9368cf428f0bfe41b0876b1a7e809d9844
