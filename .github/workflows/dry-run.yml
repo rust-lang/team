@@ -65,6 +65,10 @@ jobs:
           GITHUB_TOKEN_RUST_ANALYZER: ${{ steps.generate-tokens.outputs.rust-analyzer-token }}
           GITHUB_TOKEN_RUST_EMBEDDED: ${{ steps.generate-tokens.outputs.rust-embedded-token }}
           GITHUB_TOKEN_RUST_DEV_TOOLS: ${{ steps.generate-tokens.outputs.rust-dev-tools-token }}
+          # We do not want to use the full crates-io token in the dry-run.
+          # However, even without a token, we can actually read most of the crates.io state that we
+          # need to print a diff.
+          CRATES_IO_TOKEN: ""
         # This applies pipefail, so that the tee pipeline below fails when sync-team fails.
         shell: bash
         run: |

@@ -38,6 +38,10 @@ impl CratesIoApi {
         }
     }
 
+    pub(crate) fn is_dry_run(&self) -> bool {
+        self.dry_run
+    }
+
     /// List existing trusted publishing configurations for a given crate.
     pub(crate) fn list_trusted_publishing_github_configs(
         &self,
