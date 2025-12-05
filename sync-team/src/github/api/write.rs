@@ -513,30 +513,7 @@ impl GitHubWrite {
             "Creating environment '{name}' in '{org}/{repo}' with branches: {:?}",
             branches
         );
-        if !self.dry_run {
-            // REST API: PUT /repos/{owner}/{repo}/environments/{environment_name}
-            // https://docs.github.com/en/rest/deployments/environments#create-or-update-an-environment
-            let url = GitHubUrl::repos(org, repo, &format!("environments/{}", name))?;
-
-            let body = if branches.is_empty() {
-                serde_json::json!({})
-            } else {
-                serde_json::json!({
-                    "deployment_branch_policy": {
-                        "protected_branches": false,
-                        "custom_branch_policies": true
-                    }
-                })
-            };
-
-            self.client.send(Method::PUT, &url, &body)?;
-
-            // If we have custom branches, we need to set them via a separate API call
-            if !branches.is_empty() {
-                self.set_environment_branch_policies(org, repo, name, branches)?;
-            }
-        }
-        Ok(())
+        self.upsert_environment(org, repo, name, branches)
     }
 
     /// Update an environment in a repository
@@ -551,6 +528,17 @@ impl GitHubWrite {
             "Updating environment '{name}' in '{org}/{repo}' with branches: {:?}",
             branches
         );
+        self.upsert_environment(org, repo, name, branches)
+    }
+
+    /// Internal helper to create or update an environment
+    fn upsert_environment(
+        &self,
+        org: &str,
+        repo: &str,
+        name: &str,
+        branches: &[String],
+    ) -> anyhow::Result<()> {
         if !self.dry_run {
             // REST API: PUT /repos/{owner}/{repo}/environments/{environment_name}
             // https://docs.github.com/en/rest/deployments/environments#create-or-update-an-environment
@@ -571,7 +559,7 @@ impl GitHubWrite {
 
             self.client.send(Method::PUT, &url, &body)?;
 
-            // This ensures old policies are cleaned up when transitioning to unrestricted deployments
+            // Always sync branch policies to ensure cleanup of old policies
             self.set_environment_branch_policies(org, repo, name, branches)?;
         }
         Ok(())

@@ -451,8 +451,15 @@ impl GithubRead for GitHubApiRead {
         repo: &str,
     ) -> anyhow::Result<HashMap<String, Environment>> {
         #[derive(serde::Deserialize)]
+        struct ProtectionRule {
+            #[serde(rename = "type")]
+            rule_type: String,
+        }
+
+        #[derive(serde::Deserialize)]
         struct GitHubEnvironment {
             name: String,
+            protection_rules: Vec<ProtectionRule>,
         }
 
         #[derive(serde::Deserialize)]
@@ -470,50 +477,51 @@ impl GithubRead for GitHubApiRead {
             branch_policies: Vec<BranchPolicy>,
         }
 
-        let mut environment_names = Vec::new();
+        let mut env_infos = Vec::new();
 
-        // First, fetch all environment names
-        // REST API endpoint for environments
-        // https://docs.github.com/en/rest/deployments/environments#list-environments
+        // Fetch all environments with their protection_rules metadata
+        // REST API: https://docs.github.com/en/rest/deployments/environments#list-environments
         self.client.rest_paginated(
             &Method::GET,
             &GitHubUrl::repos(org, repo, "environments")?,
             |resp: EnvironmentsResponse| {
-                environment_names.extend(resp.environments.into_iter().map(|e| e.name));
+                env_infos.extend(resp.environments);
                 Ok(())
             },
         )?;
 
-        let mut environments: HashMap<String, Environment> = HashMap::new();
+        // For each environment, fetch deployment branch policies if they exist
+        // REST API: https://docs.github.com/en/rest/deployments/branch-policies#list-deployment-branch-policies
+        env_infos
+            .into_iter()
+            .map(|env_info| {
+                // Check if branch policies exist by looking at protection_rules metadata
+                let has_branch_policies = env_info
+                    .protection_rules
+                    .iter()
+                    .any(|rule| rule.rule_type == "branch_policy");
 
-        // Then, for each environment, fetch its deployment branch policies
-        // https://docs.github.com/en/rest/deployments/branch-policies#list-deployment-branch-policies
-        for env_name in environment_names {
-            let mut branches = Vec::new();
+                let branches = if has_branch_policies {
+                    let mut branches = Vec::new();
+                    self.client.rest_paginated(
+                        &Method::GET,
+                        &GitHubUrl::repos(
+                            org,
+                            repo,
+                            &format!("environments/{}/deployment-branch-policies", env_info.name),
+                        )?,
+                        |resp: BranchPoliciesResponse| {
+                            branches.extend(resp.branch_policies.into_iter().map(|p| p.name));
+                            Ok(())
+                        },
+                    )?;
+                    branches
+                } else {
+                    Vec::new()
+                };
 
-            // Fetch branch policies for this environment
-            let result = self.client.rest_paginated(
-                &Method::GET,
-                &GitHubUrl::repos(
-                    org,
-                    repo,
-                    &format!("environments/{}/deployment-branch-policies", env_name),
-                )?,
-                |resp: BranchPoliciesResponse| {
-                    branches.extend(resp.branch_policies.into_iter().map(|p| p.name));
-                    Ok(())
-                },
-            );
-
-            // If the API call fails (e.g., 404 when no policies are configured),
-            // treat it as an empty branches list
-            if result.is_err() {
-                branches.clear();
-            }
-
-            environments.insert(env_name, Environment { branches });
-        }
-
-        Ok(environments)
+                Ok((env_info.name, Environment { branches }))
+            })
+            .collect()
     }
 }
