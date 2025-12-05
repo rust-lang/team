@@ -156,6 +156,12 @@ impl SyncCratesIo {
             }
         }
 
+        // If any trusted publishing configs remained in the hashmap, they are leftover and should
+        // be removed.
+        for config in tp_configs.into_values().flatten() {
+            config_diffs.push(ConfigDiff::Delete(config));
+        }
+
         // We want to apply deletions first, and only then create new configs, to ensure that we
         // don't try to create a duplicate config where e.g. only the environment differs, which
         // would be an error in crates.io.
