@@ -19,6 +19,5 @@ crates = ["analyzeme", "decodeme", "measureme"]
 workflow-filename = "publish.yml"
 environment = "publish"
 
-[[environments]]
-name = "publish"
+[environments.publish]
 

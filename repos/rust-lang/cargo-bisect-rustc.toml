@@ -14,6 +14,5 @@ ehuss = "write"
 pattern = "master"
 required-approvals = 0
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

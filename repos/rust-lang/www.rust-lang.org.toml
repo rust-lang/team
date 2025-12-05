@@ -10,15 +10,11 @@ website = "write"
 [[branch-protections]]
 pattern = "main"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 
-[[environments]]
-name = "new-rust-www"
+[environments.new-rust-www]
 
-[[environments]]
-name = "rust-www-staging"
+[environments.rust-www-staging]
 
-[[environments]]
-name = "rust-www-try"
+[environments.rust-www-try]
 

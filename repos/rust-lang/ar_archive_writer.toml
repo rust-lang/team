@@ -6,6 +6,5 @@ bots = []
 [access.teams]
 compiler = "write"
 
-[[environments]]
-name = "publish"
+[environments.publish]
 

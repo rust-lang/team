@@ -3,7 +3,7 @@ pub(crate) use crate::permissions::Permissions;
 use anyhow::{bail, format_err, Error};
 use serde::de::{Deserialize, Deserializer};
 use serde_untagged::UntaggedEnumVisitor;
-use std::collections::{BTreeSet, HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
@@ -814,7 +814,7 @@ pub(crate) struct Repo {
     #[serde(default)]
     pub crates_io_publishing: Vec<CratesIoPublishing>,
     #[serde(default)]
-    pub environments: Vec<Environment>,
+    pub environments: BTreeMap<String, Environment>,
 }
 
 #[derive(serde_derive::Deserialize, Debug, Clone, PartialEq)]
@@ -887,5 +887,6 @@ pub(crate) struct CratesIoPublishing {
 #[derive(serde_derive::Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Environment {
-    pub name: String,
+    #[serde(default)]
+    pub branches: Vec<String>,
 }
