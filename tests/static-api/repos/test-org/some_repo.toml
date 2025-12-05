@@ -11,7 +11,8 @@ pattern = "master"
 ci-checks = ["CI"]
 allowed-merge-teams = ["foo"]
 
-[[crates-io-publishing]]
+[[crates-io]]
 crates = ["my-crate", "my-crate-2"]
-workflow-filename = "ci.yml"
-environment = "deploy"
+publish-workflow = "ci.yml"
+publish-environment = "deploy"
+teams = ["foo"]

@@ -3,11 +3,14 @@ mod api;
 use crate::team_api::TeamApi;
 use std::cmp::Ordering;
 
-use crate::crates_io::api::{CratesIoApi, TrustedPublishingGitHubConfig};
+use crate::crates_io::api::{CratesIoApi, CratesIoOwner, OwnerKind, TrustedPublishingGitHubConfig};
 use anyhow::Context;
 use secrecy::SecretString;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashSet};
 use std::fmt::{Display, Formatter};
+
+/// Special account that should own our managed crates.
+const RUST_LANG_OWNER_ACCOUNT: &str = "rust-lang-owner";
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 struct CrateName(String);
@@ -19,6 +22,12 @@ impl Display for CrateName {
 }
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
+struct TeamOwner {
+    org: String,
+    name: String,
+}
+
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
 struct CrateConfig {
     krate: CrateName,
     repo_org: String,
@@ -26,11 +35,12 @@ struct CrateConfig {
     workflow_file: String,
     environment: String,
     trusted_publishing_only: bool,
+    teams: Vec<TeamOwner>,
 }
 
 pub(crate) struct SyncCratesIo {
     crates_io_api: CratesIoApi,
-    crates: HashMap<CrateName, CrateConfig>,
+    crates: BTreeMap<CrateName, CrateConfig>,
 }
 
 impl SyncCratesIo {
@@ -40,7 +50,7 @@ impl SyncCratesIo {
         dry_run: bool,
     ) -> anyhow::Result<Self> {
         let crates_io_api = CratesIoApi::new(token, dry_run);
-        let crates: HashMap<CrateName, CrateConfig> = team_api
+        let crates: BTreeMap<CrateName, CrateConfig> = team_api
             .get_repos()?
             .into_iter()
             .flat_map(|repo| {
@@ -50,6 +60,7 @@ impl SyncCratesIo {
                         let Some(publishing) = &krate.crates_io_publishing else {
                             return None;
                         };
+
                         Some((
                             CrateName(krate.name.clone()),
                             CrateConfig {
@@ -59,6 +70,15 @@ impl SyncCratesIo {
                                 workflow_file: publishing.workflow_file.clone(),
                                 environment: publishing.environment.clone(),
                                 trusted_publishing_only: krate.trusted_publishing_only,
+                                teams: krate
+                                    .teams
+                                    .clone()
+                                    .into_iter()
+                                    .map(|owner| TeamOwner {
+                                        org: owner.org,
+                                        name: owner.name,
+                                    })
+                                    .collect(),
                             },
                         ))
                     })
@@ -85,6 +105,7 @@ impl SyncCratesIo {
             // to enable doing a crates.io dry-run without a privileged token.
             // Because crates.io does not currently support read-only token
             if !is_ci_dry_run {
+                // Sync trusted publishing configs
                 let mut configs = self
                     .crates_io_api
                     .list_trusted_publishing_github_configs(&krate.0)
@@ -121,6 +142,7 @@ impl SyncCratesIo {
                 config_diffs.extend(configs.into_iter().map(ConfigDiff::Delete));
             }
 
+            // Sync "trusted publishing only" crate option
             let trusted_publish_only_expected = desired.trusted_publishing_only;
             let crates_io_crate = self
                 .crates_io_api
@@ -132,11 +154,59 @@ impl SyncCratesIo {
                     value: trusted_publish_only_expected,
                 });
             }
+
+            // Sync crate owners
+            let owners = self
+                .crates_io_api
+                .list_crate_owners(&krate.0)
+                .with_context(|| anyhow::anyhow!("Cannot list crate owners of {krate}"))?;
+
+            let mut owners_to_add = vec![];
+
+            let rust_lang_owner = CratesIoOwner::user(RUST_LANG_OWNER_ACCOUNT.to_string());
+            // Make sure that `rust-lang-owner` is an owner of each managed crate
+            if !owners.contains(&rust_lang_owner) {
+                owners_to_add.push(rust_lang_owner);
+            }
+
+            // Sync team owners
+            let existing_teams: HashSet<CratesIoOwner> = owners
+                .iter()
+                .filter(|owner| match owner.kind() {
+                    OwnerKind::User => false,
+                    OwnerKind::Team => true,
+                })
+                .cloned()
+                .collect();
+            let target_teams: HashSet<CratesIoOwner> = desired
+                .teams
+                .iter()
+                .map(|team| CratesIoOwner::team(team.org.clone(), team.name.clone()))
+                .collect();
+            let teams_to_add = target_teams.difference(&existing_teams).cloned();
+            owners_to_add.extend(teams_to_add);
+
+            if !owners_to_add.is_empty() {
+                crate_diffs.push(CrateDiff::AddOwners {
+                    krate: krate.to_string(),
+                    owners: owners_to_add,
+                });
+            }
+
+            let teams_to_remove = existing_teams
+                .difference(&target_teams)
+                .cloned()
+                .collect::<Vec<_>>();
+            if !teams_to_remove.is_empty() {
+                crate_diffs.push(CrateDiff::RemoveOwners {
+                    krate: krate.to_string(),
+                    owners: teams_to_remove,
+                });
+            }
         }
 
         // We want to apply deletions first, and only then create new configs, to ensure that we
-        // don't try to create a duplicate config where e.g. only the environment differs, which
-        // would be an error in crates.io.
+        // don't try to create a duplicate config where e.g. only the environment differs.
         config_diffs.sort_by(|a, b| match &(a, b) {
             (ConfigDiff::Delete(_), ConfigDiff::Create(_)) => Ordering::Less,
             (ConfigDiff::Create(_), ConfigDiff::Delete(_)) => Ordering::Greater,
@@ -263,7 +333,18 @@ impl std::fmt::Display for ConfigDiff {
 }
 
 enum CrateDiff {
-    SetTrustedPublishingOnly { krate: String, value: bool },
+    SetTrustedPublishingOnly {
+        krate: String,
+        value: bool,
+    },
+    AddOwners {
+        krate: String,
+        owners: Vec<CratesIoOwner>,
+    },
+    RemoveOwners {
+        krate: String,
+        owners: Vec<CratesIoOwner>,
+    },
 }
 
 impl CrateDiff {
@@ -272,6 +353,12 @@ impl CrateDiff {
             Self::SetTrustedPublishingOnly { krate, value } => sync
                 .crates_io_api
                 .set_trusted_publishing_only(krate, *value),
+            CrateDiff::AddOwners { krate, owners } => {
+                sync.crates_io_api.invite_crate_owners(krate, owners)
+            }
+            CrateDiff::RemoveOwners { krate, owners } => {
+                sync.crates_io_api.delete_crate_owners(krate, owners)
+            }
         }
     }
 }
@@ -284,6 +371,32 @@ impl std::fmt::Display for CrateDiff {
                     f,
                     "  Setting trusted publishing only option for krate `{krate}` to `{value}`",
                 )?;
+            }
+            CrateDiff::AddOwners { krate, owners } => {
+                for owner in owners {
+                    let kind = match owner.kind() {
+                        OwnerKind::User => "user",
+                        OwnerKind::Team => "team",
+                    };
+                    writeln!(
+                        f,
+                        "  Adding `{kind}` owner `{}` to krate `{krate}`",
+                        owner.login()
+                    )?;
+                }
+            }
+            CrateDiff::RemoveOwners { krate, owners } => {
+                for owner in owners {
+                    let kind = match owner.kind() {
+                        OwnerKind::User => "user",
+                        OwnerKind::Team => "team",
+                    };
+                    writeln!(
+                        f,
+                        "  Removing `{kind}` owner `{}` from krate `{krate}`",
+                        owner.login()
+                    )?;
+                }
             }
         }
         Ok(())

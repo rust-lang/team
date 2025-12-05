@@ -12,10 +12,10 @@ pattern = "main"
 ci-checks = ["CI"]
 required-approvals = 0
 
-[[crates-io-publishing]]
+[[crates-io]]
 crates = ["annotate-snippets"]
-workflow-filename = "release.yml"
-environment = "publish"
+publish-workflow = "release.yml"
+publish-environment = "publish"
 
 [[environments]]
 name = "publish"
