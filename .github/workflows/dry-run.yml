@@ -68,6 +68,8 @@ jobs:
         # This applies pipefail, so that the tee pipeline below fails when sync-team fails.
         shell: bash
         run: |
+          echo "var: $GITHUB_TOKEN_RUST_LANG_DEPRECATED"
+          echo "len: ${#GITHUB_TOKEN_RUST_LANG_DEPRECATED}"
           # Perform build and execution separately to avoid any potential output from
           # cargo leaking into the output file.
           cargo build --release
