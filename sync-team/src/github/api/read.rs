@@ -53,8 +53,12 @@ pub(crate) trait GithubRead {
     ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>>;
 
     /// Get environments for a repository
-    /// Returns a list of environment names
-    fn repo_environments(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Environment>>;
+    /// Returns a map of environment names to their Environment data
+    fn repo_environments(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<HashMap<String, Environment>>;
 }
 
 pub(crate) struct GitHubApiRead {
@@ -441,26 +445,74 @@ impl GithubRead for GitHubApiRead {
         Ok(result)
     }
 
-    fn repo_environments(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Environment>> {
+    fn repo_environments(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<HashMap<String, Environment>> {
         #[derive(serde::Deserialize)]
-        struct EnvironmentsResponse {
-            environments: Vec<Environment>,
+        struct GitHubEnvironment {
+            name: String,
         }
 
-        let mut environments: Vec<Environment> = Vec::new();
+        #[derive(serde::Deserialize)]
+        struct EnvironmentsResponse {
+            environments: Vec<GitHubEnvironment>,
+        }
 
+        #[derive(serde::Deserialize)]
+        struct BranchPolicy {
+            name: String,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct BranchPoliciesResponse {
+            branch_policies: Vec<BranchPolicy>,
+        }
+
+        let mut environment_names = Vec::new();
+
+        // First, fetch all environment names
         // REST API endpoint for environments
         // https://docs.github.com/en/rest/deployments/environments#list-environments
         self.client.rest_paginated(
             &Method::GET,
             &GitHubUrl::repos(org, repo, "environments")?,
             |resp: EnvironmentsResponse| {
-                for env in resp.environments {
-                    environments.push(env);
-                }
+                environment_names.extend(resp.environments.into_iter().map(|e| e.name));
                 Ok(())
             },
         )?;
+
+        let mut environments: HashMap<String, Environment> = HashMap::new();
+
+        // Then, for each environment, fetch its deployment branch policies
+        // https://docs.github.com/en/rest/deployments/branch-policies#list-deployment-branch-policies
+        for env_name in environment_names {
+            let mut branches = Vec::new();
+
+            // Fetch branch policies for this environment
+            let result = self.client.rest_paginated(
+                &Method::GET,
+                &GitHubUrl::repos(
+                    org,
+                    repo,
+                    &format!("environments/{}/deployment-branch-policies", env_name),
+                )?,
+                |resp: BranchPoliciesResponse| {
+                    branches.extend(resp.branch_policies.into_iter().map(|p| p.name));
+                    Ok(())
+                },
+            );
+
+            // If the API call fails (e.g., 404 when no policies are configured),
+            // treat it as an empty branches list
+            if result.is_err() {
+                branches.clear();
+            }
+
+            environments.insert(env_name, Environment { branches });
+        }
 
         Ok(environments)
     }
