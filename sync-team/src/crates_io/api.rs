@@ -7,6 +7,8 @@ use reqwest::header;
 use reqwest::header::{HeaderMap, HeaderValue};
 use secrecy::{ExposeSecret, SecretString};
 use serde::Serialize;
+use serde::de::DeserializeOwned;
+use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
 
 // OpenAPI spec: https://crates.io/api/openapi.json
@@ -55,7 +57,12 @@ impl CratesIoApi {
         }
 
         let response: UserResponse = self
-            .req::<()>(reqwest::Method::GET, &format!("/users/{username}"), None)?
+            .req::<()>(
+                reqwest::Method::GET,
+                &format!("/users/{username}"),
+                HashMap::new(),
+                None,
+            )?
             .error_for_status()?
             .json_annotated()?;
 
@@ -72,16 +79,15 @@ impl CratesIoApi {
             github_configs: Vec<TrustedPublishingGitHubConfig>,
         }
 
-        let response: GetTrustedPublishing = self
-            .req::<()>(
-                reqwest::Method::GET,
-                &format!("/trusted_publishing/github_configs?user_id={}", user_id.0),
-                None,
-            )?
-            .error_for_status()?
-            .json_annotated()?;
+        let mut configs = vec![];
+        self.req_paged::<(), GetTrustedPublishing, _>(
+            "/trusted_publishing/github_configs",
+            HashMap::from([("user_id".to_string(), user_id.0.to_string())]),
+            None,
+            |resp| configs.extend(resp.github_configs),
+        )?;
 
-        Ok(response.github_configs)
+        Ok(configs)
     }
 
     /// Create a new trusted publishing configuration for a given crate.
@@ -130,6 +136,7 @@ impl CratesIoApi {
         self.req(
             reqwest::Method::POST,
             "/trusted_publishing/github_configs",
+            HashMap::new(),
             Some(&request),
         )?
         .error_for_status()
@@ -149,6 +156,7 @@ impl CratesIoApi {
             self.req::<()>(
                 reqwest::Method::DELETE,
                 &format!("/trusted_publishing/github_configs/{}", id.0),
+                HashMap::new(),
                 None,
             )?
             .error_for_status()
@@ -167,7 +175,12 @@ impl CratesIoApi {
         }
 
         let response: CrateResponse = self
-            .req::<()>(reqwest::Method::GET, &format!("/crates/{krate}"), None)?
+            .req::<()>(
+                reqwest::Method::GET,
+                &format!("/crates/{krate}"),
+                HashMap::new(),
+                None,
+            )?
             .error_for_status()?
             .json_annotated()?;
 
@@ -196,6 +209,7 @@ impl CratesIoApi {
             self.req(
                 reqwest::Method::PATCH,
                 &format!("/crates/{krate}"),
+                HashMap::new(),
                 Some(&PatchCrateRequest {
                     krate: Crate {
                         trustpub_only: value,
@@ -214,17 +228,70 @@ impl CratesIoApi {
         &self,
         method: reqwest::Method,
         path: &str,
+        query: HashMap<String, String>,
         data: Option<&T>,
     ) -> anyhow::Result<reqwest::blocking::Response> {
         let mut req = self
             .client
             .request(method, format!("{CRATES_IO_BASE_URL}{path}"))
-            .bearer_auth(self.token.expose_secret());
+            .bearer_auth(self.token.expose_secret())
+            .query(&query);
         if let Some(data) = data {
             req = req.json(data);
         }
 
         Ok(req.send()?)
+    }
+
+    /// Fetch a resource that is paged.
+    fn req_paged<T: Serialize, R: DeserializeOwned, F>(
+        &self,
+        path: &str,
+        mut query: HashMap<String, String>,
+        data: Option<&T>,
+        mut handle_response: F,
+    ) -> anyhow::Result<()>
+    where
+        F: FnMut(R),
+    {
+        #[derive(serde::Deserialize, Debug)]
+        struct Response<R> {
+            meta: MetaResponse,
+            #[serde(flatten)]
+            data: R,
+        }
+
+        #[derive(serde::Deserialize, Debug)]
+        struct MetaResponse {
+            next_page: Option<String>,
+        }
+
+        if !query.contains_key("per_page") {
+            query.insert("per_page".to_string(), "100".to_string());
+        }
+
+        let mut query = query;
+        let mut path_extra: Option<String> = None;
+        loop {
+            let path = match path_extra {
+                Some(p) => format!("{path}{p}"),
+                None => path.to_owned(),
+            };
+
+            let response: Response<R> = self
+                .req(reqwest::Method::GET, &path, query, data)?
+                .error_for_status()?
+                .json_annotated()?;
+            handle_response(response.data);
+            match response.meta.next_page {
+                Some(next) => {
+                    path_extra = Some(next);
+                    query = HashMap::new();
+                }
+                None => break,
+            }
+        }
+        Ok(())
     }
 }
 
