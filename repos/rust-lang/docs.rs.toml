@@ -11,3 +11,7 @@ docs-rs-reviewers = 'write'
 [[branch-protections]]
 pattern = 'main'
 required-approvals = 0
+
+[[crates-io-publishing]]
+crates = ["badge"]
+teams = []

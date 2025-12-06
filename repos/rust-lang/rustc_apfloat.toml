@@ -12,3 +12,7 @@ compiler = 'maintain'
 
 # Likewise, eventually we may want a branch protections section, but we will
 # tackle that later.
+
+[[crates-io-publishing]]
+crates = ["rustc_apfloat"]
+teams = []

@@ -13,3 +13,7 @@ name = "crates-io"
 [[environments]]
 name = "staging-crates-io"
 
+
+[[crates-io-publishing]]
+crates = ["cargo-registry", "cargo-registry-s3"]
+teams = ["core", "crates-io-pushers", "crates-io"]

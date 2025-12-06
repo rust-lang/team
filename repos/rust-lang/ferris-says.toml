@@ -6,3 +6,7 @@ bots = []
 
 [access.teams]
 crate-maintainers = "maintain"
+
+[[crates-io-publishing]]
+crates = ["ferris-says"]
+teams = ["website", "crate-maintainers"]

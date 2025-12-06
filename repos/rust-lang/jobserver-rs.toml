@@ -10,3 +10,7 @@ compiler = "write"
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["jobserver"]
+teams = []

@@ -13,3 +13,7 @@ pattern = 'master'
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["backtrace"]
+teams = []

@@ -6,3 +6,7 @@ bots = []
 [access.teams]
 infra = "write"
 docs-rs = "write"
+
+[[crates-io-publishing]]
+crates = ["rustwide"]
+teams = ["infra"]

@@ -20,3 +20,7 @@ ci-checks = [
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["rustc-demangle"]
+teams = ["libs", "compiler"]

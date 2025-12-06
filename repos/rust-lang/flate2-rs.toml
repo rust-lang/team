@@ -13,3 +13,7 @@ pattern = 'main'
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["flate2"]
+teams = []

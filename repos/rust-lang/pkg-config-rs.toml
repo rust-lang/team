@@ -13,3 +13,7 @@ sdroege = "write"
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["pkg-config"]
+teams = []

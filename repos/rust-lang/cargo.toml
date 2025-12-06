@@ -21,3 +21,11 @@ name = "github-pages"
 [[environments]]
 name = "release"
 
+
+[[crates-io-publishing]]
+crates = ["cargo-credential-gnome-secret", "home"]
+teams = []
+
+[[crates-io-publishing]]
+crates = ["build-rs", "cargo", "cargo-credential", "cargo-credential-1password", "cargo-credential-libsecret", "cargo-credential-macos-keychain", "cargo-credential-wincred", "cargo-platform", "cargo-test-macro", "cargo-test-support", "cargo-util", "cargo-util-schemas", "crates-io", "rustfix"]
+teams = ["release-publishers"]
