@@ -3,7 +3,7 @@ mod api;
 use crate::team_api::TeamApi;
 use std::cmp::Ordering;
 
-use crate::crates_io::api::{CratesIoApi, TrustedPublishingGitHubConfig, UserId};
+use crate::crates_io::api::{CratesIoApi, CratesIoCrate, TrustedPublishingGitHubConfig, UserId};
 use anyhow::Context;
 use secrecy::SecretString;
 use std::collections::HashMap;
@@ -32,6 +32,7 @@ pub(crate) struct SyncCratesIo {
     crates_io_api: CratesIoApi,
     crates: HashMap<CrateName, CrateConfig>,
     user_id: UserId,
+    username: String,
 }
 
 impl SyncCratesIo {
@@ -74,6 +75,7 @@ impl SyncCratesIo {
             crates_io_api,
             crates,
             user_id,
+            username,
         })
     }
 
@@ -99,6 +101,14 @@ impl SyncCratesIo {
                 });
             tp_configs
         };
+
+        // Batch load all crates owned by the current user
+        let crates: HashMap<String, CratesIoCrate> = self
+            .crates_io_api
+            .get_crates_owned_by(self.user_id)?
+            .into_iter()
+            .map(|krate| (krate.name.clone(), krate))
+            .collect();
 
         // Note: we currently only support one trusted publishing configuration per crate
         for (krate, desired) in &self.crates {
@@ -143,15 +153,16 @@ impl SyncCratesIo {
                 config_diffs.extend(configs.iter_mut().map(|c| ConfigDiff::Delete(c.clone())));
             }
 
-            let trusted_publish_only_expected = desired.trusted_publishing_only;
-            let crates_io_crate = self
-                .crates_io_api
-                .get_crate(&krate.0)
-                .with_context(|| anyhow::anyhow!("Cannot load crate {krate}"))?;
-            if crates_io_crate.trusted_publishing_only != trusted_publish_only_expected {
+            let Some(crates_io_crate) = crates.get(&krate.0) else {
+                return Err(anyhow::anyhow!(
+                    "Crate `{krate}` is not owned by user `{0}`. Please invite `{0}` to be its owner.",
+                    self.username
+                ));
+            };
+            if crates_io_crate.trusted_publishing_only != desired.trusted_publishing_only {
                 crate_diffs.push(CrateDiff::SetTrustedPublishingOnly {
                     krate: krate.to_string(),
-                    value: trusted_publish_only_expected,
+                    value: desired.trusted_publishing_only,
                 });
             }
         }

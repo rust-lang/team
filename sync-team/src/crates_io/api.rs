@@ -166,25 +166,24 @@ impl CratesIoApi {
         Ok(())
     }
 
-    /// Get information about a crate.
-    pub(crate) fn get_crate(&self, krate: &str) -> anyhow::Result<CratesIoCrate> {
+    /// Return all crates owned by the given user.
+    pub(crate) fn get_crates_owned_by(&self, user: UserId) -> anyhow::Result<Vec<CratesIoCrate>> {
         #[derive(serde::Deserialize)]
-        struct CrateResponse {
-            #[serde(rename = "crate")]
-            krate: CratesIoCrate,
+        struct CratesResponse {
+            crates: Vec<CratesIoCrate>,
         }
 
-        let response: CrateResponse = self
-            .req::<()>(
-                reqwest::Method::GET,
-                &format!("/crates/{krate}"),
-                HashMap::new(),
-                None,
-            )?
-            .error_for_status()?
-            .json_annotated()?;
+        let mut crates = vec![];
+        self.req_paged::<(), CratesResponse, _>(
+            "/crates",
+            HashMap::from([("user_id".to_string(), user.0.to_string())]),
+            None,
+            |res| {
+                crates.extend(res.crates);
+            },
+        )?;
 
-        Ok(response.krate)
+        Ok(crates)
     }
 
     /// Enable or disable the `trustpub_only` crate option, which specifies whether a crate
@@ -320,6 +319,7 @@ pub(crate) struct TrustedPublishingGitHubConfig {
 
 #[derive(serde::Deserialize, Debug)]
 pub(crate) struct CratesIoCrate {
+    pub(crate) name: String,
     #[serde(rename = "trustpub_only")]
     pub(crate) trusted_publishing_only: bool,
 }
