@@ -9,7 +9,6 @@ members = [
     "Turbo87",
     "LawnGnome",
     "mdtro",
-    "0xPoe",
     "eth3lbert",
 ]
 alumni = [
@@ -26,6 +25,7 @@ alumni = [
     "locks",
     "wycats",
     "JohnTitor",
+    "0xPoe",
 ]
 
 [permissions]
