@@ -489,28 +489,28 @@ impl SyncGitHub {
         &self,
         expected_repo: &rust_team_data::v1::Repo,
     ) -> anyhow::Result<Vec<EnvironmentDiff>> {
-        let mut environment_diffs = Vec::new();
-
         let actual_environments = self
             .github
             .repo_environments(&expected_repo.org, &expected_repo.name)?;
 
         let expected_env_names: HashSet<String> =
             expected_repo.environments.keys().cloned().collect();
-
         let actual_env_names: HashSet<String> = actual_environments.keys().cloned().collect();
 
-        // Environments to create or update (sorted for deterministic output)
-        let mut to_create_or_update: Vec<_> = expected_repo.environments.iter().collect();
-        to_create_or_update.sort_by_key(|(name, _)| name.as_str());
+        let mut environment_diffs = Vec::new();
 
-        for (env_name, expected_env) in to_create_or_update {
+        // Process environments to create or update (sorted for deterministic output)
+        let mut environments_to_process: Vec<_> = expected_repo.environments.iter().collect();
+        environments_to_process.sort_by_key(|(name, _)| name.as_str());
+
+        for (env_name, expected_env) in environments_to_process {
             match actual_environments.get(env_name) {
-                Some(actual_env) if actual_env.branches == expected_env.branches => {
-                    // No change needed
-                    continue;
-                }
                 Some(actual_env) => {
+                    // Skip if branches are identical (order-independent comparison)
+                    if branches_equal(&actual_env.branches, &expected_env.branches) {
+                        continue;
+                    }
+
                     // Environment exists but branches differ - update it
                     environment_diffs.push(EnvironmentDiff::Update(
                         env_name.clone(),
@@ -528,13 +528,13 @@ impl SyncGitHub {
             }
         }
 
-        // Environments to delete (sorted for deterministic output)
-        let mut to_delete: Vec<_> = actual_env_names
+        // Process environments to delete (sorted for deterministic output)
+        let mut envs_to_delete: Vec<_> = actual_env_names
             .difference(&expected_env_names)
             .cloned()
             .collect();
-        to_delete.sort();
-        for env in to_delete {
+        envs_to_delete.sort();
+        for env in envs_to_delete {
             environment_diffs.push(EnvironmentDiff::Delete(env));
         }
 
@@ -552,6 +552,16 @@ impl SyncGitHub {
             TeamRole::Member
         }
     }
+}
+
+/// Compare two branch lists for equality, ignoring order
+fn branches_equal(a: &[String], b: &[String]) -> bool {
+    if a.len() != b.len() {
+        return false;
+    }
+    let a_set: HashSet<&String> = a.iter().collect();
+    let b_set: HashSet<&String> = b.iter().collect();
+    a_set == b_set
 }
 
 fn calculate_permission_diffs(
