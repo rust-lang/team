@@ -328,6 +328,12 @@ impl SyncGitHub {
         Ok(diffs)
     }
 
+    /// Check if a repository should use rulesets instead of branch protections
+    fn should_use_rulesets(&self, repo: &rust_team_data::v1::Repo) -> bool {
+        let repo_full_name = format!("{}/{}", repo.org, repo.name);
+        self.config.enable_rulesets_repos.contains(&repo_full_name)
+    }
+
     fn diff_repo(&self, expected_repo: &rust_team_data::v1::Repo) -> anyhow::Result<RepoDiff> {
         debug!(
             "Diffing repo `{}/{}`",
@@ -342,12 +348,24 @@ impl SyncGitHub {
                     Default::default(),
                     Default::default(),
                 )?;
+
+                // Always create branch protections
                 let mut branch_protections = Vec::new();
                 for branch_protection in &expected_repo.branch_protections {
                     branch_protections.push((
                         branch_protection.pattern.clone(),
                         construct_branch_protection(expected_repo, branch_protection),
                     ));
+                }
+
+                // Additionally create rulesets if configured
+                let mut rulesets = Vec::new();
+                let use_rulesets = self.should_use_rulesets(expected_repo);
+                if use_rulesets {
+                    for branch_protection in &expected_repo.branch_protections {
+                        let ruleset = construct_ruleset(expected_repo, branch_protection);
+                        rulesets.push(ruleset);
+                    }
                 }
 
                 return Ok(RepoDiff::Create(CreateRepoDiff {
@@ -360,7 +378,13 @@ impl SyncGitHub {
                         auto_merge_enabled: expected_repo.auto_merge_enabled,
                     },
                     permissions,
-                    branch_protections,
+                    // Don't create branch protections if using rulesets
+                    branch_protections: if use_rulesets {
+                        vec![]
+                    } else {
+                        branch_protections
+                    },
+                    rulesets,
                     environments: expected_repo
                         .environments
                         .iter()
@@ -371,7 +395,15 @@ impl SyncGitHub {
         };
 
         let permission_diffs = self.diff_permissions(expected_repo)?;
+
         let branch_protection_diffs = self.diff_branch_protections(&actual_repo, expected_repo)?;
+
+        let ruleset_diffs = if self.should_use_rulesets(expected_repo) {
+            self.diff_rulesets(expected_repo)?
+        } else {
+            Vec::new()
+        };
+
         let environment_diffs = self.diff_environments(expected_repo)?;
         let old_settings = RepoSettings {
             description: actual_repo.description.clone(),
@@ -393,6 +425,7 @@ impl SyncGitHub {
             settings_diff: (old_settings, new_settings),
             permission_diffs,
             branch_protection_diffs,
+            ruleset_diffs,
             environment_diffs,
         }))
     }
@@ -433,6 +466,18 @@ impl SyncGitHub {
         let mut actual_protections = self
             .github
             .branch_protections(&actual_repo.org, &actual_repo.name)?;
+
+        // If rulesets are enabled, delete all existing branch protections
+        // to avoid conflicts between branch protections and rulesets
+        if self.should_use_rulesets(expected_repo) {
+            return Ok(actual_protections
+                .into_iter()
+                .map(|(name, (id, _))| BranchProtectionDiff {
+                    pattern: name,
+                    operation: BranchProtectionDiffOperation::Delete(id),
+                })
+                .collect());
+        }
         for branch_protection in &expected_repo.branch_protections {
             let actual_branch_protection = actual_protections.remove(&branch_protection.pattern);
             let mut expected_branch_protection =
@@ -565,6 +610,68 @@ impl SyncGitHub {
         }
 
         Ok(environment_diffs)
+    }
+
+    fn diff_rulesets(
+        &self,
+        expected_repo: &rust_team_data::v1::Repo,
+    ) -> anyhow::Result<Vec<RulesetDiff>> {
+        let mut ruleset_diffs = Vec::new();
+
+        // Fetch existing rulesets from GitHub
+        let actual_rulesets = self
+            .github
+            .repo_rulesets(&expected_repo.org, &expected_repo.name)?;
+
+        // Build a map of actual rulesets by name
+        let mut actual_rulesets_map: HashMap<String, api::Ruleset> = actual_rulesets
+            .into_iter()
+            .map(|r| (r.name.clone(), r))
+            .collect();
+
+        // Process each branch protection as a potential ruleset
+        for branch_protection in &expected_repo.branch_protections {
+            let expected_ruleset = construct_ruleset(expected_repo, branch_protection);
+            let ruleset_name = expected_ruleset.name.clone();
+
+            if let Some(actual_ruleset) = actual_rulesets_map.remove(&ruleset_name) {
+                // Ruleset exists, check if it needs updating
+                // For simplicity, we compare the entire ruleset
+                // In production, you might want more sophisticated comparison
+                if actual_ruleset.rules != expected_ruleset.rules
+                    || actual_ruleset.conditions != expected_ruleset.conditions
+                    || actual_ruleset.enforcement != expected_ruleset.enforcement
+                {
+                    let id = actual_ruleset.id.unwrap_or(0);
+                    ruleset_diffs.push(RulesetDiff {
+                        name: ruleset_name,
+                        operation: RulesetDiffOperation::Update(
+                            id,
+                            actual_ruleset,
+                            expected_ruleset,
+                        ),
+                    });
+                }
+            } else {
+                // Ruleset doesn't exist, create it
+                ruleset_diffs.push(RulesetDiff {
+                    name: ruleset_name,
+                    operation: RulesetDiffOperation::Create(expected_ruleset),
+                });
+            }
+        }
+
+        // Any remaining rulesets in actual_rulesets_map should be deleted
+        for (name, ruleset) in actual_rulesets_map {
+            if let Some(id) = ruleset.id {
+                ruleset_diffs.push(RulesetDiff {
+                    name,
+                    operation: RulesetDiffOperation::Delete(id),
+                });
+            }
+        }
+
+        Ok(ruleset_diffs)
     }
 
     fn expected_role(&self, org: &str, user: u64) -> TeamRole {
@@ -779,6 +886,103 @@ pub fn construct_branch_protection(
     }
 }
 
+/// Convert a branch pattern to a full ref pattern for use in rulesets.
+/// GitHub rulesets require full ref paths like "refs/heads/main" instead of just "main".
+pub(crate) fn convert_branch_pattern_to_ref_pattern(pattern: &str) -> String {
+    if pattern.starts_with("refs/") {
+        return pattern.to_string();
+    }
+    format!("refs/heads/{}", pattern)
+}
+
+/// Convert a branch protection to a ruleset with merge queue enabled
+pub fn construct_ruleset(
+    _expected_repo: &rust_team_data::v1::Repo,
+    branch_protection: &rust_team_data::v1::BranchProtection,
+) -> api::Ruleset {
+    use api::*;
+
+    let uses_merge_bot = !branch_protection.merge_bots.is_empty();
+    let branch_protection_mode = if uses_merge_bot {
+        BranchProtectionMode::PrNotRequired
+    } else {
+        branch_protection.mode.clone()
+    };
+
+    let mut rules: Vec<RulesetRule> = Vec::new();
+
+    // Add pull request rule if PRs are required
+    if let BranchProtectionMode::PrRequired {
+        required_approvals, ..
+    } = &branch_protection_mode
+    {
+        rules.push(RulesetRule::PullRequest {
+            parameters: PullRequestParameters {
+                dismiss_stale_reviews_on_push: branch_protection.dismiss_stale_review,
+                require_code_owner_review: false,
+                require_last_push_approval: false,
+                required_approving_review_count: *required_approvals as i32,
+                required_review_thread_resolution: false,
+            },
+        });
+    }
+
+    // Add required status checks if any
+    if let BranchProtectionMode::PrRequired { ci_checks, .. } = &branch_protection_mode
+        && !ci_checks.is_empty()
+    {
+        let mut checks = ci_checks.clone();
+        checks.sort();
+        rules.push(RulesetRule::RequiredStatusChecks {
+            parameters: RequiredStatusChecksParameters {
+                do_not_enforce_on_create: Some(false),
+                required_status_checks: checks
+                    .iter()
+                    .map(|context| RequiredStatusCheck {
+                        context: context.clone(),
+                        integration_id: None,
+                    })
+                    .collect(),
+                strict_required_status_checks_policy: false,
+            },
+        });
+    }
+
+    // Enable merge queue with default settings
+    rules.push(RulesetRule::MergeQueue {
+        parameters: MergeQueueParameters {
+            check_response_timeout_minutes: 360,
+            grouping_strategy: MergeQueueGroupingStrategy::Allgreen,
+            max_entries_to_build: 5,
+            max_entries_to_merge: 5,
+            merge_method: MergeQueueMergeMethod::Merge,
+            min_entries_to_merge: 0,
+            min_entries_to_merge_wait_minutes: 0,
+        },
+    });
+
+    // TODO: Add bypass actors based on allowed_merge_teams and merge_bots
+    // This would require fetching team IDs, which needs more integration
+
+    api::Ruleset {
+        id: None,
+        name: format!("Branch protection for {}", branch_protection.pattern),
+        target: RulesetTarget::Branch,
+        source_type: RulesetSourceType::Repository,
+        enforcement: RulesetEnforcement::Active,
+        bypass_actors: None,
+        conditions: Some(RulesetConditions {
+            ref_name: Some(RulesetRefNameCondition {
+                include: vec![convert_branch_pattern_to_ref_pattern(
+                    &branch_protection.pattern,
+                )],
+                exclude: vec![],
+            }),
+        }),
+        rules,
+    }
+}
+
 /// The special bot teams
 const BOTS_TEAMS: &[&str] = &["bors", "highfive", "rfcbot", "bots"];
 
@@ -905,6 +1109,7 @@ struct CreateRepoDiff {
     settings: RepoSettings,
     permissions: Vec<RepoPermissionAssignmentDiff>,
     branch_protections: Vec<(String, api::BranchProtection)>,
+    rulesets: Vec<api::Ruleset>,
     environments: Vec<(String, rust_team_data::v1::Environment)>,
 }
 
@@ -916,12 +1121,22 @@ impl CreateRepoDiff {
             permission.apply(sync, &self.org, &self.name)?;
         }
 
+        // Apply branch protections
         for (branch, protection) in &self.branch_protections {
             BranchProtectionDiff {
                 pattern: branch.clone(),
                 operation: BranchProtectionDiffOperation::Create(protection.clone()),
             }
             .apply(sync, &self.org, &self.name, &repo.node_id)?;
+        }
+
+        // Apply rulesets (in addition to branch protections if configured)
+        for ruleset in &self.rulesets {
+            RulesetDiff {
+                name: ruleset.name.clone(),
+                operation: RulesetDiffOperation::Create(ruleset.clone()),
+            }
+            .apply(sync, &self.org, &self.name)?;
         }
 
         for (env_name, env) in &self.environments {
@@ -940,6 +1155,7 @@ impl std::fmt::Display for CreateRepoDiff {
             settings,
             permissions,
             branch_protections,
+            rulesets,
             environments,
         } = self;
 
@@ -960,11 +1176,35 @@ impl std::fmt::Display for CreateRepoDiff {
         for diff in permissions {
             write!(f, "{diff}")?;
         }
-        writeln!(f, "  Branch Protections:")?;
-        for (branch_name, branch_protection) in branch_protections {
-            writeln!(&mut f, "    {branch_name}")?;
-            log_branch_protection(branch_protection, None, &mut f)?;
+
+        if !branch_protections.is_empty() {
+            writeln!(f, "  Branch Protections:")?;
+            for (branch_name, branch_protection) in branch_protections {
+                writeln!(&mut f, "    {branch_name}")?;
+                log_branch_protection(branch_protection, None, &mut f)?;
+            }
         }
+
+        if !rulesets.is_empty() {
+            writeln!(f, "  Rulesets:")?;
+            for ruleset in rulesets {
+                let id_str = ruleset.id.map_or("new".to_string(), |id| id.to_string());
+                writeln!(f, "    - {} (ID: {})", ruleset.name, id_str)?;
+                if let Some(conditions) = &ruleset.conditions
+                    && let Some(ref_name) = &conditions.ref_name
+                {
+                    writeln!(f, "      Branches: {}", ref_name.include.join(", "))?;
+                }
+                if ruleset
+                    .rules
+                    .iter()
+                    .any(|r| matches!(r, api::RulesetRule::MergeQueue { .. }))
+                {
+                    writeln!(f, "      Merge Queue: Enabled")?;
+                }
+            }
+        }
+
         if !environments.is_empty() {
             writeln!(f, "  Environments:")?;
             for (env_name, env) in environments {
@@ -990,6 +1230,7 @@ struct UpdateRepoDiff {
     settings_diff: (RepoSettings, RepoSettings),
     permission_diffs: Vec<RepoPermissionAssignmentDiff>,
     branch_protection_diffs: Vec<BranchProtectionDiff>,
+    ruleset_diffs: Vec<RulesetDiff>,
     environment_diffs: Vec<EnvironmentDiff>,
 }
 
@@ -1021,12 +1262,14 @@ impl UpdateRepoDiff {
             settings_diff,
             permission_diffs,
             branch_protection_diffs,
+            ruleset_diffs,
             environment_diffs,
         } = self;
 
         settings_diff.0 == settings_diff.1
             && permission_diffs.is_empty()
             && branch_protection_diffs.is_empty()
+            && ruleset_diffs.is_empty()
             && environment_diffs.is_empty()
     }
 
@@ -1063,6 +1306,10 @@ impl UpdateRepoDiff {
             branch_protection.apply(sync, &self.org, &self.name, &self.repo_node_id)?;
         }
 
+        for ruleset in &self.ruleset_diffs {
+            ruleset.apply(sync, &self.org, &self.name)?;
+        }
+
         for env_diff in &self.environment_diffs {
             match env_diff {
                 EnvironmentDiff::Create(name, env) => {
@@ -1070,12 +1317,9 @@ impl UpdateRepoDiff {
                 }
                 EnvironmentDiff::Update {
                     name,
-                    add_branches: _,
-                    remove_branches: _,
-                    add_tags: _,
-                    remove_tags: _,
                     new_branches,
                     new_tags,
+                    ..
                 } => {
                     sync.update_environment(&self.org, &self.name, name, new_branches, new_tags)?;
                 }
@@ -1106,6 +1350,7 @@ impl std::fmt::Display for UpdateRepoDiff {
             settings_diff,
             permission_diffs,
             branch_protection_diffs,
+            ruleset_diffs,
             environment_diffs,
         } = self;
 
@@ -1152,6 +1397,12 @@ impl std::fmt::Display for UpdateRepoDiff {
             writeln!(f, "  Branch Protections:")?;
             for branch_protection_diff in branch_protection_diffs {
                 write!(f, "{branch_protection_diff}")?;
+            }
+        }
+        if !ruleset_diffs.is_empty() {
+            writeln!(f, "  Rulesets:")?;
+            for ruleset_diff in ruleset_diffs {
+                write!(f, "{ruleset_diff}")?;
             }
         }
         if !environment_diffs.is_empty() {
@@ -1383,11 +1634,238 @@ fn log_branch_protection(
     Ok(())
 }
 
+fn log_ruleset(
+    current: &api::Ruleset,
+    new: Option<&api::Ruleset>,
+    mut result: impl Write,
+) -> std::fmt::Result {
+    macro_rules! log {
+        ($str:literal, $field:expr, $new_field:expr) => {
+            let old = $field;
+            let new_val = $new_field;
+            if Some(old) != new_val {
+                if let Some(n) = new_val {
+                    writeln!(result, "        {}: {:?} => {:?}", $str, old, n)?;
+                } else {
+                    writeln!(result, "        {}: {:?}", $str, old)?;
+                }
+            }
+        };
+    }
+
+    // Log basic ruleset properties
+    log!("Target", &current.target, new.map(|n| &n.target));
+    log!(
+        "Source Type",
+        &current.source_type,
+        new.map(|n| &n.source_type)
+    );
+    log!(
+        "Enforcement",
+        &current.enforcement,
+        new.map(|n| &n.enforcement)
+    );
+
+    // Log branch conditions
+    if let Some(conditions) = &current.conditions
+        && let Some(ref_name) = &conditions.ref_name
+    {
+        let new_ref_name = new.and_then(|n| n.conditions.as_ref()?.ref_name.as_ref());
+        if !ref_name.include.is_empty() {
+            log!(
+                "Include Branches",
+                &ref_name.include,
+                new_ref_name.map(|r| &r.include)
+            );
+        }
+        if !ref_name.exclude.is_empty() {
+            log!(
+                "Exclude Branches",
+                &ref_name.exclude,
+                new_ref_name.map(|r| &r.exclude)
+            );
+        }
+    }
+
+    // Log bypass actors
+    if let Some(bypass_actors) = &current.bypass_actors
+        && !bypass_actors.is_empty()
+    {
+        let new_bypass = new.and_then(|n| n.bypass_actors.as_ref());
+        log!("Bypass Actors", bypass_actors, new_bypass);
+    }
+
+    // Log individual rules
+    for rule in &current.rules {
+        match rule {
+            api::RulesetRule::Creation => {
+                writeln!(result, "        Rule: Creation")?;
+            }
+            api::RulesetRule::Update => {
+                writeln!(result, "        Rule: Update")?;
+            }
+            api::RulesetRule::Deletion => {
+                writeln!(result, "        Rule: Deletion")?;
+            }
+            api::RulesetRule::RequiredLinearHistory => {
+                writeln!(result, "        Rule: Required Linear History")?;
+            }
+            api::RulesetRule::RequiredSignatures => {
+                writeln!(result, "        Rule: Required Signatures")?;
+            }
+            api::RulesetRule::NonFastForward => {
+                writeln!(result, "        Rule: Non-Fast-Forward")?;
+            }
+            api::RulesetRule::MergeQueue { parameters } => {
+                writeln!(result, "        Rule: Merge Queue")?;
+                writeln!(
+                    result,
+                    "          Timeout: {} minutes",
+                    parameters.check_response_timeout_minutes
+                )?;
+                writeln!(
+                    result,
+                    "          Grouping Strategy: {:?}",
+                    parameters.grouping_strategy
+                )?;
+                writeln!(
+                    result,
+                    "          Merge Method: {:?}",
+                    parameters.merge_method
+                )?;
+                writeln!(
+                    result,
+                    "          Max Entries to Build: {}",
+                    parameters.max_entries_to_build
+                )?;
+                writeln!(
+                    result,
+                    "          Max Entries to Merge: {}",
+                    parameters.max_entries_to_merge
+                )?;
+                writeln!(
+                    result,
+                    "          Min Entries to Merge: {}",
+                    parameters.min_entries_to_merge
+                )?;
+                writeln!(
+                    result,
+                    "          Min Wait Time: {} minutes",
+                    parameters.min_entries_to_merge_wait_minutes
+                )?;
+            }
+            api::RulesetRule::PullRequest { parameters } => {
+                writeln!(result, "        Rule: Pull Request")?;
+                writeln!(
+                    result,
+                    "          Dismiss Stale Reviews: {}",
+                    parameters.dismiss_stale_reviews_on_push
+                )?;
+                writeln!(
+                    result,
+                    "          Require Code Owner Review: {}",
+                    parameters.require_code_owner_review
+                )?;
+                writeln!(
+                    result,
+                    "          Require Last Push Approval: {}",
+                    parameters.require_last_push_approval
+                )?;
+                writeln!(
+                    result,
+                    "          Required Approving Review Count: {}",
+                    parameters.required_approving_review_count
+                )?;
+                writeln!(
+                    result,
+                    "          Required Review Thread Resolution: {}",
+                    parameters.required_review_thread_resolution
+                )?;
+            }
+            api::RulesetRule::RequiredStatusChecks { parameters } => {
+                writeln!(result, "        Rule: Required Status Checks")?;
+                writeln!(
+                    result,
+                    "          Strict Policy: {}",
+                    parameters.strict_required_status_checks_policy
+                )?;
+                if !parameters.required_status_checks.is_empty() {
+                    let checks: Vec<_> = parameters
+                        .required_status_checks
+                        .iter()
+                        .map(|c| &c.context)
+                        .collect();
+                    writeln!(result, "          Checks: {:?}", checks)?;
+                }
+            }
+            api::RulesetRule::RequiredDeployments { parameters } => {
+                writeln!(result, "        Rule: Required Deployments")?;
+                writeln!(
+                    result,
+                    "          Environments: {:?}",
+                    parameters.required_deployment_environments
+                )?;
+            }
+        }
+    }
+
+    Ok(())
+}
+
 #[derive(Debug)]
 enum BranchProtectionDiffOperation {
     Create(api::BranchProtection),
     Update(String, api::BranchProtection, api::BranchProtection),
     Delete(String),
+}
+
+#[derive(Debug)]
+struct RulesetDiff {
+    name: String,
+    operation: RulesetDiffOperation,
+}
+
+impl RulesetDiff {
+    fn apply(&self, sync: &GitHubWrite, org: &str, repo_name: &str) -> anyhow::Result<()> {
+        use api::RulesetOp;
+        match &self.operation {
+            RulesetDiffOperation::Create(ruleset) => {
+                sync.upsert_ruleset(RulesetOp::CreateForRepo, org, repo_name, ruleset)?;
+            }
+            RulesetDiffOperation::Update(id, _, new_ruleset) => {
+                sync.upsert_ruleset(RulesetOp::UpdateRuleset(*id), org, repo_name, new_ruleset)?;
+            }
+            RulesetDiffOperation::Delete(id) => {
+                debug!(
+                    "Deleting ruleset '{}' (id: {}) on '{}/{}' as \
+                the ruleset is not in the team repo",
+                    self.name, id, org, repo_name
+                );
+                sync.delete_ruleset(org, repo_name, *id)?;
+            }
+        }
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for RulesetDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "      {}", self.name)?;
+        match &self.operation {
+            RulesetDiffOperation::Create(ruleset) => log_ruleset(ruleset, None, f),
+            RulesetDiffOperation::Update(_, old, new) => log_ruleset(old, Some(new), f),
+            RulesetDiffOperation::Delete(_) => {
+                writeln!(f, "        Deleting ruleset")
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
+enum RulesetDiffOperation {
+    Create(api::Ruleset),
+    Update(i64, api::Ruleset, api::Ruleset), // id, old, new
+    Delete(i64),
 }
 
 #[derive(Debug)]
