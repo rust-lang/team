@@ -69,6 +69,7 @@ jobs:
           # However, even without a token, we can actually read most of the crates.io state that we
           # need to print a diff.
           CRATES_IO_TOKEN: ""
+          CRATES_IO_USERNAME: "rust-lang-owner"
         # This applies pipefail, so that the tee pipeline below fails when sync-team fails.
         shell: bash
         run: |
