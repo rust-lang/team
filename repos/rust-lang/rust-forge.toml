@@ -28,4 +28,5 @@ pattern = "master"
 ci-checks = ["test"]
 
 [environments.github-pages]
+branches = ["master"]
 

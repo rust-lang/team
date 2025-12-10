@@ -18,4 +18,5 @@ ci-checks = [
 ]
 
 [environments.github-pages]
+branches = ["main"]
 

@@ -18,4 +18,5 @@ goals = "maintain"
 goal-owners = "maintain"
 
 [environments.github-pages]
+branches = ["main"]
 

@@ -18,4 +18,5 @@ pattern = "main"
 ci-checks = ["CI finished"]
 
 [environments.github-pages]
+branches = ["gh-readonly-queue/main/*", "main"]
 

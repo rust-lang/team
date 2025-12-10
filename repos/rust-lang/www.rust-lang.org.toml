@@ -11,6 +11,7 @@ website = "write"
 pattern = "main"
 
 [environments.github-pages]
+branches = ["main"]
 
 [environments.new-rust-www]
 

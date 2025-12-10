@@ -18,4 +18,5 @@ ci-checks = ["conclusion"]
 [environments.github-pages]
 
 [environments.release]
+branches = ["*"]
 

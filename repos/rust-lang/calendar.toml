@@ -21,4 +21,5 @@ pattern = "main"
 pr-required = false
 
 [environments.github-pages]
+branches = ["main"]
 

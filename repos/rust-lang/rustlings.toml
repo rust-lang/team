@@ -8,4 +8,5 @@ bots = []
 rustlings = "maintain"
 
 [environments.github-pages]
+branches = ["gh-pages", "main"]
 

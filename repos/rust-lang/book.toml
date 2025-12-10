@@ -13,4 +13,5 @@ ci-checks = []
 required-approvals = 0
 
 [environments.github-pages]
+branches = ["gh-pages"]
 

@@ -18,4 +18,5 @@ required-approvals = 0
 branches = ["main"]
 
 [environments.staging]
+branches = ["main"]
 

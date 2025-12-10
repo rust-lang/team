@@ -7,4 +7,5 @@ bots = []
 wg-polonius = "write"
 
 [environments.github-pages]
+branches = ["master"]
 

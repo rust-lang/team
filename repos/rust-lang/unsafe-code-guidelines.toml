@@ -8,4 +8,5 @@ bots = ["rustbot", "rfcbot"]
 opsem = 'maintain'
 
 [environments.github-pages]
+branches = ["master"]
 

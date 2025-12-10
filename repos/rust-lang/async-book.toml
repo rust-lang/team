@@ -8,4 +8,5 @@ bots = []
 wg-async = "write"
 
 [environments.github-pages]
+branches = ["master"]
 

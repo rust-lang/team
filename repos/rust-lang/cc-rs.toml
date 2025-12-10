@@ -20,4 +20,5 @@ environment = "publish"
 [environments.github-pages]
 
 [environments.publish]
+branches = ["main"]
 

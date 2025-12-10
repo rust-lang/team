@@ -10,4 +10,5 @@ wg-macros = "maintain"
 pattern = "main"
 
 [environments.github-pages]
+branches = ["main"]
 

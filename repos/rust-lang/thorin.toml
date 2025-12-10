@@ -15,4 +15,5 @@ workflow-filename = "release-plz.yml"
 environment = "publish"
 
 [environments.publish]
+branches = ["main"]
 
