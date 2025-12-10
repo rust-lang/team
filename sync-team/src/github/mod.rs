@@ -859,24 +859,24 @@ pub fn construct_ruleset(
     }
 
     // Add required status checks if any
-    if let BranchProtectionMode::PrRequired { ci_checks, .. } = &branch_protection_mode {
-        if !ci_checks.is_empty() {
-            let mut checks = ci_checks.clone();
-            checks.sort();
-            rules.push(RulesetRule::RequiredStatusChecks {
-                parameters: RequiredStatusChecksParameters {
-                    do_not_enforce_on_create: Some(false),
-                    required_status_checks: checks
-                        .iter()
-                        .map(|context| RequiredStatusCheck {
-                            context: context.clone(),
-                            integration_id: None,
-                        })
-                        .collect(),
-                    strict_required_status_checks_policy: false,
-                },
-            });
-        }
+    if let BranchProtectionMode::PrRequired { ci_checks, .. } = &branch_protection_mode
+        && !ci_checks.is_empty()
+    {
+        let mut checks = ci_checks.clone();
+        checks.sort();
+        rules.push(RulesetRule::RequiredStatusChecks {
+            parameters: RequiredStatusChecksParameters {
+                do_not_enforce_on_create: Some(false),
+                required_status_checks: checks
+                    .iter()
+                    .map(|context| RequiredStatusCheck {
+                        context: context.clone(),
+                        integration_id: None,
+                    })
+                    .collect(),
+                strict_required_status_checks_policy: false,
+            },
+        });
     }
 
     // Enable merge queue with default settings
