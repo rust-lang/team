@@ -21,6 +21,7 @@ const USER_AGENT: &str = "rust-lang teams sync (https://github.com/rust-lang/syn
 pub struct Config {
     pub special_org_members: BTreeSet<String>,
     pub independent_github_orgs: BTreeSet<String>,
+    pub enable_rulesets_repos: BTreeSet<String>,
 }
 
 pub fn run_sync_team(

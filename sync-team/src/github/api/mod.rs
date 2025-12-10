@@ -479,3 +479,157 @@ pub(crate) struct RepoSettings {
     pub archived: bool,
     pub auto_merge_enabled: bool,
 }
+
+/// GitHub Repository Ruleset
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub(crate) struct Ruleset {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) id: Option<i64>,
+    pub(crate) name: String,
+    pub(crate) target: RulesetTarget,
+    pub(crate) source_type: RulesetSourceType,
+    pub(crate) enforcement: RulesetEnforcement,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) bypass_actors: Option<Vec<RulesetBypassActor>>,
+    pub(crate) conditions: RulesetConditions,
+    pub(crate) rules: Vec<RulesetRule>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum RulesetTarget {
+    Branch,
+    Tag,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum RulesetSourceType {
+    Repository,
+    Organization,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum RulesetEnforcement {
+    Active,
+    Disabled,
+    Evaluate,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub(crate) struct RulesetBypassActor {
+    pub(crate) actor_id: i64,
+    pub(crate) actor_type: RulesetActorType,
+    pub(crate) bypass_mode: RulesetBypassMode,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub(crate) enum RulesetActorType {
+    Integration,
+    OrganizationAdmin,
+    RepositoryRole,
+    Team,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum RulesetBypassMode {
+    Always,
+    PullRequest,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub(crate) struct RulesetConditions {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) ref_name: Option<RulesetRefNameCondition>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub(crate) struct RulesetRefNameCondition {
+    pub(crate) include: Vec<String>,
+    pub(crate) exclude: Vec<String>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[serde(tag = "type", rename_all = "snake_case")]
+pub(crate) enum RulesetRule {
+    Creation,
+    Update,
+    Deletion,
+    RequiredLinearHistory,
+    MergeQueue {
+        parameters: MergeQueueParameters,
+    },
+    RequiredDeployments {
+        parameters: RequiredDeploymentsParameters,
+    },
+    RequiredSignatures,
+    PullRequest {
+        parameters: PullRequestParameters,
+    },
+    RequiredStatusChecks {
+        parameters: RequiredStatusChecksParameters,
+    },
+    NonFastForward,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub(crate) struct MergeQueueParameters {
+    pub(crate) check_response_timeout_minutes: i32,
+    pub(crate) grouping_strategy: MergeQueueGroupingStrategy,
+    pub(crate) max_entries_to_build: i32,
+    pub(crate) max_entries_to_merge: i32,
+    pub(crate) merge_method: MergeQueueMergeMethod,
+    pub(crate) min_entries_to_merge: i32,
+    pub(crate) min_entries_to_merge_wait_minutes: i32,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub(crate) enum MergeQueueGroupingStrategy {
+    Allgreen,
+    Headgreen,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub(crate) enum MergeQueueMergeMethod {
+    Merge,
+    Squash,
+    Rebase,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub(crate) struct RequiredDeploymentsParameters {
+    pub(crate) required_deployment_environments: Vec<String>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub(crate) struct PullRequestParameters {
+    pub(crate) dismiss_stale_reviews_on_push: bool,
+    pub(crate) require_code_owner_review: bool,
+    pub(crate) require_last_push_approval: bool,
+    pub(crate) required_approving_review_count: i32,
+    pub(crate) required_review_thread_resolution: bool,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub(crate) struct RequiredStatusChecksParameters {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) do_not_enforce_on_create: Option<bool>,
+    pub(crate) required_status_checks: Vec<RequiredStatusCheck>,
+    pub(crate) strict_required_status_checks_policy: bool,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub(crate) struct RequiredStatusCheck {
+    pub(crate) context: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) integration_id: Option<i64>,
+}
+
+pub(crate) enum RulesetOp {
+    CreateForRepo,
+    UpdateRuleset(i64),
+}

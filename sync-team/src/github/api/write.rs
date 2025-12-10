@@ -766,4 +766,53 @@ impl GitHubWrite {
         }
         Ok(())
     }
+
+    /// Create or update a ruleset for a repository
+    pub(crate) fn upsert_ruleset(
+        &self,
+        op: crate::github::api::RulesetOp,
+        org: &str,
+        repo: &str,
+        ruleset: &crate::github::api::Ruleset,
+    ) -> anyhow::Result<()> {
+        use crate::github::api::RulesetOp;
+
+        match op {
+            RulesetOp::CreateForRepo => {
+                debug!("Creating ruleset '{}' in '{}/{}'", ruleset.name, org, repo);
+                if !self.dry_run {
+                    // REST API: POST /repos/{owner}/{repo}/rulesets
+                    // https://docs.github.com/en/rest/repos/rules#create-a-repository-ruleset
+                    let url = GitHubUrl::repos(org, repo, "rulesets")?;
+                    self.client.send(Method::POST, &url, ruleset)?;
+                }
+            }
+            RulesetOp::UpdateRuleset(id) => {
+                debug!(
+                    "Updating ruleset '{}' (id: {}) in '{}/{}'",
+                    ruleset.name, id, org, repo
+                );
+                if !self.dry_run {
+                    // REST API: PUT /repos/{owner}/{repo}/rulesets/{ruleset_id}
+                    // https://docs.github.com/en/rest/repos/rules#update-a-repository-ruleset
+                    let url = GitHubUrl::repos(org, repo, &format!("rulesets/{}", id))?;
+                    self.client.send(Method::PUT, &url, ruleset)?;
+                }
+            }
+        }
+        Ok(())
+    }
+
+    /// Delete a ruleset from a repository
+    pub(crate) fn delete_ruleset(&self, org: &str, repo: &str, id: i64) -> anyhow::Result<()> {
+        debug!("Deleting ruleset id {} from '{}/{}'", id, org, repo);
+        if !self.dry_run {
+            // REST API: DELETE /repos/{owner}/{repo}/rulesets/{ruleset_id}
+            // https://docs.github.com/en/rest/repos/rules#delete-a-repository-ruleset
+            let url = GitHubUrl::repos(org, repo, &format!("rulesets/{}", id))?;
+            self.client
+                .send(Method::DELETE, &url, &serde_json::json!({}))?;
+        }
+        Ok(())
+    }
 }
