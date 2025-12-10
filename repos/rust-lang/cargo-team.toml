@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "cargo-team"
+description = "Coordination repository for the Cargo team"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+cargo = "write"
