@@ -10,3 +10,7 @@ infra = "write"
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["rustup-available-packages"]
+teams = []

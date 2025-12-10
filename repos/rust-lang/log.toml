@@ -13,3 +13,7 @@ Thomasdezeeuw = 'maintain'
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["log"]
+teams = ["log-owners", "libs"]

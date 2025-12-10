@@ -16,3 +16,7 @@ required-approvals = 0
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["hashbrown"]
+teams = []

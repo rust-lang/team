@@ -5,3 +5,7 @@ bots = ["rustbot"]
 
 [access.teams]
 rustdoc = "write"
+
+[[crates-io-publishing]]
+crates = ["rustdoc-types"]
+teams = ["rustdoc"]

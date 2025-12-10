@@ -15,3 +15,7 @@ required-approvals = 0
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["git2", "git2-curl", "libgit2-sys"]
+teams = []

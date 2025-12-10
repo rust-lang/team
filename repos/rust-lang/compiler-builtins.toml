@@ -10,3 +10,7 @@ crate-maintainers = "maintain"
 pattern = "main"
 ci-checks = ["success"]
 required-approvals = 0
+
+[[crates-io-publishing]]
+crates = ["compiler_builtins", "libm"]
+teams = ["libs"]

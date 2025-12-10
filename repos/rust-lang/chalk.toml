@@ -10,3 +10,7 @@ types = "write"
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["chalk-derive", "chalk-engine", "chalk-ir", "chalk-recursive", "chalk-solve"]
+teams = []

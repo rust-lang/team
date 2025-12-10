@@ -5,3 +5,7 @@ bots = []
 
 [access.teams]
 rust-analyzer = "write"
+
+[[crates-io-publishing]]
+crates = ["rowan"]
+teams = ["review"]

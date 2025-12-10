@@ -8,3 +8,7 @@ compiler = "write"
 
 [[branch-protections]]
 pattern = "main"
+
+[[crates-io-publishing]]
+crates = ["rustc-stable-hash"]
+teams = ["compiler"]

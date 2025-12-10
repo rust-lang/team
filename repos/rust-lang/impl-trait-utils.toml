@@ -8,3 +8,7 @@ wg-async = "maintain"
 
 [[branch-protections]]
 pattern = "main"
+
+[[crates-io-publishing]]
+crates = ["trait-variant"]
+teams = []

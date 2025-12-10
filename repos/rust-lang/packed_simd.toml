@@ -13,3 +13,7 @@ project-portable-simd = "write"
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["packed_simd", "packed_simd_2"]
+teams = []

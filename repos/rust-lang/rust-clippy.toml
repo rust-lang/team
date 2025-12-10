@@ -21,3 +21,11 @@ required-approvals = 0
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["clippy_config", "clippy_utils"]
+teams = []
+
+[[crates-io-publishing]]
+crates = ["rustc_tools_util"]
+teams = ["clippy"]

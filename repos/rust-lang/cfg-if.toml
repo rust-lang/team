@@ -9,3 +9,7 @@ crate-maintainers = 'maintain'
 [[environments]]
 name = "github-pages"
 
+
+[[crates-io-publishing]]
+crates = ["cfg-if"]
+teams = ["libs"]
