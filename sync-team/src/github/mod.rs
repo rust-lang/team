@@ -391,8 +391,7 @@ impl SyncGitHub {
         let permission_diffs = self.diff_permissions(expected_repo)?;
 
         // Always diff branch protections
-        let branch_protection_diffs =
-            self.diff_branch_protections(&actual_repo, expected_repo)?;
+        let branch_protection_diffs = self.diff_branch_protections(&actual_repo, expected_repo)?;
 
         // Additionally diff rulesets if configured
         let ruleset_diffs = if self.should_use_rulesets(expected_repo) {
