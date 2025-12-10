@@ -602,6 +602,15 @@ impl GithubRead for GithubMock {
         Ok(result)
     }
 
+    fn repo_rulesets(
+        &self,
+        _org: &str,
+        _repo: &str,
+    ) -> anyhow::Result<Vec<crate::github::api::Ruleset>> {
+        // Return empty list for tests - rulesets not used in mock tests yet
+        Ok(Vec::new())
+    }
+
     fn repo_environments(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Environment>> {
         Ok(self
             .get_org(org)

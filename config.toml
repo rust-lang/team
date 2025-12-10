@@ -80,3 +80,7 @@ members-without-zulip-id = [
     "therealprof",
     "zeenix"
 ]
+
+enable-rulesets-repos = [
+   "rust-lang/bors"
+]
