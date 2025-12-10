@@ -3,7 +3,7 @@ mod api;
 use crate::team_api::TeamApi;
 use std::cmp::Ordering;
 
-use crate::crates_io::api::{CratesIoApi, TrustedPublishingGitHubConfig};
+use crate::crates_io::api::{CratesIoApi, CratesIoCrate, TrustedPublishingGitHubConfig, UserId};
 use anyhow::Context;
 use secrecy::SecretString;
 use std::collections::HashMap;
@@ -31,15 +31,20 @@ struct CrateConfig {
 pub(crate) struct SyncCratesIo {
     crates_io_api: CratesIoApi,
     crates: HashMap<CrateName, CrateConfig>,
+    user_id: UserId,
+    username: String,
 }
 
 impl SyncCratesIo {
     pub(crate) fn new(
         token: SecretString,
+        username: String,
         team_api: &TeamApi,
         dry_run: bool,
     ) -> anyhow::Result<Self> {
         let crates_io_api = CratesIoApi::new(token, dry_run);
+        let user_id = crates_io_api.get_user_id(&username)?;
+
         let crates: HashMap<CrateName, CrateConfig> = team_api
             .get_repos()?
             .into_iter()
@@ -69,6 +74,8 @@ impl SyncCratesIo {
         Ok(Self {
             crates_io_api,
             crates,
+            user_id,
+            username,
         })
     }
 
@@ -77,6 +84,31 @@ impl SyncCratesIo {
         let mut crate_diffs: Vec<CrateDiff> = vec![];
 
         let is_ci_dry_run = std::env::var("CI").is_ok() && self.crates_io_api.is_dry_run();
+        let mut tp_configs = if is_ci_dry_run {
+            HashMap::new()
+        } else {
+            let tp_configs = self
+                .crates_io_api
+                .list_trusted_publishing_github_configs(self.user_id)
+                .with_context(|| {
+                    format!("Failed to list configs for user_id `{:?}`", self.user_id)
+                })?;
+            let tp_configs: HashMap<String, Vec<TrustedPublishingGitHubConfig>> = tp_configs
+                .into_iter()
+                .fold(HashMap::new(), |mut map, config| {
+                    map.entry(config.krate.clone()).or_default().push(config);
+                    map
+                });
+            tp_configs
+        };
+
+        // Batch load all crates owned by the current user
+        let crates: HashMap<String, CratesIoCrate> = self
+            .crates_io_api
+            .get_crates_owned_by(self.user_id)?
+            .into_iter()
+            .map(|krate| (krate.name.clone(), krate))
+            .collect();
 
         // Note: we currently only support one trusted publishing configuration per crate
         for (krate, desired) in &self.crates {
@@ -85,15 +117,15 @@ impl SyncCratesIo {
             // to enable doing a crates.io dry-run without a privileged token.
             // Because crates.io does not currently support read-only token
             if !is_ci_dry_run {
-                let mut configs = self
-                    .crates_io_api
-                    .list_trusted_publishing_github_configs(&krate.0)
-                    .with_context(|| format!("Failed to list configs for crate '{}'", krate.0))?;
+                let mut empty_vec = vec![];
+                let configs = tp_configs.get_mut(&krate.0).unwrap_or(&mut empty_vec);
 
-                // Find if there are config(s) that match what we need
+                // Find if there are config(s) that match what we need and remove them from the list
+                // of found configs.
                 let matching_configs = configs
                     .extract_if(.., |config| {
                         let TrustedPublishingGitHubConfig {
+                            krate: _,
                             id: _,
                             repository_owner,
                             repository_name,
@@ -118,20 +150,27 @@ impl SyncCratesIo {
                 }
 
                 // Non-matching configs should be deleted
-                config_diffs.extend(configs.into_iter().map(ConfigDiff::Delete));
+                config_diffs.extend(configs.iter_mut().map(|c| ConfigDiff::Delete(c.clone())));
             }
 
-            let trusted_publish_only_expected = desired.trusted_publishing_only;
-            let crates_io_crate = self
-                .crates_io_api
-                .get_crate(&krate.0)
-                .with_context(|| anyhow::anyhow!("Cannot load crate {krate}"))?;
-            if crates_io_crate.trusted_publishing_only != trusted_publish_only_expected {
+            let Some(crates_io_crate) = crates.get(&krate.0) else {
+                return Err(anyhow::anyhow!(
+                    "Crate `{krate}` is not owned by user `{0}`. Please invite `{0}` to be its owner.",
+                    self.username
+                ));
+            };
+            if crates_io_crate.trusted_publishing_only != desired.trusted_publishing_only {
                 crate_diffs.push(CrateDiff::SetTrustedPublishingOnly {
                     krate: krate.to_string(),
-                    value: trusted_publish_only_expected,
+                    value: desired.trusted_publishing_only,
                 });
             }
+        }
+
+        // If any trusted publishing configs remained in the hashmap, they are leftover and should
+        // be removed.
+        for config in tp_configs.into_values().flatten() {
+            config_diffs.push(ConfigDiff::Delete(config));
         }
 
         // We want to apply deletions first, and only then create new configs, to ensure that we
