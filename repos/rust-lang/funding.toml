@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "funding"
+description = "Discussions about funding Rust maintainers"
+bots = ["rfcbot"]
+
+[access.teams]
+leadership-council = "write"
