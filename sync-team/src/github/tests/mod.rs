@@ -984,14 +984,14 @@ fn repo_environment_create() {
                 permission_diffs: [],
                 branch_protection_diffs: [],
                 environment_diffs: [
-                    Create(
-                        "production",
-                        [],
-                    ),
-                    Create(
-                        "staging",
-                        [],
-                    ),
+                    Create {
+                        name: "production",
+                        branches: [],
+                    },
+                    Create {
+                        name: "staging",
+                        branches: [],
+                    },
                 ],
             },
         ),
@@ -1036,12 +1036,12 @@ fn repo_environment_delete() {
                 permission_diffs: [],
                 branch_protection_diffs: [],
                 environment_diffs: [
-                    Delete(
-                        "production",
-                    ),
-                    Delete(
-                        "staging",
-                    ),
+                    Delete {
+                        name: "production",
+                    },
+                    Delete {
+                        name: "staging",
+                    },
                 ],
             },
         ),
@@ -1095,13 +1095,13 @@ fn repo_environment_update() {
                 permission_diffs: [],
                 branch_protection_diffs: [],
                 environment_diffs: [
-                    Create(
-                        "dev",
-                        [],
-                    ),
-                    Delete(
-                        "staging",
-                    ),
+                    Create {
+                        name: "dev",
+                        branches: [],
+                    },
+                    Delete {
+                        name: "staging",
+                    },
                 ],
             },
         ),
@@ -1150,17 +1150,19 @@ fn repo_environment_update_branches() {
                 permission_diffs: [],
                 branch_protection_diffs: [],
                 environment_diffs: [
-                    Update(
-                        "production",
-                        [
-                            "main",
+                    Update {
+                        name: "production",
+                        add_branches: [
+                            "stable",
+                        ],
+                        remove_branches: [
                             "release/*",
                         ],
-                        [
+                        new_branches: [
                             "main",
                             "stable",
                         ],
-                    ),
+                    },
                 ],
             },
         ),
