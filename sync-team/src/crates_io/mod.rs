@@ -271,7 +271,7 @@ impl std::fmt::Display for ConfigDiff {
             ConfigDiff::Create(config) => {
                 writeln!(
                     f,
-                    "  Creating trusted publishing config for krate `{}`",
+                    "  Creating trusted publishing config for crate `{}`",
                     config.krate.0
                 )?;
                 writeln!(f, "    Repo: {}/{}", config.repo_org, config.repo_name)?;
@@ -281,8 +281,8 @@ impl std::fmt::Display for ConfigDiff {
             ConfigDiff::Delete(config) => {
                 writeln!(
                     f,
-                    "  Deleting trusted publishing config with ID {}",
-                    config.id
+                    "  Deleting trusted publishing config for crate `{}` (ID {})",
+                    config.krate, config.id
                 )?;
                 writeln!(
                     f,
