@@ -1,0 +1,20 @@
+name = "rfmf-design-committee"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "joshtriplett",
+    "Kobzol",
+    "lcnr",
+    "LoriLorusso",
+    "nikomatsakis",
+    "tmandry",
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "T-rfmf-committee"
