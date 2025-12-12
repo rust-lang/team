@@ -14,6 +14,6 @@ crates = ["thorin-dwp", "thorin-dwp-bin"]
 workflow-filename = "release-plz.yml"
 environment = "publish"
 
-[[environments]]
-name = "publish"
+[environments.publish]
+branches = ["main"]
 

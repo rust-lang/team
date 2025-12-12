@@ -10,6 +10,6 @@ wg-async = "write"
 [access.individuals]
 upsuper = "write"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = ["master"]
 

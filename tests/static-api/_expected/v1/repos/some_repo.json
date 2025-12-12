@@ -51,7 +51,7 @@
       "trusted_publishing_only": true
     }
   ],
-  "environments": [],
+  "environments": {},
   "archived": false,
   "private": false,
   "auto_merge_enabled": true

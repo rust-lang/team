@@ -500,8 +500,37 @@ fn run() -> Result<(), Error> {
                 let repo_name = format!("{}/{}", repo.org, repo.name);
                 if !repo.environments.is_empty() {
                     println!("{repo_name}:");
-                    for env in &repo.environments {
-                        println!("  - {}", env.name);
+                    for (env_name, env) in &repo.environments {
+                        print!("  - {env_name}");
+
+                        // Show branches if present
+                        if !env.branch.is_empty() {
+                            print!(" (branches: {})", env.branch.join(", "));
+                        }
+
+                        // Show tags if present
+                        if !env.tag.is_empty() {
+                            print!(" (tags: {})", env.tag.join(", "));
+                        }
+
+                        // Fallback to legacy fields for backwards compatibility
+                        if env.branch.is_empty() && env.tag.is_empty() {
+                            if let Some(patterns) = &env.deployment_patterns {
+                                if !patterns.is_empty() {
+                                    let patterns_str: Vec<String> = patterns
+                                        .iter()
+                                        .map(|p| format!("{} ({})", p.name, p.pattern_type))
+                                        .collect();
+                                    print!(" (legacy patterns: {})", patterns_str.join(", "));
+                                }
+                            } else if let Some(branches) = &env.branches {
+                                if !branches.is_empty() {
+                                    print!(" (legacy branches: {})", branches.join(", "));
+                                }
+                            }
+                        }
+
+                        println!();
                     }
                 } else {
                     println!("{repo_name}: (no environments)");

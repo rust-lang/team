@@ -9,6 +9,6 @@ lang-ops = "maintain"
 lang-docs = "maintain"
 types = "maintain"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = ["main"]
 
