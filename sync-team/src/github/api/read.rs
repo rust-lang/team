@@ -55,6 +55,14 @@ pub(crate) trait GithubRead {
     /// Get environments for a repository
     /// Returns a list of environment names
     fn repo_environments(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Environment>>;
+
+    /// Get rulesets for a repository
+    /// Returns a vector of rulesets
+    fn repo_rulesets(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<Vec<crate::github::api::Ruleset>>;
 }
 
 pub(crate) struct GitHubApiRead {
@@ -463,5 +471,36 @@ impl GithubRead for GitHubApiRead {
         )?;
 
         Ok(environments)
+    }
+
+    fn repo_rulesets(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<Vec<crate::github::api::Ruleset>> {
+        use crate::github::api::Ruleset;
+
+        #[derive(serde::Deserialize)]
+        struct RulesetsResponse {
+            #[serde(default)]
+            rulesets: Vec<Ruleset>,
+        }
+
+        let mut rulesets: Vec<Ruleset> = Vec::new();
+
+        // REST API endpoint for rulesets
+        // https://docs.github.com/en/rest/repos/rules#get-all-repository-rulesets
+        self.client.rest_paginated(
+            &Method::GET,
+            &GitHubUrl::repos(org, repo, "rulesets")?,
+            |resp: RulesetsResponse| {
+                for ruleset in resp.rulesets {
+                    rulesets.push(ruleset);
+                }
+                Ok(())
+            },
+        )?;
+
+        Ok(rulesets)
     }
 }
