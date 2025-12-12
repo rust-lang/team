@@ -166,17 +166,8 @@ impl<'a> Generator<'a> {
                         .environments
                         .iter()
                         .map(|(name, env)| {
-                            let mut branches = env.branch.clone();
-                            let mut tags = env.tag.clone();
-
-                            // Legacy support: merge old "branches" field into branch array
-                            if let Some(legacy_branches) = &env.branches {
-                                for b in legacy_branches {
-                                    if !branches.contains(b) {
-                                        branches.push(b.clone());
-                                    }
-                                }
-                            }
+                            let mut branches = env.branches.clone();
+                            let mut tags = env.tags.clone();
 
                             // Legacy support: convert old deployment-patterns into branch/tag arrays
                             if let Some(patterns) = &env.deployment_patterns {

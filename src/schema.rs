@@ -887,13 +887,12 @@ pub(crate) struct CratesIoPublishing {
 #[derive(serde_derive::Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Environment {
+    /// Branch patterns that can deploy to this environment
     #[serde(default)]
-    pub branch: Vec<String>,
+    pub branches: Vec<String>,
+    /// Tag patterns that can deploy to this environment
     #[serde(default)]
-    pub tag: Vec<String>,
-    /// Legacy field for backwards compatibility (old "branches" field)
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub branches: Option<Vec<String>>,
+    pub tags: Vec<String>,
     /// Legacy field for backwards compatibility (old deployment-patterns)
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub deployment_patterns: Option<Vec<LegacyDeploymentPattern>>,

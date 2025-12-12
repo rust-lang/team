@@ -1072,7 +1072,7 @@ fn validate_environments(data: &Data, errors: &mut Vec<String>) {
             let mut seen_tags = HashSet::new();
 
             // Validate branch patterns (new field)
-            for branch in &env.branch {
+            for branch in &env.branches {
                 if branch.is_empty() {
                     bail!(
                         "repo {}/{} environment '{}' has an empty branch pattern",
@@ -1093,7 +1093,7 @@ fn validate_environments(data: &Data, errors: &mut Vec<String>) {
             }
 
             // Validate tag patterns (new field)
-            for tag in &env.tag {
+            for tag in &env.tags {
                 if tag.is_empty() {
                     bail!(
                         "repo {}/{} environment '{}' has an empty tag pattern",
@@ -1113,29 +1113,7 @@ fn validate_environments(data: &Data, errors: &mut Vec<String>) {
                 }
             }
 
-            // Handle legacy fields for backwards compatibility
-            if let Some(branches) = &env.branches {
-                for branch in branches {
-                    if branch.is_empty() {
-                        bail!(
-                            "repo {}/{} environment '{}' has an empty branch name (legacy field)",
-                            repo.org,
-                            repo.name,
-                            env_name
-                        );
-                    }
-                    if !seen_branches.insert(branch) {
-                        bail!(
-                            "repo {}/{} environment '{}' has duplicate branch name '{}' (legacy field)",
-                            repo.org,
-                            repo.name,
-                            env_name,
-                            branch
-                        );
-                    }
-                }
-            }
-
+            // Handle legacy deployment-patterns field for backwards compatibility
             if let Some(patterns) = &env.deployment_patterns {
                 for pattern in patterns {
                     if pattern.name.is_empty() {

@@ -441,24 +441,20 @@ GitHub environments are used to configure deployment protection rules and secret
 [environments.production]
 # List of branch patterns that can deploy to this environment (optional)
 # If empty or omitted, any branch can deploy
-branch = ["main", "release/*"]
+branches = ["main", "release/*"]
 # List of tag patterns that can deploy to this environment (optional)
-tag = ["v*", "release-*"]
+tags = ["v*", "release-*"]
 
 [environments.staging]
 # Only specific branches can deploy to staging
-branch = ["develop", "staging"]
+branches = ["develop", "staging"]
 # No tag patterns specified - no tags can deploy
 
 [environments.development]
 # No branch or tag patterns specified - any branch or tag can deploy
 
 ## Legacy syntax (still supported for backwards compatibility):
-# The old "branches" and "deployment-patterns" fields are still supported
-# and will be automatically merged with the new "branch" and "tag" fields
-[environments.legacy-example]
-branches = ["main", "stable"]  # Old style - treated as branch patterns
-
+# The old "deployment-patterns" field is still supported
 [environments.legacy-patterns]
 deployment-patterns = [
     { name = "main", type = "branch" },

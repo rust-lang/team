@@ -504,17 +504,17 @@ fn run() -> Result<(), Error> {
                         print!("  - {env_name}");
 
                         // Show branches if present
-                        if !env.branch.is_empty() {
-                            print!(" (branches: {})", env.branch.join(", "));
+                        if !env.branches.is_empty() {
+                            print!(" (branches: {})", env.branches.join(", "));
                         }
 
                         // Show tags if present
-                        if !env.tag.is_empty() {
-                            print!(" (tags: {})", env.tag.join(", "));
+                        if !env.tags.is_empty() {
+                            print!(" (tags: {})", env.tags.join(", "));
                         }
 
-                        // Fallback to legacy fields for backwards compatibility
-                        if env.branch.is_empty() && env.tag.is_empty() {
+                        // Fallback to legacy deployment-patterns field for backwards compatibility
+                        if env.branches.is_empty() && env.tags.is_empty() {
                             if let Some(patterns) = &env.deployment_patterns {
                                 if !patterns.is_empty() {
                                     let patterns_str: Vec<String> = patterns
@@ -522,10 +522,6 @@ fn run() -> Result<(), Error> {
                                         .map(|p| format!("{} ({})", p.name, p.pattern_type))
                                         .collect();
                                     print!(" (legacy patterns: {})", patterns_str.join(", "));
-                                }
-                            } else if let Some(branches) = &env.branches {
-                                if !branches.is_empty() {
-                                    print!(" (legacy branches: {})", branches.join(", "));
                                 }
                             }
                         }
