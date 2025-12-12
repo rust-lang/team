@@ -9,3 +9,7 @@ compiler = "write"
 [environments.publish]
 branches = ["*", "master"]
 
+[[crates-io-publishing]]
+crates = ["ar_archive_writer"]
+workflow-filename = "publish.yml"
+environment = "publish"

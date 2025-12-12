@@ -786,7 +786,9 @@ fn validate_present_zulip_id(data: &Data, errors: &mut Vec<String>) {
         data.active_members().unwrap().iter(),
         errors,
         |person, _| {
-            let person = data.person(person).expect("Person not found");
+            let Some(person) = data.person(person) else {
+                return Err(anyhow::anyhow!("Person {person} not found"));
+            };
             if person.zulip_id().is_none()
                 && !data
                     .config()

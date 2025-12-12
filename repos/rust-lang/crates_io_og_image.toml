@@ -14,3 +14,7 @@ pr-required = false
 
 [environments.release]
 
+[[crates-io-publishing]]
+crates = ["crates_io_og_image"]
+workflow-filename = "release.yml"
+environment = "release"
