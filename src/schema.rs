@@ -888,5 +888,21 @@ pub(crate) struct CratesIoPublishing {
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Environment {
     #[serde(default)]
-    pub branches: Vec<String>,
+    pub branch: Vec<String>,
+    #[serde(default)]
+    pub tag: Vec<String>,
+    /// Legacy field for backwards compatibility (old "branches" field)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub branches: Option<Vec<String>>,
+    /// Legacy field for backwards compatibility (old deployment-patterns)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub deployment_patterns: Option<Vec<LegacyDeploymentPattern>>,
+}
+
+#[derive(serde_derive::Deserialize, Debug, Clone)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub(crate) struct LegacyDeploymentPattern {
+    pub name: String,
+    #[serde(rename = "type")]
+    pub pattern_type: String,
 }

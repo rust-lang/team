@@ -166,12 +166,38 @@ impl<'a> Generator<'a> {
                         .environments
                         .iter()
                         .map(|(name, env)| {
-                            (
-                                name.clone(),
-                                v1::Environment {
-                                    branches: env.branches.clone(),
-                                },
-                            )
+                            let mut branches = env.branch.clone();
+                            let mut tags = env.tag.clone();
+
+                            // Legacy support: merge old "branches" field into branch array
+                            if let Some(legacy_branches) = &env.branches {
+                                for b in legacy_branches {
+                                    if !branches.contains(b) {
+                                        branches.push(b.clone());
+                                    }
+                                }
+                            }
+
+                            // Legacy support: convert old deployment-patterns into branch/tag arrays
+                            if let Some(patterns) = &env.deployment_patterns {
+                                for p in patterns {
+                                    match p.pattern_type.as_str() {
+                                        "branch" => {
+                                            if !branches.contains(&p.name) {
+                                                branches.push(p.name.clone());
+                                            }
+                                        }
+                                        "tag" => {
+                                            if !tags.contains(&p.name) {
+                                                tags.push(p.name.clone());
+                                            }
+                                        }
+                                        _ => {}
+                                    }
+                                }
+                            }
+
+                            (name.clone(), v1::Environment { branches, tags })
                         })
                         .collect();
                     envs.sort_by(|a, b| a.0.cmp(&b.0));

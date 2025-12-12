@@ -263,6 +263,8 @@ pub struct CratesIoPublishing {
 pub struct Environment {
     #[serde(default)]
     pub branches: Vec<String>,
+    #[serde(default)]
+    pub tags: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

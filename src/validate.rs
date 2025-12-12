@@ -1042,7 +1042,7 @@ fn validate_archived_repos(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
-/// Validate that environments have valid names (non-empty) and branches
+/// Validate that environments have valid names (non-empty) and deployment patterns
 fn validate_environments(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.all_repos(), errors, |repo, _| {
         for (env_name, env) in &repo.environments {
@@ -1067,12 +1067,15 @@ fn validate_environments(data: &Data, errors: &mut Vec<String>) {
                 );
             }
 
-            // Validate branch names are not empty and not duplicated
+            // Validate branch and tag patterns are not empty and not duplicated
             let mut seen_branches = HashSet::new();
-            for branch in &env.branches {
+            let mut seen_tags = HashSet::new();
+
+            // Validate branch patterns (new field)
+            for branch in &env.branch {
                 if branch.is_empty() {
                     bail!(
-                        "repo {}/{} environment '{}' has an empty branch name",
+                        "repo {}/{} environment '{}' has an empty branch pattern",
                         repo.org,
                         repo.name,
                         env_name
@@ -1080,12 +1083,85 @@ fn validate_environments(data: &Data, errors: &mut Vec<String>) {
                 }
                 if !seen_branches.insert(branch) {
                     bail!(
-                        "repo {}/{} environment '{}' has duplicate branch name '{}'",
+                        "repo {}/{} environment '{}' has duplicate branch pattern '{}'",
                         repo.org,
                         repo.name,
                         env_name,
                         branch
                     );
+                }
+            }
+
+            // Validate tag patterns (new field)
+            for tag in &env.tag {
+                if tag.is_empty() {
+                    bail!(
+                        "repo {}/{} environment '{}' has an empty tag pattern",
+                        repo.org,
+                        repo.name,
+                        env_name
+                    );
+                }
+                if !seen_tags.insert(tag) {
+                    bail!(
+                        "repo {}/{} environment '{}' has duplicate tag pattern '{}'",
+                        repo.org,
+                        repo.name,
+                        env_name,
+                        tag
+                    );
+                }
+            }
+
+            // Handle legacy fields for backwards compatibility
+            if let Some(branches) = &env.branches {
+                for branch in branches {
+                    if branch.is_empty() {
+                        bail!(
+                            "repo {}/{} environment '{}' has an empty branch name (legacy field)",
+                            repo.org,
+                            repo.name,
+                            env_name
+                        );
+                    }
+                    if !seen_branches.insert(branch) {
+                        bail!(
+                            "repo {}/{} environment '{}' has duplicate branch name '{}' (legacy field)",
+                            repo.org,
+                            repo.name,
+                            env_name,
+                            branch
+                        );
+                    }
+                }
+            }
+
+            if let Some(patterns) = &env.deployment_patterns {
+                for pattern in patterns {
+                    if pattern.name.is_empty() {
+                        bail!(
+                            "repo {}/{} environment '{}' has an empty deployment pattern name (legacy field)",
+                            repo.org,
+                            repo.name,
+                            env_name
+                        );
+                    }
+                    // Legacy patterns use string type, decide which set to check
+                    let seen_set = match pattern.pattern_type.as_str() {
+                        "branch" => &mut seen_branches,
+                        "tag" => &mut seen_tags,
+                        _ => continue, // Skip unknown types
+                    };
+                    if !seen_set.insert(&pattern.name) {
+                        bail!(
+                            "repo {}/{} environment '{}' has duplicate deployment pattern '{}' (type: {}, legacy field)",
+                            repo.org,
+                            repo.name,
+                            env_name,
+                            pattern.name,
+                            pattern.pattern_type
+                        );
+                    }
                 }
             }
         }

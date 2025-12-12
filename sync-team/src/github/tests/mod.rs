@@ -952,12 +952,18 @@ fn repo_environment_create() {
 
     model.get_repo("repo1").environments.insert(
         "production".to_string(),
-        v1::Environment { branches: vec![] },
+        v1::Environment {
+            branches: vec![],
+            tags: vec![],
+        },
     );
-    model
-        .get_repo("repo1")
-        .environments
-        .insert("staging".to_string(), v1::Environment { branches: vec![] });
+    model.get_repo("repo1").environments.insert(
+        "staging".to_string(),
+        v1::Environment {
+            branches: vec![],
+            tags: vec![],
+        },
+    );
 
     let diff = model.diff_repos(gh);
     insta::assert_debug_snapshot!(diff, @r#"
@@ -987,10 +993,12 @@ fn repo_environment_create() {
                     Create {
                         name: "production",
                         branches: [],
+                        tags: [],
                     },
                     Create {
                         name: "staging",
                         branches: [],
+                        tags: [],
                     },
                 ],
             },
@@ -1063,12 +1071,18 @@ fn repo_environment_update() {
     model.get_repo("repo1").environments.clear();
     model.get_repo("repo1").environments.insert(
         "production".to_string(),
-        v1::Environment { branches: vec![] },
+        v1::Environment {
+            branches: vec![],
+            tags: vec![],
+        },
     );
-    model
-        .get_repo("repo1")
-        .environments
-        .insert("dev".to_string(), v1::Environment { branches: vec![] });
+    model.get_repo("repo1").environments.insert(
+        "dev".to_string(),
+        v1::Environment {
+            branches: vec![],
+            tags: vec![],
+        },
+    );
 
     let diff = model.diff_repos(gh);
     insta::assert_debug_snapshot!(diff, @r#"
@@ -1098,6 +1112,7 @@ fn repo_environment_update() {
                     Create {
                         name: "dev",
                         branches: [],
+                        tags: [],
                     },
                     Delete {
                         name: "staging",
@@ -1122,6 +1137,7 @@ fn repo_environment_update_branches() {
         "production".to_string(),
         v1::Environment {
             branches: vec!["main".to_string(), "stable".to_string()],
+            tags: vec![],
         },
     );
 
@@ -1158,10 +1174,13 @@ fn repo_environment_update_branches() {
                         remove_branches: [
                             "release/*",
                         ],
+                        add_tags: [],
+                        remove_tags: [],
                         new_branches: [
                             "main",
                             "stable",
                         ],
+                        new_tags: [],
                     },
                 ],
             },

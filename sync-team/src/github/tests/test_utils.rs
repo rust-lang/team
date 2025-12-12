@@ -391,7 +391,13 @@ impl RepoDataBuilder {
 
     pub fn environment(mut self, name: &str) -> Self {
         let mut environments = self.environments.clone().unwrap_or_default();
-        environments.insert(name.to_string(), v1::Environment { branches: vec![] });
+        environments.insert(
+            name.to_string(),
+            v1::Environment {
+                branches: vec![],
+                tags: vec![],
+            },
+        );
         self.environments = Some(environments);
         self
     }
@@ -402,6 +408,7 @@ impl RepoDataBuilder {
             name.to_string(),
             v1::Environment {
                 branches: branches.iter().map(|s| s.to_string()).collect(),
+                tags: vec![],
             },
         );
         self.environments = Some(environments);
