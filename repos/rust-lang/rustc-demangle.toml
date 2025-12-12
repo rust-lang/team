@@ -17,6 +17,5 @@ ci-checks = [
     "Publish Documentation"
 ]
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

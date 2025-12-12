@@ -15,3 +15,6 @@ allowed-merge-teams = ["foo"]
 crates = ["my-crate", "my-crate-2"]
 workflow-filename = "ci.yml"
 environment = "deploy"
+
+[environments.deploy]
+

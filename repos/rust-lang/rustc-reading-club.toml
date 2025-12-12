@@ -5,6 +5,5 @@ bots = []
 
 [access.teams]
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

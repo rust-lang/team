@@ -6,8 +6,7 @@ bots = []
 [access.teams]
 compiler = "write"
 
-[[environments]]
-name = "publish"
+[environments.publish]
 
 [[crates-io-publishing]]
 crates = ["ar_archive_writer"]

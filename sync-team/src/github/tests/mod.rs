@@ -950,12 +950,14 @@ fn repo_environment_create() {
     model.create_repo(RepoData::new("repo1"));
     let gh = model.gh_model();
 
-    model.get_repo("repo1").environments.push(v1::Environment {
-        name: "production".to_string(),
-    });
-    model.get_repo("repo1").environments.push(v1::Environment {
-        name: "staging".to_string(),
-    });
+    model.get_repo("repo1").environments.insert(
+        "production".to_string(),
+        v1::Environment { branches: vec![] },
+    );
+    model
+        .get_repo("repo1")
+        .environments
+        .insert("staging".to_string(), v1::Environment { branches: vec![] });
 
     let diff = model.diff_repos(gh);
     insta::assert_debug_snapshot!(diff, @r#"
@@ -984,9 +986,11 @@ fn repo_environment_create() {
                 environment_diffs: [
                     Create(
                         "production",
+                        [],
                     ),
                     Create(
                         "staging",
+                        [],
                     ),
                 ],
             },
@@ -1056,14 +1060,15 @@ fn repo_environment_update() {
     let gh = model.gh_model();
 
     // Remove staging, keep production, add dev
-    model.get_repo("repo1").environments = vec![
-        v1::Environment {
-            name: "production".to_string(),
-        },
-        v1::Environment {
-            name: "dev".to_string(),
-        },
-    ];
+    model.get_repo("repo1").environments.clear();
+    model.get_repo("repo1").environments.insert(
+        "production".to_string(),
+        v1::Environment { branches: vec![] },
+    );
+    model
+        .get_repo("repo1")
+        .environments
+        .insert("dev".to_string(), v1::Environment { branches: vec![] });
 
     let diff = model.diff_repos(gh);
     insta::assert_debug_snapshot!(diff, @r#"
@@ -1092,6 +1097,7 @@ fn repo_environment_update() {
                 environment_diffs: [
                     Create(
                         "dev",
+                        [],
                     ),
                     Delete(
                         "staging",
