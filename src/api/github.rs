@@ -121,7 +121,7 @@ impl GitHubApi {
         T: serde::de::DeserializeOwned,
     {
         Ok(self
-            .prepare(true, Method::GET, url)?
+            .prepare(false, Method::GET, url)?
             .send()?
             .error_for_status()?
             .json()?)

@@ -188,7 +188,6 @@ struct UntrackedRepo {
 /// Check for untracked repositories and fail if any are found
 pub fn check_untracked_repos(data: &Data) -> anyhow::Result<()> {
     let github = crate::api::github::GitHubApi::new();
-    github.require_auth()?;
 
     // Get allowed GitHub organizations from config instead of hardcoding
     let orgs_to_monitor: Vec<&str> = data
