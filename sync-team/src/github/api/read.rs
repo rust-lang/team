@@ -470,6 +470,12 @@ impl GithubRead for GitHubApiRead {
         #[derive(serde::Deserialize)]
         struct BranchPolicy {
             name: String,
+            #[serde(rename = "type", default = "default_branch_type")]
+            pattern_type: String,
+        }
+
+        fn default_branch_type() -> String {
+            "branch".to_string()
         }
 
         #[derive(serde::Deserialize)]
@@ -501,8 +507,9 @@ impl GithubRead for GitHubApiRead {
                     .iter()
                     .any(|rule| rule.rule_type == "branch_policy");
 
-                let branches = if has_branch_policies {
+                let (branches, tags) = if has_branch_policies {
                     let mut branches = Vec::new();
+                    let mut tags = Vec::new();
                     self.client.rest_paginated(
                         &Method::GET,
                         &GitHubUrl::repos(
@@ -511,16 +518,21 @@ impl GithubRead for GitHubApiRead {
                             &format!("environments/{}/deployment-branch-policies", env_info.name),
                         )?,
                         |resp: BranchPoliciesResponse| {
-                            branches.extend(resp.branch_policies.into_iter().map(|p| p.name));
+                            for p in resp.branch_policies {
+                                match p.pattern_type.as_str() {
+                                    "tag" => tags.push(p.name),
+                                    _ => branches.push(p.name),
+                                }
+                            }
                             Ok(())
                         },
                     )?;
-                    branches
+                    (branches, tags)
                 } else {
-                    Vec::new()
+                    (Vec::new(), Vec::new())
                 };
 
-                Ok((env_info.name, Environment { branches }))
+                Ok((env_info.name, Environment { branches, tags }))
             })
             .collect()
     }

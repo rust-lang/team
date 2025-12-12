@@ -433,22 +433,37 @@ merge-bots = ["homu"]
 
 ### Repository environments
 
-GitHub environments are used to configure deployment protection rules and secrets for GitHub Actions workflows. This repository can manage environment names and deployment branch policies for repositories.
+GitHub environments are used to configure deployment protection rules and secrets for GitHub Actions workflows. This repository can manage environment names and deployment branch and tag policies for repositories.
 
 ```toml
 # The environments in this repository (optional)
 # Use table-of-tables syntax where the key is the environment name
 [environments.production]
-# List of branch names that can deploy to this environment (optional)
+# List of branch patterns that can deploy to this environment (optional)
 # If empty or omitted, any branch can deploy
-branches = ["main", "release/*"]
+branch = ["main", "release/*"]
+# List of tag patterns that can deploy to this environment (optional)
+tag = ["v*", "release-*"]
 
 [environments.staging]
-# Empty branches list means any branch can deploy
-branches = []
+# Only specific branches can deploy to staging
+branch = ["develop", "staging"]
+# No tag patterns specified - no tags can deploy
 
 [environments.development]
-# No branches specified - any branch can deploy
+# No branch or tag patterns specified - any branch or tag can deploy
+
+## Legacy syntax (still supported for backwards compatibility):
+# The old "branches" and "deployment-patterns" fields are still supported
+# and will be automatically merged with the new "branch" and "tag" fields
+[environments.legacy-example]
+branches = ["main", "stable"]  # Old style - treated as branch patterns
+
+[environments.legacy-patterns]
+deployment-patterns = [
+    { name = "main", type = "branch" },
+    { name = "v*", type = "tag" }
+]
 ```
 
 ### Crates.io trusted publishing

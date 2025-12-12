@@ -364,7 +364,7 @@ impl SyncGitHub {
                     environments: expected_repo
                         .environments
                         .iter()
-                        .map(|(name, env)| (name.clone(), env.branches.clone()))
+                        .map(|(name, env)| (name.clone(), env.clone()))
                         .collect(),
                 }));
             }
@@ -506,33 +506,49 @@ impl SyncGitHub {
         for (env_name, expected_env) in environments_to_process {
             match actual_environments.get(env_name) {
                 Some(actual_env) => {
-                    // Skip if branches are identical (order-independent comparison)
-                    if branches_equal(&actual_env.branches, &expected_env.branches) {
+                    // Skip if both branches and tags are identical (order-independent comparison)
+                    if patterns_equal(&actual_env.branches, &expected_env.branches)
+                        && patterns_equal(&actual_env.tags, &expected_env.tags)
+                    {
                         continue;
                     }
 
-                    // Environment exists but branches differ - compute what to add/remove
-                    let old_set: HashSet<_> = actual_env.branches.iter().collect();
-                    let new_set: HashSet<_> = expected_env.branches.iter().collect();
+                    // Environment exists but patterns differ - compute what to add/remove for branches
+                    let old_branches: HashSet<_> = actual_env.branches.iter().collect();
+                    let new_branches: HashSet<_> = expected_env.branches.iter().collect();
 
-                    let mut add_branches: Vec<_> = new_set
-                        .difference(&old_set)
-                        .map(|s| s.to_string())
+                    let mut add_branches: Vec<_> = new_branches
+                        .difference(&old_branches)
+                        .map(|&s| s.clone())
                         .collect();
-                    let mut remove_branches: Vec<_> = old_set
-                        .difference(&new_set)
-                        .map(|s| s.to_string())
+                    let mut remove_branches: Vec<_> = old_branches
+                        .difference(&new_branches)
+                        .map(|&s| s.clone())
                         .collect();
+
+                    // Compute what to add/remove for tags
+                    let old_tags: HashSet<_> = actual_env.tags.iter().collect();
+                    let new_tags: HashSet<_> = expected_env.tags.iter().collect();
+
+                    let mut add_tags: Vec<_> =
+                        new_tags.difference(&old_tags).map(|&s| s.clone()).collect();
+                    let mut remove_tags: Vec<_> =
+                        old_tags.difference(&new_tags).map(|&s| s.clone()).collect();
 
                     // Sort for deterministic output
                     add_branches.sort();
                     remove_branches.sort();
+                    add_tags.sort();
+                    remove_tags.sort();
 
                     environment_diffs.push(EnvironmentDiff::Update {
                         name: env_name.clone(),
                         add_branches,
                         remove_branches,
+                        add_tags,
+                        remove_tags,
                         new_branches: expected_env.branches.clone(),
+                        new_tags: expected_env.tags.clone(),
                     });
                 }
                 None => {
@@ -540,6 +556,7 @@ impl SyncGitHub {
                     environment_diffs.push(EnvironmentDiff::Create {
                         name: env_name.clone(),
                         branches: expected_env.branches.clone(),
+                        tags: expected_env.tags.clone(),
                     });
                 }
             }
@@ -571,8 +588,8 @@ impl SyncGitHub {
     }
 }
 
-/// Compare two branch lists for equality, ignoring order
-fn branches_equal(a: &[String], b: &[String]) -> bool {
+/// Compare two string lists for equality, ignoring order
+fn patterns_equal(a: &[String], b: &[String]) -> bool {
     if a.len() != b.len() {
         return false;
     }
@@ -906,7 +923,7 @@ struct CreateRepoDiff {
     settings: RepoSettings,
     permissions: Vec<RepoPermissionAssignmentDiff>,
     branch_protections: Vec<(String, api::BranchProtection)>,
-    environments: Vec<(String, Vec<String>)>,
+    environments: Vec<(String, rust_team_data::v1::Environment)>,
 }
 
 impl CreateRepoDiff {
@@ -925,8 +942,8 @@ impl CreateRepoDiff {
             .apply(sync, &self.org, &self.name, &repo.node_id)?;
         }
 
-        for (env_name, branches) in &self.environments {
-            sync.create_environment(&self.org, &self.name, env_name, branches)?;
+        for (env_name, env) in &self.environments {
+            sync.create_environment(&self.org, &self.name, env_name, &env.branches, &env.tags)?;
         }
 
         Ok(())
@@ -968,10 +985,13 @@ impl std::fmt::Display for CreateRepoDiff {
         }
         if !environments.is_empty() {
             writeln!(f, "  Environments:")?;
-            for (env_name, branches) in environments {
+            for (env_name, env) in environments {
                 writeln!(f, "    - {env_name}")?;
-                if !branches.is_empty() {
-                    writeln!(f, "        Branches: {}", branches.join(", "))?;
+                if !env.branches.is_empty() {
+                    writeln!(f, "        Branches: {}", env.branches.join(", "))?;
+                }
+                if !env.tags.is_empty() {
+                    writeln!(f, "        Tags: {}", env.tags.join(", "))?;
                 }
             }
         }
@@ -996,12 +1016,16 @@ enum EnvironmentDiff {
     Create {
         name: String,
         branches: Vec<String>,
+        tags: Vec<String>,
     },
     Update {
         name: String,
         add_branches: Vec<String>,
         remove_branches: Vec<String>,
+        add_tags: Vec<String>,
+        remove_tags: Vec<String>,
         new_branches: Vec<String>,
+        new_tags: Vec<String>,
     },
     Delete {
         name: String,
@@ -1065,16 +1089,23 @@ impl UpdateRepoDiff {
 
         for env_diff in &self.environment_diffs {
             match env_diff {
-                EnvironmentDiff::Create { name, branches } => {
-                    sync.create_environment(&self.org, &self.name, name, branches)?;
+                EnvironmentDiff::Create {
+                    name,
+                    branches,
+                    tags,
+                } => {
+                    sync.create_environment(&self.org, &self.name, name, branches, tags)?;
                 }
                 EnvironmentDiff::Update {
                     name,
                     add_branches: _,
                     remove_branches: _,
+                    add_tags: _,
+                    remove_tags: _,
                     new_branches,
+                    new_tags,
                 } => {
-                    sync.update_environment(&self.org, &self.name, name, new_branches)?;
+                    sync.update_environment(&self.org, &self.name, name, new_branches, new_tags)?;
                 }
                 EnvironmentDiff::Delete { name } => {
                     sync.delete_environment(&self.org, &self.name, name)?;
@@ -1155,17 +1186,27 @@ impl std::fmt::Display for UpdateRepoDiff {
             writeln!(f, "  Environments:")?;
             for env_diff in environment_diffs {
                 match env_diff {
-                    EnvironmentDiff::Create { name, branches } => {
+                    EnvironmentDiff::Create {
+                        name,
+                        branches,
+                        tags,
+                    } => {
                         writeln!(f, "    ➕ Create: {name}")?;
                         if !branches.is_empty() {
                             writeln!(f, "        Branches: {}", branches.join(", "))?;
+                        }
+                        if !tags.is_empty() {
+                            writeln!(f, "        Tags: {}", tags.join(", "))?;
                         }
                     }
                     EnvironmentDiff::Update {
                         name,
                         add_branches,
                         remove_branches,
+                        add_tags,
+                        remove_tags,
                         new_branches: _,
+                        new_tags: _,
                     } => {
                         writeln!(f, "    🔄 Update: {name}")?;
                         if !add_branches.is_empty() {
@@ -1178,8 +1219,18 @@ impl std::fmt::Display for UpdateRepoDiff {
                                 remove_branches.join(", ")
                             )?;
                         }
-                        if add_branches.is_empty() && remove_branches.is_empty() {
-                            writeln!(f, "        No branch changes")?;
+                        if !add_tags.is_empty() {
+                            writeln!(f, "        Adding tags: {}", add_tags.join(", "))?;
+                        }
+                        if !remove_tags.is_empty() {
+                            writeln!(f, "        Removing tags: {}", remove_tags.join(", "))?;
+                        }
+                        if add_branches.is_empty()
+                            && remove_branches.is_empty()
+                            && add_tags.is_empty()
+                            && remove_tags.is_empty()
+                        {
+                            writeln!(f, "        No pattern changes")?;
                         }
                     }
                     EnvironmentDiff::Delete { name } => writeln!(f, "    ❌ Delete: {name}")?,

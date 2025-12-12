@@ -14,6 +14,7 @@ use crate::utils::ResponseExt;
 struct BranchPolicyInfo {
     id: u64,
     name: String,
+    pattern_type: String,
 }
 
 pub(crate) struct GitHubWrite {
@@ -508,12 +509,13 @@ impl GitHubWrite {
         repo: &str,
         name: &str,
         branches: &[String],
+        tags: &[String],
     ) -> anyhow::Result<()> {
         debug!(
-            "Creating environment '{name}' in '{org}/{repo}' with branches: {:?}",
-            branches
+            "Creating environment '{name}' in '{org}/{repo}' with branches: {:?}, tags: {:?}",
+            branches, tags
         );
-        self.upsert_environment(org, repo, name, branches)
+        self.upsert_environment(org, repo, name, branches, tags)
     }
 
     /// Update an environment in a repository
@@ -523,12 +525,13 @@ impl GitHubWrite {
         repo: &str,
         name: &str,
         branches: &[String],
+        tags: &[String],
     ) -> anyhow::Result<()> {
         debug!(
-            "Updating environment '{name}' in '{org}/{repo}' with branches: {:?}",
-            branches
+            "Updating environment '{name}' in '{org}/{repo}' with branches: {:?}, tags: {:?}",
+            branches, tags
         );
-        self.upsert_environment(org, repo, name, branches)
+        self.upsert_environment(org, repo, name, branches, tags)
     }
 
     /// Internal helper to create or update an environment
@@ -538,13 +541,14 @@ impl GitHubWrite {
         repo: &str,
         name: &str,
         branches: &[String],
+        tags: &[String],
     ) -> anyhow::Result<()> {
         if !self.dry_run {
             // REST API: PUT /repos/{owner}/{repo}/environments/{environment_name}
             // https://docs.github.com/en/rest/deployments/environments#create-or-update-an-environment
             let url = GitHubUrl::repos(org, repo, &format!("environments/{}", name))?;
 
-            let body = if branches.is_empty() {
+            let body = if branches.is_empty() && tags.is_empty() {
                 serde_json::json!({
                     "deployment_branch_policy": null
                 })
@@ -559,8 +563,8 @@ impl GitHubWrite {
 
             self.client.send(Method::PUT, &url, &body)?;
 
-            // Always sync branch policies to ensure cleanup of old policies
-            self.set_environment_branch_policies(org, repo, name, branches)?;
+            // Always sync branch/tag policies to ensure cleanup of old policies
+            self.set_environment_deployment_patterns(org, repo, name, branches, tags)?;
         }
         Ok(())
     }
@@ -576,6 +580,12 @@ impl GitHubWrite {
         struct BranchPolicy {
             id: u64,
             name: String,
+            #[serde(rename = "type", default = "default_branch_type")]
+            pattern_type: String,
+        }
+
+        fn default_branch_type() -> String {
+            "branch".to_string()
         }
 
         #[derive(serde::Deserialize)]
@@ -598,6 +608,7 @@ impl GitHubWrite {
             .map(|bp| BranchPolicyInfo {
                 id: bp.id,
                 name: bp.name,
+                pattern_type: bp.pattern_type,
             })
             .collect())
     }
@@ -623,41 +634,74 @@ impl GitHubWrite {
         Ok(())
     }
 
-    /// Set custom branch policies for an environment
+    /// Set custom deployment patterns (branch/tag policies) for an environment
     /// This method properly handles updates by:
     /// 1. Fetching all existing policies
     /// 2. Deleting policies that are no longer needed
     /// 3. Adding new policies that don't exist
-    fn set_environment_branch_policies(
+    fn set_environment_deployment_patterns(
         &self,
         org: &str,
         repo: &str,
         environment: &str,
         branches: &[String],
+        tags: &[String],
     ) -> anyhow::Result<()> {
         // 1. Fetch existing policies
         let existing_policies = self.get_environment_branch_policies(org, repo, environment)?;
 
-        let existing_branches: HashSet<String> =
-            existing_policies.iter().map(|p| p.name.clone()).collect();
-        let new_branches: HashSet<String> = branches.iter().cloned().collect();
+        #[derive(Hash, Eq, PartialEq)]
+        struct PatternKey {
+            name: String,
+            pattern_type: String,
+        }
+
+        let existing_patterns: HashSet<PatternKey> = existing_policies
+            .iter()
+            .map(|p| PatternKey {
+                name: p.name.clone(),
+                pattern_type: p.pattern_type.clone(),
+            })
+            .collect();
+
+        let mut new_patterns = HashSet::new();
+        for branch in branches {
+            new_patterns.insert(PatternKey {
+                name: branch.clone(),
+                pattern_type: "branch".to_string(),
+            });
+        }
+        for tag in tags {
+            new_patterns.insert(PatternKey {
+                name: tag.clone(),
+                pattern_type: "tag".to_string(),
+            });
+        }
 
         // 2. Delete policies that are no longer needed
         for policy in &existing_policies {
-            if !new_branches.contains(&policy.name) {
+            let key = PatternKey {
+                name: policy.name.clone(),
+                pattern_type: policy.pattern_type.clone(),
+            };
+            if !new_patterns.contains(&key) {
                 debug!(
-                    "Deleting branch policy '{}' (id: {}) from environment '{}' in '{}/{}'",
-                    policy.name, policy.id, environment, org, repo
+                    "Deleting deployment policy '{}' (type: {}, id: {}) from environment '{}' in '{}/{}'",
+                    policy.name, policy.pattern_type, policy.id, environment, org, repo
                 );
                 self.delete_environment_branch_policy(org, repo, environment, policy.id)?;
             }
         }
 
-        // 3. Add new policies that don't exist yet
+        // 3. Add new branch policies that don't exist yet
         for branch in branches {
-            if !existing_branches.contains(branch) {
+            let key = PatternKey {
+                name: branch.clone(),
+                pattern_type: "branch".to_string(),
+            };
+            if !existing_patterns.contains(&key) {
                 debug!(
-                    "Adding branch policy '{}' to environment '{}' in '{}/{}'",
+                    "Adding branch pattern '{}' to environment '{}' in '{}/{}'",
                     branch, environment, org, repo
                 );
                 let url = GitHubUrl::repos(
@@ -669,7 +713,35 @@ impl GitHubWrite {
                     Method::POST,
                     &url,
                     &serde_json::json!({
-                        "name": branch
+                        "name": branch,
+                        "type": "branch"
+                    }),
+                )?;
+            }
+        }
+
+        // 4. Add new tag policies that don't exist yet
+        for tag in tags {
+            let key = PatternKey {
+                name: tag.clone(),
+                pattern_type: "tag".to_string(),
+            };
+            if !existing_patterns.contains(&key) {
+                debug!(
+                    "Adding tag pattern '{}' to environment '{}' in '{}/{}'",
+                    tag, environment, org, repo
+                );
+                let url = GitHubUrl::repos(
+                    org,
+                    repo,
+                    &format!("environments/{}/deployment-branch-policies", environment),
+                )?;
+                self.client.send(
+                    Method::POST,
+                    &url,
+                    &serde_json::json!({
+                        "name": tag,
+                        "type": "tag"
                     }),
                 )?;
             }
