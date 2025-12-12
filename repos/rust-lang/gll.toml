@@ -1,0 +1,9 @@
+org = "rust-lang"
+name = "gll"
+description = "GLL parsing framework."
+bots = []
+
+[access.teams]
+
+[[branch-protections]]
+pattern = "master"
