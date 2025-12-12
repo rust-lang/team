@@ -287,12 +287,6 @@ fn find_untracked_repos(
     github_repos
         .iter()
         .filter(|(org, repo)| {
-            // Skip archived repos
-            if repo.archived {
-                debug!("Skipping archived repo: {}/{}", org, repo.name);
-                return false;
-            }
-
             // Skip forks
             if repo.fork {
                 debug!("Skipping fork: {}/{}", org, repo.name);
