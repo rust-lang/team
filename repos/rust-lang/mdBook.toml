@@ -35,4 +35,5 @@ environment = "publish"
 
 [environments.publish]
 branches = ["master"]
+tags = ["*"]
 

@@ -8,4 +8,5 @@ compiler = "write"
 
 [environments.publish]
 branches = ["*", "master"]
+tags = ["*"]
 

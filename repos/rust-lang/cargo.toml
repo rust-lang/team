@@ -19,4 +19,5 @@ ci-checks = ["conclusion"]
 
 [environments.release]
 branches = ["*"]
+tags = ["*"]
 
