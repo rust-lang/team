@@ -1,0 +1,9 @@
+org = "rust-lang"
+name = "funding-private"
+description = "Private data related to funding Rust Project contributors"
+bots = []
+private-non-synced = true
+
+[access.teams]
+rfmf-design-committee = "write"
+leadership-council = "write"
