@@ -1,0 +1,46 @@
+name = "initial-design-and-impl"
+kind = "marker-team"
+
+[people]
+leads = []
+members = []
+alumni = [
+    "graydon",
+    "Gankra",
+    "aturon",
+    "alexcrichton",
+    "brson",
+    "pnkfelix",
+    "Manishearth",
+    "mbrubeck",
+    "michaelwoerister",
+    "nrc",
+    "nikomatsakis",
+    "pcwalton",
+    "SimonSapin",
+    "steveklabnik",
+    "wycats",
+    "eholk",
+    "huonw",
+    "luqmana",
+    "jimblandy",
+    "llogiq",
+    "BurntSushi",
+    "bstrie",
+    "dotdash",
+    "bkoropoff",
+    "chris-morgan",
+    "eddyb",
+    "erickt",
+    "japaric",
+    "Kimundi",
+    "retep998",
+    "sfackler",
+    "tshepang",
+    "petrochenkov"
+]
+
+[website]
+name = "Initial design and implementation of Rust"
+description = "Many people contributed to the initial design and implementation of Rust, before the current team hierarchy was established. This team contains some of those people to recognize and honor their contributions."
+weight = 1000
