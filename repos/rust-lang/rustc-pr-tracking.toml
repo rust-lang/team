@@ -7,6 +7,5 @@ bots = ["highfive"]
 [access.teams]
 release = "write"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

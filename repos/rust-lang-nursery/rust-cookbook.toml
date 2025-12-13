@@ -7,6 +7,6 @@ bots = []
 cookbook = "write"
 lang-docs = "write"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = ["gh-pages"]
 

@@ -20,6 +20,6 @@ wg-async = "maintain"
 pattern = "main"
 pr-required = false
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = ["main"]
 

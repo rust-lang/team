@@ -17,9 +17,8 @@ crates = ["cc", "find-msvc-tools"]
 workflow-filename = "publish.yml"
 environment = "publish"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 
-[[environments]]
-name = "publish"
+[environments.publish]
+branches = ["main"]
 

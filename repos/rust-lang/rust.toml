@@ -83,6 +83,6 @@ merge-bots = ["rust-timer"]
 pattern = "perf-tmp"
 merge-bots = ["rust-timer"]
 
-[[environments]]
-name = "bors"
+[environments.bors]
+branches = ["auto", "automation/bors/try", "try", "try-perf"]
 

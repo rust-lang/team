@@ -7,6 +7,6 @@ bots = []
 [access.teams]
 wg-async = "write"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = ["master"]
 

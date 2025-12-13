@@ -178,7 +178,8 @@ impl DataModel {
             org.branch_protections
                 .insert(repo.name.clone(), protections);
 
-            let environments: Vec<Environment> = repo.environments.clone().into_iter().collect();
+            let environments: HashMap<String, Environment> =
+                repo.environments.clone().into_iter().collect();
             org.repo_environments
                 .insert(repo.name.clone(), environments);
         }
@@ -310,7 +311,7 @@ pub struct RepoData {
     #[builder(default)]
     pub branch_protections: Vec<v1::BranchProtection>,
     #[builder(default)]
-    pub environments: Vec<v1::Environment>,
+    pub environments: indexmap::IndexMap<String, v1::Environment>,
 }
 
 impl RepoData {
@@ -390,9 +391,26 @@ impl RepoDataBuilder {
 
     pub fn environment(mut self, name: &str) -> Self {
         let mut environments = self.environments.clone().unwrap_or_default();
-        environments.push(v1::Environment {
-            name: name.to_string(),
-        });
+        environments.insert(
+            name.to_string(),
+            v1::Environment {
+                branches: vec![],
+                tags: vec![],
+            },
+        );
+        self.environments = Some(environments);
+        self
+    }
+
+    pub fn environment_with_branches(mut self, name: &str, branches: &[&str]) -> Self {
+        let mut environments = self.environments.clone().unwrap_or_default();
+        environments.insert(
+            name.to_string(),
+            v1::Environment {
+                branches: branches.iter().map(|s| s.to_string()).collect(),
+                tags: vec![],
+            },
+        );
         self.environments = Some(environments);
         self
     }
@@ -602,7 +620,11 @@ impl GithubRead for GithubMock {
         Ok(result)
     }
 
-    fn repo_environments(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Environment>> {
+    fn repo_environments(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<HashMap<String, Environment>> {
         Ok(self
             .get_org(org)
             .repo_environments
@@ -627,8 +649,8 @@ struct GithubOrg {
     repo_members: HashMap<String, RepoMembers>,
     // Repo name -> Vec<(protection ID, branch protection)>
     branch_protections: HashMap<String, Vec<(String, BranchProtection)>>,
-    // Repo name -> Vec<environment>
-    repo_environments: HashMap<String, Vec<Environment>>,
+    // Repo name -> HashMap<env_name, Environment>
+    repo_environments: HashMap<String, HashMap<String, Environment>>,
 }
 
 #[derive(Clone)]

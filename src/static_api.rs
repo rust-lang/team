@@ -161,13 +161,39 @@ impl<'a> Generator<'a> {
                         })
                     })
                     .collect(),
-                environments: r
-                    .environments
-                    .iter()
-                    .map(|e| v1::Environment {
-                        name: e.name.clone(),
-                    })
-                    .collect(),
+                environments: {
+                    let mut envs: Vec<_> = r
+                        .environments
+                        .iter()
+                        .map(|(name, env)| {
+                            let mut branches = env.branches.clone();
+                            let mut tags = env.tags.clone();
+
+                            // Legacy support: convert old deployment-patterns into branch/tag arrays
+                            if let Some(patterns) = &env.deployment_patterns {
+                                for p in patterns {
+                                    match p.pattern_type.as_str() {
+                                        "branch" => {
+                                            if !branches.contains(&p.name) {
+                                                branches.push(p.name.clone());
+                                            }
+                                        }
+                                        "tag" => {
+                                            if !tags.contains(&p.name) {
+                                                tags.push(p.name.clone());
+                                            }
+                                        }
+                                        _ => {}
+                                    }
+                                }
+                            }
+
+                            (name.clone(), v1::Environment { branches, tags })
+                        })
+                        .collect();
+                    envs.sort_by(|a, b| a.0.cmp(&b.0));
+                    envs.into_iter().collect()
+                },
                 archived,
                 auto_merge_enabled: !managed_by_bors,
             };
