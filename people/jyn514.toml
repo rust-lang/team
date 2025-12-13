@@ -4,3 +4,5 @@ github-id = 23638587
 email = 'rust@jyn.dev'
 zulip-id = 232545
 discord-id = 568772690438127647
+[funding]
+github-sponsors = true
