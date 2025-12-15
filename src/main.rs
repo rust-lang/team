@@ -115,6 +115,8 @@ enum CiOpts {
     GenerateCodeowners,
     /// Check if the .github/CODEOWNERS file is up-to-date
     CheckCodeowners,
+    /// Check for untracked repositories in GitHub organizations
+    CheckUntrackedRepos,
 }
 
 #[derive(clap::Parser, Debug)]
@@ -535,6 +537,7 @@ fn run() -> Result<(), Error> {
         Cli::Ci(opts) => match opts {
             CiOpts::GenerateCodeowners => generate_codeowners_file(data)?,
             CiOpts::CheckCodeowners => check_codeowners(data)?,
+            CiOpts::CheckUntrackedRepos => ci::check_untracked_repos(&data)?,
         },
         Cli::Sync(opts) => {
             if let Err(err) = perform_sync(opts, data) {
