@@ -5,6 +5,7 @@ homepage = "https://doc.rust-lang.org/stable/core/arch/"
 bots = ["rustbot", "rfcbot"]
 
 [access.teams]
+compiler = "write"
 lang = "write"
 lang-ops = "write"
 libs = "write"
