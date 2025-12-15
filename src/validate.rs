@@ -1170,7 +1170,7 @@ fn validate_trusted_publishing(data: &Data, errors: &mut Vec<String>) {
     let mut crates = HashMap::new();
     wrapper(data.repos(), errors, |repo, _| {
         let repo_name = format!("{}/{}", repo.org, repo.name);
-        for publishing in &repo.crates_io_publishing {
+        for publishing in &repo.crates_io {
             if publishing.crates.is_empty() {
                 return Err(anyhow::anyhow!(
                     "Repository `{repo_name}` has trusted publishing for an empty set of crates.",
@@ -1181,6 +1181,31 @@ fn validate_trusted_publishing(data: &Data, errors: &mut Vec<String>) {
                 if let Some(prev_repo) = crates.insert(krate.clone(), repo_name.clone()) {
                     return Err(anyhow::anyhow!(
                         "Repository `{repo_name}` configures trusted publishing for crate `{krate}` that is also configured in `{prev_repo}`. Each crate can only be configured once.",
+                    ));
+                }
+            }
+
+            if !publishing.teams.is_empty() && !publishing.disable_other_publish_methods {
+                return Err(anyhow::anyhow!(
+                    "Repository `{repo_name}` configures crates.io access for team(s) `{}` while setting `disable-other-publish-methods = false`. Either remove the team access or set it to `true`.",
+                    publishing.teams.join(", ")
+                ));
+            }
+            for team in &publishing.teams {
+                let Some(team) = data.team(team) else {
+                    return Err(anyhow::anyhow!(
+                        "Repository `{repo_name}` configures crates.io access for team `{team}`, which does not exist.",
+                    ));
+                };
+                let has_some_gh_team = team
+                    .github_teams(data)?
+                    .into_iter()
+                    .any(|team| team.org == repo.org);
+                if !has_some_gh_team {
+                    return Err(anyhow::anyhow!(
+                        "Repository `{repo_name}` configures crates.io access for team `{}`, but it has no GitHub teams in organization `{}`.",
+                        team.name(),
+                        repo.org
                     ));
                 }
             }

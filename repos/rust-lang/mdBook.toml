@@ -17,7 +17,7 @@ pattern = "master"
 ci-checks = ["Success gate"]
 required-approvals = 0
 
-[[crates-io-publishing]]
+[[crates-io]]
 crates = [
     "mdbook",
     "mdbook-core",
@@ -28,8 +28,8 @@ crates = [
     "mdbook-renderer",
     "mdbook-summary",
 ]
-workflow-filename = "deploy.yml"
-environment = "publish"
+publish-workflow = "deploy.yml"
+publish-environment = "publish"
 
 [[environments]]
 name = "github-pages"

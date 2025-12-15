@@ -185,10 +185,18 @@ pub struct Repo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CrateTeamOwner {
+    pub org: String,
+    pub name: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Crate {
     pub name: String,
     pub crates_io_publishing: Option<CratesIoPublishing>,
     pub trusted_publishing_only: bool,
+    /// GitHub teams that have access to this crate on crates.io
+    pub teams: Vec<CrateTeamOwner>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]

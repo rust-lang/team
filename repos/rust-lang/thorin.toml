@@ -9,10 +9,11 @@ compiler = 'maintain'
 [[branch-protections]]
 pattern = "main"
 
-[[crates-io-publishing]]
+[[crates-io]]
 crates = ["thorin-dwp", "thorin-dwp-bin"]
-workflow-filename = "release-plz.yml"
-environment = "publish"
+publish-workflow = "release-plz.yml"
+publish-environment = "publish"
+teams = ["compiler"]
 
 [[environments]]
 name = "publish"
