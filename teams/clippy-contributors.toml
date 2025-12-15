@@ -12,7 +12,7 @@ members = [
     "alex-semenyuk",
 ]
 alumni = [
-    "PartiallyUntyped",
+    # "PartiallyUntyped", // user does not exists
 ]
 
 [[github]]
