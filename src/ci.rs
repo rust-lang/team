@@ -1,7 +1,8 @@
 use crate::data::Data;
 use crate::schema::RepoPermission;
-use anyhow::Context;
-use std::collections::BTreeSet;
+use anyhow::{bail, Context};
+use log::{debug, info, warn};
+use std::collections::{BTreeSet, HashSet};
 use std::path::{Path, PathBuf};
 
 /// Generates the contents of `.github/CODEOWNERS`, based on
@@ -169,4 +170,134 @@ fn codeowners_path() -> PathBuf {
     Path::new(&env!("CARGO_MANIFEST_DIR"))
         .join(".github")
         .join("CODEOWNERS")
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct GitHubRepo {
+    name: String,
+    fork: bool,
+}
+
+#[derive(Debug)]
+struct UntrackedRepo {
+    org: String,
+    name: String,
+}
+
+/// Check for untracked repositories and fail if any are found
+pub fn check_untracked_repos(data: &Data) -> anyhow::Result<()> {
+    let github = crate::api::github::GitHubApi::new();
+
+    // Get allowed GitHub organizations from config instead of hardcoding
+    let orgs_to_monitor: Vec<&str> = data
+        .config()
+        .allowed_github_orgs()
+        .iter()
+        .filter(|org| {
+            // Exclude independent orgs that shouldn't be synchronized
+            !data
+                .config()
+                .independent_github_orgs()
+                .contains(org.as_str())
+        })
+        .map(|s| s.as_str())
+        .collect();
+
+    info!(
+        "🔍 Checking for untracked repositories in organizations: {}",
+        orgs_to_monitor.join(", ")
+    );
+
+    info!("Fetching repositories from GitHub...");
+    let github_repos = fetch_all_github_repos(&github, &orgs_to_monitor)?;
+    info!(
+        "Found {} total repositories in GitHub organizations",
+        github_repos.len()
+    );
+
+    info!("Parsing local TOML files...");
+    let tracked_repos = parse_tracked_repos(data);
+    info!(
+        "Found {} tracked repositories in repos/ directory",
+        tracked_repos.len()
+    );
+
+    info!("Comparing GitHub repos with tracked repos...");
+    let untracked = find_untracked_repos(&github_repos, &tracked_repos);
+
+    if untracked.is_empty() {
+        info!("✅ All repositories are tracked!");
+        return Ok(());
+    }
+
+    warn!("❌ Found {} untracked repositories:", untracked.len());
+    for repo in &untracked {
+        warn!("  - {}/{}", repo.org, repo.name);
+    }
+
+    bail!(
+        "Found {} untracked repositories. Please add them to the repos/ directory.",
+        untracked.len()
+    );
+}
+
+fn fetch_all_github_repos(
+    github: &crate::api::github::GitHubApi,
+    orgs_to_monitor: &[&str],
+) -> anyhow::Result<Vec<(String, GitHubRepo)>> {
+    let mut all_repos = Vec::new();
+
+    for org in orgs_to_monitor {
+        debug!("Fetching repos for org: {}", org);
+        let mut page = 1;
+
+        loop {
+            let url = format!("orgs/{}/repos?per_page=100&page={}", org, page);
+
+            let repos: Vec<GitHubRepo> = github
+                .get(&url)
+                .with_context(|| format!("Failed to fetch repos for org: {}", org))?;
+
+            if repos.is_empty() {
+                break;
+            }
+
+            for repo in repos {
+                all_repos.push((org.to_string(), repo));
+            }
+
+            page += 1;
+        }
+    }
+
+    Ok(all_repos)
+}
+
+fn parse_tracked_repos(data: &Data) -> HashSet<(String, String)> {
+    data.all_repos()
+        .map(|repo| (repo.org.clone(), repo.name.clone()))
+        .collect()
+}
+
+fn find_untracked_repos(
+    github_repos: &[(String, GitHubRepo)],
+    tracked_repos: &HashSet<(String, String)>,
+) -> Vec<UntrackedRepo> {
+    github_repos
+        .iter()
+        .filter(|(org, repo)| {
+            // Skip forks
+            if repo.fork {
+                debug!("Skipping fork: {}/{}", org, repo.name);
+                return false;
+            }
+
+            // Check if tracked
+            !tracked_repos.contains(&(org.clone(), repo.name.clone()))
+        })
+        .map(|(org, repo)| UntrackedRepo {
+            org: org.clone(),
+            name: repo.name.clone(),
+        })
+        .collect()
 }
