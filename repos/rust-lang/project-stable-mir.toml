@@ -9,6 +9,5 @@ project-stable-mir = "write"
 [[branch-protections]]
 pattern = "main"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

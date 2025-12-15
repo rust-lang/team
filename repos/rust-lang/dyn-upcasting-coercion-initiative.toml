@@ -6,6 +6,5 @@ bots = []
 [access.teams]
 project-dyn-upcasting = "write"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

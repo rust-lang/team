@@ -12,6 +12,5 @@ pattern = "main"
 ci-checks = ["Build finished"]
 dismiss-stale-review = true
 
-[[environments]]
-name = "upload"
+[environments.upload]
 

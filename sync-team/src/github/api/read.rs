@@ -53,8 +53,12 @@ pub(crate) trait GithubRead {
     ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>>;
 
     /// Get environments for a repository
-    /// Returns a list of environment names
-    fn repo_environments(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Environment>>;
+    /// Returns a map of environment names to their Environment data
+    fn repo_environments(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<HashMap<String, Environment>>;
 }
 
 pub(crate) struct GitHubApiRead {
@@ -441,27 +445,95 @@ impl GithubRead for GitHubApiRead {
         Ok(result)
     }
 
-    fn repo_environments(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Environment>> {
+    fn repo_environments(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<HashMap<String, Environment>> {
         #[derive(serde::Deserialize)]
-        struct EnvironmentsResponse {
-            environments: Vec<Environment>,
+        struct ProtectionRule {
+            #[serde(rename = "type")]
+            rule_type: String,
         }
 
-        let mut environments: Vec<Environment> = Vec::new();
+        #[derive(serde::Deserialize)]
+        struct GitHubEnvironment {
+            name: String,
+            protection_rules: Vec<ProtectionRule>,
+        }
 
-        // REST API endpoint for environments
-        // https://docs.github.com/en/rest/deployments/environments#list-environments
+        #[derive(serde::Deserialize)]
+        struct EnvironmentsResponse {
+            environments: Vec<GitHubEnvironment>,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct BranchPolicy {
+            name: String,
+            #[serde(rename = "type", default = "default_branch_type")]
+            pattern_type: String,
+        }
+
+        fn default_branch_type() -> String {
+            "branch".to_string()
+        }
+
+        #[derive(serde::Deserialize)]
+        struct BranchPoliciesResponse {
+            branch_policies: Vec<BranchPolicy>,
+        }
+
+        let mut env_infos = Vec::new();
+
+        // Fetch all environments with their protection_rules metadata
+        // REST API: https://docs.github.com/en/rest/deployments/environments#list-environments
         self.client.rest_paginated(
             &Method::GET,
             &GitHubUrl::repos(org, repo, "environments")?,
             |resp: EnvironmentsResponse| {
-                for env in resp.environments {
-                    environments.push(env);
-                }
+                env_infos.extend(resp.environments);
                 Ok(())
             },
         )?;
 
-        Ok(environments)
+        // For each environment, fetch deployment branch policies if they exist
+        // REST API: https://docs.github.com/en/rest/deployments/branch-policies#list-deployment-branch-policies
+        env_infos
+            .into_iter()
+            .map(|env_info| {
+                // Check if branch policies exist by looking at protection_rules metadata
+                let has_branch_policies = env_info
+                    .protection_rules
+                    .iter()
+                    .any(|rule| rule.rule_type == "branch_policy");
+
+                let (branches, tags) = if has_branch_policies {
+                    let mut branches = Vec::new();
+                    let mut tags = Vec::new();
+                    self.client.rest_paginated(
+                        &Method::GET,
+                        &GitHubUrl::repos(
+                            org,
+                            repo,
+                            &format!("environments/{}/deployment-branch-policies", env_info.name),
+                        )?,
+                        |resp: BranchPoliciesResponse| {
+                            for p in resp.branch_policies {
+                                match p.pattern_type.as_str() {
+                                    "tag" => tags.push(p.name),
+                                    _ => branches.push(p.name),
+                                }
+                            }
+                            Ok(())
+                        },
+                    )?;
+                    (branches, tags)
+                } else {
+                    (Vec::new(), Vec::new())
+                };
+
+                Ok((env_info.name, Environment { branches, tags }))
+            })
+            .collect()
     }
 }

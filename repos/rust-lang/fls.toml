@@ -17,6 +17,6 @@ spec-contributors = "triage"
 pattern = "main"
 ci-checks = ["CI finished"]
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = ["gh-readonly-queue/main/*", "main"]
 

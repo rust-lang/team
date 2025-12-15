@@ -175,7 +175,7 @@ pub struct Repo {
     pub members: Vec<RepoMember>,
     pub branch_protections: Vec<BranchProtection>,
     pub crates: Vec<Crate>,
-    pub environments: Vec<Environment>,
+    pub environments: IndexMap<String, Environment>,
     pub archived: bool,
     // This attribute is not synced by sync-team.
     pub private: bool,
@@ -269,7 +269,10 @@ pub struct CratesIoPublishing {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Environment {
-    pub name: String,
+    #[serde(default)]
+    pub branches: Vec<String>,
+    #[serde(default)]
+    pub tags: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

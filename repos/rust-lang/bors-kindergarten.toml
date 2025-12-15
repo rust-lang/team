@@ -7,15 +7,11 @@ bots = ["rustbot"]
 infra = "write"
 infra-bors = "write"
 
-[[environments]]
-name = "bors"
+[environments.bors]
 
-[[environments]]
-name = "ci"
+[environments.ci]
 
-[[environments]]
-name = "production"
+[environments.production]
 
-[[environments]]
-name = "staging"
+[environments.staging]
 

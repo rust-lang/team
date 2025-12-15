@@ -7,6 +7,5 @@ bots = ["rustbot"]
 [access.teams]
 rust-by-example = "write"
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

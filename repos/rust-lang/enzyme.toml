@@ -21,6 +21,5 @@ pr-required = false
 pattern = "master"
 pr-required = false
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 

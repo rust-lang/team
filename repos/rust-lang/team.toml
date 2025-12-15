@@ -13,9 +13,9 @@ pattern = "main"
 ci-checks = ["CI"]
 dismiss-stale-review = true
 
-[[environments]]
-name = "deploy"
+[environments.deploy]
+branches = ["gh-readonly-queue/main/*", "main"]
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
+branches = ["main"]
 

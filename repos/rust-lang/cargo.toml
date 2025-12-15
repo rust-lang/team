@@ -15,9 +15,8 @@ ci-checks = ["conclusion"]
 pattern = "rust-1.*"
 ci-checks = ["conclusion"]
 
-[[environments]]
-name = "github-pages"
+[environments.github-pages]
 
-[[environments]]
-name = "release"
+[environments.release]
+tags = ["*"]
 
