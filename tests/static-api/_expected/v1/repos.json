@@ -103,7 +103,14 @@
           ]
         }
       ],
-      "environments": {},
+      "environments": {
+        "deploy": {
+          "branches": [
+            "main"
+          ],
+          "tags": []
+        }
+      },
       "archived": false,
       "private": false,
       "auto_merge_enabled": true

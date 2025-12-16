@@ -1212,6 +1212,14 @@ fn validate_trusted_publishing(data: &Data, errors: &mut Vec<String>) {
                 ));
             }
 
+            // Validate that the environment referenced in crates-io exists
+            if !repo.environments.contains_key(&publishing.environment) {
+                return Err(anyhow::anyhow!(
+                    "Repository `{repo_name}` configures trusted publishing with environment `{}` which is not defined in the repository's environments. Please add an environment with this name in the repository configuration.",
+                    publishing.environment
+                ));
+            }
+
             for krate in &publishing.crates {
                 if let Some(prev_repo) = crates.insert(krate.clone(), repo_name.clone()) {
                     return Err(anyhow::anyhow!(
