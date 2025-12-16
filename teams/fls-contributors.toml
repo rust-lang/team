@@ -4,6 +4,7 @@ subteam-of = "fls"
 [people]
 leads = []
 members = [
+  "rbakbashev",
 ]
 alumni = []
 
