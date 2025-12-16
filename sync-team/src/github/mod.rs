@@ -360,7 +360,8 @@ impl SyncGitHub {
 
                 // Additionally create rulesets if configured
                 let mut rulesets = Vec::new();
-                if self.should_use_rulesets(expected_repo) {
+                let use_rulesets = self.should_use_rulesets(expected_repo);
+                if use_rulesets {
                     for branch_protection in &expected_repo.branch_protections {
                         let ruleset = construct_ruleset(expected_repo, branch_protection);
                         rulesets.push(ruleset);
@@ -377,7 +378,12 @@ impl SyncGitHub {
                         auto_merge_enabled: expected_repo.auto_merge_enabled,
                     },
                     permissions,
-                    branch_protections,
+                    // Don't create branch protections if using rulesets
+                    branch_protections: if use_rulesets {
+                        vec![]
+                    } else {
+                        branch_protections
+                    },
                     rulesets,
                     environments: expected_repo
                         .environments
@@ -460,6 +466,18 @@ impl SyncGitHub {
         let mut actual_protections = self
             .github
             .branch_protections(&actual_repo.org, &actual_repo.name)?;
+
+        // If rulesets are enabled, delete all existing branch protections
+        // to avoid conflicts between branch protections and rulesets
+        if self.should_use_rulesets(expected_repo) {
+            return Ok(actual_protections
+                .into_iter()
+                .map(|(name, (id, _))| BranchProtectionDiff {
+                    pattern: name,
+                    operation: BranchProtectionDiffOperation::Delete(id),
+                })
+                .collect());
+        }
         for branch_protection in &expected_repo.branch_protections {
             let actual_branch_protection = actual_protections.remove(&branch_protection.pattern);
             let mut expected_branch_protection =
