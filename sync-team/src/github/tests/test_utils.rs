@@ -624,11 +624,15 @@ impl GithubRead for GithubMock {
 
     fn repo_rulesets(
         &self,
-        _org: &str,
-        _repo: &str,
+        org: &str,
+        repo: &str,
     ) -> anyhow::Result<Vec<crate::github::api::Ruleset>> {
-        // Return empty list for tests - rulesets not used in mock tests yet
-        Ok(Vec::new())
+        Ok(self
+            .get_org(org)
+            .rulesets
+            .get(repo)
+            .cloned()
+            .unwrap_or_default())
     }
 
     fn repo_environments(
@@ -660,6 +664,8 @@ struct GithubOrg {
     repo_members: HashMap<String, RepoMembers>,
     // Repo name -> Vec<(protection ID, branch protection)>
     branch_protections: HashMap<String, Vec<(String, BranchProtection)>>,
+    // Repo name -> Vec<ruleset>
+    rulesets: HashMap<String, Vec<crate::github::api::Ruleset>>,
     // Repo name -> HashMap<env name, environment>
     repo_environments: HashMap<String, HashMap<String, Environment>>,
 }
