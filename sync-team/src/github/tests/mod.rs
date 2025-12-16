@@ -990,16 +990,20 @@ fn repo_environment_create() {
                 permission_diffs: [],
                 branch_protection_diffs: [],
                 environment_diffs: [
-                    Create {
-                        name: "production",
-                        branches: [],
-                        tags: [],
-                    },
-                    Create {
-                        name: "staging",
-                        branches: [],
-                        tags: [],
-                    },
+                    Create(
+                        "production",
+                        Environment {
+                            branches: [],
+                            tags: [],
+                        },
+                    ),
+                    Create(
+                        "staging",
+                        Environment {
+                            branches: [],
+                            tags: [],
+                        },
+                    ),
                 ],
             },
         ),
@@ -1044,12 +1048,12 @@ fn repo_environment_delete() {
                 permission_diffs: [],
                 branch_protection_diffs: [],
                 environment_diffs: [
-                    Delete {
-                        name: "production",
-                    },
-                    Delete {
-                        name: "staging",
-                    },
+                    Delete(
+                        "production",
+                    ),
+                    Delete(
+                        "staging",
+                    ),
                 ],
             },
         ),
@@ -1109,14 +1113,16 @@ fn repo_environment_update() {
                 permission_diffs: [],
                 branch_protection_diffs: [],
                 environment_diffs: [
-                    Create {
-                        name: "dev",
-                        branches: [],
-                        tags: [],
-                    },
-                    Delete {
-                        name: "staging",
-                    },
+                    Create(
+                        "dev",
+                        Environment {
+                            branches: [],
+                            tags: [],
+                        },
+                    ),
+                    Delete(
+                        "staging",
+                    ),
                 ],
             },
         ),
