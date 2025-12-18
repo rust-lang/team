@@ -645,7 +645,11 @@ impl SyncGitHub {
                     let id = actual_ruleset.id.unwrap_or(0);
                     ruleset_diffs.push(RulesetDiff {
                         name: ruleset_name,
-                        operation: RulesetDiffOperation::Update(id, expected_ruleset),
+                        operation: RulesetDiffOperation::Update(
+                            id,
+                            actual_ruleset,
+                            expected_ruleset,
+                        ),
                     });
                 }
             } else {
@@ -1617,6 +1621,182 @@ fn log_branch_protection(
     Ok(())
 }
 
+fn log_ruleset(
+    current: &api::Ruleset,
+    new: Option<&api::Ruleset>,
+    mut result: impl Write,
+) -> std::fmt::Result {
+    macro_rules! log {
+        ($str:literal, $field:expr, $new_field:expr) => {
+            let old = $field;
+            let new_val = $new_field;
+            if Some(old) != new_val {
+                if let Some(n) = new_val {
+                    writeln!(result, "        {}: {:?} => {:?}", $str, old, n)?;
+                } else {
+                    writeln!(result, "        {}: {:?}", $str, old)?;
+                }
+            }
+        };
+    }
+
+    // Log basic ruleset properties
+    log!("Target", &current.target, new.map(|n| &n.target));
+    log!(
+        "Source Type",
+        &current.source_type,
+        new.map(|n| &n.source_type)
+    );
+    log!(
+        "Enforcement",
+        &current.enforcement,
+        new.map(|n| &n.enforcement)
+    );
+
+    // Log branch conditions
+    if let Some(ref_name) = &current.conditions.ref_name {
+        let new_ref_name = new.and_then(|n| n.conditions.ref_name.as_ref());
+        if !ref_name.include.is_empty() {
+            log!(
+                "Include Branches",
+                &ref_name.include,
+                new_ref_name.map(|r| &r.include)
+            );
+        }
+        if !ref_name.exclude.is_empty() {
+            log!(
+                "Exclude Branches",
+                &ref_name.exclude,
+                new_ref_name.map(|r| &r.exclude)
+            );
+        }
+    }
+
+    // Log bypass actors
+    if let Some(bypass_actors) = &current.bypass_actors
+        && !bypass_actors.is_empty()
+    {
+        let new_bypass = new.and_then(|n| n.bypass_actors.as_ref());
+        log!("Bypass Actors", bypass_actors, new_bypass);
+    }
+
+    // Log individual rules
+    for rule in &current.rules {
+        match rule {
+            api::RulesetRule::Creation => {
+                writeln!(result, "        Rule: Creation")?;
+            }
+            api::RulesetRule::Update => {
+                writeln!(result, "        Rule: Update")?;
+            }
+            api::RulesetRule::Deletion => {
+                writeln!(result, "        Rule: Deletion")?;
+            }
+            api::RulesetRule::RequiredLinearHistory => {
+                writeln!(result, "        Rule: Required Linear History")?;
+            }
+            api::RulesetRule::RequiredSignatures => {
+                writeln!(result, "        Rule: Required Signatures")?;
+            }
+            api::RulesetRule::NonFastForward => {
+                writeln!(result, "        Rule: Non-Fast-Forward")?;
+            }
+            api::RulesetRule::MergeQueue { parameters } => {
+                writeln!(result, "        Rule: Merge Queue")?;
+                writeln!(
+                    result,
+                    "          Timeout: {} minutes",
+                    parameters.check_response_timeout_minutes
+                )?;
+                writeln!(
+                    result,
+                    "          Grouping Strategy: {:?}",
+                    parameters.grouping_strategy
+                )?;
+                writeln!(
+                    result,
+                    "          Merge Method: {:?}",
+                    parameters.merge_method
+                )?;
+                writeln!(
+                    result,
+                    "          Max Entries to Build: {}",
+                    parameters.max_entries_to_build
+                )?;
+                writeln!(
+                    result,
+                    "          Max Entries to Merge: {}",
+                    parameters.max_entries_to_merge
+                )?;
+                writeln!(
+                    result,
+                    "          Min Entries to Merge: {}",
+                    parameters.min_entries_to_merge
+                )?;
+                writeln!(
+                    result,
+                    "          Min Wait Time: {} minutes",
+                    parameters.min_entries_to_merge_wait_minutes
+                )?;
+            }
+            api::RulesetRule::PullRequest { parameters } => {
+                writeln!(result, "        Rule: Pull Request")?;
+                writeln!(
+                    result,
+                    "          Dismiss Stale Reviews: {}",
+                    parameters.dismiss_stale_reviews_on_push
+                )?;
+                writeln!(
+                    result,
+                    "          Require Code Owner Review: {}",
+                    parameters.require_code_owner_review
+                )?;
+                writeln!(
+                    result,
+                    "          Require Last Push Approval: {}",
+                    parameters.require_last_push_approval
+                )?;
+                writeln!(
+                    result,
+                    "          Required Approving Review Count: {}",
+                    parameters.required_approving_review_count
+                )?;
+                writeln!(
+                    result,
+                    "          Required Review Thread Resolution: {}",
+                    parameters.required_review_thread_resolution
+                )?;
+            }
+            api::RulesetRule::RequiredStatusChecks { parameters } => {
+                writeln!(result, "        Rule: Required Status Checks")?;
+                writeln!(
+                    result,
+                    "          Strict Policy: {}",
+                    parameters.strict_required_status_checks_policy
+                )?;
+                if !parameters.required_status_checks.is_empty() {
+                    let checks: Vec<_> = parameters
+                        .required_status_checks
+                        .iter()
+                        .map(|c| &c.context)
+                        .collect();
+                    writeln!(result, "          Checks: {:?}", checks)?;
+                }
+            }
+            api::RulesetRule::RequiredDeployments { parameters } => {
+                writeln!(result, "        Rule: Required Deployments")?;
+                writeln!(
+                    result,
+                    "          Environments: {:?}",
+                    parameters.required_deployment_environments
+                )?;
+            }
+        }
+    }
+
+    Ok(())
+}
+
 #[derive(Debug)]
 enum BranchProtectionDiffOperation {
     Create(api::BranchProtection),
@@ -1637,8 +1817,8 @@ impl RulesetDiff {
             RulesetDiffOperation::Create(ruleset) => {
                 sync.upsert_ruleset(RulesetOp::CreateForRepo, org, repo_name, ruleset)?;
             }
-            RulesetDiffOperation::Update(id, ruleset) => {
-                sync.upsert_ruleset(RulesetOp::UpdateRuleset(*id), org, repo_name, ruleset)?;
+            RulesetDiffOperation::Update(id, _, new_ruleset) => {
+                sync.upsert_ruleset(RulesetOp::UpdateRuleset(*id), org, repo_name, new_ruleset)?;
             }
             RulesetDiffOperation::Delete(id) => {
                 debug!(
@@ -1657,12 +1837,8 @@ impl std::fmt::Display for RulesetDiff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "      {}", self.name)?;
         match &self.operation {
-            RulesetDiffOperation::Create(_) => {
-                writeln!(f, "        Creating ruleset with merge queue enabled")
-            }
-            RulesetDiffOperation::Update(_, _) => {
-                writeln!(f, "        Updating ruleset")
-            }
+            RulesetDiffOperation::Create(ruleset) => log_ruleset(ruleset, None, f),
+            RulesetDiffOperation::Update(_, old, new) => log_ruleset(old, Some(new), f),
             RulesetDiffOperation::Delete(_) => {
                 writeln!(f, "        Deleting ruleset")
             }
@@ -1673,7 +1849,7 @@ impl std::fmt::Display for RulesetDiff {
 #[derive(Debug)]
 enum RulesetDiffOperation {
     Create(api::Ruleset),
-    Update(i64, api::Ruleset),
+    Update(i64, api::Ruleset, api::Ruleset), // id, old, new
     Delete(i64),
 }
 
