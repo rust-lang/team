@@ -15,11 +15,11 @@ project-const-generics = "maintain"
 project-const-traits = "maintain"
 project-dyn-upcasting = "maintain"
 project-impl-trait = "maintain"
-project-safe-transmute = "maintain"
 project-keyword-generics = "maintain"
 rust-for-linux = "maintain"
 types = "maintain"
 wg-async = "maintain"
+wg-safe-transmute = "maintain"
 
 [[branch-protections]]
 pattern = "main"
