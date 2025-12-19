@@ -6,11 +6,12 @@ leads = []
 members = [
     "notriddle",
     "GuillaumeGomez",
-    "jsha",
     "camelid",
     "lolbinarycat",
 ]
-alumni = []
+alumni = [
+    "jsha",
+]
 
 [permissions]
 bors.rust.review = true
