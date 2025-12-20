@@ -6,7 +6,6 @@ leads = ["syphar"]
 members = [
     "GuillaumeGomez",
     "syphar",
-    "jsha",
 ]
 alumni = [
     "Nemo157",
@@ -16,6 +15,7 @@ alumni = [
     "pietroalbini",
     "jyn514",
     "QuietMisdreavus",
+    "jsha",
 ]
 
 [permissions]
