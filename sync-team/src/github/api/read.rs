@@ -1,3 +1,4 @@
+use crate::github::api::Ruleset;
 use crate::github::api::{
     BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, Repo, RepoTeam,
     RepoUser, Team, TeamMember, TeamRole, team_node_id, url::GitHubUrl, user_node_id,
@@ -59,6 +60,14 @@ pub(crate) trait GithubRead {
         org: &str,
         repo: &str,
     ) -> anyhow::Result<HashMap<String, Environment>>;
+
+    /// Get rulesets for a repository
+    /// Returns a vector of rulesets
+    fn repo_rulesets(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<Vec<crate::github::api::Ruleset>>;
 }
 
 pub(crate) struct GitHubApiRead {
@@ -535,5 +544,27 @@ impl GithubRead for GitHubApiRead {
                 Ok((env_info.name, Environment { branches, tags }))
             })
             .collect()
+    }
+
+    fn repo_rulesets(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<Vec<crate::github::api::Ruleset>> {
+        let mut rulesets: Vec<Ruleset> = Vec::new();
+
+        // REST API endpoint for rulesets
+        // https://docs.github.com/en/rest/repos/rules#get-all-repository-rulesets
+        // The API returns an array of rulesets directly, not wrapped in an object
+        self.client.rest_paginated(
+            &Method::GET,
+            &GitHubUrl::repos(org, repo, "rulesets")?,
+            |resp: Vec<Ruleset>| {
+                rulesets.extend(resp);
+                Ok(())
+            },
+        )?;
+
+        Ok(rulesets)
     }
 }

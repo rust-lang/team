@@ -1,5 +1,7 @@
 use std::collections::{BTreeSet, HashMap, HashSet};
 
+use indexmap::IndexMap;
+
 use derive_builder::Builder;
 use rust_team_data::v1::{
     self, Bot, BranchProtectionMode, Environment, GitHubTeam, MergeBot, Person, RepoPermission,
@@ -311,7 +313,7 @@ pub struct RepoData {
     #[builder(default)]
     pub branch_protections: Vec<v1::BranchProtection>,
     #[builder(default)]
-    pub environments: indexmap::IndexMap<String, v1::Environment>,
+    pub environments: IndexMap<String, v1::Environment>,
 }
 
 impl RepoData {
@@ -394,8 +396,8 @@ impl RepoDataBuilder {
         environments.insert(
             name.to_string(),
             v1::Environment {
-                branches: vec![],
-                tags: vec![],
+                branches: Vec::new(),
+                tags: Vec::new(),
             },
         );
         self.environments = Some(environments);
@@ -408,7 +410,7 @@ impl RepoDataBuilder {
             name.to_string(),
             v1::Environment {
                 branches: branches.iter().map(|s| s.to_string()).collect(),
-                tags: vec![],
+                tags: Vec::new(),
             },
         );
         self.environments = Some(environments);
@@ -620,6 +622,19 @@ impl GithubRead for GithubMock {
         Ok(result)
     }
 
+    fn repo_rulesets(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<Vec<crate::github::api::Ruleset>> {
+        Ok(self
+            .get_org(org)
+            .rulesets
+            .get(repo)
+            .cloned()
+            .unwrap_or_default())
+    }
+
     fn repo_environments(
         &self,
         org: &str,
@@ -649,7 +664,9 @@ struct GithubOrg {
     repo_members: HashMap<String, RepoMembers>,
     // Repo name -> Vec<(protection ID, branch protection)>
     branch_protections: HashMap<String, Vec<(String, BranchProtection)>>,
-    // Repo name -> HashMap<env_name, Environment>
+    // Repo name -> Vec<ruleset>
+    rulesets: HashMap<String, Vec<crate::github::api::Ruleset>>,
+    // Repo name -> HashMap<env name, environment>
     repo_environments: HashMap<String, HashMap<String, Environment>>,
 }
 
