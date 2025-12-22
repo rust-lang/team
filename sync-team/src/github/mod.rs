@@ -5,6 +5,7 @@ mod tests;
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
 use crate::Config;
 use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings};
+use anyhow::Context;
 use log::debug;
 use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot};
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
@@ -990,6 +991,7 @@ pub(crate) fn construct_bypass_actors(
 ) -> anyhow::Result<Vec<api::RulesetBypassActor>> {
     let mut bypass_actors = Vec::new();
 
+    // Resolve team bypass actors
     for team_name in &branch_protection.allowed_merge_teams {
         match github_write.resolve_team_database_id(org, team_name) {
             Ok(Some(actor_id)) => {
@@ -1001,33 +1003,31 @@ pub(crate) fn construct_bypass_actors(
             }
             Ok(None) => {
                 debug!(
-                    "Warning: Could not resolve database ID for team '{}/{}'. \
-                     The team may not exist in the organization.",
+                    "Team '{}/{}' not found; skipping bypass actor. \
+                     Verify the team exists in the organization.",
                     org, team_name
                 );
             }
             Err(e) => {
-                anyhow::bail!(
-                    "Failed to resolve database ID for team '{}/{}': {}",
-                    org,
-                    team_name,
-                    e
-                );
+                return Err(e).context(format!(
+                    "Failed to resolve team '{}/{}' for bypass actor",
+                    org, team_name
+                ));
             }
         }
     }
 
-    // Note: GitHub API has limited support for individual user bypass actors.
-    // OrganizationAdmin with actor_id=1 grants bypass to all org admins.
-    // For individual users, they must be added to a team and use allowed_merge_teams.
+    // Add OrganizationAdmin bypass actor if allowed_merge_users is specified.
+    // Note: GitHub API limitation - cannot add individual users as bypass actors.
+    // OrganizationAdmin with actor_id=1 grants bypass to ALL organization admins.
+    // For granular per-user control, use allowed_merge_teams with a team containing specific users.
     if !branch_protection.allowed_merge_users.is_empty() {
         debug!(
-            "Warning: Individual user bypass actors (allowed_merge_users) have limited API support. \
-             Users: {:?}. Only organization admins can bypass. \
-             For granular control, add users to a team and use allowed_merge_teams instead.",
+            "Using OrganizationAdmin bypass actor for allowed_merge_users: {:?}. \
+             Note: This grants bypass to ALL org admins, not just specified users. \
+             For per-user control, use allowed_merge_teams instead.",
             branch_protection.allowed_merge_users
         );
-        // Add OrganizationAdmin bypass actor (applies to all org admins)
         bypass_actors.push(api::RulesetBypassActor {
             actor_id: Some(api::ActorId::Id(1)),
             actor_type: api::RulesetActorType::OrganizationAdmin,
@@ -1035,6 +1035,7 @@ pub(crate) fn construct_bypass_actors(
         });
     }
 
+    // Resolve bot integration bypass actors
     for merge_bot in &branch_protection.merge_bots {
         let user_login = match merge_bot {
             MergeBot::Homu => "bors",
@@ -1050,17 +1051,16 @@ pub(crate) fn construct_bypass_actors(
             }
             Ok(None) => {
                 debug!(
-                    "Warning: Could not resolve database ID for bot '{}'. \
-                     This bot may not be installed in the organization.",
-                    user_login
+                    "Bot '{}' not found in organization '{}'; skipping bypass actor. \
+                     Verify the bot is installed and has access.",
+                    user_login, org
                 );
             }
             Err(e) => {
-                anyhow::bail!(
-                    "Failed to resolve database ID for bot '{}': {}",
-                    user_login,
-                    e
-                );
+                return Err(e).context(format!(
+                    "Failed to resolve bot '{}' for bypass actor",
+                    user_login
+                ));
             }
         }
     }
@@ -1364,21 +1364,9 @@ impl std::fmt::Display for CreateRepoDiff {
 
         if !rulesets.is_empty() {
             writeln!(f, "  Rulesets:")?;
-            for (ruleset, _branch_protection) in rulesets {
-                let id_str = ruleset.id.map_or("new".to_string(), |id| id.to_string());
-                writeln!(f, "    - {} (ID: {})", ruleset.name, id_str)?;
-                if let Some(conditions) = &ruleset.conditions
-                    && let Some(ref_name) = &conditions.ref_name
-                {
-                    writeln!(f, "      Branches: {}", ref_name.include.join(", "))?;
-                }
-                if ruleset
-                    .rules
-                    .iter()
-                    .any(|r| matches!(r, api::RulesetRule::MergeQueue { .. }))
-                {
-                    writeln!(f, "      Merge Queue: Enabled")?;
-                }
+            for (ruleset, branch_protection) in rulesets {
+                writeln!(f, "    {}", ruleset.name)?;
+                log_ruleset(ruleset, None, Some(branch_protection), &mut f)?;
             }
         }
 
@@ -1814,6 +1802,7 @@ fn log_branch_protection(
 fn log_ruleset(
     current: &api::Ruleset,
     new: Option<&api::Ruleset>,
+    branch_protection: Option<&rust_team_data::v1::BranchProtection>,
     mut result: impl Write,
 ) -> std::fmt::Result {
     let is_create = new.is_none();
@@ -1874,7 +1863,28 @@ fn log_ruleset(
         && !bypass_actors.is_empty()
     {
         let new_bypass = new.and_then(|n| n.bypass_actors.as_ref());
-        log!("Bypass Actors", bypass_actors, new_bypass);
+        if new_bypass.is_some() {
+            log!("Bypass Actors", bypass_actors, new_bypass);
+        } else {
+            writeln!(result, "        Bypass Actors:")?;
+            for actor in bypass_actors {
+                let actor_id_str = match &actor.actor_id {
+                    Some(api::ActorId::Id(id)) => id.to_string(),
+                    Some(api::ActorId::Null) => "null".to_string(),
+                    None => "omitted".to_string(),
+                };
+                let mode_str = actor.bypass_mode.as_ref().map_or("default", |m| match m {
+                    api::RulesetBypassMode::Always => "always",
+                    api::RulesetBypassMode::PullRequest => "pull_request",
+                    api::RulesetBypassMode::Exempt => "exempt",
+                });
+                writeln!(
+                    result,
+                    "          - Type: {:?}, ID: {}, Mode: {}",
+                    actor.actor_type, actor_id_str, mode_str
+                )?;
+            }
+        }
     }
 
     // Log individual rules
@@ -2002,6 +2012,39 @@ fn log_ruleset(
         }
     }
 
+    // Log expected bypass actors if branch protection config is provided
+    if let Some(bp) = branch_protection
+        && (!bp.allowed_merge_teams.is_empty()
+            || !bp.allowed_merge_users.is_empty()
+            || !bp.merge_bots.is_empty())
+    {
+        writeln!(result, "        Expected Bypass Actors:")?;
+
+        for team in &bp.allowed_merge_teams {
+            writeln!(result, "          - Team: {} (Mode: always)", team)?;
+        }
+
+        if !bp.allowed_merge_users.is_empty() {
+            writeln!(
+                result,
+                "          - OrganizationAdmin: ID=1 (Mode: always) [Note: Grants bypass to all org admins, requested users: {}]",
+                bp.allowed_merge_users.join(", ")
+            )?;
+        }
+
+        for bot in &bp.merge_bots {
+            let bot_name = match bot {
+                MergeBot::Homu => "bors",
+                MergeBot::RustTimer => "rust-timer",
+            };
+            writeln!(
+                result,
+                "          - Integration: {} (Mode: always)",
+                bot_name
+            )?;
+        }
+    }
+
     if !is_create && !logged {
         writeln!(result, "        No changes")?;
     }
@@ -2080,8 +2123,12 @@ impl std::fmt::Display for RulesetDiff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "      {}", self.name)?;
         match &self.operation {
-            RulesetDiffOperation::Create(ruleset) => log_ruleset(ruleset, None, f),
-            RulesetDiffOperation::Update(_, old, new) => log_ruleset(old, Some(new), f),
+            RulesetDiffOperation::Create(ruleset) => {
+                log_ruleset(ruleset, None, Some(&self.branch_protection), &mut *f)
+            }
+            RulesetDiffOperation::Update(_, old, new) => {
+                log_ruleset(old, Some(new), Some(&self.branch_protection), &mut *f)
+            }
             RulesetDiffOperation::Delete(_) => {
                 writeln!(f, "        Deleting ruleset")
             }
