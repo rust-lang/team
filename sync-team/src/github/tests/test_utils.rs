@@ -424,6 +424,7 @@ pub struct BranchProtectionBuilder {
     pub dismiss_stale_review: bool,
     pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,
+    pub allowed_merge_users: Vec<String>,
     pub merge_bots: Vec<MergeBot>,
 }
 
