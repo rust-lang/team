@@ -448,6 +448,7 @@ impl BranchProtectionBuilder {
             dismiss_stale_review,
             mode,
             allowed_merge_teams,
+            allowed_merge_users,
             merge_bots,
         } = self;
         v1::BranchProtection {
@@ -455,6 +456,7 @@ impl BranchProtectionBuilder {
             dismiss_stale_review,
             mode,
             allowed_merge_teams,
+            allowed_merge_users,
             merge_bots,
         }
     }
@@ -465,6 +467,7 @@ impl BranchProtectionBuilder {
             mode,
             dismiss_stale_review: false,
             allowed_merge_teams: vec![],
+            allowed_merge_users: vec![],
             merge_bots: vec![],
         }
     }
