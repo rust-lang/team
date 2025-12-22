@@ -368,7 +368,7 @@ impl SyncGitHub {
                 if use_rulesets {
                     for branch_protection in &expected_repo.branch_protections {
                         let ruleset = construct_ruleset(expected_repo, branch_protection);
-                        rulesets.push(ruleset);
+                        rulesets.push((ruleset, branch_protection.clone()));
                     }
                 }
 
@@ -640,12 +640,15 @@ impl SyncGitHub {
 
             if let Some(actual_ruleset) = actual_rulesets_map.remove(&ruleset_name) {
                 // Ruleset exists, check if it needs updating
-                // For simplicity, we compare the entire ruleset
-                // In production, you might want more sophisticated comparison
-                if actual_ruleset.rules != expected_ruleset.rules
+                // We compare rules, conditions, and enforcement
+                // Note: We don't compare bypass_actors here since they will be populated/updated
+                // during apply based on the branch_protection configuration
+                let needs_update = actual_ruleset.rules != expected_ruleset.rules
                     || actual_ruleset.conditions != expected_ruleset.conditions
                     || actual_ruleset.enforcement != expected_ruleset.enforcement
-                {
+                    || self.bypass_actors_need_update(&actual_ruleset, branch_protection);
+
+                if needs_update {
                     let id = actual_ruleset.id.unwrap_or(0);
                     ruleset_diffs.push(RulesetDiff {
                         name: ruleset_name,
@@ -654,6 +657,7 @@ impl SyncGitHub {
                             actual_ruleset,
                             expected_ruleset,
                         ),
+                        branch_protection: branch_protection.clone(),
                     });
                 }
             } else {
@@ -661,6 +665,7 @@ impl SyncGitHub {
                 ruleset_diffs.push(RulesetDiff {
                     name: ruleset_name,
                     operation: RulesetDiffOperation::Create(expected_ruleset),
+                    branch_protection: branch_protection.clone(),
                 });
             }
         }
@@ -668,9 +673,17 @@ impl SyncGitHub {
         // Any remaining rulesets in actual_rulesets_map should be deleted
         for (name, ruleset) in actual_rulesets_map {
             if let Some(id) = ruleset.id {
+                // For delete operations, we create a dummy branch_protection since it won't be used
                 ruleset_diffs.push(RulesetDiff {
                     name,
                     operation: RulesetDiffOperation::Delete(id),
+                    branch_protection: rust_team_data::v1::BranchProtection {
+                        pattern: String::new(),
+                        dismiss_stale_review: false,
+                        mode: rust_team_data::v1::BranchProtectionMode::PrNotRequired,
+                        allowed_merge_teams: vec![],
+                        merge_bots: vec![],
+                    },
                 });
             }
         }
@@ -688,6 +701,45 @@ impl SyncGitHub {
         } else {
             TeamRole::Member
         }
+    }
+
+    /// Check if bypass actors need to be updated based on branch protection configuration.
+    ///
+    /// This performs a simple comparison based on the count of expected actors.
+    /// A more sophisticated check would require resolving team/user IDs during diff
+    /// creation, which we avoid for performance. The count-based check will detect
+    /// most cases where updates are needed (teams added/removed, bots changed).
+    ///
+    /// Note: This may produce false positives if team/bot resolution fails during
+    /// construct_bypass_actors (e.g., team doesn't exist), since the expected count
+    /// assumes all actors can be resolved. This is acceptable as it errs on the side
+    /// of attempting updates rather than missing required changes.
+    fn bypass_actors_need_update(
+        &self,
+        actual_ruleset: &api::Ruleset,
+        branch_protection: &rust_team_data::v1::BranchProtection,
+    ) -> bool {
+        let expected_count =
+            branch_protection.allowed_merge_teams.len() + branch_protection.merge_bots.len();
+
+        let actual_count = actual_ruleset
+            .bypass_actors
+            .as_ref()
+            .map_or(0, |actors| actors.len());
+
+        // Update needed if counts don't match or if expected but no actual actors
+        if expected_count != actual_count {
+            return true;
+        }
+
+        // If both are zero, no update needed
+        if expected_count == 0 {
+            return false;
+        }
+
+        // Counts match and both are non-zero - assume update not needed
+        // A more sophisticated check would compare actual IDs/types
+        false
     }
 }
 
@@ -904,6 +956,86 @@ pub(crate) fn convert_branch_pattern_to_ref_pattern(pattern: &str) -> String {
     format!("refs/heads/{}", pattern)
 }
 
+/// Construct bypass actors from branch protection settings.
+///
+/// This function resolves team names and bot logins to their GitHub database IDs
+/// and creates `RulesetBypassActor` entries that allow these actors to bypass
+/// branch protection rules.
+///
+/// # Arguments
+/// * `org` - The organization name
+/// * `branch_protection` - Branch protection configuration containing allowed teams and bots
+/// * `github_write` - GitHub API client for resolving IDs
+///
+/// # Returns
+/// A vector of `RulesetBypassActor` entries, or an error if ID resolution fails
+pub(crate) fn construct_bypass_actors(
+    org: &str,
+    branch_protection: &rust_team_data::v1::BranchProtection,
+    github_write: &api::GitHubWrite,
+) -> anyhow::Result<Vec<api::RulesetBypassActor>> {
+    let mut bypass_actors = Vec::new();
+
+    for team_name in &branch_protection.allowed_merge_teams {
+        match github_write.resolve_team_database_id(org, team_name) {
+            Ok(Some(actor_id)) => {
+                bypass_actors.push(api::RulesetBypassActor {
+                    actor_id: Some(api::ActorId::Id(actor_id)),
+                    actor_type: api::RulesetActorType::Team,
+                    bypass_mode: Some(api::RulesetBypassMode::Always),
+                });
+            }
+            Ok(None) => {
+                debug!(
+                    "Warning: Could not resolve database ID for team '{}/{}'. \
+                     The team may not exist in the organization.",
+                    org, team_name
+                );
+            }
+            Err(e) => {
+                anyhow::bail!(
+                    "Failed to resolve database ID for team '{}/{}': {}",
+                    org,
+                    team_name,
+                    e
+                );
+            }
+        }
+    }
+
+    for merge_bot in &branch_protection.merge_bots {
+        let user_login = match merge_bot {
+            MergeBot::Homu => "bors",
+            MergeBot::RustTimer => "rust-timer",
+        };
+        match github_write.resolve_user_database_id(user_login, org) {
+            Ok(Some(actor_id)) => {
+                bypass_actors.push(api::RulesetBypassActor {
+                    actor_id: Some(api::ActorId::Id(actor_id)),
+                    actor_type: api::RulesetActorType::Integration,
+                    bypass_mode: Some(api::RulesetBypassMode::Always),
+                });
+            }
+            Ok(None) => {
+                debug!(
+                    "Warning: Could not resolve database ID for bot '{}'. \
+                     This bot may not be installed in the organization.",
+                    user_login
+                );
+            }
+            Err(e) => {
+                anyhow::bail!(
+                    "Failed to resolve database ID for bot '{}': {}",
+                    user_login,
+                    e
+                );
+            }
+        }
+    }
+
+    Ok(bypass_actors)
+}
+
 /// Convert a branch protection to a ruleset with merge queue enabled
 pub fn construct_ruleset(
     _expected_repo: &rust_team_data::v1::Repo,
@@ -970,8 +1102,11 @@ pub fn construct_ruleset(
         },
     });
 
-    // TODO: Add bypass actors based on allowed_merge_teams and merge_bots
-    // This would require fetching team IDs, which needs more integration
+    // Note: bypass_actors will be populated later when applying the diff,
+    // as it requires resolving team/user IDs via GitHubWrite.
+    // The information needed comes from:
+    // - branch_protection.allowed_merge_teams (team names in expected_repo.org)
+    // - branch_protection.merge_bots (bot user logins)
 
     api::Ruleset {
         id: None,
@@ -979,7 +1114,7 @@ pub fn construct_ruleset(
         target: RulesetTarget::Branch,
         source_type: RulesetSourceType::Repository,
         enforcement: RulesetEnforcement::Active,
-        bypass_actors: None,
+        bypass_actors: None, // Will be populated when applying the diff
         conditions: Some(RulesetConditions {
             ref_name: Some(RulesetRefNameCondition {
                 include: vec![convert_branch_pattern_to_ref_pattern(
@@ -1118,7 +1253,7 @@ struct CreateRepoDiff {
     settings: RepoSettings,
     permissions: Vec<RepoPermissionAssignmentDiff>,
     branch_protections: Vec<(String, api::BranchProtection)>,
-    rulesets: Vec<api::Ruleset>,
+    rulesets: Vec<(api::Ruleset, rust_team_data::v1::BranchProtection)>,
     environments: Vec<(String, rust_team_data::v1::Environment)>,
 }
 
@@ -1140,10 +1275,11 @@ impl CreateRepoDiff {
         }
 
         // Apply rulesets (in addition to branch protections if configured)
-        for ruleset in &self.rulesets {
+        for (ruleset, branch_protection) in &self.rulesets {
             RulesetDiff {
                 name: ruleset.name.clone(),
                 operation: RulesetDiffOperation::Create(ruleset.clone()),
+                branch_protection: branch_protection.clone(),
             }
             .apply(sync, &self.org, &self.name)?;
         }
@@ -1196,7 +1332,7 @@ impl std::fmt::Display for CreateRepoDiff {
 
         if !rulesets.is_empty() {
             writeln!(f, "  Rulesets:")?;
-            for ruleset in rulesets {
+            for (ruleset, _branch_protection) in rulesets {
                 let id_str = ruleset.id.map_or("new".to_string(), |id| id.to_string());
                 writeln!(f, "    - {} (ID: {})", ruleset.name, id_str)?;
                 if let Some(conditions) = &ruleset.conditions
@@ -1852,17 +1988,48 @@ enum BranchProtectionDiffOperation {
 struct RulesetDiff {
     name: String,
     operation: RulesetDiffOperation,
+    branch_protection: rust_team_data::v1::BranchProtection,
 }
 
 impl RulesetDiff {
+    /// Populate bypass actors for a ruleset based on branch protection configuration.
+    fn populate_bypass_actors(
+        &self,
+        ruleset: &mut api::Ruleset,
+        org: &str,
+        sync: &GitHubWrite,
+    ) -> anyhow::Result<()> {
+        let actors = construct_bypass_actors(org, &self.branch_protection, sync)?;
+        ruleset.bypass_actors = if actors.is_empty() {
+            None
+        } else {
+            Some(actors)
+        };
+        Ok(())
+    }
+
     fn apply(&self, sync: &GitHubWrite, org: &str, repo_name: &str) -> anyhow::Result<()> {
         use api::RulesetOp;
         match &self.operation {
             RulesetDiffOperation::Create(ruleset) => {
-                sync.upsert_ruleset(RulesetOp::CreateForRepo, org, repo_name, ruleset)?;
+                let mut ruleset_with_bypass = ruleset.clone();
+                self.populate_bypass_actors(&mut ruleset_with_bypass, org, sync)?;
+                sync.upsert_ruleset(
+                    RulesetOp::CreateForRepo,
+                    org,
+                    repo_name,
+                    &ruleset_with_bypass,
+                )?;
             }
             RulesetDiffOperation::Update(id, _, new_ruleset) => {
-                sync.upsert_ruleset(RulesetOp::UpdateRuleset(*id), org, repo_name, new_ruleset)?;
+                let mut ruleset_with_bypass = new_ruleset.clone();
+                self.populate_bypass_actors(&mut ruleset_with_bypass, org, sync)?;
+                sync.upsert_ruleset(
+                    RulesetOp::UpdateRuleset(*id),
+                    org,
+                    repo_name,
+                    &ruleset_with_bypass,
+                )?;
             }
             RulesetDiffOperation::Delete(id) => {
                 debug!(
