@@ -62,6 +62,7 @@ impl<'a> Generator<'a> {
                         BranchProtectionMode::PrNotRequired
                     },
                     allowed_merge_teams: b.allowed_merge_teams.clone(),
+                    allowed_merge_users: b.allowed_merge_users.clone(),
                     merge_bots: b
                         .merge_bots
                         .iter()

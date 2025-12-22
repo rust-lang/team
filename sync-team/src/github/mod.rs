@@ -682,6 +682,7 @@ impl SyncGitHub {
                         dismiss_stale_review: false,
                         mode: rust_team_data::v1::BranchProtectionMode::PrNotRequired,
                         allowed_merge_teams: vec![],
+                        allowed_merge_users: vec![],
                         merge_bots: vec![],
                     },
                 });
@@ -719,8 +720,13 @@ impl SyncGitHub {
         actual_ruleset: &api::Ruleset,
         branch_protection: &rust_team_data::v1::BranchProtection,
     ) -> bool {
-        let expected_count =
-            branch_protection.allowed_merge_teams.len() + branch_protection.merge_bots.len();
+        let expected_count = branch_protection.allowed_merge_teams.len()
+            + if branch_protection.allowed_merge_users.is_empty() {
+                0
+            } else {
+                1
+            } // OrganizationAdmin counts as 1
+            + branch_protection.merge_bots.len();
 
         let actual_count = actual_ruleset
             .bypass_actors
@@ -958,13 +964,21 @@ pub(crate) fn convert_branch_pattern_to_ref_pattern(pattern: &str) -> String {
 
 /// Construct bypass actors from branch protection settings.
 ///
-/// This function resolves team names and bot logins to their GitHub database IDs
-/// and creates `RulesetBypassActor` entries that allow these actors to bypass
-/// branch protection rules.
+/// This function resolves team names, user logins, and bot logins to their GitHub
+/// database IDs and creates `RulesetBypassActor` entries that allow these actors
+/// to bypass branch protection rules.
+///
+/// # Actor Types
+/// - Teams: Use `Team` actor type with team database ID
+/// - Users: Use `RepositoryRole` actor type with user database ID  
+/// - Bots: Use `Integration` actor type with bot database ID
 ///
 /// # Arguments
 /// * `org` - The organization name
-/// * `branch_protection` - Branch protection configuration containing allowed teams and bots
+/// * `branch_protection` - Branch protection configuration containing:
+///   - `allowed_merge_teams`: Team names to resolve
+///   - `allowed_merge_users`: User logins to resolve
+///   - `merge_bots`: Bot types to resolve (Homu/RustTimer)
 /// * `github_write` - GitHub API client for resolving IDs
 ///
 /// # Returns
@@ -1001,6 +1015,24 @@ pub(crate) fn construct_bypass_actors(
                 );
             }
         }
+    }
+
+    // Note: GitHub API has limited support for individual user bypass actors.
+    // OrganizationAdmin with actor_id=1 grants bypass to all org admins.
+    // For individual users, they must be added to a team and use allowed_merge_teams.
+    if !branch_protection.allowed_merge_users.is_empty() {
+        debug!(
+            "Warning: Individual user bypass actors (allowed_merge_users) have limited API support. \
+             Users: {:?}. Only organization admins can bypass. \
+             For granular control, add users to a team and use allowed_merge_teams instead.",
+            branch_protection.allowed_merge_users
+        );
+        // Add OrganizationAdmin bypass actor (applies to all org admins)
+        bypass_actors.push(api::RulesetBypassActor {
+            actor_id: Some(api::ActorId::Id(1)),
+            actor_type: api::RulesetActorType::OrganizationAdmin,
+            bypass_mode: Some(api::RulesetBypassMode::Always),
+        });
     }
 
     for merge_bot in &branch_protection.merge_bots {
