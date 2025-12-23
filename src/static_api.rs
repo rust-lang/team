@@ -68,6 +68,7 @@ impl<'a> Generator<'a> {
                         .map(|bot| match bot {
                             MergeBot::Homu => v1::MergeBot::Homu,
                             MergeBot::RustTimer => v1::MergeBot::RustTimer,
+                            MergeBot::Bors => v1::MergeBot::Bors,
                         })
                         .collect(),
                 })

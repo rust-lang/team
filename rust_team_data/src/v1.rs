@@ -250,6 +250,7 @@ pub enum BranchProtectionMode {
 pub enum MergeBot {
     Homu,
     RustTimer,
+    Bors,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

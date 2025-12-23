@@ -859,6 +859,11 @@ pub fn construct_branch_protection(
             MergeBot::RustTimer => PushAllowanceActor::User(api::UserPushAllowanceActor {
                 login: "rust-timer".to_owned(),
             }),
+            MergeBot::Bors => {
+                // Bors uses a GitHub app, which is not configured through team (it is set manually)
+                // Its push allowance will be roundtripped by sync-team.
+                continue;
+            }
         };
         push_allowances.push(allowance);
     }
