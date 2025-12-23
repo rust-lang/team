@@ -421,12 +421,6 @@ required-approvals = 1
 # in [access.teams].
 # (optional)
 allowed-merge-teams = ["awesome-team"]
-# Enable bypass for organization administrators.
-# Due to GitHub API limitations, individual users cannot be granted bypass  
-# access directly. Instead, this grants bypass to all organization admins.
-# For granular control, add users to a team and use allowed-merge-teams.
-# (optional)
-allowed-merge-users = ["any-username"]  # Enables OrganizationAdmin bypass
 # Determines the merge queue bot(s) that manage pushes to this branch.
 # When a bot manages the queue, some other options, like
 # `required-approvals` and `pr-required` options are not valid.

@@ -30,7 +30,6 @@
       "allowed_merge_teams": [
         "foo"
       ],
-      "allowed_merge_users": [],
       "merge_bots": []
     }
   ],
