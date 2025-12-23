@@ -1126,7 +1126,7 @@ fn validate_branch_protections(data: &Data, errors: &mut Vec<String>) {
     let github_teams = data.github_teams();
 
     wrapper(data.repos(), errors, |repo, _| {
-        let homu_configured = repo.bots.iter().any(|b| matches!(b, Bot::Bors));
+        let bors_configured = repo.bots.iter().any(|b| matches!(b, Bot::Bors));
 
         for protection in &repo.branch_protections {
             for team in &protection.allowed_merge_teams {
@@ -1173,13 +1173,23 @@ but that team is not mentioned in [access.teams]"#,
             }
 
             let managed_by_homu = protection.merge_bots.contains(&MergeBot::Homu);
-            if managed_by_homu {
-                if !homu_configured {
-                    bail!(
-                        r#"repo '{}' uses homu to manage a branch protection for '{}', but homu is not enabled. Add "bors" to the `bots` array"#,
-                        repo.name,
-                        protection.pattern,
-                    );
+            let managed_by_bors = protection.merge_bots.contains(&MergeBot::Bors);
+            if managed_by_homu || managed_by_bors {
+                if !bors_configured {
+                    if managed_by_homu {
+                        bail!(
+                            r#"repo '{}' uses homu to manage a branch protection for '{}', but homu is not enabled. Add "bors" to the `bots` array"#,
+                            repo.name,
+                            protection.pattern,
+                        );
+                    }
+                    if managed_by_bors {
+                        bail!(
+                            r#"repo '{}' uses bors to manage a branch protection for '{}', but bors is not enabled. Add "bors" to the `bots` array"#,
+                            repo.name,
+                            protection.pattern,
+                        );
+                    }
                 }
                 if protection.required_approvals.is_some()
                     || protection.dismiss_stale_review
@@ -1187,7 +1197,7 @@ but that team is not mentioned in [access.teams]"#,
                     || !protection.allowed_merge_teams.is_empty()
                 {
                     bail!(
-                        r#"repo '{}' uses the homu merge bot, but its branch protection for {} uses invalid
+                        r#"repo '{}' uses bors, but its branch protection for {} uses invalid
 attributes (`required-approvals`, `dismiss-stale-review`, `pr-required` or `allowed-merge-teams`).
 Please remove the attributes when using bors"#,
                         repo.name,
