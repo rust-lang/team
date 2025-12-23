@@ -860,6 +860,7 @@ pub(crate) enum RepoPermission {
 pub(crate) enum MergeBot {
     Homu,
     RustTimer,
+    Bors,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
