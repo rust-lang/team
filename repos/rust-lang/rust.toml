@@ -29,15 +29,15 @@ triage = "write"
 
 [[branch-protections]]
 pattern = "main"
-merge-bots = ["homu"]
+merge-bots = ["homu", "bors"]
 
 [[branch-protections]]
 pattern = "stable"
-merge-bots = ["homu"]
+merge-bots = ["homu", "bors"]
 
 [[branch-protections]]
 pattern = "beta"
-merge-bots = ["homu"]
+merge-bots = ["homu", "bors"]
 
 [[branch-protections]]
 pattern = "*"
@@ -51,13 +51,29 @@ pr-required = false
 pattern = "cargo_update"
 pr-required = false
 
-[[branch-protections]]
-pattern = "automation/bors/try-merge"
-pr-required = false
-
+# Required for running try builds created by bors.
+# Must support force-pushes.
 [[branch-protections]]
 pattern = "automation/bors/try"
-pr-required = false
+merge-bots = ["bors"]
+
+# Required for running try builds created by bors.
+# Must support force-pushes.
+[[branch-protections]]
+pattern = "automation/bors/try-merge"
+merge-bots = ["bors"]
+
+# Required for running auto builds created by bors.
+# Must support force-pushes.
+[[branch-protections]]
+pattern = "automation/bors/auto"
+merge-bots = ["bors"]
+
+# Required for running auto builds created by bors.
+# Must support force-pushes.
+[[branch-protections]]
+pattern = "automation/bors/auto-merge"
+merge-bots = ["bors"]
 
 # Required for running try builds created by homu.
 # Must support force-pushes.
@@ -84,5 +100,4 @@ pattern = "perf-tmp"
 merge-bots = ["rust-timer"]
 
 [environments.bors]
-branches = ["auto", "automation/bors/try", "try", "try-perf"]
-
+branches = ["auto", "automation/bors/auto", "automation/bors/try", "try", "try-perf"]
