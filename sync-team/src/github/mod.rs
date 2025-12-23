@@ -15,6 +15,10 @@ pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
 static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
 
+/// GitHub Actions integration ID
+/// Verified via: https://api.github.com/repos/rust-lang/rust/commits/HEAD/check-runs
+const GITHUB_ACTIONS_INTEGRATION_ID: i64 = 15368;
+
 pub(crate) fn create_diff(
     github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
@@ -945,7 +949,7 @@ pub fn construct_ruleset(
                     .iter()
                     .map(|context| RequiredStatusCheck {
                         context: context.clone(),
-                        integration_id: None,
+                        integration_id: Some(GITHUB_ACTIONS_INTEGRATION_ID),
                     })
                     .collect(),
                 strict_required_status_checks_policy: false,
