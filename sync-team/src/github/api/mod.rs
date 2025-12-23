@@ -521,25 +521,110 @@ pub(crate) enum RulesetEnforcement {
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub(crate) struct RulesetBypassActor {
-    pub(crate) actor_id: i64,
+    /// The ID of the actor that can bypass a ruleset.
+    /// - Required for Integration, RepositoryRole, and Team actor types (use Some(ActorId::Id(n)))
+    /// - Must be 1 for OrganizationAdmin (use Some(ActorId::Id(1)))
+    /// - Must be null for DeployKey (use Some(ActorId::Null))
+    /// - Omitted for EnterpriseOwner (use None)
+    #[serde(
+        skip_serializing_if = "Option::is_none",
+        default,
+        deserialize_with = "deserialize_actor_id"
+    )]
+    pub(crate) actor_id: Option<ActorId>,
     pub(crate) actor_type: RulesetActorType,
-    pub(crate) bypass_mode: RulesetBypassMode,
+    /// The bypass mode for the actor. Defaults to "always" per GitHub API.
+    /// - always: Actor can always bypass
+    /// - pull_request: Actor can only bypass on pull requests (not applicable for DeployKey)
+    /// - exempt: Rules won't run for actor, no audit entry created
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) bypass_mode: Option<RulesetBypassMode>,
+}
+
+/// Custom deserializer for actor_id that distinguishes between null and missing
+fn deserialize_actor_id<'de, D>(deserializer: D) -> Result<Option<ActorId>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    use serde::{Deserialize, de};
+
+    struct ActorIdVisitor;
+
+    impl<'de> de::Visitor<'de> for ActorIdVisitor {
+        type Value = Option<ActorId>;
+
+        fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+            formatter.write_str("an integer, null, or missing field")
+        }
+
+        fn visit_none<E>(self) -> Result<Self::Value, E>
+        where
+            E: de::Error,
+        {
+            Ok(Some(ActorId::Null))
+        }
+
+        fn visit_some<D>(self, deserializer: D) -> Result<Self::Value, D::Error>
+        where
+            D: serde::Deserializer<'de>,
+        {
+            let id = i64::deserialize(deserializer)?;
+            Ok(Some(ActorId::Id(id)))
+        }
+
+        fn visit_unit<E>(self) -> Result<Self::Value, E>
+        where
+            E: de::Error,
+        {
+            Ok(Some(ActorId::Null))
+        }
+
+        fn visit_i64<E>(self, v: i64) -> Result<Self::Value, E>
+        where
+            E: de::Error,
+        {
+            Ok(Some(ActorId::Id(v)))
+        }
+
+        fn visit_u64<E>(self, v: u64) -> Result<Self::Value, E>
+        where
+            E: de::Error,
+        {
+            Ok(Some(ActorId::Id(v as i64)))
+        }
+    }
+
+    deserializer.deserialize_option(ActorIdVisitor)
+}
+
+/// Represents the actor_id field which can be a number or null
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[serde(untagged)]
+pub(crate) enum ActorId {
+    /// A specific actor ID (used for Integration, RepositoryRole, Team, OrganizationAdmin)
+    Id(i64),
+    /// Explicitly null (required for DeployKey)
+    Null,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "PascalCase")]
 pub(crate) enum RulesetActorType {
     Integration,
     OrganizationAdmin,
     RepositoryRole,
     Team,
+    DeployKey,
+    EnterpriseOwner,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum RulesetBypassMode {
     Always,
+    #[serde(rename = "pull_request")]
     PullRequest,
+    Exempt,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
@@ -635,4 +720,190 @@ pub(crate) struct RequiredStatusCheck {
 pub(crate) enum RulesetOp {
     CreateForRepo,
     UpdateRuleset(i64),
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_bypass_actor_serialization() {
+        // Test Team actor with ID
+        let team_actor = RulesetBypassActor {
+            actor_id: Some(ActorId::Id(234)),
+            actor_type: RulesetActorType::Team,
+            bypass_mode: Some(RulesetBypassMode::Always),
+        };
+        let json =
+            serde_json::to_string(&team_actor).expect("Team actor serialization should succeed");
+        assert_eq!(
+            json, r#"{"actor_id":234,"actor_type":"Team","bypass_mode":"always"}"#,
+            "Team actor should serialize with numeric actor_id, PascalCase actor_type, and snake_case bypass_mode"
+        );
+
+        // Test Integration actor with ID
+        let integration_actor = RulesetBypassActor {
+            actor_id: Some(ActorId::Id(123456)),
+            actor_type: RulesetActorType::Integration,
+            bypass_mode: Some(RulesetBypassMode::Always),
+        };
+        let json = serde_json::to_string(&integration_actor)
+            .expect("Integration actor serialization should succeed");
+        assert_eq!(
+            json, r#"{"actor_id":123456,"actor_type":"Integration","bypass_mode":"always"}"#,
+            "Integration actor should serialize with numeric actor_id"
+        );
+
+        // Test OrganizationAdmin with ID 1 (per GitHub API spec)
+        let org_admin_actor = RulesetBypassActor {
+            actor_id: Some(ActorId::Id(1)),
+            actor_type: RulesetActorType::OrganizationAdmin,
+            bypass_mode: None, // Use API default
+        };
+        let json = serde_json::to_string(&org_admin_actor)
+            .expect("OrganizationAdmin actor serialization should succeed");
+        assert_eq!(
+            json, r#"{"actor_id":1,"actor_type":"OrganizationAdmin"}"#,
+            "OrganizationAdmin should use actor_id:1 and omit bypass_mode when None"
+        );
+
+        // Test DeployKey with null actor_id (per GitHub API spec)
+        let deploy_key_actor = RulesetBypassActor {
+            actor_id: Some(ActorId::Null),
+            actor_type: RulesetActorType::DeployKey,
+            bypass_mode: Some(RulesetBypassMode::Always),
+        };
+        let json = serde_json::to_string(&deploy_key_actor)
+            .expect("DeployKey actor serialization should succeed");
+        assert_eq!(
+            json, r#"{"actor_id":null,"actor_type":"DeployKey","bypass_mode":"always"}"#,
+            "DeployKey should serialize actor_id as null"
+        );
+
+        // Test EnterpriseOwner with None actor_id (field omitted per GitHub API spec)
+        let enterprise_actor = RulesetBypassActor {
+            actor_id: None,
+            actor_type: RulesetActorType::EnterpriseOwner,
+            bypass_mode: Some(RulesetBypassMode::Exempt),
+        };
+        let json = serde_json::to_string(&enterprise_actor)
+            .expect("EnterpriseOwner actor serialization should succeed");
+        assert_eq!(
+            json, r#"{"actor_type":"EnterpriseOwner","bypass_mode":"exempt"}"#,
+            "EnterpriseOwner should omit actor_id field entirely"
+        );
+
+        // Test pull_request bypass mode
+        let pr_actor = RulesetBypassActor {
+            actor_id: Some(ActorId::Id(789)),
+            actor_type: RulesetActorType::Team,
+            bypass_mode: Some(RulesetBypassMode::PullRequest),
+        };
+        let json = serde_json::to_string(&pr_actor)
+            .expect("PullRequest bypass mode serialization should succeed");
+        assert_eq!(
+            json, r#"{"actor_id":789,"actor_type":"Team","bypass_mode":"pull_request"}"#,
+            "PullRequest bypass mode should serialize as 'pull_request' with underscore"
+        );
+    }
+
+    #[test]
+    fn test_bypass_actor_deserialization() {
+        // Test deserializing from GitHub API response
+        let json = r#"{"actor_id":234,"actor_type":"Team","bypass_mode":"always"}"#;
+        let actor: RulesetBypassActor =
+            serde_json::from_str(json).expect("Should deserialize valid Team actor");
+        assert_eq!(
+            actor.actor_id,
+            Some(ActorId::Id(234)),
+            "actor_id should be numeric"
+        );
+        assert_eq!(
+            actor.actor_type,
+            RulesetActorType::Team,
+            "actor_type should be Team"
+        );
+        assert_eq!(
+            actor.bypass_mode,
+            Some(RulesetBypassMode::Always),
+            "bypass_mode should be Always"
+        );
+
+        // Test with null actor_id (DeployKey)
+        // Custom deserializer ensures JSON null becomes Some(ActorId::Null), not None
+        let json = r#"{"actor_id":null,"actor_type":"DeployKey","bypass_mode":"always"}"#;
+        let actor: RulesetBypassActor = serde_json::from_str(json)
+            .expect("Should deserialize DeployKey actor with null actor_id");
+        assert_eq!(
+            actor.actor_id,
+            Some(ActorId::Null),
+            "JSON null should deserialize to Some(ActorId::Null) with custom deserializer"
+        );
+        assert_eq!(actor.actor_type, RulesetActorType::DeployKey);
+
+        // Test with missing bypass_mode (should default to None)
+        let json = r#"{"actor_id":1,"actor_type":"OrganizationAdmin"}"#;
+        let actor: RulesetBypassActor = serde_json::from_str(json)
+            .expect("Should deserialize OrganizationAdmin without bypass_mode");
+        assert_eq!(actor.actor_id, Some(ActorId::Id(1)));
+        assert_eq!(
+            actor.bypass_mode, None,
+            "bypass_mode should be None when omitted from JSON"
+        );
+
+        // Test with missing actor_id (EnterpriseOwner)
+        let json = r#"{"actor_type":"EnterpriseOwner","bypass_mode":"exempt"}"#;
+        let actor: RulesetBypassActor = serde_json::from_str(json)
+            .expect("Should deserialize EnterpriseOwner without actor_id");
+        assert_eq!(
+            actor.actor_id, None,
+            "actor_id should be None when omitted from JSON"
+        );
+        assert_eq!(actor.actor_type, RulesetActorType::EnterpriseOwner);
+        assert_eq!(actor.bypass_mode, Some(RulesetBypassMode::Exempt));
+
+        // Test all actor types can be deserialized
+        let actor_types = [
+            ("Integration", RulesetActorType::Integration),
+            ("OrganizationAdmin", RulesetActorType::OrganizationAdmin),
+            ("RepositoryRole", RulesetActorType::RepositoryRole),
+            ("Team", RulesetActorType::Team),
+            ("DeployKey", RulesetActorType::DeployKey),
+            ("EnterpriseOwner", RulesetActorType::EnterpriseOwner),
+        ];
+        for (type_str, expected_type) in actor_types {
+            let json = format!(
+                r#"{{"actor_id":1,"actor_type":"{}","bypass_mode":"always"}}"#,
+                type_str
+            );
+            let actor: RulesetBypassActor = serde_json::from_str(&json)
+                .unwrap_or_else(|e| panic!("Should deserialize actor type {}: {}", type_str, e));
+            assert_eq!(
+                actor.actor_type, expected_type,
+                "actor_type {} should deserialize correctly",
+                type_str
+            );
+        }
+
+        // Test all bypass modes can be deserialized
+        let bypass_modes = [
+            ("always", RulesetBypassMode::Always),
+            ("pull_request", RulesetBypassMode::PullRequest),
+            ("exempt", RulesetBypassMode::Exempt),
+        ];
+        for (mode_str, expected_mode) in bypass_modes {
+            let json = format!(
+                r#"{{"actor_id":1,"actor_type":"Team","bypass_mode":"{}"}}"#,
+                mode_str
+            );
+            let actor: RulesetBypassActor = serde_json::from_str(&json)
+                .unwrap_or_else(|e| panic!("Should deserialize bypass mode {}: {}", mode_str, e));
+            assert_eq!(
+                actor.bypass_mode,
+                Some(expected_mode),
+                "bypass_mode {} should deserialize correctly",
+                mode_str
+            );
+        }
+    }
 }
