@@ -683,7 +683,6 @@ impl SyncGitHub {
                         dismiss_stale_review: false,
                         mode: rust_team_data::v1::BranchProtectionMode::PrNotRequired,
                         allowed_merge_teams: vec![],
-                        allowed_merge_users: vec![],
                         merge_bots: vec![],
                     },
                 });
@@ -721,13 +720,8 @@ impl SyncGitHub {
         actual_ruleset: &api::Ruleset,
         branch_protection: &rust_team_data::v1::BranchProtection,
     ) -> bool {
-        let expected_count = branch_protection.allowed_merge_teams.len()
-            + if branch_protection.allowed_merge_users.is_empty() {
-                0
-            } else {
-                1
-            } // OrganizationAdmin counts as 1
-            + branch_protection.merge_bots.len();
+        let expected_count =
+            branch_protection.allowed_merge_teams.len() + branch_protection.merge_bots.len();
 
         let actual_count = actual_ruleset
             .bypass_actors
@@ -1017,29 +1011,16 @@ pub(crate) fn construct_bypass_actors(
         }
     }
 
-    // Add OrganizationAdmin bypass actor if allowed_merge_users is specified.
-    // Note: GitHub API limitation - cannot add individual users as bypass actors.
-    // OrganizationAdmin with actor_id=1 grants bypass to ALL organization admins.
-    // For granular per-user control, use allowed_merge_teams with a team containing specific users.
-    if !branch_protection.allowed_merge_users.is_empty() {
-        debug!(
-            "Using OrganizationAdmin bypass actor for allowed_merge_users: {:?}. \
-             Note: This grants bypass to ALL org admins, not just specified users. \
-             For per-user control, use allowed_merge_teams instead.",
-            branch_protection.allowed_merge_users
-        );
-        bypass_actors.push(api::RulesetBypassActor {
-            actor_id: Some(api::ActorId::Id(1)),
-            actor_type: api::RulesetActorType::OrganizationAdmin,
-            bypass_mode: Some(api::RulesetBypassMode::Always),
-        });
-    }
-
     // Resolve bot integration bypass actors
     for merge_bot in &branch_protection.merge_bots {
         let user_login = match merge_bot {
             MergeBot::Homu => "bors",
             MergeBot::RustTimer => "rust-timer",
+            MergeBot::Bors => {
+                // Bors uses a GitHub app, which is not configured through team (it is set manually)
+                // Its bypass actor will be roundtripped by sync-team.
+                continue;
+            }
         };
         match github_write.resolve_user_database_id(user_login, org) {
             Ok(Some(actor_id)) => {
@@ -2014,9 +1995,7 @@ fn log_ruleset(
 
     // Log expected bypass actors if branch protection config is provided
     if let Some(bp) = branch_protection
-        && (!bp.allowed_merge_teams.is_empty()
-            || !bp.allowed_merge_users.is_empty()
-            || !bp.merge_bots.is_empty())
+        && (!bp.allowed_merge_teams.is_empty() || !bp.merge_bots.is_empty())
     {
         writeln!(result, "        Expected Bypass Actors:")?;
 
@@ -2024,18 +2003,14 @@ fn log_ruleset(
             writeln!(result, "          - Team: {} (Mode: always)", team)?;
         }
 
-        if !bp.allowed_merge_users.is_empty() {
-            writeln!(
-                result,
-                "          - OrganizationAdmin: ID=1 (Mode: always) [Note: Grants bypass to all org admins, requested users: {}]",
-                bp.allowed_merge_users.join(", ")
-            )?;
-        }
-
         for bot in &bp.merge_bots {
             let bot_name = match bot {
                 MergeBot::Homu => "bors",
                 MergeBot::RustTimer => "rust-timer",
+                MergeBot::Bors => {
+                    // Bors uses a GitHub app, configured manually - skip logging
+                    continue;
+                }
             };
             writeln!(
                 result,

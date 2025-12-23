@@ -878,8 +878,6 @@ pub(crate) struct BranchProtection {
     #[serde(default)]
     pub allowed_merge_teams: Vec<String>,
     #[serde(default)]
-    pub allowed_merge_users: Vec<String>,
-    #[serde(default)]
     pub merge_bots: Vec<MergeBot>,
 }
 
