@@ -15,6 +15,10 @@ pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
 static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
 
+/// GitHub Actions integration ID
+/// Verified via: https://api.github.com/repos/rust-lang/rust/commits/HEAD/check-runs
+const GITHUB_ACTIONS_INTEGRATION_ID: i64 = 15368;
+
 pub(crate) fn create_diff(
     github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
@@ -945,7 +949,7 @@ pub fn construct_ruleset(
                     .iter()
                     .map(|context| RequiredStatusCheck {
                         context: context.clone(),
-                        integration_id: None,
+                        integration_id: Some(GITHUB_ACTIONS_INTEGRATION_ID),
                     })
                     .collect(),
                 strict_required_status_checks_policy: false,
@@ -971,7 +975,7 @@ pub fn construct_ruleset(
 
     api::Ruleset {
         id: None,
-        name: format!("Branch protection for {}", branch_protection.pattern),
+        name: format!("Ruleset for {}", branch_protection.pattern),
         target: RulesetTarget::Branch,
         source_type: RulesetSourceType::Repository,
         enforcement: RulesetEnforcement::Active,
@@ -1644,15 +1648,20 @@ fn log_ruleset(
     new: Option<&api::Ruleset>,
     mut result: impl Write,
 ) -> std::fmt::Result {
+    let is_create = new.is_none();
+    let mut logged = false;
+
     macro_rules! log {
         ($str:literal, $field:expr, $new_field:expr) => {
             let old = $field;
             let new_val = $new_field;
-            if Some(old) != new_val {
+            if is_create {
+                writeln!(result, "        {}: {:?}", $str, old)?;
+                logged = true;
+            } else if Some(old) != new_val {
                 if let Some(n) = new_val {
                     writeln!(result, "        {}: {:?} => {:?}", $str, old, n)?;
-                } else {
-                    writeln!(result, "        {}: {:?}", $str, old)?;
+                    logged = true;
                 }
             }
         };
@@ -1795,12 +1804,23 @@ fn log_ruleset(
                     parameters.strict_required_status_checks_policy
                 )?;
                 if !parameters.required_status_checks.is_empty() {
-                    let checks: Vec<_> = parameters
-                        .required_status_checks
-                        .iter()
-                        .map(|c| &c.context)
-                        .collect();
-                    writeln!(result, "          Checks: {:?}", checks)?;
+                    writeln!(result, "          Checks:")?;
+                    for check in &parameters.required_status_checks {
+                        if let Some(integration_id) = check.integration_id {
+                            let app_name = if integration_id == GITHUB_ACTIONS_INTEGRATION_ID {
+                                "GitHub Actions"
+                            } else {
+                                "unknown app"
+                            };
+                            writeln!(
+                                result,
+                                "            - {} ({}, integration_id: {})",
+                                check.context, app_name, integration_id
+                            )?;
+                        } else {
+                            writeln!(result, "            - {} (any integration)", check.context)?;
+                        }
+                    }
                 }
             }
             api::RulesetRule::RequiredDeployments { parameters } => {
@@ -1812,6 +1832,10 @@ fn log_ruleset(
                 )?;
             }
         }
+    }
+
+    if !is_create && !logged {
+        writeln!(result, "        No changes")?;
     }
 
     Ok(())
