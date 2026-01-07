@@ -990,7 +990,7 @@ pub(crate) fn construct_bypass_actors(
         match github_write.resolve_team_database_id(org, team_name) {
             Ok(Some(actor_id)) => {
                 bypass_actors.push(api::RulesetBypassActor {
-                    actor_id: Some(api::ActorId::Id(actor_id)),
+                    actor_id: Some(actor_id),
                     actor_type: api::RulesetActorType::Team,
                     bypass_mode: Some(api::RulesetBypassMode::Always),
                 });
@@ -1025,7 +1025,7 @@ pub(crate) fn construct_bypass_actors(
         match github_write.resolve_user_database_id(user_login, org) {
             Ok(Some(actor_id)) => {
                 bypass_actors.push(api::RulesetBypassActor {
-                    actor_id: Some(api::ActorId::Id(actor_id)),
+                    actor_id: Some(actor_id),
                     actor_type: api::RulesetActorType::Integration,
                     bypass_mode: Some(api::RulesetBypassMode::Always),
                 });
@@ -1849,11 +1849,10 @@ fn log_ruleset(
         } else {
             writeln!(result, "        Bypass Actors:")?;
             for actor in bypass_actors {
-                let actor_id_str = match &actor.actor_id {
-                    Some(api::ActorId::Id(id)) => id.to_string(),
-                    Some(api::ActorId::Null) => "null".to_string(),
-                    None => "omitted".to_string(),
-                };
+                let actor_id_str = actor
+                    .actor_id
+                    .map(|id| id.to_string())
+                    .unwrap_or_else(|| "none".to_string());
                 let mode_str = actor.bypass_mode.as_ref().map_or("default", |m| match m {
                     api::RulesetBypassMode::Always => "always",
                     api::RulesetBypassMode::PullRequest => "pull_request",
