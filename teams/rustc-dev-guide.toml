@@ -34,8 +34,8 @@ bors.rust.review = true
 orgs = ["rust-lang"]
 
 [website]
-name = "Rustc Dev Guide working area"
-description = "Making the compiler easier to learn by maintaining and improving the Rustc Dev Guide"
+name = "rustc-dev-guide working area"
+description = "Making the compiler easier to learn by maintaining and improving the Rust Compiler Development Guide"
 repo = "https://forge.rust-lang.org/compiler/working-areas.html"
 zulip-stream = "t-compiler/rustc-dev-guide"
 
