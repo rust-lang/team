@@ -23,6 +23,7 @@ wg-safe-transmute = "maintain"
 [[branch-protections]]
 pattern = "main"
 required-approvals = 0
+pr-required = false
 
 [environments.github-pages]
 branches = ["main"]
