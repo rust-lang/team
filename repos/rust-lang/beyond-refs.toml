@@ -24,7 +24,6 @@ wg-safe-transmute = "maintain"
 pattern = "main"
 ci-checks = ["build"]
 required-approvals = 0
-pr-required = false
 
 [environments.github-pages]
 branches = ["main"]
