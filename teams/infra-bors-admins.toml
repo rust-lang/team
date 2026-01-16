@@ -1,0 +1,10 @@
+name = "infra-bors-admins"
+kind = "marker-team"
+
+[people]
+leads = ["Kobzol"]
+members = ["Kobzol"]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
