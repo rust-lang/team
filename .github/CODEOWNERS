@@ -4,7 +4,7 @@
 
 # If none of the rules below match, we apply this catch-all rule
 # and require admin approval for such a change.
-* @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+* @Mark-Simulacrum @emilyalbini @jdno @marcoieni
 
 # Data files can be approved by users with write access.
 # We don't list these users explicitly to avoid notifying all of them
@@ -17,17 +17,17 @@
 *.md
 
 # Modifying these files requires admin approval.
-/repos/rust-lang/team.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/repos/rust-lang/sync-team.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/repos/rust-lang/rust.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/teams/infra-admins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/teams/team-repo-admins.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/people/Mark-Simulacrum.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/people/Nadrieril.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/people/jackh726.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/people/jdno.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/people/jieyouxu.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/people/marcoieni.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/people/oli-obk.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/people/pietroalbini.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
-/people/steffahn.toml @Mark-Simulacrum @pietroalbini @jdno @marcoieni
+/repos/rust-lang/team.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/repos/rust-lang/sync-team.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/repos/rust-lang/rust.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/teams/infra-admins.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/teams/team-repo-admins.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/people/Mark-Simulacrum.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/people/Nadrieril.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/people/emilyalbini.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/people/jackh726.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/people/jdno.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/people/jieyouxu.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/people/marcoieni.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/people/oli-obk.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
+/people/steffahn.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni
