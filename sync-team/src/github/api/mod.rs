@@ -544,7 +544,6 @@ pub(crate) enum RulesetActorType {
 #[serde(rename_all = "snake_case")]
 pub(crate) enum RulesetBypassMode {
     Always,
-    #[serde(rename = "pull_request")]
     PullRequest,
     Exempt,
 }
