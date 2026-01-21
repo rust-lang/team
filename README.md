@@ -22,9 +22,9 @@ If you need to add or remove a person from a team, send a PR to this
 repository. After it's merged, their account will be added/removed
 from all the supported services.
 
-[bors]: https://buildbot2.rust-lang.org/homu
+[bors]: https://bors.rust-lang.org
 
-[bors-src]: https://github.com/rust-lang/homu/blob/master/homu/auth.py
+[bors-src]: https://github.com/rust-lang/bors/blob/main/src/permissions.rs
 
 [www]: https://www.rust-lang.org/governance
 
