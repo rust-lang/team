@@ -638,14 +638,17 @@ impl SyncGitHub {
             match patterns {
                 Some(p) if !p.is_empty() => {
                     // If multiple rulesets have the same pattern, keep the first one
-                    // and mark others for deletion (they shouldn't exist)
-                    if let Some(existing) = actual_rulesets_by_pattern.insert(p, ruleset)
-                        && let Some(id) = existing.id
-                    {
-                        ruleset_diffs.push(RulesetDiff {
-                            name: existing.name.clone(),
-                            operation: RulesetDiffOperation::Delete(id),
-                        });
+                    // and mark later ones for deletion (they shouldn't exist).
+                    if actual_rulesets_by_pattern.contains_key(&p) {
+                        // It's a duplicate, so delete it.
+                        if let Some(id) = ruleset.id {
+                            ruleset_diffs.push(RulesetDiff {
+                                name: ruleset.name.clone(),
+                                operation: RulesetDiffOperation::Delete(id),
+                            });
+                        }
+                    } else {
+                        actual_rulesets_by_pattern.insert(p, ruleset);
                     }
                 }
                 _ => {
@@ -680,15 +683,25 @@ impl SyncGitHub {
                     || actual_ruleset.enforcement != expected_ruleset.enforcement
                     || actual_ruleset.name != expected_ruleset.name
                 {
-                    let id = actual_ruleset.id.unwrap_or(0);
-                    ruleset_diffs.push(RulesetDiff {
-                        name: ruleset_name,
-                        operation: RulesetDiffOperation::Update(
-                            id,
-                            actual_ruleset,
-                            expected_ruleset,
-                        ),
-                    });
+                    match actual_ruleset.id {
+                        Some(id) => {
+                            ruleset_diffs.push(RulesetDiff {
+                                name: ruleset_name,
+                                operation: RulesetDiffOperation::Update(
+                                    id,
+                                    actual_ruleset,
+                                    expected_ruleset,
+                                ),
+                            });
+                        }
+                        None => {
+                            // A ruleset without an id cannot be updated; fall back to creating.
+                            ruleset_diffs.push(RulesetDiff {
+                                name: ruleset_name,
+                                operation: RulesetDiffOperation::Create(expected_ruleset),
+                            });
+                        }
+                    }
                 }
             } else {
                 // Ruleset doesn't exist for this branch pattern, create it
