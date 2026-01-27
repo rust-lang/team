@@ -633,11 +633,7 @@ impl SyncGitHub {
         let mut actual_rulesets_without_pattern: Vec<api::Ruleset> = Vec::new();
 
         for ruleset in actual_rulesets {
-            let patterns = ruleset
-                .conditions
-                .as_ref()
-                .and_then(|c| c.ref_name.as_ref())
-                .map(|r| r.include.clone());
+            let patterns = ruleset.patterns();
 
             match patterns {
                 Some(p) if !p.is_empty() => {
@@ -665,12 +661,7 @@ impl SyncGitHub {
             let ruleset_name = expected_ruleset.name.clone();
 
             // Get the expected patterns - construct_ruleset always creates valid patterns
-            let expected_patterns = expected_ruleset
-                .conditions
-                .as_ref()
-                .and_then(|c| c.ref_name.as_ref())
-                .map(|r| r.include.clone())
-                .unwrap_or_default();
+            let expected_patterns = expected_ruleset.patterns().unwrap_or_default();
 
             if expected_patterns.is_empty() {
                 // This shouldn't happen with construct_ruleset, but handle defensively

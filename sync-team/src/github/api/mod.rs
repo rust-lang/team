@@ -497,6 +497,15 @@ pub(crate) struct Ruleset {
     pub(crate) rules: Vec<RulesetRule>,
 }
 
+impl Ruleset {
+    pub fn patterns(&self) -> Option<Vec<String>> {
+        self.conditions
+            .as_ref()
+            .and_then(|c| c.ref_name.as_ref())
+            .map(|r| r.include.clone())
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub(crate) enum RulesetTarget {
