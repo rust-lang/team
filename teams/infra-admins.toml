@@ -5,9 +5,10 @@ kind = "marker-team"
 leads = []
 members = [
     "Mark-Simulacrum",
-    "pietroalbini",
+    "emilyalbini",
     "jdno",
     "marcoieni",
+    "ubiratansoares"
 ]
 alumni = [
     "aidanhs",

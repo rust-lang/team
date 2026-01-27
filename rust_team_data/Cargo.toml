@@ -1,7 +1,6 @@
 [package]
 name = "rust_team_data"
 version = "1.0.0"
-authors = ["Pietro Albini <pietro@pietroalbini.org>"]
 edition = "2018"
 license.workspace = true
 

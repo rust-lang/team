@@ -1,7 +1,6 @@
 [package]
 name = "sync-team"
 version = "0.1.0"
-authors = ["Pietro Albini <pietro@pietroalbini.org>"]
 edition = "2024"
 
 [dependencies]
