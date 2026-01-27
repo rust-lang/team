@@ -7,7 +7,7 @@ use crate::Config;
 use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings};
 use log::debug;
 use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot};
-use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet, hash_map};
 use std::fmt::Write;
 
 pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
@@ -639,7 +639,9 @@ impl SyncGitHub {
                 Some(p) if !p.is_empty() => {
                     // If multiple rulesets have the same pattern, keep the first one
                     // and mark later ones for deletion (they shouldn't exist).
-                    if actual_rulesets_by_pattern.contains_key(&p) {
+                    if let hash_map::Entry::Vacant(e) = actual_rulesets_by_pattern.entry(p) {
+                        e.insert(ruleset);
+                    } else {
                         // It's a duplicate, so delete it.
                         if let Some(id) = ruleset.id {
                             ruleset_diffs.push(RulesetDiff {
@@ -647,8 +649,6 @@ impl SyncGitHub {
                                 operation: RulesetDiffOperation::Delete(id),
                             });
                         }
-                    } else {
-                        actual_rulesets_by_pattern.insert(p, ruleset);
                     }
                 }
                 _ => {
