@@ -33,5 +33,9 @@ extra-emails = [
 name = "T-all"
 
 # Private channel with all team members, so that we can have an easy way of reaching them.
+# Also includes Rust Foundation staff, for any relevant non-public communication.
 [[zulip-streams]]
 name = "all/private"
+extra-teams = [
+    "foundation-staff",
+]
