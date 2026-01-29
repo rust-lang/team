@@ -1,7 +1,7 @@
 org = "rust-lang"
 name = "portable-simd"
 description = "The testing ground for the future of portable SIMD in Rust"
-bots = []
+bots = ["rustbot"]
 
 [access.teams]
 project-portable-simd = "write"
