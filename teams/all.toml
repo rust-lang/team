@@ -35,3 +35,6 @@ name = "T-all"
 # Private channel with all team members, so that we can have an easy way of reaching them.
 [[zulip-streams]]
 name = "all/private"
+extra-teams = [
+    "foundation-staff",
+]
