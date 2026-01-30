@@ -1,0 +1,20 @@
+name = "foundation-staff"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "becrumbul",
+    "graciegregory",
+    "JoelMarcey",
+    "LoriLorusso",
+    "abibroom",
+    "baumanj",
+    "walterhpearce",
+    "Turbo87",
+    "LawnGnome",
+    "marcoieni",
+    "ubiratansoares",
+    "ernestkissiedu"
+]
+alumni = []
