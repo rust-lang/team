@@ -78,7 +78,8 @@ members-without-zulip-id = [
     "ryankurte",
     "Stammark",
     "therealprof",
-    "zeenix"
+    "zeenix",
+    "abibroom",
 ]
 
 enable-rulesets-repos = [
