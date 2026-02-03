@@ -16,12 +16,13 @@ project-const-traits = "maintain"
 project-dyn-upcasting = "maintain"
 project-impl-trait = "maintain"
 project-keyword-generics = "maintain"
-rust-for-linux = "maintain"
 types = "maintain"
 wg-async = "maintain"
 wg-safe-transmute = "maintain"
 
 [access.individuals]
+BennoLossin = "maintain"
+dingxiangfei2009 = "maintain"
 joshlf = "maintain"
 jswrenn = "maintain"
 
