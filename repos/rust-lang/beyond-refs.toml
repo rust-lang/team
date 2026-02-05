@@ -5,6 +5,7 @@ homepage = "https://rust-lang.github.io/beyond-refs/"
 bots = []
 
 [access.teams]
+beyond-refs-editors = "maintain"
 goal-owners = "maintain"
 lang = "maintain"
 lang-advisors = "maintain"

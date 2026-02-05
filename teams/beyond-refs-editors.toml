@@ -1,0 +1,16 @@
+name = "beyond-refs-editors"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "BennoLossin",
+    "dingxiangfei2009",
+    "joshlf",
+    "jswrenn",
+    "Nadrieril",
+    "tmandry",
+]
+
+[[github]]
+orgs = ["rust-lang"]
