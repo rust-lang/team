@@ -21,3 +21,6 @@ members = [
 
 [permissions]
 bors.rust.try = true
+
+[[github]]
+orgs = ["rust-lang"]
