@@ -5,6 +5,7 @@ homepage = "https://rust-lang.github.io/beyond-refs/"
 bots = []
 
 [access.teams]
+beyond-refs-editors = "maintain"
 goal-owners = "maintain"
 lang = "maintain"
 lang-advisors = "maintain"
@@ -19,12 +20,6 @@ project-keyword-generics = "maintain"
 types = "maintain"
 wg-async = "maintain"
 wg-safe-transmute = "maintain"
-
-[access.individuals]
-BennoLossin = "maintain"
-dingxiangfei2009 = "maintain"
-joshlf = "maintain"
-jswrenn = "maintain"
 
 [[branch-protections]]
 pattern = "main"
