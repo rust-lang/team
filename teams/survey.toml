@@ -23,3 +23,6 @@ orgs = ["rust-lang"]
 
 [[lists]]
 address = "surveys@rust-lang.org"
+
+[[lists]]
+address = "survey-contributors@rust-lang.org"
