@@ -19,6 +19,7 @@ members = [
     { github = "davidtwco", roles = ["compiler-maintainer"] },
     "dianne",
     "dianqk",
+    "dingxiangfei2009",
     "durin42",
     "Enselic",
     "eholk",
