@@ -22,12 +22,12 @@ struct List {
     priority: i32,
 }
 
-fn mangle_lists(email_encryption_key: &str, lists: team_data::Lists) -> anyhow::Result<Vec<List>> {
+fn mangle_lists(email_private_key: &str, lists: team_data::Lists) -> anyhow::Result<Vec<List>> {
     let mut result = Vec::new();
 
     for (_key, mut list) in lists.lists.into_iter() {
         // Handle encrypted list addresses.
-        list.address = email_encryption::try_decrypt(email_encryption_key, &list.address)?;
+        list.address = email_encryption::try_decrypt(email_private_key, &list.address)?;
 
         let base_list = List {
             address: mangle_address(&list.address)?,
@@ -51,7 +51,7 @@ fn mangle_lists(email_encryption_key: &str, lists: team_data::Lists) -> anyhow::
         let mut partitions_count = 0;
         for mut member in list.members {
             // Handle encrypted member email addresses.
-            member = email_encryption::try_decrypt(email_encryption_key, &member)?;
+            member = email_encryption::try_decrypt(email_private_key, &member)?;
 
             let action = build_route_action(&member);
             if current_actions_len + action.len() > ACTIONS_SIZE_LIMIT_BYTES {
@@ -89,7 +89,7 @@ fn mangle_address(addr: &str) -> anyhow::Result<String> {
 
 pub(crate) fn run(
     token: SecretString,
-    email_encryption_key: &str,
+    email_private_key: &str,
     team_api: &TeamApi,
     dry_run: bool,
 ) -> anyhow::Result<()> {
@@ -97,7 +97,7 @@ pub(crate) fn run(
     let mailmap = team_api.get_lists()?;
 
     // Mangle all the mailing lists
-    let lists = mangle_lists(email_encryption_key, mailmap)?;
+    let lists = mangle_lists(email_private_key, mailmap)?;
 
     let mut routes = Vec::new();
     let mut response = mailgun.get_routes(None)?;
@@ -224,12 +224,16 @@ mod tests {
 
     #[test]
     fn test_mangle_lists() {
-        const ENCRYPTION_KEY: &str = "mGDTk1eIx8P2gTerzKXwvun67d41iUid";
+        const PRIVATE_KEY: &str =
+            "73cd73133b310671933f020b957594960bc046410765a1e145f144f88f379408";
+        const PUBLIC_KEY: &str = "d1734021de0af5cfeca64482f3c38b3350a38fd4be2e6a88b2c150be4416b261";
 
-        let secret_list = email_encryption::encrypt(ENCRYPTION_KEY, "secret-list@example.com")
-            .expect("failed to encrypt list");
-        let secret_member = email_encryption::encrypt(ENCRYPTION_KEY, "secret-member@example.com")
-            .expect("failed to encrypt member");
+        let secret_list =
+            email_encryption::encrypt_with_public_key("secret-list@example.com", PUBLIC_KEY)
+                .expect("failed to encrypt list");
+        let secret_member =
+            email_encryption::encrypt_with_public_key("secret-member@example.com", PUBLIC_KEY)
+                .expect("failed to encrypt member");
 
         let original = rust_team_data::v1::Lists {
             lists: indexmap::indexmap![
@@ -254,7 +258,7 @@ mod tests {
             ],
         };
 
-        let mangled = mangle_lists(ENCRYPTION_KEY, original).unwrap();
+        let mangled = mangle_lists(PRIVATE_KEY, original).unwrap();
         let expected = vec![
             List {
                 address: mangle_address("small@example.com").unwrap(),

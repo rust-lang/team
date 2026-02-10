@@ -54,8 +54,8 @@ pub fn run_sync_team(
             }
             "mailgun" => {
                 let token = SecretString::from(get_env("MAILGUN_API_TOKEN")?);
-                let encryption_key = get_env("EMAIL_ENCRYPTION_KEY")?;
-                mailgun::run(token, &encryption_key, &team_api, dry_run)?;
+                let private_key = get_env("EMAIL_PRIVATE_KEY")?;
+                mailgun::run(token, &private_key, &team_api, dry_run)?;
             }
             "zulip" => {
                 let username = get_env("ZULIP_USERNAME")?;
