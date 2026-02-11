@@ -7,14 +7,14 @@ members = [
     "nikomatsakis",
     "joshtriplett",
     "lqd",
-    "nandsh",
-    "davidtwco",
-    "traviscross",
     "tomassedovic",
     "nxsaken",
 ]
 alumni = [
     "spastorino",
+    "nandsh",
+    "davidtwco",
+    "traviscross",
 ]
 
 [[github]]
