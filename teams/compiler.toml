@@ -58,7 +58,7 @@ members = [
     "scottmcm",
     { github = "SparrowLii", roles = ["compiler-maintainer"] },
     { github = "spastorino", roles = ["compiler-maintainer"] },
-    "TaKO8Ki",
+    { github = "TaKO8Ki", roles = ["compiler-maintainer"] },
     "tgross35",
     "the8472",
     "tiif",
