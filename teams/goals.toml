@@ -35,3 +35,6 @@ repo = "https://github.com/rust-lang/rust-project-goals"
 
 [[zulip-groups]]
 name = "T-goals"
+
+[[lists]]
+address = "goals-team@rust-lang.org"
