@@ -7,14 +7,14 @@ members = [
     "nikomatsakis",
     "joshtriplett",
     "lqd",
-    "nandsh",
-    "davidtwco",
-    "traviscross",
     "tomassedovic",
     "nxsaken",
 ]
 alumni = [
     "spastorino",
+    "nandsh",
+    "davidtwco",
+    "traviscross",
 ]
 
 [[github]]
@@ -35,3 +35,6 @@ repo = "https://github.com/rust-lang/rust-project-goals"
 
 [[zulip-groups]]
 name = "T-goals"
+
+[[lists]]
+address = "goals-team@rust-lang.org"
