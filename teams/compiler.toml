@@ -5,6 +5,7 @@ top-level = true
 leads = ["davidtwco", "wesleywiser"]
 members = [
     "Amanieu",
+    "adwinwhite",
     "alexcrichton",
     "antoyo",
     "apiraino",
