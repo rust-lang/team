@@ -9,7 +9,6 @@
 //! a 24-byte random nonce and the XChaCha20Poly1305-encrypted email address. Utilities are provided
 //! to both encrypt and decrypt.
 
-use blake3::Hash;
 use chacha20poly1305::aead::{Aead, NewAead};
 use chacha20poly1305::{Key, XChaCha20Poly1305, XNonce};
 use hex::{FromHex, ToHex};
@@ -22,31 +21,26 @@ const KEY_LENGTH: usize = 32;
 const NONCE_LENGTH: usize = 24;
 // TODO ask an infra admin to generate one
 const PUBLIC_KEY: &str = "d1734021de0af5cfeca64482f3c38b3350a38fd4be2e6a88b2c150be4416b261";
+// Globally unique context (see here for details: https://docs.rs/blake3/latest/blake3/fn.derive_key.html)
+const KDF_CONTEXT: &str = "rust-team 2026-02-14 email-encryption";
 
 fn get_public_key(public_key: &str) -> PublicKey {
-    PublicKey::from(<[u8; 32]>::from_hex(public_key).expect(
+    PublicKey::from(<[u8; KEY_LENGTH]>::from_hex(public_key).expect(
         "invalid public key configured, ensure it was generated with the generate-key command",
     ))
 }
 
 fn get_private_key(key: &str) -> Result<StaticSecret, Error> {
     Ok(StaticSecret::from(
-        <[u8; 32]>::from_hex(key).map_err(Error::Hex)?,
+        <[u8; KEY_LENGTH]>::from_hex(key).map_err(Error::Hex)?,
     ))
-}
-
-fn get_kdf<'a>(nonce: &'a [u8], shared_secret: &[u8; 32]) -> (&'a XNonce, Hash) {
-    let nonce = XNonce::from_slice(nonce);
-    let mut kdf = blake3::Hasher::new_keyed(shared_secret);
-    kdf.update(nonce);
-    (nonce, kdf.finalize())
 }
 
 /// Encrypt an email address with x25519-dalek, with blake3 for KDF and ChaCha20Poly1305 for AEAD.
 /// The encryption process follows this flow:
 /// 1. an ephemeral x25519 key is generated;
 /// 2. a shared secret is computed against the public key defined by an infra admin as a constant above;
-/// 3. the shared secret is used with a key derivation function (blake3) to generate an uniform symmetric key;
+/// 3. the shared secret is used with a key derivation function (blake3) to generate a uniform symmetric key;
 /// 4. the symmetric key is finally used to encrypt the email;
 /// 5. the hex-encoded information required for decryption (public key, nonce, encrypted email) is returned as part of a fake email address.
 pub fn encrypt_with_public_key(email: &str, public_key: &str) -> Result<String, Error> {
@@ -55,12 +49,13 @@ pub fn encrypt_with_public_key(email: &str, public_key: &str) -> Result<String, 
     let backend_public_key = get_public_key(public_key);
     // Generate the shared secret
     let shared_secret = ephemeral_secret.diffie_hellman(&backend_public_key);
-    // Generate a random nonce every time something is encrypted.
+    // Generate random nonce every time something is encrypted
     let mut nonce = [0u8; NONCE_LENGTH];
     getrandom::getrandom(&mut nonce).map_err(Error::GetRandom)?;
-    let (nonce, shared_key) = get_kdf(&nonce, shared_secret.as_bytes());
+    let nonce = XNonce::from_slice(&nonce);
+    let shared_key = blake3::derive_key(KDF_CONTEXT, shared_secret.as_bytes());
 
-    let mut encrypted = init_cipher(shared_key.as_bytes())?
+    let mut encrypted = init_cipher(&shared_key)
         .encrypt(nonce, email.as_bytes())
         .map_err(|_| Error::EncryptionFailed)?;
 
@@ -93,24 +88,25 @@ pub fn try_decrypt(private_key: &str, email: &str) -> Result<String, Error> {
     }
 
     let (public_key, rest) = combined.split_at(KEY_LENGTH);
-    let public_key: &[u8; 32] = public_key.try_into().unwrap(); // Safe unwrap as the length is verified above
+    let public_key: &[u8; KEY_LENGTH] = public_key.try_into().unwrap(); // Safe unwrap as the length is verified above
     let (nonce, encrypted) = rest.split_at(NONCE_LENGTH);
+    let nonce = XNonce::from_slice(nonce);
 
     let private_key = get_private_key(private_key)?;
     let shared_secret = private_key.diffie_hellman(&PublicKey::from(public_key.to_owned()));
-    let (nonce, shared_key) = get_kdf(nonce, shared_secret.as_bytes());
+    let shared_key = blake3::derive_key(KDF_CONTEXT, shared_secret.as_bytes());
 
     String::from_utf8(
-        init_cipher(shared_key.as_bytes())?
+        init_cipher(&shared_key)
             .decrypt(nonce, encrypted)
             .map_err(|_| Error::EncryptionFailed)?,
     )
     .map_err(|_| Error::InvalidUtf8)
 }
 
-fn init_cipher(key: &[u8]) -> Result<XChaCha20Poly1305, Error> {
+fn init_cipher(key: &[u8; KEY_LENGTH]) -> XChaCha20Poly1305 {
     let key = Key::from_slice(key);
-    Ok(XChaCha20Poly1305::new(key))
+    XChaCha20Poly1305::new(key)
 }
 
 pub fn generate_x25519_keypair() -> (String, String) {
