@@ -92,6 +92,8 @@ enum Cli {
     EncryptEmail,
     /// Decrypt an email address
     DecryptEmail,
+    /// Generate a x25519 key for use with the email encryption module
+    GenerateKey,
     /// CI scripts
     #[clap(subcommand)]
     Ci(CiOpts),
@@ -102,7 +104,7 @@ enum Cli {
     /// Environment variables:
     /// - GITHUB_TOKEN          Authentication token with GitHub
     /// - MAILGUN_API_TOKEN     Authentication token with Mailgun
-    /// - EMAIL_ENCRYPTION_KEY  Key used to decrypt encrypted emails in the team repo
+    /// - EMAIL_PRIVATE_KEY     Key used to decrypt encrypted emails in the team repo
     /// - ZULIP_USERNAME        Username of the Zulip bot
     /// - ZULIP_API_TOKEN       Authentication token of the Zulip bot
     #[clap(verbatim_doc_comment)]
@@ -526,25 +528,23 @@ fn run() -> Result<(), Error> {
             let plain: String = dialoguer::Input::new()
                 .with_prompt("Plaintext address")
                 .interact_text()?;
-            let key = dialoguer::Password::new()
-                .with_prompt("Secret key")
-                .interact()?;
-            println!(
-                "{}",
-                rust_team_data::email_encryption::encrypt(&key, &plain)?
-            );
+            println!("{}", rust_team_data::email_encryption::encrypt(&plain)?);
         }
         Cli::DecryptEmail => {
             let encrypted: String = dialoguer::Input::new()
                 .with_prompt("Encrypted address")
                 .interact_text()?;
             let key = dialoguer::Password::new()
-                .with_prompt("Secret key")
+                .with_prompt("Private key")
                 .interact()?;
             println!(
                 "{}",
                 rust_team_data::email_encryption::try_decrypt(&key, &encrypted)?
             );
+        }
+        Cli::GenerateKey => {
+            let (secret, public) = rust_team_data::email_encryption::generate_x25519_keypair();
+            println!("Generated keypair: secret: {} - public: {}", secret, public);
         }
         Cli::Ci(opts) => match opts {
             CiOpts::GenerateCodeowners => generate_codeowners_file(data)?,
