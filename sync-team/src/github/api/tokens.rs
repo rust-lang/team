@@ -46,10 +46,6 @@ impl GitHubTokens {
             GitHubTokens::Pat(pat) => Ok(pat),
         }
     }
-
-    pub fn is_pat(&self) -> bool {
-        matches!(self, GitHubTokens::Pat(_))
-    }
 }
 
 fn org_name_from_env_var(env_var: &str) -> Option<String> {

@@ -35,7 +35,6 @@ type RepoName = String;
 #[derive(Copy, Clone, Debug, PartialEq)]
 enum GithubApp {
     RenovateBot,
-    /// New Rust implementation of Bors
     Bors,
 }
 

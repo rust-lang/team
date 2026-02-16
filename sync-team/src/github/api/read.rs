@@ -200,14 +200,8 @@ impl GithubRead for GitHubApiRead {
         }
 
         let mut installations = Vec::new();
-        let url = if self.client.github_tokens.is_pat() {
-            // we are using a PAT
-            format!("user/installations/{installation_id}/repositories")
-        } else {
-            // we are using a GitHub App
-            "installation/repositories".to_string()
-        };
 
+        let url = format!("user/installations/{installation_id}/repositories");
         self.client
             .rest_paginated(
                 &Method::GET,
