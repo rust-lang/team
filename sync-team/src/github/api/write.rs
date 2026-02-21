@@ -89,6 +89,83 @@ impl GitHubWrite {
         Ok(data.organization.team.id)
     }
 
+    /// Resolve a team's database ID for use in rulesets
+    /// Returns None if the team doesn't exist in the organization
+    pub(crate) fn resolve_team_database_id(
+        &self,
+        org: &str,
+        name: &str,
+    ) -> anyhow::Result<Option<i64>> {
+        #[derive(serde::Serialize)]
+        struct Params<'a> {
+            org: &'a str,
+            team: &'a str,
+        }
+        let query = "
+            query($org: String!, $team: String!) {
+                organization(login: $org) {
+                    team(slug: $team) {
+                        databaseId
+                    }
+                }
+            }
+        ";
+        #[derive(serde::Deserialize)]
+        struct Data {
+            organization: Option<Organization>,
+        }
+        #[derive(serde::Deserialize)]
+        struct Organization {
+            team: Option<Team>,
+        }
+        #[derive(serde::Deserialize)]
+        struct Team {
+            #[serde(rename = "databaseId")]
+            database_id: Option<i64>,
+        }
+
+        let data: Data = self
+            .client
+            .graphql(query, Params { org, team: name }, org)?;
+
+        Ok(data
+            .organization
+            .and_then(|org| org.team)
+            .and_then(|team| team.database_id))
+    }
+
+    /// Resolve a user's database ID for use in rulesets
+    /// Returns None if the user doesn't exist
+    pub(crate) fn resolve_user_database_id(
+        &self,
+        login: &str,
+        org: &str,
+    ) -> anyhow::Result<Option<i64>> {
+        #[derive(serde::Serialize)]
+        struct Params<'a> {
+            login: &'a str,
+        }
+        let query = "
+            query($login: String!) {
+                user(login: $login) {
+                    databaseId
+                }
+            }
+        ";
+        #[derive(serde::Deserialize)]
+        struct Data {
+            user: Option<User>,
+        }
+        #[derive(serde::Deserialize)]
+        struct User {
+            #[serde(rename = "databaseId")]
+            database_id: Option<i64>,
+        }
+
+        let data: Data = self.client.graphql(query, Params { login }, org)?;
+        Ok(data.user.and_then(|u| u.database_id))
+    }
+
     /// Create a team in a org
     pub(crate) fn create_team(
         &self,
