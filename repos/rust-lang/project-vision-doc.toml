@@ -3,6 +3,7 @@ name = "project-vision-doc"
 description = "Project Vision Doc"
 homepage = "https://rust-lang.github.io/project-vision-doc/"
 bots = ["rustbot", "rfcbot"]
+private-non-synced = true
 
 [access.teams]
 project-vision-doc-2025 = "maintain"
