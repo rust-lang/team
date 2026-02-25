@@ -29,6 +29,7 @@ members = [
     "lqd",
     "nikomatsakis",
     "obi1kenobi",
+    "ojeda",
     "oli-obk",
     "petrochenkov",
     "ranger-ross",
@@ -45,4 +46,3 @@ alumni = [
 
 [[github]]
 orgs = ["rust-lang"]
-
