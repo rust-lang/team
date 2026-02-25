@@ -40,7 +40,7 @@ from all the supported services.
 
 [rfcbot]: https://rfcbot.rs
 
-[rfcbot-src]: https://github.com/anp/rfcbot-rs/blob/master/src/teams.rs
+[rfcbot-src]: https://github.com/rust-lang/rfcbot-rs/blob/master/src/teams.rs
 
 [sync-team-src]: sync-team
 
