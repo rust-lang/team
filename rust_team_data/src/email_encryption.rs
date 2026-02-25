@@ -19,8 +19,7 @@ const PREFIX: &str = "encrypted+";
 const SUFFIX: &str = "@rust-lang.invalid";
 const KEY_LENGTH: usize = 32;
 const NONCE_LENGTH: usize = 24;
-// TODO ask an infra admin to generate one
-const PUBLIC_KEY: &str = "d1734021de0af5cfeca64482f3c38b3350a38fd4be2e6a88b2c150be4416b261";
+const PUBLIC_KEY: &str = "a5f80676b1368fe1b2e903058810a6de86ecf2be1225a64e6d79c8d747557b7b";
 // Globally unique context (see here for details: https://docs.rs/blake3/latest/blake3/fn.derive_key.html)
 const KDF_CONTEXT: &str = "rust-team 2026-02-14 email-encryption";
 
