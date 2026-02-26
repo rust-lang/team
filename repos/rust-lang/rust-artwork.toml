@@ -4,6 +4,4 @@ description = "Official artwork for the Rust project."
 bots = []
 
 [access.teams]
-
-[access.individuals]
-m-ou-se = "write"
+leadership-council = "write"
