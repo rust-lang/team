@@ -250,6 +250,7 @@ impl GitHubWrite {
                 description: settings.description.clone(),
                 homepage: settings.homepage.clone(),
                 archived: false,
+                private: false,
                 allow_auto_merge: Some(settings.auto_merge_enabled),
             })
         } else {

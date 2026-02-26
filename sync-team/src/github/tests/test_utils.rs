@@ -140,6 +140,7 @@ impl DataModel {
                     description: repo.description.clone(),
                     homepage: repo.homepage.clone(),
                     archived: false,
+                    private: false,
                     allow_auto_merge: None,
                 },
             );

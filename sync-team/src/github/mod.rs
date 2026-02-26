@@ -398,6 +398,14 @@ impl SyncGitHub {
             }
         };
 
+        if !expected_repo.private && actual_repo.private {
+            return Err(anyhow::anyhow!(
+                "Repository `{}/{}` is private on GitHub, but not marked as private in team. This can be a security concern!",
+                actual_repo.org,
+                actual_repo.name
+            ));
+        }
+
         let permission_diffs = self.diff_permissions(expected_repo)?;
 
         let branch_protection_diffs = self.diff_branch_protections(&actual_repo, expected_repo)?;
