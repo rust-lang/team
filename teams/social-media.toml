@@ -9,6 +9,9 @@ alumni = []
 [[lists]]
 address = "social@rust-lang.org"
 
+[[github]]
+orgs = ["rust-lang"]
+
 [website]
 name = "Social media team"
 description = "Handles posting on social media sites"
