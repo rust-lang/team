@@ -1,4 +1,3 @@
-# Auto-generated from the rust-project-goals repository
 name = "goal-owners"
 kind = "marker-team"
 
@@ -38,6 +37,7 @@ members = [
     "yaahc",
     "nxsaken",
     "JoelMarcey",
+    "teor",
 ]
 included-teams = []
 alumni = [
