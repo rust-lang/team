@@ -298,6 +298,7 @@ impl GithubRead for GitHubApiRead {
                     description
                     homepageUrl
                     isArchived
+                    isPrivate
                 }
             }
         "#;
@@ -317,6 +318,7 @@ impl GithubRead for GitHubApiRead {
             description: Option<String>,
             homepage_url: Option<String>,
             is_archived: bool,
+            is_private: bool,
         }
 
         let result: Option<Wrapper> = self
@@ -339,6 +341,7 @@ impl GithubRead for GitHubApiRead {
             archived: repo_response.is_archived,
             homepage: repo_response.homepage_url,
             org: org.to_string(),
+            private: repo_response.is_private,
         });
 
         Ok(repo)

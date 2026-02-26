@@ -329,6 +329,7 @@ pub(crate) struct Repo {
     pub(crate) description: String,
     pub(crate) homepage: Option<String>,
     pub(crate) archived: bool,
+    pub(crate) private: bool,
     #[serde(default)]
     pub(crate) allow_auto_merge: Option<bool>,
 }
