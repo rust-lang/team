@@ -1,0 +1,9 @@
+org = "rust-lang"
+name = "program-team"
+description = "Home of the Rust program team"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+edition = "maintain"
+goals = "maintain"
+program = "maintain"
