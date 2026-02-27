@@ -11,3 +11,9 @@ docs-rs-reviewers = 'write'
 [[branch-protections]]
 pattern = 'main'
 required-approvals = 0
+
+[environments.production]
+branches = ["main"]
+
+[environments.staging]
+branches = ["main"]
