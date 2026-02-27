@@ -7,7 +7,7 @@ use crate::Config;
 use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings};
 use log::debug;
 use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot};
-use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet, hash_map};
 use std::fmt::Write;
 
 pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
@@ -635,37 +635,84 @@ impl SyncGitHub {
             .github
             .repo_rulesets(&expected_repo.org, &expected_repo.name)?;
 
-        // Build a map of actual rulesets by name
-        let mut actual_rulesets_map: HashMap<String, api::Ruleset> = actual_rulesets
-            .into_iter()
-            .map(|r| (r.name.clone(), r))
-            .collect();
+        // Build a map of actual rulesets by branch pattern (the logical identity)
+        // This allows us to update rulesets even if their name changes
+        let mut actual_rulesets_by_pattern: HashMap<Vec<String>, api::Ruleset> = HashMap::new();
+        let mut actual_rulesets_without_pattern: Vec<api::Ruleset> = Vec::new();
+
+        for ruleset in actual_rulesets {
+            let patterns = ruleset.patterns();
+
+            match patterns {
+                Some(p) if !p.is_empty() => {
+                    // If multiple rulesets have the same pattern, keep the first one
+                    // and mark later ones for deletion (they shouldn't exist).
+                    if let hash_map::Entry::Vacant(e) = actual_rulesets_by_pattern.entry(p) {
+                        e.insert(ruleset);
+                    } else {
+                        // It's a duplicate, so delete it.
+                        if let Some(id) = ruleset.id {
+                            ruleset_diffs.push(RulesetDiff {
+                                name: ruleset.name.clone(),
+                                operation: RulesetDiffOperation::Delete(id),
+                            });
+                        }
+                    }
+                }
+                _ => {
+                    // Rulesets without patterns should be deleted
+                    actual_rulesets_without_pattern.push(ruleset);
+                }
+            }
+        }
 
         // Process each branch protection as a potential ruleset
         for branch_protection in &expected_repo.branch_protections {
             let expected_ruleset = construct_ruleset(expected_repo, branch_protection);
             let ruleset_name = expected_ruleset.name.clone();
 
-            if let Some(actual_ruleset) = actual_rulesets_map.remove(&ruleset_name) {
-                // Ruleset exists, check if it needs updating
-                // For simplicity, we compare the entire ruleset
-                // In production, you might want more sophisticated comparison
+            // Get the expected patterns - construct_ruleset always creates valid patterns
+            let expected_patterns = expected_ruleset.patterns().unwrap_or_default();
+
+            if expected_patterns.is_empty() {
+                // This shouldn't happen with construct_ruleset, but handle defensively
+                ruleset_diffs.push(RulesetDiff {
+                    name: ruleset_name,
+                    operation: RulesetDiffOperation::Create(expected_ruleset),
+                });
+                continue;
+            }
+
+            if let Some(actual_ruleset) = actual_rulesets_by_pattern.remove(&expected_patterns) {
+                // Ruleset exists for this branch pattern, check if it needs updating
+                // Compare rules, conditions, enforcement, and name
                 if actual_ruleset.rules != expected_ruleset.rules
                     || actual_ruleset.conditions != expected_ruleset.conditions
                     || actual_ruleset.enforcement != expected_ruleset.enforcement
+                    || actual_ruleset.name != expected_ruleset.name
                 {
-                    let id = actual_ruleset.id.unwrap_or(0);
-                    ruleset_diffs.push(RulesetDiff {
-                        name: ruleset_name,
-                        operation: RulesetDiffOperation::Update(
-                            id,
-                            actual_ruleset,
-                            expected_ruleset,
-                        ),
-                    });
+                    match actual_ruleset.id {
+                        Some(id) => {
+                            ruleset_diffs.push(RulesetDiff {
+                                name: ruleset_name,
+                                operation: RulesetDiffOperation::Update(
+                                    id,
+                                    actual_ruleset,
+                                    expected_ruleset,
+                                ),
+                            });
+                        }
+                        None => {
+                            // A ruleset without an id cannot be updated; fall back to creating.
+                            ruleset_diffs.push(RulesetDiff {
+                                name: ruleset_name,
+                                operation: RulesetDiffOperation::Create(expected_ruleset),
+                            });
+                        }
+                    }
                 }
             } else {
-                // Ruleset doesn't exist, create it
+                // Ruleset doesn't exist for this branch pattern, create it
                 ruleset_diffs.push(RulesetDiff {
                     name: ruleset_name,
                     operation: RulesetDiffOperation::Create(expected_ruleset),
@@ -673,11 +720,21 @@ impl SyncGitHub {
             }
         }
 
-        // Any remaining rulesets in actual_rulesets_map should be deleted
-        for (name, ruleset) in actual_rulesets_map {
+        // Delete rulesets that have patterns not matching any expected branch protection
+        for (_, ruleset) in actual_rulesets_by_pattern {
             if let Some(id) = ruleset.id {
                 ruleset_diffs.push(RulesetDiff {
-                    name,
+                    name: ruleset.name.clone(),
+                    operation: RulesetDiffOperation::Delete(id),
+                });
+            }
+        }
+
+        // Delete rulesets without valid patterns (shouldn't exist in a managed repo)
+        for ruleset in actual_rulesets_without_pattern {
+            if let Some(id) = ruleset.id {
+                ruleset_diffs.push(RulesetDiff {
+                    name: ruleset.name.clone(),
                     operation: RulesetDiffOperation::Delete(id),
                 });
             }
