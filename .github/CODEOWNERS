@@ -18,7 +18,6 @@
 
 # Modifying these files requires admin approval.
 /repos/rust-lang/team.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni @ubiratansoares
-/repos/rust-lang/sync-team.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni @ubiratansoares
 /repos/rust-lang/rust.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni @ubiratansoares
 /teams/infra-admins.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni @ubiratansoares
 /teams/team-repo-admins.toml @Mark-Simulacrum @emilyalbini @jdno @marcoieni @ubiratansoares
