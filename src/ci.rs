@@ -30,7 +30,6 @@ pub fn check_codeowners(data: Data) -> anyhow::Result<()> {
 /// PRs that modify them need to be approved by an infra-admin.
 const PROTECTED_PATHS: &[&str] = &[
     "/repos/rust-lang/team.toml",
-    "/repos/rust-lang/sync-team.toml",
     "/repos/rust-lang/rust.toml",
     "/teams/infra-admins.toml",
     "/teams/team-repo-admins.toml",
