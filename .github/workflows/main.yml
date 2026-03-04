@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'rust-lang/team'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 50
 
@@ -72,7 +72,7 @@ jobs:
         run: echo "${{ github.event.pull_request.number }}" > build/pr.txt
 
       - name: Upload the built JSON as a GitHub artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: team-api-output
           path: build
@@ -86,12 +86,12 @@ jobs:
       pages: write
     if: github.event_name != 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           persist-credentials: false
 
       - name: Download built JSON API and sync-team
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
         with:
           name: team-api-output
           path: build
@@ -112,7 +112,7 @@ jobs:
         run: touch build/.nojekyll
 
       - name: Upload GitHub pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
           path: build
 
