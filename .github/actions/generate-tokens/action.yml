@@ -38,7 +38,7 @@ runs:
     # GitHub tokens generated from GitHub Apps can access resources from one organization,
     # so we need to generate a token for each organization.
     - name: Generate GitHub token (rust-lang)
-      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2
+      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
       id: rust-lang-token
       with:
         app-id: ${{ inputs.app-id }}
@@ -46,7 +46,7 @@ runs:
         owner: rust-lang
 
     - name: Generate GitHub token (rust-lang-deprecated)
-      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2
+      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
       id: rust-lang-deprecated-token
       with:
         app-id: ${{ inputs.app-id }}
@@ -54,7 +54,7 @@ runs:
         owner: rust-lang-deprecated
 
     - name: Generate GitHub token (rust-lang-nursery)
-      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2
+      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
       id: rust-lang-nursery-token
       with:
         app-id: ${{ inputs.app-id }}
@@ -62,7 +62,7 @@ runs:
         owner: rust-lang-nursery
 
     - name: Generate GitHub token (bors-rs)
-      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2
+      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
       id: bors-rs-token
       with:
         app-id: ${{ inputs.app-id }}
@@ -70,7 +70,7 @@ runs:
         owner: bors-rs
 
     - name: Generate GitHub token (rust-analyzer)
-      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2
+      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
       id: rust-analyzer-token
       with:
         app-id: ${{ inputs.app-id }}
@@ -78,7 +78,7 @@ runs:
         owner: rust-analyzer
 
     - name: Generate GitHub token (rust-embedded)
-      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2
+      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
       id: rust-embedded-token
       with:
         app-id: ${{ inputs.app-id }}
@@ -86,7 +86,7 @@ runs:
         owner: rust-embedded
 
     - name: Generate GitHub token (rust-dev-tools)
-      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2
+      uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
       id: rust-dev-tools-token
       with:
         app-id: ${{ inputs.app-id }}
