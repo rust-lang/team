@@ -8,7 +8,7 @@
 //! The hex-encoded part of the email address is a concatenation of a 24-byte random nonce and the
 //! XChaCha20Poly1305-encrypted email address. Utilities are provided to both encrypt and decrypt.
 
-use chacha20poly1305::aead::{Aead, NewAead};
+use chacha20poly1305::aead::{Aead, KeyInit};
 use chacha20poly1305::{Key, XChaCha20Poly1305, XNonce};
 
 const PREFIX: &str = "encrypted+";
