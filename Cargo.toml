@@ -52,7 +52,7 @@ dialoguer = "0.12.0"
 difference = "2.0.0"
 duct = "1.0.0"
 env_logger = { version = "0.11.0", default-features = false }
-getrandom = "0.2.1"
+getrandom = "0.4.2"
 hex = "0.4.2"
 hyper-old-types = "0.11"
 indexmap = "2.6.0"
