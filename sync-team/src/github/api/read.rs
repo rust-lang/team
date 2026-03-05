@@ -1,10 +1,11 @@
-use crate::github::api::Ruleset;
+use crate::github::api::{BranchPolicy, Ruleset};
 use crate::github::api::{
     BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, Repo, RepoTeam,
-    RepoUser, Team, TeamMember, TeamRole, team_node_id, url::GitHubUrl, user_node_id,
+    RepoUser, RestPaginatedError, Team, TeamMember, TeamRole, team_node_id, url::GitHubUrl,
+    user_node_id,
 };
 use anyhow::Context as _;
-use reqwest::Method;
+use reqwest::{Method, StatusCode};
 use rust_team_data::v1::Environment;
 use std::collections::{HashMap, HashSet};
 
@@ -68,6 +69,13 @@ pub(crate) trait GithubRead {
         org: &str,
         repo: &str,
     ) -> anyhow::Result<Vec<crate::github::api::Ruleset>>;
+
+    fn environment_branch_policies(
+        &self,
+        org: &str,
+        repo: &str,
+        environment: &str,
+    ) -> anyhow::Result<Vec<BranchPolicy>>;
 }
 
 pub(crate) struct GitHubApiRead {
@@ -479,22 +487,6 @@ impl GithubRead for GitHubApiRead {
             environments: Vec<GitHubEnvironment>,
         }
 
-        #[derive(serde::Deserialize)]
-        struct BranchPolicy {
-            name: String,
-            #[serde(rename = "type", default = "default_branch_type")]
-            pattern_type: String,
-        }
-
-        fn default_branch_type() -> String {
-            "branch".to_string()
-        }
-
-        #[derive(serde::Deserialize)]
-        struct BranchPoliciesResponse {
-            branch_policies: Vec<BranchPolicy>,
-        }
-
         let mut env_infos = Vec::new();
 
         // Fetch all environments with their protection_rules metadata
@@ -522,23 +514,21 @@ impl GithubRead for GitHubApiRead {
                 let (branches, tags) = if has_branch_policies {
                     let mut branches = Vec::new();
                     let mut tags = Vec::new();
-                    self.client.rest_paginated(
-                        &Method::GET,
-                        &GitHubUrl::repos(
-                            org,
-                            repo,
-                            &format!("environments/{}/deployment-branch-policies", env_info.name),
-                        )?,
-                        |resp: BranchPoliciesResponse| {
-                            for p in resp.branch_policies {
-                                match p.pattern_type.as_str() {
-                                    "tag" => tags.push(p.name),
-                                    _ => branches.push(p.name),
-                                }
-                            }
-                            Ok(())
-                        },
-                    )?;
+                    let policies =
+                        self.environment_branch_policies(org, repo, &env_info.name).with_context(
+                            || {
+                                format!(
+                                    "failed to load deployment branch policies for environment '{}' in '{org}/{repo}'",
+                                    env_info.name
+                                )
+                            },
+                        )?;
+                    for p in policies {
+                        match p.pattern_type.as_str() {
+                            "tag" => tags.push(p.name),
+                            _ => branches.push(p.name),
+                        }
+                    }
                     (branches, tags)
                 } else {
                     (Vec::new(), Vec::new())
@@ -569,5 +559,50 @@ impl GithubRead for GitHubApiRead {
         )?;
 
         Ok(rulesets)
+    }
+
+    fn environment_branch_policies(
+        &self,
+        org: &str,
+        repo: &str,
+        environment: &str,
+    ) -> anyhow::Result<Vec<BranchPolicy>> {
+        #[derive(serde::Deserialize)]
+        struct BranchPoliciesResponse {
+            branch_policies: Vec<BranchPolicy>,
+        }
+
+        let mut policies = Vec::new();
+        let url = GitHubUrl::repos(
+            org,
+            repo,
+            &format!("environments/{environment}/deployment-branch-policies"),
+        )?;
+
+        if let Err(err) =
+            self.client
+                .rest_paginated(&Method::GET, &url, |resp: BranchPoliciesResponse| {
+                    policies.extend(resp.branch_policies);
+                    Ok(())
+                })
+        {
+            match err {
+                // If the environment doesn't have branch policies, GitHub returns a 404.
+                // In this case, we return an empty list of policies.
+                RestPaginatedError::Http {
+                    status: StatusCode::NOT_FOUND,
+                    ..
+                } => return Ok(policies),
+                other => {
+                    return Err(anyhow::Error::from(other)).with_context(|| {
+                        format!(
+                            "failed to fetch deployment branch policies for environment '{environment}' in '{org}/{repo}'"
+                        )
+                    });
+                }
+            }
+        }
+
+        Ok(policies)
     }
 }
