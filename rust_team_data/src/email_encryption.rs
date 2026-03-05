@@ -20,7 +20,7 @@ const NONCE_LENGTH: usize = 24;
 pub fn encrypt(key: &str, email: &str) -> Result<String, Error> {
     // Generate a random nonce every time something is encrypted.
     let mut nonce = [0u8; NONCE_LENGTH];
-    getrandom::getrandom(&mut nonce).map_err(Error::GetRandom)?;
+    getrandom::fill(&mut nonce).map_err(Error::GetRandom)?;
     let nonce = XNonce::from_slice(&nonce);
 
     let mut encrypted = init_cipher(key)?
