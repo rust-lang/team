@@ -40,7 +40,7 @@ jobs:
           rustup component add rustfmt clippy
           rustc -vV
 
-      - uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6
+      - uses: Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2.8.2
 
       - name: Build the team binary
         run: RUSTFLAGS="--deny warnings" cargo build

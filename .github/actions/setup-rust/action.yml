@@ -12,5 +12,4 @@ runs:
         rustup default stable
         rustc -vV
 
-    # Pinning a specific version to avoid surprises
-    - uses: Swatinem/rust-cache@27b8ea9368cf428f0bfe41b0876b1a7e809d9844
+    - uses: Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2.8.2
