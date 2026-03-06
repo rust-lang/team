@@ -4,18 +4,11 @@ use std::collections::HashSet;
 
 use crate::github::api::url::GitHubUrl;
 use crate::github::api::{
-    AppPushAllowanceActor, BranchProtection, BranchProtectionOp, HttpClient, Login,
-    PushAllowanceActor, Repo, RepoPermission, RepoSettings, Team, TeamPrivacy,
+    AppPushAllowanceActor, BranchProtection, BranchProtectionOp, GitHubApiRead, GithubRead,
+    HttpClient, Login, PushAllowanceActor, Repo, RepoPermission, RepoSettings, Team, TeamPrivacy,
     TeamPushAllowanceActor, TeamRole, UserPushAllowanceActor, allow_not_found,
 };
 use crate::utils::ResponseExt;
-
-#[derive(Debug)]
-struct BranchPolicyInfo {
-    id: u64,
-    name: String,
-    pattern_type: String,
-}
 
 pub(crate) struct GitHubWrite {
     client: HttpClient,
@@ -570,50 +563,6 @@ impl GitHubWrite {
         Ok(())
     }
 
-    /// Get existing branch policies for an environment
-    fn get_environment_branch_policies(
-        &self,
-        org: &str,
-        repo: &str,
-        environment: &str,
-    ) -> anyhow::Result<Vec<BranchPolicyInfo>> {
-        #[derive(serde::Deserialize)]
-        struct BranchPolicy {
-            id: u64,
-            name: String,
-            #[serde(rename = "type", default = "default_branch_type")]
-            pattern_type: String,
-        }
-
-        fn default_branch_type() -> String {
-            "branch".to_string()
-        }
-
-        #[derive(serde::Deserialize)]
-        struct BranchPoliciesResponse {
-            branch_policies: Vec<BranchPolicy>,
-        }
-
-        let url = GitHubUrl::repos(
-            org,
-            repo,
-            &format!("environments/{}/deployment-branch-policies", environment),
-        )?;
-
-        let response: BranchPoliciesResponse =
-            self.client.req(Method::GET, &url)?.send()?.json()?;
-
-        Ok(response
-            .branch_policies
-            .into_iter()
-            .map(|bp| BranchPolicyInfo {
-                id: bp.id,
-                name: bp.name,
-                pattern_type: bp.pattern_type,
-            })
-            .collect())
-    }
-
     /// Delete a specific branch policy by ID
     fn delete_environment_branch_policy(
         &self,
@@ -649,7 +598,8 @@ impl GitHubWrite {
         tags: &[String],
     ) -> anyhow::Result<()> {
         // 1. Fetch existing policies
-        let existing_policies = self.get_environment_branch_policies(org, repo, environment)?;
+        let existing_policies = GitHubApiRead::from_client(self.client.clone())?
+            .environment_branch_policies(org, repo, environment)?;
 
         #[derive(Hash, Eq, PartialEq)]
         struct PatternKey {

@@ -18,11 +18,26 @@ use reqwest::{
 use secrecy::ExposeSecret;
 use serde::{Deserialize, de::DeserializeOwned};
 use std::fmt;
+use thiserror::Error;
 use tokens::GitHubTokens;
 use url::GitHubUrl;
 
 pub(crate) use read::{GitHubApiRead, GithubRead};
 pub(crate) use write::GitHubWrite;
+
+#[derive(Debug, Error)]
+pub(crate) enum RestPaginatedError {
+    #[error("{method} request to '{url}' failed with status {status}")]
+    Http {
+        method: Method,
+        url: String,
+        status: StatusCode,
+        #[source]
+        source: anyhow::Error,
+    },
+    #[error(transparent)]
+    Other(#[from] anyhow::Error),
+}
 
 #[derive(Clone)]
 pub(crate) struct HttpClient {
@@ -157,7 +172,12 @@ impl HttpClient {
         })
     }
 
-    fn rest_paginated<F, T>(&self, method: &Method, url: &GitHubUrl, mut f: F) -> anyhow::Result<()>
+    fn rest_paginated<F, T>(
+        &self,
+        method: &Method,
+        url: &GitHubUrl,
+        mut f: F,
+    ) -> Result<(), RestPaginatedError>
     where
         F: FnMut(T) -> anyhow::Result<()>,
         T: DeserializeOwned,
@@ -167,12 +187,25 @@ impl HttpClient {
             let resp = self
                 .req(method.clone(), &next_url)?
                 .send()
-                .with_context(|| format!("failed to send request to {}", next_url.url()))?
-                .custom_error_for_status()?;
+                .with_context(|| format!("failed to send request to {}", next_url.url()))?;
+
+            let status = resp.status();
+            let resp =
+                resp.custom_error_for_status()
+                    .map_err(|source| RestPaginatedError::Http {
+                        method: method.clone(),
+                        url: next_url.url().to_string(),
+                        status,
+                        source,
+                    })?;
 
             // Extract the next page
             if let Some(links) = resp.headers().get(header::LINK) {
-                let links: Link = links.to_str()?.parse()?;
+                let links: Link = links
+                    .to_str()
+                    .context("failed to convert LINK header to string")?
+                    .parse()
+                    .context("failed to parse LINK header")?;
                 for link in links.values() {
                     if link
                         .rel()
@@ -636,4 +669,16 @@ pub(crate) struct RequiredStatusCheck {
 pub(crate) enum RulesetOp {
     CreateForRepo,
     UpdateRuleset(i64),
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub(crate) struct BranchPolicy {
+    pub(crate) id: u64,
+    pub(crate) name: String,
+    #[serde(rename = "type", default = "default_branch_policy_type")]
+    pattern_type: String,
+}
+
+fn default_branch_policy_type() -> String {
+    "branch".to_string()
 }

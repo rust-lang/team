@@ -10,7 +10,8 @@ use rust_team_data::v1::{
 
 use crate::Config;
 use crate::github::api::{
-    BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Team, TeamMember, TeamPrivacy, TeamRole,
+    BranchPolicy, BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Team, TeamMember,
+    TeamPrivacy, TeamRole,
 };
 use crate::github::{
     OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_branch_protection,
@@ -647,6 +648,17 @@ impl GithubRead for GithubMock {
             .get(repo)
             .cloned()
             .unwrap_or_default())
+    }
+
+    fn environment_branch_policies(
+        &self,
+        _org: &str,
+        _repo: &str,
+        _environment: &str,
+    ) -> anyhow::Result<Vec<BranchPolicy>> {
+        unimplemented!(
+            "call the function repo_environments instead, and read branch policies from there"
+        )
     }
 }
 
