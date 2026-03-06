@@ -1,9 +1,11 @@
+use crate::github::api;
 use crate::github::api::{BranchPolicy, Ruleset};
 use crate::github::api::{
     BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, Repo, RepoTeam,
     RepoUser, RestPaginatedError, Team, TeamMember, TeamRole, team_node_id, url::GitHubUrl,
     user_node_id,
 };
+use crate::utils::ResponseExt;
 use anyhow::Context as _;
 use reqwest::{Method, StatusCode};
 use rust_team_data::v1::Environment;
@@ -544,19 +546,38 @@ impl GithubRead for GitHubApiRead {
         org: &str,
         repo: &str,
     ) -> anyhow::Result<Vec<crate::github::api::Ruleset>> {
-        let mut rulesets: Vec<Ruleset> = Vec::new();
+        #[derive(serde::Deserialize)]
+        struct RulesetInfo {
+            id: u64,
+        }
+
+        let mut ruleset_ids = vec![];
 
         // REST API endpoint for rulesets
         // https://docs.github.com/en/rest/repos/rules#get-all-repository-rulesets
-        // The API returns an array of rulesets directly, not wrapped in an object
+        // The API returns only a subset of data for each ruleset :/
+        // So we then have to fetch the rulesets individuall to get the full data.
         self.client.rest_paginated(
             &Method::GET,
             &GitHubUrl::repos(org, repo, "rulesets")?,
-            |resp: Vec<Ruleset>| {
-                rulesets.extend(resp);
+            |resp: Vec<RulesetInfo>| {
+                ruleset_ids.extend(resp.into_iter().map(|info| info.id));
                 Ok(())
             },
         )?;
+
+        let mut rulesets: Vec<Ruleset> = vec![];
+        for id in ruleset_ids {
+            let ruleset: api::Ruleset = self
+                .client
+                .req(
+                    Method::GET,
+                    &GitHubUrl::repos(org, repo, &format!("rulesets/{id}"))?,
+                )?
+                .send()?
+                .json_annotated()?;
+            rulesets.push(ruleset);
+        }
 
         Ok(rulesets)
     }

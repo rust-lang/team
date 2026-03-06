@@ -523,11 +523,8 @@ pub(crate) struct Ruleset {
     pub(crate) target: RulesetTarget,
     pub(crate) source_type: RulesetSourceType,
     pub(crate) enforcement: RulesetEnforcement,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub(crate) bypass_actors: Option<Vec<RulesetBypassActor>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub(crate) conditions: Option<RulesetConditions>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub(crate) bypass_actors: Vec<RulesetBypassActor>,
+    pub(crate) conditions: RulesetConditions,
     pub(crate) rules: Vec<RulesetRule>,
 }
 
@@ -578,8 +575,7 @@ pub(crate) enum RulesetBypassMode {
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub(crate) struct RulesetConditions {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub(crate) ref_name: Option<RulesetRefNameCondition>,
+    pub(crate) ref_name: RulesetRefNameCondition,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
