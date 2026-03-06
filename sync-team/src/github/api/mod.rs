@@ -522,17 +522,22 @@ pub(crate) enum RulesetEnforcement {
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub(crate) struct RulesetBypassActor {
-    pub(crate) actor_id: i64,
+    /// The ID of the actor that can bypass a ruleset.
+    /// Required for Team and Integration actor types.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) actor_id: Option<i64>,
     pub(crate) actor_type: RulesetActorType,
-    pub(crate) bypass_mode: RulesetBypassMode,
+    /// The bypass mode for the actor. Defaults to "always" per GitHub API.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) bypass_mode: Option<RulesetBypassMode>,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "PascalCase")]
 pub(crate) enum RulesetActorType {
+    /// GitHub App integration
     Integration,
-    OrganizationAdmin,
-    RepositoryRole,
+    /// GitHub Team
     Team,
 }
 
@@ -541,6 +546,7 @@ pub(crate) enum RulesetActorType {
 pub(crate) enum RulesetBypassMode {
     Always,
     PullRequest,
+    Exempt,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
@@ -636,4 +642,121 @@ pub(crate) struct RequiredStatusCheck {
 pub(crate) enum RulesetOp {
     CreateForRepo,
     UpdateRuleset(i64),
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_bypass_actor_serialization() {
+        // Test Team actor with ID
+        let team_actor = RulesetBypassActor {
+            actor_id: Some(234),
+            actor_type: RulesetActorType::Team,
+            bypass_mode: Some(RulesetBypassMode::Always),
+        };
+        let json =
+            serde_json::to_string(&team_actor).expect("Team actor serialization should succeed");
+        assert_eq!(
+            json, r#"{"actor_id":234,"actor_type":"Team","bypass_mode":"always"}"#,
+            "Team actor should serialize with numeric actor_id, PascalCase actor_type, and snake_case bypass_mode"
+        );
+
+        // Test Integration actor with ID
+        let integration_actor = RulesetBypassActor {
+            actor_id: Some(123456),
+            actor_type: RulesetActorType::Integration,
+            bypass_mode: Some(RulesetBypassMode::Always),
+        };
+        let json = serde_json::to_string(&integration_actor)
+            .expect("Integration actor serialization should succeed");
+        assert_eq!(
+            json, r#"{"actor_id":123456,"actor_type":"Integration","bypass_mode":"always"}"#,
+            "Integration actor should serialize with numeric actor_id"
+        );
+
+        // Test with None actor_id (field omitted)
+        let actor_no_id = RulesetBypassActor {
+            actor_id: None,
+            actor_type: RulesetActorType::Team,
+            bypass_mode: Some(RulesetBypassMode::Always),
+        };
+        let json = serde_json::to_string(&actor_no_id)
+            .expect("Actor without ID serialization should succeed");
+        assert_eq!(
+            json, r#"{"actor_type":"Team","bypass_mode":"always"}"#,
+            "Actor without ID should omit actor_id field"
+        );
+
+        // Test pull_request bypass mode
+        let pr_actor = RulesetBypassActor {
+            actor_id: Some(789),
+            actor_type: RulesetActorType::Team,
+            bypass_mode: Some(RulesetBypassMode::PullRequest),
+        };
+        let json = serde_json::to_string(&pr_actor)
+            .expect("PullRequest bypass mode serialization should succeed");
+        assert_eq!(
+            json, r#"{"actor_id":789,"actor_type":"Team","bypass_mode":"pull_request"}"#,
+            "PullRequest bypass mode should serialize as 'pull_request' with underscore"
+        );
+    }
+
+    #[test]
+    fn test_bypass_actor_deserialization() {
+        // Test deserializing Team actor from GitHub API response
+        let json = r#"{"actor_id":234,"actor_type":"Team","bypass_mode":"always"}"#;
+        let actor: RulesetBypassActor =
+            serde_json::from_str(json).expect("Should deserialize valid Team actor");
+        assert_eq!(actor.actor_id, Some(234), "actor_id should be numeric");
+        assert_eq!(
+            actor.actor_type,
+            RulesetActorType::Team,
+            "actor_type should be Team"
+        );
+        assert_eq!(
+            actor.bypass_mode,
+            Some(RulesetBypassMode::Always),
+            "bypass_mode should be Always"
+        );
+
+        // Test deserializing Integration actor
+        let json = r#"{"actor_id":456,"actor_type":"Integration","bypass_mode":"always"}"#;
+        let actor: RulesetBypassActor =
+            serde_json::from_str(json).expect("Should deserialize valid Integration actor");
+        assert_eq!(actor.actor_id, Some(456));
+        assert_eq!(actor.actor_type, RulesetActorType::Integration);
+
+        // Test with missing bypass_mode (should default to None)
+        let json = r#"{"actor_id":1,"actor_type":"Team"}"#;
+        let actor: RulesetBypassActor =
+            serde_json::from_str(json).expect("Should deserialize Team without bypass_mode");
+        assert_eq!(actor.actor_id, Some(1));
+        assert_eq!(
+            actor.bypass_mode, None,
+            "bypass_mode should be None when omitted from JSON"
+        );
+
+        // Test all bypass modes can be deserialized
+        let bypass_modes = [
+            ("always", RulesetBypassMode::Always),
+            ("pull_request", RulesetBypassMode::PullRequest),
+            ("exempt", RulesetBypassMode::Exempt),
+        ];
+        for (mode_str, expected_mode) in bypass_modes {
+            let json = format!(
+                r#"{{"actor_id":1,"actor_type":"Team","bypass_mode":"{}"}}"#,
+                mode_str
+            );
+            let actor: RulesetBypassActor = serde_json::from_str(&json)
+                .unwrap_or_else(|e| panic!("Should deserialize bypass mode {}: {}", mode_str, e));
+            assert_eq!(
+                actor.bypass_mode,
+                Some(expected_mode),
+                "bypass_mode {} should deserialize correctly",
+                mode_str
+            );
+        }
+    }
 }
