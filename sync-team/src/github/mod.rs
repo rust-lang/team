@@ -677,11 +677,19 @@ impl SyncGitHub {
                     rules: expected_rules,
                 } = &expected_ruleset;
 
+                // With a read-only GitHub App token, GitHub does not actually return bypass actors
+                // from the API. So we should not check it, otherwise the diff will not be clean.
+                let bypass_actors_differ = if !self.github.uses_pat() {
+                    false
+                } else {
+                    bypass_actors != expected_bypass_actors
+                };
+
                 // Ruleset exists for this branch name, check if it needs updating
                 if target != expected_target
                     || source_type != expected_source_type
                     || enforcement != expected_enforcement
-                    || bypass_actors != expected_bypass_actors
+                    || bypass_actors_differ
                     || conditions != expected_conditions
                     || rules != expected_rules
                 {
@@ -1017,7 +1025,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
         target: RulesetTarget::Branch,
         source_type: RulesetSourceType::Repository,
         enforcement: RulesetEnforcement::Active,
-        bypass_actors: vec![],
+        bypass_actors: Some(vec![]),
         conditions: RulesetConditions {
             ref_name: RulesetRefNameCondition {
                 include: vec![convert_branch_pattern_to_ref_pattern(
