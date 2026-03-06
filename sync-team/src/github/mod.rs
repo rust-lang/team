@@ -1680,7 +1680,7 @@ fn log_ruleset(
             let new_val = $new_field;
 
             // If there is a new value and it does not match the old, print a diff
-            if let Some(new_value) = $new_field
+            if let Some(new_value) = new_val
                 && new_value != old
             {
                 writeln!(result, "        {}: {old:?} => {new_value:?}", $str)?;

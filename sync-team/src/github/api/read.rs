@@ -556,7 +556,7 @@ impl GithubRead for GitHubApiRead {
         // REST API endpoint for rulesets
         // https://docs.github.com/en/rest/repos/rules#get-all-repository-rulesets
         // The API returns only a subset of data for each ruleset :/
-        // So we then have to fetch the rulesets individuall to get the full data.
+        // So we then have to fetch the rulesets individually to get the full data.
         self.client.rest_paginated(
             &Method::GET,
             &GitHubUrl::repos(org, repo, "rulesets")?,
