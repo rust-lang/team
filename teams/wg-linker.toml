@@ -1,0 +1,22 @@
+name = "wg-linker"
+subteam-of = "compiler"
+kind = "working-group"
+
+[people]
+leads = []
+members = [
+    "davidlattimore",
+    "jyn514",
+    "madsmtm",
+    "mati865",
+]
+alumni = []
+
+[website]
+name = "Linkers working area"
+description = "Helping deal with linker related issues and their integration within the compiler"
+repo = "https://forge.rust-lang.org/compiler/working-areas.html"
+zulip-stream = "t-compiler/linker"
+
+[[zulip-groups]]
+name = "WG-linker"
