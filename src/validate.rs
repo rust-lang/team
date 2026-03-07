@@ -1127,8 +1127,17 @@ fn validate_branch_protections(data: &Data, errors: &mut Vec<String>) {
 
     wrapper(data.repos(), errors, |repo, _| {
         let bors_configured = repo.bots.iter().any(|b| matches!(b, Bot::Bors));
+        let mut patterns = HashSet::new();
 
         for protection in &repo.branch_protections {
+            if !patterns.insert(&protection.pattern) {
+                bail!(
+                    r#"repo '{}' uses multiple branch protections with the pattern `{}`"#,
+                    repo.name,
+                    protection.pattern,
+                );
+            }
+
             for team in &protection.allowed_merge_teams {
                 let key = (repo.org.clone(), team.clone());
                 if !github_teams.contains(&key) {

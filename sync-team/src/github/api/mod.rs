@@ -523,11 +523,12 @@ pub(crate) struct Ruleset {
     pub(crate) target: RulesetTarget,
     pub(crate) source_type: RulesetSourceType,
     pub(crate) enforcement: RulesetEnforcement,
+    // When we use a read-only token, GitHub does not return the `bypass_actors` field from the
+    // get ruleset endpoint (https://docs.github.com/en/rest/repos/rules?apiVersion=2022-11-28#get-a-repository-ruleset)
+    // We thus have to mark the field as optional.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) bypass_actors: Option<Vec<RulesetBypassActor>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub(crate) conditions: Option<RulesetConditions>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub(crate) conditions: RulesetConditions,
     pub(crate) rules: Vec<RulesetRule>,
 }
 
@@ -578,8 +579,7 @@ pub(crate) enum RulesetBypassMode {
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub(crate) struct RulesetConditions {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub(crate) ref_name: Option<RulesetRefNameCondition>,
+    pub(crate) ref_name: RulesetRefNameCondition,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]

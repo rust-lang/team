@@ -4,11 +4,13 @@ mod tests;
 
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
 use crate::Config;
-use crate::github::api::{GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings};
+use crate::github::api::{
+    GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings, Ruleset,
+};
 use log::debug;
 use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot};
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
-use std::fmt::Write;
+use std::fmt::{Display, Formatter, Write};
 
 pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
 
@@ -353,7 +355,6 @@ impl SyncGitHub {
                     Default::default(),
                 )?;
 
-                // Always create branch protections
                 let mut branch_protections = Vec::new();
                 for branch_protection in &expected_repo.branch_protections {
                     branch_protections.push((
@@ -362,12 +363,11 @@ impl SyncGitHub {
                     ));
                 }
 
-                // Additionally create rulesets if configured
                 let mut rulesets = Vec::new();
                 let use_rulesets = self.should_use_rulesets(expected_repo);
                 if use_rulesets {
                     for branch_protection in &expected_repo.branch_protections {
-                        let ruleset = construct_ruleset(expected_repo, branch_protection);
+                        let ruleset = construct_ruleset(branch_protection);
                         rulesets.push(ruleset);
                     }
                 }
@@ -635,28 +635,71 @@ impl SyncGitHub {
             .github
             .repo_rulesets(&expected_repo.org, &expected_repo.name)?;
 
-        // Build a map of actual rulesets by name
-        let mut actual_rulesets_map: HashMap<String, api::Ruleset> = actual_rulesets
-            .into_iter()
-            .map(|r| (r.name.clone(), r))
-            .collect();
+        // Build a map of actual rulesets by branch name (the logical identity)
+        let mut rulesets_by_name: HashMap<String, api::Ruleset> = HashMap::new();
+
+        for ruleset in actual_rulesets {
+            // If multiple rulesets have the same name, keep the last one
+            // and mark others for deletion (they shouldn't exist)
+            if let Some(existing) = rulesets_by_name.insert(ruleset.name.clone(), ruleset)
+                && let Some(id) = existing.id
+            {
+                ruleset_diffs.push(RulesetDiff {
+                    name: existing.name.clone(),
+                    operation: RulesetDiffOperation::Delete(id),
+                });
+            }
+        }
 
         // Process each branch protection as a potential ruleset
         for branch_protection in &expected_repo.branch_protections {
-            let expected_ruleset = construct_ruleset(expected_repo, branch_protection);
-            let ruleset_name = expected_ruleset.name.clone();
+            let expected_ruleset = construct_ruleset(branch_protection);
 
-            if let Some(actual_ruleset) = actual_rulesets_map.remove(&ruleset_name) {
-                // Ruleset exists, check if it needs updating
-                // For simplicity, we compare the entire ruleset
-                // In production, you might want more sophisticated comparison
-                if actual_ruleset.rules != expected_ruleset.rules
-                    || actual_ruleset.conditions != expected_ruleset.conditions
-                    || actual_ruleset.enforcement != expected_ruleset.enforcement
+            if let Some(actual_ruleset) = rulesets_by_name.remove(&expected_ruleset.name) {
+                let Ruleset {
+                    id: _,
+                    name,
+                    target,
+                    source_type,
+                    enforcement,
+                    bypass_actors,
+                    conditions,
+                    rules,
+                } = &actual_ruleset;
+                let Ruleset {
+                    id: _,
+                    name: _,
+                    target: expected_target,
+                    source_type: expected_source_type,
+                    enforcement: expected_enforcement,
+                    bypass_actors: expected_bypass_actors,
+                    conditions: expected_conditions,
+                    rules: expected_rules,
+                } = &expected_ruleset;
+
+                // With a read-only GitHub App token, GitHub does not actually return bypass actors
+                // from the API. So we should not check it, otherwise the diff will not be clean.
+                let bypass_actors_differ = if !self.github.uses_pat() {
+                    false
+                } else {
+                    bypass_actors != expected_bypass_actors
+                };
+
+                // Ruleset exists for this branch name, check if it needs updating
+                if target != expected_target
+                    || source_type != expected_source_type
+                    || enforcement != expected_enforcement
+                    || bypass_actors_differ
+                    || conditions != expected_conditions
+                    || rules != expected_rules
                 {
-                    let id = actual_ruleset.id.unwrap_or(0);
+                    let Some(id) = actual_ruleset.id else {
+                        return Err(anyhow::anyhow!(
+                            "Encountered ruleset without ID: {actual_ruleset:?}"
+                        ));
+                    };
                     ruleset_diffs.push(RulesetDiff {
-                        name: ruleset_name,
+                        name: name.clone(),
                         operation: RulesetDiffOperation::Update(
                             id,
                             actual_ruleset,
@@ -665,19 +708,18 @@ impl SyncGitHub {
                     });
                 }
             } else {
-                // Ruleset doesn't exist, create it
                 ruleset_diffs.push(RulesetDiff {
-                    name: ruleset_name,
+                    name: expected_ruleset.name.clone(),
                     operation: RulesetDiffOperation::Create(expected_ruleset),
                 });
             }
         }
 
-        // Any remaining rulesets in actual_rulesets_map should be deleted
-        for (name, ruleset) in actual_rulesets_map {
+        // Delete rulesets that have names not matching any expected branch protection
+        for (_, ruleset) in rulesets_by_name {
             if let Some(id) = ruleset.id {
                 ruleset_diffs.push(RulesetDiff {
-                    name,
+                    name: ruleset.name.clone(),
                     operation: RulesetDiffOperation::Delete(id),
                 });
             }
@@ -909,14 +951,10 @@ pub(crate) fn convert_branch_pattern_to_ref_pattern(pattern: &str) -> String {
     if pattern.starts_with("refs/") {
         return pattern.to_string();
     }
-    format!("refs/heads/{}", pattern)
+    format!("refs/heads/{pattern}")
 }
 
-/// Convert a branch protection to a ruleset with merge queue enabled
-pub fn construct_ruleset(
-    _expected_repo: &rust_team_data::v1::Repo,
-    branch_protection: &rust_team_data::v1::BranchProtection,
-) -> api::Ruleset {
+pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtection) -> api::Ruleset {
     use api::*;
 
     let uses_merge_bot = !branch_protection.merge_bots.is_empty();
@@ -987,15 +1025,15 @@ pub fn construct_ruleset(
         target: RulesetTarget::Branch,
         source_type: RulesetSourceType::Repository,
         enforcement: RulesetEnforcement::Active,
-        bypass_actors: None,
-        conditions: Some(RulesetConditions {
-            ref_name: Some(RulesetRefNameCondition {
+        bypass_actors: Some(vec![]),
+        conditions: RulesetConditions {
+            ref_name: RulesetRefNameCondition {
                 include: vec![convert_branch_pattern_to_ref_pattern(
                     &branch_protection.pattern,
                 )],
                 exclude: vec![],
-            }),
-        }),
+            },
+        },
         rules,
     }
 }
@@ -1205,20 +1243,8 @@ impl std::fmt::Display for CreateRepoDiff {
         if !rulesets.is_empty() {
             writeln!(f, "  Rulesets:")?;
             for ruleset in rulesets {
-                let id_str = ruleset.id.map_or("new".to_string(), |id| id.to_string());
-                writeln!(f, "    - {} (ID: {})", ruleset.name, id_str)?;
-                if let Some(conditions) = &ruleset.conditions
-                    && let Some(ref_name) = &conditions.ref_name
-                {
-                    writeln!(f, "      Branches: {}", ref_name.include.join(", "))?;
-                }
-                if ruleset
-                    .rules
-                    .iter()
-                    .any(|r| matches!(r, api::RulesetRule::MergeQueue { .. }))
-                {
-                    writeln!(f, "      Merge Queue: Enabled")?;
-                }
+                writeln!(f, "    {}", ruleset.name)?;
+                log_ruleset(ruleset, None, &mut f)?;
             }
         }
 
@@ -1656,21 +1682,19 @@ fn log_ruleset(
     new: Option<&api::Ruleset>,
     mut result: impl Write,
 ) -> std::fmt::Result {
-    let is_create = new.is_none();
-    let mut logged = false;
-
     macro_rules! log {
-        ($str:literal, $field:expr, $new_field:expr) => {
+        ($str:expr, $field:expr, $new_field:expr) => {
             let old = $field;
             let new_val = $new_field;
-            if is_create {
-                writeln!(result, "        {}: {:?}", $str, old)?;
-                logged = true;
-            } else if Some(old) != new_val {
-                if let Some(n) = new_val {
-                    writeln!(result, "        {}: {:?} => {:?}", $str, old, n)?;
-                    logged = true;
-                }
+
+            // If there is a new value and it does not match the old, print a diff
+            if let Some(new_value) = new_val
+                && new_value != old
+            {
+                writeln!(result, "        {}: {old:?} => {new_value:?}", $str)?;
+            } else if new_val.is_none() {
+                // If there is no new value, just print the old value
+                writeln!(result, "        {}: {old:?}", $str)?;
             }
         };
     }
@@ -1689,161 +1713,206 @@ fn log_ruleset(
     );
 
     // Log branch conditions
-    if let Some(conditions) = &current.conditions
-        && let Some(ref_name) = &conditions.ref_name
-    {
-        let new_ref_name = new.and_then(|n| n.conditions.as_ref()?.ref_name.as_ref());
-        if !ref_name.include.is_empty() {
-            log!(
-                "Include Branches",
-                &ref_name.include,
-                new_ref_name.map(|r| &r.include)
-            );
-        }
-        if !ref_name.exclude.is_empty() {
-            log!(
-                "Exclude Branches",
-                &ref_name.exclude,
-                new_ref_name.map(|r| &r.exclude)
-            );
+    let ref_name = &current.conditions.ref_name;
+    let new_ref_name = new.map(|n| &n.conditions.ref_name);
+    log!(
+        "Include Branches",
+        &ref_name.include,
+        new_ref_name.as_ref().map(|r| &r.include)
+    );
+    log!(
+        "Exclude Branches",
+        &ref_name.exclude,
+        new_ref_name.as_ref().map(|r| &r.exclude)
+    );
+
+    let new_bypass = new.map(|n| &n.bypass_actors);
+    log!("Bypass Actors", &current.bypass_actors, new_bypass);
+
+    #[derive(PartialEq)]
+    enum RuleValue {
+        Present,
+        String(String),
+    }
+
+    impl Display for RuleValue {
+        fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+            match self {
+                RuleValue::Present => f.write_str("(present)"),
+                RuleValue::String(val) => val.fmt(f),
+            }
         }
     }
 
-    // Log bypass actors
-    if let Some(bypass_actors) = &current.bypass_actors
-        && !bypass_actors.is_empty()
-    {
-        let new_bypass = new.and_then(|n| n.bypass_actors.as_ref());
-        log!("Bypass Actors", bypass_actors, new_bypass);
-    }
-
-    // Log individual rules
-    for rule in &current.rules {
-        match rule {
-            api::RulesetRule::Creation => {
-                writeln!(result, "        Rule: Creation")?;
-            }
-            api::RulesetRule::Update => {
-                writeln!(result, "        Rule: Update")?;
-            }
-            api::RulesetRule::Deletion => {
-                writeln!(result, "        Rule: Deletion")?;
-            }
-            api::RulesetRule::RequiredLinearHistory => {
-                writeln!(result, "        Rule: Required Linear History")?;
-            }
-            api::RulesetRule::RequiredSignatures => {
-                writeln!(result, "        Rule: Required Signatures")?;
-            }
-            api::RulesetRule::NonFastForward => {
-                writeln!(result, "        Rule: Non-Fast-Forward")?;
-            }
-            api::RulesetRule::MergeQueue { parameters } => {
-                writeln!(result, "        Rule: Merge Queue")?;
-                writeln!(
-                    result,
-                    "          Timeout: {} minutes",
-                    parameters.check_response_timeout_minutes
-                )?;
-                writeln!(
-                    result,
-                    "          Grouping Strategy: {:?}",
-                    parameters.grouping_strategy
-                )?;
-                writeln!(
-                    result,
-                    "          Merge Method: {:?}",
-                    parameters.merge_method
-                )?;
-                writeln!(
-                    result,
-                    "          Max Entries to Build: {}",
-                    parameters.max_entries_to_build
-                )?;
-                writeln!(
-                    result,
-                    "          Max Entries to Merge: {}",
-                    parameters.max_entries_to_merge
-                )?;
-                writeln!(
-                    result,
-                    "          Min Entries to Merge: {}",
-                    parameters.min_entries_to_merge
-                )?;
-                writeln!(
-                    result,
-                    "          Min Wait Time: {} minutes",
-                    parameters.min_entries_to_merge_wait_minutes
-                )?;
-            }
-            api::RulesetRule::PullRequest { parameters } => {
-                writeln!(result, "        Rule: Pull Request")?;
-                writeln!(
-                    result,
-                    "          Dismiss Stale Reviews: {}",
-                    parameters.dismiss_stale_reviews_on_push
-                )?;
-                writeln!(
-                    result,
-                    "          Require Code Owner Review: {}",
-                    parameters.require_code_owner_review
-                )?;
-                writeln!(
-                    result,
-                    "          Require Last Push Approval: {}",
-                    parameters.require_last_push_approval
-                )?;
-                writeln!(
-                    result,
-                    "          Required Approving Review Count: {}",
-                    parameters.required_approving_review_count
-                )?;
-                writeln!(
-                    result,
-                    "          Required Review Thread Resolution: {}",
-                    parameters.required_review_thread_resolution
-                )?;
-            }
-            api::RulesetRule::RequiredStatusChecks { parameters } => {
-                writeln!(result, "        Rule: Required Status Checks")?;
-                writeln!(
-                    result,
-                    "          Strict Policy: {}",
-                    parameters.strict_required_status_checks_policy
-                )?;
-                if !parameters.required_status_checks.is_empty() {
-                    writeln!(result, "          Checks:")?;
-                    for check in &parameters.required_status_checks {
-                        if let Some(integration_id) = check.integration_id {
-                            let app_name = if integration_id == GITHUB_ACTIONS_INTEGRATION_ID {
-                                "GitHub Actions"
+    // The list representation of rules makes it a bit annoying to diff and print
+    // So we normalize the rules to a set of key-value pairs, and then diff those
+    fn record_rules(ruleset: &Ruleset) -> HashMap<&'static str, RuleValue> {
+        let mut rules = HashMap::new();
+        for rule in &ruleset.rules {
+            match rule {
+                api::RulesetRule::Creation => {
+                    rules.insert("Restrict creations", RuleValue::Present);
+                }
+                api::RulesetRule::Update => {
+                    rules.insert("Restrict updates", RuleValue::Present);
+                }
+                api::RulesetRule::Deletion => {
+                    rules.insert("Restrict deletions", RuleValue::Present);
+                }
+                api::RulesetRule::RequiredLinearHistory => {
+                    rules.insert("Require linear history", RuleValue::Present);
+                }
+                api::RulesetRule::RequiredSignatures => {
+                    rules.insert("Require signed commits", RuleValue::Present);
+                }
+                api::RulesetRule::NonFastForward => {
+                    rules.insert("Forbid force pushes", RuleValue::Present);
+                }
+                api::RulesetRule::MergeQueue { parameters } => {
+                    let api::MergeQueueParameters {
+                        check_response_timeout_minutes,
+                        grouping_strategy,
+                        max_entries_to_build,
+                        max_entries_to_merge,
+                        merge_method,
+                        min_entries_to_merge,
+                        min_entries_to_merge_wait_minutes,
+                    } = parameters;
+                    rules.insert(
+                        "Merge queue timeout",
+                        RuleValue::String(check_response_timeout_minutes.to_string()),
+                    );
+                    rules.insert(
+                        "Merge queue grouping strategy",
+                        RuleValue::String(format!("{:?}", grouping_strategy)),
+                    );
+                    rules.insert(
+                        "Merge queue max entries to build",
+                        RuleValue::String(max_entries_to_build.to_string()),
+                    );
+                    rules.insert(
+                        "Merge queue max entries to merge",
+                        RuleValue::String(max_entries_to_merge.to_string()),
+                    );
+                    rules.insert(
+                        "Merge queue min entries to merge",
+                        RuleValue::String(min_entries_to_merge.to_string()),
+                    );
+                    rules.insert(
+                        "Merge queue merge_method",
+                        RuleValue::String(format!("{merge_method:?}")),
+                    );
+                    rules.insert(
+                        "Merge queue wait time for min group size",
+                        RuleValue::String(min_entries_to_merge_wait_minutes.to_string()),
+                    );
+                }
+                api::RulesetRule::PullRequest { parameters } => {
+                    rules.insert(
+                        "Dismiss stale reviews on push",
+                        RuleValue::String(parameters.dismiss_stale_reviews_on_push.to_string()),
+                    );
+                    rules.insert(
+                        "Require code owner review",
+                        RuleValue::String(parameters.require_code_owner_review.to_string()),
+                    );
+                    rules.insert(
+                        "Require last push approval",
+                        RuleValue::String(parameters.require_last_push_approval.to_string()),
+                    );
+                    rules.insert(
+                        "Required approvals",
+                        RuleValue::String(parameters.required_approving_review_count.to_string()),
+                    );
+                    rules.insert(
+                        "Require review thread resolution",
+                        RuleValue::String(parameters.required_review_thread_resolution.to_string()),
+                    );
+                }
+                api::RulesetRule::RequiredStatusChecks { parameters } => {
+                    rules.insert(
+                        "Strict policy for status checks",
+                        RuleValue::String(
+                            parameters.strict_required_status_checks_policy.to_string(),
+                        ),
+                    );
+                    let mut checks: Vec<String> = parameters
+                        .required_status_checks
+                        .iter()
+                        .map(|check| {
+                            if let Some(integration_id) = check.integration_id {
+                                format!("{} (integration_id: {integration_id})", check.context)
                             } else {
-                                "unknown app"
-                            };
-                            writeln!(
-                                result,
-                                "            - {} ({}, integration_id: {})",
-                                check.context, app_name, integration_id
-                            )?;
-                        } else {
-                            writeln!(result, "            - {} (any integration)", check.context)?;
-                        }
-                    }
+                                format!("{} (any integration)", check.context)
+                            }
+                        })
+                        .collect();
+                    checks.sort();
+                    rules.insert(
+                        "Required status checks",
+                        RuleValue::String(checks.join(", ")),
+                    );
+                }
+                api::RulesetRule::RequiredDeployments { parameters } => {
+                    let mut envs = parameters.required_deployment_environments.clone();
+                    envs.sort();
+                    rules.insert(
+                        "Required deployment environments",
+                        RuleValue::String(envs.join(", ")),
+                    );
                 }
             }
-            api::RulesetRule::RequiredDeployments { parameters } => {
-                writeln!(result, "        Rule: Required Deployments")?;
+        }
+        rules
+    }
+
+    let old_rules = record_rules(current);
+    let new_rules = new.map(record_rules);
+
+    if let Some(new_rules) = new_rules {
+        for (name, old_value) in &old_rules {
+            if let Some(new_value) = new_rules.get(name) {
+                // Updated rule
+                if new_value != old_value {
+                    writeln!(result, "        {name}: {old_value} => {new_value}")?;
+                }
+            } else {
+                // Deleted rule
                 writeln!(
                     result,
-                    "          Environments: {:?}",
-                    parameters.required_deployment_environments
+                    "        {name}: {}",
+                    match old_value {
+                        RuleValue::Present => "yes => no".to_string(),
+                        RuleValue::String(val) => format!("deleting `{val}`"),
+                    }
                 )?;
             }
         }
-    }
 
-    if !is_create && !logged {
-        writeln!(result, "        No changes")?;
+        // Created rules
+        for (name, new_value) in new_rules {
+            if !old_rules.contains_key(name) {
+                writeln!(
+                    result,
+                    "        {name}: {}",
+                    match &new_value {
+                        RuleValue::Present => "yes",
+                        RuleValue::String(val) => val,
+                    }
+                )?;
+            }
+        }
+    } else {
+        for (name, value) in old_rules {
+            writeln!(
+                result,
+                "        {name}: {}",
+                match &value {
+                    RuleValue::Present => "yes",
+                    RuleValue::String(val) => &val,
+                }
+            )?;
+        }
     }
 
     Ok(())
@@ -1887,13 +1956,16 @@ impl RulesetDiff {
 
 impl std::fmt::Display for RulesetDiff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "      {}", self.name)?;
+        let action = match self.operation {
+            RulesetDiffOperation::Create(_) => "Creating",
+            RulesetDiffOperation::Update(_, _, _) => "Updating",
+            RulesetDiffOperation::Delete(_) => "Deleting",
+        };
+        writeln!(f, "      {action} '{}'", self.name)?;
         match &self.operation {
             RulesetDiffOperation::Create(ruleset) => log_ruleset(ruleset, None, f),
             RulesetDiffOperation::Update(_, old, new) => log_ruleset(old, Some(new), f),
-            RulesetDiffOperation::Delete(_) => {
-                writeln!(f, "        Deleting ruleset")
-            }
+            RulesetDiffOperation::Delete(_) => Ok(()),
         }
     }
 }
