@@ -35,7 +35,9 @@ jobs:
           # so that we can also test code changes.
           # If it is from a fork, then always checkout the 'main' branch,
           # to avoid checking out code of untrusted PRs.
-          ref: ${{ github.event.workflow_run.head_repository.full_name != 'rust-lang/team' && 'main' || github.event.workflow_run.head_sha }}
+          # Also allow kobzol's fork to allow him to work on team's code without infra-admins
+          # privileges.
+          ref: ${{ (github.event.workflow_run.head_repository.full_name != 'rust-lang/team' && github.event.workflow_run.head_repository.full_name != 'Kobzol/team') && 'main' || github.event.workflow_run.head_sha }}
           persist-credentials: false
 
       - name: Setup Rust
