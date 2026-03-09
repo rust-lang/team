@@ -1631,49 +1631,68 @@ impl std::fmt::Display for BranchProtectionDiff {
     }
 }
 
+/// Logs a field diff. When `new` is `Some`, only prints if the value changed.
+/// When `new` is `None` (creation), always prints the current value.
+fn log_field<T: PartialEq + std::fmt::Debug>(
+    label: &str,
+    old: &T,
+    new: Option<&T>,
+    result: &mut dyn Write,
+) -> std::fmt::Result {
+    match new {
+        Some(new_val) => {
+            if old != new_val {
+                writeln!(result, "        {label}: {old:?} => {new_val:?}")?;
+            }
+        }
+        None => {
+            writeln!(result, "        {label}: {old:?}")?;
+        }
+    }
+    Ok(())
+}
+
 fn log_branch_protection(
     current: &api::BranchProtection,
     new: Option<&api::BranchProtection>,
     mut result: impl Write,
 ) -> std::fmt::Result {
-    let api::BranchProtection {
-        // Pattern identifies the branch protection, so it has to be same between `current`
-        // and `new`.
-        pattern: _,
-        is_admin_enforced,
-        dismisses_stale_reviews,
-        required_approving_review_count,
-        required_status_check_contexts,
-        push_allowances,
-        requires_approving_reviews,
-    } = current;
-
-    macro_rules! log {
-        ($str:literal, $field1:ident) => {
-            let old = $field1;
-            let new = new.map(|n| &n.$field1);
-            log!($str, old, new);
-        };
-        ($str:literal, $old:expr, $new:expr) => {
-            if Some($old) != $new {
-                if let Some(n) = $new.as_ref() {
-                    writeln!(result, "        {}: {:?} => {:?}", $str, $old, n)?;
-                } else {
-                    writeln!(result, "        {}: {:?}", $str, $old)?;
-                };
-            }
-        };
-    }
-
-    log!("Dismiss Stale Reviews", dismisses_stale_reviews);
-    log!("Is admin enforced", is_admin_enforced);
-    log!(
+    log_field(
+        "Dismiss Stale Reviews",
+        &current.dismisses_stale_reviews,
+        new.map(|n| &n.dismisses_stale_reviews),
+        &mut result,
+    )?;
+    log_field(
+        "Is admin enforced",
+        &current.is_admin_enforced,
+        new.map(|n| &n.is_admin_enforced),
+        &mut result,
+    )?;
+    log_field(
         "Required Approving Review Count",
-        required_approving_review_count
-    );
-    log!("Requires PR", requires_approving_reviews);
-    log!("Required Checks", required_status_check_contexts);
-    log!("Allowances", push_allowances);
+        &current.required_approving_review_count,
+        new.map(|n| &n.required_approving_review_count),
+        &mut result,
+    )?;
+    log_field(
+        "Requires PR",
+        &current.requires_approving_reviews,
+        new.map(|n| &n.requires_approving_reviews),
+        &mut result,
+    )?;
+    log_field(
+        "Required Checks",
+        &current.required_status_check_contexts,
+        new.map(|n| &n.required_status_check_contexts),
+        &mut result,
+    )?;
+    log_field(
+        "Allowances",
+        &current.push_allowances,
+        new.map(|n| &n.push_allowances),
+        &mut result,
+    )?;
     Ok(())
 }
 
@@ -1682,52 +1701,48 @@ fn log_ruleset(
     new: Option<&api::Ruleset>,
     mut result: impl Write,
 ) -> std::fmt::Result {
-    macro_rules! log {
-        ($str:expr, $field:expr, $new_field:expr) => {
-            let old = $field;
-            let new_val = $new_field;
-
-            // If there is a new value and it does not match the old, print a diff
-            if let Some(new_value) = new_val
-                && new_value != old
-            {
-                writeln!(result, "        {}: {old:?} => {new_value:?}", $str)?;
-            } else if new_val.is_none() {
-                // If there is no new value, just print the old value
-                writeln!(result, "        {}: {old:?}", $str)?;
-            }
-        };
-    }
-
     // Log basic ruleset properties
-    log!("Target", &current.target, new.map(|n| &n.target));
-    log!(
+    log_field(
+        "Target",
+        &current.target,
+        new.map(|n| &n.target),
+        &mut result,
+    )?;
+    log_field(
         "Source Type",
         &current.source_type,
-        new.map(|n| &n.source_type)
-    );
-    log!(
+        new.map(|n| &n.source_type),
+        &mut result,
+    )?;
+    log_field(
         "Enforcement",
         &current.enforcement,
-        new.map(|n| &n.enforcement)
-    );
+        new.map(|n| &n.enforcement),
+        &mut result,
+    )?;
 
     // Log branch conditions
     let ref_name = &current.conditions.ref_name;
     let new_ref_name = new.map(|n| &n.conditions.ref_name);
-    log!(
+    log_field(
         "Include Branches",
         &ref_name.include,
-        new_ref_name.as_ref().map(|r| &r.include)
-    );
-    log!(
+        new_ref_name.map(|r| &r.include),
+        &mut result,
+    )?;
+    log_field(
         "Exclude Branches",
         &ref_name.exclude,
-        new_ref_name.as_ref().map(|r| &r.exclude)
-    );
+        new_ref_name.map(|r| &r.exclude),
+        &mut result,
+    )?;
 
-    let new_bypass = new.map(|n| &n.bypass_actors);
-    log!("Bypass Actors", &current.bypass_actors, new_bypass);
+    log_field(
+        "Bypass Actors",
+        &current.bypass_actors,
+        new.map(|n| &n.bypass_actors),
+        &mut result,
+    )?;
 
     #[derive(PartialEq)]
     enum RuleValue {
