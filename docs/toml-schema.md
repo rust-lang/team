@@ -395,6 +395,10 @@ Admins cannot override these branch protections. If an admin needs to do that, t
 [[branch-protections]]
 # The pattern matching the branches to be protected (required)
 pattern = "main"
+# Custom name for the GitHub ruleset created from this branch protection.
+# If not specified, defaults to "Ruleset for <pattern>".
+# (optional)
+name = "My custom ruleset name"
 # Which CI checks to are required for merging (optional)
 # Cannot be set if `pr-required` is `false`.
 #
@@ -421,14 +425,22 @@ required-approvals = 1
 # in [access.teams].
 # (optional)
 allowed-merge-teams = ["awesome-team"]
-# Determines the merge queue bot(s) that manage pushes to this branch.
+# Determines the GitHub Apps that manage pushes to this branch.
 # When a bot manages the queue, some other options, like
 # `required-approvals` and `pr-required` options are not valid.
 #
-# Currently, only the "homu" option is supported.
-# When "homu" is used, "bors" has to be in the `bots` array.
+# Currently supported values: "rust-timer", "bors", "workflows-crates-io".
 # (optional)
-merge-bots = ["homu"]
+allowed-merge-apps = ["bors"]
+# Whether to enable a merge queue for this branch.
+# (optional - default `false`)
+merge-queue = false
+# Whether to prevent branch deletion.
+# (optional - default `false`)
+prevent-deletion = false
+# Whether to prevent force pushes to the branch.
+# (optional - default `false`)
+prevent-force-push = false
 ```
 
 ### Repository environments

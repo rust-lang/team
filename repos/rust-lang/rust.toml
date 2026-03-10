@@ -29,15 +29,15 @@ triage = "write"
 
 [[branch-protections]]
 pattern = "main"
-merge-bots = ["bors"]
+allowed-merge-apps = ["bors"]
 
 [[branch-protections]]
 pattern = "stable"
-merge-bots = ["bors"]
+allowed-merge-apps = ["bors"]
 
 [[branch-protections]]
 pattern = "beta"
-merge-bots = ["bors"]
+allowed-merge-apps = ["bors"]
 
 [[branch-protections]]
 pattern = "*"
@@ -54,37 +54,37 @@ pr-required = false
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "automation/bors/try"
-merge-bots = ["bors"]
+allowed-merge-apps = ["bors"]
 
 # Required for running try builds created by bors.
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "automation/bors/try-merge"
-merge-bots = ["bors"]
+allowed-merge-apps = ["bors"]
 
 # Required for running auto builds created by bors.
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "automation/bors/auto"
-merge-bots = ["bors"]
+allowed-merge-apps = ["bors"]
 
 # Required for running auto builds created by bors.
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "automation/bors/auto-merge"
-merge-bots = ["bors"]
+allowed-merge-apps = ["bors"]
 
 # Required for unrolled PR builds created by perfbot.
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "try-perf"
-merge-bots = ["rust-timer"]
+allowed-merge-apps = ["rust-timer"]
 
 # Required for unrolled PR builds created by perfbot.
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "perf-tmp"
-merge-bots = ["rust-timer"]
+allowed-merge-apps = ["rust-timer"]
 
 [environments.bors]
 branches = ["automation/bors/auto", "automation/bors/try", "try-perf"]

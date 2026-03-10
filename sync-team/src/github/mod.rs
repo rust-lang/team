@@ -871,18 +871,26 @@ pub fn convert_permission(p: &rust_team_data::v1::RepoPermission) -> RepoPermiss
     }
 }
 
+fn get_branch_protection_mode(
+    branch_protection: &rust_team_data::v1::BranchProtection,
+) -> BranchProtectionMode {
+    let is_managed_by_bors = branch_protection
+        .allowed_merge_apps
+        .contains(&MergeBot::Bors);
+    // When bors manages a branch, we should not require a PR nor approvals
+    // for that branch, because it will (force) push to these branches directly.
+    if is_managed_by_bors {
+        BranchProtectionMode::PrNotRequired
+    } else {
+        branch_protection.mode.clone()
+    }
+}
+
 pub fn construct_branch_protection(
     expected_repo: &rust_team_data::v1::Repo,
     branch_protection: &rust_team_data::v1::BranchProtection,
 ) -> api::BranchProtection {
-    let uses_merge_bot = !branch_protection.merge_bots.is_empty();
-    // When a merge bot manages a branch, we should not require a PR nor approvals
-    // for that branch, because it will (force) push to these branches directly.
-    let branch_protection_mode = if uses_merge_bot {
-        BranchProtectionMode::PrNotRequired
-    } else {
-        branch_protection.mode.clone()
-    };
+    let branch_protection_mode = get_branch_protection_mode(branch_protection);
 
     let required_approving_review_count: u8 = match branch_protection_mode {
         BranchProtectionMode::PrRequired {
@@ -905,7 +913,7 @@ pub fn construct_branch_protection(
         })
         .collect();
 
-    for merge_bot in &branch_protection.merge_bots {
+    for merge_bot in &branch_protection.allowed_merge_apps {
         let allowance = match merge_bot {
             MergeBot::Homu => PushAllowanceActor::User(api::UserPushAllowanceActor {
                 login: "bors".to_owned(),
@@ -913,9 +921,9 @@ pub fn construct_branch_protection(
             MergeBot::RustTimer => PushAllowanceActor::User(api::UserPushAllowanceActor {
                 login: "rust-timer".to_owned(),
             }),
-            MergeBot::Bors => {
-                // Bors uses a GitHub app, which is not configured through team (it is set manually)
-                // Its push allowance will be roundtripped by sync-team.
+            MergeBot::Bors | MergeBot::WorkflowsCratesIo => {
+                // These use GitHub apps, which are not configured through team (set manually).
+                // Their push allowance will be roundtripped by sync-team.
                 continue;
             }
         };
@@ -957,14 +965,19 @@ pub(crate) fn convert_branch_pattern_to_ref_pattern(pattern: &str) -> String {
 pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtection) -> api::Ruleset {
     use api::*;
 
-    let uses_merge_bot = !branch_protection.merge_bots.is_empty();
-    let branch_protection_mode = if uses_merge_bot {
-        BranchProtectionMode::PrNotRequired
-    } else {
-        branch_protection.mode.clone()
-    };
+    let branch_protection_mode = get_branch_protection_mode(branch_protection);
 
     let mut rules: Vec<RulesetRule> = Vec::new();
+
+    // Add deletion protection if requested
+    if branch_protection.prevent_deletion {
+        rules.push(RulesetRule::Deletion);
+    }
+
+    // Add non-fast-forward protection if requested
+    if branch_protection.prevent_force_push {
+        rules.push(RulesetRule::NonFastForward);
+    }
 
     // Add pull request rule if PRs are required
     if let BranchProtectionMode::PrRequired {
@@ -1003,29 +1016,44 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
         });
     }
 
-    // Enable merge queue with default settings
-    rules.push(RulesetRule::MergeQueue {
-        parameters: MergeQueueParameters {
-            check_response_timeout_minutes: 360,
-            grouping_strategy: MergeQueueGroupingStrategy::Allgreen,
-            max_entries_to_build: 5,
-            max_entries_to_merge: 5,
-            merge_method: MergeQueueMergeMethod::Merge,
-            min_entries_to_merge: 0,
-            min_entries_to_merge_wait_minutes: 0,
-        },
-    });
+    if branch_protection.merge_queue {
+        // Enable merge queue with default settings
+        rules.push(RulesetRule::MergeQueue {
+            parameters: MergeQueueParameters {
+                check_response_timeout_minutes: 360,
+                grouping_strategy: MergeQueueGroupingStrategy::Allgreen,
+                max_entries_to_build: 5,
+                max_entries_to_merge: 5,
+                merge_method: MergeQueueMergeMethod::Merge,
+                min_entries_to_merge: 0,
+                min_entries_to_merge_wait_minutes: 0,
+            },
+        });
+    }
 
-    // TODO: Add bypass actors based on allowed_merge_teams and merge_bots
-    // This would require fetching team IDs, which needs more integration
+    // Build bypass actors from allowed merge apps
+    let bypass_actors: Vec<RulesetBypassActor> = branch_protection
+        .allowed_merge_apps
+        .iter()
+        .filter_map(|app| {
+            app.app_id().map(|app_id| RulesetBypassActor {
+                actor_id: app_id,
+                actor_type: RulesetActorType::Integration,
+                bypass_mode: RulesetBypassMode::Always,
+            })
+        })
+        .collect();
 
     api::Ruleset {
         id: None,
-        name: format!("Ruleset for {}", branch_protection.pattern),
+        name: branch_protection
+            .name
+            .clone()
+            .unwrap_or_else(|| format!("Ruleset for {}", branch_protection.pattern)),
         target: RulesetTarget::Branch,
         source_type: RulesetSourceType::Repository,
         enforcement: RulesetEnforcement::Active,
-        bypass_actors: Some(vec![]),
+        bypass_actors: Some(bypass_actors),
         conditions: RulesetConditions {
             ref_name: RulesetRefNameCondition {
                 include: vec![convert_branch_pattern_to_ref_pattern(

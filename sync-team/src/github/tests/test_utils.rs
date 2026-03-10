@@ -422,11 +422,15 @@ impl RepoDataBuilder {
 
 #[derive(Clone)]
 pub struct BranchProtectionBuilder {
+    pub name: Option<String>,
     pub pattern: String,
     pub dismiss_stale_review: bool,
     pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,
-    pub merge_bots: Vec<MergeBot>,
+    pub allowed_merge_apps: Vec<MergeBot>,
+    pub merge_queue: bool,
+    pub prevent_deletion: bool,
+    pub prevent_force_push: bool,
 }
 
 impl BranchProtectionBuilder {
@@ -446,28 +450,42 @@ impl BranchProtectionBuilder {
 
     pub fn build(self) -> v1::BranchProtection {
         let BranchProtectionBuilder {
+            name,
             pattern,
             dismiss_stale_review,
             mode,
             allowed_merge_teams,
-            merge_bots,
+            allowed_merge_apps,
+            merge_queue,
+            prevent_deletion,
+            prevent_force_push,
         } = self;
         v1::BranchProtection {
+            name,
             pattern,
             dismiss_stale_review,
             mode,
             allowed_merge_teams,
-            merge_bots,
+            allowed_merge_apps,
+            merge_queue,
+            prevent_deletion,
+            prevent_force_push,
+            // Maintain compatibility with triagebot
+            merge_bots: vec![],
         }
     }
 
     fn create(pattern: &str, mode: BranchProtectionMode) -> Self {
         Self {
+            name: None,
             pattern: pattern.to_string(),
             mode,
             dismiss_stale_review: false,
             allowed_merge_teams: vec![],
-            merge_bots: vec![],
+            allowed_merge_apps: vec![],
+            merge_queue: false,
+            prevent_deletion: false,
+            prevent_force_push: false,
         }
     }
 }

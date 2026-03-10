@@ -562,12 +562,12 @@ pub(crate) struct RulesetBypassActor {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-#[serde(rename_all = "snake_case")]
 pub(crate) enum RulesetActorType {
     Integration,
     OrganizationAdmin,
     RepositoryRole,
     Team,
+    DeployKey,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]

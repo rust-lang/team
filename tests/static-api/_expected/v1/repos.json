@@ -21,7 +21,11 @@
             }
           },
           "allowed_merge_teams": [],
-          "merge_bots": []
+          "merge_bots": [],
+          "allowed_merge_apps": [],
+          "merge_queue": false,
+          "prevent_deletion": false,
+          "prevent_force_push": false
         }
       ],
       "crates": [],
@@ -62,7 +66,11 @@
           "allowed_merge_teams": [
             "foo"
           ],
-          "merge_bots": []
+          "merge_bots": [],
+          "allowed_merge_apps": [],
+          "merge_queue": false,
+          "prevent_deletion": false,
+          "prevent_force_push": false
         }
       ],
       "crates": [

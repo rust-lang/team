@@ -1,6 +1,8 @@
 use crate::data::Data;
 use crate::schema;
-use crate::schema::{Bot, Email, MergeBot, Permissions, RepoPermission, TeamKind, ZulipMember};
+use crate::schema::{
+    AllowedMergeApp, Bot, Email, Permissions, RepoPermission, TeamKind, ZulipMember,
+};
 use anyhow::{ensure, Context as _, Error};
 use indexmap::IndexMap;
 use log::info;
@@ -52,6 +54,7 @@ impl<'a> Generator<'a> {
                 .iter()
                 .map(|b| v1::BranchProtection {
                     pattern: b.pattern.clone(),
+                    name: b.name.clone(),
                     dismiss_stale_review: b.dismiss_stale_review,
                     mode: if b.pr_required {
                         BranchProtectionMode::PrRequired {
@@ -62,15 +65,20 @@ impl<'a> Generator<'a> {
                         BranchProtectionMode::PrNotRequired
                     },
                     allowed_merge_teams: b.allowed_merge_teams.clone(),
-                    merge_bots: b
-                        .merge_bots
+                    allowed_merge_apps: b
+                        .allowed_merge_apps
                         .iter()
-                        .map(|bot| match bot {
-                            MergeBot::Homu => v1::MergeBot::Homu,
-                            MergeBot::RustTimer => v1::MergeBot::RustTimer,
-                            MergeBot::Bors => v1::MergeBot::Bors,
+                        .map(|app| match app {
+                            AllowedMergeApp::RustTimer => v1::MergeBot::RustTimer,
+                            AllowedMergeApp::Bors => v1::MergeBot::Bors,
+                            AllowedMergeApp::WorkflowsCratesIo => v1::MergeBot::WorkflowsCratesIo,
                         })
                         .collect(),
+                    merge_queue: b.merge_queue,
+                    prevent_deletion: b.prevent_deletion,
+                    prevent_force_push: b.prevent_force_push,
+                    // This field is empty for retrocompatibility with triagebot
+                    merge_bots: vec![],
                 })
                 .collect();
             let managed_by_bors = r.bots.contains(&Bot::Bors);

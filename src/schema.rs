@@ -857,16 +857,18 @@ pub(crate) enum RepoPermission {
 
 #[derive(serde_derive::Deserialize, Debug, PartialEq, Eq)]
 #[serde(rename_all = "kebab-case")]
-pub(crate) enum MergeBot {
-    Homu,
+pub(crate) enum AllowedMergeApp {
     RustTimer,
     Bors,
+    WorkflowsCratesIo,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct BranchProtection {
     pub pattern: String,
+    #[serde(default)]
+    pub name: Option<String>,
     #[serde(default)]
     pub ci_checks: Vec<String>,
     #[serde(default)]
@@ -878,7 +880,13 @@ pub(crate) struct BranchProtection {
     #[serde(default)]
     pub allowed_merge_teams: Vec<String>,
     #[serde(default)]
-    pub merge_bots: Vec<MergeBot>,
+    pub allowed_merge_apps: Vec<AllowedMergeApp>,
+    #[serde(default)]
+    pub merge_queue: bool,
+    #[serde(default)]
+    pub prevent_deletion: bool,
+    #[serde(default)]
+    pub prevent_force_push: bool,
 }
 
 #[derive(serde_derive::Deserialize, Debug)]
