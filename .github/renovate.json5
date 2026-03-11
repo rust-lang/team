@@ -5,6 +5,20 @@
     ":maintainLockFilesMonthly",
     "helpers:pinGitHubActionDigests"
   ],
+  customManagers: [
+    {
+      customType: "regex",
+      managerFilePatterns: [
+        '/^\\.github/workflows/main\\.yml$/',
+      ],
+      matchStrings: [
+        "RUST_VERSION:\\s*\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\""
+      ],
+      depNameTemplate: "rust-lang/rust",
+      datasourceTemplate: 'github-tags',
+      versioningTemplate: 'semver',
+    }
+  ],
   packageRules: [
     {
       matchCategories: [
