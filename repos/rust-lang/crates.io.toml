@@ -7,22 +7,21 @@ bots = ["renovate", "rustbot", "heroku-deploy-access"]
 [access.teams]
 crates-io = "write"
 
-# TODO: enable after updating triagebot
-# [[branch-protections]]
-# name = "main"
-# pattern = "main"
-# ci-checks = [
-#     "Backend / Lint",
-#     "Backend / Test",
-#     "Backend / dependencies",
-#     "Frontend / Lint",
-#     "Frontend / Test",
-# ]
-# required-approvals = 0
-# merge-queue = false
-# prevent-deletion = true
-# prevent-force-push = true
-# allowed-merge-apps = ["workflows-crates-io"]
+[[branch-protections]]
+name = "main"
+pattern = "main"
+ci-checks = [
+    "Backend / Lint",
+    "Backend / Test",
+    "Backend / dependencies",
+    "Frontend / Lint",
+    "Frontend / Test",
+]
+required-approvals = 0
+merge-queue = false
+prevent-deletion = true
+prevent-force-push = true
+allowed-merge-apps = ["workflows-crates-io"]
 
 [environments.crates-io]
 

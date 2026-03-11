@@ -84,6 +84,5 @@ members-without-zulip-id = [
 
 enable-rulesets-repos = [
    "rust-lang/bors",
-   # TODO: Enable after updating triagebot
-   # "rust-lang/crates.io",
+   "rust-lang/crates.io",
 ]
