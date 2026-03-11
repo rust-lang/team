@@ -251,15 +251,35 @@ pub enum MergeBot {
     Homu,
     RustTimer,
     Bors,
+    WorkflowsCratesIo,
+}
+
+impl MergeBot {
+    pub fn app_id(&self) -> Option<i64> {
+        match self {
+            MergeBot::WorkflowsCratesIo => Some(2201425),
+            MergeBot::Bors => Some(278306),
+            // These are user-based bots, not GitHub Apps
+            MergeBot::RustTimer | MergeBot::Homu => None,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BranchProtection {
     pub pattern: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     pub dismiss_stale_review: bool,
     pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,
     pub merge_bots: Vec<MergeBot>,
+    pub allowed_merge_apps: Vec<MergeBot>,
+    pub merge_queue: bool,
+    #[serde(default)]
+    pub prevent_deletion: bool,
+    #[serde(default)]
+    pub prevent_force_push: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

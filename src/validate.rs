@@ -2,7 +2,7 @@ use crate::api::github::GitHubApi;
 use crate::api::zulip::ZulipApi;
 use crate::data::Data;
 use crate::schema::{
-    Bot, Email, MergeBot, Permissions, Repo, RepoPermission, Team, TeamKind, TeamPeople,
+    AllowedMergeApp, Bot, Email, Permissions, Repo, RepoPermission, Team, TeamKind, TeamPeople,
     ZulipMember,
 };
 use anyhow::{bail, Context as _, Error};
@@ -1181,24 +1181,16 @@ but that team is not mentioned in [access.teams]"#,
                 }
             }
 
-            let managed_by_homu = protection.merge_bots.contains(&MergeBot::Homu);
-            let managed_by_bors = protection.merge_bots.contains(&MergeBot::Bors);
-            if managed_by_homu || managed_by_bors {
+            let managed_by_bors = protection
+                .allowed_merge_apps
+                .contains(&AllowedMergeApp::Bors);
+            if managed_by_bors {
                 if !bors_configured {
-                    if managed_by_homu {
-                        bail!(
-                            r#"repo '{}' uses homu to manage a branch protection for '{}', but homu is not enabled. Add "bors" to the `bots` array"#,
-                            repo.name,
-                            protection.pattern,
-                        );
-                    }
-                    if managed_by_bors {
-                        bail!(
-                            r#"repo '{}' uses bors to manage a branch protection for '{}', but bors is not enabled. Add "bors" to the `bots` array"#,
-                            repo.name,
-                            protection.pattern,
-                        );
-                    }
+                    bail!(
+                        r#"repo '{}' uses bors to manage a branch protection for '{}', but bors is not enabled. Add "bors" to the `bots` array"#,
+                        repo.name,
+                        protection.pattern,
+                    );
                 }
                 if protection.required_approvals.is_some()
                     || protection.dismiss_stale_review

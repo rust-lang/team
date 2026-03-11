@@ -14,6 +14,7 @@ infra-bors-admins = "write"
 pattern = "main"
 ci-checks = ["Test", "Test Docker"]
 required-approvals = 0
+merge-queue = true
 
 [environments.production]
 branches = ["main"]
