@@ -2,13 +2,13 @@ use log::debug;
 use reqwest::Method;
 use std::collections::HashSet;
 
-use crate::github::api::url::GitHubUrl;
-use crate::github::api::{
+use crate::sync::github::api::url::GitHubUrl;
+use crate::sync::github::api::{
     AppPushAllowanceActor, BranchProtection, BranchProtectionOp, GitHubApiRead, GithubRead,
-    HttpClient, Login, PushAllowanceActor, Repo, RepoPermission, RepoSettings, Team, TeamPrivacy,
-    TeamPushAllowanceActor, TeamRole, UserPushAllowanceActor, allow_not_found,
+    HttpClient, Login, PushAllowanceActor, Repo, RepoPermission, RepoSettings, Ruleset, RulesetOp,
+    Team, TeamPrivacy, TeamPushAllowanceActor, TeamRole, UserPushAllowanceActor, allow_not_found,
 };
-use crate::utils::ResponseExt;
+use crate::sync::utils::ResponseExt;
 
 pub(crate) struct GitHubWrite {
     client: HttpClient,
@@ -721,13 +721,11 @@ impl GitHubWrite {
     /// Create or update a ruleset for a repository
     pub(crate) fn upsert_ruleset(
         &self,
-        op: crate::github::api::RulesetOp,
+        op: RulesetOp,
         org: &str,
         repo: &str,
-        ruleset: &crate::github::api::Ruleset,
+        ruleset: &Ruleset,
     ) -> anyhow::Result<()> {
-        use crate::github::api::RulesetOp;
-
         match op {
             RulesetOp::CreateForRepo => {
                 debug!("Creating ruleset '{}' in '{}/{}'", ruleset.name, org, repo);

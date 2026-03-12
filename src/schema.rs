@@ -1,11 +1,11 @@
 use crate::data::Data;
 pub(crate) use crate::permissions::Permissions;
-use anyhow::{bail, format_err, Error};
+use anyhow::{Error, bail, format_err};
 use serde::de::{Deserialize, Deserializer};
 use serde_untagged::UntaggedEnumVisitor;
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Config {
     allowed_mailing_lists_domains: HashSet<String>,
@@ -57,7 +57,7 @@ impl Config {
 // This is an enum to allow two kinds of values for the email field:
 //   email = false
 //   email = "foo@example.com"
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(untagged)]
 enum EmailField {
     Disabled(bool),
@@ -76,13 +76,13 @@ pub(crate) enum Email<'a> {
     Present(&'a str),
 }
 
-#[derive(serde_derive::Deserialize, Debug, Default)]
+#[derive(serde::Deserialize, Debug, Default)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Funding {
     github_sponsors: bool,
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Person {
     name: String,
@@ -160,7 +160,7 @@ impl Person {
     }
 }
 
-#[derive(serde_derive::Deserialize, Debug, Default, Copy, Clone, PartialEq, Eq)]
+#[derive(serde::Deserialize, Debug, Default, Copy, Clone, PartialEq, Eq)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum TeamKind {
     #[default]
@@ -185,7 +185,7 @@ impl std::fmt::Display for TeamKind {
     }
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Team {
     name: String,
@@ -564,7 +564,7 @@ impl std::cmp::Ord for GitHubTeam<'_> {
     }
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct TeamPeople {
     pub leads: Vec<String>,
@@ -620,7 +620,7 @@ struct GitHubData {
     extra_teams: Vec<String>,
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct RfcbotData {
     pub(crate) label: String,
@@ -630,7 +630,7 @@ pub(crate) struct RfcbotData {
     pub(crate) exclude_members: Vec<String>,
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct WebsiteData {
     name: String,
@@ -678,14 +678,14 @@ impl WebsiteData {
     }
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct MemberRole {
     pub id: String,
     pub description: String,
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct TeamList {
     pub(crate) address: String,
@@ -701,7 +701,7 @@ pub(crate) struct TeamList {
     pub(crate) extra_teams: Vec<String>,
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct RawZulipCommon {
     pub(crate) name: String,
@@ -717,14 +717,14 @@ pub(crate) struct RawZulipCommon {
     pub(crate) excluded_people: Vec<String>,
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct RawZulipGroup {
     #[serde(flatten)]
     pub(crate) common: RawZulipCommon,
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 pub(crate) struct RawZulipStream {
     #[serde(flatten)]
@@ -804,7 +804,7 @@ fn default_false() -> bool {
     false
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Repo {
     pub org: String,
@@ -823,7 +823,7 @@ pub(crate) struct Repo {
     pub environments: BTreeMap<String, Environment>,
 }
 
-#[derive(serde_derive::Deserialize, Debug, Clone, PartialEq)]
+#[derive(serde::Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum Bot {
     Bors,
@@ -838,7 +838,7 @@ pub(crate) enum Bot {
     HerokuDeployAccess,
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct RepoAccess {
     pub teams: HashMap<String, RepoPermission>,
@@ -846,7 +846,7 @@ pub(crate) struct RepoAccess {
     pub individuals: HashMap<String, RepoPermission>,
 }
 
-#[derive(serde_derive::Deserialize, Debug, Clone)]
+#[derive(serde::Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) enum RepoPermission {
     Triage,
@@ -855,7 +855,7 @@ pub(crate) enum RepoPermission {
     Admin,
 }
 
-#[derive(serde_derive::Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde::Deserialize, Debug, PartialEq, Eq)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum AllowedMergeApp {
     RustTimer,
@@ -863,7 +863,7 @@ pub(crate) enum AllowedMergeApp {
     WorkflowsCratesIo,
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct BranchProtection {
     pub pattern: String,
@@ -891,7 +891,7 @@ pub(crate) struct BranchProtection {
     pub prevent_force_push: bool,
 }
 
-#[derive(serde_derive::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct CratesIoConfiguration {
     pub crates: Vec<String>,
@@ -905,7 +905,7 @@ pub(crate) struct CratesIoConfiguration {
     pub teams: Vec<String>,
 }
 
-#[derive(serde_derive::Deserialize, Debug, Clone)]
+#[derive(serde::Deserialize, Debug, Clone)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Environment {
     /// Branch patterns that can deploy to this environment

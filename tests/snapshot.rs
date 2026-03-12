@@ -1,5 +1,5 @@
-use anyhow::{bail, Error};
-use duct::{cmd, Expression};
+use anyhow::{Error, bail};
+use duct::{Expression, cmd};
 use std::{
     collections::HashSet,
     path::{Path, PathBuf},

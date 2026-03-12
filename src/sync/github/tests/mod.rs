@@ -1,4 +1,4 @@
-use crate::github::tests::test_utils::{
+use crate::sync::github::tests::test_utils::{
     BranchProtectionBuilder, DEFAULT_ORG, DataModel, RepoData, TeamData,
 };
 use rust_team_data::v1::{self, BranchProtectionMode, RepoPermission};

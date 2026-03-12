@@ -7,15 +7,13 @@ mod zulip;
 
 use std::collections::BTreeSet;
 
-use crate::crates_io::SyncCratesIo;
-use crate::github::{GitHubApiRead, GitHubWrite, HttpClient, create_diff};
-use crate::team_api::TeamApi;
-use crate::zulip::SyncZulip;
 use anyhow::Context;
+use crates_io::SyncCratesIo;
+use github::{GitHubApiRead, GitHubWrite, HttpClient, create_diff};
 use log::{info, warn};
 use secrecy::SecretString;
-
-const USER_AGENT: &str = "rust-lang teams sync (https://github.com/rust-lang/sync-team)";
+use team_api::TeamApi;
+use zulip::SyncZulip;
 
 #[derive(Debug, Clone, Default)]
 pub struct Config {

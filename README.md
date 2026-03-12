@@ -54,6 +54,16 @@ from all the supported services.
     * In particular, refer to [*Rules for changes to team repo*](https://forge.rust-lang.org/infra/team-maintenance.html#rules-for-changes-to-team-repo).
 * [Labels applied to issues and PRs](docs/labels.md)
 
+## Environment variables
+
+To run synchronization, various environment variables have to be provided, based on the synchronized service.
+
+| Service name | Description                                     | Environment variables                       |
+|--------------|-------------------------------------------------|---------------------------------------------|
+| github       | Synchronize GitHub teams and repo configuration | `GITHUB_TOKEN`                              |
+| mailgun      | Synchronize mailing lists on Mailgun            | `MAILGUN_API_TOKEN`, `EMAIL_ENCRYPTION_KEY` |
+| zulip        | Synchronize Zulip user groups                   | `ZULIP_USERNAME`, `ZULIP_API_TOKEN`         |
+
 ## Using the CLI tool
 
 It's possible to interact with this repository through its CLI tool.

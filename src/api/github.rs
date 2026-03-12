@@ -1,9 +1,9 @@
-use anyhow::{bail, Error};
-use base64::prelude::BASE64_STANDARD;
+use anyhow::{Error, bail};
 use base64::Engine;
+use base64::prelude::BASE64_STANDARD;
+use reqwest::Method;
 use reqwest::blocking::{Client, ClientBuilder, RequestBuilder};
 use reqwest::header::{self, HeaderValue};
-use reqwest::Method;
 use std::borrow::Cow;
 use std::collections::HashMap;
 

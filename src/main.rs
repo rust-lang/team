@@ -7,6 +7,7 @@ mod api;
 mod ci;
 mod schema;
 mod static_api;
+mod sync;
 mod validate;
 
 const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun", "zulip", "crates-io"];
@@ -19,15 +20,15 @@ use schema::{Email, Team, TeamKind};
 
 use crate::ci::{check_codeowners, generate_codeowners_file};
 use crate::schema::RepoPermission;
-use anyhow::{bail, format_err, Context, Error};
+use crate::sync::run_sync_team;
+use crate::sync::team_api::TeamApi;
+use anyhow::{Context, Error, bail, format_err};
 use api::github;
 use clap::Parser;
 use log::{error, info, warn};
 use std::collections::{BTreeMap, HashMap};
 use std::path::PathBuf;
 use std::str::FromStr;
-use sync_team::run_sync_team;
-use sync_team::team_api::TeamApi;
 
 #[derive(clap::ValueEnum, Clone, Debug)]
 enum DumpIndividualAccessGroupBy {

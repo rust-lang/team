@@ -1,5 +1,5 @@
-use crate::crates_io::CrateConfig;
-use crate::utils::ResponseExt;
+use crate::sync::crates_io::CrateConfig;
+use crate::sync::utils::ResponseExt;
 use anyhow::{Context, anyhow};
 use log::debug;
 use reqwest::blocking::Client;

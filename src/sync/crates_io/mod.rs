@@ -1,9 +1,9 @@
 mod api;
 
-use crate::team_api::TeamApi;
+use crate::sync::team_api::TeamApi;
 use std::cmp::Ordering;
 
-use crate::crates_io::api::{
+use crate::sync::crates_io::api::{
     CratesIoApi, CratesIoCrate, CratesIoOwner, OwnerKind, TrustedPublishingGitHubConfig, UserId,
 };
 use anyhow::Context;

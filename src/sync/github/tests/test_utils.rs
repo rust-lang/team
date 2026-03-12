@@ -8,12 +8,12 @@ use rust_team_data::v1::{
     TeamGitHub, TeamKind,
 };
 
-use crate::Config;
-use crate::github::api::{
-    BranchPolicy, BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Team, TeamMember,
-    TeamPrivacy, TeamRole,
+use crate::sync::Config;
+use crate::sync::github::api::{
+    BranchPolicy, BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Ruleset, Team,
+    TeamMember, TeamPrivacy, TeamRole,
 };
-use crate::github::{
+use crate::sync::github::{
     OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_branch_protection,
     convert_permission,
 };
@@ -646,11 +646,7 @@ impl GithubRead for GithubMock {
         Ok(result)
     }
 
-    fn repo_rulesets(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<Vec<crate::github::api::Ruleset>> {
+    fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>> {
         Ok(self
             .get_org(org)
             .rulesets
@@ -700,7 +696,7 @@ struct GithubOrg {
     // Repo name -> Vec<(protection ID, branch protection)>
     branch_protections: HashMap<String, Vec<(String, BranchProtection)>>,
     // Repo name -> Vec<ruleset>
-    rulesets: HashMap<String, Vec<crate::github::api::Ruleset>>,
+    rulesets: HashMap<String, Vec<Ruleset>>,
     // Repo name -> HashMap<env name, environment>
     repo_environments: HashMap<String, HashMap<String, Environment>>,
 }

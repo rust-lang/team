@@ -5,11 +5,11 @@ use crate::schema::{
     AllowedMergeApp, Bot, Email, Permissions, Repo, RepoPermission, Team, TeamKind, TeamPeople,
     ZulipMember,
 };
-use anyhow::{bail, Context as _, Error};
+use anyhow::{Context as _, Error, bail};
 use log::{error, warn};
 use regex::Regex;
-use std::collections::hash_map::{Entry, HashMap};
 use std::collections::HashSet;
+use std::collections::hash_map::{Entry, HashMap};
 
 macro_rules! checks {
     ($($f:ident,)*) => {
@@ -94,7 +94,9 @@ pub(crate) fn validate(data: &Data, strict: bool, skip: &[&str]) -> Result<(), E
         if strict {
             return Err(err);
         } else {
-            warn!("couldn't perform checks relying on the GitHub API, some errors will not be detected");
+            warn!(
+                "couldn't perform checks relying on the GitHub API, some errors will not be detected"
+            );
             warn!("cause: {err}");
         }
     } else {
@@ -360,10 +362,16 @@ fn validate_alumni(data: &Data, errors: &mut Vec<String>) {
 fn validate_archived_teams(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.archived_teams(), errors, |team, _| {
         if !team.members(data)?.is_empty() {
-            bail!("archived team '{}' must not have current members; please move members to that team's alumni", team.name());
+            bail!(
+                "archived team '{}' must not have current members; please move members to that team's alumni",
+                team.name()
+            );
         }
         if !team.leads().is_empty() {
-            bail!("archived team '{}' must not have team leads; please move members to that team's alumni", team.name());
+            bail!(
+                "archived team '{}' must not have team leads; please move members to that team's alumni",
+                team.name()
+            );
         }
         Ok(())
     })
@@ -444,15 +452,18 @@ fn validate_list_email_addresses(data: &Data, errors: &mut Vec<String>) {
             return Ok(());
         }
         wrapper(team.members(data)?.iter(), errors, |member, _| {
-            if let Some(member) = data.person(member) {
-                if let Email::Missing = member.email() {
+            if let Some(member) = data.person(member)
+                && let Email::Missing = member.email() {
                     bail!(
                         "person `{}` is a member of at least one mailing list ({}) but has no email address",
                         member.github(),
-                        lists.iter().map(|l| l.address()).collect::<Vec<_>>().join(", "),
+                        lists
+                            .iter()
+                            .map(|l| l.address())
+                            .collect::<Vec<_>>()
+                            .join(", "),
                     );
                 }
-            }
             Ok(())
         });
         Ok(())
@@ -519,11 +530,10 @@ fn validate_list_addresses(data: &Data, errors: &mut Vec<String>) {
 /// Ensure people email addresses are correct
 fn validate_people_addresses(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.people(), errors, |person, _| {
-        if let Email::Present(email) = person.email() {
-            if !email.contains('@') {
+        if let Email::Present(email) = person.email()
+            && !email.contains('@') {
                 bail!("invalid email address of `{}`: {}", person.github(), email);
             }
-        }
         Ok(())
     });
 }
@@ -574,11 +584,10 @@ fn validate_permissions(data: &Data, errors: &mut Vec<String>) {
 fn validate_rfcbot_labels(data: &Data, errors: &mut Vec<String>) {
     let mut labels = HashSet::new();
     wrapper(data.teams(), errors, move |team, errors| {
-        if let Some(rfcbot) = team.rfcbot_data() {
-            if !labels.insert(rfcbot.label.clone()) {
+        if let Some(rfcbot) = team.rfcbot_data()
+            && !labels.insert(rfcbot.label.clone()) {
                 errors.push(format!("duplicate rfcbot label: {}", rfcbot.label));
             }
-        }
         Ok(())
     });
 }
@@ -677,14 +686,13 @@ fn validate_github_usernames(data: &Data, github: &GitHubApi, errors: &mut Vec<S
 /// Ensure the user doens't put an URL as the Zulip stream name.
 fn validate_zulip_stream_name(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
-        if let Some(stream) = team.website_data().and_then(|ws| ws.zulip_stream()) {
-            if stream.starts_with("https://") {
+        if let Some(stream) = team.website_data().and_then(|ws| ws.zulip_stream())
+            && stream.starts_with("https://") {
                 bail!(
                     "the zulip stream name of the team `{}` is a link: only the name is required",
                     team.name()
                 );
             }
-        }
         Ok(())
     })
 }
@@ -768,14 +776,13 @@ fn validate_zulip_users(data: &Data, zulip: &ZulipApi, errors: &mut Vec<String>)
 fn validate_unique_zulip_user_ids(data: &Data, errors: &mut Vec<String>) {
     let mut zulip_ids = HashMap::new();
     wrapper(data.people(), errors, |person, _| {
-        if let Some(zulip_id) = person.zulip_id() {
-            if let Some(previous) = zulip_ids.insert(zulip_id, person.github()) {
+        if let Some(zulip_id) = person.zulip_id()
+            && let Some(previous) = zulip_ids.insert(zulip_id, person.github()) {
                 return Err(anyhow::anyhow!(
                     "{previous} and {} have the same Zulip user ID: {zulip_id}",
                     person.github()
                 ));
             }
-        }
         Ok(())
     })
 }
@@ -1023,7 +1030,10 @@ fn check_team_access(data: &Data, repo: &Repo, team_name: &str) -> anyhow::Resul
         .team(team_name)
         .with_context(|| format!("The file 'teams/{team_name}.toml' does not exist."))?;
     if data.is_team_archived(team.name(), &repo.org) {
-        bail!("The team '{}/{team_name}' is archived. Please remove the team access from the `[access.teams]` section of the repo", repo.org);
+        bail!(
+            "The team '{}/{team_name}' is archived. Please remove the team access from the `[access.teams]` section of the repo",
+            repo.org
+        );
     }
 
     let are_gh_teams_in_org = team.github_teams(data)?.iter().any(|t| t.org == repo.org);
@@ -1170,15 +1180,14 @@ but that team is not mentioned in [access.teams]"#,
                         protection.pattern,
                     );
                 }
-                if let Some(required_approvals) = protection.required_approvals {
-                    if required_approvals > 0 {
+                if let Some(required_approvals) = protection.required_approvals
+                    && required_approvals > 0 {
                         bail!(
                             r#"repo '{}' uses a branch protection for {} that does not require a PR, but `required-approvals` is greater than 0"#,
                             repo.name,
                             protection.pattern,
                         );
                     }
-                }
             }
 
             let managed_by_bors = protection

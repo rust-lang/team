@@ -1,9 +1,9 @@
 use crate::data::Data;
 use crate::schema::{Config, Person};
-use anyhow::{bail, Error};
+use anyhow::{Error, bail};
 use std::collections::{HashMap, HashSet};
 
-#[derive(serde_derive::Deserialize, Debug, Clone, Default)]
+#[derive(serde::Deserialize, Debug, Clone, Default)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct BorsAcl {
     #[serde(default)]
@@ -22,7 +22,7 @@ impl BorsAcl {
     }
 }
 
-#[derive(serde_derive::Deserialize, Debug, Default)]
+#[derive(serde::Deserialize, Debug, Default)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) struct Permissions {
     #[serde(default)]

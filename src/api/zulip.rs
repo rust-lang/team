@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
-use anyhow::{bail, Error};
-use reqwest::blocking::{Client, ClientBuilder, Response};
+use anyhow::{Error, bail};
 use reqwest::Method;
+use reqwest::blocking::{Client, ClientBuilder, Response};
 use serde::Deserialize;
 
 const ZULIP_BASE_URL: &str = "https://rust-lang.zulipchat.com/api/v1";
