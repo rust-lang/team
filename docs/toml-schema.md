@@ -435,12 +435,15 @@ allowed-merge-apps = ["bors"]
 # Whether to enable a merge queue for this branch.
 # (optional - default `false`)
 merge-queue = false
+# Whether to prevent branch creation.
+# (optional - default `true`)
+prevent-creation = true
 # Whether to prevent branch deletion.
-# (optional - default `false`)
-prevent-deletion = false
+# (optional - default `true`)
+prevent-deletion = true
 # Whether to prevent force pushes to the branch.
-# (optional - default `false`)
-prevent-force-push = false
+# (optional - default `true`)
+prevent-force-push = true
 ```
 
 ### Repository environments

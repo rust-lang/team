@@ -883,9 +883,11 @@ pub(crate) struct BranchProtection {
     pub allowed_merge_apps: Vec<AllowedMergeApp>,
     #[serde(default)]
     pub merge_queue: bool,
-    #[serde(default)]
+    #[serde(default = "default_true")]
+    pub prevent_creation: bool,
+    #[serde(default = "default_true")]
     pub prevent_deletion: bool,
-    #[serde(default)]
+    #[serde(default = "default_true")]
     pub prevent_force_push: bool,
 }
 

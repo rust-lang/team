@@ -429,6 +429,7 @@ pub struct BranchProtectionBuilder {
     pub allowed_merge_teams: Vec<String>,
     pub allowed_merge_apps: Vec<MergeBot>,
     pub merge_queue: bool,
+    pub prevent_creation: bool,
     pub prevent_deletion: bool,
     pub prevent_force_push: bool,
 }
@@ -457,6 +458,7 @@ impl BranchProtectionBuilder {
             allowed_merge_teams,
             allowed_merge_apps,
             merge_queue,
+            prevent_creation,
             prevent_deletion,
             prevent_force_push,
         } = self;
@@ -468,6 +470,7 @@ impl BranchProtectionBuilder {
             allowed_merge_teams,
             allowed_merge_apps,
             merge_queue,
+            prevent_creation,
             prevent_deletion,
             prevent_force_push,
             // Maintain compatibility with triagebot
@@ -484,8 +487,9 @@ impl BranchProtectionBuilder {
             allowed_merge_teams: vec![],
             allowed_merge_apps: vec![],
             merge_queue: false,
-            prevent_deletion: false,
-            prevent_force_push: false,
+            prevent_creation: true,
+            prevent_deletion: true,
+            prevent_force_push: true,
         }
     }
 }
