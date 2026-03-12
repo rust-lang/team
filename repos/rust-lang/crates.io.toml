@@ -19,8 +19,6 @@ ci-checks = [
 ]
 required-approvals = 0
 merge-queue = false
-prevent-deletion = true
-prevent-force-push = true
 allowed-merge-apps = ["workflows-crates-io"]
 
 [environments.crates-io]
