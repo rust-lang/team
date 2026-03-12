@@ -16,7 +16,7 @@ pub(crate) struct Data {
 }
 
 impl Data {
-    pub(crate) fn load() -> Result<Self, Error> {
+    pub(crate) fn load(directory: &Path) -> Result<Self, Error> {
         let mut data = Data {
             people: HashMap::new(),
             teams: HashMap::new(),
@@ -45,7 +45,7 @@ impl Data {
             Ok(())
         }
 
-        data.load_dir("repos", true, |this, org, repo: Repo, path: &Path| {
+        data.load_dir(directory.join("repos"), true, |this, org, repo: Repo, path: &Path| {
             if org == "archive" {
                 bail!("repo '{}' is located in the 'archive/' directory. Move it into the org subdirectory, e.g. 'archive/rust-lang/'", repo.name);
             }
@@ -55,33 +55,39 @@ impl Data {
             Ok(())
         })?;
 
-        if Path::new("repos/archive").is_dir() {
-            data.load_dir(
-                "repos/archive",
-                true,
-                |this, org, repo: Repo, path: &Path| {
-                    validate_repo(org, &repo, path)?;
-                    this.archived_repos.push(repo);
-                    Ok(())
-                },
-            )?;
+        let archive_path = directory.join("repos").join("archive");
+        if archive_path.is_dir() {
+            data.load_dir(archive_path, true, |this, org, repo: Repo, path: &Path| {
+                validate_repo(org, &repo, path)?;
+                this.archived_repos.push(repo);
+                Ok(())
+            })?;
         }
 
-        data.load_dir("people", false, |this, _dir, person: Person, _path| {
-            person.validate()?;
-            this.people.insert(person.github().to_string(), person);
-            Ok(())
-        })?;
+        data.load_dir(
+            directory.join("people"),
+            false,
+            |this, _dir, person: Person, _path| {
+                person.validate()?;
+                this.people.insert(person.github().to_string(), person);
+                Ok(())
+            },
+        )?;
 
-        data.load_dir("teams", false, |this, _dir, team: Team, _path| {
+        let teams_dir = directory.join("teams");
+        data.load_dir(&teams_dir, false, |this, _dir, team: Team, _path| {
             this.teams.insert(team.name().to_string(), team);
             Ok(())
         })?;
 
-        data.load_dir("teams/archive", false, |this, _dir, team: Team, _path| {
-            this.archived_teams.push(team);
-            Ok(())
-        })?;
+        data.load_dir(
+            teams_dir.join("archive"),
+            false,
+            |this, _dir, team: Team, _path| {
+                this.archived_teams.push(team);
+                Ok(())
+            },
+        )?;
 
         Ok(data)
     }
