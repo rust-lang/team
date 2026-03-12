@@ -1049,6 +1049,9 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
         })
         .collect();
 
+    // Set bypass_actors to None if it's empty
+    let bypass_actors = (!bypass_actors.is_empty()).then_some(bypass_actors);
+
     api::Ruleset {
         id: None,
         name: branch_protection
@@ -1058,7 +1061,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
         target: RulesetTarget::Branch,
         source_type: RulesetSourceType::Repository,
         enforcement: RulesetEnforcement::Active,
-        bypass_actors: Some(bypass_actors),
+        bypass_actors,
         conditions: RulesetConditions {
             ref_name: RulesetRefNameCondition {
                 include: vec![convert_branch_pattern_to_ref_pattern(
