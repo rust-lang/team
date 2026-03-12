@@ -485,9 +485,10 @@ impl<'a> Generator<'a> {
     fn write(&self, path: &str, bytes: &[u8]) -> Result<(), Error> {
         let dest = self.dest.join(path);
         if let Some(parent) = dest.parent()
-            && !parent.exists() {
-                std::fs::create_dir_all(parent)?;
-            }
+            && !parent.exists()
+        {
+            std::fs::create_dir_all(parent)?;
+        }
         std::fs::write(&dest, bytes)?;
         Ok(())
     }

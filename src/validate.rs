@@ -453,17 +453,18 @@ fn validate_list_email_addresses(data: &Data, errors: &mut Vec<String>) {
         }
         wrapper(team.members(data)?.iter(), errors, |member, _| {
             if let Some(member) = data.person(member)
-                && let Email::Missing = member.email() {
-                    bail!(
-                        "person `{}` is a member of at least one mailing list ({}) but has no email address",
-                        member.github(),
-                        lists
-                            .iter()
-                            .map(|l| l.address())
-                            .collect::<Vec<_>>()
-                            .join(", "),
-                    );
-                }
+                && let Email::Missing = member.email()
+            {
+                bail!(
+                    "person `{}` is a member of at least one mailing list ({}) but has no email address",
+                    member.github(),
+                    lists
+                        .iter()
+                        .map(|l| l.address())
+                        .collect::<Vec<_>>()
+                        .join(", "),
+                );
+            }
             Ok(())
         });
         Ok(())
@@ -531,9 +532,10 @@ fn validate_list_addresses(data: &Data, errors: &mut Vec<String>) {
 fn validate_people_addresses(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.people(), errors, |person, _| {
         if let Email::Present(email) = person.email()
-            && !email.contains('@') {
-                bail!("invalid email address of `{}`: {}", person.github(), email);
-            }
+            && !email.contains('@')
+        {
+            bail!("invalid email address of `{}`: {}", person.github(), email);
+        }
         Ok(())
     });
 }
@@ -585,9 +587,10 @@ fn validate_rfcbot_labels(data: &Data, errors: &mut Vec<String>) {
     let mut labels = HashSet::new();
     wrapper(data.teams(), errors, move |team, errors| {
         if let Some(rfcbot) = team.rfcbot_data()
-            && !labels.insert(rfcbot.label.clone()) {
-                errors.push(format!("duplicate rfcbot label: {}", rfcbot.label));
-            }
+            && !labels.insert(rfcbot.label.clone())
+        {
+            errors.push(format!("duplicate rfcbot label: {}", rfcbot.label));
+        }
         Ok(())
     });
 }
@@ -687,12 +690,13 @@ fn validate_github_usernames(data: &Data, github: &GitHubApi, errors: &mut Vec<S
 fn validate_zulip_stream_name(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, _| {
         if let Some(stream) = team.website_data().and_then(|ws| ws.zulip_stream())
-            && stream.starts_with("https://") {
-                bail!(
-                    "the zulip stream name of the team `{}` is a link: only the name is required",
-                    team.name()
-                );
-            }
+            && stream.starts_with("https://")
+        {
+            bail!(
+                "the zulip stream name of the team `{}` is a link: only the name is required",
+                team.name()
+            );
+        }
         Ok(())
     })
 }
@@ -777,12 +781,13 @@ fn validate_unique_zulip_user_ids(data: &Data, errors: &mut Vec<String>) {
     let mut zulip_ids = HashMap::new();
     wrapper(data.people(), errors, |person, _| {
         if let Some(zulip_id) = person.zulip_id()
-            && let Some(previous) = zulip_ids.insert(zulip_id, person.github()) {
-                return Err(anyhow::anyhow!(
-                    "{previous} and {} have the same Zulip user ID: {zulip_id}",
-                    person.github()
-                ));
-            }
+            && let Some(previous) = zulip_ids.insert(zulip_id, person.github())
+        {
+            return Err(anyhow::anyhow!(
+                "{previous} and {} have the same Zulip user ID: {zulip_id}",
+                person.github()
+            ));
+        }
         Ok(())
     })
 }
@@ -1181,13 +1186,14 @@ but that team is not mentioned in [access.teams]"#,
                     );
                 }
                 if let Some(required_approvals) = protection.required_approvals
-                    && required_approvals > 0 {
-                        bail!(
-                            r#"repo '{}' uses a branch protection for {} that does not require a PR, but `required-approvals` is greater than 0"#,
-                            repo.name,
-                            protection.pattern,
-                        );
-                    }
+                    && required_approvals > 0
+                {
+                    bail!(
+                        r#"repo '{}' uses a branch protection for {} that does not require a PR, but `required-approvals` is greater than 0"#,
+                        repo.name,
+                        protection.pattern,
+                    );
+                }
             }
 
             let managed_by_bors = protection
