@@ -3,3 +3,6 @@ email = "eopage@gmail.com"
 github = "epage"
 github-id = 60961
 zulip-id = 424212
+
+[funding]
+github-sponsors = true
