@@ -3,7 +3,7 @@ mod tokens;
 mod url;
 mod write;
 
-use crate::utils::ResponseExt;
+use crate::sync::utils::ResponseExt;
 use anyhow::{Context, bail};
 use base64::Engine as _;
 use base64::prelude::BASE64_STANDARD;

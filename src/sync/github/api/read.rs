@@ -1,11 +1,11 @@
-use crate::github::api;
-use crate::github::api::{BranchPolicy, Ruleset};
-use crate::github::api::{
+use crate::sync::github::api;
+use crate::sync::github::api::{BranchPolicy, Ruleset};
+use crate::sync::github::api::{
     BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, Repo, RepoTeam,
     RepoUser, RestPaginatedError, Team, TeamMember, TeamRole, team_node_id, url::GitHubUrl,
     user_node_id,
 };
-use crate::utils::ResponseExt;
+use crate::sync::utils::ResponseExt;
 use anyhow::Context as _;
 use reqwest::{Method, StatusCode};
 use rust_team_data::v1::Environment;
@@ -66,11 +66,7 @@ pub(crate) trait GithubRead {
 
     /// Get rulesets for a repository
     /// Returns a vector of rulesets
-    fn repo_rulesets(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<Vec<crate::github::api::Ruleset>>;
+    fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>>;
 
     fn environment_branch_policies(
         &self,
@@ -541,11 +537,7 @@ impl GithubRead for GitHubApiRead {
             .collect()
     }
 
-    fn repo_rulesets(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<Vec<crate::github::api::Ruleset>> {
+    fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>> {
         #[derive(serde::Deserialize)]
         struct RulesetInfo {
             id: u64,

@@ -1,6 +1,6 @@
 use crate::data::Data;
 use crate::schema::RepoPermission;
-use anyhow::{bail, Context};
+use anyhow::{Context, bail};
 use log::{debug, info, warn};
 use std::collections::{BTreeSet, HashSet};
 use std::path::{Path, PathBuf};
@@ -20,7 +20,9 @@ pub fn check_codeowners(data: Data) -> anyhow::Result<()> {
     let actual_codeowners =
         std::fs::read_to_string(codeowners_path()).context("cannot read CODEOWNERS")?;
     if expected_codeowners != actual_codeowners {
-        return Err(anyhow::anyhow!("CODEOWNERS content is not up-to-date. Regenerate it using `cargo run ci generate-codeowners`."));
+        return Err(anyhow::anyhow!(
+            "CODEOWNERS content is not up-to-date. Regenerate it using `cargo run ci generate-codeowners`."
+        ));
     }
 
     Ok(())

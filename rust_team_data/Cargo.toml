@@ -12,4 +12,4 @@ indexmap = { workspace = true, features = ["serde"] }
 serde = { workspace = true, features = ["derive"] }
 
 [features]
-email-encryption = ["chacha20poly1305", "getrandom", "hex"]
+email-encryption = ["dep:chacha20poly1305", "dep:getrandom", "dep:hex"]

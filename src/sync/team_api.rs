@@ -1,4 +1,4 @@
-use crate::utils::ResponseExt;
+use crate::sync::utils::ResponseExt;
 use log::{debug, trace};
 use std::borrow::Cow;
 use std::path::PathBuf;

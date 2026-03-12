@@ -1,6 +1,6 @@
 mod api;
 
-use crate::team_api::TeamApi;
+use crate::sync::team_api::TeamApi;
 use anyhow::Context;
 use api::{ZulipApi, ZulipStream, ZulipUserGroup};
 use rust_team_data::v1::{ZulipGroupMember, ZulipStreamMember};

@@ -1,5 +1,6 @@
 use crate::schema::{Config, List, Person, Repo, Team, ZulipGroup, ZulipStream};
-use anyhow::{bail, Context as _, Error};
+use crate::sync;
+use anyhow::{Context as _, Error, bail};
 use serde::de::DeserializeOwned;
 use std::collections::{HashMap, HashSet};
 use std::ffi::OsStr;
@@ -224,7 +225,7 @@ impl Data {
             .any(|github_team| github_team.name == team_name && github_team.org == org)
     }
 
-    pub(crate) fn get_sync_team_config(&self) -> anyhow::Result<sync_team::Config> {
+    pub(crate) fn get_sync_team_config(&self) -> anyhow::Result<sync::Config> {
         let mut special_org_members = self.config.special_org_members().clone();
 
         // Add infra admins from the infra-admins team
@@ -238,7 +239,7 @@ impl Data {
             .map(|m| m.github.clone());
         special_org_members.extend(infra_admins_usernames);
 
-        Ok(sync_team::Config {
+        Ok(sync::Config {
             special_org_members,
             independent_github_orgs: self.config.independent_github_orgs().clone(),
             enable_rulesets_repos: self.config.enable_rulesets_repos().clone(),

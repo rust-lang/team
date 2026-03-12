@@ -3,8 +3,8 @@ mod api;
 mod tests;
 
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
-use crate::Config;
-use crate::github::api::{
+use crate::sync::Config;
+use crate::sync::github::api::{
     GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings, Ruleset,
 };
 use log::debug;

@@ -3,7 +3,7 @@ use crate::schema;
 use crate::schema::{
     AllowedMergeApp, Bot, Email, Permissions, RepoPermission, TeamKind, ZulipMember,
 };
-use anyhow::{ensure, Context as _, Error};
+use anyhow::{Context as _, Error, ensure};
 use indexmap::IndexMap;
 use log::info;
 use rust_team_data::v1;
@@ -484,10 +484,10 @@ impl<'a> Generator<'a> {
 
     fn write(&self, path: &str, bytes: &[u8]) -> Result<(), Error> {
         let dest = self.dest.join(path);
-        if let Some(parent) = dest.parent() {
-            if !parent.exists() {
-                std::fs::create_dir_all(parent)?;
-            }
+        if let Some(parent) = dest.parent()
+            && !parent.exists()
+        {
+            std::fs::create_dir_all(parent)?;
         }
         std::fs::write(&dest, bytes)?;
         Ok(())
