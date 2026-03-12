@@ -270,7 +270,10 @@ fn run() -> Result<(), Error> {
                 bail!("person already in the repo: {}", github_name);
             }
 
-            let file = format!("people/{github_name}.toml");
+            let file = cli
+                .data_dir
+                .join("people")
+                .join(format!("{github_name}.toml"));
             std::fs::write(
                 &file,
                 toml::to_string_pretty(&PersonToAdd {
@@ -291,7 +294,7 @@ fn run() -> Result<(), Error> {
                 .as_bytes(),
             )?;
 
-            info!("written data to {file}");
+            info!("written data to {}", file.display());
         }
         RootOpts::StaticApi { ref dest } => {
             let dest = PathBuf::from(dest);

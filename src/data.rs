@@ -74,17 +74,14 @@ impl Data {
             },
         )?;
 
-        data.load_dir(
-            directory.join("teams"),
-            false,
-            |this, _dir, team: Team, _path| {
-                this.teams.insert(team.name().to_string(), team);
-                Ok(())
-            },
-        )?;
+        let teams_dir = directory.join("teams");
+        data.load_dir(&teams_dir, false, |this, _dir, team: Team, _path| {
+            this.teams.insert(team.name().to_string(), team);
+            Ok(())
+        })?;
 
         data.load_dir(
-            directory.join("teams/archive"),
+            teams_dir.join("archive"),
             false,
             |this, _dir, team: Team, _path| {
                 this.archived_teams.push(team);
