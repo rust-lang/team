@@ -22,8 +22,9 @@
       "merge_bots": [],
       "allowed_merge_apps": [],
       "merge_queue": false,
-      "prevent_deletion": false,
-      "prevent_force_push": false
+      "prevent_creation": true,
+      "prevent_deletion": true,
+      "prevent_force_push": true
     }
   ],
   "crates": [],

@@ -969,6 +969,11 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
 
     let mut rules: Vec<RulesetRule> = Vec::new();
 
+    // Add creation protection if requested
+    if branch_protection.prevent_creation {
+        rules.push(RulesetRule::Creation);
+    }
+
     // Add deletion protection if requested
     if branch_protection.prevent_deletion {
         rules.push(RulesetRule::Deletion);

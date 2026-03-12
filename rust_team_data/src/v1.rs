@@ -276,9 +276,11 @@ pub struct BranchProtection {
     pub merge_bots: Vec<MergeBot>,
     pub allowed_merge_apps: Vec<MergeBot>,
     pub merge_queue: bool,
-    #[serde(default)]
+    #[serde(default = "default_true")]
+    pub prevent_creation: bool,
+    #[serde(default = "default_true")]
     pub prevent_deletion: bool,
-    #[serde(default)]
+    #[serde(default = "default_true")]
     pub prevent_force_push: bool,
 }
 
@@ -308,4 +310,8 @@ pub struct Person {
 pub struct People {
     /// GitHub name as key.
     pub people: IndexMap<String, Person>,
+}
+
+fn default_true() -> bool {
+    true
 }
