@@ -967,21 +967,23 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
 
     let branch_protection_mode = get_branch_protection_mode(branch_protection);
 
-    let mut rules: Vec<RulesetRule> = Vec::new();
+    // Use a BTreeSet to ensure a consistent order. This avoids unnecessary diffs when the order of rules changes,
+    // since GitHub does not guarantee any specific order for rules.
+    let mut rules: BTreeSet<RulesetRule> = BTreeSet::new();
 
     // Add creation protection if requested
     if branch_protection.prevent_creation {
-        rules.push(RulesetRule::Creation);
+        rules.insert(RulesetRule::Creation);
     }
 
     // Add deletion protection if requested
     if branch_protection.prevent_deletion {
-        rules.push(RulesetRule::Deletion);
+        rules.insert(RulesetRule::Deletion);
     }
 
     // Add non-fast-forward protection if requested
     if branch_protection.prevent_force_push {
-        rules.push(RulesetRule::NonFastForward);
+        rules.insert(RulesetRule::NonFastForward);
     }
 
     // Add pull request rule if PRs are required
@@ -989,7 +991,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
         required_approvals, ..
     } = &branch_protection_mode
     {
-        rules.push(RulesetRule::PullRequest {
+        rules.insert(RulesetRule::PullRequest {
             parameters: PullRequestParameters {
                 dismiss_stale_reviews_on_push: branch_protection.dismiss_stale_review,
                 require_code_owner_review: false,
@@ -1006,7 +1008,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
     {
         let mut checks = ci_checks.clone();
         checks.sort();
-        rules.push(RulesetRule::RequiredStatusChecks {
+        rules.insert(RulesetRule::RequiredStatusChecks {
             parameters: RequiredStatusChecksParameters {
                 do_not_enforce_on_create: Some(false),
                 required_status_checks: checks
@@ -1023,7 +1025,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
 
     if branch_protection.merge_queue {
         // Enable merge queue with default settings
-        rules.push(RulesetRule::MergeQueue {
+        rules.insert(RulesetRule::MergeQueue {
             parameters: MergeQueueParameters {
                 check_response_timeout_minutes: 360,
                 grouping_strategy: MergeQueueGroupingStrategy::Allgreen,
