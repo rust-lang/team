@@ -17,6 +17,7 @@ use reqwest::{
 };
 use secrecy::ExposeSecret;
 use serde::{Deserialize, de::DeserializeOwned};
+use std::collections::BTreeSet;
 use std::fmt;
 use thiserror::Error;
 use tokens::GitHubTokens;
@@ -529,24 +530,24 @@ pub(crate) struct Ruleset {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) bypass_actors: Option<Vec<RulesetBypassActor>>,
     pub(crate) conditions: RulesetConditions,
-    pub(crate) rules: Vec<RulesetRule>,
+    pub(crate) rules: BTreeSet<RulesetRule>,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub(crate) enum RulesetTarget {
     Branch,
     Tag,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub(crate) enum RulesetSourceType {
     Repository,
     Organization,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub(crate) enum RulesetEnforcement {
     Active,
@@ -588,7 +589,7 @@ pub(crate) struct RulesetRefNameCondition {
     pub(crate) exclude: Vec<String>,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub(crate) enum RulesetRule {
     Creation,
@@ -611,7 +612,7 @@ pub(crate) enum RulesetRule {
     NonFastForward,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 pub(crate) struct MergeQueueParameters {
     pub(crate) check_response_timeout_minutes: i32,
     pub(crate) grouping_strategy: MergeQueueGroupingStrategy,
@@ -622,14 +623,14 @@ pub(crate) struct MergeQueueParameters {
     pub(crate) min_entries_to_merge_wait_minutes: i32,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub(crate) enum MergeQueueGroupingStrategy {
     Allgreen,
     Headgreen,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub(crate) enum MergeQueueMergeMethod {
     Merge,
@@ -637,12 +638,12 @@ pub(crate) enum MergeQueueMergeMethod {
     Rebase,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 pub(crate) struct RequiredDeploymentsParameters {
     pub(crate) required_deployment_environments: Vec<String>,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 pub(crate) struct PullRequestParameters {
     pub(crate) dismiss_stale_reviews_on_push: bool,
     pub(crate) require_code_owner_review: bool,
@@ -651,7 +652,7 @@ pub(crate) struct PullRequestParameters {
     pub(crate) required_review_thread_resolution: bool,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 pub(crate) struct RequiredStatusChecksParameters {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) do_not_enforce_on_create: Option<bool>,
@@ -659,7 +660,7 @@ pub(crate) struct RequiredStatusChecksParameters {
     pub(crate) strict_required_status_checks_policy: bool,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 pub(crate) struct RequiredStatusCheck {
     pub(crate) context: String,
     #[serde(skip_serializing_if = "Option::is_none")]
