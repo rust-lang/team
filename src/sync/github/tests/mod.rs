@@ -1,3 +1,4 @@
+use crate::sync::github::api;
 use crate::sync::github::tests::test_utils::{
     BranchProtectionBuilder, DEFAULT_ORG, DataModel, RepoData, TeamData,
 };
@@ -199,6 +200,52 @@ fn repo_noop() {
     let gh = model.gh_model();
     let diff = model.diff_repos(gh);
     assert!(diff.is_empty());
+}
+
+#[test]
+fn repo_ruleset_noop_when_status_check_rule_order_differs() {
+    let mut model = DataModel::default();
+    model.enable_rulesets_repo(DEFAULT_ORG, "repo1");
+    model.create_repo(RepoData::new("repo1").branch_protections(vec![
+        BranchProtectionBuilder::pr_required("main", &["z-check", "a-check"], 0).build(),
+    ]));
+    let mut gh = model.gh_model();
+
+    let ruleset = gh
+        .repo_rulesets_mut(DEFAULT_ORG, "repo1")
+        .first_mut()
+        .unwrap();
+    ruleset.rules.reverse();
+    for rule in &mut ruleset.rules {
+        if let api::RulesetRule::RequiredStatusChecks { parameters } = rule {
+            parameters.do_not_enforce_on_create = None;
+            parameters.required_status_checks.reverse();
+        }
+    }
+
+    let diff = model.diff_repos(gh);
+    assert!(diff.is_empty(), "{diff:#?}");
+}
+
+#[test]
+fn repo_ruleset_noop_when_bypass_actors_are_omitted_by_github() {
+    let mut model = DataModel::default();
+    model.enable_rulesets_repo(DEFAULT_ORG, "repo1");
+    model.create_repo(RepoData::new("repo1").branch_protections(vec![
+        BranchProtectionBuilder::pr_required("main", &["ci"], 0).build(),
+    ]));
+    model.get_repo("repo1").branch_protections[0].allowed_merge_apps =
+        vec![v1::MergeBot::WorkflowsCratesIo];
+
+    let mut gh = model.gh_model();
+    let ruleset = gh
+        .repo_rulesets_mut(DEFAULT_ORG, "repo1")
+        .first_mut()
+        .unwrap();
+    ruleset.bypass_actors = None;
+
+    let diff = model.diff_repos(gh);
+    assert!(diff.is_empty(), "{diff:#?}");
 }
 
 #[test]

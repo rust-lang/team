@@ -15,7 +15,7 @@ use crate::sync::github::api::{
 };
 use crate::sync::github::{
     OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_branch_protection,
-    convert_permission,
+    construct_ruleset, convert_permission,
 };
 
 pub const DEFAULT_ORG: &str = "rust-lang";
@@ -77,6 +77,12 @@ impl DataModel {
 
     pub fn add_independent_github_org(&mut self, org: &str) {
         self.config.independent_github_orgs.insert(org.to_string());
+    }
+
+    pub fn enable_rulesets_repo(&mut self, org: &str, repo: &str) {
+        self.config
+            .enable_rulesets_repos
+            .insert(format!("{org}/{repo}"));
     }
 
     /// Creates a GitHub model from the current team data mock.
@@ -172,15 +178,25 @@ impl DataModel {
                 .insert(repo.name.clone(), RepoMembers { teams, members });
 
             let repo_v1: v1::Repo = repo.clone().into();
+            let repo_full_name = format!("{}/{}", repo.org, repo.name);
+            let use_rulesets = self.config.enable_rulesets_repos.contains(&repo_full_name);
             let mut protections = vec![];
+            let mut rulesets = vec![];
             for protection in &repo.branch_protections {
-                protections.push((
-                    format!("{}", protections.len()),
-                    construct_branch_protection(&repo_v1, protection),
-                ));
+                if use_rulesets {
+                    let mut ruleset = construct_ruleset(protection);
+                    ruleset.id = Some(rulesets.len() as i64);
+                    rulesets.push(ruleset);
+                } else {
+                    protections.push((
+                        format!("{}", protections.len()),
+                        construct_branch_protection(&repo_v1, protection),
+                    ));
+                }
             }
             org.branch_protections
                 .insert(repo.name.clone(), protections);
+            org.rulesets.insert(repo.name.clone(), rulesets);
 
             let environments: HashMap<String, Environment> =
                 repo.environments.clone().into_iter().collect();
@@ -520,6 +536,13 @@ impl GithubMock {
             .entry(repo.to_string())
             .or_default()
             .push(user.to_string());
+    }
+
+    pub fn repo_rulesets_mut(&mut self, org: &str, repo: &str) -> &mut Vec<Ruleset> {
+        self.get_org_mut(org)
+            .rulesets
+            .entry(repo.to_string())
+            .or_default()
     }
 
     fn get_org(&self, org: &str) -> &GithubOrg {
