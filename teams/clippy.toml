@@ -33,6 +33,7 @@ alumni = [
 [permissions]
 perf = true
 bors.rust.review = true
+crater = true
 dev-desktop = true
 
 [[github]]
