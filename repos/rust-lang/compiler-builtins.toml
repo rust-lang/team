@@ -10,3 +10,9 @@ crate-maintainers = "maintain"
 pattern = "main"
 ci-checks = ["success"]
 required-approvals = 0
+
+[environments.rustc-pull]
+branches = ["main"]
+
+[environments.publish]
+branches = ["main"]
