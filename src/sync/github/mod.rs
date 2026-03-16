@@ -1059,7 +1059,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
         name: branch_protection
             .name
             .clone()
-            .unwrap_or_else(|| format!("Ruleset for {}", branch_protection.pattern)),
+            .unwrap_or_else(|| branch_protection.pattern.to_string()),
         target: RulesetTarget::Branch,
         source_type: RulesetSourceType::Repository,
         enforcement: RulesetEnforcement::Active,

@@ -8,7 +8,6 @@ bots = ["renovate", "rustbot", "heroku-deploy-access"]
 crates-io = "write"
 
 [[branch-protections]]
-name = "main"
 pattern = "main"
 ci-checks = [
     "Backend / Lint",
