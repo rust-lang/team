@@ -334,6 +334,7 @@ fn repo_create() {
                         BranchProtection {
                             pattern: "main",
                             is_admin_enforced: true,
+                            allows_force_pushes: false,
                             dismisses_stale_reviews: false,
                             required_approving_review_count: 1,
                             required_status_check_contexts: [
@@ -742,6 +743,7 @@ fn repo_add_branch_protection() {
                             BranchProtection {
                                 pattern: "master",
                                 is_admin_enforced: true,
+                                allows_force_pushes: false,
                                 dismisses_stale_reviews: false,
                                 required_approving_review_count: 0,
                                 required_status_check_contexts: [
@@ -759,6 +761,7 @@ fn repo_add_branch_protection() {
                             BranchProtection {
                                 pattern: "beta",
                                 is_admin_enforced: true,
+                                allows_force_pushes: false,
                                 dismisses_stale_reviews: false,
                                 required_approving_review_count: 0,
                                 required_status_check_contexts: [],
@@ -804,6 +807,7 @@ fn repo_update_branch_protection() {
         BranchProtectionMode::PrNotRequired => unreachable!(),
     }
     protection.dismiss_stale_review = true;
+    protection.prevent_force_push = false;
 
     let diff = model.diff_repos(gh);
     insta::assert_debug_snapshot!(diff, @r#"
@@ -836,6 +840,7 @@ fn repo_update_branch_protection() {
                             BranchProtection {
                                 pattern: "master",
                                 is_admin_enforced: true,
+                                allows_force_pushes: false,
                                 dismisses_stale_reviews: false,
                                 required_approving_review_count: 1,
                                 required_status_check_contexts: [
@@ -847,6 +852,7 @@ fn repo_update_branch_protection() {
                             BranchProtection {
                                 pattern: "master",
                                 is_admin_enforced: true,
+                                allows_force_pushes: true,
                                 dismisses_stale_reviews: true,
                                 required_approving_review_count: 0,
                                 required_status_check_contexts: [

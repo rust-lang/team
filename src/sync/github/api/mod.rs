@@ -437,6 +437,7 @@ fn team_node_id(id: u64) -> String {
 pub(crate) struct BranchProtection {
     pub(crate) pattern: String,
     pub(crate) is_admin_enforced: bool,
+    pub(crate) allows_force_pushes: bool,
     pub(crate) dismisses_stale_reviews: bool,
     #[serde(default, deserialize_with = "nullable")]
     pub(crate) required_approving_review_count: u8,

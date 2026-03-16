@@ -401,6 +401,7 @@ impl GithubRead for GitHubApiRead {
                             id,
                             pattern,
                             isAdminEnforced,
+                            allowsForcePushes,
                             dismissesStaleReviews,
                             requiredStatusCheckContexts,
                             requiredApprovingReviewCount,

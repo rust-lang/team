@@ -942,6 +942,7 @@ pub fn construct_branch_protection(
     api::BranchProtection {
         pattern: branch_protection.pattern.clone(),
         is_admin_enforced: true,
+        allows_force_pushes: !branch_protection.prevent_force_push,
         dismisses_stale_reviews: branch_protection.dismiss_stale_review,
         required_approving_review_count,
         required_status_check_contexts: checks,
