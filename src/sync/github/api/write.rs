@@ -390,6 +390,7 @@ impl GitHubWrite {
             id: &'a str,
             pattern: &'a str,
             contexts: &'a [String],
+            allows_force_pushes: bool,
             dismiss_stale: bool,
             review_count: u8,
             restricts_pushes: bool,
@@ -410,7 +411,7 @@ impl GitHubWrite {
             BranchProtectionOp::UpdateBranchProtection(id) => id,
         };
         let query = format!("
-        mutation($id: ID!, $pattern:String!, $contexts: [String!], $dismissStale: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean, $requiresApprovingReviews: Boolean) {{
+        mutation($id: ID!, $pattern:String!, $contexts: [String!], $allowsForcePushes: Boolean, $dismissStale: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean, $requiresApprovingReviews: Boolean) {{
             {mutation_name}(input: {{
                 {id_field}: $id,
                 pattern: $pattern,
@@ -419,6 +420,7 @@ impl GitHubWrite {
                 # Disable 'Require branch to be up-to-date before merging'
                 requiresStrictStatusChecks: false,
                 isAdminEnforced: true,
+                allowsForcePushes: $allowsForcePushes,
                 requiredApprovingReviewCount: $reviewCount,
                 dismissesStaleReviews: $dismissStale,
                 requiresApprovingReviews: $requiresApprovingReviews,
@@ -454,6 +456,7 @@ impl GitHubWrite {
                     id,
                     pattern,
                     contexts: &branch_protection.required_status_check_contexts,
+                    allows_force_pushes: branch_protection.allows_force_pushes,
                     dismiss_stale: branch_protection.dismisses_stale_reviews,
                     review_count: branch_protection.required_approving_review_count,
                     // We restrict merges, if we have explicitly set some actors to be
