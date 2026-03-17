@@ -1,9 +1,10 @@
+use crate::sync::utils::ResponseExt;
 use anyhow::Error;
 use log::info;
 use reqwest::{
     Method,
-    blocking::{Client, RequestBuilder},
     header::{self, HeaderValue},
+    {Client, RequestBuilder},
 };
 use secrecy::{ExposeSecret, SecretString};
 
@@ -22,20 +23,21 @@ impl Mailgun {
         }
     }
 
-    pub(super) fn get_routes(&self, skip: Option<u64>) -> Result<RoutesResponse, Error> {
+    pub(super) async fn get_routes(&self, skip: Option<u64>) -> Result<RoutesResponse, Error> {
         let url = if let Some(skip) = skip {
             format!("routes?skip={skip}")
         } else {
             "routes".into()
         };
-        Ok(self
-            .request(Method::GET, &url)
-            .send()?
+        self.request(Method::GET, &url)
+            .send()
+            .await?
             .error_for_status()?
-            .json()?)
+            .json_annotated()
+            .await
     }
 
-    pub(super) fn create_route(
+    pub(super) async fn create_route(
         &self,
         priority: i32,
         description: &str,
@@ -58,13 +60,14 @@ impl Mailgun {
 
         self.request(Method::POST, "routes")
             .form(&form)
-            .send()?
+            .send()
+            .await?
             .error_for_status()?;
 
         Ok(())
     }
 
-    pub(super) fn update_route(
+    pub(super) async fn update_route(
         &self,
         id: &str,
         priority: i32,
@@ -82,20 +85,22 @@ impl Mailgun {
 
         self.request(Method::PUT, &format!("routes/{id}"))
             .form(&form)
-            .send()?
+            .send()
+            .await?
             .error_for_status()?;
 
         Ok(())
     }
 
-    pub(super) fn delete_route(&self, id: &str) -> Result<(), Error> {
+    pub(super) async fn delete_route(&self, id: &str) -> Result<(), Error> {
         info!("deleting route with ID {id}");
         if self.dry_run {
             return Ok(());
         }
 
         self.request(Method::DELETE, &format!("routes/{id}"))
-            .send()?
+            .send()
+            .await?
             .error_for_status()?;
         Ok(())
     }

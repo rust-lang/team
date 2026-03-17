@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use anyhow::Context as _;
-use reqwest::blocking::Client;
+use reqwest::Client;
 use secrecy::{ExposeSecret, SecretString};
 use serde::Deserialize;
 
@@ -30,7 +30,7 @@ impl ZulipApi {
     /// Creates a Zulip user group with the supplied name, description, and members
     ///
     /// This is a noop if the user group already exists.
-    pub(crate) fn create_user_group(
+    pub(crate) async fn create_user_group(
         &self,
         user_group_name: &str,
         description: &str,
@@ -49,9 +49,11 @@ impl ZulipApi {
         form.insert("description", description);
         form.insert("members", &member_ids);
 
-        let r = self.req(reqwest::Method::POST, "/user_groups/create", Some(form))?;
+        let r = self
+            .req(reqwest::Method::POST, "/user_groups/create", Some(form))
+            .await?;
         if r.status() == 400 {
-            let body = r.json::<serde_json::Value>()?;
+            let body = r.json::<serde_json::Value>().await?;
             let err = || {
                 anyhow::format_err!(
                     "got 400 when creating user group {}: {}",
@@ -74,79 +76,89 @@ impl ZulipApi {
     }
 
     /// Get all user groups of the Rust Zulip instance
-    pub(crate) fn get_user_groups(&self) -> anyhow::Result<Vec<ZulipUserGroup>> {
+    pub(crate) async fn get_user_groups(&self) -> anyhow::Result<Vec<ZulipUserGroup>> {
         let response = self
-            .req(reqwest::Method::GET, "/user_groups", None)?
+            .req(reqwest::Method::GET, "/user_groups", None)
+            .await?
             .error_for_status()?
-            .json::<ZulipUserGroups>()?
+            .json::<ZulipUserGroups>()
+            .await?
             .user_groups;
 
         Ok(response)
     }
 
     /// Get all streams of the Rust Zulip instance
-    pub(crate) fn get_streams(&self) -> anyhow::Result<Vec<ZulipStream>> {
+    pub(crate) async fn get_streams(&self) -> anyhow::Result<Vec<ZulipStream>> {
         let mut form = HashMap::new();
         form.insert("include_web_public", "true");
         form.insert("include_all_active", "true");
 
         let response = self
-            .req(reqwest::Method::GET, "/streams", Some(form))?
+            .req(reqwest::Method::GET, "/streams", Some(form))
+            .await?
             .error_for_status()?
-            .json::<ZulipStreams>()?
+            .json::<ZulipStreams>()
+            .await?
             .streams;
 
         Ok(response)
     }
 
     /// Get all members a stream in the Rust Zulip instance
-    pub(crate) fn get_stream_members(&self, stream_id: u64) -> anyhow::Result<Vec<u64>> {
+    pub(crate) async fn get_stream_members(&self, stream_id: u64) -> anyhow::Result<Vec<u64>> {
         let response = self
             .req(
                 reqwest::Method::GET,
                 &format!("/streams/{stream_id}/members"),
                 None,
-            )?
+            )
+            .await?
             .error_for_status()?
-            .json::<ZulipStreamMembership>()?
+            .json::<ZulipStreamMembership>()
+            .await?
             .subscribers;
 
         Ok(response)
     }
 
     /// Get all users of the Rust Zulip instance
-    pub(crate) fn get_users(&self) -> anyhow::Result<Vec<ZulipUser>> {
+    pub(crate) async fn get_users(&self) -> anyhow::Result<Vec<ZulipUser>> {
         let response = self
-            .req(reqwest::Method::GET, "/users", None)?
+            .req(reqwest::Method::GET, "/users", None)
+            .await?
             .error_for_status()?
-            .json::<ZulipUsers>()?
+            .json::<ZulipUsers>()
+            .await?
             .members;
 
         Ok(response)
     }
 
     /// Is a Zulip stream private?
-    pub(crate) fn is_stream_private(&self, stream_id: u64) -> anyhow::Result<bool> {
-        let stream = self.get_stream(stream_id).with_context(|| {
+    pub(crate) async fn is_stream_private(&self, stream_id: u64) -> anyhow::Result<bool> {
+        let stream = self.get_stream(stream_id).await.with_context(|| {
             format!("Failed to determine if stream with id {stream_id} is private")
         })?;
         Ok(stream.invite_only)
     }
 
-    fn get_stream(&self, stream_id: u64) -> anyhow::Result<ZulipStream> {
+    async fn get_stream(&self, stream_id: u64) -> anyhow::Result<ZulipStream> {
         #[derive(Deserialize)]
         struct OneZulipStream {
             stream: ZulipStream,
         }
 
         Ok(self
-            .req(reqwest::Method::GET, &format!("/streams/{stream_id}"), None)?
+            .req(reqwest::Method::GET, &format!("/streams/{stream_id}"), None)
+            .await?
             .error_for_status()?
-            .json::<OneZulipStream>()?
+            .json::<OneZulipStream>()
+            .await?
             .stream)
     }
 
-    pub(crate) fn update_user_group_members(
+    pub(crate) async fn update_user_group_members(
         &self,
         user_group_id: u64,
         add_ids: &[u64],
@@ -174,13 +186,14 @@ impl ZulipApi {
         form.insert("delete", remove_ids.as_str());
 
         let path = format!("/user_groups/{user_group_id}/members");
-        let response = self.req(reqwest::Method::POST, &path, Some(form))?;
+        let response = self.req(reqwest::Method::POST, &path, Some(form)).await?;
 
         if response.status() == 400 {
             log::warn!(
                 "failed to update group membership with a bad request: {}",
                 response
                     .text()
+                    .await
                     .unwrap_or_else(|_| String::from("<BODY NOT DECODABLE>"))
             );
             return Ok(());
@@ -190,7 +203,7 @@ impl ZulipApi {
         Ok(())
     }
 
-    pub(crate) fn update_stream_membership(
+    pub(crate) async fn update_stream_membership(
         &self,
         stream_name: &str,
         stream_id: u64,
@@ -208,21 +221,24 @@ impl ZulipApi {
             return Ok(());
         }
 
-        let submit = |method: reqwest::Method,
-                      subscriptions: String,
-                      principals: String|
-         -> anyhow::Result<()> {
+        let submit = async |method: reqwest::Method,
+                            subscriptions: String,
+                            principals: String|
+               -> anyhow::Result<()> {
             let mut form = HashMap::new();
             form.insert("subscriptions", subscriptions.as_str());
             form.insert("principals", principals.as_str());
 
-            let response = self.req(method, "/users/me/subscriptions", Some(form.clone()))?;
+            let response = self
+                .req(method, "/users/me/subscriptions", Some(form.clone()))
+                .await?;
 
             if response.status() == 400 {
                 log::warn!(
                     "failed to update stream membership with a bad request: {}. Sent form: {form:?}",
                     response
                         .text()
+                        .await
                         .unwrap_or_else(|_| String::from("<BODY NOT DECODABLE>"))
                 );
                 return Ok(());
@@ -237,25 +253,25 @@ impl ZulipApi {
                 "name": stream_name,
             }]))?;
             let add_ids = serialize_as_array(add_ids);
-            submit(reqwest::Method::POST, subscriptions, add_ids)?;
+            submit(reqwest::Method::POST, subscriptions, add_ids).await?;
         }
 
         if !remove_ids.is_empty() {
             let subscriptions = serde_json::to_string(&serde_json::json!([stream_name]))?;
             let remove_ids = serialize_as_array(remove_ids);
-            submit(reqwest::Method::DELETE, subscriptions, remove_ids)?;
+            submit(reqwest::Method::DELETE, subscriptions, remove_ids).await?;
         }
 
         Ok(())
     }
 
     /// Perform a request against the Zulip API
-    fn req(
+    async fn req(
         &self,
         method: reqwest::Method,
         path: &str,
         form: Option<HashMap<&str, &str>>,
-    ) -> anyhow::Result<reqwest::blocking::Response> {
+    ) -> anyhow::Result<reqwest::Response> {
         let mut req = self
             .client
             .request(method, format!("{ZULIP_BASE_URL}{path}"))
@@ -264,7 +280,7 @@ impl ZulipApi {
             req = req.form(&form);
         }
 
-        Ok(req.send()?)
+        Ok(req.send().await?)
     }
 }
 

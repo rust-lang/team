@@ -87,20 +87,20 @@ fn mangle_address(addr: &str) -> anyhow::Result<String> {
     }
 }
 
-pub(crate) fn run(
+pub(crate) async fn run(
     token: SecretString,
     email_encryption_key: &str,
     team_api: &TeamApi,
     dry_run: bool,
 ) -> anyhow::Result<()> {
     let mailgun = Mailgun::new(token, dry_run);
-    let mailmap = team_api.get_lists()?;
+    let mailmap = team_api.get_lists().await?;
 
     // Mangle all the mailing lists
     let lists = mangle_lists(email_encryption_key, mailmap)?;
 
     let mut routes = Vec::new();
-    let mut response = mailgun.get_routes(None)?;
+    let mut response = mailgun.get_routes(None).await?;
     let mut cur = 0u64;
     while !response.items.is_empty() {
         cur += response.items.len() as u64;
@@ -108,7 +108,7 @@ pub(crate) fn run(
         if cur >= response.total_count {
             break;
         }
-        response = mailgun.get_routes(Some(cur))?;
+        response = mailgun.get_routes(Some(cur)).await?;
     }
 
     let mut addr2list = HashMap::new();
@@ -133,15 +133,19 @@ pub(crate) fn run(
         let key = (address.to_string(), route.priority);
         match addr2list.remove(&key) {
             Some(new_list) => sync(&mailgun, &route, new_list)
+                .await
                 .with_context(|| format!("failed to sync {address}"))?,
             None => mailgun
                 .delete_route(&route.id)
+                .await
                 .with_context(|| format!("failed to delete {address}"))?,
         }
     }
 
     for (_, list) in addr2list.iter() {
-        create(&mailgun, list).with_context(|| format!("failed to create {}", list.address))?;
+        create(&mailgun, list)
+            .await
+            .with_context(|| format!("failed to create {}", list.address))?;
     }
 
     Ok(())
@@ -155,16 +159,18 @@ fn build_route_actions(list: &List) -> impl Iterator<Item = String> + '_ {
     list.members.iter().map(|member| build_route_action(member))
 }
 
-fn create(mailgun: &Mailgun, list: &List) -> anyhow::Result<()> {
+async fn create(mailgun: &Mailgun, list: &List) -> anyhow::Result<()> {
     info!("creating list {}", list.address);
 
     let expr = format!("match_recipient(\"{}\")", list.address);
     let actions = build_route_actions(list).collect::<Vec<_>>();
-    mailgun.create_route(list.priority, DESCRIPTION, &expr, &actions)?;
+    mailgun
+        .create_route(list.priority, DESCRIPTION, &expr, &actions)
+        .await?;
     Ok(())
 }
 
-fn sync(mailgun: &Mailgun, route: &api::Route, list: &List) -> anyhow::Result<()> {
+async fn sync(mailgun: &Mailgun, route: &api::Route, list: &List) -> anyhow::Result<()> {
     let before = route
         .actions
         .iter()
@@ -177,7 +183,9 @@ fn sync(mailgun: &Mailgun, route: &api::Route, list: &List) -> anyhow::Result<()
 
     info!("updating list {}", list.address);
     let actions = build_route_actions(list).collect::<Vec<_>>();
-    mailgun.update_route(&route.id, list.priority, &actions)?;
+    mailgun
+        .update_route(&route.id, list.priority, &actions)
+        .await?;
     Ok(())
 }
 

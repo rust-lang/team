@@ -1,19 +1,19 @@
 use anyhow::Context;
-use reqwest::blocking::Response;
+use reqwest::Response;
 use serde::de::DeserializeOwned;
 use std::str::FromStr;
 
 pub trait ResponseExt {
-    fn custom_error_for_status(self) -> anyhow::Result<Response>;
-    fn json_annotated<T: DeserializeOwned>(self) -> anyhow::Result<T>;
+    async fn custom_error_for_status(self) -> anyhow::Result<Response>;
+    async fn json_annotated<T: DeserializeOwned>(self) -> anyhow::Result<T>;
 }
 
 impl ResponseExt for Response {
-    fn custom_error_for_status(self) -> anyhow::Result<Response> {
+    async fn custom_error_for_status(self) -> anyhow::Result<Response> {
         match self.error_for_status_ref() {
             Ok(_) => Ok(self),
             Err(err) => {
-                let body = self.text().context("failed to read response body")?;
+                let body = self.text().await.context("failed to read response body")?;
                 Err(err).context(format!("Body: {body:?}"))
             }
         }
@@ -22,8 +22,8 @@ impl ResponseExt for Response {
     /// Try to load the response as JSON. If it fails, include the response body
     /// as text in the error message, so that it is easier to understand what was
     /// the problem.
-    fn json_annotated<T: DeserializeOwned>(self) -> anyhow::Result<T> {
-        let text = self.text()?;
+    async fn json_annotated<T: DeserializeOwned>(self) -> anyhow::Result<T> {
+        let text = self.text().await?;
 
         serde_json::from_str::<T>(&text).with_context(|| {
             // Try to at least deserialize as generic JSON, to provide a more readable

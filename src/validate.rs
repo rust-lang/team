@@ -22,6 +22,17 @@ macro_rules! checks {
     }
 }
 
+macro_rules! async_checks {
+    ($($f:ident,)*) => {
+        [$(
+            Check {
+                f: Box::pin($f),
+                name: stringify!($f)
+            }
+        ),*]
+    }
+}
+
 #[allow(clippy::type_complexity)]
 static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_name_prefixes,
@@ -64,20 +75,12 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_website,
 ];
 
-#[allow(clippy::type_complexity)]
-static GITHUB_CHECKS: &[Check<fn(&Data, &GitHubApi, &mut Vec<String>)>] =
-    checks![validate_github_usernames,];
-
-#[allow(clippy::type_complexity)]
-static ZULIP_CHECKS: &[Check<fn(&Data, &ZulipApi, &mut Vec<String>)>] =
-    checks![validate_zulip_users,];
-
 struct Check<F> {
     f: F,
     name: &'static str,
 }
 
-pub(crate) fn validate(data: &Data, strict: bool, skip: &[&str]) -> Result<(), Error> {
+pub(crate) async fn validate(data: &Data, strict: bool, skip: &[&str]) -> Result<(), Error> {
     let mut errors = Vec::new();
 
     for check in CHECKS {
@@ -100,13 +103,14 @@ pub(crate) fn validate(data: &Data, strict: bool, skip: &[&str]) -> Result<(), E
             warn!("cause: {err}");
         }
     } else {
-        for check in GITHUB_CHECKS {
+        let github_checks = async_checks!(validate_github_usernames,);
+        for check in github_checks {
             if skip.contains(&check.name) {
                 warn!("skipped check: {}", check.name);
                 continue;
             }
 
-            (check.f)(data, &github, &mut errors);
+            (check.f)(data, &github, &mut errors).await;
         }
     }
 
@@ -115,13 +119,14 @@ pub(crate) fn validate(data: &Data, strict: bool, skip: &[&str]) -> Result<(), E
         warn!("couldn't perform checks relying on the Zulip API, some errors will not be detected");
         warn!("cause: {err}");
     } else {
-        for check in ZULIP_CHECKS {
+        let zulip_checks = async_checks!(validate_zulip_users,);
+        for check in zulip_checks {
             if skip.contains(&check.name) {
                 warn!("skipped check: {}", check.name);
                 continue;
             }
 
-            (check.f)(data, &zulip, &mut errors);
+            (check.f)(data, &zulip, &mut errors).await;
         }
     }
 
@@ -669,12 +674,15 @@ fn validate_github_teams(data: &Data, errors: &mut Vec<String>) {
 }
 
 /// Ensure there are no misspelled GitHub account names
-fn validate_github_usernames(data: &Data, github: &GitHubApi, errors: &mut Vec<String>) {
+async fn validate_github_usernames(data: &Data, github: &GitHubApi, errors: &mut Vec<String>) {
     let people = data
         .people()
         .map(|p| (p.github_id(), p))
         .collect::<HashMap<_, _>>();
-    match github.usernames(&people.keys().cloned().collect::<Vec<_>>()) {
+    match github
+        .usernames(&people.keys().cloned().collect::<Vec<_>>())
+        .await
+    {
         Ok(res) => wrapper(res.iter(), errors, |(id, name), _| {
             let original = people[id].github();
             if original != name {
@@ -735,8 +743,8 @@ fn validate_subteam_of_required(data: &Data, errors: &mut Vec<String>) {
 }
 
 /// Ensure every member of a team that has a Zulip group has a Zulip id
-fn validate_zulip_users(data: &Data, zulip: &ZulipApi, errors: &mut Vec<String>) {
-    let by_id = match zulip.get_users(false) {
+async fn validate_zulip_users(data: &Data, zulip: &ZulipApi, errors: &mut Vec<String>) {
+    let by_id = match zulip.get_users(false).await {
         Ok(u) => u.iter().map(|u| u.user_id).collect::<HashSet<_>>(),
         Err(err) => {
             errors.push(format!("couldn't verify Zulip users: {err}"));

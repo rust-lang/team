@@ -23,7 +23,7 @@ impl GitHubWrite {
         })
     }
 
-    fn user_id(&self, name: &str, org: &str) -> anyhow::Result<String> {
+    async fn user_id(&self, name: &str, org: &str) -> anyhow::Result<String> {
         #[derive(serde::Serialize)]
         struct Params<'a> {
             name: &'a str,
@@ -44,11 +44,11 @@ impl GitHubWrite {
             id: String,
         }
 
-        let data: Data = self.client.graphql(query, Params { name }, org)?;
+        let data: Data = self.client.graphql(query, Params { name }, org).await?;
         Ok(data.user.id)
     }
 
-    fn team_id(&self, org: &str, name: &str) -> anyhow::Result<String> {
+    async fn team_id(&self, org: &str, name: &str) -> anyhow::Result<String> {
         #[derive(serde::Serialize)]
         struct Params<'a> {
             org: &'a str,
@@ -78,12 +78,13 @@ impl GitHubWrite {
 
         let data: Data = self
             .client
-            .graphql(query, Params { org, team: name }, org)?;
+            .graphql(query, Params { org, team: name }, org)
+            .await?;
         Ok(data.organization.team.id)
     }
 
     /// Create a team in a org
-    pub(crate) fn create_team(
+    pub(crate) async fn create_team(
         &self,
         org: &str,
         name: &str,
@@ -115,13 +116,15 @@ impl GitHubWrite {
             };
             Ok(self
                 .client
-                .send(Method::POST, &GitHubUrl::orgs(org, "teams")?, body)?
-                .json_annotated()?)
+                .send(Method::POST, &GitHubUrl::orgs(org, "teams")?, body)
+                .await?
+                .json_annotated()
+                .await?)
         }
     }
 
     /// Edit a team
-    pub(crate) fn edit_team(
+    pub(crate) async fn edit_team(
         &self,
         org: &str,
         name: &str,
@@ -148,30 +151,32 @@ impl GitHubWrite {
             serde_json::to_string(&req).unwrap_or_else(|_| "INVALID_REQUEST".to_string())
         );
         if !self.dry_run {
-            self.client.send(
-                Method::PATCH,
-                &GitHubUrl::orgs(org, &format!("teams/{name}"))?,
-                &req,
-            )?;
+            self.client
+                .send(
+                    Method::PATCH,
+                    &GitHubUrl::orgs(org, &format!("teams/{name}"))?,
+                    &req,
+                )
+                .await?;
         }
 
         Ok(())
     }
 
     /// Delete a team by name and org
-    pub(crate) fn delete_team(&self, org: &str, slug: &str) -> anyhow::Result<()> {
+    pub(crate) async fn delete_team(&self, org: &str, slug: &str) -> anyhow::Result<()> {
         debug!("Deleting team with slug '{slug}' in '{org}'");
         if !self.dry_run {
             let method = Method::DELETE;
             let url = GitHubUrl::orgs(org, &format!("teams/{slug}"))?;
-            let resp = self.client.req(method.clone(), &url)?.send()?;
-            allow_not_found(resp, method, url.url())?;
+            let resp = self.client.req(method.clone(), &url)?.send().await?;
+            allow_not_found(resp, method, url.url()).await?;
         }
         Ok(())
     }
 
     /// Set a user's membership in a team to a role
-    pub(crate) fn set_team_membership(
+    pub(crate) async fn set_team_membership(
         &self,
         org: &str,
         team: &str,
@@ -184,18 +189,20 @@ impl GitHubWrite {
             role: TeamRole,
         }
         if !self.dry_run {
-            self.client.send(
-                Method::PUT,
-                &GitHubUrl::orgs(org, &format!("teams/{team}/memberships/{user}"))?,
-                &Req { role },
-            )?;
+            self.client
+                .send(
+                    Method::PUT,
+                    &GitHubUrl::orgs(org, &format!("teams/{team}/memberships/{user}"))?,
+                    &Req { role },
+                )
+                .await?;
         }
 
         Ok(())
     }
 
     /// Remove a user from a team
-    pub(crate) fn remove_team_membership(
+    pub(crate) async fn remove_team_membership(
         &self,
         org: &str,
         team: &str,
@@ -205,15 +212,15 @@ impl GitHubWrite {
         if !self.dry_run {
             let url = &GitHubUrl::orgs(org, &format!("teams/{team}/memberships/{user}"))?;
             let method = Method::DELETE;
-            let resp = self.client.req(method.clone(), url)?.send()?;
-            allow_not_found(resp, method, url.url())?;
+            let resp = self.client.req(method.clone(), url)?.send().await?;
+            allow_not_found(resp, method, url.url()).await?;
         }
 
         Ok(())
     }
 
     /// Create a repo
-    pub(crate) fn create_repo(
+    pub(crate) async fn create_repo(
         &self,
         org: &str,
         name: &str,
@@ -249,12 +256,14 @@ impl GitHubWrite {
         } else {
             Ok(self
                 .client
-                .send(Method::POST, &GitHubUrl::orgs(org, "repos")?, req)?
-                .json_annotated()?)
+                .send(Method::POST, &GitHubUrl::orgs(org, "repos")?, req)
+                .await?
+                .json_annotated()
+                .await?)
         }
     }
 
-    pub(crate) fn edit_repo(
+    pub(crate) async fn edit_repo(
         &self,
         org: &str,
         repo_name: &str,
@@ -276,13 +285,14 @@ impl GitHubWrite {
         debug!("Editing repo {org}/{repo_name} with {req:?}");
         if !self.dry_run {
             self.client
-                .send(Method::PATCH, &GitHubUrl::repos(org, repo_name, "")?, &req)?;
+                .send(Method::PATCH, &GitHubUrl::repos(org, repo_name, "")?, &req)
+                .await?;
         }
         Ok(())
     }
 
     /// Update a team's permissions to a repo
-    pub(crate) fn update_team_repo_permissions(
+    pub(crate) async fn update_team_repo_permissions(
         &self,
         org: &str,
         repo: &str,
@@ -295,18 +305,20 @@ impl GitHubWrite {
         }
         debug!("Updating permission for team {team} on {org}/{repo} to {permission:?}");
         if !self.dry_run {
-            self.client.send(
-                Method::PUT,
-                &GitHubUrl::orgs(org, &format!("teams/{team}/repos/{org}/{repo}"))?,
-                &Req { permission },
-            )?;
+            self.client
+                .send(
+                    Method::PUT,
+                    &GitHubUrl::orgs(org, &format!("teams/{team}/repos/{org}/{repo}"))?,
+                    &Req { permission },
+                )
+                .await?;
         }
 
         Ok(())
     }
 
     /// Update a user's permissions to a repo
-    pub(crate) fn update_user_repo_permissions(
+    pub(crate) async fn update_user_repo_permissions(
         &self,
         org: &str,
         repo: &str,
@@ -319,17 +331,19 @@ impl GitHubWrite {
         }
         debug!("Updating permission for user {user} on {org}/{repo} to {permission:?}");
         if !self.dry_run {
-            self.client.send(
-                Method::PUT,
-                &GitHubUrl::repos(org, repo, &format!("collaborators/{user}"))?,
-                &Req { permission },
-            )?;
+            self.client
+                .send(
+                    Method::PUT,
+                    &GitHubUrl::repos(org, repo, &format!("collaborators/{user}"))?,
+                    &Req { permission },
+                )
+                .await?;
         }
         Ok(())
     }
 
     /// Remove a team from a repo
-    pub(crate) fn remove_team_from_repo(
+    pub(crate) async fn remove_team_from_repo(
         &self,
         org: &str,
         repo: &str,
@@ -339,27 +353,31 @@ impl GitHubWrite {
         if !self.dry_run {
             let method = Method::DELETE;
             let url = GitHubUrl::orgs(org, &format!("teams/{team}/repos/{org}/{repo}"))?;
-            let resp = self.client.req(method.clone(), &url)?.send()?;
-            allow_not_found(resp, method, url.url())?;
+            let resp = self.client.req(method.clone(), &url)?.send().await?;
+            allow_not_found(resp, method, url.url()).await?;
         }
 
         Ok(())
     }
 
     /// Remove a member from an org
-    pub(crate) fn remove_gh_member_from_org(&self, org: &str, user: &str) -> anyhow::Result<()> {
+    pub(crate) async fn remove_gh_member_from_org(
+        &self,
+        org: &str,
+        user: &str,
+    ) -> anyhow::Result<()> {
         debug!("Removing user {user} from org {org}");
         if !self.dry_run {
             let method = Method::DELETE;
             let url = GitHubUrl::orgs(org, &format!("members/{user}"))?;
-            let resp = self.client.req(method.clone(), &url)?.send()?;
-            allow_not_found(resp, method, url.url())?;
+            let resp = self.client.req(method.clone(), &url)?.send().await?;
+            allow_not_found(resp, method, url.url()).await?;
         }
         Ok(())
     }
 
     /// Remove a collaborator from a repo
-    pub(crate) fn remove_collaborator_from_repo(
+    pub(crate) async fn remove_collaborator_from_repo(
         &self,
         org: &str,
         repo: &str,
@@ -369,14 +387,14 @@ impl GitHubWrite {
         if !self.dry_run {
             let method = Method::DELETE;
             let url = &GitHubUrl::repos(org, repo, &format!("collaborators/{collaborator}"))?;
-            let resp = self.client.req(method.clone(), url)?.send()?;
-            allow_not_found(resp, method, url.url())?;
+            let resp = self.client.req(method.clone(), url)?.send().await?;
+            allow_not_found(resp, method, url.url()).await?;
         }
         Ok(())
     }
 
     /// Create or update a branch protection.
-    pub(crate) fn upsert_branch_protection(
+    pub(crate) async fn upsert_branch_protection(
         &self,
         op: BranchProtectionOp,
         pattern: &str,
@@ -437,12 +455,12 @@ impl GitHubWrite {
         for actor in &branch_protection.push_allowances {
             match actor {
                 PushAllowanceActor::User(UserPushAllowanceActor { login: name }) => {
-                    push_actor_ids.push(self.user_id(name, org)?);
+                    push_actor_ids.push(self.user_id(name, org).await?);
                 }
                 PushAllowanceActor::Team(TeamPushAllowanceActor {
                     organization: Login { login: org },
                     name,
-                }) => push_actor_ids.push(self.team_id(org, name)?),
+                }) => push_actor_ids.push(self.team_id(org, name).await?),
                 PushAllowanceActor::App(AppPushAllowanceActor { id, .. }) => {
                     push_actor_ids.push(id.clone())
                 }
@@ -450,30 +468,33 @@ impl GitHubWrite {
         }
 
         if !self.dry_run {
-            let _: serde_json::Value = self.client.graphql(
-                &query,
-                Params {
-                    id,
-                    pattern,
-                    contexts: &branch_protection.required_status_check_contexts,
-                    allows_force_pushes: branch_protection.allows_force_pushes,
-                    dismiss_stale: branch_protection.dismisses_stale_reviews,
-                    review_count: branch_protection.required_approving_review_count,
-                    // We restrict merges, if we have explicitly set some actors to be
-                    // able to merge (i.e., we allow allow those with write permissions
-                    // to merge *or* we only allow those in `push_actor_ids`)
-                    restricts_pushes: !push_actor_ids.is_empty(),
-                    push_actor_ids: &push_actor_ids,
-                    requires_approving_reviews: branch_protection.requires_approving_reviews,
-                },
-                org,
-            )?;
+            let _: serde_json::Value = self
+                .client
+                .graphql(
+                    &query,
+                    Params {
+                        id,
+                        pattern,
+                        contexts: &branch_protection.required_status_check_contexts,
+                        allows_force_pushes: branch_protection.allows_force_pushes,
+                        dismiss_stale: branch_protection.dismisses_stale_reviews,
+                        review_count: branch_protection.required_approving_review_count,
+                        // We restrict merges, if we have explicitly set some actors to be
+                        // able to merge (i.e., we allow allow those with write permissions
+                        // to merge *or* we only allow those in `push_actor_ids`)
+                        restricts_pushes: !push_actor_ids.is_empty(),
+                        push_actor_ids: &push_actor_ids,
+                        requires_approving_reviews: branch_protection.requires_approving_reviews,
+                    },
+                    org,
+                )
+                .await?;
         }
         Ok(())
     }
 
     /// Delete a branch protection
-    pub(crate) fn delete_branch_protection(
+    pub(crate) async fn delete_branch_protection(
         &self,
         org: &str,
         repo_name: &str,
@@ -494,13 +515,13 @@ impl GitHubWrite {
                     }
                 }
             ";
-            let _: serde_json::Value = self.client.graphql(query, Params { id }, org)?;
+            let _: serde_json::Value = self.client.graphql(query, Params { id }, org).await?;
         }
         Ok(())
     }
 
     /// Create an environment in a repository
-    pub(crate) fn create_environment(
+    pub(crate) async fn create_environment(
         &self,
         org: &str,
         repo: &str,
@@ -513,10 +534,11 @@ impl GitHubWrite {
             branches, tags
         );
         self.upsert_environment(org, repo, name, branches, tags)
+            .await
     }
 
     /// Update an environment in a repository
-    pub(crate) fn update_environment(
+    pub(crate) async fn update_environment(
         &self,
         org: &str,
         repo: &str,
@@ -529,10 +551,11 @@ impl GitHubWrite {
             branches, tags
         );
         self.upsert_environment(org, repo, name, branches, tags)
+            .await
     }
 
     /// Internal helper to create or update an environment
-    fn upsert_environment(
+    async fn upsert_environment(
         &self,
         org: &str,
         repo: &str,
@@ -558,16 +581,17 @@ impl GitHubWrite {
                 })
             };
 
-            self.client.send(Method::PUT, &url, &body)?;
+            self.client.send(Method::PUT, &url, &body).await?;
 
             // Always sync branch/tag policies to ensure cleanup of old policies
-            self.set_environment_deployment_patterns(org, repo, name, branches, tags)?;
+            self.set_environment_deployment_patterns(org, repo, name, branches, tags)
+                .await?;
         }
         Ok(())
     }
 
     /// Delete a specific branch policy by ID
-    fn delete_environment_branch_policy(
+    async fn delete_environment_branch_policy(
         &self,
         org: &str,
         repo: &str,
@@ -583,7 +607,8 @@ impl GitHubWrite {
             ),
         )?;
         self.client
-            .send(Method::DELETE, &url, &serde_json::json!({}))?;
+            .send(Method::DELETE, &url, &serde_json::json!({}))
+            .await?;
         Ok(())
     }
 
@@ -592,7 +617,7 @@ impl GitHubWrite {
     /// 1. Fetching all existing policies
     /// 2. Deleting policies that are no longer needed
     /// 3. Adding new policies that don't exist
-    fn set_environment_deployment_patterns(
+    async fn set_environment_deployment_patterns(
         &self,
         org: &str,
         repo: &str,
@@ -602,7 +627,8 @@ impl GitHubWrite {
     ) -> anyhow::Result<()> {
         // 1. Fetch existing policies
         let existing_policies = GitHubApiRead::from_client(self.client.clone())?
-            .environment_branch_policies(org, repo, environment)?;
+            .environment_branch_policies(org, repo, environment)
+            .await?;
 
         #[derive(Hash, Eq, PartialEq)]
         struct PatternKey {
@@ -643,7 +669,8 @@ impl GitHubWrite {
                     "Deleting deployment policy '{}' (type: {}, id: {}) from environment '{}' in '{}/{}'",
                     policy.name, policy.pattern_type, policy.id, environment, org, repo
                 );
-                self.delete_environment_branch_policy(org, repo, environment, policy.id)?;
+                self.delete_environment_branch_policy(org, repo, environment, policy.id)
+                    .await?;
             }
         }
 
@@ -663,14 +690,16 @@ impl GitHubWrite {
                     repo,
                     &format!("environments/{}/deployment-branch-policies", environment),
                 )?;
-                self.client.send(
-                    Method::POST,
-                    &url,
-                    &serde_json::json!({
-                        "name": branch,
-                        "type": "branch"
-                    }),
-                )?;
+                self.client
+                    .send(
+                        Method::POST,
+                        &url,
+                        &serde_json::json!({
+                            "name": branch,
+                            "type": "branch"
+                        }),
+                    )
+                    .await?;
             }
         }
 
@@ -690,21 +719,23 @@ impl GitHubWrite {
                     repo,
                     &format!("environments/{}/deployment-branch-policies", environment),
                 )?;
-                self.client.send(
-                    Method::POST,
-                    &url,
-                    &serde_json::json!({
-                        "name": tag,
-                        "type": "tag"
-                    }),
-                )?;
+                self.client
+                    .send(
+                        Method::POST,
+                        &url,
+                        &serde_json::json!({
+                            "name": tag,
+                            "type": "tag"
+                        }),
+                    )
+                    .await?;
             }
         }
         Ok(())
     }
 
     /// Delete an environment from a repository
-    pub(crate) fn delete_environment(
+    pub(crate) async fn delete_environment(
         &self,
         org: &str,
         repo: &str,
@@ -716,13 +747,14 @@ impl GitHubWrite {
             // https://docs.github.com/en/rest/deployments/environments#delete-an-environment
             let url = GitHubUrl::repos(org, repo, &format!("environments/{}", name))?;
             self.client
-                .send(Method::DELETE, &url, &serde_json::json!({}))?;
+                .send(Method::DELETE, &url, &serde_json::json!({}))
+                .await?;
         }
         Ok(())
     }
 
     /// Create or update a ruleset for a repository
-    pub(crate) fn upsert_ruleset(
+    pub(crate) async fn upsert_ruleset(
         &self,
         op: RulesetOp,
         org: &str,
@@ -736,7 +768,7 @@ impl GitHubWrite {
                     // REST API: POST /repos/{owner}/{repo}/rulesets
                     // https://docs.github.com/en/rest/repos/rules#create-a-repository-ruleset
                     let url = GitHubUrl::repos(org, repo, "rulesets")?;
-                    self.client.send(Method::POST, &url, ruleset)?;
+                    self.client.send(Method::POST, &url, ruleset).await?;
                 }
             }
             RulesetOp::UpdateRuleset(id) => {
@@ -748,7 +780,7 @@ impl GitHubWrite {
                     // REST API: PUT /repos/{owner}/{repo}/rulesets/{ruleset_id}
                     // https://docs.github.com/en/rest/repos/rules#update-a-repository-ruleset
                     let url = GitHubUrl::repos(org, repo, &format!("rulesets/{}", id))?;
-                    self.client.send(Method::PUT, &url, ruleset)?;
+                    self.client.send(Method::PUT, &url, ruleset).await?;
                 }
             }
         }
@@ -756,14 +788,20 @@ impl GitHubWrite {
     }
 
     /// Delete a ruleset from a repository
-    pub(crate) fn delete_ruleset(&self, org: &str, repo: &str, id: i64) -> anyhow::Result<()> {
+    pub(crate) async fn delete_ruleset(
+        &self,
+        org: &str,
+        repo: &str,
+        id: i64,
+    ) -> anyhow::Result<()> {
         debug!("Deleting ruleset id {} from '{}/{}'", id, org, repo);
         if !self.dry_run {
             // REST API: DELETE /repos/{owner}/{repo}/rulesets/{ruleset_id}
             // https://docs.github.com/en/rest/repos/rules#delete-a-repository-ruleset
             let url = GitHubUrl::repos(org, repo, &format!("rulesets/{}", id))?;
             self.client
-                .send(Method::DELETE, &url, &serde_json::json!({}))?;
+                .send(Method::DELETE, &url, &serde_json::json!({}))
+                .await?;
         }
         Ok(())
     }

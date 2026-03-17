@@ -186,7 +186,7 @@ struct UntrackedRepo {
 }
 
 /// Check for untracked repositories and fail if any are found
-pub fn check_untracked_repos(data: &Data) -> anyhow::Result<()> {
+pub async fn check_untracked_repos(data: &Data) -> anyhow::Result<()> {
     let github = crate::api::github::GitHubApi::new();
 
     // Get allowed GitHub organizations from config instead of hardcoding
@@ -210,7 +210,7 @@ pub fn check_untracked_repos(data: &Data) -> anyhow::Result<()> {
     );
 
     info!("Fetching repositories from GitHub...");
-    let github_repos = fetch_all_github_repos(&github, &orgs_to_monitor)?;
+    let github_repos = fetch_all_github_repos(&github, &orgs_to_monitor).await?;
     info!(
         "Found {} total repositories in GitHub organizations",
         github_repos.len()
@@ -242,7 +242,7 @@ pub fn check_untracked_repos(data: &Data) -> anyhow::Result<()> {
     );
 }
 
-fn fetch_all_github_repos(
+async fn fetch_all_github_repos(
     github: &crate::api::github::GitHubApi,
     orgs_to_monitor: &[&str],
 ) -> anyhow::Result<Vec<(String, GitHubRepo)>> {
@@ -257,6 +257,7 @@ fn fetch_all_github_repos(
 
             let repos: Vec<GitHubRepo> = github
                 .get(&url)
+                .await
                 .with_context(|| format!("Failed to fetch repos for org: {}", org))?;
 
             if repos.is_empty() {

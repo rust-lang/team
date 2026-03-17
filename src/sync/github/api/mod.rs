@@ -11,8 +11,7 @@ use hyper_old_types::header::{Link, RelationType};
 use log::{debug, trace};
 use reqwest::header::HeaderMap;
 use reqwest::{
-    Method, StatusCode,
-    blocking::{Client, RequestBuilder, Response},
+    Client, Method, RequestBuilder, Response, StatusCode,
     header::{self, HeaderValue},
 };
 use secrecy::ExposeSecret;
@@ -48,7 +47,7 @@ pub(crate) struct HttpClient {
 
 impl HttpClient {
     pub(crate) fn new() -> anyhow::Result<Self> {
-        let mut builder = reqwest::blocking::ClientBuilder::default();
+        let mut builder = reqwest::ClientBuilder::default();
         let mut map = HeaderMap::default();
 
         map.insert(
@@ -84,41 +83,41 @@ impl HttpClient {
         Ok(client)
     }
 
-    fn send<T: serde::Serialize + std::fmt::Debug>(
+    async fn send<T: serde::Serialize + std::fmt::Debug>(
         &self,
         method: Method,
         url: &GitHubUrl,
         body: &T,
     ) -> Result<Response, anyhow::Error> {
-        let resp = self.req(method, url)?.json(body).send()?;
-        resp.custom_error_for_status()
+        let resp = self.req(method, url)?.json(body).send().await?;
+        resp.custom_error_for_status().await
     }
 
-    fn send_option<T: DeserializeOwned>(
+    async fn send_option<T: DeserializeOwned>(
         &self,
         method: Method,
         url: &GitHubUrl,
     ) -> Result<Option<T>, anyhow::Error> {
-        let resp = self.req(method.clone(), url)?.send()?;
+        let resp = self.req(method.clone(), url)?.send().await?;
         match resp.status() {
-            StatusCode::OK => Ok(Some(resp.json_annotated().with_context(|| {
+            StatusCode::OK => Ok(Some(resp.json_annotated().await.with_context(|| {
                 format!(
                     "Failed to decode response body on {method} request to '{}'",
                     url.url()
                 )
             })?)),
             StatusCode::NOT_FOUND => Ok(None),
-            _ => Err(resp.custom_error_for_status().unwrap_err()),
+            _ => Err(resp.custom_error_for_status().await.unwrap_err()),
         }
     }
 
     /// Send a request to the GitHub API and return the response.
-    fn graphql<R, V>(&self, query: &str, variables: V, org: &str) -> anyhow::Result<R>
+    async fn graphql<R, V>(&self, query: &str, variables: V, org: &str) -> anyhow::Result<R>
     where
         R: serde::de::DeserializeOwned,
         V: serde::Serialize,
     {
-        let res = self.send_graphql_req(query, variables, org)?;
+        let res = self.send_graphql_req(query, variables, org).await?;
 
         if let Some(error) = res.errors.first() {
             bail!("graphql error: {}", error.message);
@@ -129,12 +128,17 @@ impl HttpClient {
 
     /// Send a request to the GitHub API and return the response.
     /// If the request contains the error type `NOT_FOUND`, this method returns `Ok(None)`.
-    fn graphql_opt<R, V>(&self, query: &str, variables: V, org: &str) -> anyhow::Result<Option<R>>
+    async fn graphql_opt<R, V>(
+        &self,
+        query: &str,
+        variables: V,
+        org: &str,
+    ) -> anyhow::Result<Option<R>>
     where
         R: serde::de::DeserializeOwned,
         V: serde::Serialize,
     {
-        let res = self.send_graphql_req(query, variables, org)?;
+        let res = self.send_graphql_req(query, variables, org).await?;
 
         if let Some(error) = res.errors.first() {
             if error.type_ == Some(GraphErrorType::NotFound) {
@@ -146,7 +150,7 @@ impl HttpClient {
         read_graphql_data(res)
     }
 
-    fn send_graphql_req<R, V>(
+    async fn send_graphql_req<R, V>(
         &self,
         query: &str,
         variables: V,
@@ -165,15 +169,17 @@ impl HttpClient {
             .req(Method::POST, &GitHubUrl::new("graphql", org))?
             .json(&Request { query, variables })
             .send()
+            .await
             .context("failed to send graphql request")?
-            .custom_error_for_status()?;
+            .custom_error_for_status()
+            .await?;
 
-        resp.json_annotated().with_context(|| {
+        resp.json_annotated().await.with_context(|| {
             format!("Failed to decode response body on graphql request with query '{query}'")
         })
     }
 
-    fn rest_paginated<F, T>(
+    async fn rest_paginated<F, T>(
         &self,
         method: &Method,
         url: &GitHubUrl,
@@ -188,17 +194,18 @@ impl HttpClient {
             let resp = self
                 .req(method.clone(), &next_url)?
                 .send()
+                .await
                 .with_context(|| format!("failed to send request to {}", next_url.url()))?;
 
             let status = resp.status();
-            let resp =
-                resp.custom_error_for_status()
-                    .map_err(|source| RestPaginatedError::Http {
-                        method: method.clone(),
-                        url: next_url.url().to_string(),
-                        status,
-                        source,
-                    })?;
+            let resp = resp.custom_error_for_status().await.map_err(|source| {
+                RestPaginatedError::Http {
+                    method: method.clone(),
+                    url: next_url.url().to_string(),
+                    status,
+                    source,
+                }
+            })?;
 
             // Extract the next page
             if let Some(links) = resp.headers().get(header::LINK) {
@@ -219,7 +226,7 @@ impl HttpClient {
                 }
             }
 
-            f(resp.json_annotated().with_context(|| {
+            f(resp.json_annotated().await.with_context(|| {
                 format!(
                     "Failed to deserialize response body for {method} request to '{}'",
                     next_url.url()
@@ -241,13 +248,13 @@ where
     }
 }
 
-fn allow_not_found(resp: Response, method: Method, url: &str) -> Result<(), anyhow::Error> {
+async fn allow_not_found(resp: Response, method: Method, url: &str) -> Result<(), anyhow::Error> {
     match resp.status() {
         StatusCode::NOT_FOUND => {
             debug!("Response from {method} {url} returned 404 which is treated as success");
         }
         _ => {
-            resp.custom_error_for_status()?;
+            resp.custom_error_for_status().await?;
         }
     }
     Ok(())

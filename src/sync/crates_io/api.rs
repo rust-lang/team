@@ -2,7 +2,7 @@ use crate::sync::crates_io::CrateConfig;
 use crate::sync::utils::ResponseExt;
 use anyhow::{Context, anyhow};
 use log::debug;
-use reqwest::blocking::Client;
+use reqwest::Client;
 use reqwest::header;
 use reqwest::header::{HeaderMap, HeaderValue};
 use secrecy::{ExposeSecret, SecretString};
@@ -31,7 +31,7 @@ impl CratesIoApi {
         );
 
         Self {
-            client: reqwest::blocking::ClientBuilder::default()
+            client: reqwest::ClientBuilder::default()
                 .default_headers(map)
                 .build()
                 .unwrap(),
@@ -45,7 +45,7 @@ impl CratesIoApi {
     }
 
     /// Return the user ID based on the username.
-    pub(crate) fn get_user_id(&self, username: &str) -> anyhow::Result<UserId> {
+    pub(crate) async fn get_user_id(&self, username: &str) -> anyhow::Result<UserId> {
         #[derive(serde::Deserialize)]
         struct User {
             id: u32,
@@ -62,15 +62,17 @@ impl CratesIoApi {
                 &format!("/users/{username}"),
                 HashMap::new(),
                 None,
-            )?
+            )
+            .await?
             .error_for_status()?
-            .json_annotated()?;
+            .json_annotated()
+            .await?;
 
         Ok(UserId(response.user.id))
     }
 
     /// List existing trusted publishing configurations for a given crate.
-    pub(crate) fn list_trusted_publishing_github_configs(
+    pub(crate) async fn list_trusted_publishing_github_configs(
         &self,
         user_id: UserId,
     ) -> anyhow::Result<Vec<TrustedPublishingGitHubConfig>> {
@@ -85,13 +87,17 @@ impl CratesIoApi {
             HashMap::from([("user_id".to_string(), user_id.0.to_string())]),
             None,
             |resp| configs.extend(resp.github_configs),
-        )?;
+        )
+        .await?;
 
         Ok(configs)
     }
 
     /// List owners of a given crate.
-    pub(crate) fn list_crate_owners(&self, krate: &str) -> anyhow::Result<Vec<CratesIoOwner>> {
+    pub(crate) async fn list_crate_owners(
+        &self,
+        krate: &str,
+    ) -> anyhow::Result<Vec<CratesIoOwner>> {
         #[derive(serde::Deserialize)]
         struct OwnersResponse {
             users: Vec<CratesIoOwner>,
@@ -103,15 +109,17 @@ impl CratesIoApi {
                 &format!("/crates/{krate}/owners"),
                 HashMap::new(),
                 None,
-            )?
+            )
+            .await?
             .error_for_status()?
-            .json_annotated()?;
+            .json_annotated()
+            .await?;
 
         Ok(response.users)
     }
 
     /// Invite the specified user(s) or team(s) to own a given crate.
-    pub(crate) fn invite_crate_owners(
+    pub(crate) async fn invite_crate_owners(
         &self,
         krate: &str,
         owners: &[CratesIoOwner],
@@ -131,7 +139,8 @@ impl CratesIoApi {
                 &format!("/crates/{krate}/owners"),
                 HashMap::new(),
                 Some(&InviteOwnersRequest { owners }),
-            )?
+            )
+            .await?
             .error_for_status()?;
         }
 
@@ -139,7 +148,7 @@ impl CratesIoApi {
     }
 
     /// Delete the specified owner(s) of a given crate.
-    pub(crate) fn delete_crate_owners(
+    pub(crate) async fn delete_crate_owners(
         &self,
         krate: &str,
         owners: &[CratesIoOwner],
@@ -159,7 +168,8 @@ impl CratesIoApi {
                 &format!("/crates/{krate}/owners"),
                 HashMap::new(),
                 Some(&DeleteOwnersRequest { owners: &owners }),
-            )?
+            )
+            .await?
             .error_for_status()
             .with_context(|| {
                 anyhow::anyhow!("Cannot delete owner(s) {owners:?} from krate {krate}")
@@ -169,7 +179,7 @@ impl CratesIoApi {
     }
 
     /// Create a new trusted publishing configuration for a given crate.
-    pub(crate) fn create_trusted_publishing_github_config(
+    pub(crate) async fn create_trusted_publishing_github_config(
         &self,
         config: &CrateConfig,
     ) -> anyhow::Result<()> {
@@ -216,7 +226,8 @@ impl CratesIoApi {
             "/trusted_publishing/github_configs",
             HashMap::new(),
             Some(&request),
-        )?
+        )
+        .await?
         .error_for_status()
         .with_context(|| anyhow!("Cannot created trusted publishing config {config:?}"))?;
 
@@ -224,7 +235,7 @@ impl CratesIoApi {
     }
 
     /// Delete a trusted publishing configuration with the given ID.
-    pub(crate) fn delete_trusted_publishing_github_config(
+    pub(crate) async fn delete_trusted_publishing_github_config(
         &self,
         id: TrustedPublishingId,
     ) -> anyhow::Result<()> {
@@ -236,7 +247,8 @@ impl CratesIoApi {
                 &format!("/trusted_publishing/github_configs/{}", id.0),
                 HashMap::new(),
                 None,
-            )?
+            )
+            .await?
             .error_for_status()
             .with_context(|| anyhow!("Cannot delete trusted publishing config with ID {id}"))?;
         }
@@ -245,7 +257,10 @@ impl CratesIoApi {
     }
 
     /// Return all crates owned by the given user.
-    pub(crate) fn get_crates_owned_by(&self, user: UserId) -> anyhow::Result<Vec<CratesIoCrate>> {
+    pub(crate) async fn get_crates_owned_by(
+        &self,
+        user: UserId,
+    ) -> anyhow::Result<Vec<CratesIoCrate>> {
         #[derive(serde::Deserialize)]
         struct CratesResponse {
             crates: Vec<CratesIoCrate>,
@@ -259,14 +274,15 @@ impl CratesIoApi {
             |res| {
                 crates.extend(res.crates);
             },
-        )?;
+        )
+        .await?;
 
         Ok(crates)
     }
 
     /// Enable or disable the `trustpub_only` crate option, which specifies whether a crate
     /// has to be published **only** through trusted publishing.
-    pub(crate) fn set_trusted_publishing_only(
+    pub(crate) async fn set_trusted_publishing_only(
         &self,
         krate: &str,
         value: bool,
@@ -292,7 +308,8 @@ impl CratesIoApi {
                         trustpub_only: value,
                     },
                 }),
-            )?
+            )
+            .await?
             .error_for_status()
             .with_context(|| anyhow::anyhow!("Cannot patch crate {krate}"))?;
         }
@@ -301,13 +318,13 @@ impl CratesIoApi {
     }
 
     /// Perform a request against the crates.io API
-    fn req<T: Serialize>(
+    async fn req<T: Serialize>(
         &self,
         method: reqwest::Method,
         path: &str,
         query: HashMap<String, String>,
         data: Option<&T>,
-    ) -> anyhow::Result<reqwest::blocking::Response> {
+    ) -> anyhow::Result<reqwest::Response> {
         let mut req = self
             .client
             .request(method, format!("{CRATES_IO_BASE_URL}{path}"))
@@ -317,11 +334,11 @@ impl CratesIoApi {
             req = req.json(data);
         }
 
-        Ok(req.send()?)
+        Ok(req.send().await?)
     }
 
     /// Fetch a resource that is paged.
-    fn req_paged<T: Serialize, R: DeserializeOwned, F>(
+    async fn req_paged<T: Serialize, R: DeserializeOwned, F>(
         &self,
         path: &str,
         mut query: HashMap<String, String>,
@@ -356,9 +373,11 @@ impl CratesIoApi {
             };
 
             let response: Response<R> = self
-                .req(reqwest::Method::GET, &path, query, data)?
+                .req(reqwest::Method::GET, &path, query, data)
+                .await?
                 .error_for_status()?
-                .json_annotated()?;
+                .json_annotated()
+                .await?;
             handle_response(response.data);
             match response.meta.next_page {
                 Some(next) => {

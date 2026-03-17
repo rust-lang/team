@@ -21,14 +21,14 @@ static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
 /// Verified via: https://api.github.com/repos/rust-lang/rust/commits/HEAD/check-runs
 const GITHUB_ACTIONS_INTEGRATION_ID: i64 = 15368;
 
-pub(crate) fn create_diff(
+pub(crate) async fn create_diff(
     github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
     repos: Vec<rust_team_data::v1::Repo>,
     config: Config,
 ) -> anyhow::Result<Diff> {
-    let github = SyncGitHub::new(github, teams, repos, config)?;
-    github.diff_all()
+    let github = SyncGitHub::new(github, teams, repos, config).await?;
+    github.diff_all().await
 }
 
 type OrgName = String;
@@ -44,7 +44,7 @@ struct SyncGitHub {
 }
 
 impl SyncGitHub {
-    pub(crate) fn new(
+    pub(crate) async fn new(
         github: Box<dyn GithubRead>,
         teams: Vec<rust_team_data::v1::Team>,
         repos: Vec<rust_team_data::v1::Repo>,
@@ -60,7 +60,7 @@ impl SyncGitHub {
             .collect::<HashSet<_>>()
             .into_iter()
             .collect::<Vec<_>>();
-        let usernames_cache = github.usernames(&users)?;
+        let usernames_cache = github.usernames(&users).await?;
 
         debug!("caching organization owners");
         let orgs = teams
@@ -74,8 +74,8 @@ impl SyncGitHub {
         let mut org_members = HashMap::new();
 
         for org in &orgs {
-            org_owners.insert((*org).to_string(), github.org_owners(org)?);
-            org_members.insert((*org).to_string(), github.org_members(org)?);
+            org_owners.insert((*org).to_string(), github.org_owners(org).await?);
+            org_members.insert((*org).to_string(), github.org_members(org).await?);
         }
 
         Ok(SyncGitHub {
@@ -89,10 +89,10 @@ impl SyncGitHub {
         })
     }
 
-    pub(crate) fn diff_all(&self) -> anyhow::Result<Diff> {
-        let team_diffs = self.diff_teams()?;
-        let repo_diffs = self.diff_repos()?;
-        let org_membership_diffs = self.diff_org_memberships()?;
+    pub(crate) async fn diff_all(&self) -> anyhow::Result<Diff> {
+        let team_diffs = self.diff_teams().await?;
+        let repo_diffs = self.diff_repos().await?;
+        let org_membership_diffs = self.diff_org_memberships().await?;
 
         Ok(Diff {
             team_diffs,
@@ -119,7 +119,7 @@ impl SyncGitHub {
     }
 
     /// Diff organization memberships between TOML teams and GitHub
-    fn diff_org_memberships(&self) -> anyhow::Result<Vec<OrgMembershipDiff>> {
+    async fn diff_org_memberships(&self) -> anyhow::Result<Vec<OrgMembershipDiff>> {
         let toml_org_team_members = self.get_org_members_from_teams();
 
         let mut org_diffs: BTreeMap<String, OrgMembershipDiff> = BTreeMap::new();
@@ -183,7 +183,7 @@ impl SyncGitHub {
         members_to_remove
     }
 
-    fn diff_teams(&self) -> anyhow::Result<Vec<TeamDiff>> {
+    async fn diff_teams(&self) -> anyhow::Result<Vec<TeamDiff>> {
         let mut diffs = Vec::new();
         let mut unseen_github_teams = HashMap::new();
         for team in &self.teams {
@@ -195,7 +195,8 @@ impl SyncGitHub {
                         None => {
                             let ts: HashMap<_, _> = self
                                 .github
-                                .org_teams(&github_team.org)?
+                                .org_teams(&github_team.org)
+                                .await?
                                 .into_iter()
                                 .collect();
                             unseen_github_teams
@@ -206,7 +207,7 @@ impl SyncGitHub {
                     // Remove the current team from the collection of unseen GitHub teams
                     unseen_github_teams.remove(&github_team.name);
 
-                    let diff_team = self.diff_team(github_team)?;
+                    let diff_team = self.diff_team(github_team).await?;
                     if !diff_team.noop() {
                         diffs.push(diff_team);
                     }
@@ -233,11 +234,18 @@ impl SyncGitHub {
         Ok(diffs)
     }
 
-    fn diff_team(&self, github_team: &rust_team_data::v1::GitHubTeam) -> anyhow::Result<TeamDiff> {
+    async fn diff_team(
+        &self,
+        github_team: &rust_team_data::v1::GitHubTeam,
+    ) -> anyhow::Result<TeamDiff> {
         debug!("Diffing team `{}/{}`", github_team.org, github_team.name);
 
         // Ensure the team exists and is consistent
-        let team = match self.github.team(&github_team.org, &github_team.name)? {
+        let team = match self
+            .github
+            .team(&github_team.org, &github_team.name)
+            .await?
+        {
             Some(team) => team,
             None => {
                 let members = github_team
@@ -279,10 +287,14 @@ impl SyncGitHub {
 
         let mut member_diffs = Vec::new();
 
-        let mut current_members = self.github.team_memberships(&team, &github_team.org)?;
+        let mut current_members = self
+            .github
+            .team_memberships(&team, &github_team.org)
+            .await?;
         let invites = self
             .github
-            .team_membership_invitations(&github_team.org, &github_team.name)?;
+            .team_membership_invitations(&github_team.org, &github_team.name)
+            .await?;
 
         // Ensure all expected members are in the team
         for member in &github_team.members {
@@ -323,10 +335,10 @@ impl SyncGitHub {
         }))
     }
 
-    fn diff_repos(&self) -> anyhow::Result<Vec<RepoDiff>> {
+    async fn diff_repos(&self) -> anyhow::Result<Vec<RepoDiff>> {
         let mut diffs = Vec::new();
         for repo in &self.repos {
-            let repo_diff = self.diff_repo(repo)?;
+            let repo_diff = self.diff_repo(repo).await?;
             if !repo_diff.noop() {
                 diffs.push(repo_diff);
             }
@@ -340,13 +352,20 @@ impl SyncGitHub {
         self.config.enable_rulesets_repos.contains(&repo_full_name)
     }
 
-    fn diff_repo(&self, expected_repo: &rust_team_data::v1::Repo) -> anyhow::Result<RepoDiff> {
+    async fn diff_repo(
+        &self,
+        expected_repo: &rust_team_data::v1::Repo,
+    ) -> anyhow::Result<RepoDiff> {
         debug!(
             "Diffing repo `{}/{}`",
             expected_repo.org, expected_repo.name
         );
 
-        let actual_repo = match self.github.repo(&expected_repo.org, &expected_repo.name)? {
+        let actual_repo = match self
+            .github
+            .repo(&expected_repo.org, &expected_repo.name)
+            .await?
+        {
             Some(r) => r,
             None => {
                 let permissions = calculate_permission_diffs(
@@ -406,17 +425,19 @@ impl SyncGitHub {
             ));
         }
 
-        let permission_diffs = self.diff_permissions(expected_repo)?;
+        let permission_diffs = self.diff_permissions(expected_repo).await?;
 
-        let branch_protection_diffs = self.diff_branch_protections(&actual_repo, expected_repo)?;
+        let branch_protection_diffs = self
+            .diff_branch_protections(&actual_repo, expected_repo)
+            .await?;
 
         let ruleset_diffs = if self.should_use_rulesets(expected_repo) {
-            self.diff_rulesets(expected_repo)?
+            self.diff_rulesets(expected_repo).await?
         } else {
             Vec::new()
         };
 
-        let environment_diffs = self.diff_environments(expected_repo)?;
+        let environment_diffs = self.diff_environments(expected_repo).await?;
         let old_settings = RepoSettings {
             description: actual_repo.description.clone(),
             homepage: actual_repo.homepage.clone(),
@@ -442,19 +463,21 @@ impl SyncGitHub {
         }))
     }
 
-    fn diff_permissions(
+    async fn diff_permissions(
         &self,
         expected_repo: &rust_team_data::v1::Repo,
     ) -> anyhow::Result<Vec<RepoPermissionAssignmentDiff>> {
         let actual_teams: HashMap<_, _> = self
             .github
-            .repo_teams(&expected_repo.org, &expected_repo.name)?
+            .repo_teams(&expected_repo.org, &expected_repo.name)
+            .await?
             .into_iter()
             .map(|t| (t.name.clone(), t))
             .collect();
         let actual_collaborators: HashMap<_, _> = self
             .github
-            .repo_collaborators(&expected_repo.org, &expected_repo.name)?
+            .repo_collaborators(&expected_repo.org, &expected_repo.name)
+            .await?
             .into_iter()
             .map(|u| (u.name.clone(), u))
             .collect();
@@ -462,7 +485,7 @@ impl SyncGitHub {
         calculate_permission_diffs(expected_repo, actual_teams, actual_collaborators)
     }
 
-    fn diff_branch_protections(
+    async fn diff_branch_protections(
         &self,
         actual_repo: &api::Repo,
         expected_repo: &rust_team_data::v1::Repo,
@@ -477,7 +500,8 @@ impl SyncGitHub {
         let mut branch_protection_diffs = Vec::new();
         let mut actual_protections = self
             .github
-            .branch_protections(&actual_repo.org, &actual_repo.name)?;
+            .branch_protections(&actual_repo.org, &actual_repo.name)
+            .await?;
 
         // If rulesets are enabled, delete all existing branch protections
         // to avoid conflicts between branch protections and rulesets
@@ -542,7 +566,7 @@ impl SyncGitHub {
         Ok(branch_protection_diffs)
     }
 
-    fn diff_environments(
+    async fn diff_environments(
         &self,
         expected_repo: &rust_team_data::v1::Repo,
     ) -> anyhow::Result<Vec<EnvironmentDiff>> {
@@ -550,7 +574,8 @@ impl SyncGitHub {
 
         let actual_environments_map = self
             .github
-            .repo_environments(&expected_repo.org, &expected_repo.name)?;
+            .repo_environments(&expected_repo.org, &expected_repo.name)
+            .await?;
 
         let actual_environments: BTreeSet<String> =
             actual_environments_map.keys().cloned().collect();
@@ -624,7 +649,7 @@ impl SyncGitHub {
         Ok(environment_diffs)
     }
 
-    fn diff_rulesets(
+    async fn diff_rulesets(
         &self,
         expected_repo: &rust_team_data::v1::Repo,
     ) -> anyhow::Result<Vec<RulesetDiff>> {
@@ -633,7 +658,8 @@ impl SyncGitHub {
         // Fetch existing rulesets from GitHub
         let actual_rulesets = self
             .github
-            .repo_rulesets(&expected_repo.org, &expected_repo.name)?;
+            .repo_rulesets(&expected_repo.org, &expected_repo.name)
+            .await?;
 
         // Build a map of actual rulesets by branch name (the logical identity)
         let mut rulesets_by_name: HashMap<String, api::Ruleset> = HashMap::new();
@@ -1086,15 +1112,15 @@ pub(crate) struct Diff {
 
 impl Diff {
     /// Apply the diff to GitHub
-    pub(crate) fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
+    pub(crate) async fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
         for team_diff in self.team_diffs {
-            team_diff.apply(sync)?;
+            team_diff.apply(sync).await?;
         }
         for repo_diff in self.repo_diffs {
-            repo_diff.apply(sync)?;
+            repo_diff.apply(sync).await?;
         }
         for org_diff in self.org_membership_diffs {
-            org_diff.apply(sync)?;
+            org_diff.apply(sync).await?;
         }
 
         Ok(())
@@ -1141,10 +1167,10 @@ enum RepoDiff {
 }
 
 impl RepoDiff {
-    fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
+    async fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
         match self {
-            RepoDiff::Create(c) => c.apply(sync),
-            RepoDiff::Update(u) => u.apply(sync),
+            RepoDiff::Create(c) => c.apply(sync).await,
+            RepoDiff::Update(u) => u.apply(sync).await,
         }
     }
 
@@ -1172,9 +1198,9 @@ struct OrgMembershipDiff {
 }
 
 impl OrgMembershipDiff {
-    fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
+    async fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
         for member in &self.members_to_remove {
-            sync.remove_gh_member_from_org(&self.org, member)?;
+            sync.remove_gh_member_from_org(&self.org, member).await?;
         }
 
         Ok(())
@@ -1205,11 +1231,13 @@ struct CreateRepoDiff {
 }
 
 impl CreateRepoDiff {
-    fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
-        let repo = sync.create_repo(&self.org, &self.name, &self.settings)?;
+    async fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
+        let repo = sync
+            .create_repo(&self.org, &self.name, &self.settings)
+            .await?;
 
         for permission in &self.permissions {
-            permission.apply(sync, &self.org, &self.name)?;
+            permission.apply(sync, &self.org, &self.name).await?;
         }
 
         // Apply branch protections
@@ -1218,7 +1246,8 @@ impl CreateRepoDiff {
                 pattern: branch.clone(),
                 operation: BranchProtectionDiffOperation::Create(protection.clone()),
             }
-            .apply(sync, &self.org, &self.name, &repo.node_id)?;
+            .apply(sync, &self.org, &self.name, &repo.node_id)
+            .await?;
         }
 
         // Apply rulesets (in addition to branch protections if configured)
@@ -1227,11 +1256,13 @@ impl CreateRepoDiff {
                 name: ruleset.name.clone(),
                 operation: RulesetDiffOperation::Create(ruleset.clone()),
             }
-            .apply(sync, &self.org, &self.name)?;
+            .apply(sync, &self.org, &self.name)
+            .await?;
         }
 
         for (env_name, env) in &self.environments {
-            sync.create_environment(&self.org, &self.name, env_name, &env.branches, &env.tags)?;
+            sync.create_environment(&self.org, &self.name, env_name, &env.branches, &env.tags)
+                .await?;
         }
 
         Ok(())
@@ -1362,7 +1393,7 @@ impl UpdateRepoDiff {
         true
     }
 
-    fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
+    async fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
         if !self.can_be_modified() {
             return Ok(());
         }
@@ -1374,25 +1405,29 @@ impl UpdateRepoDiff {
         let is_unarchive = self.settings_diff.0.archived && !self.settings_diff.1.archived;
 
         if is_unarchive {
-            sync.edit_repo(&self.org, &self.name, &self.settings_diff.1)?;
+            sync.edit_repo(&self.org, &self.name, &self.settings_diff.1)
+                .await?;
         }
 
         for permission in &self.permission_diffs {
-            permission.apply(sync, &self.org, &self.name)?;
+            permission.apply(sync, &self.org, &self.name).await?;
         }
 
         for branch_protection in &self.branch_protection_diffs {
-            branch_protection.apply(sync, &self.org, &self.name, &self.repo_node_id)?;
+            branch_protection
+                .apply(sync, &self.org, &self.name, &self.repo_node_id)
+                .await?;
         }
 
         for ruleset in &self.ruleset_diffs {
-            ruleset.apply(sync, &self.org, &self.name)?;
+            ruleset.apply(sync, &self.org, &self.name).await?;
         }
 
         for env_diff in &self.environment_diffs {
             match env_diff {
                 EnvironmentDiff::Create(name, env) => {
-                    sync.create_environment(&self.org, &self.name, name, &env.branches, &env.tags)?;
+                    sync.create_environment(&self.org, &self.name, name, &env.branches, &env.tags)
+                        .await?;
                 }
                 EnvironmentDiff::Update {
                     name,
@@ -1400,16 +1435,18 @@ impl UpdateRepoDiff {
                     new_tags,
                     ..
                 } => {
-                    sync.update_environment(&self.org, &self.name, name, new_branches, new_tags)?;
+                    sync.update_environment(&self.org, &self.name, name, new_branches, new_tags)
+                        .await?;
                 }
                 EnvironmentDiff::Delete(name) => {
-                    sync.delete_environment(&self.org, &self.name, name)?;
+                    sync.delete_environment(&self.org, &self.name, name).await?;
                 }
             }
         }
 
         if !is_unarchive && self.settings_diff.0 != self.settings_diff.1 {
-            sync.edit_repo(&self.org, &self.name, &self.settings_diff.1)?;
+            sync.edit_repo(&self.org, &self.name, &self.settings_diff.1)
+                .await?;
         }
 
         Ok(())
@@ -1547,24 +1584,28 @@ struct RepoPermissionAssignmentDiff {
 }
 
 impl RepoPermissionAssignmentDiff {
-    fn apply(&self, sync: &GitHubWrite, org: &str, repo_name: &str) -> anyhow::Result<()> {
+    async fn apply(&self, sync: &GitHubWrite, org: &str, repo_name: &str) -> anyhow::Result<()> {
         match &self.diff {
             RepoPermissionDiff::Create(p) | RepoPermissionDiff::Update(_, p) => {
                 match &self.collaborator {
                     RepoCollaborator::Team(team_name) => {
-                        sync.update_team_repo_permissions(org, repo_name, team_name, p)?
+                        sync.update_team_repo_permissions(org, repo_name, team_name, p)
+                            .await?
                     }
                     RepoCollaborator::User(user_name) => {
-                        sync.update_user_repo_permissions(org, repo_name, user_name, p)?
+                        sync.update_user_repo_permissions(org, repo_name, user_name, p)
+                            .await?
                     }
                 }
             }
             RepoPermissionDiff::Delete(_) => match &self.collaborator {
                 RepoCollaborator::Team(team_name) => {
-                    sync.remove_team_from_repo(org, repo_name, team_name)?
+                    sync.remove_team_from_repo(org, repo_name, team_name)
+                        .await?
                 }
                 RepoCollaborator::User(user_name) => {
-                    sync.remove_collaborator_from_repo(org, repo_name, user_name)?
+                    sync.remove_collaborator_from_repo(org, repo_name, user_name)
+                        .await?
                 }
             },
         }
@@ -1614,7 +1655,7 @@ struct BranchProtectionDiff {
 }
 
 impl BranchProtectionDiff {
-    fn apply(
+    async fn apply(
         &self,
         sync: &GitHubWrite,
         org: &str,
@@ -1628,7 +1669,8 @@ impl BranchProtectionDiff {
                     &self.pattern,
                     bp,
                     org,
-                )?;
+                )
+                .await?;
             }
             BranchProtectionDiffOperation::Update(id, _, bp) => {
                 sync.upsert_branch_protection(
@@ -1636,7 +1678,8 @@ impl BranchProtectionDiff {
                     &self.pattern,
                     bp,
                     org,
-                )?;
+                )
+                .await?;
             }
             BranchProtectionDiffOperation::Delete(id) => {
                 debug!(
@@ -1644,7 +1687,7 @@ impl BranchProtectionDiff {
                 the protection is not in the team repo",
                     self.pattern, org, repo_name
                 );
-                sync.delete_branch_protection(org, repo_name, id)?;
+                sync.delete_branch_protection(org, repo_name, id).await?;
             }
         }
 
@@ -1983,14 +2026,16 @@ struct RulesetDiff {
 }
 
 impl RulesetDiff {
-    fn apply(&self, sync: &GitHubWrite, org: &str, repo_name: &str) -> anyhow::Result<()> {
+    async fn apply(&self, sync: &GitHubWrite, org: &str, repo_name: &str) -> anyhow::Result<()> {
         use api::RulesetOp;
         match &self.operation {
             RulesetDiffOperation::Create(ruleset) => {
-                sync.upsert_ruleset(RulesetOp::CreateForRepo, org, repo_name, ruleset)?;
+                sync.upsert_ruleset(RulesetOp::CreateForRepo, org, repo_name, ruleset)
+                    .await?;
             }
             RulesetDiffOperation::Update(id, _, new_ruleset) => {
-                sync.upsert_ruleset(RulesetOp::UpdateRuleset(*id), org, repo_name, new_ruleset)?;
+                sync.upsert_ruleset(RulesetOp::UpdateRuleset(*id), org, repo_name, new_ruleset)
+                    .await?;
             }
             RulesetDiffOperation::Delete(id) => {
                 debug!(
@@ -1998,7 +2043,7 @@ impl RulesetDiff {
                 the ruleset is not in the team repo",
                     self.name, id, org, repo_name
                 );
-                sync.delete_ruleset(org, repo_name, *id)?;
+                sync.delete_ruleset(org, repo_name, *id).await?;
             }
         }
         Ok(())
@@ -2036,11 +2081,11 @@ enum TeamDiff {
 }
 
 impl TeamDiff {
-    fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
+    async fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
         match self {
-            TeamDiff::Create(c) => c.apply(sync)?,
-            TeamDiff::Edit(e) => e.apply(sync)?,
-            TeamDiff::Delete(d) => d.apply(sync)?,
+            TeamDiff::Create(c) => c.apply(sync).await?,
+            TeamDiff::Edit(e) => e.apply(sync).await?,
+            TeamDiff::Delete(d) => d.apply(sync).await?,
         }
 
         Ok(())
@@ -2074,10 +2119,13 @@ struct CreateTeamDiff {
 }
 
 impl CreateTeamDiff {
-    fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
-        sync.create_team(&self.org, &self.name, &self.description, self.privacy)?;
+    async fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
+        sync.create_team(&self.org, &self.name, &self.description, self.privacy)
+            .await?;
         for (member_name, role) in self.members {
-            MemberDiff::Create(role).apply(&self.org, &self.name, &member_name, sync)?;
+            MemberDiff::Create(role)
+                .apply(&self.org, &self.name, &member_name, sync)
+                .await?;
         }
 
         Ok(())
@@ -2125,7 +2173,7 @@ struct EditTeamDiff {
 }
 
 impl EditTeamDiff {
-    fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
+    async fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
         if self.name_diff.is_some()
             || self.description_diff.is_some()
             || self.privacy_diff.is_some()
@@ -2136,11 +2184,14 @@ impl EditTeamDiff {
                 self.name_diff.as_deref(),
                 self.description_diff.as_ref().map(|(_, d)| d.as_str()),
                 self.privacy_diff.map(|(_, p)| p),
-            )?;
+            )
+            .await?;
         }
 
         for (member_name, member_diff) in self.member_diffs {
-            member_diff.apply(&self.org, &self.name, &member_name, sync)?;
+            member_diff
+                .apply(&self.org, &self.name, &member_name, sync)
+                .await?;
         }
 
         Ok(())
@@ -2219,12 +2270,18 @@ enum MemberDiff {
 }
 
 impl MemberDiff {
-    fn apply(self, org: &str, team: &str, member: &str, sync: &GitHubWrite) -> anyhow::Result<()> {
+    async fn apply(
+        self,
+        org: &str,
+        team: &str,
+        member: &str,
+        sync: &GitHubWrite,
+    ) -> anyhow::Result<()> {
         match self {
             MemberDiff::Create(role) | MemberDiff::ChangeRole((_, role)) => {
-                sync.set_team_membership(org, team, member, role)?;
+                sync.set_team_membership(org, team, member, role).await?;
             }
-            MemberDiff::Delete => sync.remove_team_membership(org, team, member)?,
+            MemberDiff::Delete => sync.remove_team_membership(org, team, member).await?,
             MemberDiff::Noop => {}
         }
 
@@ -2244,8 +2301,8 @@ struct DeleteTeamDiff {
 }
 
 impl DeleteTeamDiff {
-    fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
-        sync.delete_team(&self.org, &self.slug)?;
+    async fn apply(self, sync: &GitHubWrite) -> anyhow::Result<()> {
+        sync.delete_team(&self.org, &self.slug).await?;
         Ok(())
     }
 }

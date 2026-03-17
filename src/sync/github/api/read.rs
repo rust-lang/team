@@ -7,50 +7,59 @@ use crate::sync::github::api::{
 };
 use crate::sync::utils::ResponseExt;
 use anyhow::Context as _;
+use async_trait::async_trait;
 use reqwest::{Method, StatusCode};
 use rust_team_data::v1::Environment;
 use std::collections::{HashMap, HashSet};
 
+#[async_trait]
 pub(crate) trait GithubRead {
     fn uses_pat(&self) -> bool;
 
     /// Get user names by user ids
-    fn usernames(&self, ids: &[u64]) -> anyhow::Result<HashMap<u64, String>>;
+    async fn usernames(&self, ids: &[u64]) -> anyhow::Result<HashMap<u64, String>>;
 
     /// Get the owners of an org
-    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<u64>>;
+    async fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<u64>>;
 
     /// Get the members of an org
-    fn org_members(&self, org: &str) -> anyhow::Result<HashMap<u64, String>>;
+    async fn org_members(&self, org: &str) -> anyhow::Result<HashMap<u64, String>>;
 
     /// Get all teams associated with a org
     ///
     /// Returns a list of tuples of team name and slug
-    fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>>;
+    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>>;
 
     /// Get the team by name and org
-    fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>>;
+    async fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>>;
 
-    fn team_memberships(&self, team: &Team, org: &str) -> anyhow::Result<HashMap<u64, TeamMember>>;
+    async fn team_memberships(
+        &self,
+        team: &Team,
+        org: &str,
+    ) -> anyhow::Result<HashMap<u64, TeamMember>>;
 
     /// The GitHub names of users invited to the given team
-    fn team_membership_invitations(&self, org: &str, team: &str)
-    -> anyhow::Result<HashSet<String>>;
+    async fn team_membership_invitations(
+        &self,
+        org: &str,
+        team: &str,
+    ) -> anyhow::Result<HashSet<String>>;
 
     /// Get a repo by org and name
-    fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>>;
+    async fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>>;
 
     /// Get teams in a repo
-    fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>>;
+    async fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>>;
 
     /// Get collaborators in a repo
     ///
     /// Only fetches those who are direct collaborators (i.e., not a collaborator through a repo team)
-    fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>>;
+    async fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>>;
 
     /// Get branch_protections
     /// Returns a map branch pattern -> (protection ID, protection data)
-    fn branch_protections(
+    async fn branch_protections(
         &self,
         org: &str,
         repo: &str,
@@ -58,7 +67,7 @@ pub(crate) trait GithubRead {
 
     /// Get environments for a repository
     /// Returns a map of environment names to their Environment data
-    fn repo_environments(
+    async fn repo_environments(
         &self,
         org: &str,
         repo: &str,
@@ -66,9 +75,9 @@ pub(crate) trait GithubRead {
 
     /// Get rulesets for a repository
     /// Returns a vector of rulesets
-    fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>>;
+    async fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>>;
 
-    fn environment_branch_policies(
+    async fn environment_branch_policies(
         &self,
         org: &str,
         repo: &str,
@@ -86,12 +95,13 @@ impl GitHubApiRead {
     }
 }
 
+#[async_trait]
 impl GithubRead for GitHubApiRead {
     fn uses_pat(&self) -> bool {
         self.client.uses_pat()
     }
 
-    fn usernames(&self, ids: &[u64]) -> anyhow::Result<HashMap<u64, String>> {
+    async fn usernames(&self, ids: &[u64]) -> anyhow::Result<HashMap<u64, String>> {
         #[derive(serde::Deserialize)]
         #[serde(rename_all = "camelCase")]
         struct Usernames {
@@ -115,13 +125,16 @@ impl GithubRead for GitHubApiRead {
 
         let mut result = HashMap::new();
         for chunk in ids.chunks(100) {
-            let res: GraphNodes<Usernames> = self.client.graphql(
-                QUERY,
-                Params {
-                    ids: chunk.iter().map(|id| user_node_id(*id)).collect(),
-                },
-                "rust-lang", // any of our orgs will work for this query
-            )?;
+            let res: GraphNodes<Usernames> = self
+                .client
+                .graphql(
+                    QUERY,
+                    Params {
+                        ids: chunk.iter().map(|id| user_node_id(*id)).collect(),
+                    },
+                    "rust-lang", // any of our orgs will work for this query
+                )
+                .await?;
             for node in res.nodes.into_iter().flatten() {
                 result.insert(node.database_id, node.login);
             }
@@ -129,66 +142,78 @@ impl GithubRead for GitHubApiRead {
         Ok(result)
     }
 
-    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<u64>> {
+    async fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<u64>> {
         #[derive(serde::Deserialize, Eq, PartialEq, Hash)]
         struct User {
             id: u64,
         }
         let mut owners = HashSet::new();
-        self.client.rest_paginated(
-            &Method::GET,
-            &GitHubUrl::orgs(org, "members?role=admin")?,
-            |resp: Vec<User>| {
-                owners.extend(resp.into_iter().map(|u| u.id));
-                Ok(())
-            },
-        )?;
+        self.client
+            .rest_paginated(
+                &Method::GET,
+                &GitHubUrl::orgs(org, "members?role=admin")?,
+                |resp: Vec<User>| {
+                    owners.extend(resp.into_iter().map(|u| u.id));
+                    Ok(())
+                },
+            )
+            .await?;
         Ok(owners)
     }
 
-    fn org_members(&self, org: &str) -> anyhow::Result<HashMap<u64, String>> {
+    async fn org_members(&self, org: &str) -> anyhow::Result<HashMap<u64, String>> {
         #[derive(serde::Deserialize, Eq, PartialEq, Hash)]
         struct User {
             id: u64,
             login: String,
         }
         let mut members = HashMap::new();
-        self.client.rest_paginated(
-            &Method::GET,
-            &GitHubUrl::orgs(org, "members")?,
-            |resp: Vec<User>| {
-                for user in resp {
-                    members.insert(user.id, user.login);
-                }
-                Ok(())
-            },
-        )?;
+        self.client
+            .rest_paginated(
+                &Method::GET,
+                &GitHubUrl::orgs(org, "members")?,
+                |resp: Vec<User>| {
+                    for user in resp {
+                        members.insert(user.id, user.login);
+                    }
+                    Ok(())
+                },
+            )
+            .await?;
         Ok(members)
     }
 
-    fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
+    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
         let mut teams = Vec::new();
 
-        self.client.rest_paginated(
-            &Method::GET,
-            &GitHubUrl::orgs(org, "teams")?,
-            |resp: Vec<Team>| {
-                teams.extend(resp.into_iter().map(|t| (t.name, t.slug)));
-                Ok(())
-            },
-        )?;
+        self.client
+            .rest_paginated(
+                &Method::GET,
+                &GitHubUrl::orgs(org, "teams")?,
+                |resp: Vec<Team>| {
+                    teams.extend(resp.into_iter().map(|t| (t.name, t.slug)));
+                    Ok(())
+                },
+            )
+            .await?;
 
         Ok(teams)
     }
 
-    fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
-        self.client.send_option(
-            Method::GET,
-            &GitHubUrl::orgs(org, &format!("teams/{team}"))?,
-        )
+    async fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
+        self.client
+            .send_option(
+                Method::GET,
+                &GitHubUrl::orgs(org, &format!("teams/{team}"))?,
+            )
+            .await
     }
 
-    fn team_memberships(&self, team: &Team, org: &str) -> anyhow::Result<HashMap<u64, TeamMember>> {
+    async fn team_memberships(
+        &self,
+        team: &Team,
+        org: &str,
+    ) -> anyhow::Result<HashMap<u64, TeamMember>> {
         #[derive(serde::Deserialize)]
         struct RespTeam {
             members: RespMembers,
@@ -242,14 +267,17 @@ impl GithubRead for GitHubApiRead {
         if let Some(id) = team.id {
             let mut page_info = GraphPageInfo::start();
             while page_info.has_next_page {
-                let res: GraphNode<RespTeam> = self.client.graphql(
-                    QUERY,
-                    Params {
-                        team: team_node_id(id),
-                        cursor: page_info.end_cursor.as_deref(),
-                    },
-                    org,
-                )?;
+                let res: GraphNode<RespTeam> = self
+                    .client
+                    .graphql(
+                        QUERY,
+                        Params {
+                            team: team_node_id(id),
+                            cursor: page_info.end_cursor.as_deref(),
+                        },
+                        org,
+                    )
+                    .await?;
                 if let Some(team) = res.node {
                     page_info = team.members.page_info;
                     for edge in team.members.edges.into_iter() {
@@ -268,26 +296,28 @@ impl GithubRead for GitHubApiRead {
         Ok(memberships)
     }
 
-    fn team_membership_invitations(
+    async fn team_membership_invitations(
         &self,
         org: &str,
         team: &str,
     ) -> anyhow::Result<HashSet<String>> {
         let mut invites = HashSet::new();
 
-        self.client.rest_paginated(
-            &Method::GET,
-            &GitHubUrl::orgs(org, &format!("teams/{team}/invitations"))?,
-            |resp: Vec<Login>| {
-                invites.extend(resp.into_iter().map(|l| l.login));
-                Ok(())
-            },
-        )?;
+        self.client
+            .rest_paginated(
+                &Method::GET,
+                &GitHubUrl::orgs(org, &format!("teams/{team}/invitations"))?,
+                |resp: Vec<Login>| {
+                    invites.extend(resp.into_iter().map(|l| l.login));
+                    Ok(())
+                },
+            )
+            .await?;
 
         Ok(invites)
     }
 
-    fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
+    async fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
         // We use the GraphQL API instead of REST because of
         // this bug: https://github.com/orgs/community/discussions/153258
         #[derive(serde::Serialize)]
@@ -337,6 +367,7 @@ impl GithubRead for GitHubApiRead {
                 },
                 org,
             )
+            .await
             .with_context(|| format!("failed to retrieve repo `{org}/{repo}`"))?;
 
         let repo = result.and_then(|r| r.repository).map(|repo_response| Repo {
@@ -353,37 +384,41 @@ impl GithubRead for GitHubApiRead {
         Ok(repo)
     }
 
-    fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
+    async fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
         let mut teams = Vec::new();
 
-        self.client.rest_paginated(
-            &Method::GET,
-            &GitHubUrl::repos(org, repo, "teams")?,
-            |resp: Vec<RepoTeam>| {
-                teams.extend(resp);
-                Ok(())
-            },
-        )?;
+        self.client
+            .rest_paginated(
+                &Method::GET,
+                &GitHubUrl::repos(org, repo, "teams")?,
+                |resp: Vec<RepoTeam>| {
+                    teams.extend(resp);
+                    Ok(())
+                },
+            )
+            .await?;
 
         Ok(teams)
     }
 
-    fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>> {
+    async fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>> {
         let mut users = Vec::new();
 
-        self.client.rest_paginated(
-            &Method::GET,
-            &GitHubUrl::repos(org, repo, "collaborators?affiliation=direct")?,
-            |resp: Vec<RepoUser>| {
-                users.extend(resp);
-                Ok(())
-            },
-        )?;
+        self.client
+            .rest_paginated(
+                &Method::GET,
+                &GitHubUrl::repos(org, repo, "collaborators?affiliation=direct")?,
+                |resp: Vec<RepoUser>| {
+                    users.extend(resp);
+                    Ok(())
+                },
+            )
+            .await?;
 
         Ok(users)
     }
 
-    fn branch_protections(
+    async fn branch_protections(
         &self,
         org: &str,
         repo: &str,
@@ -449,7 +484,10 @@ impl GithubRead for GitHubApiRead {
         }
 
         let mut result = HashMap::new();
-        let res: Wrapper = self.client.graphql(QUERY, Params { org, repo }, org)?;
+        let res: Wrapper = self
+            .client
+            .graphql(QUERY, Params { org, repo }, org)
+            .await?;
         for mut node in res
             .repository
             .branch_protection_rules
@@ -464,7 +502,7 @@ impl GithubRead for GitHubApiRead {
         Ok(result)
     }
 
-    fn repo_environments(
+    async fn repo_environments(
         &self,
         org: &str,
         repo: &str,
@@ -490,20 +528,23 @@ impl GithubRead for GitHubApiRead {
 
         // Fetch all environments with their protection_rules metadata
         // REST API: https://docs.github.com/en/rest/deployments/environments#list-environments
-        self.client.rest_paginated(
-            &Method::GET,
-            &GitHubUrl::repos(org, repo, "environments")?,
-            |resp: EnvironmentsResponse| {
-                env_infos.extend(resp.environments);
-                Ok(())
-            },
-        )?;
+        self.client
+            .rest_paginated(
+                &Method::GET,
+                &GitHubUrl::repos(org, repo, "environments")?,
+                |resp: EnvironmentsResponse| {
+                    env_infos.extend(resp.environments);
+                    Ok(())
+                },
+            )
+            .await?;
+
+        use futures_util::StreamExt;
 
         // For each environment, fetch deployment branch policies if they exist
         // REST API: https://docs.github.com/en/rest/deployments/branch-policies#list-deployment-branch-policies
-        env_infos
-            .into_iter()
-            .map(|env_info| {
+        futures_util::stream::iter(env_infos)
+            .then(|env_info| async move {
                 // Check if branch policies exist by looking at protection_rules metadata
                 let has_branch_policies = env_info
                     .protection_rules
@@ -514,7 +555,7 @@ impl GithubRead for GitHubApiRead {
                     let mut branches = Vec::new();
                     let mut tags = Vec::new();
                     let policies =
-                        self.environment_branch_policies(org, repo, &env_info.name).with_context(
+                        self.environment_branch_policies(org, repo, &env_info.name).await.with_context(
                             || {
                                 format!(
                                     "failed to load deployment branch policies for environment '{}' in '{org}/{repo}'",
@@ -535,10 +576,13 @@ impl GithubRead for GitHubApiRead {
 
                 Ok((env_info.name, Environment { branches, tags }))
             })
-            .collect()
+            .collect::<Vec<_>>()
+            .await
+            .into_iter()
+            .collect::<anyhow::Result<HashMap<_, _>>>()
     }
 
-    fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>> {
+    async fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>> {
         #[derive(serde::Deserialize)]
         struct RulesetInfo {
             id: u64,
@@ -550,14 +594,16 @@ impl GithubRead for GitHubApiRead {
         // https://docs.github.com/en/rest/repos/rules#get-all-repository-rulesets
         // The API returns only a subset of data for each ruleset :/
         // So we then have to fetch the rulesets individually to get the full data.
-        self.client.rest_paginated(
-            &Method::GET,
-            &GitHubUrl::repos(org, repo, "rulesets")?,
-            |resp: Vec<RulesetInfo>| {
-                ruleset_ids.extend(resp.into_iter().map(|info| info.id));
-                Ok(())
-            },
-        )?;
+        self.client
+            .rest_paginated(
+                &Method::GET,
+                &GitHubUrl::repos(org, repo, "rulesets")?,
+                |resp: Vec<RulesetInfo>| {
+                    ruleset_ids.extend(resp.into_iter().map(|info| info.id));
+                    Ok(())
+                },
+            )
+            .await?;
 
         let mut rulesets: Vec<Ruleset> = vec![];
         for id in ruleset_ids {
@@ -567,15 +613,17 @@ impl GithubRead for GitHubApiRead {
                     Method::GET,
                     &GitHubUrl::repos(org, repo, &format!("rulesets/{id}"))?,
                 )?
-                .send()?
-                .json_annotated()?;
+                .send()
+                .await?
+                .json_annotated()
+                .await?;
             rulesets.push(ruleset);
         }
 
         Ok(rulesets)
     }
 
-    fn environment_branch_policies(
+    async fn environment_branch_policies(
         &self,
         org: &str,
         repo: &str,
@@ -593,12 +641,13 @@ impl GithubRead for GitHubApiRead {
             &format!("environments/{environment}/deployment-branch-policies"),
         )?;
 
-        if let Err(err) =
-            self.client
-                .rest_paginated(&Method::GET, &url, |resp: BranchPoliciesResponse| {
-                    policies.extend(resp.branch_policies);
-                    Ok(())
-                })
+        if let Err(err) = self
+            .client
+            .rest_paginated(&Method::GET, &url, |resp: BranchPoliciesResponse| {
+                policies.extend(resp.branch_policies);
+                Ok(())
+            })
+            .await
         {
             match err {
                 // If the environment doesn't have branch policies, GitHub returns a 404.
