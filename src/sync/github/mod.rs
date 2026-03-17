@@ -682,7 +682,7 @@ impl SyncGitHub {
                 let bypass_actors_differ = if !self.github.uses_pat() {
                     false
                 } else {
-                    !option_slice_eq(bypass_actors.as_deref(), expected_bypass_actors.as_deref())
+                    bypass_actors != expected_bypass_actors
                 };
 
                 // Ruleset exists for this branch name, check if it needs updating
@@ -954,14 +954,6 @@ pub fn construct_branch_protection(
     }
 }
 
-fn option_slice_eq<T: PartialEq>(left: Option<&[T]>, right: Option<&[T]>) -> bool {
-    match (left, right) {
-        (None | Some([]), None | Some([])) => true,
-        (Some(left), Some(right)) => left == right,
-        _ => false,
-    }
-}
-
 /// Convert a branch pattern to a full ref pattern for use in rulesets.
 /// GitHub rulesets require full ref paths like "refs/heads/main" instead of just "main".
 pub(crate) fn convert_branch_pattern_to_ref_pattern(pattern: &str) -> String {
@@ -1059,9 +1051,6 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
             })
         })
         .collect();
-
-    // Set bypass_actors to None if it's empty
-    let bypass_actors = (!bypass_actors.is_empty()).then_some(bypass_actors);
 
     api::Ruleset {
         id: None,
