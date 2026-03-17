@@ -682,7 +682,7 @@ impl SyncGitHub {
                 let bypass_actors_differ = if !self.github.uses_pat() {
                     false
                 } else {
-                    bypass_actors != expected_bypass_actors
+                    !option_slice_eq(bypass_actors.as_deref(), expected_bypass_actors.as_deref())
                 };
 
                 // Ruleset exists for this branch name, check if it needs updating
@@ -951,6 +951,14 @@ pub fn construct_branch_protection(
             branch_protection_mode,
             BranchProtectionMode::PrRequired { .. }
         ),
+    }
+}
+
+fn option_slice_eq<T: PartialEq>(left: Option<&[T]>, right: Option<&[T]>) -> bool {
+    match (left, right) {
+        (None | Some([]), None | Some([])) => true,
+        (Some(left), Some(right)) => left == right,
+        _ => false,
     }
 }
 
