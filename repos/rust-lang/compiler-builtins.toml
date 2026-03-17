@@ -16,3 +16,9 @@ branches = ["main"]
 
 [environments.publish]
 branches = ["main"]
+
+[[crates-io]]
+crates = ["libm"]
+publish-workflow = "publish.yaml"
+publish-environment = "publish"
+teams = ["libs"]
