@@ -1,6 +1,6 @@
-use std::collections::{BTreeSet, HashMap, HashSet};
-
+use async_trait::async_trait;
 use indexmap::IndexMap;
+use std::collections::{BTreeSet, HashMap, HashSet};
 
 use derive_builder::Builder;
 use rust_team_data::v1::{
@@ -195,30 +195,38 @@ impl DataModel {
         GithubMock { users, orgs }
     }
 
-    pub fn diff_org_membership(&self, github: GithubMock) -> Vec<OrgMembershipDiff> {
+    pub async fn diff_org_membership(&self, github: GithubMock) -> Vec<OrgMembershipDiff> {
         self.create_sync(github)
+            .await
             .diff_org_memberships()
+            .await
             .expect("Cannot diff org membership")
     }
 
-    pub fn diff_teams(&self, github: GithubMock) -> Vec<TeamDiff> {
+    pub async fn diff_teams(&self, github: GithubMock) -> Vec<TeamDiff> {
         self.create_sync(github)
+            .await
             .diff_teams()
+            .await
             .expect("Cannot diff teams")
     }
 
-    pub fn diff_repos(&self, github: GithubMock) -> Vec<RepoDiff> {
+    pub async fn diff_repos(&self, github: GithubMock) -> Vec<RepoDiff> {
         self.create_sync(github)
+            .await
             .diff_repos()
+            .await
             .expect("Cannot diff repos")
     }
 
-    fn create_sync(&self, github: GithubMock) -> SyncGitHub {
+    async fn create_sync(&self, github: GithubMock) -> SyncGitHub {
         let teams = self.teams.iter().cloned().map(|t| t.into()).collect();
         let repos = self.repos.iter().cloned().map(|r| r.into()).collect();
         let config = self.config.clone();
 
-        SyncGitHub::new(Box::new(github), teams, repos, config).expect("Cannot create SyncGitHub")
+        SyncGitHub::new(Box::new(github), teams, repos, config)
+            .await
+            .expect("Cannot create SyncGitHub")
     }
 }
 
@@ -535,12 +543,13 @@ impl GithubMock {
     }
 }
 
+#[async_trait]
 impl GithubRead for GithubMock {
     fn uses_pat(&self) -> bool {
         true
     }
 
-    fn usernames(&self, ids: &[UserId]) -> anyhow::Result<HashMap<UserId, String>> {
+    async fn usernames(&self, ids: &[UserId]) -> anyhow::Result<HashMap<UserId, String>> {
         Ok(self
             .users
             .iter()
@@ -549,15 +558,15 @@ impl GithubRead for GithubMock {
             .collect())
     }
 
-    fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<UserId>> {
+    async fn org_owners(&self, org: &str) -> anyhow::Result<HashSet<UserId>> {
         Ok(self.get_org(org).owners.iter().copied().collect())
     }
 
-    fn org_members(&self, org: &str) -> anyhow::Result<HashMap<u64, String>> {
+    async fn org_members(&self, org: &str) -> anyhow::Result<HashMap<u64, String>> {
         Ok(self.get_org(org).members.iter().cloned().collect())
     }
 
-    fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
+    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
         Ok(self
             .get_org(org)
             .teams
@@ -566,7 +575,7 @@ impl GithubRead for GithubMock {
             .collect())
     }
 
-    fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
+    async fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
         Ok(self
             .get_org(org)
             .teams
@@ -575,7 +584,7 @@ impl GithubRead for GithubMock {
             .cloned())
     }
 
-    fn team_memberships(
+    async fn team_memberships(
         &self,
         team: &Team,
         org: &str,
@@ -588,7 +597,7 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
-    fn team_membership_invitations(
+    async fn team_membership_invitations(
         &self,
         org: &str,
         team: &str,
@@ -603,14 +612,14 @@ impl GithubRead for GithubMock {
             .collect())
     }
 
-    fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
+    async fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
         Ok(self
             .orgs
             .get(org)
             .and_then(|org| org.repos.get(repo).cloned()))
     }
 
-    fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
+    async fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
         Ok(self
             .get_org(org)
             .repo_members
@@ -620,7 +629,7 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
-    fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>> {
+    async fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>> {
         Ok(self
             .get_org(org)
             .repo_members
@@ -630,7 +639,7 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
-    fn branch_protections(
+    async fn branch_protections(
         &self,
         org: &str,
         repo: &str,
@@ -646,7 +655,7 @@ impl GithubRead for GithubMock {
         Ok(result)
     }
 
-    fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>> {
+    async fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>> {
         Ok(self
             .get_org(org)
             .rulesets
@@ -655,7 +664,7 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
-    fn repo_environments(
+    async fn repo_environments(
         &self,
         org: &str,
         repo: &str,
@@ -668,7 +677,7 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
-    fn environment_branch_policies(
+    async fn environment_branch_policies(
         &self,
         _org: &str,
         _repo: &str,

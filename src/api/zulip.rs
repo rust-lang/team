@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use anyhow::{Error, bail};
 use reqwest::Method;
-use reqwest::blocking::{Client, ClientBuilder, Response};
+use reqwest::{Client, ClientBuilder, Response};
 use serde::Deserialize;
 
 const ZULIP_BASE_URL: &str = "https://rust-lang.zulipchat.com/api/v1";
@@ -42,34 +42,41 @@ impl ZulipApi {
     }
 
     /// Get all users of the Rust Zulip instance
-    pub(crate) fn get_users(&self, include_profile_fields: bool) -> Result<Vec<ZulipUser>, Error> {
+    pub(crate) async fn get_users(
+        &self,
+        include_profile_fields: bool,
+    ) -> Result<Vec<ZulipUser>, Error> {
         let url = if include_profile_fields {
             "/users?include_custom_profile_fields=true"
         } else {
             "/users"
         };
         let response = self
-            .req(Method::GET, url, None)?
+            .req(Method::GET, url, None)
+            .await?
             .error_for_status()?
-            .json::<ZulipUsers>()?
+            .json::<ZulipUsers>()
+            .await?
             .members;
 
         Ok(response)
     }
 
     /// Get a single user of the Rust Zulip instance
-    pub(crate) fn get_user(&self, user_id: u64) -> Result<ZulipUser, Error> {
+    pub(crate) async fn get_user(&self, user_id: u64) -> Result<ZulipUser, Error> {
         let response = self
-            .req(Method::GET, &format!("/users/{user_id}"), None)?
+            .req(Method::GET, &format!("/users/{user_id}"), None)
+            .await?
             .error_for_status()?
-            .json::<ZulipOneUser>()?
+            .json::<ZulipOneUser>()
+            .await?
             .user;
 
         Ok(response)
     }
 
     /// Perform a request against the Zulip API
-    fn req(
+    async fn req(
         &self,
         method: Method,
         path: &str,
@@ -86,7 +93,7 @@ impl ZulipApi {
             req = req.form(&form);
         }
 
-        Ok(req.send()?)
+        Ok(req.send().await?)
     }
 }
 

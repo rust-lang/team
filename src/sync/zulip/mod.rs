@@ -5,6 +5,7 @@ use anyhow::Context;
 use api::{ZulipApi, ZulipStream, ZulipUserGroup};
 use rust_team_data::v1::{ZulipGroupMember, ZulipStreamMember};
 
+use futures_util::StreamExt;
 use secrecy::SecretString;
 use std::collections::BTreeMap;
 
@@ -15,22 +16,22 @@ pub(crate) struct SyncZulip {
 }
 
 impl SyncZulip {
-    pub(crate) fn new(
+    pub(crate) async fn new(
         username: String,
         token: SecretString,
         team_api: &TeamApi,
         dry_run: bool,
     ) -> anyhow::Result<Self> {
         let zulip_api = ZulipApi::new(username, token, dry_run);
-        let mut stream_definitions = get_stream_definitions(team_api, &zulip_api)?;
-        let user_group_definitions = get_user_group_definitions(team_api, &zulip_api)?;
-        let zulip_controller = ZulipController::new(zulip_api)?;
+        let mut stream_definitions = get_stream_definitions(team_api, &zulip_api).await?;
+        let user_group_definitions = get_user_group_definitions(team_api, &zulip_api).await?;
+        let zulip_controller = ZulipController::new(zulip_api).await?;
         // rust-lang-owner is the user who owns the Zulip token.
         // This user needs to be in private streams to be able to
         // add/remove members.
         // Since this user is not in the team repo, we need to add
         // it manually.
-        add_rust_lang_owner_to_private_streams(&mut stream_definitions, &zulip_controller)?;
+        add_rust_lang_owner_to_private_streams(&mut stream_definitions, &zulip_controller).await?;
         Ok(Self {
             zulip_controller,
             stream_definitions,
@@ -38,14 +39,16 @@ impl SyncZulip {
         })
     }
 
-    pub(crate) fn diff_all(&self) -> anyhow::Result<Diff> {
-        let stream_membership_diffs = self
-            .stream_definitions
-            .iter()
-            .filter_map(|(stream_name, member_ids)| {
+    pub(crate) async fn diff_all(&self) -> anyhow::Result<Diff> {
+        let stream_membership_diffs = futures_util::stream::iter(&self.stream_definitions)
+            .filter_map(|(stream_name, member_ids)| async move {
                 self.diff_stream_membership(stream_name, member_ids)
+                    .await
                     .transpose()
             })
+            .collect::<Vec<_>>()
+            .await
+            .into_iter()
             .collect::<anyhow::Result<Vec<_>>>()?;
         let user_group_diffs = self
             .user_group_definitions
@@ -116,7 +119,7 @@ impl SyncZulip {
         }
     }
 
-    fn diff_stream_membership(
+    async fn diff_stream_membership(
         &self,
         stream_name: &str,
         member_ids: &[u64],
@@ -131,9 +134,12 @@ impl SyncZulip {
                 return Ok(None);
             }
         };
-        let is_stream_private = self.zulip_controller.is_stream_private(stream_id)?;
+        let is_stream_private = self.zulip_controller.is_stream_private(stream_id).await?;
 
-        let existing_members = self.zulip_controller.stream_members_from_id(stream_id)?;
+        let existing_members = self
+            .zulip_controller
+            .stream_members_from_id(stream_id)
+            .await?;
         log::debug!(
             "'{stream_name}' stream ({stream_id}) has members on Zulip {existing_members:?} and needs to have {member_ids:?}",
         );
@@ -167,7 +173,7 @@ impl SyncZulip {
     }
 }
 
-fn add_rust_lang_owner_to_private_streams(
+async fn add_rust_lang_owner_to_private_streams(
     stream_definitions: &mut BTreeMap<String, Vec<u64>>,
     zulip_controller: &ZulipController,
 ) -> anyhow::Result<()> {
@@ -183,7 +189,10 @@ fn add_rust_lang_owner_to_private_streams(
                      Please create the stream manually and add the rust-lang-owner user to it."
                 )
             })?;
-        let is_stream_private = zulip_controller.zulip_api.is_stream_private(stream_id)?;
+        let is_stream_private = zulip_controller
+            .zulip_api
+            .is_stream_private(stream_id)
+            .await?;
         if is_stream_private {
             members.insert(0, rust_lang_owner_id);
         }
@@ -197,12 +206,12 @@ pub(crate) struct Diff {
 }
 
 impl Diff {
-    pub(crate) fn apply(&self, sync: &SyncZulip) -> anyhow::Result<()> {
+    pub(crate) async fn apply(&self, sync: &SyncZulip) -> anyhow::Result<()> {
         for user_group_diff in &self.user_group_diffs {
-            user_group_diff.apply(sync)?;
+            user_group_diff.apply(sync).await?;
         }
         for stream_membership_diff in &self.stream_membership_diffs {
-            stream_membership_diff.apply(sync)?;
+            stream_membership_diff.apply(sync).await?;
         }
         Ok(())
     }
@@ -237,9 +246,9 @@ enum StreamMembershipDiff {
 }
 
 impl StreamMembershipDiff {
-    fn apply(&self, sync: &SyncZulip) -> anyhow::Result<()> {
+    async fn apply(&self, sync: &SyncZulip) -> anyhow::Result<()> {
         match self {
-            StreamMembershipDiff::Update(u) => u.apply(sync),
+            StreamMembershipDiff::Update(u) => u.apply(sync).await,
         }
     }
 }
@@ -260,13 +269,16 @@ struct UpdateStreamMembershipDiff {
 }
 
 impl UpdateStreamMembershipDiff {
-    fn apply(&self, sync: &SyncZulip) -> Result<(), anyhow::Error> {
-        sync.zulip_controller.zulip_api.update_stream_membership(
-            &self.stream_name,
-            self.stream_id,
-            &self.member_id_additions,
-            &self.member_id_deletions,
-        )
+    async fn apply(&self, sync: &SyncZulip) -> Result<(), anyhow::Error> {
+        sync.zulip_controller
+            .zulip_api
+            .update_stream_membership(
+                &self.stream_name,
+                self.stream_id,
+                &self.member_id_additions,
+                &self.member_id_deletions,
+            )
+            .await
     }
 }
 
@@ -292,10 +304,10 @@ enum UserGroupDiff {
 }
 
 impl UserGroupDiff {
-    fn apply(&self, sync: &SyncZulip) -> anyhow::Result<()> {
+    async fn apply(&self, sync: &SyncZulip) -> anyhow::Result<()> {
         match self {
-            UserGroupDiff::Create(c) => c.apply(sync),
-            UserGroupDiff::Update(u) => u.apply(sync),
+            UserGroupDiff::Create(c) => c.apply(sync).await,
+            UserGroupDiff::Update(u) => u.apply(sync).await,
         }
     }
 }
@@ -316,9 +328,10 @@ struct CreateUserGroupDiff {
 }
 
 impl CreateUserGroupDiff {
-    fn apply(&self, sync: &SyncZulip) -> Result<(), anyhow::Error> {
+    async fn apply(&self, sync: &SyncZulip) -> Result<(), anyhow::Error> {
         sync.zulip_controller
             .create_user_group(&self.name, &self.description, &self.member_ids)
+            .await
     }
 }
 
@@ -343,12 +356,15 @@ struct UpdateUserGroupDiff {
 }
 
 impl UpdateUserGroupDiff {
-    fn apply(&self, sync: &SyncZulip) -> Result<(), anyhow::Error> {
-        sync.zulip_controller.zulip_api.update_user_group_members(
-            self.user_group_id,
-            &self.member_id_additions,
-            &self.member_id_deletions,
-        )
+    async fn apply(&self, sync: &SyncZulip) -> Result<(), anyhow::Error> {
+        sync.zulip_controller
+            .zulip_api
+            .update_user_group_members(
+                self.user_group_id,
+                &self.member_id_additions,
+                &self.member_id_deletions,
+            )
+            .await
     }
 }
 
@@ -368,17 +384,19 @@ impl std::fmt::Display for UpdateUserGroupDiff {
 }
 
 /// Fetches the definitions of the user groups from the Team API
-fn get_user_group_definitions(
+async fn get_user_group_definitions(
     team_api: &TeamApi,
     zulip_api: &ZulipApi,
 ) -> anyhow::Result<BTreeMap<String, Vec<u64>>> {
     let email_map = zulip_api
-        .get_users()?
+        .get_users()
+        .await?
         .into_iter()
         .filter_map(|u| u.email.map(|e| (e, u.user_id)))
         .collect::<BTreeMap<_, _>>();
     let user_group_definitions = team_api
-        .get_zulip_groups()?
+        .get_zulip_groups()
+        .await?
         .groups
         .into_iter()
         .map(|(name, group)| {
@@ -403,17 +421,19 @@ fn get_user_group_definitions(
 }
 
 /// Fetches the definitions of the user streams from the Team API
-fn get_stream_definitions(
+async fn get_stream_definitions(
     team_api: &TeamApi,
     zulip_api: &ZulipApi,
 ) -> anyhow::Result<BTreeMap<String, Vec<u64>>> {
     let email_map = zulip_api
-        .get_users()?
+        .get_users()
+        .await?
         .into_iter()
         .filter_map(|u| u.email.map(|e| (e, u.user_id)))
         .collect::<BTreeMap<_, _>>();
     let stream_definitions = team_api
-        .get_zulip_streams()?
+        .get_zulip_streams()
+        .await?
         .streams
         .into_iter()
         .map(|(name, stream)| {
@@ -449,9 +469,9 @@ struct ZulipController {
 
 impl ZulipController {
     /// Create a new `ZulipController`
-    fn new(zulip_api: ZulipApi) -> anyhow::Result<Self> {
-        let streams = zulip_api.get_streams()?;
-        let user_groups = zulip_api.get_user_groups()?;
+    async fn new(zulip_api: ZulipApi) -> anyhow::Result<Self> {
+        let streams = zulip_api.get_streams().await?;
+        let user_groups = zulip_api.get_user_groups().await?;
 
         let stream_ids = streams
             .into_iter()
@@ -484,14 +504,15 @@ impl ZulipController {
     }
 
     /// Create a user group with a certain name, description, and members
-    fn create_user_group(
+    async fn create_user_group(
         &self,
         user_group_name: &str,
         description: &str,
         member_ids: &[u64],
     ) -> anyhow::Result<()> {
         self.zulip_api
-            .create_user_group(user_group_name, description, member_ids)?;
+            .create_user_group(user_group_name, description, member_ids)
+            .await?;
 
         Ok(())
     }
@@ -504,11 +525,11 @@ impl ZulipController {
     }
 
     /// Get the members of a stream given its id
-    fn stream_members_from_id(&self, stream_id: u64) -> anyhow::Result<Vec<u64>> {
-        self.zulip_api.get_stream_members(stream_id)
+    async fn stream_members_from_id(&self, stream_id: u64) -> anyhow::Result<Vec<u64>> {
+        self.zulip_api.get_stream_members(stream_id).await
     }
 
-    fn is_stream_private(&self, stream_id: u64) -> anyhow::Result<bool> {
-        self.zulip_api.is_stream_private(stream_id)
+    async fn is_stream_private(&self, stream_id: u64) -> anyhow::Result<bool> {
+        self.zulip_api.is_stream_private(stream_id).await
     }
 }

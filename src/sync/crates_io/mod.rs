@@ -45,17 +45,18 @@ pub(crate) struct SyncCratesIo {
 }
 
 impl SyncCratesIo {
-    pub(crate) fn new(
+    pub(crate) async fn new(
         token: SecretString,
         username: String,
         team_api: &TeamApi,
         dry_run: bool,
     ) -> anyhow::Result<Self> {
         let crates_io_api = CratesIoApi::new(token, dry_run);
-        let user_id = crates_io_api.get_user_id(&username)?;
+        let user_id = crates_io_api.get_user_id(&username).await?;
 
         let crates: BTreeMap<CrateName, CrateConfig> = team_api
-            .get_repos()?
+            .get_repos()
+            .await?
             .into_iter()
             .flat_map(|repo| {
                 repo.crates
@@ -98,7 +99,7 @@ impl SyncCratesIo {
         })
     }
 
-    pub(crate) fn diff_all(&self) -> anyhow::Result<Diff> {
+    pub(crate) async fn diff_all(&self) -> anyhow::Result<Diff> {
         let mut config_diffs: Vec<ConfigDiff> = vec![];
         let mut crate_diffs: Vec<CrateDiff> = vec![];
 
@@ -109,6 +110,7 @@ impl SyncCratesIo {
             let tp_configs = self
                 .crates_io_api
                 .list_trusted_publishing_github_configs(self.user_id)
+                .await
                 .with_context(|| {
                     format!("Failed to list configs for user_id `{:?}`", self.user_id)
                 })?;
@@ -124,7 +126,8 @@ impl SyncCratesIo {
         // Batch load all crates owned by the current user
         let crates: HashMap<String, CratesIoCrate> = self
             .crates_io_api
-            .get_crates_owned_by(self.user_id)?
+            .get_crates_owned_by(self.user_id)
+            .await?
             .into_iter()
             .map(|krate| (krate.name.clone(), krate))
             .collect();
@@ -191,6 +194,7 @@ impl SyncCratesIo {
             let owners = self
                 .crates_io_api
                 .list_crate_owners(&krate.0)
+                .await
                 .with_context(|| anyhow::anyhow!("Cannot list crate owners of {krate}"))?;
 
             // Sync team owners
@@ -258,17 +262,17 @@ pub(crate) struct Diff {
 }
 
 impl Diff {
-    pub(crate) fn apply(&self, sync: &SyncCratesIo) -> anyhow::Result<()> {
+    pub(crate) async fn apply(&self, sync: &SyncCratesIo) -> anyhow::Result<()> {
         let Diff {
             config_diffs,
             crate_diffs,
         } = self;
 
         for diff in config_diffs {
-            diff.apply(sync)?;
+            diff.apply(sync).await?;
         }
         for diff in crate_diffs {
-            diff.apply(sync)?;
+            diff.apply(sync).await?;
         }
         Ok(())
     }
@@ -315,14 +319,18 @@ enum ConfigDiff {
 }
 
 impl ConfigDiff {
-    fn apply(&self, sync: &SyncCratesIo) -> anyhow::Result<()> {
+    async fn apply(&self, sync: &SyncCratesIo) -> anyhow::Result<()> {
         match self {
-            ConfigDiff::Create(config) => sync
-                .crates_io_api
-                .create_trusted_publishing_github_config(config),
-            ConfigDiff::Delete(config) => sync
-                .crates_io_api
-                .delete_trusted_publishing_github_config(config.id),
+            ConfigDiff::Create(config) => {
+                sync.crates_io_api
+                    .create_trusted_publishing_github_config(config)
+                    .await
+            }
+            ConfigDiff::Delete(config) => {
+                sync.crates_io_api
+                    .delete_trusted_publishing_github_config(config.id)
+                    .await
+            }
         }
     }
 }
@@ -379,16 +387,18 @@ enum CrateDiff {
 }
 
 impl CrateDiff {
-    fn apply(&self, sync: &SyncCratesIo) -> anyhow::Result<()> {
+    async fn apply(&self, sync: &SyncCratesIo) -> anyhow::Result<()> {
         match self {
-            Self::SetTrustedPublishingOnly { krate, value } => sync
-                .crates_io_api
-                .set_trusted_publishing_only(krate, *value),
+            Self::SetTrustedPublishingOnly { krate, value } => {
+                sync.crates_io_api
+                    .set_trusted_publishing_only(krate, *value)
+                    .await
+            }
             CrateDiff::AddOwners { krate, owners } => {
-                sync.crates_io_api.invite_crate_owners(krate, owners)
+                sync.crates_io_api.invite_crate_owners(krate, owners).await
             }
             CrateDiff::RemoveOwners { krate, owners } => {
-                sync.crates_io_api.delete_crate_owners(krate, owners)
+                sync.crates_io_api.delete_crate_owners(krate, owners).await
             }
         }
     }

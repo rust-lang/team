@@ -5,22 +5,22 @@ use rust_team_data::v1::{self, BranchProtectionMode, RepoPermission};
 
 mod test_utils;
 
-#[test]
-fn team_noop() {
+#[tokio::test]
+async fn team_noop() {
     let model = DataModel::default();
     let gh = model.gh_model();
-    let team_diff = model.diff_teams(gh);
+    let team_diff = model.diff_teams(gh).await;
     assert!(team_diff.is_empty());
 }
 
-#[test]
-fn team_create() {
+#[tokio::test]
+async fn team_create() {
     let mut model = DataModel::default();
     let user = model.create_user("mark");
     let user2 = model.create_user("jan");
     let gh = model.gh_model();
     model.create_team(TeamData::new("admins").gh_team(DEFAULT_ORG, "admins-gh", &[user, user2]));
-    let team_diff = model.diff_teams(gh);
+    let team_diff = model.diff_teams(gh).await;
     insta::assert_debug_snapshot!(team_diff, @r###"
     [
         Create(
@@ -45,8 +45,8 @@ fn team_create() {
     "###);
 }
 
-#[test]
-fn team_add_member() {
+#[tokio::test]
+async fn team_add_member() {
     let mut model = DataModel::default();
     let user = model.create_user("mark");
     let user2 = model.create_user("jan");
@@ -54,7 +54,7 @@ fn team_add_member() {
     let gh = model.gh_model();
 
     model.get_team("admins").add_gh_member("admins-gh", user2);
-    let team_diff = model.diff_teams(gh);
+    let team_diff = model.diff_teams(gh).await;
     insta::assert_debug_snapshot!(team_diff, @r###"
     [
         Edit(
@@ -82,8 +82,8 @@ fn team_add_member() {
     "###);
 }
 
-#[test]
-fn team_dont_add_member_if_invitation_is_pending() {
+#[tokio::test]
+async fn team_dont_add_member_if_invitation_is_pending() {
     let mut model = DataModel::default();
     let user = model.create_user("mark");
     let user2 = model.create_user("jan");
@@ -93,12 +93,12 @@ fn team_dont_add_member_if_invitation_is_pending() {
     model.get_team("admins").add_gh_member("admins-gh", user2);
     gh.add_invitation(DEFAULT_ORG, "admins-gh", "jan");
 
-    let team_diff = model.diff_teams(gh);
+    let team_diff = model.diff_teams(gh).await;
     insta::assert_debug_snapshot!(team_diff, @"[]");
 }
 
-#[test]
-fn remove_org_members() {
+#[tokio::test]
+async fn remove_org_members() {
     let mut model = DataModel::default();
     let rust_lang_org = "rust-lang";
     let user = model.create_user("sakura");
@@ -111,7 +111,7 @@ fn remove_org_members() {
     gh.add_member(rust_lang_org, bot);
     model.add_allowed_org_member(bot);
 
-    let gh_org_diff = model.diff_org_membership(gh);
+    let gh_org_diff = model.diff_org_membership(gh).await;
 
     insta::assert_debug_snapshot!(gh_org_diff, @r#"
     [
@@ -125,8 +125,8 @@ fn remove_org_members() {
     "#);
 }
 
-#[test]
-fn team_remove_member() {
+#[tokio::test]
+async fn team_remove_member() {
     let mut model = DataModel::default();
     let user = model.create_user("mark");
     let user2 = model.create_user("jan");
@@ -137,7 +137,7 @@ fn team_remove_member() {
         .get_team("admins")
         .remove_gh_member("admins-gh", user2);
 
-    let team_diff = model.diff_teams(gh);
+    let team_diff = model.diff_teams(gh).await;
     insta::assert_debug_snapshot!(team_diff, @r###"
     [
         Edit(
@@ -163,8 +163,8 @@ fn team_remove_member() {
     "###);
 }
 
-#[test]
-fn team_delete() {
+#[tokio::test]
+async fn team_delete() {
     let mut model = DataModel::default();
     let user = model.create_user("mark");
 
@@ -179,7 +179,7 @@ fn team_delete() {
 
     model.get_team("admins").remove_gh_team("users-gh");
 
-    let team_diff = model.diff_teams(gh);
+    let team_diff = model.diff_teams(gh).await;
     insta::assert_debug_snapshot!(team_diff, @r#"
     [
         Delete(
@@ -193,22 +193,22 @@ fn team_delete() {
     "#);
 }
 
-#[test]
-fn repo_noop() {
+#[tokio::test]
+async fn repo_noop() {
     let model = DataModel::default();
     let gh = model.gh_model();
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     assert!(diff.is_empty());
 }
 
-#[test]
-fn repo_change_description() {
+#[tokio::test]
+async fn repo_change_description() {
     let mut model = DataModel::default();
     model.create_repo(RepoData::new("repo1").description("foo".to_string()));
     let gh = model.gh_model();
     model.get_repo("repo1").description = "bar".to_string();
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -240,14 +240,14 @@ fn repo_change_description() {
     "#);
 }
 
-#[test]
-fn repo_change_homepage() {
+#[tokio::test]
+async fn repo_change_homepage() {
     let mut model = DataModel::default();
     model.create_repo(RepoData::new("repo1").homepage(Some("https://foo.rs".to_string())));
     let gh = model.gh_model();
     model.get_repo("repo1").homepage = Some("https://bar.rs".to_string());
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -283,8 +283,8 @@ fn repo_change_homepage() {
     "#);
 }
 
-#[test]
-fn repo_create() {
+#[tokio::test]
+async fn repo_create() {
     let mut model = DataModel::default();
     let gh = model.gh_model();
 
@@ -297,7 +297,7 @@ fn repo_create() {
                 BranchProtectionBuilder::pr_required("main", &["test"], 1).build(),
             ]),
     );
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Create(
@@ -353,8 +353,8 @@ fn repo_create() {
     "#);
 }
 
-#[test]
-fn repo_add_member() {
+#[tokio::test]
+async fn repo_add_member() {
     let mut model = DataModel::default();
     model.create_repo(
         RepoData::new("repo1")
@@ -367,7 +367,7 @@ fn repo_add_member() {
         .get_repo("repo1")
         .add_member("user2", RepoPermission::Admin);
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -408,8 +408,8 @@ fn repo_add_member() {
     "#);
 }
 
-#[test]
-fn repo_change_member_permissions() {
+#[tokio::test]
+async fn repo_change_member_permissions() {
     let mut model = DataModel::default();
     model.create_repo(RepoData::new("repo1").member("user1", RepoPermission::Write));
 
@@ -421,7 +421,7 @@ fn repo_change_member_permissions() {
         .unwrap()
         .permission = RepoPermission::Triage;
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -463,15 +463,15 @@ fn repo_change_member_permissions() {
     "#);
 }
 
-#[test]
-fn repo_remove_member() {
+#[tokio::test]
+async fn repo_remove_member() {
     let mut model = DataModel::default();
     model.create_repo(RepoData::new("repo1").member("user1", RepoPermission::Write));
 
     let gh = model.gh_model();
     model.get_repo("repo1").members.clear();
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -512,8 +512,8 @@ fn repo_remove_member() {
     "#);
 }
 
-#[test]
-fn repo_add_team() {
+#[tokio::test]
+async fn repo_add_team() {
     let mut model = DataModel::default();
     model.create_repo(RepoData::new("repo1").member("user1", RepoPermission::Write));
 
@@ -522,7 +522,7 @@ fn repo_add_team() {
         .get_repo("repo1")
         .add_team("team1", RepoPermission::Triage);
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -563,15 +563,15 @@ fn repo_add_team() {
     "#);
 }
 
-#[test]
-fn repo_change_team_permissions() {
+#[tokio::test]
+async fn repo_change_team_permissions() {
     let mut model = DataModel::default();
     model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Triage));
 
     let gh = model.gh_model();
     model.get_repo("repo1").teams.last_mut().unwrap().permission = RepoPermission::Admin;
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -613,15 +613,15 @@ fn repo_change_team_permissions() {
     "#);
 }
 
-#[test]
-fn repo_remove_team() {
+#[tokio::test]
+async fn repo_remove_team() {
     let mut model = DataModel::default();
     model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Write));
 
     let gh = model.gh_model();
     model.get_repo("repo1").teams.clear();
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -662,15 +662,15 @@ fn repo_remove_team() {
     "#);
 }
 
-#[test]
-fn repo_archive_repo() {
+#[tokio::test]
+async fn repo_archive_repo() {
     let mut model = DataModel::default();
     model.create_repo(RepoData::new("repo1"));
 
     let gh = model.gh_model();
     model.get_repo("repo1").archived = true;
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -702,8 +702,8 @@ fn repo_archive_repo() {
     "#);
 }
 
-#[test]
-fn repo_add_branch_protection() {
+#[tokio::test]
+async fn repo_add_branch_protection() {
     let mut model = DataModel::default();
     model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Write));
 
@@ -713,7 +713,7 @@ fn repo_add_branch_protection() {
         BranchProtectionBuilder::pr_not_required("beta").build(),
     ]);
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -779,8 +779,8 @@ fn repo_add_branch_protection() {
     "#);
 }
 
-#[test]
-fn repo_update_branch_protection() {
+#[tokio::test]
+async fn repo_update_branch_protection() {
     let mut model = DataModel::default();
     model.create_repo(
         RepoData::new("repo1")
@@ -809,7 +809,7 @@ fn repo_update_branch_protection() {
     protection.dismiss_stale_review = true;
     protection.prevent_force_push = false;
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -873,8 +873,8 @@ fn repo_update_branch_protection() {
     "#);
 }
 
-#[test]
-fn repo_remove_branch_protection() {
+#[tokio::test]
+async fn repo_remove_branch_protection() {
     let mut model = DataModel::default();
     model.create_repo(
         RepoData::new("repo1")
@@ -888,7 +888,7 @@ fn repo_remove_branch_protection() {
     let gh = model.gh_model();
     model.get_repo("repo1").branch_protections.pop().unwrap();
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -927,8 +927,8 @@ fn repo_remove_branch_protection() {
     "#);
 }
 
-#[test]
-fn independent_orgs_are_not_synced() {
+#[tokio::test]
+async fn independent_orgs_are_not_synced() {
     let mut model = DataModel::default();
     let user = model.create_user("sakura");
 
@@ -944,14 +944,14 @@ fn independent_orgs_are_not_synced() {
 
     model.add_independent_github_org(independent_org);
 
-    let gh_org_diff = model.diff_org_membership(gh);
+    let gh_org_diff = model.diff_org_membership(gh).await;
 
     // No members should be removed for independent organizations
     insta::assert_debug_snapshot!(gh_org_diff, @"[]");
 }
 
-#[test]
-fn repo_environment_noop() {
+#[tokio::test]
+async fn repo_environment_noop() {
     let mut model = DataModel::default();
     model.create_repo(
         RepoData::new("repo1")
@@ -959,12 +959,12 @@ fn repo_environment_noop() {
             .environment("staging"),
     );
     let gh = model.gh_model();
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     assert!(diff.is_empty());
 }
 
-#[test]
-fn repo_environment_create() {
+#[tokio::test]
+async fn repo_environment_create() {
     let mut model = DataModel::default();
     model.create_repo(RepoData::new("repo1"));
     let gh = model.gh_model();
@@ -984,7 +984,7 @@ fn repo_environment_create() {
         },
     );
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -1031,8 +1031,8 @@ fn repo_environment_create() {
     "#);
 }
 
-#[test]
-fn repo_environment_delete() {
+#[tokio::test]
+async fn repo_environment_delete() {
     let mut model = DataModel::default();
     model.create_repo(
         RepoData::new("repo1")
@@ -1043,7 +1043,7 @@ fn repo_environment_delete() {
 
     model.get_repo("repo1").environments.clear();
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -1082,8 +1082,8 @@ fn repo_environment_delete() {
     "#);
 }
 
-#[test]
-fn repo_environment_update() {
+#[tokio::test]
+async fn repo_environment_update() {
     let mut model = DataModel::default();
     model.create_repo(
         RepoData::new("repo1")
@@ -1109,7 +1109,7 @@ fn repo_environment_update() {
         },
     );
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(
@@ -1152,8 +1152,8 @@ fn repo_environment_update() {
     "#);
 }
 
-#[test]
-fn repo_environment_update_branches() {
+#[tokio::test]
+async fn repo_environment_update_branches() {
     let mut model = DataModel::default();
     model.create_repo(
         RepoData::new("repo1").environment_with_branches("production", &["main", "release/*"]),
@@ -1169,7 +1169,7 @@ fn repo_environment_update_branches() {
         },
     );
 
-    let diff = model.diff_repos(gh);
+    let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
     [
         Update(

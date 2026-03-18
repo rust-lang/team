@@ -1,9 +1,10 @@
+use crate::sync::utils::ResponseExt;
 use anyhow::{Error, bail};
 use base64::Engine;
 use base64::prelude::BASE64_STANDARD;
 use reqwest::Method;
-use reqwest::blocking::{Client, ClientBuilder, RequestBuilder};
 use reqwest::header::{self, HeaderValue};
+use reqwest::{Client, ClientBuilder, RequestBuilder};
 use std::borrow::Cow;
 use std::collections::HashMap;
 
@@ -76,7 +77,7 @@ impl GitHubApi {
         Ok(req)
     }
 
-    fn graphql<R, V>(&self, query: &str, variables: V) -> Result<R, Error>
+    async fn graphql<R, V>(&self, query: &str, variables: V) -> Result<R, Error>
     where
         R: serde::de::DeserializeOwned,
         V: serde::Serialize,
@@ -89,9 +90,11 @@ impl GitHubApi {
         let res: GraphResult<R> = self
             .prepare(true, Method::POST, "graphql")?
             .json(&Request { query, variables })
-            .send()?
+            .send()
+            .await?
             .error_for_status()?
-            .json()?;
+            .json_annotated()
+            .await?;
         if let Some(error) = res.errors.first() {
             bail!("graphql error: {}", error.message);
         } else if let Some(data) = res.data {
@@ -108,26 +111,28 @@ impl GitHubApi {
         Ok(())
     }
 
-    pub(crate) fn user(&self, login: &str) -> Result<User, Error> {
-        Ok(self
-            .prepare(false, Method::GET, &format!("users/{login}"))?
-            .send()?
+    pub(crate) async fn user(&self, login: &str) -> Result<User, Error> {
+        self.prepare(false, Method::GET, &format!("users/{login}"))?
+            .send()
+            .await?
             .error_for_status()?
-            .json()?)
+            .json_annotated()
+            .await
     }
 
-    pub(crate) fn get<T>(&self, url: &str) -> Result<T, Error>
+    pub(crate) async fn get<T>(&self, url: &str) -> Result<T, Error>
     where
         T: serde::de::DeserializeOwned,
     {
-        Ok(self
-            .prepare(false, Method::GET, url)?
-            .send()?
+        self.prepare(false, Method::GET, url)?
+            .send()
+            .await?
             .error_for_status()?
-            .json()?)
+            .json_annotated()
+            .await
     }
 
-    pub(crate) fn usernames(&self, ids: &[u64]) -> Result<HashMap<u64, String>, Error> {
+    pub(crate) async fn usernames(&self, ids: &[u64]) -> Result<HashMap<u64, String>, Error> {
         #[derive(serde::Deserialize)]
         #[serde(rename_all = "camelCase")]
         struct Usernames {
@@ -153,24 +158,30 @@ impl GitHubApi {
 
         let mut result = HashMap::new();
         for chunk in ids.chunks(100) {
-            let res: GraphNodes<Usernames> = match self.graphql(
-                QUERY,
-                Params {
-                    ids: chunk.iter().map(|id| user_node_id(*id)).collect(),
-                },
-            ) {
+            let res: GraphNodes<Usernames> = match self
+                .graphql(
+                    QUERY,
+                    Params {
+                        ids: chunk.iter().map(|id| user_node_id(*id)).collect(),
+                    },
+                )
+                .await
+            {
                 Ok(res) => res,
                 Err(e) => {
                     if cant_resolve(&e) {
                         // This error happens when a user is deleted. Provide
                         // a more helpful error message to pinpoint it:
                         for id in chunk {
-                            if let Err(inner_e) = self.graphql::<GraphNodes<Usernames>, Params>(
-                                QUERY,
-                                Params {
-                                    ids: vec![user_node_id(*id)],
-                                },
-                            ) {
+                            if let Err(inner_e) = self
+                                .graphql::<GraphNodes<Usernames>, Params>(
+                                    QUERY,
+                                    Params {
+                                        ids: vec![user_node_id(*id)],
+                                    },
+                                )
+                                .await
+                            {
                                 if cant_resolve(&inner_e) {
                                     bail!(
                                         "failed to resolve user id {}: {}\n\

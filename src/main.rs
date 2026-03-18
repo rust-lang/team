@@ -214,13 +214,14 @@ fn main() {
     env.parse_default_env();
     env.init();
 
-    if let Err(e) = run() {
+    let rt = tokio::runtime::Runtime::new().expect("Cannot create tokio runtime");
+    if let Err(e) = rt.block_on(run()) {
         error!("{e:?}");
         std::process::exit(1);
     }
 }
 
-fn run() -> Result<(), Error> {
+async fn run() -> Result<(), Error> {
     let cli = Cli::parse();
     let data = Data::load(&cli.data_dir)?;
     match cli.opts {
@@ -229,7 +230,8 @@ fn run() -> Result<(), Error> {
                 &data,
                 strict,
                 &skip.iter().map(|s| s.as_ref()).collect::<Vec<_>>(),
-            )?;
+            )
+            .await?;
         }
         RootOpts::AddPerson {
             ref github_name,
@@ -248,14 +250,14 @@ fn run() -> Result<(), Error> {
             }
 
             let github = github::GitHubApi::new();
-            let user = github.user(github_name)?;
+            let user = github.user(github_name).await?;
             let github_name = user.login;
             let github_id = user.id;
 
             let mut zulip_id: Option<u64> = None;
             if fetch_zulip_id {
                 let zulip = ZulipApi::new();
-                let users = zulip.get_users(true).context("Cannot get user data from Zulip. Configure ZULIP_USER and ZULIP_TOKEN environment variables")?;
+                let users = zulip.get_users(true).await.context("Cannot get user data from Zulip. Configure ZULIP_USER and ZULIP_TOKEN environment variables")?;
 
                 // Try to find user by GitHub handle
                 if let Some(zulip_user) = users.iter().find(|u| {
@@ -316,7 +318,7 @@ fn run() -> Result<(), Error> {
             if let Some(zulip_id) = person.zulip_id() {
                 let zulip = ZulipApi::new();
                 match zulip.require_auth() {
-                    Ok(()) => match zulip.get_user(zulip_id) {
+                    Ok(()) => match zulip.get_user(zulip_id).await {
                         Ok(user) => println!("zulip: {} ({zulip_id})", user.name),
                         Err(err) => {
                             println!("zulip_id: {zulip_id}  # Failed to look up Zulip name: {err}")
@@ -564,10 +566,10 @@ fn run() -> Result<(), Error> {
         RootOpts::Ci(opts) => match opts {
             CiOpts::GenerateCodeowners => generate_codeowners_file(data)?,
             CiOpts::CheckCodeowners => check_codeowners(data)?,
-            CiOpts::CheckUntrackedRepos => ci::check_untracked_repos(&data)?,
+            CiOpts::CheckUntrackedRepos => ci::check_untracked_repos(&data).await?,
         },
         RootOpts::Sync(opts) => {
-            if let Err(err) = perform_sync(opts, data) {
+            if let Err(err) = perform_sync(opts, data).await {
                 // Display shows just the first element of the chain.
                 error!("failed: {err}");
                 for cause in err.chain().skip(1) {
@@ -608,7 +610,7 @@ fn dump_team_members(
     Ok(())
 }
 
-fn perform_sync(opts: SyncOpts, data: Data) -> anyhow::Result<()> {
+async fn perform_sync(opts: SyncOpts, data: Data) -> anyhow::Result<()> {
     // We pregenerate the directory here in case we need it, to make sure it lives
     // long enough.
     let source_dir = tempfile::tempdir()?;
@@ -635,6 +637,7 @@ fn perform_sync(opts: SyncOpts, data: Data) -> anyhow::Result<()> {
     let subcmd = opts.command.unwrap_or(SyncCommand::DryRun);
     let only_print_plan = matches!(subcmd, SyncCommand::PrintPlan);
     let dry_run = only_print_plan || matches!(subcmd, SyncCommand::DryRun);
+
     run_sync_team(
         team_api,
         &services,
@@ -642,4 +645,5 @@ fn perform_sync(opts: SyncOpts, data: Data) -> anyhow::Result<()> {
         only_print_plan,
         data.get_sync_team_config()?,
     )
+    .await
 }
