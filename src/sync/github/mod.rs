@@ -3,16 +3,16 @@ mod api;
 mod tests;
 
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
+pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
 use crate::sync::Config;
 use crate::sync::github::api::{
     GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings, Ruleset,
 };
+use futures_util::StreamExt;
 use log::debug;
 use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot};
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fmt::{Display, Formatter, Write};
-
-pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
 
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
 static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
@@ -186,6 +186,7 @@ impl SyncGitHub {
     async fn diff_teams(&self) -> anyhow::Result<Vec<TeamDiff>> {
         let mut diffs = Vec::new();
         let mut unseen_github_teams = HashMap::new();
+        let mut teams_to_diff = vec![];
         for team in &self.teams {
             if let Some(gh) = &team.github {
                 for github_team in &gh.teams {
@@ -206,12 +207,19 @@ impl SyncGitHub {
                     };
                     // Remove the current team from the collection of unseen GitHub teams
                     unseen_github_teams.remove(&github_team.name);
-
-                    let diff_team = self.diff_team(github_team).await?;
-                    if !diff_team.noop() {
-                        diffs.push(diff_team);
-                    }
+                    teams_to_diff.push(github_team);
                 }
+            }
+        }
+
+        // Diff teams concurrently
+        let mut stream = futures_util::stream::iter(teams_to_diff)
+            .map(|team| self.diff_team(team))
+            .buffer_unordered(10);
+        while let Some(diff_team) = stream.next().await {
+            let diff_team = diff_team?;
+            if !diff_team.noop() {
+                diffs.push(diff_team);
             }
         }
 
@@ -337,8 +345,12 @@ impl SyncGitHub {
 
     async fn diff_repos(&self) -> anyhow::Result<Vec<RepoDiff>> {
         let mut diffs = Vec::new();
-        for repo in &self.repos {
-            let repo_diff = self.diff_repo(repo).await?;
+
+        let mut stream = futures_util::stream::iter(self.repos.iter())
+            .map(|repo| self.diff_repo(repo))
+            .buffer_unordered(10);
+        while let Some(repo_diff) = stream.next().await {
+            let repo_diff = repo_diff?;
             if !repo_diff.noop() {
                 diffs.push(repo_diff);
             }
