@@ -644,11 +644,11 @@ pub(crate) struct MergeQueueParameters {
     pub(crate) min_entries_to_merge_wait_minutes: i32,
 }
 
-pub(crate) const DEFAULT_MERGE_QUEUE_TIMEOUT_MINUTES: i32 = 360;
+pub(crate) const DEFAULT_MERGE_QUEUE_TIMEOUT_MINUTES: i32 = 60;
 pub(crate) const DEFAULT_MERGE_QUEUE_MAX_ENTRIES_TO_BUILD: i32 = 5;
 pub(crate) const DEFAULT_MERGE_QUEUE_MAX_ENTRIES_TO_MERGE: i32 = 5;
-pub(crate) const DEFAULT_MERGE_QUEUE_MIN_ENTRIES_TO_MERGE: i32 = 0;
-pub(crate) const DEFAULT_MERGE_QUEUE_MIN_ENTRIES_TO_MERGE_WAIT_MINUTES: i32 = 0;
+pub(crate) const DEFAULT_MERGE_QUEUE_MIN_ENTRIES_TO_MERGE: i32 = 1;
+pub(crate) const DEFAULT_MERGE_QUEUE_MIN_ENTRIES_TO_MERGE_WAIT_MINUTES: i32 = 5;
 
 #[derive(
     Clone, Debug, Default, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize,
