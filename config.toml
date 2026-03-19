@@ -84,7 +84,7 @@ members-without-zulip-id = [
 
 enable-rulesets-repos = [
    "rust-lang/bors",
-#  "rust-lang/cargo",
+   "rust-lang/cargo",
    "rust-lang/crates.io",
    "rust-lang/rustfmt",
 ]
