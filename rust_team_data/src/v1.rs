@@ -252,6 +252,7 @@ pub enum MergeBot {
     RustTimer,
     Bors,
     WorkflowsCratesIo,
+    PromoteRelease,
 }
 
 impl MergeBot {
@@ -259,15 +260,26 @@ impl MergeBot {
         match self {
             MergeBot::WorkflowsCratesIo => Some(2201425),
             MergeBot::Bors => Some(278306),
+            MergeBot::PromoteRelease => Some(217112),
             // These are user-based bots, not GitHub Apps
             MergeBot::RustTimer | MergeBot::Homu => None,
         }
     }
 }
 
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash, Default)]
+#[serde(rename_all = "snake_case")]
+pub enum ProtectionTarget {
+    #[default]
+    Branch,
+    Tag,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BranchProtection {
     pub pattern: String,
+    #[serde(default, skip_serializing_if = "is_branch_target")]
+    pub target: ProtectionTarget,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     pub dismiss_stale_review: bool,
@@ -276,11 +288,9 @@ pub struct BranchProtection {
     pub merge_bots: Vec<MergeBot>,
     pub allowed_merge_apps: Vec<MergeBot>,
     pub merge_queue: bool,
-    #[serde(default = "default_true")]
     pub prevent_creation: bool,
-    #[serde(default = "default_true")]
+    pub prevent_update: bool,
     pub prevent_deletion: bool,
-    #[serde(default = "default_true")]
     pub prevent_force_push: bool,
 }
 
@@ -312,6 +322,6 @@ pub struct People {
     pub people: IndexMap<String, Person>,
 }
 
-fn default_true() -> bool {
-    true
+fn is_branch_target(target: &ProtectionTarget) -> bool {
+    matches!(target, ProtectionTarget::Branch)
 }

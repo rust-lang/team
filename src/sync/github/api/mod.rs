@@ -545,23 +545,32 @@ pub(crate) struct Ruleset {
     pub(crate) rules: BTreeSet<RulesetRule>,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
+#[derive(
+    Clone, Debug, Default, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize,
+)]
 #[serde(rename_all = "lowercase")]
 pub(crate) enum RulesetTarget {
+    #[default]
     Branch,
     Tag,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
+#[derive(
+    Clone, Debug, Default, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize,
+)]
 #[serde(rename_all = "PascalCase")]
 pub(crate) enum RulesetSourceType {
+    #[default]
     Repository,
     Organization,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
+#[derive(
+    Clone, Debug, Default, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize,
+)]
 #[serde(rename_all = "lowercase")]
 pub(crate) enum RulesetEnforcement {
+    #[default]
     Active,
     Disabled,
     Evaluate,
@@ -635,19 +644,46 @@ pub(crate) struct MergeQueueParameters {
     pub(crate) min_entries_to_merge_wait_minutes: i32,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
+pub(crate) const DEFAULT_MERGE_QUEUE_TIMEOUT_MINUTES: i32 = 360;
+pub(crate) const DEFAULT_MERGE_QUEUE_MAX_ENTRIES_TO_BUILD: i32 = 5;
+pub(crate) const DEFAULT_MERGE_QUEUE_MAX_ENTRIES_TO_MERGE: i32 = 5;
+pub(crate) const DEFAULT_MERGE_QUEUE_MIN_ENTRIES_TO_MERGE: i32 = 0;
+pub(crate) const DEFAULT_MERGE_QUEUE_MIN_ENTRIES_TO_MERGE_WAIT_MINUTES: i32 = 0;
+
+#[derive(
+    Clone, Debug, Default, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize,
+)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub(crate) enum MergeQueueGroupingStrategy {
+    #[default]
     Allgreen,
     Headgreen,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
+#[derive(
+    Clone, Debug, Default, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize,
+)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub(crate) enum MergeQueueMergeMethod {
+    #[default]
     Merge,
     Squash,
     Rebase,
+}
+
+impl Default for MergeQueueParameters {
+    fn default() -> Self {
+        Self {
+            check_response_timeout_minutes: DEFAULT_MERGE_QUEUE_TIMEOUT_MINUTES,
+            grouping_strategy: MergeQueueGroupingStrategy::default(),
+            max_entries_to_build: DEFAULT_MERGE_QUEUE_MAX_ENTRIES_TO_BUILD,
+            max_entries_to_merge: DEFAULT_MERGE_QUEUE_MAX_ENTRIES_TO_MERGE,
+            merge_method: MergeQueueMergeMethod::default(),
+            min_entries_to_merge: DEFAULT_MERGE_QUEUE_MIN_ENTRIES_TO_MERGE,
+            min_entries_to_merge_wait_minutes:
+                DEFAULT_MERGE_QUEUE_MIN_ENTRIES_TO_MERGE_WAIT_MINUTES,
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
@@ -669,6 +705,7 @@ pub(crate) struct RequiredStatusChecksParameters {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) do_not_enforce_on_create: Option<bool>,
     pub(crate) required_status_checks: Vec<RequiredStatusCheck>,
+    /// Whether pull requests targeting a matching branch must be tested with the latest code.
     pub(crate) strict_required_status_checks_policy: bool,
 }
 
