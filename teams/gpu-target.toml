@@ -1,0 +1,27 @@
+# Intended to be a ping group on rust-lang/rust for GPU targets.
+
+name = "gpu-target"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    # AMD
+    "Flakebi",
+    # Nvidia
+    "kjetilkjeka",
+    "LegNeato",
+    "FractalFir",
+    # Intel
+    "karolzwolak",
+    # SPIRV
+    "fee1-dead",
+    "eddyb",
+    "Firestar99",
+    # Offload
+    "Sa4dUs",
+    "ZuseZ4",
+    # other members for T-compiler
+    "RalfJung",
+    "workingjubilee"
+]
