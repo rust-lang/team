@@ -25,6 +25,7 @@
           "allowed_merge_apps": [],
           "merge_queue": false,
           "prevent_creation": true,
+          "prevent_update": false,
           "prevent_deletion": true,
           "prevent_force_push": true
         }
@@ -71,6 +72,7 @@
           "allowed_merge_apps": [],
           "merge_queue": false,
           "prevent_creation": true,
+          "prevent_update": false,
           "prevent_deletion": true,
           "prevent_force_push": true
         }

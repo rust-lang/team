@@ -1153,10 +1153,11 @@ fn validate_branch_protections(data: &Data, errors: &mut Vec<String>) {
         let mut patterns = HashSet::new();
 
         for protection in &repo.branch_protections {
-            if !patterns.insert(&protection.pattern) {
+            if !patterns.insert((protection.target, &protection.pattern)) {
                 bail!(
-                    r#"repo '{}' uses multiple branch protections with the pattern `{}`"#,
+                    r#"repo '{}' uses multiple {:?} protections with the pattern `{}`"#,
                     repo.name,
+                    protection.target,
                     protection.pattern,
                 );
             }

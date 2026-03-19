@@ -4,10 +4,11 @@ use std::collections::{BTreeSet, HashMap, HashSet};
 
 use derive_builder::Builder;
 use rust_team_data::v1::{
-    self, Bot, BranchProtectionMode, Environment, GitHubTeam, MergeBot, Person, RepoPermission,
-    TeamGitHub, TeamKind,
+    self, Bot, BranchProtectionMode, Environment, GitHubTeam, MergeBot, Person, ProtectionTarget,
+    RepoPermission, TeamGitHub, TeamKind,
 };
 
+use crate::schema;
 use crate::sync::Config;
 use crate::sync::github::api::{
     BranchPolicy, BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Ruleset, Team,
@@ -432,12 +433,14 @@ impl RepoDataBuilder {
 pub struct BranchProtectionBuilder {
     pub name: Option<String>,
     pub pattern: String,
+    pub target: ProtectionTarget,
     pub dismiss_stale_review: bool,
     pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,
     pub allowed_merge_apps: Vec<MergeBot>,
     pub merge_queue: bool,
     pub prevent_creation: bool,
+    pub prevent_update: bool,
     pub prevent_deletion: bool,
     pub prevent_force_push: bool,
 }
@@ -461,24 +464,28 @@ impl BranchProtectionBuilder {
         let BranchProtectionBuilder {
             name,
             pattern,
+            target,
             dismiss_stale_review,
             mode,
             allowed_merge_teams,
             allowed_merge_apps,
             merge_queue,
             prevent_creation,
+            prevent_update,
             prevent_deletion,
             prevent_force_push,
         } = self;
         v1::BranchProtection {
             name,
             pattern,
+            target,
             dismiss_stale_review,
             mode,
             allowed_merge_teams,
             allowed_merge_apps,
             merge_queue,
             prevent_creation,
+            prevent_update,
             prevent_deletion,
             prevent_force_push,
             // Maintain compatibility with triagebot
@@ -490,14 +497,16 @@ impl BranchProtectionBuilder {
         Self {
             name: None,
             pattern: pattern.to_string(),
+            target: ProtectionTarget::Branch,
             mode,
             dismiss_stale_review: false,
             allowed_merge_teams: vec![],
             allowed_merge_apps: vec![],
             merge_queue: false,
-            prevent_creation: true,
-            prevent_deletion: true,
-            prevent_force_push: true,
+            prevent_creation: schema::branch_protection_default_prevent_creation(),
+            prevent_update: schema::branch_protection_default_prevent_update(),
+            prevent_deletion: schema::branch_protection_default_prevent_deletion(),
+            prevent_force_push: schema::branch_protection_default_prevent_force_push(),
         }
     }
 }

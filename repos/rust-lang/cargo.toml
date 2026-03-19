@@ -10,13 +10,21 @@ cargo = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["conclusion"]
+# merge-queue = true
 
 [[branch-protections]]
 pattern = "rust-1.*"
 ci-checks = ["conclusion"]
 
+# [[branch-protections]]
+# name = "Only allow the release process to publish tags"
+# pattern = "0.*"
+# target = "tag"
+# pr-required = false
+# allowed-merge-apps = ["promote-release"]
+# prevent-update = true
+
 [environments.github-pages]
 
 [environments.release]
 tags = ["*"]
-

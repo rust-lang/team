@@ -4,15 +4,16 @@ mod tests;
 
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
 pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
+use crate::schema;
 use crate::sync::Config;
 use crate::sync::github::api::{
     GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings, Ruleset,
 };
 use futures_util::StreamExt;
 use log::debug;
-use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot};
+use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot, ProtectionTarget};
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
-use std::fmt::{Display, Formatter, Write};
+use std::fmt::{Display, Write};
 
 static DEFAULT_DESCRIPTION: &str = "Managed by the rust-lang/team repository.";
 static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
@@ -20,6 +21,11 @@ static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
 /// GitHub Actions integration ID
 /// Verified via: https://api.github.com/repos/rust-lang/rust/commits/HEAD/check-runs
 const GITHUB_ACTIONS_INTEGRATION_ID: i64 = 15368;
+
+const REQUIRE_CODE_OWNER_REVIEW_DEFAULT: bool = false;
+const REQUIRE_LAST_PUSH_APPROVAL_DEFAULT: bool = false;
+const REQUIRED_REVIEW_THREAD_RESOLUTION_DEFAULT: bool = false;
+const STRICT_REQUIRED_STATUS_CHECKS_POLICY_DEFAULT: bool = false;
 
 pub(crate) async fn create_diff(
     github: Box<dyn GithubRead>,
@@ -959,7 +965,7 @@ pub fn construct_branch_protection(
             MergeBot::RustTimer => PushAllowanceActor::User(api::UserPushAllowanceActor {
                 login: "rust-timer".to_owned(),
             }),
-            MergeBot::Bors | MergeBot::WorkflowsCratesIo => {
+            MergeBot::Bors | MergeBot::WorkflowsCratesIo | MergeBot::PromoteRelease => {
                 // These use GitHub apps, which are not configured through team (set manually).
                 // Their push allowance will be roundtripped by sync-team.
                 continue;
@@ -992,13 +998,17 @@ pub fn construct_branch_protection(
     }
 }
 
-/// Convert a branch pattern to a full ref pattern for use in rulesets.
-/// GitHub rulesets require full ref paths like "refs/heads/main" instead of just "main".
-pub(crate) fn convert_branch_pattern_to_ref_pattern(pattern: &str) -> String {
+/// Convert a branch or tag pattern to a full ref pattern for use in rulesets.
+/// GitHub rulesets require full ref paths like "refs/heads/main" and "refs/tags/0.*".
+pub(crate) fn convert_pattern_to_ref_pattern(target: ProtectionTarget, pattern: &str) -> String {
     if pattern.starts_with("refs/") {
         return pattern.to_string();
     }
-    format!("refs/heads/{pattern}")
+
+    match target {
+        ProtectionTarget::Branch => format!("refs/heads/{pattern}"),
+        ProtectionTarget::Tag => format!("refs/tags/{pattern}"),
+    }
 }
 
 pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtection) -> api::Ruleset {
@@ -1020,6 +1030,10 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
         rules.insert(RulesetRule::Deletion);
     }
 
+    if branch_protection.prevent_update {
+        rules.insert(RulesetRule::Update);
+    }
+
     // Add non-fast-forward protection if requested
     if branch_protection.prevent_force_push {
         rules.insert(RulesetRule::NonFastForward);
@@ -1033,10 +1047,10 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
         rules.insert(RulesetRule::PullRequest {
             parameters: PullRequestParameters {
                 dismiss_stale_reviews_on_push: branch_protection.dismiss_stale_review,
-                require_code_owner_review: false,
-                require_last_push_approval: false,
+                require_code_owner_review: REQUIRE_CODE_OWNER_REVIEW_DEFAULT,
+                require_last_push_approval: REQUIRE_LAST_PUSH_APPROVAL_DEFAULT,
                 required_approving_review_count: *required_approvals as i32,
-                required_review_thread_resolution: false,
+                required_review_thread_resolution: REQUIRED_REVIEW_THREAD_RESOLUTION_DEFAULT,
             },
         });
     }
@@ -1057,7 +1071,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
                         integration_id: Some(GITHUB_ACTIONS_INTEGRATION_ID),
                     })
                     .collect(),
-                strict_required_status_checks_policy: false,
+                strict_required_status_checks_policy: STRICT_REQUIRED_STATUS_CHECKS_POLICY_DEFAULT,
             },
         });
     }
@@ -1065,15 +1079,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
     if branch_protection.merge_queue {
         // Enable merge queue with default settings
         rules.insert(RulesetRule::MergeQueue {
-            parameters: MergeQueueParameters {
-                check_response_timeout_minutes: 360,
-                grouping_strategy: MergeQueueGroupingStrategy::Allgreen,
-                max_entries_to_build: 5,
-                max_entries_to_merge: 5,
-                merge_method: MergeQueueMergeMethod::Merge,
-                min_entries_to_merge: 0,
-                min_entries_to_merge_wait_minutes: 0,
-            },
+            parameters: MergeQueueParameters::default(),
         });
     }
 
@@ -1096,13 +1102,17 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
             .name
             .clone()
             .unwrap_or_else(|| branch_protection.pattern.to_string()),
-        target: RulesetTarget::Branch,
+        target: match branch_protection.target {
+            ProtectionTarget::Branch => RulesetTarget::Branch,
+            ProtectionTarget::Tag => RulesetTarget::Tag,
+        },
         source_type: RulesetSourceType::Repository,
         enforcement: RulesetEnforcement::Active,
         bypass_actors,
         conditions: RulesetConditions {
             ref_name: RulesetRefNameCondition {
-                include: vec![convert_branch_pattern_to_ref_pattern(
+                include: vec![convert_pattern_to_ref_pattern(
+                    branch_protection.target,
                     &branch_protection.pattern,
                 )],
                 exclude: vec![],
@@ -1743,6 +1753,23 @@ fn log_field<T: PartialEq + std::fmt::Debug>(
     Ok(())
 }
 
+fn log_field_if_not_default<T: PartialEq + std::fmt::Debug + Default>(
+    label: &str,
+    old: &T,
+    new: Option<&T>,
+    result: &mut dyn Write,
+) -> std::fmt::Result {
+    match new {
+        Some(new_val) => log_field(label, old, Some(new_val), result)?,
+        None => {
+            if old != &T::default() {
+                writeln!(result, "        {label}: {old:?}")?;
+            }
+        }
+    }
+    Ok(())
+}
+
 fn log_branch_protection(
     current: &api::BranchProtection,
     new: Option<&api::BranchProtection>,
@@ -1793,88 +1820,178 @@ fn log_ruleset(
     mut result: impl Write,
 ) -> std::fmt::Result {
     // Log basic ruleset properties
-    log_field(
+    log_field_if_not_default(
         "Target",
         &current.target,
         new.map(|n| &n.target),
         &mut result,
     )?;
-    log_field(
+    log_field_if_not_default(
         "Source Type",
         &current.source_type,
         new.map(|n| &n.source_type),
         &mut result,
     )?;
-    log_field(
+    log_field_if_not_default(
         "Enforcement",
         &current.enforcement,
         new.map(|n| &n.enforcement),
         &mut result,
     )?;
 
-    // Log branch conditions
+    let (include_label, exclude_label) = match current.target {
+        api::RulesetTarget::Branch => ("Include Branches", "Exclude Branches"),
+        api::RulesetTarget::Tag => ("Include Tags", "Exclude Tags"),
+    };
+
     let ref_name = &current.conditions.ref_name;
     let new_ref_name = new.map(|n| &n.conditions.ref_name);
     log_field(
-        "Include Branches",
+        include_label,
         &ref_name.include,
         new_ref_name.map(|r| &r.include),
         &mut result,
     )?;
-    log_field(
-        "Exclude Branches",
+    log_field_if_not_default(
+        exclude_label,
         &ref_name.exclude,
         new_ref_name.map(|r| &r.exclude),
         &mut result,
     )?;
 
-    log_field(
+    log_field_if_not_default(
         "Bypass Actors",
         &current.bypass_actors,
         new.map(|n| &n.bypass_actors),
         &mut result,
     )?;
 
-    #[derive(PartialEq)]
+    #[derive(PartialEq, Eq)]
     enum RuleValue {
-        Present,
+        Bool(bool),
+        Number(i32),
         String(String),
     }
 
-    impl Display for RuleValue {
-        fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-            match self {
-                RuleValue::Present => f.write_str("(present)"),
+    /// Store the default value of a rule (if it has one) to suppress noisy
+    /// logging when a full ruleset is created or a rule is added/removed.
+    #[derive(PartialEq, Eq)]
+    struct LoggedRule {
+        value: RuleValue,
+        default: Option<RuleValue>,
+    }
+
+    impl Display for LoggedRule {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            match &self.value {
+                RuleValue::Bool(val) => val.fmt(f),
+                RuleValue::Number(val) => val.fmt(f),
                 RuleValue::String(val) => val.fmt(f),
             }
         }
     }
 
+    impl LoggedRule {
+        fn bool_with_default(value: bool, default: bool) -> Self {
+            Self {
+                value: RuleValue::Bool(value),
+                default: Some(RuleValue::Bool(default)),
+            }
+        }
+
+        fn number(value: i32) -> Self {
+            Self {
+                value: RuleValue::Number(value),
+                default: None,
+            }
+        }
+
+        fn number_with_default(value: i32, default: i32) -> Self {
+            Self {
+                value: RuleValue::Number(value),
+                default: Some(RuleValue::Number(default)),
+            }
+        }
+
+        fn string(value: String) -> Self {
+            Self {
+                value: RuleValue::String(value),
+                default: None,
+            }
+        }
+
+        fn string_with_default(value: String, default: String) -> Self {
+            Self {
+                value: RuleValue::String(value),
+                default: Some(RuleValue::String(default)),
+            }
+        }
+
+        fn is_default(&self) -> bool {
+            self.default.as_ref() == Some(&self.value)
+        }
+    }
+
     // The list representation of rules makes it a bit annoying to diff and print
     // So we normalize the rules to a set of key-value pairs, and then diff those
-    fn record_rules(ruleset: &Ruleset) -> HashMap<&'static str, RuleValue> {
+    fn record_rules(ruleset: &Ruleset) -> HashMap<&'static str, LoggedRule> {
         let mut rules = HashMap::new();
         for rule in &ruleset.rules {
             match rule {
                 api::RulesetRule::Creation => {
-                    rules.insert("Restrict creations", RuleValue::Present);
+                    rules.insert(
+                        "Restrict creations",
+                        LoggedRule::bool_with_default(
+                            true,
+                            schema::branch_protection_default_prevent_creation(),
+                        ),
+                    );
                 }
                 api::RulesetRule::Update => {
-                    rules.insert("Restrict updates", RuleValue::Present);
+                    rules.insert(
+                        "Restrict updates",
+                        LoggedRule::bool_with_default(
+                            true,
+                            schema::branch_protection_default_prevent_update(),
+                        ),
+                    );
                 }
                 api::RulesetRule::Deletion => {
-                    rules.insert("Restrict deletions", RuleValue::Present);
+                    rules.insert(
+                        "Restrict deletions",
+                        LoggedRule::bool_with_default(
+                            true,
+                            schema::branch_protection_default_prevent_deletion(),
+                        ),
+                    );
                 }
                 api::RulesetRule::RequiredLinearHistory => {
-                    rules.insert("Require linear history", RuleValue::Present);
+                    rules.insert(
+                        "Require linear history",
+                        LoggedRule::bool_with_default(true, false),
+                    );
                 }
                 api::RulesetRule::RequiredSignatures => {
-                    rules.insert("Require signed commits", RuleValue::Present);
+                    rules.insert(
+                        "Require signed commits",
+                        LoggedRule::bool_with_default(true, false),
+                    );
                 }
                 api::RulesetRule::NonFastForward => {
-                    rules.insert("Forbid force pushes", RuleValue::Present);
+                    rules.insert(
+                        "Forbid force pushes",
+                        LoggedRule::bool_with_default(
+                            true,
+                            schema::branch_protection_default_prevent_force_push(),
+                        ),
+                    );
                 }
                 api::RulesetRule::MergeQueue { parameters } => {
+                    let default_parameters = api::MergeQueueParameters::default();
+                    rules.insert(
+                        "Require merge queue",
+                        LoggedRule::bool_with_default(true, false),
+                    );
                     let api::MergeQueueParameters {
                         check_response_timeout_minutes,
                         grouping_strategy,
@@ -1886,60 +2003,94 @@ fn log_ruleset(
                     } = parameters;
                     rules.insert(
                         "Merge queue timeout",
-                        RuleValue::String(check_response_timeout_minutes.to_string()),
+                        LoggedRule::number_with_default(
+                            *check_response_timeout_minutes,
+                            default_parameters.check_response_timeout_minutes,
+                        ),
                     );
                     rules.insert(
                         "Merge queue grouping strategy",
-                        RuleValue::String(format!("{:?}", grouping_strategy)),
+                        LoggedRule::string_with_default(
+                            format!("{grouping_strategy:?}"),
+                            format!("{:?}", default_parameters.grouping_strategy),
+                        ),
                     );
                     rules.insert(
                         "Merge queue max entries to build",
-                        RuleValue::String(max_entries_to_build.to_string()),
+                        LoggedRule::number_with_default(
+                            *max_entries_to_build,
+                            default_parameters.max_entries_to_build,
+                        ),
                     );
                     rules.insert(
                         "Merge queue max entries to merge",
-                        RuleValue::String(max_entries_to_merge.to_string()),
+                        LoggedRule::number_with_default(
+                            *max_entries_to_merge,
+                            default_parameters.max_entries_to_merge,
+                        ),
                     );
                     rules.insert(
                         "Merge queue min entries to merge",
-                        RuleValue::String(min_entries_to_merge.to_string()),
+                        LoggedRule::number_with_default(
+                            *min_entries_to_merge,
+                            default_parameters.min_entries_to_merge,
+                        ),
                     );
                     rules.insert(
                         "Merge queue merge_method",
-                        RuleValue::String(format!("{merge_method:?}")),
+                        LoggedRule::string_with_default(
+                            format!("{merge_method:?}"),
+                            format!("{:?}", default_parameters.merge_method),
+                        ),
                     );
                     rules.insert(
                         "Merge queue wait time for min group size",
-                        RuleValue::String(min_entries_to_merge_wait_minutes.to_string()),
+                        LoggedRule::number_with_default(
+                            *min_entries_to_merge_wait_minutes,
+                            default_parameters.min_entries_to_merge_wait_minutes,
+                        ),
                     );
                 }
                 api::RulesetRule::PullRequest { parameters } => {
                     rules.insert(
                         "Dismiss stale reviews on push",
-                        RuleValue::String(parameters.dismiss_stale_reviews_on_push.to_string()),
+                        LoggedRule::bool_with_default(
+                            parameters.dismiss_stale_reviews_on_push,
+                            false,
+                        ),
                     );
                     rules.insert(
                         "Require code owner review",
-                        RuleValue::String(parameters.require_code_owner_review.to_string()),
+                        LoggedRule::bool_with_default(
+                            parameters.require_code_owner_review,
+                            REQUIRE_CODE_OWNER_REVIEW_DEFAULT,
+                        ),
                     );
                     rules.insert(
                         "Require last push approval",
-                        RuleValue::String(parameters.require_last_push_approval.to_string()),
+                        LoggedRule::bool_with_default(
+                            parameters.require_last_push_approval,
+                            REQUIRE_LAST_PUSH_APPROVAL_DEFAULT,
+                        ),
                     );
                     rules.insert(
                         "Required approvals",
-                        RuleValue::String(parameters.required_approving_review_count.to_string()),
+                        LoggedRule::number(parameters.required_approving_review_count),
                     );
                     rules.insert(
                         "Require review thread resolution",
-                        RuleValue::String(parameters.required_review_thread_resolution.to_string()),
+                        LoggedRule::bool_with_default(
+                            parameters.required_review_thread_resolution,
+                            REQUIRED_REVIEW_THREAD_RESOLUTION_DEFAULT,
+                        ),
                     );
                 }
                 api::RulesetRule::RequiredStatusChecks { parameters } => {
                     rules.insert(
                         "Strict policy for status checks",
-                        RuleValue::String(
-                            parameters.strict_required_status_checks_policy.to_string(),
+                        LoggedRule::bool_with_default(
+                            parameters.strict_required_status_checks_policy,
+                            STRICT_REQUIRED_STATUS_CHECKS_POLICY_DEFAULT,
                         ),
                     );
                     let mut checks: Vec<String> = parameters
@@ -1956,7 +2107,7 @@ fn log_ruleset(
                     checks.sort();
                     rules.insert(
                         "Required status checks",
-                        RuleValue::String(checks.join(", ")),
+                        LoggedRule::string(checks.join(", ")),
                     );
                 }
                 api::RulesetRule::RequiredDeployments { parameters } => {
@@ -1964,7 +2115,7 @@ fn log_ruleset(
                     envs.sort();
                     rules.insert(
                         "Required deployment environments",
-                        RuleValue::String(envs.join(", ")),
+                        LoggedRule::string(envs.join(", ")),
                     );
                 }
             }
@@ -1979,16 +2130,17 @@ fn log_ruleset(
         for (name, old_value) in &old_rules {
             if let Some(new_value) = new_rules.get(name) {
                 // Updated rule
-                if new_value != old_value {
+                if new_value.value != old_value.value {
                     writeln!(result, "        {name}: {old_value} => {new_value}")?;
                 }
             } else {
-                // Deleted rule
+                // The rule is not present anymore in the new ruleset, so it was deleted
                 writeln!(
                     result,
                     "        {name}: {}",
-                    match old_value {
-                        RuleValue::Present => "yes => no".to_string(),
+                    match &old_value.value {
+                        RuleValue::Bool(val) => format!("deleting `{val}`"),
+                        RuleValue::Number(val) => format!("deleting `{val}`"),
                         RuleValue::String(val) => format!("deleting `{val}`"),
                     }
                 )?;
@@ -1998,26 +2150,18 @@ fn log_ruleset(
         // Created rules
         for (name, new_value) in new_rules {
             if !old_rules.contains_key(name) {
-                writeln!(
-                    result,
-                    "        {name}: {}",
-                    match &new_value {
-                        RuleValue::Present => "yes",
-                        RuleValue::String(val) => val,
-                    }
-                )?;
+                writeln!(result, "        {name}: {new_value}")?;
             }
         }
     } else {
+        // The entire ruleset is new
         for (name, value) in old_rules {
-            writeln!(
-                result,
-                "        {name}: {}",
-                match &value {
-                    RuleValue::Present => "yes",
-                    RuleValue::String(val) => &val,
-                }
-            )?;
+            if value.is_default() {
+                // Hide default-valued rules on creation as
+                // they don't represent a meaningful change to the user.
+                continue;
+            }
+            writeln!(result, "        {name}: {value}")?;
         }
     }
 

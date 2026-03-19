@@ -54,6 +54,10 @@ impl<'a> Generator<'a> {
                 .iter()
                 .map(|b| v1::BranchProtection {
                     pattern: b.pattern.clone(),
+                    target: match b.target {
+                        schema::ProtectionTarget::Branch => v1::ProtectionTarget::Branch,
+                        schema::ProtectionTarget::Tag => v1::ProtectionTarget::Tag,
+                    },
                     name: b.name.clone(),
                     dismiss_stale_review: b.dismiss_stale_review,
                     mode: if b.pr_required {
@@ -72,10 +76,12 @@ impl<'a> Generator<'a> {
                             AllowedMergeApp::RustTimer => v1::MergeBot::RustTimer,
                             AllowedMergeApp::Bors => v1::MergeBot::Bors,
                             AllowedMergeApp::WorkflowsCratesIo => v1::MergeBot::WorkflowsCratesIo,
+                            AllowedMergeApp::PromoteRelease => v1::MergeBot::PromoteRelease,
                         })
                         .collect(),
                     merge_queue: b.merge_queue,
                     prevent_creation: b.prevent_creation,
+                    prevent_update: b.prevent_update,
                     prevent_deletion: b.prevent_deletion,
                     prevent_force_push: b.prevent_force_push,
                     // This field is empty for retrocompatibility with triagebot

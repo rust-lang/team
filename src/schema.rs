@@ -861,12 +861,23 @@ pub(crate) enum AllowedMergeApp {
     RustTimer,
     Bors,
     WorkflowsCratesIo,
+    PromoteRelease,
+}
+
+#[derive(serde::Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum ProtectionTarget {
+    #[default]
+    Branch,
+    Tag,
 }
 
 #[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct BranchProtection {
     pub pattern: String,
+    #[serde(default)]
+    pub target: ProtectionTarget,
     #[serde(default)]
     pub name: Option<String>,
     #[serde(default)]
@@ -883,11 +894,13 @@ pub(crate) struct BranchProtection {
     pub allowed_merge_apps: Vec<AllowedMergeApp>,
     #[serde(default)]
     pub merge_queue: bool,
-    #[serde(default = "default_true")]
+    #[serde(default = "branch_protection_default_prevent_creation")]
     pub prevent_creation: bool,
-    #[serde(default = "default_true")]
+    #[serde(default = "branch_protection_default_prevent_update")]
+    pub prevent_update: bool,
+    #[serde(default = "branch_protection_default_prevent_deletion")]
     pub prevent_deletion: bool,
-    #[serde(default = "default_true")]
+    #[serde(default = "branch_protection_default_prevent_force_push")]
     pub prevent_force_push: bool,
 }
 
@@ -914,4 +927,20 @@ pub(crate) struct Environment {
     /// Tag patterns that can deploy to this environment
     #[serde(default)]
     pub tags: Vec<String>,
+}
+
+pub const fn branch_protection_default_prevent_creation() -> bool {
+    true
+}
+
+pub const fn branch_protection_default_prevent_update() -> bool {
+    false
+}
+
+pub const fn branch_protection_default_prevent_deletion() -> bool {
+    true
+}
+
+pub const fn branch_protection_default_prevent_force_push() -> bool {
+    true
 }
