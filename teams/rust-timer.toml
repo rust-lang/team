@@ -1,0 +1,11 @@
+# Team used to add the rust-timer bot to the rust repository ruleset bypass list.
+
+name = "rust-timer"
+kind = "marker-team"
+
+[people]
+leads = []
+members = ["rust-timer"]
+
+[[github]]
+orgs = ["rust-lang"]
