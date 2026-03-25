@@ -939,7 +939,7 @@ pub const fn branch_protection_default_prevent_creation() -> bool {
 }
 
 pub const fn branch_protection_default_prevent_update() -> bool {
-    false
+    true
 }
 
 pub const fn branch_protection_default_prevent_deletion() -> bool {

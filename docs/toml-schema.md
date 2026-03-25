@@ -437,18 +437,18 @@ merge-queue = {
   # (optional - default `false`)
   enabled = false
 }
-# Whether to prevent branch creation.
+# Whether to prevent branch or tag creation.
 # (optional - default `true`)
 prevent-creation = true
-# Whether to prevent branch deletion.
+# Whether to prevent branch or tag deletion.
 # (optional - default `true`)
 prevent-deletion = true
-# Whether to prevent force pushes to the branch.
+# Whether to prevent force pushes to the branch or tag.
 # (optional - default `true`)
 prevent-force-push = true
-# Whether to prevent updates to the branch.
-# (optional - default `false`)
-prevent-update = false
+# Whether to prevent updates (pushes) to the branch or tag.
+# (optional - default `true`)
+prevent-update = true
 # Whether the protection applies to branches or tags.
 # Options are "branch" or "tag".
 # (optional - default `branch`)
