@@ -10,7 +10,7 @@ cargo = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["conclusion"]
-merge-queue = true
+merge-queue = { enabled = true }
 
 [[branch-protections]]
 pattern = "rust-1.*"

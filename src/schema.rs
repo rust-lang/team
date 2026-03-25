@@ -872,6 +872,11 @@ pub(crate) enum ProtectionTarget {
     Tag,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, serde::Deserialize)]
+pub(crate) struct MergeQueue {
+    pub enabled: bool,
+}
+
 #[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct BranchProtection {
@@ -893,7 +898,7 @@ pub(crate) struct BranchProtection {
     #[serde(default)]
     pub allowed_merge_apps: Vec<AllowedMergeApp>,
     #[serde(default)]
-    pub merge_queue: bool,
+    pub merge_queue: MergeQueue,
     #[serde(default = "branch_protection_default_prevent_creation")]
     pub prevent_creation: bool,
     #[serde(default = "branch_protection_default_prevent_update")]
