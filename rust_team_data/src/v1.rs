@@ -245,6 +245,12 @@ pub enum BranchProtectionMode {
     PrNotRequired,
 }
 
+impl BranchProtectionMode {
+    pub fn is_pr_required(&self) -> bool {
+        matches!(self, BranchProtectionMode::PrRequired { .. })
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum MergeBot {

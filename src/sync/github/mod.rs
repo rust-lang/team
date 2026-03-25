@@ -1932,6 +1932,16 @@ fn log_ruleset(
         }
     }
 
+    fn ruleset_default_prevent_update(ruleset: &Ruleset) -> bool {
+        ruleset.rules.iter().any(|rule| {
+            matches!(
+                rule,
+                api::RulesetRule::PullRequest { .. }
+                    | api::RulesetRule::RequiredStatusChecks { .. }
+            )
+        })
+    }
+
     // The list representation of rules makes it a bit annoying to diff and print
     // So we normalize the rules to a set of key-value pairs, and then diff those
     fn record_rules(ruleset: &Ruleset) -> HashMap<&'static str, LoggedRule> {
@@ -1952,7 +1962,7 @@ fn log_ruleset(
                         "Restrict updates",
                         LoggedRule::bool_with_default(
                             true,
-                            schema::branch_protection_default_prevent_update(),
+                            ruleset_default_prevent_update(ruleset),
                         ),
                     );
                 }

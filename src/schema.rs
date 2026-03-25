@@ -901,12 +901,18 @@ pub(crate) struct BranchProtection {
     pub merge_queue: MergeQueue,
     #[serde(default = "branch_protection_default_prevent_creation")]
     pub prevent_creation: bool,
-    #[serde(default = "branch_protection_default_prevent_update")]
-    pub prevent_update: bool,
+    #[serde(default)]
+    prevent_update: Option<bool>,
     #[serde(default = "branch_protection_default_prevent_deletion")]
     pub prevent_deletion: bool,
     #[serde(default = "branch_protection_default_prevent_force_push")]
     pub prevent_force_push: bool,
+}
+
+impl BranchProtection {
+    pub(crate) fn prevent_update(&self) -> bool {
+        self.prevent_update.unwrap_or(self.pr_required)
+    }
 }
 
 #[derive(serde::Deserialize, Debug)]
@@ -938,14 +944,38 @@ pub const fn branch_protection_default_prevent_creation() -> bool {
     true
 }
 
-pub const fn branch_protection_default_prevent_update() -> bool {
-    false
-}
-
 pub const fn branch_protection_default_prevent_deletion() -> bool {
     true
 }
 
 pub const fn branch_protection_default_prevent_force_push() -> bool {
     true
+}
+
+#[cfg(test)]
+mod tests {
+    use super::BranchProtection;
+
+    #[test]
+    fn prevent_update_defaults_to_true_when_pr_is_required() {
+        let protection: BranchProtection = toml::from_str(r#"pattern = "main""#).unwrap();
+        assert!(protection.pr_required);
+        assert!(protection.prevent_update());
+    }
+
+    #[test]
+    fn prevent_update_defaults_to_false_when_pr_is_not_required() {
+        let protection: BranchProtection =
+            toml::from_str("pattern = \"main\"\npr-required = false").unwrap();
+        assert!(!protection.pr_required);
+        assert!(!protection.prevent_update());
+    }
+
+    #[test]
+    fn explicit_prevent_update_still_overrides_default() {
+        let protection: BranchProtection =
+            toml::from_str("pattern = \"main\"\nprevent-update = false").unwrap();
+        assert!(protection.pr_required);
+        assert!(!protection.prevent_update());
+    }
 }

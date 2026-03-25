@@ -81,7 +81,7 @@ impl<'a> Generator<'a> {
                         .collect(),
                     merge_queue: b.merge_queue.enabled,
                     prevent_creation: b.prevent_creation,
-                    prevent_update: b.prevent_update,
+                    prevent_update: b.prevent_update(),
                     prevent_deletion: b.prevent_deletion,
                     prevent_force_push: b.prevent_force_push,
                     // This field is empty for retrocompatibility with triagebot

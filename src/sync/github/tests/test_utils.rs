@@ -494,6 +494,7 @@ impl BranchProtectionBuilder {
     }
 
     fn create(pattern: &str, mode: BranchProtectionMode) -> Self {
+        let prevent_update = mode.is_pr_required();
         Self {
             name: None,
             pattern: pattern.to_string(),
@@ -504,7 +505,7 @@ impl BranchProtectionBuilder {
             allowed_merge_apps: vec![],
             merge_queue: false,
             prevent_creation: schema::branch_protection_default_prevent_creation(),
-            prevent_update: schema::branch_protection_default_prevent_update(),
+            prevent_update,
             prevent_deletion: schema::branch_protection_default_prevent_deletion(),
             prevent_force_push: schema::branch_protection_default_prevent_force_push(),
         }

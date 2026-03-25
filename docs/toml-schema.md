@@ -447,8 +447,8 @@ prevent-deletion = true
 # (optional - default `true`)
 prevent-force-push = true
 # Whether to prevent updates to the branch.
-# (optional - default `false`)
-prevent-update = false
+# (optional - default matches `pr-required`)
+prevent-update = true
 # Whether the protection applies to branches or tags.
 # Options are "branch" or "tag".
 # (optional - default `branch`)
