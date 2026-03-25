@@ -432,9 +432,11 @@ allowed-merge-teams = ["awesome-team"]
 # Currently supported values: "rust-timer", "bors", "workflows-crates-io".
 # (optional)
 allowed-merge-apps = ["bors"]
-# Whether to enable a merge queue for this branch.
-# (optional - default `false`)
-merge-queue = false
+# Merge queue configuration for this branch. (optional)
+merge-queue = {
+  # (optional - default `false`)
+  enabled = false
+}
 # Whether to prevent branch creation.
 # (optional - default `true`)
 prevent-creation = true
