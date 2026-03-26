@@ -446,7 +446,7 @@ prevent-deletion = true
 # Whether to prevent force pushes to the branch.
 # (optional - default `true`)
 prevent-force-push = true
-# Whether to prevent updates to the branch.
+# Whether to prevent updates to the branch, such as merging a PR or pushing commits.
 # (optional - default `false`)
 prevent-update = false
 # Whether the protection applies to branches or tags.
