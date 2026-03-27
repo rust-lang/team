@@ -12,3 +12,4 @@ infra = "triage"
 pattern = "main"
 ci-checks = ["Conclusion"]
 required-approvals = 0
+merge-queue = { enabled = true }

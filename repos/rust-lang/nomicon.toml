@@ -11,3 +11,4 @@ lang-docs = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["Success gate"]
+merge-queue = { enabled = true }

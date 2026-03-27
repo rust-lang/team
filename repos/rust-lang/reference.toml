@@ -13,5 +13,6 @@ spec-contributors = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["Success gate"]
+merge-queue = { enabled = true }
 
 [environments.github-pages]

@@ -16,6 +16,6 @@ libs-contributors = "write"
 pattern = "main"
 ci-checks = ["conclusion"]
 required-approvals = 0
+merge-queue = { enabled = true }
 
 [environments.github-pages]
-

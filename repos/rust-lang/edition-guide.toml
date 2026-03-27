@@ -11,6 +11,6 @@ edition = "maintain"
 pattern = "master"
 ci-checks = ["Success gate"]
 required-approvals = 0
+merge-queue = { enabled = true }
 
 [environments.github-pages]
-
