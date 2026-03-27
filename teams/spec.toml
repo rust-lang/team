@@ -8,9 +8,9 @@ members = [
     "ehuss",
     "traviscross",
     "nikomatsakis",
-    "joshtriplett",
 ]
 alumni = [
+    "joshtriplett",
     "m-ou-se",
     "pnkfelix",
 ]
