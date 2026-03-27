@@ -79,12 +79,14 @@ allowed-merge-apps = ["bors"]
 [[branch-protections]]
 pattern = "try-perf"
 allowed-merge-apps = ["rust-timer"]
+pr-required = false
 
 # Required for unrolled PR builds created by perfbot.
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "perf-tmp"
 allowed-merge-apps = ["rust-timer"]
+pr-required = false
 
 [environments.bors]
 branches = ["automation/bors/auto", "automation/bors/try", "try-perf"]
