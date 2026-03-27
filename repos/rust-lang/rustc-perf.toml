@@ -10,3 +10,4 @@ wg-compiler-performance = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["conclusion"]
+merge-queue = { enabled = true }

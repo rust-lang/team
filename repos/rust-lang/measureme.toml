@@ -9,6 +9,7 @@ compiler = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["success"]
+merge-queue = { enabled = true }
 
 [[branch-protections]]
 pattern = "stable"
@@ -22,4 +23,3 @@ publish-environment = "publish"
 [environments.publish]
 branches = ["master"]
 tags = ["*"]
-
