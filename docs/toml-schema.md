@@ -435,7 +435,23 @@ allowed-merge-apps = ["bors"]
 # Merge queue configuration for this branch. (optional)
 merge-queue = {
   # (optional - default `false`)
-  enabled = false
+  enabled = false,
+  # How GitHub merges entries from the queue.
+  # Options are "merge", "rebase", or "squash".
+  # (optional - default `merge`)
+  method = "merge",
+  # Limit the number of queued pull requests requesting checks and workflow runs at the same time.
+  # (optional - default `5`)
+  max-entries-to-build = 5,
+  # The time merge queue should wait after the first PR is added to the queue for the minimum group size to be met. After this time has elapsed, the minimum group size will be ignored and a smaller group will be merged.
+  # (optional - default `5`)
+  min-entries-to-merge-wait-minutes = 5,
+  # The maximum number of PRs that will be merged together in a group.
+  # (optional - default `5`)
+  max-entries-to-merge = 5,
+  # Maximum time for a required status check to report a conclusion. After this much time has elapsed, checks that have not reported a conclusion will be assumed to have failed
+  # (optional - default `60`)
+  check-response-timeout-minutes = 60
 }
 # Whether to prevent branch creation.
 # (optional - default `true`)

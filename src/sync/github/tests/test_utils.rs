@@ -1,11 +1,12 @@
 use async_trait::async_trait;
 use indexmap::IndexMap;
 use std::collections::{BTreeSet, HashMap, HashSet};
+use std::vec;
 
 use derive_builder::Builder;
 use rust_team_data::v1::{
-    self, Bot, BranchProtectionMode, Environment, GitHubTeam, MergeBot, Person, ProtectionTarget,
-    RepoPermission, TeamGitHub, TeamKind,
+    self, Bot, BranchProtectionMode, Environment, GitHubTeam, MergeBot, MergeQueueMethod, Person,
+    ProtectionTarget, RepoPermission, TeamGitHub, TeamKind,
 };
 
 use crate::schema;
@@ -439,6 +440,11 @@ pub struct BranchProtectionBuilder {
     pub allowed_merge_teams: Vec<String>,
     pub allowed_merge_apps: Vec<MergeBot>,
     pub merge_queue: bool,
+    pub merge_queue_method: MergeQueueMethod,
+    pub merge_queue_max_entries_to_build: u32,
+    pub merge_queue_min_entries_to_merge_wait_minutes: u32,
+    pub merge_queue_max_entries_to_merge: u32,
+    pub merge_queue_check_response_timeout_minutes: u32,
     pub prevent_creation: bool,
     pub prevent_update: bool,
     pub prevent_deletion: bool,
@@ -470,6 +476,11 @@ impl BranchProtectionBuilder {
             allowed_merge_teams,
             allowed_merge_apps,
             merge_queue,
+            merge_queue_method,
+            merge_queue_max_entries_to_build,
+            merge_queue_min_entries_to_merge_wait_minutes,
+            merge_queue_max_entries_to_merge,
+            merge_queue_check_response_timeout_minutes,
             prevent_creation,
             prevent_update,
             prevent_deletion,
@@ -484,6 +495,11 @@ impl BranchProtectionBuilder {
             allowed_merge_teams,
             allowed_merge_apps,
             merge_queue,
+            merge_queue_method,
+            merge_queue_max_entries_to_build,
+            merge_queue_min_entries_to_merge_wait_minutes,
+            merge_queue_max_entries_to_merge,
+            merge_queue_check_response_timeout_minutes,
             prevent_creation,
             prevent_update,
             prevent_deletion,
@@ -494,15 +510,24 @@ impl BranchProtectionBuilder {
     }
 
     fn create(pattern: &str, mode: BranchProtectionMode) -> Self {
+        let merge_queue_defaults = schema::MergeQueue::default();
+
         Self {
             name: None,
             pattern: pattern.to_string(),
-            target: ProtectionTarget::Branch,
+            target: ProtectionTarget::default(),
             mode,
             dismiss_stale_review: false,
             allowed_merge_teams: vec![],
             allowed_merge_apps: vec![],
-            merge_queue: false,
+            merge_queue: merge_queue_defaults.enabled,
+            merge_queue_method: merge_queue_defaults.method.into(),
+            merge_queue_max_entries_to_build: merge_queue_defaults.max_entries_to_build,
+            merge_queue_min_entries_to_merge_wait_minutes: merge_queue_defaults
+                .min_entries_to_merge_wait_minutes,
+            merge_queue_max_entries_to_merge: merge_queue_defaults.max_entries_to_merge,
+            merge_queue_check_response_timeout_minutes: merge_queue_defaults
+                .check_response_timeout_minutes,
             prevent_creation: schema::branch_protection_default_prevent_creation(),
             prevent_update: schema::branch_protection_default_prevent_update(),
             prevent_deletion: schema::branch_protection_default_prevent_deletion(),
