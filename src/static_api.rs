@@ -80,6 +80,15 @@ impl<'a> Generator<'a> {
                         })
                         .collect(),
                     merge_queue: b.merge_queue.enabled,
+                    merge_queue_method: b.merge_queue.method.into(),
+                    merge_queue_max_entries_to_build: b.merge_queue.max_entries_to_build,
+                    merge_queue_min_entries_to_merge_wait_minutes: b
+                        .merge_queue
+                        .min_entries_to_merge_wait_minutes,
+                    merge_queue_max_entries_to_merge: b.merge_queue.max_entries_to_merge,
+                    merge_queue_check_response_timeout_minutes: b
+                        .merge_queue
+                        .check_response_timeout_minutes,
                     prevent_creation: b.prevent_creation,
                     prevent_update: b.prevent_update,
                     prevent_deletion: b.prevent_deletion,

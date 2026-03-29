@@ -1011,6 +1011,10 @@ pub(crate) fn convert_pattern_to_ref_pattern(target: ProtectionTarget, pattern: 
     }
 }
 
+fn github_int(value: u32) -> i32 {
+    i32::try_from(value).unwrap_or_else(|_| panic!("Value {value} exceeds GitHub's Int range"))
+}
+
 pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtection) -> api::Ruleset {
     use api::*;
 
@@ -1049,7 +1053,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
                 dismiss_stale_reviews_on_push: branch_protection.dismiss_stale_review,
                 require_code_owner_review: REQUIRE_CODE_OWNER_REVIEW_DEFAULT,
                 require_last_push_approval: REQUIRE_LAST_PUSH_APPROVAL_DEFAULT,
-                required_approving_review_count: *required_approvals as i32,
+                required_approving_review_count: github_int(*required_approvals),
                 required_review_thread_resolution: REQUIRED_REVIEW_THREAD_RESOLUTION_DEFAULT,
             },
         });
@@ -1077,10 +1081,25 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
     }
 
     if branch_protection.merge_queue {
-        // Enable merge queue with default settings
-        rules.insert(RulesetRule::MergeQueue {
-            parameters: MergeQueueParameters::default(),
-        });
+        let merge_method = match branch_protection.merge_queue_method {
+            rust_team_data::v1::MergeQueueMethod::Merge => MergeQueueMergeMethod::Merge,
+            rust_team_data::v1::MergeQueueMethod::Squash => MergeQueueMergeMethod::Squash,
+            rust_team_data::v1::MergeQueueMethod::Rebase => MergeQueueMergeMethod::Rebase,
+        };
+        let parameters = MergeQueueParameters {
+            check_response_timeout_minutes: github_int(
+                branch_protection.merge_queue_check_response_timeout_minutes,
+            ),
+            max_entries_to_build: github_int(branch_protection.merge_queue_max_entries_to_build),
+            max_entries_to_merge: github_int(branch_protection.merge_queue_max_entries_to_merge),
+            merge_method,
+            min_entries_to_merge_wait_minutes: github_int(
+                branch_protection.merge_queue_min_entries_to_merge_wait_minutes,
+            ),
+            ..MergeQueueParameters::default()
+        };
+
+        rules.insert(RulesetRule::MergeQueue { parameters });
     }
 
     // Build bypass actors from allowed merge apps
