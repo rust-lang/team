@@ -873,8 +873,68 @@ pub(crate) enum ProtectionTarget {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, serde::Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum MergeQueueMethod {
+    #[default]
+    Merge,
+    Squash,
+    Rebase,
+}
+
+impl From<MergeQueueMethod> for rust_team_data::v1::MergeQueueMethod {
+    fn from(method: MergeQueueMethod) -> Self {
+        match method {
+            MergeQueueMethod::Merge => Self::Merge,
+            MergeQueueMethod::Squash => Self::Squash,
+            MergeQueueMethod::Rebase => Self::Rebase,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Deserialize)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct MergeQueue {
     pub enabled: bool,
+    #[serde(default)]
+    pub method: MergeQueueMethod,
+    #[serde(default = "merge_queue_default_max_entries_to_build")]
+    pub max_entries_to_build: u32,
+    #[serde(default = "merge_queue_default_min_entries_to_merge_wait_minutes")]
+    pub min_entries_to_merge_wait_minutes: u32,
+    #[serde(default = "merge_queue_default_max_entries_to_merge")]
+    pub max_entries_to_merge: u32,
+    #[serde(default = "merge_queue_default_check_response_timeout_minutes")]
+    pub check_response_timeout_minutes: u32,
+}
+
+impl Default for MergeQueue {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            method: MergeQueueMethod::default(),
+            max_entries_to_build: merge_queue_default_max_entries_to_build(),
+            min_entries_to_merge_wait_minutes:
+                merge_queue_default_min_entries_to_merge_wait_minutes(),
+            max_entries_to_merge: merge_queue_default_max_entries_to_merge(),
+            check_response_timeout_minutes: merge_queue_default_check_response_timeout_minutes(),
+        }
+    }
+}
+
+fn merge_queue_default_max_entries_to_build() -> u32 {
+    5
+}
+
+fn merge_queue_default_min_entries_to_merge_wait_minutes() -> u32 {
+    5
+}
+
+fn merge_queue_default_max_entries_to_merge() -> u32 {
+    5
+}
+
+fn merge_queue_default_check_response_timeout_minutes() -> u32 {
+    60
 }
 
 #[derive(serde::Deserialize, Debug)]

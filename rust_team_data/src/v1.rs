@@ -275,6 +275,15 @@ pub enum ProtectionTarget {
     Tag,
 }
 
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Default)]
+#[serde(rename_all = "snake_case")]
+pub enum MergeQueueMethod {
+    #[default]
+    Merge,
+    Squash,
+    Rebase,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct BranchProtection {
     pub pattern: String,
@@ -288,6 +297,28 @@ pub struct BranchProtection {
     pub merge_bots: Vec<MergeBot>,
     pub allowed_merge_apps: Vec<MergeBot>,
     pub merge_queue: bool,
+    #[serde(default, skip_serializing_if = "is_default_merge_queue_method")]
+    pub merge_queue_method: MergeQueueMethod,
+    #[serde(
+        default = "default_merge_queue_max_entries_to_build",
+        skip_serializing_if = "is_default_merge_queue_max_entries_to_build"
+    )]
+    pub merge_queue_max_entries_to_build: u32,
+    #[serde(
+        default = "default_merge_queue_min_entries_to_merge_wait_minutes",
+        skip_serializing_if = "is_default_merge_queue_min_entries_to_merge_wait_minutes"
+    )]
+    pub merge_queue_min_entries_to_merge_wait_minutes: u32,
+    #[serde(
+        default = "default_merge_queue_max_entries_to_merge",
+        skip_serializing_if = "is_default_merge_queue_max_entries_to_merge"
+    )]
+    pub merge_queue_max_entries_to_merge: u32,
+    #[serde(
+        default = "default_merge_queue_check_response_timeout_minutes",
+        skip_serializing_if = "is_default_merge_queue_check_response_timeout_minutes"
+    )]
+    pub merge_queue_check_response_timeout_minutes: u32,
     pub prevent_creation: bool,
     pub prevent_update: bool,
     pub prevent_deletion: bool,
@@ -324,4 +355,40 @@ pub struct People {
 
 fn is_branch_target(target: &ProtectionTarget) -> bool {
     matches!(target, ProtectionTarget::Branch)
+}
+
+fn is_default_merge_queue_method(method: &MergeQueueMethod) -> bool {
+    matches!(method, MergeQueueMethod::Merge)
+}
+
+fn default_merge_queue_max_entries_to_build() -> u32 {
+    5
+}
+
+fn is_default_merge_queue_max_entries_to_build(value: &u32) -> bool {
+    *value == default_merge_queue_max_entries_to_build()
+}
+
+fn default_merge_queue_min_entries_to_merge_wait_minutes() -> u32 {
+    5
+}
+
+fn is_default_merge_queue_min_entries_to_merge_wait_minutes(value: &u32) -> bool {
+    *value == default_merge_queue_min_entries_to_merge_wait_minutes()
+}
+
+fn default_merge_queue_max_entries_to_merge() -> u32 {
+    5
+}
+
+fn is_default_merge_queue_max_entries_to_merge(value: &u32) -> bool {
+    *value == default_merge_queue_max_entries_to_merge()
+}
+
+fn default_merge_queue_check_response_timeout_minutes() -> u32 {
+    60
+}
+
+fn is_default_merge_queue_check_response_timeout_minutes(value: &u32) -> bool {
+    *value == default_merge_queue_check_response_timeout_minutes()
 }
