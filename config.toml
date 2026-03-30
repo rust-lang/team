@@ -99,6 +99,7 @@ enable-rulesets-repos = [
    "rust-lang/rust-clippy",
    "rust-lang/rustc-perf",
    "rust-lang/rustfmt",
+   "rust-lang/rust",
    "rust-lang/stdarch",
    "rust-lang/triagebot",
 ]
