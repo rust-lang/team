@@ -13,12 +13,13 @@ crate-maintainers = 'maintain'
 pattern = 'main'
 ci-checks = ['success']
 required-approvals = 0
+merge-queue = { enabled = true, method = "rebase" }
 
 [[branch-protections]]
 pattern = 'libc-0.2'
 ci-checks = ['success']
 required-approvals = 0
+merge-queue = { enabled = true, method = "rebase" }
 
 [environments.github-pages]
 branches = ["gh-pages", "main", "master"]
-
