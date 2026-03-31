@@ -11,6 +11,6 @@ wg-bindgen = "write"
 pattern = "main"
 required-approvals = 0
 ci-checks = ["success"]
+merge-queue = { enabled = true, method = "rebase" }
 
 [environments.github-pages]
-
