@@ -16,6 +16,7 @@ Dylan-DPC = "write"
 pattern = "master"
 ci-checks = ["Success gate"]
 required-approvals = 0
+merge-queue = { enabled = true, min-entries-to-merge-wait-minutes = 1 }
 
 [[crates-io]]
 crates = [
@@ -36,4 +37,3 @@ publish-environment = "publish"
 [environments.publish]
 branches = ["master"]
 tags = ["*"]
-

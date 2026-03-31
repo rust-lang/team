@@ -10,3 +10,4 @@ miri = "write"
 pattern = "master"
 ci-checks = ["Success"]
 required-approvals = 0
+merge-queue = { enabled = true, check-response-timeout-minutes = 120 }

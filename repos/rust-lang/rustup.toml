@@ -10,6 +10,7 @@ rustup = "maintain"
 [[branch-protections]]
 pattern = "main"
 ci-checks = ["conclusion"]
+merge-queue = { enabled = true, method = "rebase" }
 
 [environments.github-pages]
 

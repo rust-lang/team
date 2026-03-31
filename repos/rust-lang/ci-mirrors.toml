@@ -11,6 +11,6 @@ infra = "write"
 pattern = "main"
 ci-checks = ["Build finished"]
 dismiss-stale-review = true
+merge-queue = { enabled = true, max-entries-to-build = 1, min-entries-to-merge-wait-minutes = 1, max-entries-to-merge = 15 }
 
 [environments.upload]
-
