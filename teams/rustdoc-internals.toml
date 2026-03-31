@@ -1,16 +1,19 @@
-name = "rustdoc-frontend"
+name = "rustdoc-internals"
 subteam-of = "rustdoc"
 
 [people]
 leads = []
 members = [
-    "notriddle",
     "GuillaumeGomez",
     "camelid",
+    "notriddle",
+    "fmease",
     "lolbinarycat",
+    "yotamofek",
+    "Urgau",
+    "Manishearth",
 ]
 alumni = [
-    "jsha",
 ]
 
 [permissions]
@@ -22,11 +25,11 @@ perf = true
 orgs = ["rust-lang", "rust-lang-nursery"]
 
 [website]
-name = "Rustdoc web frontend"
-description = "Rustdoc frontend design, UI, UX and development"
+name = "Rustdoc internals"
+description = "Rustdoc internals development"
 zulip-stream = "t-rustdoc"
 
 [rfcbot]
-label = "T-rustdoc-frontend"
-name = "Rustdoc frontend"
-ping = "rust-lang/rustdoc-frontend"
+label = "T-rustdoc-internals"
+name = "Rustdoc internals"
+ping = "rust-lang/rustdoc-internals"

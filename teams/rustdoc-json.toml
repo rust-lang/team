@@ -1,0 +1,30 @@
+name = "rustdoc-json-backend"
+subteam-of = "rustdoc"
+
+[people]
+leads = []
+members = [
+    "aDotInTheVoid",
+    "GuillaumeGomez",
+    "Urgau",
+]
+alumni = [
+]
+
+[permissions]
+bors.rust.review = true
+dev-desktop = true
+perf = true
+
+[[github]]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
+[website]
+name = "Rustdoc JSON backend"
+description = "Rustdoc JSON backend development"
+zulip-stream = "t-rustdoc"
+
+[rfcbot]
+label = "T-rustdoc-json-backend"
+name = "Rustdoc JSON backend"
+ping = "rust-lang/rustdoc-json-backend"
