@@ -16,6 +16,6 @@ ci-checks = [
     "Rustfmt",
     "Publish Documentation"
 ]
+require-up-to-date-branches = true
 
 [environments.github-pages]
-

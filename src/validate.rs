@@ -1205,6 +1205,14 @@ but that team is not mentioned in [access.teams]"#,
                 }
             }
 
+            if protection.require_up_to_date_branches && protection.ci_checks.is_empty() {
+                bail!(
+                    r#"repo '{}' uses a branch protection for {} that enables `require-up-to-date-branches`, but has empty `ci-checks`"#,
+                    repo.name,
+                    protection.pattern,
+                );
+            }
+
             let managed_by_bors = protection
                 .allowed_merge_apps
                 .contains(&AllowedMergeApp::Bors);

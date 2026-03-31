@@ -988,6 +988,7 @@ pub fn construct_branch_protection(
         is_admin_enforced: true,
         allows_force_pushes: !branch_protection.prevent_force_push,
         dismisses_stale_reviews: branch_protection.dismiss_stale_review,
+        requires_strict_status_checks: branch_protection.require_up_to_date_branches,
         required_approving_review_count,
         required_status_check_contexts: checks,
         push_allowances,
@@ -1075,7 +1076,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
                         integration_id: Some(GITHUB_ACTIONS_INTEGRATION_ID),
                     })
                     .collect(),
-                strict_required_status_checks_policy: STRICT_REQUIRED_STATUS_CHECKS_POLICY_DEFAULT,
+                strict_required_status_checks_policy: branch_protection.require_up_to_date_branches,
             },
         });
     }
@@ -1794,6 +1795,12 @@ fn log_branch_protection(
     new: Option<&api::BranchProtection>,
     mut result: impl Write,
 ) -> std::fmt::Result {
+    log_field(
+        "Require branches to be up to date",
+        &current.requires_strict_status_checks,
+        new.map(|n| &n.requires_strict_status_checks),
+        &mut result,
+    )?;
     log_field(
         "Dismiss Stale Reviews",
         &current.dismisses_stale_reviews,
