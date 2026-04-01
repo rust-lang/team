@@ -46,7 +46,7 @@ pub(crate) struct HttpClient {
 }
 
 impl HttpClient {
-    pub(crate) fn new() -> anyhow::Result<Self> {
+    pub(crate) async fn new() -> anyhow::Result<Self> {
         let mut builder = reqwest::ClientBuilder::default();
         let mut map = HeaderMap::default();
 
@@ -58,7 +58,7 @@ impl HttpClient {
 
         Ok(Self {
             client: builder.build()?,
-            github_tokens: GitHubTokens::from_env()?,
+            github_tokens: GitHubTokens::from_env().await?,
         })
     }
 
@@ -67,7 +67,7 @@ impl HttpClient {
     }
 
     fn auth_header(&self, org: &str) -> anyhow::Result<HeaderValue> {
-        let token = self.github_tokens.get_token(org)?;
+        let token = self.github_tokens.get_token_for_org(org)?;
         let mut auth = HeaderValue::from_str(&format!("token {}", token.expose_secret()))?;
         auth.set_sensitive(true);
         Ok(auth)
