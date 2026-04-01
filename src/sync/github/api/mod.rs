@@ -66,8 +66,10 @@ impl HttpClient {
         matches!(self.github_tokens, GitHubTokens::Pat(_))
     }
 
-    fn auth_header(&self, org: &str) -> anyhow::Result<HeaderValue> {
-        let token = self.github_tokens.get_token_for_org(org)?;
+    fn auth_header(&self, url: &GitHubUrl) -> anyhow::Result<HeaderValue> {
+        let token = self
+            .github_tokens
+            .get_token_for_org(url.org(), url.token_type())?;
         let mut auth = HeaderValue::from_str(&format!("token {}", token.expose_secret()))?;
         auth.set_sensitive(true);
         Ok(auth)
@@ -75,7 +77,7 @@ impl HttpClient {
 
     fn req(&self, method: Method, url: &GitHubUrl) -> anyhow::Result<RequestBuilder> {
         trace!("http request: {} {}", method, url.url());
-        let token = self.auth_header(url.org())?;
+        let token = self.auth_header(url)?;
         let client = self
             .client
             .request(method, url.url())

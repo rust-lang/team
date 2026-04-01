@@ -128,6 +128,8 @@ impl SyncGitHub {
 
             let mut installations: Vec<OrgAppInstallation> = vec![];
             for installation in github.org_app_installations(org).await? {
+                // Only load installations from apps that we know about, to avoid removing
+                // installations of unknown apps.
                 if let Some(app) = GithubApp::from_id(installation.app_id) {
                     let mut repositories = HashSet::new();
                     for repo_installation in github
@@ -540,8 +542,6 @@ impl SyncGitHub {
                 installations
                     .iter()
                     .filter_map(|installation| {
-                        // Only load installations from apps that we know about, to avoid removing
-                        // unknown installations.
                         if installation.repositories.contains(&actual_repo.name) {
                             Some(AppInstallation {
                                 app: installation.app,

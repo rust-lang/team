@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use crate::sync::github::api::url::TokenType;
 use anyhow::Context as _;
 use chrono::Duration;
 use octocrab::OctocrabBuilder;
@@ -135,13 +136,32 @@ impl GitHubTokens {
 
     /// Get a token for a GitHub organization.
     /// Return an error if not present.
-    pub fn get_token_for_org(&self, org: &str) -> anyhow::Result<&SecretString> {
+    pub fn get_token_for_org(
+        &self,
+        org: &str,
+        token_type: &TokenType,
+    ) -> anyhow::Result<&SecretString> {
         match self {
-            GitHubTokens::App { org_tokens, .. } => org_tokens.get(org).with_context(|| {
-                format!(
-                    "failed to get the GitHub token environment variable for organization {org}"
-                )
-            }),
+            GitHubTokens::App {
+                org_tokens,
+                enterprise_client_ctx,
+            } => match token_type {
+                TokenType::Organization => org_tokens.get(org).with_context(|| {
+                    format!(
+                        "failed to get the GitHub token environment variable for organization {org}"
+                    )
+                }),
+                TokenType::EnterpriseOrganization => {
+                    enterprise_client_ctx.org_tokens.get(org).with_context(|| {
+                        format!(
+                            "failed to get the GitHub token environment variable for organization `{org}` for the enterprise GH app"
+                        )
+                    })
+                }
+                TokenType::Enterprise => {
+                    Ok(&enterprise_client_ctx.enterprise_token)
+                }
+            },
             GitHubTokens::Pat(pat) => Ok(pat),
         }
     }

@@ -1,4 +1,5 @@
 use crate::sync::github::api;
+use crate::sync::github::api::url::TokenType;
 use crate::sync::github::api::{BranchPolicy, Ruleset};
 use crate::sync::github::api::{
     BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, OrgAppInstallation,
@@ -200,15 +201,16 @@ impl GithubRead for GitHubApiRead {
         }
 
         let mut installations = Vec::new();
+
+        // For this endpoint, we have to use an org-specific app installation of
+        // an enterprise GH app.
+        let url = GitHubUrl::orgs(org, "installations")?
+            .with_token_type(TokenType::EnterpriseOrganization);
         self.client
-            .rest_paginated(
-                &Method::GET,
-                &GitHubUrl::orgs(org, "installations")?,
-                |response: InstallationPage| {
-                    installations.extend(response.installations);
-                    Ok(())
-                },
-            )
+            .rest_paginated(&Method::GET, &url, |response: InstallationPage| {
+                installations.extend(response.installations);
+                Ok(())
+            })
             .await?;
         Ok(installations)
     }
@@ -226,15 +228,14 @@ impl GithubRead for GitHubApiRead {
         let mut installations = Vec::new();
 
         let url = format!("user/installations/{installation_id}/repositories");
+
+        // For this endpoint, we have to use the enterprise installation of an enterprise GH app
+        let gh_url = GitHubUrl::new(&url, org).with_token_type(TokenType::Enterprise);
         self.client
-            .rest_paginated(
-                &Method::GET,
-                &GitHubUrl::new(&url, org),
-                |response: InstallationPage| {
-                    installations.extend(response.repositories);
-                    Ok(())
-                },
-            )
+            .rest_paginated(&Method::GET, &gh_url, |response: InstallationPage| {
+                installations.extend(response.repositories);
+                Ok(())
+            })
             .await
             .with_context(|| format!("failed to send rest paginated request to {url}"))?;
         Ok(installations)
