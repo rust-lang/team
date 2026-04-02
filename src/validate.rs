@@ -48,6 +48,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_list_extra_teams,
     validate_list_addresses,
     validate_people_addresses,
+    validate_people_sso,
     validate_duplicate_permissions,
     validate_permissions,
     validate_rfcbot_labels,
@@ -541,6 +542,22 @@ fn validate_people_addresses(data: &Data, errors: &mut Vec<String>) {
         {
             bail!("invalid email address of `{}`: {}", person.github(), email);
         }
+        Ok(())
+    });
+}
+
+/// Ensure personal email provided for people with access to Google Workspace
+fn validate_people_sso(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.people(), errors, |person, _| {
+        if person.google_workspace().is_some() {
+            return match person.email() {
+                Email::Missing | Email::Disabled => {
+                    bail!("google workspace requires a personal user email")
+                }
+                Email::Present(_) => Ok(()),
+            };
+        }
+
         Ok(())
     });
 }
