@@ -2113,7 +2113,7 @@ fn log_ruleset(
                 }
                 api::RulesetRule::RequiredStatusChecks { parameters } => {
                     rules.insert(
-                        "Strict policy for status checks",
+                        "Require branches to be up to date",
                         LoggedRule::bool_with_default(
                             parameters.strict_required_status_checks_policy,
                             STRICT_REQUIRED_STATUS_CHECKS_POLICY_DEFAULT,
