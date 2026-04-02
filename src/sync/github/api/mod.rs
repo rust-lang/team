@@ -397,7 +397,7 @@ where
 }
 
 /// An object with a `login` field
-#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+#[derive(Deserialize, Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub(crate) struct Login {
     pub(crate) login: String,
 }
@@ -439,7 +439,7 @@ fn team_node_id(id: u64) -> String {
     BASE64_STANDARD.encode(format!("04:Team{id}"))
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct BranchProtection {
     pub(crate) pattern: String,
@@ -482,7 +482,7 @@ where
 }
 
 /// Entities that can be allowed to push to a branch in a repo
-#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
 #[serde(untagged)]
 pub(crate) enum PushAllowanceActor {
     User(UserPushAllowanceActor),
@@ -491,20 +491,20 @@ pub(crate) enum PushAllowanceActor {
 }
 
 /// User who can be allowed to push to a branch in a repo
-#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub(crate) struct UserPushAllowanceActor {
     pub(crate) login: String,
 }
 
 /// Team that can be allowed to push to a branch in a repo
-#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub(crate) struct TeamPushAllowanceActor {
     pub(crate) organization: Login,
     pub(crate) name: String,
 }
 
 /// GitHub app that can be allowed to push to a branch in a repo
-#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub(crate) struct AppPushAllowanceActor {
     pub(crate) name: String,
     /// Node ID, which can be used as a push actor ID

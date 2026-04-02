@@ -368,7 +368,7 @@ impl SyncGitHub {
     /// Check if a repository should use rulesets instead of branch protections
     fn should_use_rulesets(&self, repo: &rust_team_data::v1::Repo) -> bool {
         let repo_full_name = format!("{}/{}", repo.org, repo.name);
-        self.config.enable_rulesets_repos.contains(&repo_full_name)
+        !self.config.disable_rulesets_repos.contains(&repo_full_name)
     }
 
     async fn diff_repo(
@@ -508,15 +508,15 @@ impl SyncGitHub {
         &self,
         actual_repo: &api::Repo,
         expected_repo: &rust_team_data::v1::Repo,
-    ) -> anyhow::Result<Vec<BranchProtectionDiff>> {
+    ) -> anyhow::Result<BTreeSet<BranchProtectionDiff>> {
         // The rust-lang/rust repository uses GitHub apps push allowance actors for its branch
         // protections, which cannot be read without a PAT.
         // To avoid errors, we simply return an empty diff here.
         if !self.github.uses_pat() && actual_repo.org == "rust-lang" && actual_repo.name == "rust" {
-            return Ok(vec![]);
+            return Ok(BTreeSet::new());
         }
 
-        let mut branch_protection_diffs = Vec::new();
+        let mut branch_protection_diffs = BTreeSet::new();
         let mut actual_protections = self
             .github
             .branch_protections(&actual_repo.org, &actual_repo.name)
@@ -567,10 +567,10 @@ impl SyncGitHub {
                     Some(_) => continue,
                 }
             };
-            branch_protection_diffs.push(BranchProtectionDiff {
+            branch_protection_diffs.insert(BranchProtectionDiff {
                 pattern: branch_protection.pattern.clone(),
                 operation,
-            })
+            });
         }
 
         // `actual_branch_protections` now contains the branch protections that were not expected
@@ -1389,7 +1389,7 @@ struct UpdateRepoDiff {
     // old, new
     settings_diff: (RepoSettings, RepoSettings),
     permission_diffs: Vec<RepoPermissionAssignmentDiff>,
-    branch_protection_diffs: Vec<BranchProtectionDiff>,
+    branch_protection_diffs: BTreeSet<BranchProtectionDiff>,
     ruleset_diffs: Vec<RulesetDiff>,
     environment_diffs: Vec<EnvironmentDiff>,
 }
@@ -1698,7 +1698,7 @@ enum RepoCollaborator {
     User(String),
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 struct BranchProtectionDiff {
     pattern: String,
     operation: BranchProtectionDiffOperation,
@@ -2202,7 +2202,7 @@ fn log_ruleset(
     Ok(())
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 enum BranchProtectionDiffOperation {
     Create(api::BranchProtection),
     Update(String, api::BranchProtection, api::BranchProtection),
