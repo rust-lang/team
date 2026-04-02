@@ -361,6 +361,7 @@ impl SyncGitHub {
                 diffs.push(repo_diff);
             }
         }
+        diffs.sort_by(|left, right| left.org_and_name().cmp(&right.org_and_name()));
         Ok(diffs)
     }
 
@@ -1220,6 +1221,13 @@ impl RepoDiff {
         match self {
             RepoDiff::Create(_c) => false,
             RepoDiff::Update(u) => u.noop(),
+        }
+    }
+
+    fn org_and_name(&self) -> (&str, &str) {
+        match self {
+            RepoDiff::Create(c) => (&c.org, &c.name),
+            RepoDiff::Update(u) => (&u.org, &u.name),
         }
     }
 }
@@ -2113,7 +2121,7 @@ fn log_ruleset(
                 }
                 api::RulesetRule::RequiredStatusChecks { parameters } => {
                     rules.insert(
-                        "Strict policy for status checks",
+                        "Require branches to be up to date",
                         LoggedRule::bool_with_default(
                             parameters.strict_required_status_checks_policy,
                             STRICT_REQUIRED_STATUS_CHECKS_POLICY_DEFAULT,
