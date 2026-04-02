@@ -296,7 +296,6 @@ pub struct BranchProtection {
     pub allowed_merge_teams: Vec<String>,
     pub merge_bots: Vec<MergeBot>,
     pub allowed_merge_apps: Vec<MergeBot>,
-    #[serde(default, skip_serializing_if = "is_false")]
     pub require_up_to_date_branches: bool,
     pub merge_queue: bool,
     #[serde(default, skip_serializing_if = "is_default_merge_queue_method")]
@@ -393,8 +392,4 @@ fn default_merge_queue_check_response_timeout_minutes() -> u32 {
 
 fn is_default_merge_queue_check_response_timeout_minutes(value: &u32) -> bool {
     *value == default_merge_queue_check_response_timeout_minutes()
-}
-
-fn is_false(value: &bool) -> bool {
-    !*value
 }

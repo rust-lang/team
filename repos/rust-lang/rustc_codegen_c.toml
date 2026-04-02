@@ -10,4 +10,5 @@ compiler = "maintain"
 [[branch-protections]]
 pattern = "main"
 ci-checks = ['success']
+require-up-to-date-branches = true
 required-approvals = 0

@@ -446,6 +446,7 @@ pub(crate) struct BranchProtection {
     pub(crate) is_admin_enforced: bool,
     pub(crate) allows_force_pushes: bool,
     pub(crate) dismisses_stale_reviews: bool,
+    pub(crate) requires_strict_status_checks: bool,
     #[serde(default, deserialize_with = "nullable")]
     pub(crate) required_approving_review_count: u8,
     #[serde(default, deserialize_with = "nullable")]
