@@ -11,6 +11,7 @@ docs-rs-reviewers = 'write'
 [[branch-protections]]
 pattern = 'main'
 required-approvals = 0
+require-conversation-resolution = true
 
 [environments.production]
 branches = ["main"]

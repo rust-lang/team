@@ -20,3 +20,4 @@ ci-checks = [
     "build (windows-latest, stable)",
 ]
 required-approvals = 0
+require-conversation-resolution = true
