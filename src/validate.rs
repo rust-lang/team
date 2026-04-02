@@ -39,6 +39,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_subteam_of,
     validate_team_leads,
     validate_team_members,
+    validate_team_gws_group,
     validate_duplicate_team_entries,
     validate_alumni,
     validate_archived_teams,
@@ -48,6 +49,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_list_extra_teams,
     validate_list_addresses,
     validate_people_addresses,
+    validate_people_gws,
     validate_duplicate_permissions,
     validate_permissions,
     validate_rfcbot_labels,
@@ -242,6 +244,27 @@ fn validate_team_members(data: &Data, errors: &mut Vec<String>) {
                     team.name()
                 );
             }
+            Ok(())
+        });
+        Ok(())
+    });
+}
+
+/// Ensure that teams mapped to Google Groups have all Google Workspace (GWS) accounts already provisioned
+fn validate_team_gws_group(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, errors| {
+        wrapper(team.members(data)?.iter(), errors, |member, _| {
+            if let Some(person) = data.person(member)
+                && let Some(true) = team.google_workspace_saml_group()
+                && person.google_workspace().is_none()
+            {
+                bail!(
+                    "team `{}` defines a google group but `{}` account is not on google workspace",
+                    team.name(),
+                    member,
+                );
+            }
+
             Ok(())
         });
         Ok(())
@@ -541,6 +564,22 @@ fn validate_people_addresses(data: &Data, errors: &mut Vec<String>) {
         {
             bail!("invalid email address of `{}`: {}", person.github(), email);
         }
+        Ok(())
+    });
+}
+
+/// Ensure personal email provided for people with access to Google Workspace
+fn validate_people_gws(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.people(), errors, |person, _| {
+        if person.google_workspace().is_some() {
+            return match person.email() {
+                Email::Missing | Email::Disabled => {
+                    bail!("google workspace requires a personal user email")
+                }
+                Email::Present(_) => Ok(()),
+            };
+        }
+
         Ok(())
     });
 }

@@ -82,6 +82,16 @@ pub(crate) struct Funding {
     github_sponsors: bool,
 }
 
+#[allow(dead_code)]
+#[derive(serde::Deserialize, Debug)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub(crate) struct GoogleWorkspace {
+    first_name: String,
+    last_name: String,
+    account_handle: String,
+}
+
+#[allow(dead_code)]
 #[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Person {
@@ -98,6 +108,7 @@ pub(crate) struct Person {
     funding: Funding,
     #[serde(default)]
     permissions: Permissions,
+    google_workspace: Option<GoogleWorkspace>,
 }
 
 impl Person {
@@ -152,6 +163,10 @@ impl Person {
         &self.permissions
     }
 
+    pub(crate) fn google_workspace(&self) -> &Option<GoogleWorkspace> {
+        &self.google_workspace
+    }
+
     pub(crate) fn validate(&self) -> Result<(), Error> {
         if let EmailField::Disabled(true) = &self.email {
             bail!("`email = true` is not valid (for person {})", self.github);
@@ -185,6 +200,7 @@ impl std::fmt::Display for TeamKind {
     }
 }
 
+#[allow(dead_code)]
 #[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) struct Team {
@@ -193,6 +209,7 @@ pub(crate) struct Team {
     kind: TeamKind,
     subteam_of: Option<String>,
     top_level: Option<bool>,
+    google_workspace_saml_group: Option<bool>,
     people: TeamPeople,
     #[serde(default)]
     permissions: Permissions,
@@ -227,6 +244,10 @@ impl Team {
 
     pub(crate) fn top_level(&self) -> Option<bool> {
         self.top_level
+    }
+
+    pub(crate) fn google_workspace_saml_group(&self) -> Option<bool> {
+        self.google_workspace_saml_group
     }
 
     // Return's whether the provided team is a subteam of this team

@@ -13,6 +13,7 @@ zulip-id = 123456   # Zulip ID of the person (required)
 discord-id = 123456 # Discord ID of the person (optional)
 # You can also set `email = false` to explicitly disable the email for the user.
 # This will, for example, avoid adding the person to the mailing lists.
+# Note: if you need Google SSO access, this field is mandatory
 email = "john@doe.com"  # Email address used for mailing lists (optional)
 irc = "jdoe"  # Nickname of the person on IRC, if different than the GitHub one (optional)
 matrix = "@john:doe.com" # Matrix username (MXID) of the person (optional)
@@ -24,6 +25,13 @@ github-sponsors = true
 
 [permissions]
 # Optional, see the permissions documentation
+
+[google-workspace]
+# Optional, available only for users who require managed infrastructure access
+# See https://forge.rust-lang.org/infra/docs
+first-name = "John"  # Your first name
+last-name = "Doe"   # Your last name or preferred surname
+account-handle = "john.doe" # The handle to define a @rust-lang.org account (e.g. john.doe@rust-lang.org)
 ```
 
 The file must be named the same as the GitHub username.
@@ -45,6 +53,11 @@ top-level = true
 # - project-group
 # - marker-team
 kind = "working-group"
+
+# Optional, defaults to false.
+# Set this field to true to grant team members access to specific infrastructure systems via Google Groups.
+# See https://forge.rust-lang.org/infra/docs
+google-workpace-saml-group = false
 
 [people]
 # Leads of the team, can be more than one and must be members of the team.
