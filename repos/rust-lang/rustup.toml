@@ -17,6 +17,7 @@ pattern = "release/*"
 ci-checks = ["conclusion"]
 required-approvals = 0
 merge-queue = { enabled = true, method = "rebase" }
+prevent-creation = false
 
 [environments.github-pages]
 
