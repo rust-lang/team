@@ -12,6 +12,12 @@ pattern = "main"
 ci-checks = ["conclusion"]
 merge-queue = { enabled = true, method = "rebase" }
 
+[[branch-protections]]
+pattern = "release/*"
+ci-checks = ["conclusion"]
+required-approvals = 0
+merge-queue = { enabled = true, method = "rebase" }
+
 [environments.github-pages]
 
 [environments.www-deploy]
