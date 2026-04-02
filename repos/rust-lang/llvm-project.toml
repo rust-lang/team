@@ -9,6 +9,7 @@ wg-llvm = "maintain"
 [[branch-protections]]
 pattern = "rustc/*"
 pr-required = false
+prevent-creation = false
 
 [[branch-protections]]
 pattern = "master"
