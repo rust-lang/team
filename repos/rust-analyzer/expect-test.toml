@@ -10,3 +10,4 @@ expect-test = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["test"]
+merge-queue = { enabled = true, check-response-timeout-minutes = 30 }
