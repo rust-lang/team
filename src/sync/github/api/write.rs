@@ -463,6 +463,7 @@ impl GitHubWrite {
             contexts: &'a [String],
             allows_force_pushes: bool,
             dismiss_stale: bool,
+            requires_strict_status_checks: bool,
             review_count: u8,
             restricts_pushes: bool,
             // Is a PR required to push into this branch?
@@ -482,14 +483,13 @@ impl GitHubWrite {
             BranchProtectionOp::UpdateBranchProtection(id) => id,
         };
         let query = format!("
-        mutation($id: ID!, $pattern:String!, $contexts: [String!], $allowsForcePushes: Boolean, $dismissStale: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean, $requiresApprovingReviews: Boolean) {{
+        mutation($id: ID!, $pattern:String!, $contexts: [String!], $allowsForcePushes: Boolean, $dismissStale: Boolean, $requiresStrictStatusChecks: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean, $requiresApprovingReviews: Boolean) {{
             {mutation_name}(input: {{
                 {id_field}: $id,
                 pattern: $pattern,
                 requiresStatusChecks: true,
                 requiredStatusCheckContexts: $contexts,
-                # Disable 'Require branch to be up-to-date before merging'
-                requiresStrictStatusChecks: false,
+                requiresStrictStatusChecks: $requiresStrictStatusChecks,
                 isAdminEnforced: true,
                 allowsForcePushes: $allowsForcePushes,
                 requiredApprovingReviewCount: $reviewCount,
@@ -531,6 +531,8 @@ impl GitHubWrite {
                         contexts: &branch_protection.required_status_check_contexts,
                         allows_force_pushes: branch_protection.allows_force_pushes,
                         dismiss_stale: branch_protection.dismisses_stale_reviews,
+                        requires_strict_status_checks: branch_protection
+                            .requires_strict_status_checks,
                         review_count: branch_protection.required_approving_review_count,
                         // We restrict merges, if we have explicitly set some actors to be
                         // able to merge (i.e., we allow allow those with write permissions

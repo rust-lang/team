@@ -79,7 +79,7 @@ impl<'a> Generator<'a> {
                             AllowedMergeApp::PromoteRelease => v1::MergeBot::PromoteRelease,
                         })
                         .collect(),
-                    require_up_to_date_branches: false,
+                    require_up_to_date_branches: b.require_up_to_date_branches,
                     merge_queue: b.merge_queue.enabled,
                     merge_queue_method: b.merge_queue.method.into(),
                     merge_queue_max_entries_to_build: b.merge_queue.max_entries_to_build,

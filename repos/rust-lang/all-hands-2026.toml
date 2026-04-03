@@ -1,0 +1,7 @@
+org = 'rust-lang'
+name = 'all-hands-2026'
+description = 'Rust All Hands 2026'
+bots = []
+
+[access.teams]
+all-hands = 'maintain'

@@ -426,6 +426,7 @@ impl SyncGitHub {
                 diffs.push(repo_diff);
             }
         }
+        diffs.sort_by(|left, right| left.org_and_name().cmp(&right.org_and_name()));
         Ok(diffs)
     }
 
@@ -1136,6 +1137,7 @@ pub fn construct_branch_protection(
         is_admin_enforced: true,
         allows_force_pushes: !branch_protection.prevent_force_push,
         dismisses_stale_reviews: branch_protection.dismiss_stale_review,
+        requires_strict_status_checks: branch_protection.require_up_to_date_branches,
         required_approving_review_count,
         required_status_check_contexts: checks,
         push_allowances,
@@ -1223,7 +1225,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
                         integration_id: Some(GITHUB_ACTIONS_INTEGRATION_ID),
                     })
                     .collect(),
-                strict_required_status_checks_policy: STRICT_REQUIRED_STATUS_CHECKS_POLICY_DEFAULT,
+                strict_required_status_checks_policy: branch_protection.require_up_to_date_branches,
             },
         });
     }
@@ -1367,6 +1369,13 @@ impl RepoDiff {
         match self {
             RepoDiff::Create(_c) => false,
             RepoDiff::Update(u) => u.noop(),
+        }
+    }
+
+    fn org_and_name(&self) -> (&str, &str) {
+        match self {
+            RepoDiff::Create(c) => (&c.org, &c.name),
+            RepoDiff::Update(u) => (&u.org, &u.name),
         }
     }
 }
@@ -1976,6 +1985,12 @@ fn log_branch_protection(
     mut result: impl Write,
 ) -> std::fmt::Result {
     log_field(
+        "Require branches to be up to date",
+        &current.requires_strict_status_checks,
+        new.map(|n| &n.requires_strict_status_checks),
+        &mut result,
+    )?;
+    log_field(
         "Dismiss Stale Reviews",
         &current.dismisses_stale_reviews,
         new.map(|n| &n.dismisses_stale_reviews),
@@ -2287,7 +2302,7 @@ fn log_ruleset(
                 }
                 api::RulesetRule::RequiredStatusChecks { parameters } => {
                     rules.insert(
-                        "Strict policy for status checks",
+                        "Require branches to be up to date",
                         LoggedRule::bool_with_default(
                             parameters.strict_required_status_checks_policy,
                             STRICT_REQUIRED_STATUS_CHECKS_POLICY_DEFAULT,
