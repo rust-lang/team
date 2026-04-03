@@ -39,3 +39,7 @@ extra-teams = ["lang"]
 
 [[zulip-groups]]
 name = "T-lang-advisors"
+
+[[zulip-streams]]
+name = "t-lang/with-advisors"
+extra-teams = ["lang"]
