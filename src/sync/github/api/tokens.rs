@@ -10,35 +10,39 @@ use secrecy::SecretString;
 /// Enterprise GitHub App used for certain operations that cannot be performed with an organization
 /// GitHub app.
 #[derive(Clone)]
-pub struct EnterpriseClientCtx {
+pub struct EnterpriseAppCtx {
     /// Token for the enterprise installation of an enterprise GH app.
     ///
     /// Used to:
-    /// - Find out in which repositories is an app installation installed in.
+    /// - Find out in which repositories is an app installed in.
     ///
     /// The token has to be available for the whole duration of the process.
     enterprise_token: SecretString,
     /// Maps an organization to a pre-configured organization installation token of an enterprise GH
-    /// app.
+    /// app. We need this token, because the enterprise token does not have permissions for fetching
+    /// everything we need about apps installed in an organization (sigh).
     ///
     /// Used to:
     /// - Find which apps are installed in a given organization.
     ///
     /// The token has to be available for the whole duration of the process.
     org_tokens: HashMap<String, SecretString>,
+    /// Name of the enterprise.
+    enterprise_name: String,
 }
 
 #[derive(Clone)]
 pub enum GitHubTokens {
-    /// One token per organization (used with GitHub App).
-    /// Optionally can also include a GitHub enterprise app token, which is used to synchronize
-    /// GitHub apps themselves.
+    /// Authentication using a set of GitHub apps.
+    ///
+    /// Stores one token per organization for most API operations.
+    /// For operations involving other GitHub apps, also stores GitHub enterprise app token(s).
     App {
         /// Maps an organization to a pre-configured token.
         /// The token has to be available for the whole duration of the process.
         org_tokens: HashMap<String, SecretString>,
         /// Context for using enterprise GitHub App.
-        enterprise_client_ctx: EnterpriseClientCtx,
+        enterprise_client_ctx: EnterpriseAppCtx,
     },
     /// One token for all API calls (used with Personal Access Token).
     Pat(SecretString),
@@ -69,14 +73,14 @@ impl GitHubTokens {
             // Those apps are preauthorized (from CI), and we directly load their tokens from
             // environment variables.
 
-            // Then we also need to load an enterprise GitHub App that is used to manage GitHub App
+            // Then we also need to load an enterprise GitHub App used to manage GitHub App
             // installations. Since the CI action that we use does not support enterprise apps yet,
             // we instead load the app id and the secret key through environment variables and
             // generate the necessary tokens ourselves.
             // Ideally, we would at least get the enterprise app installation id from GitHub, but
             // for some reason their endpoint for that does not work at the moment.
             // So we also have to pass the installation ID manually.
-
+            let enterprise_name = get_var("ENTERPRISE_NAME")?;
             let enterprise_gh_app_id = get_var("ENTERPRISE_APP_ID")?
                 .parse::<u64>()
                 .map(AppId)
@@ -95,13 +99,14 @@ impl GitHubTokens {
             let enterprise_app_client = OctocrabBuilder::new()
                 .app(enterprise_gh_app_id, secret_key)
                 .build()?;
-            // Client for the enterprise app's installation in the enterprise... sigh.
+            // Client for the enterprise app's installation in the enterprise... sigh
             let enterprise_installation_client =
                 enterprise_app_client.installation(enterprise_gh_app_installation_id)?;
+
             // Token for finding which repositories are GH apps installed in
             // Create a 1 hour buffer for the token
             let enterprise_token = enterprise_installation_client
-                .installation_token_with_buffer(chrono::Duration::hours(1))
+                .installation_token_with_buffer(Duration::hours(1))
                 .await?;
 
             let mut enterprise_org_tokens = HashMap::new();
@@ -117,7 +122,7 @@ impl GitHubTokens {
                         )
                     })?;
                 let org_client = enterprise_app_client.installation(org_installation.id)?;
-                // Generate an installation token for the given org
+                // Generate an enterprise app installation token for the given org
                 let org_token = org_client
                     .installation_token_with_buffer(Duration::hours(1))
                     .await?;
@@ -126,9 +131,10 @@ impl GitHubTokens {
 
             Ok(GitHubTokens::App {
                 org_tokens: tokens,
-                enterprise_client_ctx: EnterpriseClientCtx {
+                enterprise_client_ctx: EnterpriseAppCtx {
                     enterprise_token,
                     org_tokens: enterprise_org_tokens,
+                    enterprise_name,
                 },
             })
         }
@@ -163,6 +169,19 @@ impl GitHubTokens {
                 }
             },
             GitHubTokens::Pat(pat) => Ok(pat),
+        }
+    }
+
+    /// Return the name of the enterprise, if present.
+    pub fn get_enterprise_name(&self) -> anyhow::Result<String> {
+        match self {
+            GitHubTokens::App {
+                enterprise_client_ctx,
+                ..
+            } => Ok(enterprise_client_ctx.enterprise_name.clone()),
+            GitHubTokens::Pat(_) => Err(anyhow::anyhow!(
+                "No enterprise is configured when using a PAT"
+            )),
         }
     }
 }

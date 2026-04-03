@@ -202,8 +202,10 @@ impl GithubRead for GitHubApiRead {
 
         let mut installations = Vec::new();
 
-        // For this endpoint, we have to use an org-specific app installation of
-        // an enterprise GH app.
+        // Without a PAT, we could use an enterprise endpoint instead, which would require an
+        // organization installation token. However, that endpoint does not return the app ID, just
+        // its slug. And getting the ID from the slug via the /apps/<slug> endpoint does not work
+        // for private apps.
         let url = GitHubUrl::orgs(org, "installations")?
             .with_token_type(TokenType::EnterpriseOrganization);
         self.client
@@ -227,17 +229,44 @@ impl GithubRead for GitHubApiRead {
 
         let mut installations = Vec::new();
 
-        let url = format!("user/installations/{installation_id}/repositories");
+        // For a PAT, we have to use the /user/installations/<installation_id>/repositories
+        // endpoint.
+        // For GH apps we have to use an enterprise endpoint instead.
+        if self.client.uses_pat() {
+            let url = format!("user/installations/{installation_id}/repositories");
+            let url = GitHubUrl::new(&url, org);
+            self.client
+                .rest_paginated(&Method::GET, &url, |response: InstallationPage| {
+                    installations.extend(response.repositories);
+                    Ok(())
+                })
+                .await
+                .with_context(|| {
+                    format!("failed to send rest paginated request to {}", url.url())
+                })?;
+        } else {
+            let url = GitHubUrl::new(
+                &format!("enterprises/{}/apps/organizations/{org}/installations/{installation_id}/repositories",
+                    self.client.github_tokens.get_enterprise_name()?
+                ),
+                org,
+            )
+            .with_token_type(TokenType::Enterprise);
+            self.client
+                .rest_paginated(
+                    &Method::GET,
+                    &url,
+                    |repositories: Vec<RepoAppInstallation>| {
+                        installations.extend(repositories);
+                        Ok(())
+                    },
+                )
+                .await
+                .with_context(|| {
+                    format!("failed to send rest paginated request to {}", url.url())
+                })?;
+        };
 
-        // For this endpoint, we have to use the enterprise installation of an enterprise GH app
-        let gh_url = GitHubUrl::new(&url, org).with_token_type(TokenType::Enterprise);
-        self.client
-            .rest_paginated(&Method::GET, &gh_url, |response: InstallationPage| {
-                installations.extend(response.repositories);
-                Ok(())
-            })
-            .await
-            .with_context(|| format!("failed to send rest paginated request to {url}"))?;
         Ok(installations)
     }
 

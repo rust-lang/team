@@ -12,8 +12,8 @@ use rust_team_data::v1::{
 use crate::schema;
 use crate::sync::Config;
 use crate::sync::github::api::{
-    BranchPolicy, BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Ruleset, Team,
-    TeamMember, TeamPrivacy, TeamRole,
+    BranchPolicy, BranchProtection, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation,
+    RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::sync::github::{
     OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_branch_protection,
