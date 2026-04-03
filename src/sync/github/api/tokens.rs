@@ -173,12 +173,12 @@ impl GitHubTokens {
     }
 
     /// Return the name of the enterprise, if present.
-    pub fn get_enterprise_name(&self) -> anyhow::Result<String> {
+    pub fn get_enterprise_name(&self) -> anyhow::Result<&str> {
         match self {
             GitHubTokens::App {
                 enterprise_client_ctx,
                 ..
-            } => Ok(enterprise_client_ctx.enterprise_name.clone()),
+            } => Ok(enterprise_client_ctx.enterprise_name.as_str()),
             GitHubTokens::Pat(_) => Err(anyhow::anyhow!(
                 "No enterprise is configured when using a PAT"
             )),
