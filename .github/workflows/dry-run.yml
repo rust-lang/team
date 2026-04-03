@@ -72,6 +72,11 @@ jobs:
           # need to print a diff.
           CRATES_IO_TOKEN: ""
           CRATES_IO_USERNAME: "rust-lang-owner"
+          ENTERPRISE_NAME: "rust-lang"
+          # sync-team-app-read enterprise app
+          ENTERPRISE_APP_ID: 2885328
+          ENTERPRISE_APP_INSTALLATION_ID: 110701681
+          ENTERPRISE_APP_SECRET_KEY: ${{ secrets.ENTERPRISE_APP_SECRET_KEY }}
         # This applies pipefail, so that the tee pipeline below fails when sync-team fails.
         shell: bash
         run: |
