@@ -19,9 +19,6 @@ outputs:
   rust-lang-nursery-token:
     description: Token for the rust-lang-nursery organization
     value: ${{ steps.rust-lang-nursery-token.outputs.token }}
-  bors-rs-token:
-    description: Token for the bors-rs organization
-    value: ${{ steps.bors-rs-token.outputs.token }}
   rust-analyzer-token:
     description: Token for the rust-analyzer organization
     value: ${{ steps.rust-analyzer-token.outputs.token }}
@@ -60,14 +57,6 @@ runs:
         app-id: ${{ inputs.app-id }}
         private-key: ${{ inputs.private-key }}
         owner: rust-lang-nursery
-
-    - name: Generate GitHub token (bors-rs)
-      uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
-      id: bors-rs-token
-      with:
-        app-id: ${{ inputs.app-id }}
-        private-key: ${{ inputs.private-key }}
-        owner: bors-rs
 
     - name: Generate GitHub token (rust-analyzer)
       uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
