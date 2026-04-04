@@ -12,8 +12,8 @@ use rust_team_data::v1::{
 use crate::schema;
 use crate::sync::Config;
 use crate::sync::github::api::{
-    BranchPolicy, BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Ruleset, Team,
-    TeamMember, TeamPrivacy, TeamRole,
+    BranchPolicy, BranchProtection, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation,
+    RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::sync::github::{
     OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_branch_protection,
@@ -138,6 +138,7 @@ impl DataModel {
                 repo.name.clone(),
                 Repo {
                     node_id: org.repos.len().to_string(),
+                    repo_id: org.repos.len() as u64,
                     name: repo.name.clone(),
                     org: repo.org.clone(),
                     description: repo.description.clone(),
@@ -602,6 +603,18 @@ impl GithubRead for GithubMock {
 
     async fn org_members(&self, org: &str) -> anyhow::Result<HashMap<u64, String>> {
         Ok(self.get_org(org).members.iter().cloned().collect())
+    }
+
+    async fn org_app_installations(&self, _org: &str) -> anyhow::Result<Vec<OrgAppInstallation>> {
+        Ok(vec![])
+    }
+
+    async fn app_installation_repos(
+        &self,
+        _installation_id: u64,
+        _org: &str,
+    ) -> anyhow::Result<Vec<RepoAppInstallation>> {
+        Ok(vec![])
     }
 
     async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
