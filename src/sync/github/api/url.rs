@@ -1,3 +1,15 @@
+/// Type of a token used for an API request.
+/// If PAT is used, then token type does not matter.
+#[derive(Clone)]
+pub enum TokenType {
+    /// Use token for an organization installation of an organization GitHub App.
+    Organization,
+    /// Use token for an organization installation of an enterprise GitHub App.
+    EnterpriseOrganization,
+    /// Use token for an enterprise installation of an enterprise GitHub App.
+    Enterprise,
+}
+
 /// A URL to a GitHub API endpoint.
 /// When using a GitHub App instead of a PAT, the token depends on the organization.
 /// So storing the token together with the URL is convenient.
@@ -5,6 +17,7 @@
 pub struct GitHubUrl {
     url: String,
     org: String,
+    token_type: TokenType,
 }
 
 impl GitHubUrl {
@@ -18,7 +31,13 @@ impl GitHubUrl {
         Self {
             url,
             org: org.to_string(),
+            token_type: TokenType::Organization,
         }
+    }
+
+    pub fn with_token_type(mut self, token_type: TokenType) -> Self {
+        self.token_type = token_type;
+        self
     }
 
     pub fn repos(org: &str, repo: &str, remaining_endpoint: &str) -> anyhow::Result<Self> {
@@ -44,6 +63,10 @@ impl GitHubUrl {
 
     pub fn org(&self) -> &str {
         &self.org
+    }
+
+    pub fn token_type(&self) -> &TokenType {
+        &self.token_type
     }
 }
 

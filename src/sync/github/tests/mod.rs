@@ -216,6 +216,7 @@ async fn repo_change_description() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "foo",
@@ -234,6 +235,7 @@ async fn repo_change_description() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -255,6 +257,7 @@ async fn repo_change_homepage() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -277,6 +280,7 @@ async fn repo_change_homepage() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -348,6 +352,7 @@ async fn repo_create() {
                 ],
                 rulesets: [],
                 environments: [],
+                app_installations: [],
             },
         ),
     ]
@@ -376,6 +381,7 @@ async fn repo_add_member() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -403,6 +409,7 @@ async fn repo_add_member() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -430,6 +437,7 @@ async fn repo_change_member_permissions() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -458,6 +466,7 @@ async fn repo_change_member_permissions() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -480,6 +489,7 @@ async fn repo_remove_member() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -507,6 +517,7 @@ async fn repo_remove_member() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -531,6 +542,7 @@ async fn repo_add_team() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -558,6 +570,7 @@ async fn repo_add_team() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -580,6 +593,7 @@ async fn repo_change_team_permissions() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -608,6 +622,7 @@ async fn repo_change_team_permissions() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -630,6 +645,7 @@ async fn repo_remove_team() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -657,6 +673,7 @@ async fn repo_remove_team() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -679,6 +696,7 @@ async fn repo_archive_repo() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -697,6 +715,7 @@ async fn repo_archive_repo() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -722,6 +741,7 @@ async fn repo_add_branch_protection() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -776,6 +796,7 @@ async fn repo_add_branch_protection() {
                 ],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -821,6 +842,7 @@ async fn repo_update_branch_protection() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -873,6 +895,7 @@ async fn repo_update_branch_protection() {
                 ],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -902,6 +925,7 @@ async fn repo_remove_branch_protection() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -927,6 +951,7 @@ async fn repo_remove_branch_protection() {
                 ],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -998,6 +1023,7 @@ async fn repo_environment_create() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -1031,6 +1057,7 @@ async fn repo_environment_create() {
                         },
                     ),
                 ],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -1057,6 +1084,7 @@ async fn repo_environment_delete() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -1082,6 +1110,7 @@ async fn repo_environment_delete() {
                         "staging",
                     ),
                 ],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -1123,6 +1152,7 @@ async fn repo_environment_update() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -1152,6 +1182,7 @@ async fn repo_environment_update() {
                         "staging",
                     ),
                 ],
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -1183,6 +1214,7 @@ async fn repo_environment_update_branches() {
                 org: "rust-lang",
                 name: "repo1",
                 repo_node_id: "0",
+                repo_id: 0,
                 settings_diff: (
                     RepoSettings {
                         description: "",
@@ -1218,6 +1250,7 @@ async fn repo_environment_update_branches() {
                         new_tags: [],
                     },
                 ],
+                app_installation_diffs: [],
             },
         ),
     ]

@@ -1,9 +1,10 @@
 use crate::sync::github::api;
+use crate::sync::github::api::url::TokenType;
 use crate::sync::github::api::{BranchPolicy, Ruleset};
 use crate::sync::github::api::{
-    BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, Repo, RepoTeam,
-    RepoUser, RestPaginatedError, Team, TeamMember, TeamRole, team_node_id, url::GitHubUrl,
-    user_node_id,
+    BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, OrgAppInstallation,
+    Repo, RepoAppInstallation, RepoTeam, RepoUser, RestPaginatedError, Team, TeamMember, TeamRole,
+    team_node_id, url::GitHubUrl, user_node_id,
 };
 use crate::sync::utils::ResponseExt;
 use anyhow::Context as _;
@@ -24,6 +25,16 @@ pub(crate) trait GithubRead {
 
     /// Get the members of an org
     async fn org_members(&self, org: &str) -> anyhow::Result<HashMap<u64, String>>;
+
+    /// Get the app installations of an org
+    async fn org_app_installations(&self, org: &str) -> anyhow::Result<Vec<OrgAppInstallation>>;
+
+    /// Get the repositories enabled for an app installation.
+    async fn app_installation_repos(
+        &self,
+        installation_id: u64,
+        org: &str,
+    ) -> anyhow::Result<Vec<RepoAppInstallation>>;
 
     /// Get all teams associated with a org
     ///
@@ -183,6 +194,82 @@ impl GithubRead for GitHubApiRead {
         Ok(members)
     }
 
+    async fn org_app_installations(&self, org: &str) -> anyhow::Result<Vec<OrgAppInstallation>> {
+        #[derive(serde::Deserialize, Debug)]
+        struct InstallationPage {
+            installations: Vec<OrgAppInstallation>,
+        }
+
+        let mut installations = Vec::new();
+
+        // Without a PAT, we could use an enterprise endpoint instead, which would require an
+        // organization installation token. However, that endpoint does not return the app ID, just
+        // its slug. And getting the ID from the slug via the /apps/<slug> endpoint does not work
+        // for private apps.
+        let url = GitHubUrl::orgs(org, "installations")?
+            .with_token_type(TokenType::EnterpriseOrganization);
+        self.client
+            .rest_paginated(&Method::GET, &url, |response: InstallationPage| {
+                installations.extend(response.installations);
+                Ok(())
+            })
+            .await?;
+        Ok(installations)
+    }
+
+    async fn app_installation_repos(
+        &self,
+        installation_id: u64,
+        org: &str,
+    ) -> anyhow::Result<Vec<RepoAppInstallation>> {
+        #[derive(serde::Deserialize, Debug)]
+        struct InstallationPage {
+            repositories: Vec<RepoAppInstallation>,
+        }
+
+        let mut installations = Vec::new();
+
+        // For a PAT, we have to use the /user/installations/<installation_id>/repositories
+        // endpoint.
+        // For GH apps we have to use an enterprise endpoint instead.
+        if self.client.uses_pat() {
+            let url = format!("user/installations/{installation_id}/repositories");
+            let url = GitHubUrl::new(&url, org);
+            self.client
+                .rest_paginated(&Method::GET, &url, |response: InstallationPage| {
+                    installations.extend(response.repositories);
+                    Ok(())
+                })
+                .await
+                .with_context(|| {
+                    format!("failed to send rest paginated request to {}", url.url())
+                })?;
+        } else {
+            let url = GitHubUrl::new(
+                &format!("enterprises/{}/apps/organizations/{org}/installations/{installation_id}/repositories",
+                    self.client.github_tokens.get_enterprise_name()?
+                ),
+                org,
+            )
+            .with_token_type(TokenType::Enterprise);
+            self.client
+                .rest_paginated(
+                    &Method::GET,
+                    &url,
+                    |repositories: Vec<RepoAppInstallation>| {
+                        installations.extend(repositories);
+                        Ok(())
+                    },
+                )
+                .await
+                .with_context(|| {
+                    format!("failed to send rest paginated request to {}", url.url())
+                })?;
+        };
+
+        Ok(installations)
+    }
+
     async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
         let mut teams = Vec::new();
 
@@ -330,6 +417,7 @@ impl GithubRead for GitHubApiRead {
             query($owner: String!, $name: String!) {
                 repository(owner: $owner, name: $name) {
                     id
+                    databaseId
                     autoMergeAllowed
                     description
                     homepageUrl
@@ -350,6 +438,7 @@ impl GithubRead for GitHubApiRead {
             // Equivalent of `node_id` of the Rest API
             id: String,
             // Equivalent of `id` of the Rest API
+            database_id: u64,
             auto_merge_allowed: Option<bool>,
             description: Option<String>,
             homepage_url: Option<String>,
@@ -371,6 +460,7 @@ impl GithubRead for GitHubApiRead {
             .with_context(|| format!("failed to retrieve repo `{org}/{repo}`"))?;
 
         let repo = result.and_then(|r| r.repository).map(|repo_response| Repo {
+            repo_id: repo_response.database_id,
             node_id: repo_response.id,
             name: repo.to_string(),
             description: repo_response.description.unwrap_or_default(),
