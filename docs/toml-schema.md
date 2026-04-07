@@ -419,6 +419,8 @@ dismiss-stale-review = false
 # (optional - default `false`)
 require-conversation-resolution = false
 # Prevent merge commits from being pushed to matching branches.
+# When this option is set, one cannot use `merge` as merging method 
+# for a Merge Queue. Use squash or rebase instead.
 # (optional - default `false`)
 require-linear-history = false
 # Is a PR required when making changes to this branch?
