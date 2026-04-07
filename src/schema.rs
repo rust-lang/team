@@ -835,6 +835,7 @@ pub(crate) enum Bot {
     Glacierbot,
     LogAnalyzer,
     Renovate,
+    ForkingRenovate,
     HerokuDeployAccess,
 }
 
