@@ -340,6 +340,9 @@ async fn repo_create() {
                             is_admin_enforced: true,
                             allows_force_pushes: false,
                             dismisses_stale_reviews: false,
+                            requires_conversation_resolution: false,
+                            requires_linear_history: false,
+                            requires_strict_status_checks: false,
                             required_approving_review_count: 1,
                             required_status_check_contexts: [
                                 "test",
@@ -765,6 +768,9 @@ async fn repo_add_branch_protection() {
                                 is_admin_enforced: true,
                                 allows_force_pushes: false,
                                 dismisses_stale_reviews: false,
+                                requires_conversation_resolution: false,
+                                requires_linear_history: false,
+                                requires_strict_status_checks: false,
                                 required_approving_review_count: 0,
                                 required_status_check_contexts: [
                                     "test",
@@ -783,6 +789,9 @@ async fn repo_add_branch_protection() {
                                 is_admin_enforced: true,
                                 allows_force_pushes: false,
                                 dismisses_stale_reviews: false,
+                                requires_conversation_resolution: false,
+                                requires_linear_history: false,
+                                requires_strict_status_checks: false,
                                 required_approving_review_count: 0,
                                 required_status_check_contexts: [],
                                 push_allowances: [],
@@ -828,7 +837,10 @@ async fn repo_update_branch_protection() {
         BranchProtectionMode::PrNotRequired => unreachable!(),
     }
     protection.dismiss_stale_review = true;
+    protection.require_conversation_resolution = true;
+    protection.require_linear_history = true;
     protection.prevent_force_push = false;
+    protection.require_up_to_date_branches = true;
 
     let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
@@ -864,6 +876,9 @@ async fn repo_update_branch_protection() {
                                 is_admin_enforced: true,
                                 allows_force_pushes: false,
                                 dismisses_stale_reviews: false,
+                                requires_conversation_resolution: false,
+                                requires_linear_history: false,
+                                requires_strict_status_checks: false,
                                 required_approving_review_count: 1,
                                 required_status_check_contexts: [
                                     "test",
@@ -876,6 +891,9 @@ async fn repo_update_branch_protection() {
                                 is_admin_enforced: true,
                                 allows_force_pushes: true,
                                 dismisses_stale_reviews: true,
+                                requires_conversation_resolution: true,
+                                requires_linear_history: true,
+                                requires_strict_status_checks: true,
                                 required_approving_review_count: 0,
                                 required_status_check_contexts: [
                                     "Test",

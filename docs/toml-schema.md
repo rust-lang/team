@@ -406,10 +406,21 @@ name = "My custom ruleset name"
 # not the name of the workflow or the workflow filename. The name of the job
 # defaults to its YAML key name, or can be overridden with the `name` field.
 ci-checks = ["CI"]
+# Whether branches must be up to date with the base branch before merging.
+# This option is only relevant when `ci-checks` is non-empty.
+# This option is also not suggested if you use a merge queue.
+# (optional - default `false`)
+require-up-to-date-branches = false
 # Whether new commits after a reviewer's approval of a PR
 # merging into this branch require another review.
 # (optional - default `false`)
 dismiss-stale-review = false
+# Whether all PR conversations must be resolved before merging.
+# (optional - default `false`)
+require-conversation-resolution = false
+# Prevent merge commits from being pushed to matching branches.
+# (optional - default `false`)
+require-linear-history = false
 # Is a PR required when making changes to this branch?
 # (optional - default `true`)
 pr-required = true

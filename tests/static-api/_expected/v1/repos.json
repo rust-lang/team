@@ -12,6 +12,8 @@
         {
           "pattern": "master",
           "dismiss_stale_review": false,
+          "require_conversation_resolution": false,
+          "require_linear_history": false,
           "mode": {
             "pr_required": {
               "ci_checks": [
@@ -23,6 +25,7 @@
           "allowed_merge_teams": [],
           "merge_bots": [],
           "allowed_merge_apps": [],
+          "require_up_to_date_branches": false,
           "merge_queue": false,
           "prevent_creation": true,
           "prevent_update": false,
@@ -57,6 +60,8 @@
         {
           "pattern": "master",
           "dismiss_stale_review": false,
+          "require_conversation_resolution": false,
+          "require_linear_history": false,
           "mode": {
             "pr_required": {
               "ci_checks": [
@@ -70,6 +75,7 @@
           ],
           "merge_bots": [],
           "allowed_merge_apps": [],
+          "require_up_to_date_branches": false,
           "merge_queue": false,
           "prevent_creation": true,
           "prevent_update": false,

@@ -1,0 +1,22 @@
+name = "formality"
+subteam-of = "types"
+
+[people]
+leads = ["nikomatsakis"]
+members = ["jackh726", "lqd", "tiif", "nikomatsakis"]
+alumni = []
+
+[website]
+name = "Formality team"
+description = "Maintaining and improving a-mir-formality, the types team model of the Rust type system"
+repo = "https://github.com/rust-lang/a-mir-formality"
+zulip-stream = "t-types/formality"
+
+[[zulip-groups]]
+name = "T-formality"
+
+[[github]]
+orgs = ["rust-lang"]
+
+[permissions]
+dev-desktop = true

@@ -948,7 +948,13 @@ pub(crate) struct BranchProtection {
     #[serde(default)]
     pub ci_checks: Vec<String>,
     #[serde(default)]
+    pub require_up_to_date_branches: bool,
+    #[serde(default)]
     pub dismiss_stale_review: bool,
+    #[serde(default)]
+    pub require_conversation_resolution: bool,
+    #[serde(default)]
+    pub require_linear_history: bool,
     #[serde(default)]
     pub required_approvals: Option<u32>,
     #[serde(default = "default_true")]

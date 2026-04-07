@@ -63,7 +63,6 @@ jobs:
           GITHUB_TOKEN_RUST_LANG: ${{ steps.generate-tokens.outputs.rust-lang-token }}
           GITHUB_TOKEN_RUST_LANG_DEPRECATED: ${{ steps.generate-tokens.outputs.rust-lang-deprecated-token }}
           GITHUB_TOKEN_RUST_LANG_NURSERY: ${{ steps.generate-tokens.outputs.rust-lang-nursery-token }}
-          GITHUB_TOKEN_BORS_RS: ${{ steps.generate-tokens.outputs.bors-rs-token }}
           GITHUB_TOKEN_RUST_ANALYZER: ${{ steps.generate-tokens.outputs.rust-analyzer-token }}
           GITHUB_TOKEN_RUST_EMBEDDED: ${{ steps.generate-tokens.outputs.rust-embedded-token }}
           GITHUB_TOKEN_RUST_DEV_TOOLS: ${{ steps.generate-tokens.outputs.rust-dev-tools-token }}

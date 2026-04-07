@@ -1,0 +1,14 @@
+name = "all-hands"
+subteam-of = "launching-pad"
+
+[people]
+leads = ["m-ou-se"]
+members = ["m-ou-se"]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "All hands team"
+description = "Organizes the Rust All Hands"

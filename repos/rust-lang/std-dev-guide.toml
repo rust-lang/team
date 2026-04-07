@@ -13,6 +13,6 @@ rustc-dev-guide = "write"
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["book-test"]
+require-up-to-date-branches = true
 
 [environments.github-pages]
-

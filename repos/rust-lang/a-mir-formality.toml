@@ -8,6 +8,7 @@ lang = "maintain"
 lang-ops = "maintain"
 lang-docs = "maintain"
 types = "maintain"
+formality = "maintain"
 
 [environments.github-pages]
 branches = ["main"]

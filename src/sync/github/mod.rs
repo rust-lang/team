@@ -433,6 +433,7 @@ impl SyncGitHub {
                 diffs.push(repo_diff);
             }
         }
+        diffs.sort_by(|left, right| left.org_and_name().cmp(&right.org_and_name()));
         Ok(diffs)
     }
 
@@ -1143,6 +1144,9 @@ pub fn construct_branch_protection(
         is_admin_enforced: true,
         allows_force_pushes: !branch_protection.prevent_force_push,
         dismisses_stale_reviews: branch_protection.dismiss_stale_review,
+        requires_conversation_resolution: branch_protection.require_conversation_resolution,
+        requires_linear_history: branch_protection.require_linear_history,
+        requires_strict_status_checks: branch_protection.require_up_to_date_branches,
         required_approving_review_count,
         required_status_check_contexts: checks,
         push_allowances,
@@ -1193,6 +1197,10 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
         rules.insert(RulesetRule::Update);
     }
 
+    if branch_protection.require_linear_history {
+        rules.insert(RulesetRule::RequiredLinearHistory);
+    }
+
     // Add non-fast-forward protection if requested
     if branch_protection.prevent_force_push {
         rules.insert(RulesetRule::NonFastForward);
@@ -1209,7 +1217,8 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
                 require_code_owner_review: REQUIRE_CODE_OWNER_REVIEW_DEFAULT,
                 require_last_push_approval: REQUIRE_LAST_PUSH_APPROVAL_DEFAULT,
                 required_approving_review_count: github_int(*required_approvals),
-                required_review_thread_resolution: REQUIRED_REVIEW_THREAD_RESOLUTION_DEFAULT,
+                required_review_thread_resolution: branch_protection
+                    .require_conversation_resolution,
             },
         });
     }
@@ -1230,7 +1239,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
                         integration_id: Some(GITHUB_ACTIONS_INTEGRATION_ID),
                     })
                     .collect(),
-                strict_required_status_checks_policy: STRICT_REQUIRED_STATUS_CHECKS_POLICY_DEFAULT,
+                strict_required_status_checks_policy: branch_protection.require_up_to_date_branches,
             },
         });
     }
@@ -1374,6 +1383,13 @@ impl RepoDiff {
         match self {
             RepoDiff::Create(_c) => false,
             RepoDiff::Update(u) => u.noop(),
+        }
+    }
+
+    fn org_and_name(&self) -> (&str, &str) {
+        match self {
+            RepoDiff::Create(c) => (&c.org, &c.name),
+            RepoDiff::Update(u) => (&u.org, &u.name),
         }
     }
 }
@@ -1983,9 +1999,27 @@ fn log_branch_protection(
     mut result: impl Write,
 ) -> std::fmt::Result {
     log_field(
+        "Require branches to be up to date",
+        &current.requires_strict_status_checks,
+        new.map(|n| &n.requires_strict_status_checks),
+        &mut result,
+    )?;
+    log_field(
         "Dismiss Stale Reviews",
         &current.dismisses_stale_reviews,
         new.map(|n| &n.dismisses_stale_reviews),
+        &mut result,
+    )?;
+    log_field(
+        "Require conversation resolution",
+        &current.requires_conversation_resolution,
+        new.map(|n| &n.requires_conversation_resolution),
+        &mut result,
+    )?;
+    log_field(
+        "Require linear history",
+        &current.requires_linear_history,
+        new.map(|n| &n.requires_linear_history),
         &mut result,
     )?;
     log_field(
@@ -2294,7 +2328,7 @@ fn log_ruleset(
                 }
                 api::RulesetRule::RequiredStatusChecks { parameters } => {
                     rules.insert(
-                        "Strict policy for status checks",
+                        "Require branches to be up to date",
                         LoggedRule::bool_with_default(
                             parameters.strict_required_status_checks_policy,
                             STRICT_REQUIRED_STATUS_CHECKS_POLICY_DEFAULT,
