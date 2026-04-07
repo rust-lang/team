@@ -9,6 +9,7 @@ infra = "write"
 [[branch-protections]]
 pattern = "main"
 required-approvals = 0
+require-linear-history = true
 ci-checks = [
     "Check Markdown style",
     "Check JSON style",
