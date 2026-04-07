@@ -292,6 +292,8 @@ pub struct BranchProtection {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     pub dismiss_stale_review: bool,
+    #[serde(default)]
+    pub require_conversation_resolution: bool,
     pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,
     pub merge_bots: Vec<MergeBot>,

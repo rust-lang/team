@@ -8,6 +8,7 @@ compiler = 'maintain'
 
 [[branch-protections]]
 pattern = "main"
+require-conversation-resolution = true
 
 [[crates-io]]
 crates = ["thorin-dwp", "thorin-dwp-bin"]
@@ -17,4 +18,3 @@ teams = ["compiler"]
 
 [environments.publish]
 branches = ["main"]
-

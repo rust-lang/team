@@ -19,6 +19,7 @@
     {
       "pattern": "master",
       "dismiss_stale_review": false,
+      "require_conversation_resolution": false,
       "mode": {
         "pr_required": {
           "ci_checks": [

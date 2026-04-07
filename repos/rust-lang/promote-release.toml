@@ -17,3 +17,4 @@ ci-checks = [
     "Test",
 ]
 required-approvals = 0
+require-conversation-resolution = true

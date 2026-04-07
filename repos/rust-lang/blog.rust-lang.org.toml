@@ -16,7 +16,7 @@ ci-checks = [
     "lint",
     "build",
 ]
+require-conversation-resolution = true
 
 [environments.github-pages]
 branches = ["main"]
-

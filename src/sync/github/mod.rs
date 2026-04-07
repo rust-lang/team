@@ -989,6 +989,7 @@ pub fn construct_branch_protection(
         is_admin_enforced: true,
         allows_force_pushes: !branch_protection.prevent_force_push,
         dismisses_stale_reviews: branch_protection.dismiss_stale_review,
+        requires_conversation_resolution: branch_protection.require_conversation_resolution,
         requires_strict_status_checks: branch_protection.require_up_to_date_branches,
         required_approving_review_count,
         required_status_check_contexts: checks,
@@ -1056,7 +1057,8 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
                 require_code_owner_review: REQUIRE_CODE_OWNER_REVIEW_DEFAULT,
                 require_last_push_approval: REQUIRE_LAST_PUSH_APPROVAL_DEFAULT,
                 required_approving_review_count: github_int(*required_approvals),
-                required_review_thread_resolution: REQUIRED_REVIEW_THREAD_RESOLUTION_DEFAULT,
+                required_review_thread_resolution: branch_protection
+                    .require_conversation_resolution,
             },
         });
     }
@@ -1813,6 +1815,12 @@ fn log_branch_protection(
         "Dismiss Stale Reviews",
         &current.dismisses_stale_reviews,
         new.map(|n| &n.dismisses_stale_reviews),
+        &mut result,
+    )?;
+    log_field(
+        "Require conversation resolution",
+        &current.requires_conversation_resolution,
+        new.map(|n| &n.requires_conversation_resolution),
         &mut result,
     )?;
     log_field(

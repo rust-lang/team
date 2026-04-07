@@ -410,6 +410,7 @@ impl GitHubWrite {
             contexts: &'a [String],
             allows_force_pushes: bool,
             dismiss_stale: bool,
+            requires_conversation_resolution: bool,
             requires_strict_status_checks: bool,
             review_count: u8,
             restricts_pushes: bool,
@@ -430,7 +431,7 @@ impl GitHubWrite {
             BranchProtectionOp::UpdateBranchProtection(id) => id,
         };
         let query = format!("
-        mutation($id: ID!, $pattern:String!, $contexts: [String!], $allowsForcePushes: Boolean, $dismissStale: Boolean, $requiresStrictStatusChecks: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean, $requiresApprovingReviews: Boolean) {{
+        mutation($id: ID!, $pattern:String!, $contexts: [String!], $allowsForcePushes: Boolean, $dismissStale: Boolean, $requiresConversationResolution: Boolean, $requiresStrictStatusChecks: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean, $requiresApprovingReviews: Boolean) {{
             {mutation_name}(input: {{
                 {id_field}: $id,
                 pattern: $pattern,
@@ -441,6 +442,7 @@ impl GitHubWrite {
                 allowsForcePushes: $allowsForcePushes,
                 requiredApprovingReviewCount: $reviewCount,
                 dismissesStaleReviews: $dismissStale,
+                requiresConversationResolution: $requiresConversationResolution,
                 requiresApprovingReviews: $requiresApprovingReviews,
                 restrictsPushes: $restrictsPushes,
                 pushActorIds: $pushActorIds
@@ -478,6 +480,8 @@ impl GitHubWrite {
                         contexts: &branch_protection.required_status_check_contexts,
                         allows_force_pushes: branch_protection.allows_force_pushes,
                         dismiss_stale: branch_protection.dismisses_stale_reviews,
+                        requires_conversation_resolution: branch_protection
+                            .requires_conversation_resolution,
                         requires_strict_status_checks: branch_protection
                             .requires_strict_status_checks,
                         review_count: branch_protection.required_approving_review_count,
