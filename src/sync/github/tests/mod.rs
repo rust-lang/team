@@ -231,7 +231,7 @@ async fn repo_change_description() {
                     },
                 ),
                 permission_diffs: [],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [],
             },
@@ -274,7 +274,7 @@ async fn repo_change_homepage() {
                     },
                 ),
                 permission_diffs: [],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [],
             },
@@ -328,27 +328,55 @@ async fn repo_create() {
                         ),
                     },
                 ],
-                branch_protections: [
-                    (
-                        "main",
-                        BranchProtection {
-                            pattern: "main",
-                            is_admin_enforced: true,
-                            allows_force_pushes: false,
-                            dismisses_stale_reviews: false,
-                            requires_conversation_resolution: false,
-                            requires_linear_history: false,
-                            requires_strict_status_checks: false,
-                            required_approving_review_count: 1,
-                            required_status_check_contexts: [
-                                "test",
-                            ],
-                            push_allowances: [],
-                            requires_approving_reviews: true,
+                branch_protections: [],
+                rulesets: [
+                    Ruleset {
+                        id: None,
+                        name: "main",
+                        target: Branch,
+                        source_type: Repository,
+                        enforcement: Active,
+                        bypass_actors: [],
+                        conditions: RulesetConditions {
+                            ref_name: RulesetRefNameCondition {
+                                include: [
+                                    "refs/heads/main",
+                                ],
+                                exclude: [],
+                            },
                         },
-                    ),
+                        rules: {
+                            Creation,
+                            Deletion,
+                            PullRequest {
+                                parameters: PullRequestParameters {
+                                    dismiss_stale_reviews_on_push: false,
+                                    require_code_owner_review: false,
+                                    require_last_push_approval: false,
+                                    required_approving_review_count: 1,
+                                    required_review_thread_resolution: false,
+                                },
+                            },
+                            RequiredStatusChecks {
+                                parameters: RequiredStatusChecksParameters {
+                                    do_not_enforce_on_create: Some(
+                                        false,
+                                    ),
+                                    required_status_checks: [
+                                        RequiredStatusCheck {
+                                            context: "test",
+                                            integration_id: Some(
+                                                15368,
+                                            ),
+                                        },
+                                    ],
+                                    strict_required_status_checks_policy: false,
+                                },
+                            },
+                            NonFastForward,
+                        },
+                    },
                 ],
-                rulesets: [],
                 environments: [],
             },
         ),
@@ -402,7 +430,7 @@ async fn repo_add_member() {
                         ),
                     },
                 ],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [],
             },
@@ -457,7 +485,7 @@ async fn repo_change_member_permissions() {
                         ),
                     },
                 ],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [],
             },
@@ -506,7 +534,7 @@ async fn repo_remove_member() {
                         ),
                     },
                 ],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [],
             },
@@ -557,7 +585,7 @@ async fn repo_add_team() {
                         ),
                     },
                 ],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [],
             },
@@ -607,7 +635,7 @@ async fn repo_change_team_permissions() {
                         ),
                     },
                 ],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [],
             },
@@ -656,7 +684,7 @@ async fn repo_remove_team() {
                         ),
                     },
                 ],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [],
             },
@@ -696,7 +724,7 @@ async fn repo_archive_repo() {
                     },
                 ),
                 permission_diffs: [],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [],
             },
@@ -739,48 +767,92 @@ async fn repo_add_branch_protection() {
                     },
                 ),
                 permission_diffs: [],
-                branch_protection_diffs: [
-                    BranchProtectionDiff {
-                        pattern: "master",
+                branch_protection_diffs: {},
+                ruleset_diffs: [
+                    RulesetDiff {
+                        name: "master",
                         operation: Create(
-                            BranchProtection {
-                                pattern: "master",
-                                is_admin_enforced: true,
-                                allows_force_pushes: false,
-                                dismisses_stale_reviews: false,
-                                requires_conversation_resolution: false,
-                                requires_linear_history: false,
-                                requires_strict_status_checks: false,
-                                required_approving_review_count: 0,
-                                required_status_check_contexts: [
-                                    "test",
-                                    "test 2",
-                                ],
-                                push_allowances: [],
-                                requires_approving_reviews: true,
+                            Ruleset {
+                                id: None,
+                                name: "master",
+                                target: Branch,
+                                source_type: Repository,
+                                enforcement: Active,
+                                bypass_actors: [],
+                                conditions: RulesetConditions {
+                                    ref_name: RulesetRefNameCondition {
+                                        include: [
+                                            "refs/heads/master",
+                                        ],
+                                        exclude: [],
+                                    },
+                                },
+                                rules: {
+                                    Creation,
+                                    Deletion,
+                                    PullRequest {
+                                        parameters: PullRequestParameters {
+                                            dismiss_stale_reviews_on_push: false,
+                                            require_code_owner_review: false,
+                                            require_last_push_approval: false,
+                                            required_approving_review_count: 0,
+                                            required_review_thread_resolution: false,
+                                        },
+                                    },
+                                    RequiredStatusChecks {
+                                        parameters: RequiredStatusChecksParameters {
+                                            do_not_enforce_on_create: Some(
+                                                false,
+                                            ),
+                                            required_status_checks: [
+                                                RequiredStatusCheck {
+                                                    context: "test",
+                                                    integration_id: Some(
+                                                        15368,
+                                                    ),
+                                                },
+                                                RequiredStatusCheck {
+                                                    context: "test 2",
+                                                    integration_id: Some(
+                                                        15368,
+                                                    ),
+                                                },
+                                            ],
+                                            strict_required_status_checks_policy: false,
+                                        },
+                                    },
+                                    NonFastForward,
+                                },
                             },
                         ),
                     },
-                    BranchProtectionDiff {
-                        pattern: "beta",
+                    RulesetDiff {
+                        name: "beta",
                         operation: Create(
-                            BranchProtection {
-                                pattern: "beta",
-                                is_admin_enforced: true,
-                                allows_force_pushes: false,
-                                dismisses_stale_reviews: false,
-                                requires_conversation_resolution: false,
-                                requires_linear_history: false,
-                                requires_strict_status_checks: false,
-                                required_approving_review_count: 0,
-                                required_status_check_contexts: [],
-                                push_allowances: [],
-                                requires_approving_reviews: false,
+                            Ruleset {
+                                id: None,
+                                name: "beta",
+                                target: Branch,
+                                source_type: Repository,
+                                enforcement: Active,
+                                bypass_actors: [],
+                                conditions: RulesetConditions {
+                                    ref_name: RulesetRefNameCondition {
+                                        include: [
+                                            "refs/heads/beta",
+                                        ],
+                                        exclude: [],
+                                    },
+                                },
+                                rules: {
+                                    Creation,
+                                    Deletion,
+                                    NonFastForward,
+                                },
                             },
                         ),
                     },
                 ],
-                ruleset_diffs: [],
                 environment_diffs: [],
             },
         ),
@@ -844,46 +916,73 @@ async fn repo_update_branch_protection() {
                     },
                 ),
                 permission_diffs: [],
-                branch_protection_diffs: [
+                branch_protection_diffs: {
                     BranchProtectionDiff {
                         pattern: "master",
-                        operation: Update(
+                        operation: Delete(
                             "0",
-                            BranchProtection {
-                                pattern: "master",
-                                is_admin_enforced: true,
-                                allows_force_pushes: false,
-                                dismisses_stale_reviews: false,
-                                requires_conversation_resolution: false,
-                                requires_linear_history: false,
-                                requires_strict_status_checks: false,
-                                required_approving_review_count: 1,
-                                required_status_check_contexts: [
-                                    "test",
-                                ],
-                                push_allowances: [],
-                                requires_approving_reviews: true,
-                            },
-                            BranchProtection {
-                                pattern: "master",
-                                is_admin_enforced: true,
-                                allows_force_pushes: true,
-                                dismisses_stale_reviews: true,
-                                requires_conversation_resolution: true,
-                                requires_linear_history: true,
-                                requires_strict_status_checks: true,
-                                required_approving_review_count: 0,
-                                required_status_check_contexts: [
-                                    "Test",
-                                    "test",
-                                ],
-                                push_allowances: [],
-                                requires_approving_reviews: true,
+                        ),
+                    },
+                },
+                ruleset_diffs: [
+                    RulesetDiff {
+                        name: "master",
+                        operation: Create(
+                            Ruleset {
+                                id: None,
+                                name: "master",
+                                target: Branch,
+                                source_type: Repository,
+                                enforcement: Active,
+                                bypass_actors: [],
+                                conditions: RulesetConditions {
+                                    ref_name: RulesetRefNameCondition {
+                                        include: [
+                                            "refs/heads/master",
+                                        ],
+                                        exclude: [],
+                                    },
+                                },
+                                rules: {
+                                    Creation,
+                                    Deletion,
+                                    RequiredLinearHistory,
+                                    PullRequest {
+                                        parameters: PullRequestParameters {
+                                            dismiss_stale_reviews_on_push: true,
+                                            require_code_owner_review: false,
+                                            require_last_push_approval: false,
+                                            required_approving_review_count: 0,
+                                            required_review_thread_resolution: true,
+                                        },
+                                    },
+                                    RequiredStatusChecks {
+                                        parameters: RequiredStatusChecksParameters {
+                                            do_not_enforce_on_create: Some(
+                                                false,
+                                            ),
+                                            required_status_checks: [
+                                                RequiredStatusCheck {
+                                                    context: "Test",
+                                                    integration_id: Some(
+                                                        15368,
+                                                    ),
+                                                },
+                                                RequiredStatusCheck {
+                                                    context: "test",
+                                                    integration_id: Some(
+                                                        15368,
+                                                    ),
+                                                },
+                                            ],
+                                            strict_required_status_checks_policy: true,
+                                        },
+                                    },
+                                },
                             },
                         ),
                     },
                 ],
-                ruleset_diffs: [],
                 environment_diffs: [],
             },
         ),
@@ -929,15 +1028,73 @@ async fn repo_remove_branch_protection() {
                     },
                 ),
                 permission_diffs: [],
-                branch_protection_diffs: [
+                branch_protection_diffs: {
+                    BranchProtectionDiff {
+                        pattern: "main",
+                        operation: Delete(
+                            "0",
+                        ),
+                    },
                     BranchProtectionDiff {
                         pattern: "stable",
                         operation: Delete(
                             "1",
                         ),
                     },
+                },
+                ruleset_diffs: [
+                    RulesetDiff {
+                        name: "main",
+                        operation: Create(
+                            Ruleset {
+                                id: None,
+                                name: "main",
+                                target: Branch,
+                                source_type: Repository,
+                                enforcement: Active,
+                                bypass_actors: [],
+                                conditions: RulesetConditions {
+                                    ref_name: RulesetRefNameCondition {
+                                        include: [
+                                            "refs/heads/main",
+                                        ],
+                                        exclude: [],
+                                    },
+                                },
+                                rules: {
+                                    Creation,
+                                    Deletion,
+                                    PullRequest {
+                                        parameters: PullRequestParameters {
+                                            dismiss_stale_reviews_on_push: false,
+                                            require_code_owner_review: false,
+                                            require_last_push_approval: false,
+                                            required_approving_review_count: 1,
+                                            required_review_thread_resolution: false,
+                                        },
+                                    },
+                                    RequiredStatusChecks {
+                                        parameters: RequiredStatusChecksParameters {
+                                            do_not_enforce_on_create: Some(
+                                                false,
+                                            ),
+                                            required_status_checks: [
+                                                RequiredStatusCheck {
+                                                    context: "test",
+                                                    integration_id: Some(
+                                                        15368,
+                                                    ),
+                                                },
+                                            ],
+                                            strict_required_status_checks_policy: false,
+                                        },
+                                    },
+                                    NonFastForward,
+                                },
+                            },
+                        ),
+                    },
                 ],
-                ruleset_diffs: [],
                 environment_diffs: [],
             },
         ),
@@ -1025,7 +1182,7 @@ async fn repo_environment_create() {
                     },
                 ),
                 permission_diffs: [],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [
                     Create(
@@ -1084,7 +1241,7 @@ async fn repo_environment_delete() {
                     },
                 ),
                 permission_diffs: [],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [
                     Delete(
@@ -1150,7 +1307,7 @@ async fn repo_environment_update() {
                     },
                 ),
                 permission_diffs: [],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [
                     Create(
@@ -1210,7 +1367,7 @@ async fn repo_environment_update_branches() {
                     },
                 ),
                 permission_diffs: [],
-                branch_protection_diffs: [],
+                branch_protection_diffs: {},
                 ruleset_diffs: [],
                 environment_diffs: [
                     Update {
