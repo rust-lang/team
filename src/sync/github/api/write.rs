@@ -245,6 +245,7 @@ impl GitHubWrite {
         if self.dry_run {
             Ok(Repo {
                 node_id: String::from("ID"),
+                repo_id: 0,
                 name: name.to_string(),
                 org: org.to_string(),
                 description: settings.description.clone(),
@@ -286,6 +287,58 @@ impl GitHubWrite {
         if !self.dry_run {
             self.client
                 .send(Method::PATCH, &GitHubUrl::repos(org, repo_name, "")?, &req)
+                .await?;
+        }
+        Ok(())
+    }
+
+    pub(crate) async fn add_repo_to_app_installation(
+        &self,
+        installation_id: u64,
+        repository_id: u64,
+        org: &str,
+    ) -> anyhow::Result<()> {
+        debug!("Adding repository {repository_id} to installation {installation_id}");
+        if !self.dry_run {
+            self.client
+                .req(
+                    Method::PUT,
+                    &GitHubUrl::new(
+                        &format!(
+                            "user/installations/{installation_id}/repositories/{repository_id}"
+                        ),
+                        org,
+                    ),
+                )?
+                .send()
+                .await?
+                .custom_error_for_status()
+                .await?;
+        }
+        Ok(())
+    }
+
+    pub(crate) async fn remove_repo_from_app_installation(
+        &self,
+        installation_id: u64,
+        repository_id: u64,
+        org: &str,
+    ) -> anyhow::Result<()> {
+        debug!("Removing repository {repository_id} from installation {installation_id}");
+        if !self.dry_run {
+            self.client
+                .req(
+                    Method::DELETE,
+                    &GitHubUrl::new(
+                        &format!(
+                            "user/installations/{installation_id}/repositories/{repository_id}"
+                        ),
+                        org,
+                    ),
+                )?
+                .send()
+                .await?
+                .custom_error_for_status()
                 .await?;
         }
         Ok(())
