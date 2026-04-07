@@ -223,7 +223,7 @@ impl HttpClient {
                         .map(|r| r.contains(&RelationType::Next))
                         .unwrap_or(false)
                     {
-                        next = Some(GitHubUrl::new(link.link(), next_url.org()));
+                        next = Some(next_url.clone().with_url(link.link()));
                         break;
                     }
                 }

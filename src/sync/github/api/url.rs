@@ -40,6 +40,11 @@ impl GitHubUrl {
         self
     }
 
+    pub fn with_url(mut self, url: &str) -> GitHubUrl {
+        self.url = url.to_owned();
+        self
+    }
+
     pub fn repos(org: &str, repo: &str, remaining_endpoint: &str) -> anyhow::Result<Self> {
         let remaining_endpoint = if remaining_endpoint.is_empty() {
             "".to_string()
