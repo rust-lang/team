@@ -211,6 +211,7 @@ pub enum Bot {
     Glacierbot,
     LogAnalyzer,
     Renovate,
+    ForkingRenovate,
     HerokuDeployAccess,
 }
 

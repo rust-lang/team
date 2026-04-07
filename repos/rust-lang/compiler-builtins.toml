@@ -1,7 +1,7 @@
 org = "rust-lang"
 name = "compiler-builtins"
 description = "Rust implementations of compiler-rt and libm"
-bots = ["rustbot"]
+bots = ["rustbot", "forking-renovate"]
 
 [access.teams]
 crate-maintainers = "maintain"

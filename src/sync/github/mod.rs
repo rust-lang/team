@@ -44,6 +44,7 @@ type RepoName = String;
 #[derive(Copy, Clone, Debug, PartialEq)]
 enum GithubApp {
     RenovateBot,
+    ForkingRenovateBot,
     Bors,
 }
 
@@ -53,6 +54,7 @@ impl GithubApp {
     fn from_id(app_id: u64) -> Option<Self> {
         match app_id {
             2740 => Some(GithubApp::RenovateBot),
+            7402 => Some(GithubApp::ForkingRenovateBot),
             278306 => Some(GithubApp::Bors),
             _ => None,
         }
@@ -62,6 +64,7 @@ impl GithubApp {
 impl Display for GithubApp {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
+            GithubApp::ForkingRenovateBot => f.write_str("Forking RenovateBot"),
             GithubApp::RenovateBot => f.write_str("RenovateBot"),
             GithubApp::Bors => f.write_str("Bors"),
         }
@@ -882,6 +885,7 @@ impl SyncGitHub {
         // Find apps that should be enabled on the repository
         for app in expected_repo.bots.iter().filter_map(|bot| match bot {
             Bot::Renovate => Some(GithubApp::RenovateBot),
+            Bot::ForkingRenovate => Some(GithubApp::ForkingRenovateBot),
             Bot::Bors => Some(GithubApp::Bors),
             Bot::Highfive
             | Bot::Rfcbot
@@ -1054,7 +1058,7 @@ impl From<&Bot> for BotDetails {
             Bot::Craterbot => write_access("craterbot"),
             Bot::Glacierbot => write_access("rust-lang-glacier-bot"),
             Bot::LogAnalyzer => write_access("rust-log-analyzer"),
-            Bot::Renovate => BotDetails::GitHubApp,
+            Bot::Renovate | Bot::ForkingRenovate => BotDetails::GitHubApp,
             // Unfortunately linking to Heroku requires admin access, since the integration creates
             // GitHub webhooks, which require admin access.
             Bot::HerokuDeployAccess => admin_access("rust-heroku-deploy-access"),
