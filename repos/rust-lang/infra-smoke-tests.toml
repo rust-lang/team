@@ -6,7 +6,7 @@ bots = ["renovate"]
 [access.teams]
 infra = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 required-approvals = 0
 require-linear-history = true

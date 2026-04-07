@@ -6,7 +6,7 @@ bots = ["rustbot"]
 [access.teams]
 compiler = 'maintain'
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 require-conversation-resolution = true
 require-linear-history = true

@@ -8,7 +8,7 @@ mods = "write"
 team-repo-admins = "write"
 infra = "triage"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = ["CI"]
 dismiss-stale-review = true

@@ -6,5 +6,5 @@ bots = []
 [access.teams]
 wg-async = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"

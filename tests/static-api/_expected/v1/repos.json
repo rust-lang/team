@@ -81,6 +81,31 @@
           "prevent_update": false,
           "prevent_deletion": true,
           "prevent_force_push": true
+        },
+        {
+          "pattern": "release/*",
+          "dismiss_stale_review": false,
+          "require_conversation_resolution": false,
+          "require_linear_history": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Release CI"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [
+            "foo"
+          ],
+          "merge_bots": [],
+          "allowed_merge_apps": [],
+          "require_up_to_date_branches": false,
+          "merge_queue": false,
+          "prevent_creation": true,
+          "prevent_update": false,
+          "prevent_deletion": true,
+          "prevent_force_push": true
         }
       ],
       "crates": [
@@ -131,7 +156,34 @@
       },
       "archived": false,
       "private": false,
-      "auto_merge_enabled": true
+      "auto_merge_enabled": true,
+      "rulesets": [
+        {
+          "pattern": "release/*",
+          "dismiss_stale_review": false,
+          "require_conversation_resolution": false,
+          "require_linear_history": false,
+          "mode": {
+            "pr_required": {
+              "ci_checks": [
+                "Release CI"
+              ],
+              "required_approvals": 1
+            }
+          },
+          "allowed_merge_teams": [
+            "foo"
+          ],
+          "merge_bots": [],
+          "allowed_merge_apps": [],
+          "require_up_to_date_branches": false,
+          "merge_queue": false,
+          "prevent_creation": true,
+          "prevent_update": false,
+          "prevent_deletion": true,
+          "prevent_force_push": true
+        }
+      ]
     }
   ]
 }

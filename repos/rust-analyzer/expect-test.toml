@@ -7,7 +7,7 @@ bots = []
 rust-analyzer = "write"
 expect-test = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["test"]
 merge-queue = { enabled = true, check-response-timeout-minutes = 30 }

@@ -10,15 +10,15 @@ use rust_team_data::v1::{
 };
 
 use crate::schema;
-use crate::sync::Config;
 use crate::sync::github::api::{
     BranchPolicy, BranchProtection, GithubRead, Repo, RepoTeam, RepoUser, Ruleset, Team,
     TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::sync::github::{
     OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_branch_protection,
-    convert_permission,
+    construct_ruleset, convert_permission,
 };
+use crate::sync::{Config, team_api};
 
 pub const DEFAULT_ORG: &str = "rust-lang";
 
@@ -173,16 +173,28 @@ impl DataModel {
             org.repo_members
                 .insert(repo.name.clone(), RepoMembers { teams, members });
 
-            let repo_v1: v1::Repo = repo.clone().into();
+            let repo_api: team_api::Repo = repo.clone().into();
             let mut protections = vec![];
             for protection in &repo.branch_protections {
                 protections.push((
                     format!("{}", protections.len()),
-                    construct_branch_protection(&repo_v1, protection),
+                    construct_branch_protection(&repo_api, protection),
                 ));
             }
             org.branch_protections
                 .insert(repo.name.clone(), protections);
+            org.rulesets.insert(
+                repo.name.clone(),
+                repo.rulesets
+                    .iter()
+                    .enumerate()
+                    .map(|(index, ruleset)| {
+                        let mut ruleset = construct_ruleset(ruleset);
+                        ruleset.id = Some(index as i64);
+                        ruleset
+                    })
+                    .collect(),
+            );
 
             let environments: HashMap<String, Environment> =
                 repo.environments.clone().into_iter().collect();
@@ -223,7 +235,12 @@ impl DataModel {
 
     async fn create_sync(&self, github: GithubMock) -> SyncGitHub {
         let teams = self.teams.iter().cloned().map(|t| t.into()).collect();
-        let repos = self.repos.iter().cloned().map(|r| r.into()).collect();
+        let repos = self
+            .repos
+            .iter()
+            .cloned()
+            .map(team_api::Repo::from)
+            .collect();
         let config = self.config.clone();
 
         SyncGitHub::new(Box::new(github), teams, repos, config)
@@ -325,6 +342,8 @@ pub struct RepoData {
     #[builder(default)]
     pub branch_protections: Vec<v1::BranchProtection>,
     #[builder(default)]
+    pub rulesets: Vec<v1::BranchProtection>,
+    #[builder(default)]
     pub environments: IndexMap<String, v1::Environment>,
 }
 
@@ -349,7 +368,7 @@ impl RepoData {
     }
 }
 
-impl From<RepoData> for v1::Repo {
+impl From<RepoData> for team_api::Repo {
     fn from(value: RepoData) -> Self {
         let RepoData {
             name,
@@ -362,23 +381,30 @@ impl From<RepoData> for v1::Repo {
             archived,
             allow_auto_merge,
             branch_protections,
+            rulesets,
             environments,
         } = value;
-        Self {
-            org,
-            name: name.clone(),
-            description,
-            homepage,
-            bots,
-            teams: teams.clone(),
-            members: members.clone(),
-            branch_protections,
-            crates: vec![],
-            environments,
-            archived,
-            private: false,
-            auto_merge_enabled: allow_auto_merge,
-        }
+        let mut compatibility_branch_protections = branch_protections.clone();
+        compatibility_branch_protections.extend(rulesets.clone());
+
+        team_api::Repo::new(
+            v1::Repo {
+                org,
+                name: name.clone(),
+                description,
+                homepage,
+                bots,
+                teams: teams.clone(),
+                members: members.clone(),
+                branch_protections: compatibility_branch_protections,
+                crates: vec![],
+                environments,
+                archived,
+                private: false,
+                auto_merge_enabled: allow_auto_merge,
+            },
+            rulesets,
+        )
     }
 }
 

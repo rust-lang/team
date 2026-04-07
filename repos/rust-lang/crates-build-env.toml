@@ -7,5 +7,5 @@ bots = ["rustbot"]
 docs-rs = 'write'
 infra = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = 'master'

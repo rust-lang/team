@@ -6,7 +6,7 @@ bots = []
 [access.teams]
 miri = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["Success"]
 required-approvals = 0

@@ -6,7 +6,7 @@ bots = []
 [access.teams]
 infra = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = ["CI finished"]
 merge-queue = { enabled = true, max-entries-to-build = 1, min-entries-to-merge-wait-minutes = 1, max-entries-to-merge = 1 }

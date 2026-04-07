@@ -6,5 +6,5 @@ bots = []
 [access.teams]
 compiler = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"

@@ -16,6 +16,20 @@ pub(crate) struct Generator<'a> {
     data: &'a Data,
 }
 
+#[derive(Debug, serde::Serialize, serde::Deserialize, PartialEq)]
+struct ApiRepo {
+    #[serde(flatten)]
+    repo: v1::Repo,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    rulesets: Vec<v1::BranchProtection>,
+}
+
+#[derive(Debug, serde::Serialize, serde::Deserialize, PartialEq)]
+struct ApiRepos {
+    #[serde(flatten)]
+    repos: IndexMap<String, Vec<ApiRepo>>,
+}
+
 impl<'a> Generator<'a> {
     pub(crate) fn new(dest: &'a Path, data: &'a Data) -> Result<Generator<'a>, Error> {
         if dest.is_dir() {
@@ -41,7 +55,7 @@ impl<'a> Generator<'a> {
     }
 
     fn generate_repos(&self) -> Result<(), Error> {
-        let mut repos: IndexMap<String, Vec<v1::Repo>> = IndexMap::new();
+        let mut repos: IndexMap<String, Vec<ApiRepo>> = IndexMap::new();
         let repo_iter = self
             .data
             .repos()
@@ -49,186 +63,142 @@ impl<'a> Generator<'a> {
             .chain(self.data.archived_repos().map(|repo| (repo, true)));
 
         for (r, archived) in repo_iter {
-            let branch_protections: Vec<_> = r
-                .branch_protections
-                .iter()
-                .map(|b| v1::BranchProtection {
-                    pattern: b.pattern.clone(),
-                    target: match b.target {
-                        schema::ProtectionTarget::Branch => v1::ProtectionTarget::Branch,
-                        schema::ProtectionTarget::Tag => v1::ProtectionTarget::Tag,
-                    },
-                    name: b.name.clone(),
-                    dismiss_stale_review: b.dismiss_stale_review,
-                    require_conversation_resolution: b.require_conversation_resolution,
-                    require_linear_history: b.require_linear_history,
-                    mode: if b.pr_required {
-                        BranchProtectionMode::PrRequired {
-                            ci_checks: b.ci_checks.clone(),
-                            required_approvals: b.required_approvals.unwrap_or(1),
-                        }
-                    } else {
-                        BranchProtectionMode::PrNotRequired
-                    },
-                    allowed_merge_teams: b.allowed_merge_teams.clone(),
-                    allowed_merge_apps: b
-                        .allowed_merge_apps
+            let branch_protections = convert_protections(&r.branch_protections);
+            let rulesets = convert_protections(&r.rulesets);
+            let mut compatibility_branch_protections = branch_protections.clone();
+            compatibility_branch_protections.extend(rulesets.clone());
+            let managed_by_bors = r.bots.contains(&Bot::Bors);
+            let repo = ApiRepo {
+                repo: v1::Repo {
+                    org: r.org.clone(),
+                    name: r.name.clone(),
+                    description: r.description.clone(),
+                    homepage: r.homepage.clone(),
+                    private: r.private_non_synced.unwrap_or(false),
+                    bots: r
+                        .bots
                         .iter()
-                        .map(|app| match app {
-                            AllowedMergeApp::RustTimer => v1::MergeBot::RustTimer,
-                            AllowedMergeApp::Bors => v1::MergeBot::Bors,
-                            AllowedMergeApp::WorkflowsCratesIo => v1::MergeBot::WorkflowsCratesIo,
-                            AllowedMergeApp::PromoteRelease => v1::MergeBot::PromoteRelease,
+                        .map(|b| match b {
+                            Bot::Bors => v1::Bot::Bors,
+                            Bot::Highfive => v1::Bot::Highfive,
+                            Bot::RustTimer => v1::Bot::RustTimer,
+                            Bot::Rustbot => v1::Bot::Rustbot,
+                            Bot::Rfcbot => v1::Bot::Rfcbot,
+                            Bot::Craterbot => v1::Bot::Craterbot,
+                            Bot::Glacierbot => v1::Bot::Glacierbot,
+                            Bot::LogAnalyzer => v1::Bot::LogAnalyzer,
+                            Bot::Renovate => v1::Bot::Renovate,
+                            Bot::HerokuDeployAccess => v1::Bot::HerokuDeployAccess,
                         })
                         .collect(),
-                    require_up_to_date_branches: b.require_up_to_date_branches,
-                    merge_queue: b.merge_queue.enabled,
-                    merge_queue_method: b.merge_queue.method.into(),
-                    merge_queue_max_entries_to_build: b.merge_queue.max_entries_to_build,
-                    merge_queue_min_entries_to_merge_wait_minutes: b
-                        .merge_queue
-                        .min_entries_to_merge_wait_minutes,
-                    merge_queue_max_entries_to_merge: b.merge_queue.max_entries_to_merge,
-                    merge_queue_check_response_timeout_minutes: b
-                        .merge_queue
-                        .check_response_timeout_minutes,
-                    prevent_creation: b.prevent_creation,
-                    prevent_update: b.prevent_update,
-                    prevent_deletion: b.prevent_deletion,
-                    prevent_force_push: b.prevent_force_push,
-                    // This field is empty for retrocompatibility with triagebot
-                    merge_bots: vec![],
-                })
-                .collect();
-            let managed_by_bors = r.bots.contains(&Bot::Bors);
-            let repo = v1::Repo {
-                org: r.org.clone(),
-                name: r.name.clone(),
-                description: r.description.clone(),
-                homepage: r.homepage.clone(),
-                private: r.private_non_synced.unwrap_or(false),
-                bots: r
-                    .bots
-                    .iter()
-                    .map(|b| match b {
-                        Bot::Bors => v1::Bot::Bors,
-                        Bot::Highfive => v1::Bot::Highfive,
-                        Bot::RustTimer => v1::Bot::RustTimer,
-                        Bot::Rustbot => v1::Bot::Rustbot,
-                        Bot::Rfcbot => v1::Bot::Rfcbot,
-                        Bot::Craterbot => v1::Bot::Craterbot,
-                        Bot::Glacierbot => v1::Bot::Glacierbot,
-                        Bot::LogAnalyzer => v1::Bot::LogAnalyzer,
-                        Bot::Renovate => v1::Bot::Renovate,
-                        Bot::HerokuDeployAccess => v1::Bot::HerokuDeployAccess,
-                    })
-                    .collect(),
-                teams: {
-                    let mut teams = Vec::new();
-                    for (team_name, permission) in &r.access.teams {
-                        let permission = match permission {
-                            RepoPermission::Admin => v1::RepoPermission::Admin,
-                            RepoPermission::Write => v1::RepoPermission::Write,
-                            RepoPermission::Maintain => v1::RepoPermission::Maintain,
-                            RepoPermission::Triage => v1::RepoPermission::Triage,
-                        };
-
-                        // Look up the team by name and get all its GitHub teams
-                        let team = self.data.team(team_name).with_context(|| {
-                            format!("failed to find team '{team_name}' in teams directory")
-                        })?;
-                        let github_teams = team.github_teams(self.data).with_context(|| {
-                            format!("failed to get GitHub teams for '{team_name}'")
-                        })?;
-                        for gh_team in github_teams {
-                            if gh_team.org == r.org {
-                                let new_team = v1::RepoTeam {
-                                    name: gh_team.name.to_string(),
-                                    permission: permission.clone(),
-                                };
-                                teams.push(new_team);
-                            }
-                        }
-                    }
-                    teams.sort_by_key(|t| t.name.clone());
-                    teams
-                },
-                members: {
-                    let mut members: Vec<RepoMember> = r
-                        .access
-                        .individuals
-                        .iter()
-                        .map(|(name, permission)| {
+                    teams: {
+                        let mut teams = Vec::new();
+                        for (team_name, permission) in &r.access.teams {
                             let permission = match permission {
                                 RepoPermission::Admin => v1::RepoPermission::Admin,
                                 RepoPermission::Write => v1::RepoPermission::Write,
                                 RepoPermission::Maintain => v1::RepoPermission::Maintain,
                                 RepoPermission::Triage => v1::RepoPermission::Triage,
                             };
-                            v1::RepoMember {
-                                name: name.clone(),
-                                permission,
-                            }
-                        })
-                        .collect();
-                    members.sort_by_key(|m| m.name.clone());
-                    members
-                },
-                branch_protections,
-                crates: {
-                    r.crates_io
-                        .iter()
-                        .flat_map(|p| {
-                            p.crates.iter().map(|krate| {
-                                let mut team_owners = vec![];
-                                for team in &p.teams {
-                                    let Some(team) = self.data.team(team) else {
-                                        return Err(anyhow::anyhow!("Cannot find team `{team}` that should own krate `{krate}`"))
-                                    };
-                                    let github_teams =
-                                        team.github_teams(self.data).with_context(|| {
-                                            format!("failed to get GitHub teams for `{}`", team.name())
-                                        })?.into_iter()
-                                            .filter(|team| team.org == r.org)
-                                            .map(|team| CrateTeamOwner {
-                                                org: team.org.to_owned(),
-                                                name: team.name.to_owned(),
-                                            });
-                                    team_owners.extend(github_teams);
-                                }
 
-                                Ok(v1::Crate {
-                                    name: krate.to_string(),
-                                    crates_io_publishing: Some(v1::CratesIoPublishing {
-                                        workflow_file: p.workflow_filename.clone(),
-                                        environment: p.environment.clone(),
-                                    }),
-                                    trusted_publishing_only: p.disable_other_publish_methods,
-                                    teams: team_owners,
+                            // Look up the team by name and get all its GitHub teams
+                            let team = self.data.team(team_name).with_context(|| {
+                                format!("failed to find team '{team_name}' in teams directory")
+                            })?;
+                            let github_teams = team.github_teams(self.data).with_context(|| {
+                                format!("failed to get GitHub teams for '{team_name}'")
+                            })?;
+                            for gh_team in github_teams {
+                                if gh_team.org == r.org {
+                                    let new_team = v1::RepoTeam {
+                                        name: gh_team.name.to_string(),
+                                        permission: permission.clone(),
+                                    };
+                                    teams.push(new_team);
+                                }
+                            }
+                        }
+                        teams.sort_by_key(|t| t.name.clone());
+                        teams
+                    },
+                    members: {
+                        let mut members: Vec<RepoMember> = r
+                            .access
+                            .individuals
+                            .iter()
+                            .map(|(name, permission)| {
+                                let permission = match permission {
+                                    RepoPermission::Admin => v1::RepoPermission::Admin,
+                                    RepoPermission::Write => v1::RepoPermission::Write,
+                                    RepoPermission::Maintain => v1::RepoPermission::Maintain,
+                                    RepoPermission::Triage => v1::RepoPermission::Triage,
+                                };
+                                v1::RepoMember {
+                                    name: name.clone(),
+                                    permission,
+                                }
+                            })
+                            .collect();
+                        members.sort_by_key(|m| m.name.clone());
+                        members
+                    },
+                    branch_protections: compatibility_branch_protections,
+                    crates: {
+                        r.crates_io
+                            .iter()
+                            .flat_map(|p| {
+                                p.crates.iter().map(|krate| {
+                                    let mut team_owners = vec![];
+                                    for team in &p.teams {
+                                        let Some(team) = self.data.team(team) else {
+                                            return Err(anyhow::anyhow!("Cannot find team `{team}` that should own krate `{krate}`"))
+                                        };
+                                        let github_teams =
+                                            team.github_teams(self.data).with_context(|| {
+                                                format!("failed to get GitHub teams for `{}`", team.name())
+                                            })?.into_iter()
+                                                .filter(|team| team.org == r.org)
+                                                .map(|team| CrateTeamOwner {
+                                                    org: team.org.to_owned(),
+                                                    name: team.name.to_owned(),
+                                                });
+                                        team_owners.extend(github_teams);
+                                    }
+
+                                    Ok(v1::Crate {
+                                        name: krate.to_string(),
+                                        crates_io_publishing: Some(v1::CratesIoPublishing {
+                                            workflow_file: p.workflow_filename.clone(),
+                                            environment: p.environment.clone(),
+                                        }),
+                                        trusted_publishing_only: p.disable_other_publish_methods,
+                                        teams: team_owners,
+                                    })
                                 })
                             })
-                        })
-                        .collect::<anyhow::Result<Vec<Crate>>>()?
+                            .collect::<anyhow::Result<Vec<Crate>>>()?
+                    },
+                    environments: {
+                        let mut envs: Vec<_> = r
+                            .environments
+                            .iter()
+                            .map(|(name, env)| {
+                                (
+                                    name.clone(),
+                                    v1::Environment {
+                                        branches: env.branches.clone(),
+                                        tags: env.tags.clone(),
+                                    },
+                                )
+                            })
+                            .collect();
+                        envs.sort_by(|a, b| a.0.cmp(&b.0));
+                        envs.into_iter().collect()
+                    },
+                    archived,
+                    auto_merge_enabled: !managed_by_bors,
                 },
-                environments: {
-                    let mut envs: Vec<_> = r
-                        .environments
-                        .iter()
-                        .map(|(name, env)| {
-                            (
-                                name.clone(),
-                                v1::Environment {
-                                    branches: env.branches.clone(),
-                                    tags: env.tags.clone(),
-                                },
-                            )
-                        })
-                        .collect();
-                    envs.sort_by(|a, b| a.0.cmp(&b.0));
-                    envs.into_iter().collect()
-                },
-                archived,
-                auto_merge_enabled: !managed_by_bors,
+                rulesets,
             };
 
             self.add(&format!("v1/repos/{}.json", r.name), &repo)?;
@@ -236,9 +206,9 @@ impl<'a> Generator<'a> {
         }
         repos
             .values_mut()
-            .for_each(|r| r.sort_by(|r1, r2| r1.name.cmp(&r2.name)));
+            .for_each(|r| r.sort_by(|r1, r2| r1.repo.name.cmp(&r2.repo.name)));
 
-        self.add("v1/repos.json", &v1::Repos { repos })?;
+        self.add("v1/repos.json", &ApiRepos { repos })?;
         Ok(())
     }
 
@@ -510,6 +480,59 @@ impl<'a> Generator<'a> {
         std::fs::write(&dest, bytes)?;
         Ok(())
     }
+}
+
+fn convert_protections(protections: &[schema::BranchProtection]) -> Vec<v1::BranchProtection> {
+    protections
+        .iter()
+        .map(|b| v1::BranchProtection {
+            pattern: b.pattern.clone(),
+            target: match b.target {
+                schema::ProtectionTarget::Branch => v1::ProtectionTarget::Branch,
+                schema::ProtectionTarget::Tag => v1::ProtectionTarget::Tag,
+            },
+            name: b.name.clone(),
+            dismiss_stale_review: b.dismiss_stale_review,
+            require_conversation_resolution: b.require_conversation_resolution,
+            require_linear_history: b.require_linear_history,
+            mode: if b.pr_required {
+                BranchProtectionMode::PrRequired {
+                    ci_checks: b.ci_checks.clone(),
+                    required_approvals: b.required_approvals.unwrap_or(1),
+                }
+            } else {
+                BranchProtectionMode::PrNotRequired
+            },
+            allowed_merge_teams: b.allowed_merge_teams.clone(),
+            allowed_merge_apps: b
+                .allowed_merge_apps
+                .iter()
+                .map(|app| match app {
+                    AllowedMergeApp::RustTimer => v1::MergeBot::RustTimer,
+                    AllowedMergeApp::Bors => v1::MergeBot::Bors,
+                    AllowedMergeApp::WorkflowsCratesIo => v1::MergeBot::WorkflowsCratesIo,
+                    AllowedMergeApp::PromoteRelease => v1::MergeBot::PromoteRelease,
+                })
+                .collect(),
+            require_up_to_date_branches: b.require_up_to_date_branches,
+            merge_queue: b.merge_queue.enabled,
+            merge_queue_method: b.merge_queue.method.into(),
+            merge_queue_max_entries_to_build: b.merge_queue.max_entries_to_build,
+            merge_queue_min_entries_to_merge_wait_minutes: b
+                .merge_queue
+                .min_entries_to_merge_wait_minutes,
+            merge_queue_max_entries_to_merge: b.merge_queue.max_entries_to_merge,
+            merge_queue_check_response_timeout_minutes: b
+                .merge_queue
+                .check_response_timeout_minutes,
+            prevent_creation: b.prevent_creation,
+            prevent_update: b.prevent_update,
+            prevent_deletion: b.prevent_deletion,
+            prevent_force_push: b.prevent_force_push,
+            // This field is empty for retrocompatibility with triagebot
+            merge_bots: vec![],
+        })
+        .collect()
 }
 
 fn convert_teams<'a>(

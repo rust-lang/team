@@ -8,7 +8,7 @@ bots = ["rustbot"]
 infra = "maintain"
 triagebot = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["ci"]
 merge-queue = { enabled = true }

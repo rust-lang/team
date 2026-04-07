@@ -7,7 +7,7 @@ bots = []
 infra = "triage"
 infra-admins = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = [
     "Local release (beta)",

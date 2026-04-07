@@ -16,7 +16,7 @@ libs = "maintain"
 release = "maintain"
 wg-async = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 pr-required = false
 

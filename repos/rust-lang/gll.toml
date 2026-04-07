@@ -5,5 +5,5 @@ bots = []
 
 [access.teams]
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"

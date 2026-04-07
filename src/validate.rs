@@ -1150,116 +1150,141 @@ fn validate_branch_protections(data: &Data, errors: &mut Vec<String>) {
 
     wrapper(data.repos(), errors, |repo, _| {
         let bors_configured = repo.bots.iter().any(|b| matches!(b, Bot::Bors));
-        let mut patterns = HashSet::new();
-
-        for protection in &repo.branch_protections {
-            if !patterns.insert((protection.target, &protection.pattern)) {
-                bail!(
-                    r#"repo '{}' uses multiple {:?} protections with the pattern `{}`"#,
-                    repo.name,
-                    protection.target,
-                    protection.pattern,
-                );
-            }
-
-            for team in &protection.allowed_merge_teams {
-                let key = (repo.org.clone(), team.clone());
-                if !github_teams.contains(&key) {
-                    bail!(
-                        r#"repo '{}' uses a branch protection for {} that mentions the '{}' github team;
-but that team does not seem to exist"#,
-                        repo.name,
-                        protection.pattern,
-                        team
-                    );
-                }
-                if !repo.access.teams.contains_key(team) {
-                    bail!(
-                        r#"repo '{}' uses a branch protection for {} that has an allowed merge team '{}',
-but that team is not mentioned in [access.teams]"#,
-                        repo.name,
-                        protection.pattern,
-                        team
-                    );
-                }
-            }
-
-            if !protection.pr_required {
-                // It does not make sense to use CI checks when a PR is not required, because with a
-                // CI check, it would not be possible to push into the branch without a PR anyway.
-                if !protection.ci_checks.is_empty() {
-                    bail!(
-                        r#"repo '{}' uses a branch protection for {} that does not require a PR, but has non-empty `ci-checks`"#,
-                        repo.name,
-                        protection.pattern,
-                    );
-                }
-                if let Some(required_approvals) = protection.required_approvals
-                    && required_approvals > 0
-                {
-                    bail!(
-                        r#"repo '{}' uses a branch protection for {} that does not require a PR, but `required-approvals` is greater than 0"#,
-                        repo.name,
-                        protection.pattern,
-                    );
-                }
-            }
-
-            if protection.require_up_to_date_branches && protection.ci_checks.is_empty() {
-                bail!(
-                    r#"repo '{}' uses a branch protection for {} that enables `require-up-to-date-branches`, but has empty `ci-checks`"#,
-                    repo.name,
-                    protection.pattern,
-                );
-            }
-
-            if protection.merge_queue.enabled && protection.pattern.contains('*') {
-                bail!(
-                    r#"repo '{}' uses a GitHub rule for {} that enables `merge-queue`, but GitHub merge queues only support exact ref names patterns"#,
-                    repo.name,
-                    protection.pattern,
-                );
-            }
-
-            if protection.require_linear_history
-                && protection.merge_queue.enabled
-                && protection.merge_queue.method == MergeQueueMethod::Merge
-            {
-                bail!(
-                    r"repo '{}' uses a branch protection for {} that requires linear commit history, but also requires a merge queue using the default merging method `merge`, which is not compatible",
-                    repo.name,
-                    protection.pattern,
-                );
-            }
-
-            let managed_by_bors = protection
-                .allowed_merge_apps
-                .contains(&AllowedMergeApp::Bors);
-            if managed_by_bors {
-                if !bors_configured {
-                    bail!(
-                        r#"repo '{}' uses bors to manage a branch protection for '{}', but bors is not enabled. Add "bors" to the `bots` array"#,
-                        repo.name,
-                        protection.pattern,
-                    );
-                }
-                if protection.required_approvals.is_some()
-                    || protection.dismiss_stale_review
-                    || !protection.pr_required
-                    || !protection.allowed_merge_teams.is_empty()
-                {
-                    bail!(
-                        r#"repo '{}' uses bors, but its branch protection for {} uses invalid
-attributes (`required-approvals`, `dismiss-stale-review`, `pr-required` or `allowed-merge-teams`).
-Please remove the attributes when using bors"#,
-                        repo.name,
-                        protection.pattern,
-                    );
-                }
-            }
-        }
+        validate_github_rules(
+            repo,
+            "branch protection",
+            &repo.branch_protections,
+            &github_teams,
+            bors_configured,
+        )?;
+        validate_github_rules(
+            repo,
+            "ruleset",
+            &repo.rulesets,
+            &github_teams,
+            bors_configured,
+        )?;
         Ok(())
     })
+}
+
+fn validate_github_rules(
+    repo: &Repo,
+    kind: &str,
+    protections: &[crate::schema::BranchProtection],
+    github_teams: &HashSet<(String, String)>,
+    bors_configured: bool,
+) -> anyhow::Result<()> {
+    let mut patterns = HashSet::new();
+
+    for protection in protections {
+        if !patterns.insert((protection.target, &protection.pattern)) {
+            bail!(
+                r#"repo '{}' uses multiple {:?} {kind}s with the pattern `{}`"#,
+                repo.name,
+                protection.target,
+                protection.pattern,
+            );
+        }
+
+        for team in &protection.allowed_merge_teams {
+            let key = (repo.org.clone(), team.clone());
+            if !github_teams.contains(&key) {
+                bail!(
+                    r#"repo '{}' uses a {kind} for {} that mentions the '{}' github team;
+but that team does not seem to exist"#,
+                    repo.name,
+                    protection.pattern,
+                    team
+                );
+            }
+            if !repo.access.teams.contains_key(team) {
+                bail!(
+                    r#"repo '{}' uses a {kind} for {} that has an allowed merge team '{}',
+but that team is not mentioned in [access.teams]"#,
+                    repo.name,
+                    protection.pattern,
+                    team
+                );
+            }
+        }
+
+        if !protection.pr_required {
+            // It does not make sense to use CI checks when a PR is not required, because with a
+            // CI check, it would not be possible to push into the branch without a PR anyway.
+            if !protection.ci_checks.is_empty() {
+                bail!(
+                    r#"repo '{}' uses a {kind} for {} that does not require a PR, but has non-empty `ci-checks`"#,
+                    repo.name,
+                    protection.pattern,
+                );
+            }
+            if let Some(required_approvals) = protection.required_approvals
+                && required_approvals > 0
+            {
+                bail!(
+                    r#"repo '{}' uses a {kind} for {} that does not require a PR, but `required-approvals` is greater than 0"#,
+                    repo.name,
+                    protection.pattern,
+                );
+            }
+        }
+
+        if protection.require_up_to_date_branches && protection.ci_checks.is_empty() {
+            bail!(
+                r#"repo '{}' uses a {kind} for {} that enables `require-up-to-date-branches`, but has empty `ci-checks`"#,
+                repo.name,
+                protection.pattern,
+            );
+        }
+
+        if protection.merge_queue.enabled && protection.pattern.contains('*') {
+            bail!(
+                r#"repo '{}' uses a GitHub rule for {} that enables `merge-queue`, but GitHub merge queues only support exact ref names patterns"#,
+                repo.name,
+                protection.pattern,
+            );
+        }
+
+        if protection.require_linear_history
+            && protection.merge_queue.enabled
+            && protection.merge_queue.method == MergeQueueMethod::Merge
+        {
+            bail!(
+                r#"repo '{}' uses a {kind} for {} that requires linear commit history, but also requires a merge queue using the default merging method `merge`, which is not compatible"#,
+                repo.name,
+                protection.pattern,
+            );
+        }
+
+        let managed_by_bors = protection
+            .allowed_merge_apps
+            .contains(&AllowedMergeApp::Bors);
+        if managed_by_bors {
+            if !bors_configured {
+                bail!(
+                    r#"repo '{}' uses bors to manage a {kind} for '{}', but bors is not enabled. Add "bors" to the `bots` array"#,
+                    repo.name,
+                    protection.pattern,
+                );
+            }
+            if protection.required_approvals.is_some()
+                || protection.dismiss_stale_review
+                || !protection.pr_required
+                || !protection.allowed_merge_teams.is_empty()
+            {
+                bail!(
+                    r#"repo '{}' uses bors, but its {kind} for {} uses invalid
+attributes (`required-approvals`, `dismiss-stale-review`, `pr-required` or `allowed-merge-teams`).
+Please remove the attributes when using bors"#,
+                    repo.name,
+                    protection.pattern,
+                );
+            }
+        }
+    }
+
+    Ok(())
 }
 
 /// Validate that trusted publishing configuration has unique crates across all repositories.

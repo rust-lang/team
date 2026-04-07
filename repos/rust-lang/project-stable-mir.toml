@@ -6,7 +6,7 @@ bots = ["rustbot"]
 [access.teams]
 project-stable-mir = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 
 [environments.github-pages]

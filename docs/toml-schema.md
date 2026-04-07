@@ -373,9 +373,15 @@ compiler = "write"
 octocat = "write"
 ```
 
-### Repository branch protections
+### Repository branch protections and rulesets
 
-[Branch protections] restrict actions on specified branches. It is strongly encouraged to set up branch protections on the default branch (e.g. `main` or `master`).
+Use `[[branch-protections]]` to manage classic GitHub branch protections, and
+use `[[rulesets]]` to manage GitHub repository rulesets. Both tables can appear
+in the same repository TOML file.
+
+[Branch protections] restrict actions on specified branches. It is strongly
+encouraged to protect the default branch (for example `main` or `master`) with
+branch protections, rulesets, or both, depending on what the repository needs.
 
 The behavior of branch protections depends on whether or not `bors` is enabled in the `bots` key mentioned above:
 
@@ -391,13 +397,16 @@ Admins cannot override these branch protections. If an admin needs to do that, t
 [Branch protections]: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
 
 ```toml
-# The branch protections (optional)
+# Use `[[branch-protections]]` to manage a classic GitHub branch protection.
+# Use `[[rulesets]]` to manage a GitHub repository ruleset.
+# Both tables accept the same keys shown below.
 [[branch-protections]]
 # The pattern matching the branches to be protected (required)
 pattern = "main"
-# Custom name for the GitHub ruleset created from this branch protection.
-# If not specified, defaults to "Ruleset for <pattern>".
-# (optional)
+# Custom name for the GitHub ruleset.
+# This is only used for `[[rulesets]]`.
+# If not specified, it defaults to the `pattern`.
+# (optional, rulesets only)
 name = "My custom ruleset name"
 # Which CI checks to are required for merging (optional)
 # Cannot be set if `pr-required` is `false`.
@@ -445,7 +454,9 @@ allowed-merge-teams = ["awesome-team"]
 # Currently supported values: "rust-timer", "bors", "workflows-crates-io".
 # (optional)
 allowed-merge-apps = ["bors"]
-# Merge queue configuration for this branch. (optional)
+# Merge queue configuration for this branch or tag.
+# This is only used for `[[rulesets]]`.
+# (optional, rulesets only)
 merge-queue = {
   # (optional - default `false`)
   enabled = false,
@@ -466,17 +477,20 @@ merge-queue = {
   # (optional - default `60`)
   check-response-timeout-minutes = 60
 }
-# Whether to prevent branch creation.
-# (optional - default `true`)
+# Whether to prevent branch or tag creation.
+# This is only used for `[[rulesets]]`.
+# (optional - default `true`, rulesets only)
 prevent-creation = true
-# Whether to prevent branch deletion.
-# (optional - default `true`)
+# Whether to prevent branch or tag deletion.
+# This is only used for `[[rulesets]]`.
+# (optional - default `true`, rulesets only)
 prevent-deletion = true
 # Whether to prevent force pushes to the branch.
 # (optional - default `true`)
 prevent-force-push = true
 # Whether to prevent updates to the branch, such as merging a PR or pushing commits.
-# (optional - default `false`)
+# This is only used for `[[rulesets]]`.
+# (optional - default `false`, rulesets only)
 prevent-update = false
 # Whether the protection applies to branches or tags.
 # Options are "branch" or "tag".

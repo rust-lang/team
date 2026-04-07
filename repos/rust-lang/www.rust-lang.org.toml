@@ -7,7 +7,7 @@ bots = ["rustbot"]
 [access.teams]
 website = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 
 [environments.github-pages]

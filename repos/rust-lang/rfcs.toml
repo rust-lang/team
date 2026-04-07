@@ -7,7 +7,7 @@ bots = ["rustbot", "rfcbot", "renovate"]
 [access.teams]
 all = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 required-approvals = 0
 

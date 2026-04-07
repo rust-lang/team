@@ -7,7 +7,7 @@ bots = []
 [access.teams]
 wg-async = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 required-approvals = 0
 

@@ -6,7 +6,7 @@ bots = ["rustbot"]
 [access.teams]
 crate-maintainers = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = ["success"]
 required-approvals = 0

@@ -6,12 +6,12 @@ bots = []
 [access.teams]
 compiler = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["success"]
 merge-queue = { enabled = true }
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "stable"
 ci-checks = ["success"]
 

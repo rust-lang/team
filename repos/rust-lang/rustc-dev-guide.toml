@@ -18,7 +18,7 @@ rustdoc = "write"
 rustdoc-frontend = "write"
 rustc-dev-guide = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = ["ci"]
 required-approvals = 0
@@ -26,7 +26,7 @@ required-approvals = 0
 # This branch protection exists for historical reasons
 # We had to force-push the whole commit history of rustc-dev-guide
 # This branch contains the old commit graph, to keep commit references working
-[[branch-protections]]
+[[rulesets]]
 pattern = "master-old"
 prevent-update = true
 

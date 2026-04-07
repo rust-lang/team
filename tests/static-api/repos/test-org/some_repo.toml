@@ -11,6 +11,11 @@ pattern = "master"
 ci-checks = ["CI"]
 allowed-merge-teams = ["foo"]
 
+[[rulesets]]
+pattern = "release/*"
+ci-checks = ["Release CI"]
+allowed-merge-teams = ["foo"]
+
 [environments.deploy]
 branches = ["main"]
 

@@ -21,7 +21,7 @@ types = "maintain"
 wg-async = "maintain"
 wg-safe-transmute = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = ["build"]
 required-approvals = 0

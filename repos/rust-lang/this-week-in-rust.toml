@@ -8,6 +8,6 @@ bots = []
 twir-reviewers = "write"
 twir = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 required-approvals = 0

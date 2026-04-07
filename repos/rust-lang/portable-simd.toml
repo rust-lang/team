@@ -6,7 +6,7 @@ bots = ["rustbot"]
 [access.teams]
 project-portable-simd = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 required-approvals = 0
 

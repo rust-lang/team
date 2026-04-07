@@ -7,7 +7,7 @@ bots = ["rustbot"]
 [access.teams]
 wg-bindgen = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 required-approvals = 0
 ci-checks = ["success"]

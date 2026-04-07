@@ -19,7 +19,6 @@ use zulip::SyncZulip;
 pub struct Config {
     pub special_org_members: BTreeSet<String>,
     pub independent_github_orgs: BTreeSet<String>,
-    pub enable_rulesets_repos: BTreeSet<String>,
 }
 
 pub async fn run_sync_team(

@@ -7,7 +7,7 @@ bots = ["renovate"]
 cargo = "write"
 wg-diagnostics = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = ["CI"]
 required-approvals = 0

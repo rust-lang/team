@@ -6,11 +6,11 @@ bots = []
 [access.teams]
 wg-llvm = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "rustc/*"
 pr-required = false
 prevent-creation = false
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 pr-required = false

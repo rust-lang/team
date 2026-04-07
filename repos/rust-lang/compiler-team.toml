@@ -9,7 +9,7 @@ compiler = "write"
 compiler-ops = "write"
 types = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 required-approvals = 0
 

@@ -5,10 +5,10 @@ mod tests;
 use self::api::{BranchProtectionOp, TeamPrivacy, TeamRole};
 pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
 use crate::schema;
-use crate::sync::Config;
 use crate::sync::github::api::{
     GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings, Ruleset,
 };
+use crate::sync::{Config, team_api};
 use futures_util::StreamExt;
 use log::debug;
 use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot, ProtectionTarget};
@@ -31,7 +31,7 @@ const STRICT_REQUIRED_STATUS_CHECKS_POLICY_DEFAULT: bool = false;
 pub(crate) async fn create_diff(
     github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
-    repos: Vec<rust_team_data::v1::Repo>,
+    repos: Vec<team_api::Repo>,
     config: Config,
 ) -> anyhow::Result<Diff> {
     let github = SyncGitHub::new(github, teams, repos, config).await?;
@@ -43,7 +43,7 @@ type OrgName = String;
 struct SyncGitHub {
     github: Box<dyn GithubRead>,
     teams: Vec<rust_team_data::v1::Team>,
-    repos: Vec<rust_team_data::v1::Repo>,
+    repos: Vec<team_api::Repo>,
     config: Config,
     usernames_cache: HashMap<u64, String>,
     org_owners: HashMap<OrgName, HashSet<u64>>,
@@ -54,7 +54,7 @@ impl SyncGitHub {
     pub(crate) async fn new(
         github: Box<dyn GithubRead>,
         teams: Vec<rust_team_data::v1::Team>,
-        repos: Vec<rust_team_data::v1::Repo>,
+        repos: Vec<team_api::Repo>,
         config: Config,
     ) -> anyhow::Result<Self> {
         debug!("caching mapping between user ids and usernames");
@@ -366,16 +366,7 @@ impl SyncGitHub {
         Ok(diffs)
     }
 
-    /// Check if a repository should use rulesets instead of branch protections
-    fn should_use_rulesets(&self, repo: &rust_team_data::v1::Repo) -> bool {
-        let repo_full_name = format!("{}/{}", repo.org, repo.name);
-        self.config.enable_rulesets_repos.contains(&repo_full_name)
-    }
-
-    async fn diff_repo(
-        &self,
-        expected_repo: &rust_team_data::v1::Repo,
-    ) -> anyhow::Result<RepoDiff> {
+    async fn diff_repo(&self, expected_repo: &team_api::Repo) -> anyhow::Result<RepoDiff> {
         debug!(
             "Diffing repo `{}/{}`",
             expected_repo.org, expected_repo.name
@@ -403,12 +394,8 @@ impl SyncGitHub {
                 }
 
                 let mut rulesets = Vec::new();
-                let use_rulesets = self.should_use_rulesets(expected_repo);
-                if use_rulesets {
-                    for branch_protection in &expected_repo.branch_protections {
-                        let ruleset = construct_ruleset(branch_protection);
-                        rulesets.push(ruleset);
-                    }
+                for ruleset in &expected_repo.rulesets {
+                    rulesets.push(construct_ruleset(ruleset));
                 }
 
                 return Ok(RepoDiff::Create(CreateRepoDiff {
@@ -421,12 +408,7 @@ impl SyncGitHub {
                         auto_merge_enabled: expected_repo.auto_merge_enabled,
                     },
                     permissions,
-                    // Don't create branch protections if using rulesets
-                    branch_protections: if use_rulesets {
-                        vec![]
-                    } else {
-                        branch_protections
-                    },
+                    branch_protections,
                     rulesets,
                     environments: expected_repo
                         .environments
@@ -451,11 +433,7 @@ impl SyncGitHub {
             .diff_branch_protections(&actual_repo, expected_repo)
             .await?;
 
-        let ruleset_diffs = if self.should_use_rulesets(expected_repo) {
-            self.diff_rulesets(expected_repo).await?
-        } else {
-            Vec::new()
-        };
+        let ruleset_diffs = self.diff_rulesets(expected_repo).await?;
 
         let environment_diffs = self.diff_environments(expected_repo).await?;
         let old_settings = RepoSettings {
@@ -485,7 +463,7 @@ impl SyncGitHub {
 
     async fn diff_permissions(
         &self,
-        expected_repo: &rust_team_data::v1::Repo,
+        expected_repo: &team_api::Repo,
     ) -> anyhow::Result<Vec<RepoPermissionAssignmentDiff>> {
         let actual_teams: HashMap<_, _> = self
             .github
@@ -508,7 +486,7 @@ impl SyncGitHub {
     async fn diff_branch_protections(
         &self,
         actual_repo: &api::Repo,
-        expected_repo: &rust_team_data::v1::Repo,
+        expected_repo: &team_api::Repo,
     ) -> anyhow::Result<Vec<BranchProtectionDiff>> {
         // The rust-lang/rust repository uses GitHub apps push allowance actors for its branch
         // protections, which cannot be read without a PAT.
@@ -523,17 +501,6 @@ impl SyncGitHub {
             .branch_protections(&actual_repo.org, &actual_repo.name)
             .await?;
 
-        // If rulesets are enabled, delete all existing branch protections
-        // to avoid conflicts between branch protections and rulesets
-        if self.should_use_rulesets(expected_repo) {
-            return Ok(actual_protections
-                .into_iter()
-                .map(|(name, (id, _))| BranchProtectionDiff {
-                    pattern: name,
-                    operation: BranchProtectionDiffOperation::Delete(id),
-                })
-                .collect());
-        }
         for branch_protection in &expected_repo.branch_protections {
             let actual_branch_protection = actual_protections.remove(&branch_protection.pattern);
             let mut expected_branch_protection =
@@ -671,7 +638,7 @@ impl SyncGitHub {
 
     async fn diff_rulesets(
         &self,
-        expected_repo: &rust_team_data::v1::Repo,
+        expected_repo: &team_api::Repo,
     ) -> anyhow::Result<Vec<RulesetDiff>> {
         let mut ruleset_diffs = Vec::new();
 
@@ -697,9 +664,8 @@ impl SyncGitHub {
             }
         }
 
-        // Process each branch protection as a potential ruleset
-        for branch_protection in &expected_repo.branch_protections {
-            let expected_ruleset = construct_ruleset(branch_protection);
+        for ruleset in &expected_repo.rulesets {
+            let expected_ruleset = construct_ruleset(ruleset);
 
             if let Some(actual_ruleset) = rulesets_by_name.remove(&expected_ruleset.name) {
                 let Ruleset {

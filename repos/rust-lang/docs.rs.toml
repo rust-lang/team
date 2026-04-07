@@ -8,7 +8,7 @@ bots = ["rustbot", "renovate"]
 docs-rs = 'write'
 docs-rs-reviewers = 'write'
 
-[[branch-protections]]
+[[rulesets]]
 pattern = 'main'
 required-approvals = 0
 require-conversation-resolution = true

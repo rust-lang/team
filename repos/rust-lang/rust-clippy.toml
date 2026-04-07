@@ -8,7 +8,7 @@ bots = ["rustbot"]
 clippy = "write"
 clippy-contributors = "triage"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = [
     "conclusion",

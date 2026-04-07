@@ -7,16 +7,16 @@ bots = ["rustbot", "rfcbot", "renovate"]
 [access.teams]
 cargo = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["conclusion"]
 merge-queue = { enabled = true }
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "rust-1.*"
 ci-checks = ["conclusion"]
 
-[[branch-protections]]
+[[rulesets]]
 name = "Only allow the release process to publish tags"
 pattern = "0.*"
 target = "tag"

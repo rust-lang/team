@@ -8,7 +8,7 @@ bots = ["rustbot"]
 rustfmt = "write"
 rustfmt-contributors = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 required-approvals = 0
 ci-checks = [
@@ -27,11 +27,11 @@ ci-checks = [
     "rustdoc check",
 ]
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "libsyntax"
 required-approvals = 0
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "rust-1.*"
 required-approvals = 0
 

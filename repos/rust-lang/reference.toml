@@ -10,7 +10,7 @@ lang-docs = "write"
 spec = "write"
 spec-contributors = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["Success gate"]
 merge-queue = { enabled = true }

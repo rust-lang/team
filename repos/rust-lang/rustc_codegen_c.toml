@@ -7,7 +7,7 @@ bots = []
 codegen-c-maintainers = "maintain"
 compiler = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = ['success']
 require-up-to-date-branches = true

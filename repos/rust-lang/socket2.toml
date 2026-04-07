@@ -14,7 +14,7 @@ Thomasdezeeuw = 'maintain'
 carllerche = 'maintain'
 Darksonn = 'maintain'
 
-[[branch-protections]]
+[[rulesets]]
 pattern = 'master'
 ci-checks = [
     'Rustfmt',

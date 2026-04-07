@@ -7,7 +7,7 @@ bots = []
 [access.teams]
 crate-maintainers = 'maintain'
 
-[[branch-protections]]
+[[rulesets]]
 pattern = 'master'
 
 [environments.github-pages]

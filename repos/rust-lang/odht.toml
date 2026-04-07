@@ -6,7 +6,7 @@ bots = []
 [access.teams]
 compiler = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = ["Required Checks Passed"]
 require-up-to-date-branches = true

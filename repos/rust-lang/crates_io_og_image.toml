@@ -7,7 +7,7 @@ bots = ["renovate", "rustbot"]
 [access.teams]
 crates-io = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 required-approvals = 0
 pr-required = false

@@ -10,7 +10,7 @@ libs-api = "write"
 libs = "maintain"
 rustc-dev-guide = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["book-test"]
 require-up-to-date-branches = true

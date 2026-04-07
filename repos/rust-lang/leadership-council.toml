@@ -7,5 +7,5 @@ bots = ["rustbot", "rfcbot"]
 leadership-council = "maintain"
 council-librarians = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"

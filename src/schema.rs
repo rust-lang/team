@@ -16,8 +16,6 @@ pub(crate) struct Config {
     // Use a BTreeSet for consistent ordering in tests
     special_org_members: BTreeSet<String>,
     members_without_zulip_id: BTreeSet<String>,
-    #[serde(default)]
-    enable_rulesets_repos: BTreeSet<String>,
 }
 
 impl Config {
@@ -47,10 +45,6 @@ impl Config {
 
     pub(crate) fn members_without_zulip_id(&self) -> &BTreeSet<String> {
         &self.members_without_zulip_id
-    }
-
-    pub(crate) fn enable_rulesets_repos(&self) -> &BTreeSet<String> {
-        &self.enable_rulesets_repos
     }
 }
 
@@ -817,6 +811,8 @@ pub(crate) struct Repo {
     pub access: RepoAccess,
     #[serde(default)]
     pub branch_protections: Vec<BranchProtection>,
+    #[serde(default)]
+    pub rulesets: Vec<BranchProtection>,
     #[serde(default)]
     pub crates_io: Vec<CratesIoConfiguration>,
     #[serde(default)]

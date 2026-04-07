@@ -12,7 +12,7 @@ devtools = "write"
 # soon, and then this can be removed.
 Dylan-DPC = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["Success gate"]
 required-approvals = 0

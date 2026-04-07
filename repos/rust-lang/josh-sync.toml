@@ -7,7 +7,7 @@ bots = []
 compiler = "write"
 infra = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = ["Test"]
 required-approvals = 0

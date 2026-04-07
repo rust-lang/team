@@ -6,11 +6,11 @@ bots = []
 [access.teams]
 crates-io = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "snapshot-*"
 pr-required = false
 prevent-creation = false
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 pr-required = false

@@ -8,7 +8,7 @@ bots = []
 lang = "write"
 lang-docs = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["Success gate"]
 merge-queue = { enabled = true }

@@ -13,7 +13,7 @@ lang-ops = "write"
 spec = "write"
 spec-contributors = "triage"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = ["CI finished"]
 merge-queue = { enabled = true, max-entries-to-build = 1, min-entries-to-merge-wait-minutes = 1 }

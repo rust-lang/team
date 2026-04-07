@@ -23,7 +23,7 @@ rustdoc = "maintain"
 triagebot = "maintain"
 rustc-dev-guide = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["test"]
 

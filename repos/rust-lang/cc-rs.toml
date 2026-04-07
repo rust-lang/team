@@ -7,7 +7,7 @@ bots = []
 [access.teams]
 crate-maintainers = 'maintain'
 
-[[branch-protections]]
+[[rulesets]]
 pattern = 'main'
 required-approvals = 0
 ci-checks = ['Tests pass']

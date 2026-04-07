@@ -242,7 +242,6 @@ impl Data {
         Ok(sync::Config {
             special_org_members,
             independent_github_orgs: self.config.independent_github_orgs().clone(),
-            enable_rulesets_repos: self.config.enable_rulesets_repos().clone(),
         })
     }
 }

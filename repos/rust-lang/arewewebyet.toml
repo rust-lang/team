@@ -7,7 +7,7 @@ bots = []
 [access.teams]
 arewewebyet = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = 'master'
 
 [environments.github-pages]

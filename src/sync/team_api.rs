@@ -1,7 +1,66 @@
 use crate::sync::utils::ResponseExt;
+use indexmap::IndexMap;
 use log::{debug, trace};
 use std::borrow::Cow;
+use std::ops::Deref;
 use std::path::PathBuf;
+
+#[derive(Debug, Clone, serde::Deserialize)]
+struct ApiRepo {
+    #[serde(flatten)]
+    repo: rust_team_data::v1::Repo,
+    #[serde(default)]
+    rulesets: Vec<rust_team_data::v1::BranchProtection>,
+}
+
+#[derive(Debug, Clone, serde::Deserialize)]
+struct ApiRepos {
+    #[serde(flatten)]
+    repos: IndexMap<String, Vec<ApiRepo>>,
+}
+
+#[derive(Debug, Clone)]
+pub(crate) struct Repo {
+    pub(crate) branch_protections: Vec<rust_team_data::v1::BranchProtection>,
+    pub(crate) rulesets: Vec<rust_team_data::v1::BranchProtection>,
+    api_repo: rust_team_data::v1::Repo,
+}
+
+impl Repo {
+    pub(crate) fn new(
+        repo: rust_team_data::v1::Repo,
+        rulesets: Vec<rust_team_data::v1::BranchProtection>,
+    ) -> Self {
+        let mut branch_protections = repo.branch_protections.clone();
+
+        for ruleset in &rulesets {
+            if let Some(position) = branch_protections.iter().position(|item| item == ruleset) {
+                branch_protections.remove(position);
+            }
+        }
+
+        Self {
+            branch_protections,
+            rulesets,
+            api_repo: repo,
+        }
+    }
+}
+
+impl From<ApiRepo> for Repo {
+    fn from(value: ApiRepo) -> Self {
+        let ApiRepo { repo, rulesets } = value;
+        Self::new(repo, rulesets)
+    }
+}
+
+impl Deref for Repo {
+    type Target = rust_team_data::v1::Repo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.api_repo
+    }
+}
 
 /// Determines how do we get access to the ground-truth data from `rust-lang/team`.
 pub enum TeamApi {
@@ -23,14 +82,14 @@ impl TeamApi {
             .collect())
     }
 
-    pub(crate) async fn get_repos(&self) -> anyhow::Result<Vec<rust_team_data::v1::Repo>> {
+    pub(crate) async fn get_repos(&self) -> anyhow::Result<Vec<Repo>> {
         debug!("loading teams list from the Team API");
         Ok(self
-            .req::<rust_team_data::v1::Repos>("repos.json")
+            .req::<ApiRepos>("repos.json")
             .await?
             .repos
             .into_iter()
-            .flat_map(|(_k, v)| v)
+            .flat_map(|(_k, v)| v.into_iter().map(Repo::from))
             .collect())
     }
 

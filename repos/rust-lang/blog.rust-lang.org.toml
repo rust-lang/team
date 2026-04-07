@@ -10,7 +10,7 @@ website = "maintain"
 # For Rust release blog posts
 release = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = [
     "lint",

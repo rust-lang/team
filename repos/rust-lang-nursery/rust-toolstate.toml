@@ -7,7 +7,7 @@ bots = ["highfive"]
 [access.teams]
 infra = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 pr-required = false
 

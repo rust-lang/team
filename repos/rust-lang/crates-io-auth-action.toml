@@ -8,7 +8,7 @@ crates-io-infra-admins = "write"
 infra-admins = "write"
 infra = "triage"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = ["Conclusion"]
 required-approvals = 0

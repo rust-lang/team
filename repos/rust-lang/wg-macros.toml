@@ -6,7 +6,7 @@ bots = ["rustbot"]
 [access.teams]
 wg-macros = "maintain"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 
 [environments.github-pages]

@@ -10,7 +10,7 @@ infra-bors = "write"
 infra-admins = "write"
 infra-bors-admins = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
 ci-checks = ["Test", "Test Docker"]
 required-approvals = 0

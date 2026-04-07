@@ -8,7 +8,7 @@ bots = ["rustbot"]
 rust-analyzer = "write"
 rust-analyzer-contributors = "triage"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["conclusion"]
 required-approvals = 0

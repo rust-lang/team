@@ -1,4 +1,4 @@
-use super::{construct_ruleset, log_ruleset};
+use super::{RepoDiff, RulesetDiffOperation, construct_ruleset, log_ruleset};
 use crate::sync::github::tests::test_utils::{
     BranchProtectionBuilder, DEFAULT_ORG, DataModel, RepoData, TeamData,
 };
@@ -355,6 +355,50 @@ async fn repo_create() {
         ),
     ]
     "#);
+}
+
+#[tokio::test]
+async fn repo_create_branch_protection_and_ruleset() {
+    let mut model = DataModel::default();
+    let gh = model.gh_model();
+    let branch_protection = BranchProtectionBuilder::pr_required("main", &["test"], 1).build();
+    let ruleset = BranchProtectionBuilder::pr_required("stable", &["dist"], 0).build();
+
+    model.create_repo(
+        RepoData::new("repo1")
+            .branch_protections(vec![branch_protection.clone()])
+            .rulesets(vec![ruleset.clone()]),
+    );
+
+    let diff = model.diff_repos(gh).await;
+    let [RepoDiff::Create(create)] = diff.as_slice() else {
+        panic!("expected a single repo creation diff");
+    };
+
+    assert_eq!(create.branch_protections.len(), 1);
+    assert_eq!(create.branch_protections[0].0, "main");
+    assert_eq!(create.rulesets, vec![construct_ruleset(&ruleset)]);
+}
+
+#[tokio::test]
+async fn repo_remove_ruleset() {
+    let mut model = DataModel::default();
+    let ruleset = BranchProtectionBuilder::pr_required("main", &["test"], 1).build();
+    model.create_repo(RepoData::new("repo1").rulesets(vec![ruleset]));
+
+    let gh = model.gh_model();
+    model.get_repo("repo1").rulesets.clear();
+
+    let diff = model.diff_repos(gh).await;
+    let [RepoDiff::Update(update)] = diff.as_slice() else {
+        panic!("expected a single repo update diff");
+    };
+
+    assert!(update.branch_protection_diffs.is_empty());
+    assert!(matches!(
+        update.ruleset_diffs.as_slice(),
+        [ruleset_diff] if matches!(ruleset_diff.operation, RulesetDiffOperation::Delete(_))
+    ));
 }
 
 #[tokio::test]

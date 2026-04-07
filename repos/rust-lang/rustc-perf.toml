@@ -7,7 +7,7 @@ bots = []
 [access.teams]
 wg-compiler-performance = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["conclusion"]
 merge-queue = { enabled = true }

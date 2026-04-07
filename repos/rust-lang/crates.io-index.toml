@@ -7,7 +7,7 @@ bots = []
 crates-io = "write"
 crates-io-on-call = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 pr-required = false
 prevent-force-push = false

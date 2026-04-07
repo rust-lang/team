@@ -6,7 +6,7 @@ bots = []
 [access.teams]
 release = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = [
     "build (macos-latest, beta)",

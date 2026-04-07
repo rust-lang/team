@@ -7,7 +7,7 @@ bots = ["rustbot"]
 compiler = "write"
 miri = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "master"
 ci-checks = ["conclusion"]
 required-approvals = 0

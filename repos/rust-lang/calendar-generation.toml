@@ -15,5 +15,5 @@ libs = "write"
 release = "write"
 wg-async = "write"
 
-[[branch-protections]]
+[[rulesets]]
 pattern = "main"
