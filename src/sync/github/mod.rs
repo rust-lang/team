@@ -22,6 +22,7 @@ static DEFAULT_PRIVACY: TeamPrivacy = TeamPrivacy::Closed;
 /// Verified via: https://api.github.com/repos/rust-lang/rust/commits/HEAD/check-runs
 const GITHUB_ACTIONS_INTEGRATION_ID: i64 = 15368;
 
+const REQUIRE_PULL_REQUESTS_DEFAULT: bool = true;
 const REQUIRE_CODE_OWNER_REVIEW_DEFAULT: bool = false;
 const REQUIRE_LAST_PUSH_APPROVAL_DEFAULT: bool = false;
 const REQUIRED_REVIEW_THREAD_RESOLUTION_DEFAULT: bool = false;
@@ -1987,13 +1988,47 @@ fn log_ruleset(
 
     // The list representation of rules makes it a bit annoying to diff and print
     // So we normalize the rules to a set of key-value pairs, and then diff those
-    fn record_rules(ruleset: &Ruleset) -> HashMap<&'static str, LoggedRule> {
-        let mut rules = HashMap::new();
+    fn record_rules(ruleset: &Ruleset) -> BTreeMap<&'static str, LoggedRule> {
+        const FORBID_FORCE_PUSHES: &str = "Forbid force pushes";
+        const REQUIRE_PULL_REQUESTS: &str = "Require pull requests";
+        const RESTRICT_CREATIONS: &str = "Restrict creations";
+        const RESTRICT_DELETIONS: &str = "Restrict deletions";
+
+        // Some default-true toggles are represented by the presence of a rule,
+        // so seed their disabled state to keep non-default `false` values visible.
+        let mut rules = BTreeMap::from([
+            (
+                FORBID_FORCE_PUSHES,
+                LoggedRule::bool_with_default(
+                    false,
+                    schema::branch_protection_default_prevent_force_push(),
+                ),
+            ),
+            (
+                REQUIRE_PULL_REQUESTS,
+                LoggedRule::bool_with_default(false, REQUIRE_PULL_REQUESTS_DEFAULT),
+            ),
+            (
+                RESTRICT_CREATIONS,
+                LoggedRule::bool_with_default(
+                    false,
+                    schema::branch_protection_default_prevent_creation(),
+                ),
+            ),
+            (
+                RESTRICT_DELETIONS,
+                LoggedRule::bool_with_default(
+                    false,
+                    schema::branch_protection_default_prevent_deletion(),
+                ),
+            ),
+        ]);
+
         for rule in &ruleset.rules {
             match rule {
                 api::RulesetRule::Creation => {
                     rules.insert(
-                        "Restrict creations",
+                        RESTRICT_CREATIONS,
                         LoggedRule::bool_with_default(
                             true,
                             schema::branch_protection_default_prevent_creation(),
@@ -2011,7 +2046,7 @@ fn log_ruleset(
                 }
                 api::RulesetRule::Deletion => {
                     rules.insert(
-                        "Restrict deletions",
+                        RESTRICT_DELETIONS,
                         LoggedRule::bool_with_default(
                             true,
                             schema::branch_protection_default_prevent_deletion(),
@@ -2032,7 +2067,7 @@ fn log_ruleset(
                 }
                 api::RulesetRule::NonFastForward => {
                     rules.insert(
-                        "Forbid force pushes",
+                        FORBID_FORCE_PUSHES,
                         LoggedRule::bool_with_default(
                             true,
                             schema::branch_protection_default_prevent_force_push(),
@@ -2105,6 +2140,10 @@ fn log_ruleset(
                     );
                 }
                 api::RulesetRule::PullRequest { parameters } => {
+                    rules.insert(
+                        REQUIRE_PULL_REQUESTS,
+                        LoggedRule::bool_with_default(true, REQUIRE_PULL_REQUESTS_DEFAULT),
+                    );
                     rules.insert(
                         "Dismiss stale reviews on push",
                         LoggedRule::bool_with_default(

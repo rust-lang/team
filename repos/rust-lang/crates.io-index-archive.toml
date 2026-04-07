@@ -9,6 +9,7 @@ crates-io = "maintain"
 [[branch-protections]]
 pattern = "snapshot-*"
 pr-required = false
+prevent-creation = false
 
 [[branch-protections]]
 pattern = "main"

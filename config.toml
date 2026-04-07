@@ -87,6 +87,5 @@ members-without-zulip-id = [
 disable-rulesets-repos = [
     # Requires bypass
     "rust-lang/blog.rust-lang.org",
-
     "rust-lang/rust",
 ]

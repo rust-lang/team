@@ -1,3 +1,4 @@
+use super::{construct_ruleset, log_ruleset};
 use crate::sync::github::tests::test_utils::{
     BranchProtectionBuilder, DEFAULT_ORG, DataModel, RepoData, TeamData,
 };
@@ -1100,6 +1101,42 @@ async fn repo_remove_branch_protection() {
         ),
     ]
     "#);
+}
+
+#[test]
+fn ruleset_creation_logs_non_default_disabled_flags() {
+    let mut protection = BranchProtectionBuilder::pr_not_required("main").build();
+
+    // Change defaults
+    protection.prevent_creation = false;
+    protection.prevent_deletion = false;
+    protection.prevent_force_push = false;
+
+    let ruleset = construct_ruleset(&protection);
+    let mut rendered = String::new();
+    log_ruleset(&ruleset, None, &mut rendered).unwrap();
+
+    assert!(rendered.contains("Restrict creations: false"));
+    assert!(rendered.contains("Restrict deletions: false"));
+    assert!(rendered.contains("Forbid force pushes: false"));
+    assert!(rendered.contains("Require pull requests: false"));
+}
+
+#[test]
+fn ruleset_updates_log_disabled_toggle_rules_as_false() {
+    let old =
+        construct_ruleset(&BranchProtectionBuilder::pr_required("main", &["test"], 1).build());
+
+    let mut new_protection = BranchProtectionBuilder::pr_required("main", &["test"], 1).build();
+
+    // Change default
+    new_protection.prevent_force_push = false;
+
+    let new = construct_ruleset(&new_protection);
+    let mut rendered = String::new();
+    log_ruleset(&old, Some(&new), &mut rendered).unwrap();
+
+    assert!(rendered.contains("Forbid force pushes: true => false"));
 }
 
 #[tokio::test]
