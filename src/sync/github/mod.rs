@@ -127,6 +127,13 @@ impl SyncGitHub {
             org_members.insert((*org).to_string(), github.org_members(org).await?);
 
             let mut installations: Vec<OrgAppInstallation> = vec![];
+
+            // We cannot get app installations for organizations outside the rust-lang enterprise
+            // with an GitHub App token authentication, so we skip those.
+            if !github.uses_pat() && config.independent_github_orgs.contains(org.as_str()) {
+                continue;
+            }
+
             for installation in github.org_app_installations(org).await? {
                 // Only load installations from apps that we know about, to avoid removing
                 // installations of unknown apps.
