@@ -11,6 +11,7 @@
       "pattern": "master",
       "dismiss_stale_review": false,
       "require_conversation_resolution": false,
+      "require_linear_history": false,
       "mode": {
         "pr_required": {
           "ci_checks": [

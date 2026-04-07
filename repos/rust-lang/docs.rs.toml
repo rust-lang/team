@@ -12,6 +12,7 @@ docs-rs-reviewers = 'write'
 pattern = 'main'
 required-approvals = 0
 require-conversation-resolution = true
+require-linear-history = true
 
 [environments.production]
 branches = ["main"]

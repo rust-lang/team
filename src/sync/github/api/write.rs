@@ -411,6 +411,7 @@ impl GitHubWrite {
             allows_force_pushes: bool,
             dismiss_stale: bool,
             requires_conversation_resolution: bool,
+            requires_linear_history: bool,
             requires_strict_status_checks: bool,
             review_count: u8,
             restricts_pushes: bool,
@@ -431,7 +432,7 @@ impl GitHubWrite {
             BranchProtectionOp::UpdateBranchProtection(id) => id,
         };
         let query = format!("
-        mutation($id: ID!, $pattern:String!, $contexts: [String!], $allowsForcePushes: Boolean, $dismissStale: Boolean, $requiresConversationResolution: Boolean, $requiresStrictStatusChecks: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean, $requiresApprovingReviews: Boolean) {{
+        mutation($id: ID!, $pattern:String!, $contexts: [String!], $allowsForcePushes: Boolean, $dismissStale: Boolean, $requiresConversationResolution: Boolean, $requiresLinearHistory: Boolean, $requiresStrictStatusChecks: Boolean, $reviewCount: Int, $pushActorIds: [ID!], $restrictsPushes: Boolean, $requiresApprovingReviews: Boolean) {{
             {mutation_name}(input: {{
                 {id_field}: $id,
                 pattern: $pattern,
@@ -443,6 +444,7 @@ impl GitHubWrite {
                 requiredApprovingReviewCount: $reviewCount,
                 dismissesStaleReviews: $dismissStale,
                 requiresConversationResolution: $requiresConversationResolution,
+                requiresLinearHistory: $requiresLinearHistory,
                 requiresApprovingReviews: $requiresApprovingReviews,
                 restrictsPushes: $restrictsPushes,
                 pushActorIds: $pushActorIds
@@ -482,6 +484,7 @@ impl GitHubWrite {
                         dismiss_stale: branch_protection.dismisses_stale_reviews,
                         requires_conversation_resolution: branch_protection
                             .requires_conversation_resolution,
+                        requires_linear_history: branch_protection.requires_linear_history,
                         requires_strict_status_checks: branch_protection
                             .requires_strict_status_checks,
                         review_count: branch_protection.required_approving_review_count,

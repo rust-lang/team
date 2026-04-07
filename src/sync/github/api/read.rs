@@ -439,6 +439,7 @@ impl GithubRead for GitHubApiRead {
                             allowsForcePushes,
                             dismissesStaleReviews,
                             requiresConversationResolution,
+                            requiresLinearHistory,
                             requiresStrictStatusChecks,
                             requiredStatusCheckContexts,
                             requiredApprovingReviewCount,
