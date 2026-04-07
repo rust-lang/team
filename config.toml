@@ -107,6 +107,7 @@ enable-rulesets-repos = [
    "rust-lang/crates-build-env",
    "rust-lang/crates-io-auth-action",
    "rust-lang/crates.io",
+   "rust-lang/crates.io-index-archive",
    "rust-lang/docs.rs",
    "rust-lang/edition-guide",
    "rust-lang/ena",
