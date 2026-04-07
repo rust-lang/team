@@ -91,6 +91,7 @@ enable-rulesets-repos = [
    "rust-lang/async-fundamentals-initiative",
    "rust-lang/backtrace-rs",
    "rust-lang/beyond-refs",
+   "rust-lang/blog.rust-lang.org",
    "rust-lang/book",
    "rust-lang/bors",
    "rust-lang/calendar-generation",

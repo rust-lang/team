@@ -17,6 +17,8 @@ ci-checks = [
     "build",
 ]
 require-conversation-resolution = true
+# Allow promote release to push without PRs
+allowed-merge-apps = ["promote-release"]
 
 [environments.github-pages]
 branches = ["main"]
