@@ -990,6 +990,7 @@ pub fn construct_branch_protection(
         allows_force_pushes: !branch_protection.prevent_force_push,
         dismisses_stale_reviews: branch_protection.dismiss_stale_review,
         requires_conversation_resolution: branch_protection.require_conversation_resolution,
+        requires_linear_history: branch_protection.require_linear_history,
         requires_strict_status_checks: branch_protection.require_up_to_date_branches,
         required_approving_review_count,
         required_status_check_contexts: checks,
@@ -1039,6 +1040,10 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
 
     if branch_protection.prevent_update {
         rules.insert(RulesetRule::Update);
+    }
+
+    if branch_protection.require_linear_history {
+        rules.insert(RulesetRule::RequiredLinearHistory);
     }
 
     // Add non-fast-forward protection if requested
@@ -1821,6 +1826,12 @@ fn log_branch_protection(
         "Require conversation resolution",
         &current.requires_conversation_resolution,
         new.map(|n| &n.requires_conversation_resolution),
+        &mut result,
+    )?;
+    log_field(
+        "Require linear history",
+        &current.requires_linear_history,
+        new.map(|n| &n.requires_linear_history),
         &mut result,
     )?;
     log_field(

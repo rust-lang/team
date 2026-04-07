@@ -418,6 +418,9 @@ dismiss-stale-review = false
 # Whether all PR conversations must be resolved before merging.
 # (optional - default `false`)
 require-conversation-resolution = false
+# Prevent merge commits from being pushed to matching branches.
+# (optional - default `false`)
+require-linear-history = false
 # Is a PR required when making changes to this branch?
 # (optional - default `true`)
 pr-required = true

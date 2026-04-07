@@ -294,6 +294,8 @@ pub struct BranchProtection {
     pub dismiss_stale_review: bool,
     #[serde(default)]
     pub require_conversation_resolution: bool,
+    #[serde(default)]
+    pub require_linear_history: bool,
     pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,
     pub merge_bots: Vec<MergeBot>,
