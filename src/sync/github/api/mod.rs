@@ -22,6 +22,7 @@ use thiserror::Error;
 use tokens::GitHubTokens;
 use url::GitHubUrl;
 
+use crate::sync::Config;
 pub(crate) use read::{GitHubApiRead, GithubRead};
 pub(crate) use write::GitHubWrite;
 
@@ -46,7 +47,7 @@ pub(crate) struct HttpClient {
 }
 
 impl HttpClient {
-    pub(crate) async fn new() -> anyhow::Result<Self> {
+    pub(crate) async fn new(config: &Config) -> anyhow::Result<Self> {
         let mut builder = reqwest::ClientBuilder::default();
         let mut map = HeaderMap::default();
 
@@ -58,7 +59,7 @@ impl HttpClient {
 
         Ok(Self {
             client: builder.build()?,
-            github_tokens: GitHubTokens::from_env().await?,
+            github_tokens: GitHubTokens::from_env(config).await?,
         })
     }
 

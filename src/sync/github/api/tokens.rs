@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use crate::sync::Config;
 use crate::sync::github::api::url::TokenType;
 use anyhow::Context as _;
 use chrono::Duration;
@@ -53,7 +54,7 @@ impl GitHubTokens {
     ///
     /// Parses environment variables in the format GITHUB_TOKEN_{ORG_NAME}
     /// to retrieve GitHub tokens.
-    pub async fn from_env() -> anyhow::Result<Self> {
+    pub async fn from_env(config: &Config) -> anyhow::Result<Self> {
         let mut tokens = HashMap::new();
 
         for (key, value) in std::env::vars() {
@@ -111,6 +112,10 @@ impl GitHubTokens {
 
             let mut enterprise_org_tokens = HashMap::new();
             for org in tokens.keys() {
+                if config.independent_github_orgs.contains(org.as_str()) {
+                    continue;
+                }
+
                 // Get the corresponding organization installation of the enterprise app
                 let org_installation = enterprise_app_client
                     .apps()

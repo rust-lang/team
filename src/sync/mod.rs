@@ -37,7 +37,7 @@ pub async fn run_sync_team(
         info!("synchronizing {service}");
         match service.as_str() {
             "github" => {
-                let client = HttpClient::new().await?;
+                let client = HttpClient::new(&config).await?;
                 let gh_read = Box::new(GitHubApiRead::from_client(client.clone())?);
                 let teams = team_api.get_teams().await?;
                 let repos = team_api.get_repos().await?;
