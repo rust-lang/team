@@ -2,8 +2,8 @@ use crate::api::github::GitHubApi;
 use crate::api::zulip::ZulipApi;
 use crate::data::Data;
 use crate::schema::{
-    AllowedMergeApp, Bot, Email, Permissions, Repo, RepoPermission, Team, TeamKind, TeamPeople,
-    ZulipMember,
+    AllowedMergeApp, Bot, Email, MergeQueueMethod, Permissions, Repo, RepoPermission, Team,
+    TeamKind, TeamPeople, ZulipMember,
 };
 use anyhow::{Context as _, Error, bail};
 use log::{error, warn};
@@ -1216,6 +1216,17 @@ but that team is not mentioned in [access.teams]"#,
             if protection.merge_queue.enabled && protection.pattern.contains('*') {
                 bail!(
                     r#"repo '{}' uses a GitHub rule for {} that enables `merge-queue`, but GitHub merge queues only support exact ref names patterns"#,
+                    repo.name,
+                    protection.pattern,
+                );
+            }
+
+            if protection.require_linear_history
+                && protection.merge_queue.enabled
+                && protection.merge_queue.method == MergeQueueMethod::Merge
+            {
+                bail!(
+                    r"repo '{}' uses a branch protection for {} that requires linear commit history, but also requires a merge queue using the default merging method `merge`, which is not compatible",
                     repo.name,
                     protection.pattern,
                 );
