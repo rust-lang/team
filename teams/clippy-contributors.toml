@@ -5,7 +5,6 @@ subteam-of = "clippy"
 leads = []
 members = [
     "GuillaumeGomez",
-    "J-ZhengLi",
     "pitaj",
     "profetia",
     "alex-semenyuk",
@@ -13,6 +12,7 @@ members = [
 alumni = [
     # User deleted their account
     # "PartiallyUntyped"
+    "J-ZhengLi",
 ]
 
 [[github]]
