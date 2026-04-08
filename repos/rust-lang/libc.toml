@@ -14,12 +14,14 @@ pattern = 'main'
 ci-checks = ['success']
 required-approvals = 0
 merge-queue = { enabled = true, method = "rebase" }
+require-linear-history = true
 
 [[branch-protections]]
 pattern = 'libc-0.2'
 ci-checks = ['success']
 required-approvals = 0
 merge-queue = { enabled = true, method = "rebase" }
+require-linear-history = true
 
 [environments.github-pages]
 branches = ["gh-pages", "main", "master"]
