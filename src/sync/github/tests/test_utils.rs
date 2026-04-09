@@ -182,7 +182,7 @@ impl DataModel {
                 .enumerate()
                 .map(|(idx, protection)| Ruleset {
                     id: Some(idx as i64),
-                    ..construct_ruleset(protection)
+                    ..construct_ruleset(protection, vec![])
                 })
                 .collect();
             org.rulesets.insert(repo.name.clone(), protections);

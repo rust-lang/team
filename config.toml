@@ -83,6 +83,4 @@ members-without-zulip-id = [
     "rust-timer",
 ]
 
-disable-rulesets-repos = [
-    "rust-lang/rust",
-]
+disable-rulesets-repos = []

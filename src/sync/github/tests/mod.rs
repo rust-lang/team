@@ -1121,7 +1121,7 @@ fn ruleset_creation_logs_non_default_disabled_flags() {
     protection.prevent_deletion = false;
     protection.prevent_force_push = false;
 
-    let ruleset = construct_ruleset(&protection);
+    let ruleset = construct_ruleset(&protection, vec![]);
     let mut rendered = String::new();
     log_ruleset(&ruleset, None, &mut rendered).unwrap();
 
@@ -1133,15 +1133,17 @@ fn ruleset_creation_logs_non_default_disabled_flags() {
 
 #[test]
 fn ruleset_updates_log_disabled_toggle_rules_as_false() {
-    let old =
-        construct_ruleset(&BranchProtectionBuilder::pr_required("main", &["test"], 1).build());
+    let old = construct_ruleset(
+        &BranchProtectionBuilder::pr_required("main", &["test"], 1).build(),
+        vec![],
+    );
 
     let mut new_protection = BranchProtectionBuilder::pr_required("main", &["test"], 1).build();
 
     // Change default
     new_protection.prevent_force_push = false;
 
-    let new = construct_ruleset(&new_protection);
+    let new = construct_ruleset(&new_protection, vec![]);
     let mut rendered = String::new();
     log_ruleset(&old, Some(&new), &mut rendered).unwrap();
 
