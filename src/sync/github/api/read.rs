@@ -11,7 +11,7 @@ use anyhow::Context as _;
 use async_trait::async_trait;
 use reqwest::{Method, StatusCode};
 use rust_team_data::v1::Environment;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 
 #[async_trait]
 pub(crate) trait GithubRead {
@@ -74,7 +74,7 @@ pub(crate) trait GithubRead {
         &self,
         org: &str,
         repo: &str,
-    ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>>;
+    ) -> anyhow::Result<BTreeMap<String, (String, BranchProtection)>>;
 
     /// Get environments for a repository
     /// Returns a map of environment names to their Environment data
@@ -512,7 +512,7 @@ impl GithubRead for GitHubApiRead {
         &self,
         org: &str,
         repo: &str,
-    ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>> {
+    ) -> anyhow::Result<BTreeMap<String, (String, BranchProtection)>> {
         #[derive(serde::Serialize)]
         struct Params<'a> {
             org: &'a str,
@@ -576,7 +576,7 @@ impl GithubRead for GitHubApiRead {
             protection: BranchProtection,
         }
 
-        let mut result = HashMap::new();
+        let mut result = BTreeMap::new();
         let res: Wrapper = self
             .client
             .graphql(QUERY, Params { org, repo }, org)

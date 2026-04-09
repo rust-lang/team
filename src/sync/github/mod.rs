@@ -444,7 +444,7 @@ impl SyncGitHub {
     /// Check if a repository should use rulesets instead of branch protections
     fn should_use_rulesets(&self, repo: &rust_team_data::v1::Repo) -> bool {
         let repo_full_name = format!("{}/{}", repo.org, repo.name);
-        self.config.enable_rulesets_repos.contains(&repo_full_name)
+        !self.config.disable_rulesets_repos.contains(&repo_full_name)
     }
 
     async fn diff_repo(
@@ -671,7 +671,7 @@ impl SyncGitHub {
             branch_protection_diffs.push(BranchProtectionDiff {
                 pattern: branch_protection.pattern.clone(),
                 operation,
-            })
+            });
         }
 
         // `actual_branch_protections` now contains the branch protections that were not expected
