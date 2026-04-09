@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use indexmap::IndexMap;
-use std::collections::{BTreeSet, HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::vec;
 
 use derive_builder::Builder;
@@ -16,8 +16,7 @@ use crate::sync::github::api::{
     RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::sync::github::{
-    OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_branch_protection,
-    convert_permission,
+    OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_ruleset, convert_permission,
 };
 
 pub const DEFAULT_ORG: &str = "rust-lang";
@@ -174,16 +173,19 @@ impl DataModel {
             org.repo_members
                 .insert(repo.name.clone(), RepoMembers { teams, members });
 
-            let repo_v1: v1::Repo = repo.clone().into();
-            let mut protections = vec![];
-            for protection in &repo.branch_protections {
-                protections.push((
-                    format!("{}", protections.len()),
-                    construct_branch_protection(&repo_v1, protection),
-                ));
-            }
-            org.branch_protections
-                .insert(repo.name.clone(), protections);
+            // Branch protections are deprecated so we don't test them anymore
+            org.branch_protections.insert(repo.name.clone(), Vec::new());
+
+            let protections = repo
+                .branch_protections
+                .iter()
+                .enumerate()
+                .map(|(idx, protection)| Ruleset {
+                    id: Some(idx as i64),
+                    ..construct_ruleset(protection)
+                })
+                .collect();
+            org.rulesets.insert(repo.name.clone(), protections);
 
             let environments: HashMap<String, Environment> =
                 repo.environments.clone().into_iter().collect();
@@ -702,11 +704,11 @@ impl GithubRead for GithubMock {
         &self,
         org: &str,
         repo: &str,
-    ) -> anyhow::Result<HashMap<String, (String, BranchProtection)>> {
+    ) -> anyhow::Result<BTreeMap<String, (String, BranchProtection)>> {
         let Some(protections) = self.get_org(org).branch_protections.get(repo) else {
             return Ok(Default::default());
         };
-        let mut result = HashMap::default();
+        let mut result = BTreeMap::default();
         for (id, protection) in protections {
             result.insert(protection.pattern.clone(), (id.clone(), protection.clone()));
         }

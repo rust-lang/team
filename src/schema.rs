@@ -17,7 +17,7 @@ pub(crate) struct Config {
     special_org_members: BTreeSet<String>,
     members_without_zulip_id: BTreeSet<String>,
     #[serde(default)]
-    enable_rulesets_repos: BTreeSet<String>,
+    disable_rulesets_repos: BTreeSet<String>,
 }
 
 impl Config {
@@ -49,8 +49,8 @@ impl Config {
         &self.members_without_zulip_id
     }
 
-    pub(crate) fn enable_rulesets_repos(&self) -> &BTreeSet<String> {
-        &self.enable_rulesets_repos
+    pub(crate) fn disable_rulesets_repos(&self) -> &BTreeSet<String> {
+        &self.disable_rulesets_repos
     }
 }
 
