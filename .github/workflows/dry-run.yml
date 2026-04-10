@@ -18,6 +18,8 @@ on:
     types:
       - completed
 
+permissions: {}
+
 jobs:
   dry-run:
     runs-on: ubuntu-latest
@@ -27,7 +29,7 @@ jobs:
       group: dry-run-${{ github.event.workflow_run.head_branch }}
       cancel-in-progress: true
     permissions:
-      pull-requests: write
+      pull-requests: write  # Needed to post and edit the dry-run result comment on the PR
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
