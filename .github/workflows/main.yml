@@ -20,11 +20,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || 'deploy' }}
   cancel-in-progress: false
 
+permissions: {}
+
 jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
     if: github.repository == 'rust-lang/team'
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -82,8 +86,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: deploy
     permissions:
-      id-token: write
-      pages: write
+      contents: read
+      id-token: write  # Needed for GitHub Pages OIDC authentication in `actions/deploy-pages`
+      pages: write     # Needed to deploy the built static API to GitHub Pages
     if: github.event_name != 'pull_request'
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
