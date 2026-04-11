@@ -129,6 +129,9 @@ jobs:
   # Summary job for the merge queue.
   # ALL THE PREVIOUS JOBS NEED TO BE ADDED TO THE `needs` SECTION OF THIS JOB!
   CI:
+    # Keep `name: CI` matching the job key. The merge queue's required status
+    # check is `CI / CI`, so renaming would silently break it.
+    name: CI
     needs: [ test, deploy ]
     # We need to ensure this job does *not* get skipped if its dependencies fail,
     # because a skipped job is considered a success by GitHub. So we have to
