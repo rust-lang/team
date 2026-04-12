@@ -2,7 +2,7 @@ use log::debug;
 use reqwest::Method;
 use std::collections::HashSet;
 
-use crate::sync::github::api::url::GitHubUrl;
+use crate::sync::github::api::url::{GitHubUrl, TokenType};
 use crate::sync::github::api::{
     AppPushAllowanceActor, BranchProtection, BranchProtectionOp, GitHubApiRead, GithubRead,
     HttpClient, Login, PushAllowanceActor, Repo, RepoPermission, RepoSettings, Ruleset, RulesetOp,
@@ -295,25 +295,56 @@ impl GitHubWrite {
     pub(crate) async fn add_repo_to_app_installation(
         &self,
         installation_id: u64,
+        repository: &str,
         repository_id: u64,
         org: &str,
     ) -> anyhow::Result<()> {
         debug!("Adding repository {repository_id} to installation {installation_id}");
         if !self.dry_run {
-            self.client
-                .req(
-                    Method::PUT,
-                    &GitHubUrl::new(
-                        &format!(
-                            "user/installations/{installation_id}/repositories/{repository_id}"
+            if self.client.uses_pat() {
+                self.client
+                    .req(
+                        Method::PUT,
+                        &GitHubUrl::new(
+                            &format!(
+                                "user/installations/{installation_id}/repositories/{repository_id}"
+                            ),
+                            org,
                         ),
-                        org,
-                    ),
-                )?
-                .send()
-                .await?
-                .custom_error_for_status()
-                .await?;
+                    )?
+                    .send()
+                    .await?
+                    .custom_error_for_status()
+                    .await?;
+            } else {
+                // We have to use a different endpoint if we use enterprise GitHub app
+                // authentication
+                #[derive(serde::Serialize)]
+                struct Request<'a> {
+                    repositories: Vec<&'a str>,
+                }
+
+                // https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin/organization-installations?apiVersion=2026-03-10#grant-repository-access-to-an-organization-installation
+                self.client
+                    .req(
+                        Method::PATCH,
+                        &GitHubUrl::new(
+                            &format!(
+                                "enterprises/{}/apps/organizations/{org}/installations/{installation_id}/repositories/add",
+                                self.client.github_tokens.get_enterprise_name()?
+                            ),
+                            org,
+                        )
+                        .with_token_type(TokenType::Enterprise),
+                    )?
+                    .json(&Request {
+                        repositories: vec![repository]
+                    })
+                    .send()
+                    .await?
+                    .custom_error_for_status()
+                    .await?;
+            }
         }
         Ok(())
     }
@@ -321,25 +352,56 @@ impl GitHubWrite {
     pub(crate) async fn remove_repo_from_app_installation(
         &self,
         installation_id: u64,
+        repository: &str,
         repository_id: u64,
         org: &str,
     ) -> anyhow::Result<()> {
         debug!("Removing repository {repository_id} from installation {installation_id}");
         if !self.dry_run {
-            self.client
-                .req(
-                    Method::DELETE,
-                    &GitHubUrl::new(
-                        &format!(
-                            "user/installations/{installation_id}/repositories/{repository_id}"
+            if self.client.uses_pat() {
+                self.client
+                    .req(
+                        Method::DELETE,
+                        &GitHubUrl::new(
+                            &format!(
+                                "user/installations/{installation_id}/repositories/{repository_id}"
+                            ),
+                            org,
                         ),
-                        org,
-                    ),
-                )?
-                .send()
-                .await?
-                .custom_error_for_status()
-                .await?;
+                    )?
+                    .send()
+                    .await?
+                    .custom_error_for_status()
+                    .await?;
+            } else {
+                // We have to use a different endpoint if we use enterprise GitHub app
+                // authentication
+                #[derive(serde::Serialize)]
+                struct Request<'a> {
+                    repositories: Vec<&'a str>,
+                }
+
+                // https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin/organization-installations?apiVersion=2026-03-10#remove-repository-access-from-an-organization-installation
+                self.client
+                    .req(
+                        Method::PATCH,
+                        &GitHubUrl::new(
+                            &format!(
+                                "enterprises/{}/apps/organizations/{org}/installations/{installation_id}/repositories/remove",
+                                self.client.github_tokens.get_enterprise_name()?
+                            ),
+                            org,
+                        )
+                            .with_token_type(TokenType::Enterprise),
+                    )?
+                    .json(&Request {
+                        repositories: vec![repository]
+                    })
+                    .send()
+                    .await?
+                    .custom_error_for_status()
+                    .await?;
+            }
         }
         Ok(())
     }
