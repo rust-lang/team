@@ -9,6 +9,7 @@ use crate::sync::Config;
 use crate::sync::github::api::{
     GithubRead, Login, PushAllowanceActor, RepoPermission, RepoSettings, Ruleset,
 };
+use anyhow::Context as _;
 use futures_util::StreamExt;
 use log::debug;
 use rust_team_data::v1::{Bot, BranchProtectionMode, MergeBot, ProtectionTarget};
@@ -447,6 +448,78 @@ impl SyncGitHub {
         !self.config.disable_rulesets_repos.contains(&repo_full_name)
     }
 
+    async fn construct_ruleset(
+        &self,
+        expected_repo: &rust_team_data::v1::Repo,
+        branch_protection: &rust_team_data::v1::BranchProtection,
+    ) -> anyhow::Result<api::Ruleset> {
+        let bypass_actors = self.bypass_actors(expected_repo, branch_protection).await?;
+
+        Ok(construct_ruleset(branch_protection, bypass_actors))
+    }
+
+    async fn bypass_actors(
+        &self,
+        expected_repo: &rust_team_data::v1::Repo,
+        branch_protection: &rust_team_data::v1::BranchProtection,
+    ) -> Result<Vec<api::RulesetBypassActor>, anyhow::Error> {
+        use api::{RulesetActorType, RulesetBypassActor, RulesetBypassMode};
+
+        let mut bypass_actors = Vec::new();
+        let allowed_teams = self
+            .allowed_merge_teams(expected_repo, branch_protection)
+            .await?;
+        bypass_actors.extend(allowed_teams);
+        let allowed_apps = branch_protection
+            .allowed_merge_apps
+            .iter()
+            .filter_map(|app| {
+                app.app_id().map(|app_id| RulesetBypassActor {
+                    actor_id: app_id,
+                    actor_type: RulesetActorType::Integration,
+                    bypass_mode: RulesetBypassMode::Always,
+                })
+            });
+        bypass_actors.extend(allowed_apps);
+        Ok(bypass_actors)
+    }
+
+    async fn allowed_merge_teams(
+        &self,
+        expected_repo: &rust_team_data::v1::Repo,
+        branch_protection: &rust_team_data::v1::BranchProtection,
+    ) -> Result<Vec<api::RulesetBypassActor>, anyhow::Error> {
+        use api::{RulesetActorType, RulesetBypassActor, RulesetBypassMode};
+
+        let mut allowed = vec![];
+
+        for team_name in &branch_protection.allowed_merge_teams {
+            let github_team = self
+                .github
+                .team(&expected_repo.org, team_name)
+                .await?
+                .with_context(|| {
+                    format!(
+                        "failed to find GitHub team '{team_name}' in org '{}' for repo '{}/{}'",
+                        expected_repo.org, expected_repo.org, expected_repo.name
+                    )
+                })?;
+            let team_id = github_team.id.with_context(|| {
+                format!(
+                    "GitHub team '{team_name}' in org '{}' is missing an ID",
+                    expected_repo.org
+                )
+            })?;
+
+            allowed.push(RulesetBypassActor {
+                actor_id: team_id as i64,
+                actor_type: RulesetActorType::Team,
+                bypass_mode: RulesetBypassMode::Always,
+            });
+        }
+        Ok(allowed)
+    }
+
     async fn diff_repo(
         &self,
         expected_repo: &rust_team_data::v1::Repo,
@@ -481,7 +554,9 @@ impl SyncGitHub {
                 let use_rulesets = self.should_use_rulesets(expected_repo);
                 if use_rulesets {
                     for branch_protection in &expected_repo.branch_protections {
-                        let ruleset = construct_ruleset(branch_protection);
+                        let ruleset = self
+                            .construct_ruleset(expected_repo, branch_protection)
+                            .await?;
                         rulesets.push(ruleset);
                     }
                 }
@@ -799,7 +874,9 @@ impl SyncGitHub {
 
         // Process each branch protection as a potential ruleset
         for branch_protection in &expected_repo.branch_protections {
-            let expected_ruleset = construct_ruleset(branch_protection);
+            let expected_ruleset = self
+                .construct_ruleset(expected_repo, branch_protection)
+                .await?;
 
             if let Some(actual_ruleset) = rulesets_by_name.remove(&expected_ruleset.name) {
                 let Ruleset {
@@ -1179,10 +1256,11 @@ fn github_int(value: u32) -> i32 {
     i32::try_from(value).unwrap_or_else(|_| panic!("Value {value} exceeds GitHub's Int range"))
 }
 
-pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtection) -> api::Ruleset {
+pub fn construct_ruleset(
+    branch_protection: &rust_team_data::v1::BranchProtection,
+    bypass_actors: Vec<api::RulesetBypassActor>,
+) -> api::Ruleset {
     use api::*;
-
-    let branch_protection_mode = get_branch_protection_mode(branch_protection);
 
     // Use a BTreeSet to ensure a consistent order. This avoids unnecessary diffs when the order of rules changes,
     // since GitHub does not guarantee any specific order for rules.
@@ -1214,14 +1292,14 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
     // Add pull request rule if PRs are required
     if let BranchProtectionMode::PrRequired {
         required_approvals, ..
-    } = &branch_protection_mode
+    } = branch_protection.mode
     {
         rules.insert(RulesetRule::PullRequest {
             parameters: PullRequestParameters {
                 dismiss_stale_reviews_on_push: branch_protection.dismiss_stale_review,
                 require_code_owner_review: REQUIRE_CODE_OWNER_REVIEW_DEFAULT,
                 require_last_push_approval: REQUIRE_LAST_PUSH_APPROVAL_DEFAULT,
-                required_approving_review_count: github_int(*required_approvals),
+                required_approving_review_count: github_int(required_approvals),
                 required_review_thread_resolution: branch_protection
                     .require_conversation_resolution,
             },
@@ -1229,7 +1307,7 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
     }
 
     // Add required status checks if any
-    if let BranchProtectionMode::PrRequired { ci_checks, .. } = &branch_protection_mode
+    if let BranchProtectionMode::PrRequired { ci_checks, .. } = &branch_protection.mode
         && !ci_checks.is_empty()
     {
         let mut checks = ci_checks.clone();
@@ -1270,19 +1348,6 @@ pub fn construct_ruleset(branch_protection: &rust_team_data::v1::BranchProtectio
 
         rules.insert(RulesetRule::MergeQueue { parameters });
     }
-
-    // Build bypass actors from allowed merge apps
-    let bypass_actors: Vec<RulesetBypassActor> = branch_protection
-        .allowed_merge_apps
-        .iter()
-        .filter_map(|app| {
-            app.app_id().map(|app_id| RulesetBypassActor {
-                actor_id: app_id,
-                actor_type: RulesetActorType::Integration,
-                bypass_mode: RulesetBypassMode::Always,
-            })
-        })
-        .collect();
 
     api::Ruleset {
         id: None,

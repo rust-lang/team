@@ -26,67 +26,127 @@ rust-analyzer = "write"
 style = "write"
 types = "write"
 triage = "write"
+# needed for the branch protection
+rust-timer = "write"
 
+# Only `bors` can push to `main`
 [[branch-protections]]
+name = "main"
 pattern = "main"
 allowed-merge-apps = ["bors"]
+prevent-update = true
 
+# No one can force push to main
 [[branch-protections]]
+name = "main - force-push"
+pattern = "main"
+# `main` already requires users to open PRs.
+# This allows bors to push without opening a PR.
+pr-required = false
+
+# Only `bors` and `promote-release` can push to `stable`
+[[branch-protections]]
+name = "stable"
 pattern = "stable"
-allowed-merge-apps = ["bors"]
+allowed-merge-apps = ["bors", "promote-release"]
+prevent-update = true
 
+# Only `promote-release` can force-push to `stable`
 [[branch-protections]]
+name = "stable - force-push"
+pattern = "stable"
+allowed-merge-apps = ["promote-release"]
+# `stable` already requires users to open PRs.
+# This allows bors to push without opening a PR.
+pr-required = false
+
+# No one create or delete the stable branch.
+[[branch-protections]]
+name = "stable - misc"
+pattern = "stable"
+pr-required = false
+prevent-force-push = false
+
+# Only `bors` and `promote-release` can push to `beta`
+[[branch-protections]]
+name = "beta"
 pattern = "beta"
-allowed-merge-apps = ["bors"]
+allowed-merge-apps = ["bors", "promote-release"]
+prevent-update = true
+
+# Only `promote-release` can force-push to `beta`
+[[branch-protections]]
+name = "beta - force-push"
+pattern = "beta"
+allowed-merge-apps = ["promote-release"]
+# `beta` already requires users to open PRs.
+# This allows bors to push without opening a PR.
+pr-required = false
+
+# no one can create or delete the beta branch.
+[[branch-protections]]
+name = "beta - misc"
+pattern = "beta"
+pr-required = false
+prevent-force-push = false
 
 [[branch-protections]]
 pattern = "*"
+allowed-merge-apps = ["promote-release"]
+prevent-update = true
 
 [[branch-protections]]
 pattern = "*/**/*"
 pr-required = false
+prevent-update = true
 
 [[branch-protections]]
 pattern = "cargo_update"
 pr-required = false
+prevent-deletion = false
+prevent-force-push = false
 
 # Required for running try builds created by bors.
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "automation/bors/try"
 allowed-merge-apps = ["bors"]
+prevent-update = true
 
 # Required for running try builds created by bors.
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "automation/bors/try-merge"
 allowed-merge-apps = ["bors"]
+prevent-update = true
 
 # Required for running auto builds created by bors.
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "automation/bors/auto"
 allowed-merge-apps = ["bors"]
+prevent-update = true
 
 # Required for running auto builds created by bors.
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "automation/bors/auto-merge"
 allowed-merge-apps = ["bors"]
+prevent-update = true
 
 # Required for unrolled PR builds created by perfbot.
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "try-perf"
-allowed-merge-apps = ["rust-timer"]
-pr-required = false
+allowed-merge-teams = ["rust-timer"]
+prevent-update = true
 
 # Required for unrolled PR builds created by perfbot.
 # Must support force-pushes.
 [[branch-protections]]
 pattern = "perf-tmp"
-allowed-merge-apps = ["rust-timer"]
-pr-required = false
+allowed-merge-teams = ["rust-timer"]
+prevent-update = true
 
 [environments.bors]
 branches = ["automation/bors/auto", "automation/bors/try", "try-perf"]

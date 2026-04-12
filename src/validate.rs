@@ -1189,12 +1189,22 @@ fn validate_branch_protections(data: &Data, errors: &mut Vec<String>) {
 
     wrapper(data.repos(), errors, |repo, _| {
         let bors_configured = repo.bots.iter().any(|b| matches!(b, Bot::Bors));
-        let mut patterns = HashSet::new();
+        let mut pattern_counts = HashMap::new();
 
         for protection in &repo.branch_protections {
-            if !patterns.insert((protection.target, &protection.pattern)) {
+            *pattern_counts
+                .entry((protection.target, protection.pattern.as_str()))
+                .or_insert(0usize) += 1;
+        }
+
+        for protection in &repo.branch_protections {
+            let key = (protection.target, protection.pattern.as_str());
+            let occurrences = pattern_counts
+                .get(&key)
+                .with_context(|| format!("pattern_counts should contain the key {key:?}"))?;
+            if *occurrences > 1 && protection.name.is_none() {
                 bail!(
-                    r#"repo '{}' uses multiple {:?} protections with the pattern `{}`"#,
+                    r#"repo '{}' uses multiple {:?} protections with the pattern `{}`; when multiple protections share the same target and pattern, each protection must specify `name`"#,
                     repo.name,
                     protection.target,
                     protection.pattern,
@@ -1205,8 +1215,7 @@ fn validate_branch_protections(data: &Data, errors: &mut Vec<String>) {
                 let key = (repo.org.clone(), team.clone());
                 if !github_teams.contains(&key) {
                     bail!(
-                        r#"repo '{}' uses a branch protection for {} that mentions the '{}' github team;
-but that team does not seem to exist"#,
+                        r#"repo '{}' uses a branch protection for {} that mentions the '{}' github team; but that team does not seem to exist"#,
                         repo.name,
                         protection.pattern,
                         team
@@ -1214,8 +1223,7 @@ but that team does not seem to exist"#,
                 }
                 if !repo.access.teams.contains_key(team) {
                     bail!(
-                        r#"repo '{}' uses a branch protection for {} that has an allowed merge team '{}',
-but that team is not mentioned in [access.teams]"#,
+                        r#"repo '{}' uses a branch protection for {} that has an allowed merge team '{}', but that team is not mentioned in [access.teams]"#,
                         repo.name,
                         protection.pattern,
                         team
