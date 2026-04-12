@@ -2,8 +2,16 @@ name = "survey"
 subteam-of = "launching-pad"
 
 [people]
-leads = ["Kobzol", "apiraino"]
-members = ["graciegregory", "Kobzol", "apiraino"]
+leads = [
+    "Kobzol",
+    "apiraino"
+]
+members = [
+    "graciegregory",
+    "Kobzol",
+    "apiraino",
+    "hashcatHitman"
+]
 alumni = [
     "Manishearth",
     "nikomatsakis",
