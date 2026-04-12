@@ -3,3 +3,6 @@ github = "Kobzol"
 github-id = 4539057
 zulip-id = 266526
 email = "berykubik@gmail.com"
+
+[funding]
+github-sponsors = true
