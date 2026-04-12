@@ -9,7 +9,7 @@ libs = "write"
 libs-contributors = "write"
 
 [[branch-protections]]
-pattern = "master"
+pattern = "main"
 ci-checks = ["conclusion"]
 required-approvals = 0
 merge-queue = { enabled = true }
