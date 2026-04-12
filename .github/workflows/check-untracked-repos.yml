@@ -10,6 +10,7 @@ permissions: {}
 
 jobs:
   check-untracked-repos:
+    name: Check untracked repositories
     runs-on: ubuntu-latest
     permissions:
       contents: read
