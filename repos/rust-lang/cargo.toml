@@ -15,6 +15,7 @@ merge-queue = { enabled = true }
 [[branch-protections]]
 pattern = "rust-1.*"
 ci-checks = ["conclusion"]
+prevent-creation = false
 
 [[branch-protections]]
 name = "Only allow the release process to publish tags"
