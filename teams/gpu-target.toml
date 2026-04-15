@@ -23,6 +23,5 @@ members = [
     "Sa4dUs",
     "ZuseZ4",
     # other members for T-compiler
-    "RalfJung",
     "workingjubilee"
 ]
