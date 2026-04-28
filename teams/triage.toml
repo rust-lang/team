@@ -42,6 +42,9 @@ members = [
 ]
 alumni = []
 
+[permissions]
+crater = true
+
 [website]
 name = "Triage Team"
 description = "Triaging repositories under the rust-lang organisation"
