@@ -1,6 +1,6 @@
 mod api;
 
-use crate::sync::gws::api::{GoogleWorkspaceApiClient, Group, User};
+use crate::sync::gws::api::{GoogleWorkspaceApiClient, Group, User, UserName};
 use std::collections::BTreeSet;
 use std::fmt::Debug;
 
@@ -22,7 +22,7 @@ pub(crate) enum GoogleUserDiff {
 
 /// A diff between the team repo and the state on Google Workspace
 #[allow(dead_code)]
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub(crate) struct GoogleWorkspaceDiff {
     google_groups: Vec<GoogleGroupDiff>,
     google_users: Vec<GoogleUserDiff>,
@@ -33,6 +33,7 @@ pub(crate) struct GoogleWorkspaceDiff {
 #[allow(dead_code)]
 pub(crate) struct SyncGoogleWorkspace {
     actual_users: Vec<User>,
+    actual_groups: Vec<Group>,
     configured_teams: Vec<rust_team_data::v1::Team>,
 }
 
@@ -43,8 +44,10 @@ impl SyncGoogleWorkspace {
         gws_api_client: Box<dyn GoogleWorkspaceApiClient>,
     ) -> anyhow::Result<Self> {
         let gws_users = gws_api_client.get_users().await?;
+        let gws_groups = gws_api_client.get_groups().await?;
         let sync = Self {
             actual_users: gws_users,
+            actual_groups: gws_groups,
             configured_teams: teams,
         };
         Ok(sync)
@@ -52,17 +55,48 @@ impl SyncGoogleWorkspace {
 
     pub(crate) fn diff_all(&self) -> anyhow::Result<GoogleWorkspaceDiff> {
         let google_groups_diff = self.diff_groups()?;
-        let google_accounts_diff = self.diff_users()?;
+        let google_users_diff = self.diff_users()?;
 
         let diff = GoogleWorkspaceDiff {
             google_groups: google_groups_diff,
-            google_users: google_accounts_diff,
+            google_users: google_users_diff,
         };
         Ok(diff)
     }
 
     fn diff_groups(&self) -> anyhow::Result<Vec<GoogleGroupDiff>> {
-        Ok(vec![])
+        let declared_groups = self
+            .configured_teams
+            .iter()
+            .filter(|team| team.google_workspace_saml_group.unwrap_or_default())
+            .map(|gws| Group::new(&gws.name))
+            .collect::<BTreeSet<_>>();
+
+        let declared_emails = declared_groups
+            .iter()
+            .map(|group| group.email.as_str())
+            .collect::<BTreeSet<_>>();
+
+        let actual_emails = self
+            .actual_groups
+            .iter()
+            .filter(|group| group.is_saml())
+            .map(|group| group.email.as_str())
+            .collect::<BTreeSet<_>>();
+
+        let diffs = declared_groups
+            .iter()
+            .filter(|group| !actual_emails.contains(group.email.as_str()))
+            .map(|group| GoogleGroupDiff::Create(group.clone()))
+            .chain(
+                self.actual_groups
+                    .iter()
+                    .filter(|group| group.is_saml())
+                    .filter(|group| !declared_emails.contains(group.email.as_str()))
+                    .map(|group| GoogleGroupDiff::Delete(group.clone())),
+            )
+            .collect();
+        Ok(diffs)
     }
 
     fn diff_users(&self) -> anyhow::Result<Vec<GoogleUserDiff>> {
@@ -71,7 +105,15 @@ impl SyncGoogleWorkspace {
             .iter()
             .filter(|team| team.google_workspace_saml_group.unwrap_or_default())
             .flat_map(|team| team.members.iter())
-            .filter_map(|member| member.google_workspace.as_ref().map(User::from))
+            .filter_map(|member| {
+                member.google_workspace.as_ref().map(|gws| User {
+                    primary_email: format!("{}@{RUST_LANG_GWS_DOMAIN}", gws.account_handle),
+                    name: UserName {
+                        given_name: gws.first_name.to_string(),
+                        family_name: gws.last_name.to_string(),
+                    },
+                })
+            })
             .collect::<BTreeSet<_>>();
 
         let declared_emails = declared_users
@@ -87,13 +129,13 @@ impl SyncGoogleWorkspace {
 
         let diffs = declared_users
             .iter()
-            .filter(|u| !actual_emails.contains(u.primary_email.as_str()))
-            .map(|u| GoogleUserDiff::Create(u.clone()))
+            .filter(|user| !actual_emails.contains(user.primary_email.as_str()))
+            .map(|user| GoogleUserDiff::Create(user.clone()))
             .chain(
                 self.actual_users
                     .iter()
-                    .filter(|u| !declared_emails.contains(u.primary_email.as_str()))
-                    .map(|u| GoogleUserDiff::Delete(u.clone())),
+                    .filter(|user| !declared_emails.contains(user.primary_email.as_str()))
+                    .map(|user| GoogleUserDiff::Delete(user.clone())),
             )
             .collect();
 
@@ -151,22 +193,28 @@ mod tests {
         }
     }
 
-    use crate::sync::gws::api::{GoogleWorkspaceApiClient, User, UserName};
+    use crate::sync::gws::api::{GoogleWorkspaceApiClient, Group, User, UserName};
     use crate::sync::gws::tests::rust_team_data_fakes::{privileged_member, privileged_team};
     use crate::sync::gws::{
-        GoogleUserDiff, GoogleWorkspaceDiff, RUST_LANG_GWS_DOMAIN, SyncGoogleWorkspace,
+        GoogleGroupDiff, GoogleUserDiff, GoogleWorkspaceDiff, RUST_LANG_GWS_DOMAIN,
+        SyncGoogleWorkspace,
     };
     use async_trait::async_trait;
     use rust_team_data::v1::Team;
 
     struct FakeGoogleWorkspace {
         users: Vec<User>,
+        groups: Vec<Group>,
     }
 
     #[async_trait]
     impl GoogleWorkspaceApiClient for FakeGoogleWorkspace {
         async fn get_users(&self) -> anyhow::Result<Vec<User>> {
             Ok(self.users.clone())
+        }
+
+        async fn get_groups(&self) -> anyhow::Result<Vec<Group>> {
+            Ok(self.groups.clone())
         }
     }
 
@@ -177,6 +225,13 @@ mod tests {
                 family_name: surname.into(),
             },
             primary_email: format!("{name}.{surname}@{RUST_LANG_GWS_DOMAIN}"),
+        }
+    }
+
+    fn google_group(name: &str) -> Group {
+        Group {
+            name: name.to_string(),
+            email: format!("{name}@{RUST_LANG_GWS_DOMAIN}"),
         }
     }
 
@@ -196,8 +251,8 @@ mod tests {
         }
     }
 
-    fn fake_gws_client(users: Vec<User>) -> Box<dyn GoogleWorkspaceApiClient> {
-        let fake_gws = FakeGoogleWorkspace { users };
+    fn fake_gws_client(users: Vec<User>, groups: Vec<Group>) -> Box<dyn GoogleWorkspaceApiClient> {
+        let fake_gws = FakeGoogleWorkspace { users, groups };
         Box::new(fake_gws)
     }
 
@@ -208,6 +263,11 @@ mod tests {
             google_user("marco", "ieni"),
         ];
 
+        let google_groups = vec![
+            google_group("infra-admins-saml"),
+            google_group("security-response"), // groups not related to SAML are not diffed
+        ];
+
         let teams = vec![privileged_team(
             "infra-admins",
             vec![
@@ -216,7 +276,7 @@ mod tests {
             ],
         )];
 
-        let gws_api_client = fake_gws_client(google_users);
+        let gws_api_client = fake_gws_client(google_users, google_groups);
 
         let diff = run_sync(gws_api_client, teams).await;
         assert!(diff.google_users.is_empty());
@@ -230,6 +290,8 @@ mod tests {
             google_user("marco", "ieni"),
         ];
 
+        let google_groups = vec![google_group("infra-admins-saml")];
+
         let teams = vec![privileged_team(
             "infra-admins",
             vec![
@@ -239,7 +301,7 @@ mod tests {
             ],
         )];
 
-        let gws_api_client = fake_gws_client(google_users);
+        let gws_api_client = fake_gws_client(google_users, google_groups);
 
         let diff = run_sync(gws_api_client, teams).await;
         let expected = vec![GoogleUserDiff::Create(google_user("emily", "albini"))];
@@ -256,12 +318,14 @@ mod tests {
             google_user("emily", "albini"),
         ];
 
+        let google_groups = vec![google_group("infra-admins-saml")];
+
         let teams = vec![privileged_team(
             "infra-admins",
             vec![privileged_member("emily", "albini")],
         )];
 
-        let gws_api_client = fake_gws_client(google_users);
+        let gws_api_client = fake_gws_client(google_users, google_groups);
 
         let diff = run_sync(gws_api_client, teams).await;
         let expected = vec![
@@ -271,5 +335,132 @@ mod tests {
 
         assert_eq!(diff.google_users, expected);
         assert!(diff.google_groups.is_empty());
+    }
+
+    #[tokio::test]
+    async fn diff_spots_group_creation() {
+        let google_users = vec![
+            google_user("ubiratan", "soares"),
+            google_user("marco", "ieni"),
+        ];
+
+        let google_groups = vec![];
+
+        let teams = vec![privileged_team(
+            "infra-admins",
+            vec![
+                privileged_member("ubiratan", "soares"),
+                privileged_member("marco", "ieni"),
+            ],
+        )];
+
+        let gws_api_client = fake_gws_client(google_users, google_groups);
+
+        let diff = run_sync(gws_api_client, teams).await;
+        let expected = vec![GoogleGroupDiff::Create(google_group("infra-admins-saml"))];
+
+        assert!(diff.google_users.is_empty());
+        assert_eq!(expected, diff.google_groups);
+    }
+
+    #[tokio::test]
+    async fn diff_spots_group_deletion() {
+        let google_users = vec![
+            google_user("ubiratan", "soares"),
+            google_user("marco", "ieni"),
+        ];
+
+        let google_groups = vec![
+            google_group("infra-admins-saml"),
+            google_group("external-auditors-saml"),
+        ];
+
+        let teams = vec![privileged_team(
+            "infra-admins",
+            vec![
+                privileged_member("ubiratan", "soares"),
+                privileged_member("marco", "ieni"),
+            ],
+        )];
+
+        let gws_api_client = fake_gws_client(google_users, google_groups);
+
+        let diff = run_sync(gws_api_client, teams).await;
+        let expected = vec![GoogleGroupDiff::Delete(google_group(
+            "external-auditors-saml",
+        ))];
+
+        assert!(diff.google_users.is_empty());
+        assert_eq!(expected, diff.google_groups);
+    }
+
+    #[tokio::test]
+    async fn diff_spots_multiple_creations() {
+        let google_users = vec![
+            google_user("ubiratan", "soares"),
+            google_user("marco", "ieni"),
+        ];
+
+        let google_groups = vec![google_group("infra-admins-saml")];
+
+        let teams = vec![
+            privileged_team(
+                "infra-admins",
+                vec![
+                    privileged_member("ubiratan", "soares"),
+                    privileged_member("marco", "ieni"),
+                ],
+            ),
+            privileged_team(
+                "crates-io-admins",
+                vec![privileged_member("adam", "harvey")],
+            ),
+        ];
+
+        let gws_api_client = fake_gws_client(google_users, google_groups);
+
+        let diff = run_sync(gws_api_client, teams).await;
+        let expected = GoogleWorkspaceDiff {
+            google_users: vec![GoogleUserDiff::Create(google_user("adam", "harvey"))],
+            google_groups: vec![GoogleGroupDiff::Create(google_group(
+                "crates-io-admins-saml",
+            ))],
+        };
+
+        assert_eq!(expected, diff);
+    }
+
+    #[tokio::test]
+    async fn diff_spots_multiple_deletions() {
+        let google_users = vec![
+            google_user("ubiratan", "soares"),
+            google_user("marco", "ieni"),
+            google_user("adam", "harvey"),
+        ];
+
+        let google_groups = vec![
+            google_group("infra-admins-saml"),
+            google_group("crates-io-admins-saml"),
+        ];
+
+        let teams = vec![privileged_team(
+            "infra-admins",
+            vec![
+                privileged_member("ubiratan", "soares"),
+                privileged_member("marco", "ieni"),
+            ],
+        )];
+
+        let gws_api_client = fake_gws_client(google_users, google_groups);
+
+        let diff = run_sync(gws_api_client, teams).await;
+        let expected = GoogleWorkspaceDiff {
+            google_users: vec![GoogleUserDiff::Delete(google_user("adam", "harvey"))],
+            google_groups: vec![GoogleGroupDiff::Delete(google_group(
+                "crates-io-admins-saml",
+            ))],
+        };
+
+        assert_eq!(expected, diff);
     }
 }
