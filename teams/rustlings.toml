@@ -6,14 +6,17 @@ leads = ["mo8it", "manyinsects"]
 members = [
     "manyinsects",
     "mo8it",
+    "senekor",
 ]
-alumni = []
+alumni = [
+    "carols10cents",
+]
 
 [[github]]
 orgs = ["rust-lang"]
 
 [website]
 name = "Rustlings team"
-description = "Maintaining and updating the Rustlings course"
-repo = "https://github.com/rust-lang/rustlings/"
+description = "Maintaining the Rustlings course"
+repo = "https://github.com/rust-lang/rustlings"
 zulip-stream = "t-lang/rustlings"
