@@ -77,25 +77,23 @@ impl SyncGoogleWorkspace {
             .map(|group| group.email.as_str())
             .collect::<BTreeSet<_>>();
 
-        let actual_emails = self
-            .actual_groups
-            .iter()
-            .filter(|group| group.is_saml())
+        let actual_saml_groups = self.actual_groups.iter().filter(|group| group.is_saml());
+
+        let actual_emails = actual_saml_groups
+            .clone()
             .map(|group| group.email.as_str())
             .collect::<BTreeSet<_>>();
 
-        let diffs = declared_groups
+        let additions = declared_groups
             .iter()
             .filter(|group| !actual_emails.contains(group.email.as_str()))
-            .map(|group| GoogleGroupDiff::Create(group.clone()))
-            .chain(
-                self.actual_groups
-                    .iter()
-                    .filter(|group| group.is_saml())
-                    .filter(|group| !declared_emails.contains(group.email.as_str()))
-                    .map(|group| GoogleGroupDiff::Delete(group.clone())),
-            )
-            .collect();
+            .map(|group| GoogleGroupDiff::Create(group.clone()));
+
+        let deletions = actual_saml_groups
+            .filter(|group| !declared_emails.contains(group.email.as_str()))
+            .map(|group| GoogleGroupDiff::Delete(group.clone()));
+
+        let diffs = additions.chain(deletions).collect();
         Ok(diffs)
     }
 
