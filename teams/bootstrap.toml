@@ -21,6 +21,11 @@ perf = true
 dev-desktop = true
 bors.rust.review = true
 
+[rfcbot]
+label = "T-bootstrap"
+name = "Bootstrap"
+ping = "rust-lang/bootstrap"
+
 [[github]]
 orgs = ["rust-lang"]
 
