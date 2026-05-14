@@ -3,14 +3,12 @@ kind = "project-group"
 subteam-of = "lang"
 
 [people]
-leads = [
-    "crlf0710",
-]
-members = [
+leads = []
+members = []
+alumni = [
     "crlf0710",
     "nikomatsakis",
 ]
-alumni = []
 
 [website]
 name = "Dyn Upcasting Initiative"

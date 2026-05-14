@@ -3,14 +3,12 @@ kind = "project-group"
 subteam-of = "lang"
 
 [people]
-leads = [
-    "jackh726",
-]
-members = [
+leads = []
+members = []
+alumni = [
     "jackh726",
     "nikomatsakis",
 ]
-alumni = []
 
 [website]
 name = "Generic Associated Types Initiative"

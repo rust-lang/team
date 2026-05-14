@@ -5,4 +5,3 @@ homepage = "https://rust-lang.github.io/keyword-generics-initiative/"
 bots = []
 
 [access.teams]
-project-keyword-generics = "write"
