@@ -1,0 +1,14 @@
+name = "yocto"
+kind = "marker-team"
+
+# This marker team is for Rust project members that are interested in helping with issues related
+# to Yocto's distribution of Rust
+
+[people]
+leads = []
+members = [
+  "davidtwco"
+]
+
+[[github]]
+orgs = ["rust-lang"]
