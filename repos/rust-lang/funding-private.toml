@@ -5,5 +5,5 @@ bots = []
 private-non-synced = true
 
 [access.teams]
-rfmf-design-committee = "write"
+funding = "write"
 leadership-council = "write"
