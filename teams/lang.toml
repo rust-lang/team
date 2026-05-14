@@ -3,7 +3,6 @@ top-level = true
 
 [people]
 leads = [
-    "nikomatsakis",
     "tmandry",
 ]
 members = [
