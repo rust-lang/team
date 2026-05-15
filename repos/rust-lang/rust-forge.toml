@@ -21,6 +21,7 @@ edition = "maintain"
 release = "maintain"
 rustdoc = "maintain"
 triagebot = "maintain"
+types = "maintain"
 rustc-dev-guide = "maintain"
 
 [[rulesets]]
