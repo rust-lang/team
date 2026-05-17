@@ -28,6 +28,7 @@ tokio = { version = "1", default-features = false, features = ["net", "rt-multi-
 tempfile = "3.19.1"
 thiserror = "2.0.18"
 toml = "1.0"
+toml_edit = "0.22"
 
 [dev-dependencies]
 ansi_term = "0.12.1"

@@ -31,9 +31,10 @@ use crate::sync::team_api::TeamApi;
 use anyhow::{Context, Error, bail, format_err};
 use api::github;
 use clap::Parser;
+use indexmap::IndexSet;
 use log::{error, info, warn};
 use std::collections::{BTreeMap, HashMap};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
 #[derive(clap::ValueEnum, Clone, Debug)]
@@ -112,6 +113,9 @@ enum RootOpts {
     DecryptEmail,
     /// Generate a x25519 key for use with the email encryption module
     GenerateKey,
+    /// Archive a repo or team, moving it to the archive directory
+    #[clap(subcommand)]
+    Archive(ArchiveOpts),
     /// CI scripts
     #[clap(subcommand)]
     Ci(CiOpts),
@@ -137,6 +141,20 @@ enum CiOpts {
     CheckCodeowners,
     /// Check for untracked repositories in GitHub organizations
     CheckUntrackedRepos,
+}
+
+#[derive(clap::Parser, Clone, Debug)]
+enum ArchiveOpts {
+    /// Archive a repository
+    Repo {
+        /// Repository in "org/name" format (e.g. "rust-lang/homu")
+        name: String,
+    },
+    /// Archive a team
+    Team {
+        /// Team name (e.g. "project-generic-associated-types")
+        name: String,
+    },
 }
 
 #[derive(clap::Parser, Clone, Debug)]
@@ -569,6 +587,14 @@ async fn run() -> Result<(), Error> {
             let (secret, public) = rust_team_data::email_encryption::generate_x25519_keypair();
             println!("Generated keypair: secret: {} - public: {}", secret, public);
         }
+        RootOpts::Archive(opts) => match opts {
+            ArchiveOpts::Repo { ref name } => {
+                archive_repo(&cli.data_dir, name)?;
+            }
+            ArchiveOpts::Team { ref name } => {
+                archive_team(&cli.data_dir, name)?;
+            }
+        },
         RootOpts::Ci(opts) => match opts {
             CiOpts::GenerateCodeowners => generate_codeowners_file(data)?,
             CiOpts::CheckCodeowners => check_codeowners(data)?,
@@ -652,4 +678,163 @@ async fn perform_sync(opts: SyncOpts, data: Data) -> anyhow::Result<()> {
         data.get_sync_team_config()?,
     )
     .await
+}
+
+fn get_access_teams(doc: &mut toml_edit::DocumentMut) -> Option<&mut toml_edit::Table> {
+    doc.get_mut("access")?.get_mut("teams")?.as_table_mut()
+}
+
+fn archive_repo(data_dir: &Path, name: &str) -> Result<(), Error> {
+    let (org, repo_name) = name
+        .split_once('/')
+        .ok_or_else(|| format_err!("repository must be in 'org/name' format, got '{}'", name))?;
+
+    let src = data_dir
+        .join("repos")
+        .join(org)
+        .join(format!("{repo_name}.toml"));
+    let dest_dir = data_dir.join("repos").join("archive").join(org);
+    let dest = dest_dir.join(format!("{repo_name}.toml"));
+
+    if !src.is_file() {
+        bail!("repo file not found: {}", src.display());
+    }
+    if dest.is_file() {
+        bail!("repo is already archived: {}", dest.display());
+    }
+
+    let content = std::fs::read_to_string(&src)
+        .with_context(|| format!("failed to read {}", src.display()))?;
+    let mut doc: toml_edit::DocumentMut = content
+        .parse()
+        .with_context(|| format!("failed to parse {}", src.display()))?;
+
+    if let Some(table) = get_access_teams(&mut doc) {
+        table.clear();
+    }
+
+    std::fs::create_dir_all(&dest_dir)
+        .with_context(|| format!("failed to create directory {}", dest_dir.display()))?;
+    std::fs::write(&dest, doc.to_string())
+        .with_context(|| format!("failed to write {}", dest.display()))?;
+    std::fs::remove_file(&src).with_context(|| format!("failed to remove {}", src.display()))?;
+
+    info!("archived repo {} -> {}", src.display(), dest.display());
+    Ok(())
+}
+
+fn archive_team(data_dir: &Path, name: &str) -> Result<(), Error> {
+    let src = data_dir.join("teams").join(format!("{name}.toml"));
+    let dest_dir = data_dir.join("teams").join("archive");
+    let dest = dest_dir.join(format!("{name}.toml"));
+
+    if !src.is_file() {
+        bail!("team file not found: {}", src.display());
+    }
+    if dest.is_file() {
+        bail!("team is already archived: {}", dest.display());
+    }
+
+    let content = std::fs::read_to_string(&src)
+        .with_context(|| format!("failed to read {}", src.display()))?;
+    let mut doc: toml_edit::DocumentMut = content
+        .parse()
+        .with_context(|| format!("failed to parse {}", src.display()))?;
+
+    if let Some(people) = doc.get_mut("people")
+        && let Some(people_table) = people.as_table_mut()
+    {
+        let mut all_alumni = IndexSet::new();
+
+        // Collect everyone from leads, members, and existing alumni
+        for key in &["leads", "members", "alumni"] {
+            if let Some(arr) = people_table.get(key).and_then(|v| v.as_array()) {
+                for item in arr.iter() {
+                    let username = if let Some(s) = item.as_str() {
+                        s.to_string()
+                    } else if let Some(tbl) = item.as_inline_table() {
+                        match tbl.get("github").and_then(|v| v.as_str()) {
+                            Some(s) => s.to_string(),
+                            None => continue,
+                        }
+                    } else {
+                        continue;
+                    };
+                    if !username.is_empty() {
+                        all_alumni.insert(username);
+                    }
+                }
+            }
+        }
+
+        people_table.insert("leads", toml_edit::Array::new().into());
+        people_table.insert("members", toml_edit::Array::new().into());
+
+        let mut alumni_array = toml_edit::Array::new();
+        for person in &all_alumni {
+            let mut val = toml_edit::Value::from(person.as_str());
+            val.decor_mut().set_prefix("\n    ");
+            alumni_array.push_formatted(val);
+        }
+        alumni_array.set_trailing("\n");
+        alumni_array.set_trailing_comma(true);
+        people_table.insert("alumni", alumni_array.into());
+    }
+
+    std::fs::create_dir_all(&dest_dir)
+        .with_context(|| format!("failed to create directory {}", dest_dir.display()))?;
+    std::fs::write(&dest, doc.to_string())
+        .with_context(|| format!("failed to write {}", dest.display()))?;
+    std::fs::remove_file(&src).with_context(|| format!("failed to remove {}", src.display()))?;
+
+    info!("archived team {} -> {}", src.display(), dest.display());
+
+    remove_team_from_repos(data_dir, name)?;
+
+    Ok(())
+}
+
+fn remove_team_from_repos(data_dir: &Path, team_name: &str) -> Result<(), Error> {
+    let repos_dir = data_dir.join("repos");
+    if !repos_dir.is_dir() {
+        return Ok(());
+    }
+
+    for org_entry in std::fs::read_dir(&repos_dir)
+        .with_context(|| format!("failed to read {}", repos_dir.display()))?
+    {
+        let org_path = org_entry?.path();
+        if !org_path.is_dir() || org_path.file_name() == Some(std::ffi::OsStr::new("archive")) {
+            continue;
+        }
+
+        for repo_entry in std::fs::read_dir(&org_path)
+            .with_context(|| format!("failed to read {}", org_path.display()))?
+        {
+            let repo_path = repo_entry?.path();
+            if !repo_path.is_file() || repo_path.extension() != Some(std::ffi::OsStr::new("toml")) {
+                continue;
+            }
+
+            let content = std::fs::read_to_string(&repo_path)
+                .with_context(|| format!("failed to read {}", repo_path.display()))?;
+            let mut doc: toml_edit::DocumentMut = content
+                .parse()
+                .with_context(|| format!("failed to parse {}", repo_path.display()))?;
+
+            let removed = if let Some(table) = get_access_teams(&mut doc) {
+                table.remove(team_name).is_some()
+            } else {
+                false
+            };
+
+            if removed {
+                std::fs::write(&repo_path, doc.to_string())
+                    .with_context(|| format!("failed to write {}", repo_path.display()))?;
+                info!("removed team '{}' from {}", team_name, repo_path.display());
+            }
+        }
+    }
+
+    Ok(())
 }
