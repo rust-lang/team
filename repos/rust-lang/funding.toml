@@ -4,4 +4,4 @@ description = "Discussions about funding Rust maintainers"
 bots = ["rfcbot"]
 
 [access.teams]
-leadership-council = "write"
+funding = "write"
