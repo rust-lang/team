@@ -2,15 +2,15 @@ name = "opsem"
 subteam-of = "lang"
 
 [people]
-leads = ["JakobDegen", "RalfJung"]
+leads = ["saethlin", "RalfJung"]
 members = [
     "CAD97",
     "digama0",
-    "JakobDegen",
     "RalfJung",
     "saethlin",
+    "joshlf",
 ]
-alumni = []
+alumni = ["JakobDegen"]
 
 [website]
 name = "Operational Semantics team"
@@ -31,4 +31,4 @@ name = "T-opsem"
 
 [[zulip-groups]]
 name = "T-opsem/meetings"
-extra-people = ["chorman0773", "thomcc", "joshlf", "burakemir", "fbq", "n1ark"]
+extra-people = ["chorman0773", "thomcc", "burakemir", "fbq", "n1ark"]
