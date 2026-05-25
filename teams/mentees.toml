@@ -20,6 +20,11 @@ members = [
     { github = "zedddie", roles = ["gsoc"] },
     { github = "Walnut356", roles = ["gsoc"] },
     { github = "Cloud0310", roles = ["gsoc"] },
+    # Outreachy
+    { github = "Ajay-singh1", roles = ["outreachy"] },
+    { github = "akintewe", roles = ["outreachy"] },
+    { github = "System625", roles = ["outreachy"] },
+    { github = "Sandijigs", roles = ["outreachy"] },
 ]
 alumni = [
     # GSoC
