@@ -46,6 +46,8 @@ alumni = [
     { github = "makai410", roles = ["gsoc"] },
     { github = "Pyr0de", roles = ["gsoc"] },
     { github = "secona", roles = ["gsoc"] },
+    # OSPP
+    { github = "liwagu", roles = ["ospp"] },
     # External
     { github = "KMJ-007", roles = ["guest"] },
 ]
@@ -58,6 +60,10 @@ perf = true
 [[roles]]
 id = "gsoc"
 description = "Google Summer of Code contributor"
+
+[[roles]]
+id = "ospp"
+description = "OSPP contributor"
 
 [[roles]]
 id = "outreachy"
