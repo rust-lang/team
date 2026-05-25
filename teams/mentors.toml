@@ -5,29 +5,49 @@ subteam-of = "mentorship"
 [people]
 leads = []
 members = [
+    # GSoC
     "Kobzol",
-    "jackh726",
-    "Amanieu",
-    "epage",
     "jieyouxu",
-    "ytmimi",
     "oli-obk",
-    "obi1kenobi",
-    "davidlattimore",
     "ZuseZ4",
-    "tautschnig",
-    "antoyo",
-    "SparrowLii",
     "rami3l",
     "tgross35",
     "Veykril",
-    "celinval",
-    "cassaundra"
+    "Urgau",
+    "jhpratt",
+    "ChayimFriedman2",
+    "folkertdev",
+    "Kivooeo",
+    # Outreachy
+    "jackh726",
+    "teor2345",
+    "cramertj",
+    "thunderseethe",
+    "nikomatsakis",
+    "lqd",
+    "tiif",
+    "marcoieni",
+    "ubiratansoares"
 ]
-alumni = []
+alumni = [
+    "Amanieu",
+    "epage",
+    "ytmimi",
+    "antoyo",
+    "tautschnig",
+    "davidlattimore",
+    "obi1kenobi",
+    "SparrowLii",
+    "celinval",
+    "cassaundra",
+    "onur-ozkan"
+]
 
 [[zulip-groups]]
 name = "gsoc-mentors"
+
+[[zulip-groups]]
+name = "mentors"
 
 [website]
 name = "Mentors team"
