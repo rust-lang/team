@@ -1,0 +1,86 @@
+name = "mentees"
+subteam-of = "launching-pad"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    # GSoC
+    { github = "Zoxc", roles = ["gsoc"] },
+    { github = "Sa4dUs", roles = ["gsoc"] },
+    { github = "lapla-cogito", roles = ["gsoc"] },
+    { github = "Shourya742", roles = ["gsoc"] },
+    { github = "sgasho", roles = ["gsoc"] },
+    { github = "moabo3li", roles = ["gsoc"] },
+    { github = "CoCo-Japan-pan", roles = ["gsoc"] },
+    { github = "NONnonHere", roles = ["gsoc"] },
+    { github = "dybucc", roles = ["gsoc"] },
+    { github = "vishruth-thimmaiah", roles = ["gsoc"] },
+    { github = "xonx4l", roles = ["gsoc"] },
+    { github = "zedddie", roles = ["gsoc"] },
+    { github = "Walnut356", roles = ["gsoc"] },
+    { github = "Cloud0310", roles = ["gsoc"] },
+    # Outreachy
+    { github = "Ajay-singh1", roles = ["outreachy"] },
+    { github = "akintewe", roles = ["outreachy"] },
+    { github = "System625", roles = ["outreachy"] },
+    { github = "Sandijigs", roles = ["outreachy"] },
+]
+alumni = [
+    # GSoC
+    { github = "d-sonuga", roles = ["gsoc"] },
+    { github = "mav3ri3k", roles = ["gsoc"] },
+    { github = "s7tya", roles = ["gsoc"] },
+    { github = "ding-young", roles = ["gsoc"] },
+    { github = "suaviloquence", roles = ["gsoc"] },
+    { github = "tiif", roles = ["gsoc"] },
+    { github = "shannmu", roles = ["gsoc"] },
+    { github = "Oneirical", roles = ["gsoc"] },
+    { github = "FractalFir", roles = ["gsoc"] },
+    { github = "dawidl022", roles = ["gsoc"] },
+    { github = "namanlp", roles = ["gsoc"] },
+    { github = "zjp-CN", roles = ["gsoc"] },
+    { github = "GlitchlessCode", roles = ["gsoc"] },
+    { github = "madhav-madhusoodanan", roles = ["gsoc"] },
+    { github = "Sakib25800", roles = ["gsoc"] },
+    { github = "LorrensP-2158466", roles = ["gsoc"] },
+    { github = "CLIDragon", roles = ["gsoc"] },
+    { github = "FranciscoTGouveia", roles = ["gsoc"] },
+    { github = "mbyx", roles = ["gsoc"] },
+    { github = "DriedYellowPeach", roles = ["gsoc"] },
+    { github = "makai410", roles = ["gsoc"] },
+    { github = "Pyr0de", roles = ["gsoc"] },
+    { github = "secona", roles = ["gsoc"] },
+    # OSPP
+    { github = "liwagu", roles = ["ospp"] },
+    # External
+    { github = "KMJ-007", roles = ["guest"] },
+]
+
+[permissions]
+dev-desktop = true
+bors.rust.try = true
+perf = true
+
+[[roles]]
+id = "gsoc"
+description = "Google Summer of Code contributor"
+
+[[roles]]
+id = "ospp"
+description = "OSPP contributor"
+
+[[roles]]
+id = "outreachy"
+description = "Outreachy contributor"
+
+[[roles]]
+id = "guest"
+description = "External Google Summer of Code contributor"
+
+[[zulip-groups]]
+name = "mentees"
+
+[website]
+name = "Contributors participating in mentorship programs"
+description = "Rust contributors participating in mentorship programs such as Google Summer of Code or Outreachy"
