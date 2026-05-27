@@ -28,6 +28,9 @@ orgs = ["rust-lang"]
 [[zulip-groups]]
 name = "T-funding"
 
+[[zulip-streams]]
+name = "funding/private"
+
 [[lists]]
 address = "funding@rust-lang.org"
 
