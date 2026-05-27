@@ -552,3 +552,5 @@ teams = ["awesome-team"]
 > [!TIP]
 > To list the public crates of a workspace, run:
 > `cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.publish == null or .publish == true) | .name'`
+
+See also the [forge trusted publishing docs](https://forge.rust-lang.org/infra/docs/trusted-publishing.html).
