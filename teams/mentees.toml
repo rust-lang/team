@@ -6,7 +6,6 @@ kind = "marker-team"
 leads = []
 members = [
     # GSoC
-    { github = "Zoxc", roles = ["gsoc"] },
     { github = "Sa4dUs", roles = ["gsoc"] },
     { github = "lapla-cogito", roles = ["gsoc"] },
     { github = "Shourya742", roles = ["gsoc"] },
