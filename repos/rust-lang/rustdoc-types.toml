@@ -5,3 +5,12 @@ bots = ["rustbot"]
 
 [access.teams]
 rustdoc = "write"
+
+[environments.publish]
+branches = ["trunk"]
+
+[[crates-io]]
+crates = ["rustdoc-types"]
+publish-workflow = "release.yml"
+publish-environment = "publish"
+
