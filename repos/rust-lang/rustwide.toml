@@ -6,3 +6,11 @@ bots = []
 [access.teams]
 infra = "write"
 docs-rs = "write"
+
+[environments.publish]
+branches = ["main"]
+
+[[crates-io]]
+crates = ["rustwide"]
+publish-workflow = "release.yml"
+publish-environment = "publish"
