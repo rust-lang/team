@@ -26,3 +26,19 @@ zulip-stream = "project-const-generics"
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "project-const-generics"
+
+[[zulip-groups]]
+name = "project-const-generics/talkies"
+include-team-members = false
+extra-people = [
+    "BoxyUwU",
+    "camelid",
+    "khyperia",
+    "zedddie",
+    "LaneAsade",
+    "redddy",
+]
+

@@ -6,6 +6,7 @@ bots = ["rustbot"]
 
 [access.teams]
 project-const-generics = "maintain"
+all = "write"
 
 [environments.github-pages]
 

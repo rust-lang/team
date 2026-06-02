@@ -1,0 +1,23 @@
+name = "project-const-generics-triage"
+kind = "project-group"
+subteam-of = "project-const-generics"
+
+[people]
+leads = ["BoxyUwU"]
+members = [
+    "BoxyUwU",
+    "khyperia",
+    "zedddie",
+    "LaneAsade",
+    "reddevilmidzy",
+]
+alumni = []
+
+[website]
+name = "Const Generics Project Group Triage"
+description = "People working on const generics who need triage access to the const generics repo"
+repo = "https://github.com/rust-lang/project-const-generics"
+zulip-stream = "project-const-generics"
+
+[[github]]
+orgs = ["rust-lang"]
