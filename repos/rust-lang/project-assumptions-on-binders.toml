@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "project-assumptions-on-binders"
+description = ""
+homepage = "https://rust-lang.github.io/project-assumptions-on-binders/"
+bots = ["rustbot"]
+
+[access.teams]
+project-assumptions-on-binders = "maintain"
+all = "write"
+
+[environments.github-pages]
+
