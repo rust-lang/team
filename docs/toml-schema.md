@@ -368,7 +368,7 @@ Access to a repository is given on a per-team basis. Teams who are responsible f
 See [GitHub's documentation][github-roles] for information on what each role is allowed to do. The recommendations for choosing a role are:
 
 - `admin` — No users or teams except for org owners should have this permission level.
-- `maintain` — Teams may have this permission level at their discretion for repositories the team is responsible for. Repositories using the bors bot may want to consider using the `write` permission level instead in order to deactivate the “Merge” button on PRs to enforce that merges go through bors.
+- `maintain` — Teams may have this permission level at their discretion for repositories the team is responsible for.
 - `write` — Teams that are responsible for a repository should have at least this permission level.
 - `triage` — This role is available if teams want to give these permissions to other teams, such as for triage support. Unfortunately this role does not allow contributors to edit issue descriptions or titles, so its utility for that purpose is limited.
 
@@ -405,8 +405,6 @@ The behavior of rulesets depends on whether or not `bors` is enabled in the `bot
 
 - If bors is not enabled, then the default will be to require at least one approving review (via GitHub's PR UI).
 - If bors is enabled, approvals via GitHub's UI is not required (since we count the `@bors r+` comment as an approval). Also, bors will be added to the "allowed pushers".
-
-Users with the "maintain" or "admin" role are allowed to merge PRs via the GitHub UI. If you have bors enabled, you should only give users the "write" role so that the "Merge" button is disabled, forcing the user to use the `@bors r+` comment instead.
 
 Admins cannot override these rulesets. If an admin needs to do that, they will need to temporarily edit the repository ruleset in the GitHub settings.
 
