@@ -1,0 +1,7 @@
+org = "rust-lang"
+name = "crabwatch"
+description = "Analyze Rust project repositories CI and best practices"
+bots = []
+
+[access.teams]
+infra = "write"
