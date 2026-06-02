@@ -4,23 +4,25 @@ subteam-of = "compiler"
 [people]
 leads = []
 members = [
-    "cjgillot",
+    "Mark-Simulacrum",
+    "TaKO8Ki",
     "davidtwco",
     "estebank",
+    "jdonszelmann",
     "jieyouxu",
-    "Mark-Simulacrum",
-    "matthewjasper",
-    "nagisa",
+    "nnethercote",
     "oli-obk",
     "petrochenkov",
-    "SparrowLii",
     "spastorino",
-    "TaKO8Ki",
     "wesleywiser",
 ]
 alumni = [
-    "compiler-errors",
     "Noratrieb",
+    "SparrowLii",
+    "cjgillot",
+    "compiler-errors",
+    "matthewjasper",
+    "nagisa",
 ]
 
 [rfcbot]
