@@ -5,3 +5,9 @@ bots = []
 
 [access.teams]
 infra = "write"
+
+[[rulesets]]
+pattern = "main"
+ci-checks = ["CI"]
+required-approvals = 0
+
