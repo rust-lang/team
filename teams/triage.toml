@@ -20,7 +20,6 @@ members = [
     "KittyBorgX",
     "Enselic",
     "tranquillity-codes",
-    "jieyouxu",
     "oskgo",
     "lolbinarycat",
     "alex-semenyuk",
@@ -40,7 +39,9 @@ members = [
     "JayanAXHF",
     "cijiugechu",
 ]
-alumni = []
+alumni = [
+    "jieyouxu",
+]
 
 [website]
 name = "Triage Team"
