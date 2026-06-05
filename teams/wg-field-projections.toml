@@ -1,0 +1,28 @@
+name = "wg-field-projections"
+subteam-of = "lang"
+kind = "working-group"
+
+[people]
+leads = [
+    "BennoLossin",
+    "tmandry",
+]
+members = [
+    "BennoLossin",
+    "tmandry",
+    "Nadrieril",
+    "dingxiangfei2009",
+]
+alumni = [
+]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Field Projections Working Group"
+description = "Designing a language feature for field projections in Rust"
+zulip-stream = "t-lang/custom-refs"
+
+[[zulip-groups]]
+name = "WG-field-projections"
