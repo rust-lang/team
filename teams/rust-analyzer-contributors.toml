@@ -5,6 +5,7 @@ subteam-of = "rust-analyzer"
 leads = []
 members = [
     "alibektas",
+    "dfireBird",
     "DropDemBits",
     "Nadrieril",
     "roife",
