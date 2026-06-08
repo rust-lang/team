@@ -381,6 +381,7 @@ impl From<RepoData> for v1::Repo {
             archived,
             private: false,
             auto_merge_enabled: allow_auto_merge,
+            custom_properties: Default::default(),
         }
     }
 }

@@ -844,6 +844,8 @@ pub(crate) struct Repo {
     pub crates_io: Vec<CratesIoConfiguration>,
     #[serde(default)]
     pub environments: BTreeMap<String, Environment>,
+    #[serde(default)]
+    pub custom_properties: BTreeMap<String, bool>,
 }
 
 #[derive(serde::Deserialize, Debug, Clone, PartialEq)]

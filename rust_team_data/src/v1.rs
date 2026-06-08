@@ -1,5 +1,6 @@
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
 pub static BASE_URL: &str = "https://team-api.infra.rust-lang.org/v1";
 
@@ -195,6 +196,8 @@ pub struct Repo {
     // Is the GitHub "Auto-merge" option enabled?
     // https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request
     pub auto_merge_enabled: bool,
+    #[serde(default)]
+    pub custom_properties: BTreeMap<String, bool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
