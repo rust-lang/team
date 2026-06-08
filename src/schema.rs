@@ -846,6 +846,8 @@ pub(crate) struct Repo {
     pub environments: BTreeMap<String, Environment>,
     #[serde(default)]
     pages: Option<RawPages>,
+    #[serde(default)]
+    pub custom_properties: BTreeMap<String, bool>,
 }
 
 impl Repo {

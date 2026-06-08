@@ -234,6 +234,7 @@ impl<'a> Generator<'a> {
                 pages: convert_pages(r)?,
                 archived,
                 auto_merge_enabled: !managed_by_bors,
+                custom_properties: r.custom_properties.clone(),
             };
 
             self.add(&format!("v1/repos/{}.json", r.name), &repo)?;
