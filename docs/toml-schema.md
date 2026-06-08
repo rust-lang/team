@@ -527,6 +527,23 @@ branches = ["develop", "staging"]
 # No branch or tag patterns specified - any branch or tag can deploy
 ```
 
+### Repository custom properties
+
+[Repository custom properties] are values set on a repository to opt it into org-wide tooling. The property must first be defined at the organization level.
+
+Only boolean values are supported.
+
+[Repository custom properties]: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/managing-custom-properties-for-a-repository
+
+```toml
+# Repository custom properties (optional)
+[custom-properties]
+# Set a property name to a boolean value
+crabwatch = true
+```
+
+Properties set on GitHub but not declared here are left unchanged.
+
 ### Crates.io crate management
 Configure properties of crates.io crates that are deployed using Trusted Publishing from the given repository.
 
