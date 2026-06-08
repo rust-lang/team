@@ -565,6 +565,14 @@ impl SyncGitHub {
                         .collect(),
                     pages: expected_repo.pages.clone(),
                     app_installations: self.diff_app_installations(expected_repo, &[])?,
+                    custom_properties: expected_repo
+                        .custom_properties
+                        .iter()
+                        .map(|(name, value)| api::CustomPropertyValue {
+                            property_name: name.clone(),
+                            value: Some(value.to_string()),
+                        })
+                        .collect(),
                 }));
             }
         };
@@ -582,6 +590,8 @@ impl SyncGitHub {
         let branch_protection_diffs = self.diff_branch_protections(&actual_repo).await?;
 
         let ruleset_diffs = self.diff_rulesets(expected_repo).await?;
+
+        let custom_property_diffs = self.diff_custom_properties(expected_repo).await?;
 
         let environment_diffs = self.diff_environments(expected_repo).await?;
         let pages_diff = self.diff_pages(expected_repo).await?;
@@ -631,6 +641,7 @@ impl SyncGitHub {
             environment_diffs,
             pages_diff,
             app_installation_diffs,
+            custom_property_diffs,
         }))
     }
 
@@ -894,6 +905,41 @@ impl SyncGitHub {
         }
 
         Ok(ruleset_diffs)
+    }
+
+    async fn diff_custom_properties(
+        &self,
+        expected_repo: &rust_team_data::v1::Repo,
+    ) -> anyhow::Result<Vec<CustomPropertyDiff>> {
+        let actual = self
+            .github
+            .repo_custom_properties(&expected_repo.org, &expected_repo.name)
+            .await?;
+
+        let actual_by_name: HashMap<String, Option<String>> = actual
+            .into_iter()
+            .map(|p| (p.property_name, p.value))
+            .collect();
+
+        let mut diffs = Vec::new();
+        for (name, value) in &expected_repo.custom_properties {
+            // GitHub stores values as strings, even bools.
+            let expected = value.to_string();
+            let operation = match actual_by_name.get(name) {
+                // Missing on the repo, or value is null.
+                None | Some(None) => CustomPropertyDiffOperation::Create(expected),
+                Some(Some(actual)) if actual != &expected => {
+                    CustomPropertyDiffOperation::Update(actual.clone(), expected)
+                }
+                Some(Some(_)) => continue,
+            };
+            diffs.push(CustomPropertyDiff {
+                name: name.clone(),
+                operation,
+            });
+        }
+
+        Ok(diffs)
     }
 
     fn diff_app_installations(
@@ -1371,6 +1417,7 @@ struct CreateRepoDiff {
     environments: Vec<(String, rust_team_data::v1::Environment)>,
     pages: Option<Pages>,
     app_installations: Vec<AppInstallationDiff>,
+    custom_properties: Vec<api::CustomPropertyValue>,
 }
 
 impl CreateRepoDiff {
@@ -1406,6 +1453,11 @@ impl CreateRepoDiff {
             installation.apply(sync, repo.repo_id, &self.org).await?;
         }
 
+        for property in &self.custom_properties {
+            sync.set_custom_property(&self.org, &self.name, property)
+                .await?;
+        }
+
         Ok(())
     }
 }
@@ -1421,6 +1473,7 @@ impl std::fmt::Display for CreateRepoDiff {
             environments,
             pages,
             app_installations,
+            custom_properties,
         } = self;
 
         let RepoSettings {
@@ -1471,6 +1524,19 @@ impl std::fmt::Display for CreateRepoDiff {
             write!(f, "{diff}")?;
         }
 
+        if !custom_properties.is_empty() {
+            writeln!(f, "  Custom Properties:")?;
+            for property in custom_properties {
+                if let Some(value) = &property.value {
+                    writeln!(
+                        f,
+                        "      Setting '{}' = '{}'",
+                        property.property_name, value
+                    )?;
+                }
+            }
+        }
+
         Ok(())
     }
 }
@@ -1488,6 +1554,7 @@ struct UpdateRepoDiff {
     environment_diffs: Vec<EnvironmentDiff>,
     pages_diff: Option<PagesDiff>,
     app_installation_diffs: Vec<AppInstallationDiff>,
+    custom_property_diffs: Vec<CustomPropertyDiff>,
 }
 
 #[derive(Debug)]
@@ -1567,6 +1634,7 @@ impl UpdateRepoDiff {
             environment_diffs,
             pages_diff,
             app_installation_diffs,
+            custom_property_diffs,
         } = self;
 
         settings_diff.0 == settings_diff.1
@@ -1576,6 +1644,7 @@ impl UpdateRepoDiff {
             && environment_diffs.is_empty()
             && pages_diff.is_none()
             && app_installation_diffs.is_empty()
+            && custom_property_diffs.is_empty()
     }
 
     fn can_be_modified(&self) -> bool {
@@ -1614,6 +1683,10 @@ impl UpdateRepoDiff {
 
         for ruleset in &self.ruleset_diffs {
             ruleset.apply(sync, &self.org, &self.name).await?;
+        }
+
+        for custom_property in &self.custom_property_diffs {
+            custom_property.apply(sync, &self.org, &self.name).await?;
         }
 
         for env_diff in &self.environment_diffs {
@@ -1673,6 +1746,7 @@ impl std::fmt::Display for UpdateRepoDiff {
             environment_diffs,
             pages_diff,
             app_installation_diffs,
+            custom_property_diffs,
         } = self;
 
         writeln!(f, "📝 Editing repo '{org}/{name}':")?;
@@ -1787,6 +1861,13 @@ impl std::fmt::Display for UpdateRepoDiff {
             writeln!(f, "  App installation changes:")?;
 
             for diff in app_installation_diffs {
+                write!(f, "{diff}")?;
+            }
+        }
+
+        if !custom_property_diffs.is_empty() {
+            writeln!(f, "  Custom Properties:")?;
+            for diff in custom_property_diffs {
                 write!(f, "{diff}")?;
             }
         }
@@ -2387,6 +2468,50 @@ enum RulesetDiffOperation {
     Create(api::Ruleset),
     Update(i64, api::Ruleset, api::Ruleset), // id, old, new
     Delete(i64),
+}
+
+#[derive(Debug)]
+struct CustomPropertyDiff {
+    name: String,
+    operation: CustomPropertyDiffOperation,
+}
+
+impl CustomPropertyDiff {
+    async fn apply(&self, sync: &GitHubWrite, org: &str, repo_name: &str) -> anyhow::Result<()> {
+        let value = match &self.operation {
+            CustomPropertyDiffOperation::Create(v) | CustomPropertyDiffOperation::Update(_, v) => {
+                v.clone()
+            }
+        };
+        let property = api::CustomPropertyValue {
+            property_name: self.name.clone(),
+            value: Some(value),
+        };
+        sync.set_custom_property(org, repo_name, &property).await
+    }
+}
+
+impl std::fmt::Display for CustomPropertyDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match &self.operation {
+            CustomPropertyDiffOperation::Create(value) => {
+                writeln!(f, "      Setting '{}' = '{}'", self.name, value)
+            }
+            CustomPropertyDiffOperation::Update(old, new) => {
+                writeln!(
+                    f,
+                    "      Updating '{}' from '{}' to '{}'",
+                    self.name, old, new
+                )
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
+enum CustomPropertyDiffOperation {
+    Create(String),
+    Update(String, String), // old, new
 }
 
 #[derive(Debug)]

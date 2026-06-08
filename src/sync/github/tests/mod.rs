@@ -238,6 +238,7 @@ async fn repo_change_description() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -283,6 +284,7 @@ async fn repo_change_homepage() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -385,6 +387,7 @@ async fn repo_create() {
                 environments: [],
                 pages: None,
                 app_installations: [],
+                custom_properties: [],
             },
         ),
     ]
@@ -610,6 +613,7 @@ async fn repo_add_member() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -667,6 +671,7 @@ async fn repo_change_member_permissions() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -718,6 +723,7 @@ async fn repo_remove_member() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -771,6 +777,7 @@ async fn repo_add_team() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -823,6 +830,7 @@ async fn repo_change_team_permissions() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -874,6 +882,7 @@ async fn repo_remove_team() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -916,6 +925,7 @@ async fn repo_archive_repo() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1045,6 +1055,7 @@ async fn repo_add_branch_protection() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1219,6 +1230,7 @@ async fn repo_update_branch_protection() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1275,6 +1287,7 @@ async fn repo_remove_branch_protection() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1419,6 +1432,7 @@ async fn repo_environment_create() {
                 ],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1472,6 +1486,7 @@ async fn repo_environment_delete() {
                 ],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1544,6 +1559,7 @@ async fn repo_environment_update() {
                 ],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1612,6 +1628,7 @@ async fn repo_environment_update_branches() {
                 ],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]

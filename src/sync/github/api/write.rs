@@ -5,8 +5,8 @@ use std::collections::HashSet;
 
 use crate::sync::github::api::url::GitHubUrl;
 use crate::sync::github::api::{
-    GitHubApiRead, GithubRead, HttpClient, Repo, RepoPermission, RepoSettings, Ruleset, RulesetOp,
-    Team, TeamPrivacy, TeamRole, allow_not_found,
+    CustomPropertyValue, GitHubApiRead, GithubRead, HttpClient, Repo, RepoPermission, RepoSettings,
+    Ruleset, RulesetOp, SetCustomPropertiesRequest, Team, TeamPrivacy, TeamRole, allow_not_found,
 };
 use crate::sync::utils::ResponseExt;
 
@@ -735,6 +735,29 @@ impl GitHubWrite {
             self.client
                 .send(Method::DELETE, &url, &serde_json::json!({}))
                 .await?;
+        }
+        Ok(())
+    }
+
+    /// Set a custom property value on a repository
+    pub(crate) async fn set_custom_property(
+        &self,
+        org: &str,
+        repo: &str,
+        property: &CustomPropertyValue,
+    ) -> anyhow::Result<()> {
+        debug!(
+            "Setting custom property '{}' on '{}/{}'",
+            property.property_name, org, repo
+        );
+        if !self.dry_run {
+            // REST API: PATCH /repos/{owner}/{repo}/properties/values
+            // https://docs.github.com/en/rest/repos/custom-properties#create-or-update-custom-property-values-for-a-repository
+            let url = GitHubUrl::repos(org, repo, "properties/values")?;
+            let body = SetCustomPropertiesRequest {
+                properties: vec![property.clone()],
+            };
+            self.client.send(Method::PATCH, &url, &body).await?;
         }
         Ok(())
     }

@@ -12,8 +12,8 @@ use rust_team_data::v1::{
 use crate::schema;
 use crate::sync::Config;
 use crate::sync::github::api::{
-    BranchPolicy, BranchProtection, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation,
-    RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
+    BranchPolicy, BranchProtection, CustomPropertyValue, GithubRead, OrgAppInstallation, Repo,
+    RepoAppInstallation, RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::sync::github::{
     OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_ruleset, convert_permission,
@@ -759,6 +759,14 @@ impl GithubRead for GithubMock {
             .get(repo)
             .cloned()
             .unwrap_or_default())
+    }
+
+    async fn repo_custom_properties(
+        &self,
+        _org: &str,
+        _repo: &str,
+    ) -> anyhow::Result<Vec<CustomPropertyValue>> {
+        Ok(vec![])
     }
 
     async fn repo_environments(
