@@ -4,6 +4,7 @@ mod data;
 #[macro_use]
 mod permissions;
 mod api;
+mod archive;
 mod ci;
 mod schema;
 mod static_api;
@@ -24,6 +25,7 @@ use api::zulip::ZulipApi;
 use data::Data;
 use schema::{Email, Team, TeamKind};
 
+use crate::archive::{archive_repo, archive_team};
 use crate::ci::{check_codeowners, generate_codeowners_file};
 use crate::schema::RepoPermission;
 use crate::sync::run_sync_team;
@@ -112,6 +114,9 @@ enum RootOpts {
     DecryptEmail,
     /// Generate a x25519 key for use with the email encryption module
     GenerateKey,
+    /// Archive a repo or team, moving it to the archive directory
+    #[clap(subcommand)]
+    Archive(ArchiveOpts),
     /// CI scripts
     #[clap(subcommand)]
     Ci(CiOpts),
@@ -137,6 +142,20 @@ enum CiOpts {
     CheckCodeowners,
     /// Check for untracked repositories in GitHub organizations
     CheckUntrackedRepos,
+}
+
+#[derive(clap::Parser, Clone, Debug)]
+enum ArchiveOpts {
+    /// Archive a repository
+    Repo {
+        /// Repository in "org/name" format (e.g. "rust-lang/homu")
+        name: String,
+    },
+    /// Archive a team
+    Team {
+        /// Team name (e.g. "project-generic-associated-types")
+        name: String,
+    },
 }
 
 #[derive(clap::Parser, Clone, Debug)]
@@ -569,6 +588,14 @@ async fn run() -> Result<(), Error> {
             let (secret, public) = rust_team_data::email_encryption::generate_x25519_keypair();
             println!("Generated keypair: secret: {} - public: {}", secret, public);
         }
+        RootOpts::Archive(opts) => match opts {
+            ArchiveOpts::Repo { ref name } => {
+                archive_repo(&cli.data_dir, name)?;
+            }
+            ArchiveOpts::Team { ref name } => {
+                archive_team(&cli.data_dir, name)?;
+            }
+        },
         RootOpts::Ci(opts) => match opts {
             CiOpts::GenerateCodeowners => generate_codeowners_file(data)?,
             CiOpts::CheckCodeowners => check_codeowners(data)?,
