@@ -16,7 +16,7 @@ alumni = []
 name = "Meta-language Dictionary Passing Working Group"
 description = "Modelling the trait system and cycle handling via meta-language dictionary passing"
 repo = "https://github.com/rust-lang/project-dictionary-passing"
-zulip-stream = "T-types/dictionary-passing"
+zulip-stream = "t-types/dictionary-passing"
 
 [[github]]
 orgs = ["rust-lang"]
