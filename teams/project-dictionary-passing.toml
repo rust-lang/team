@@ -1,0 +1,25 @@
+name = "project-dictionary-passing"
+kind = "project-group"
+subteam-of = "types"
+
+[people]
+leads = ["lcnr"]
+members = [
+    "lcnr",
+    "Nadrieril",
+    "nikomatsakis",
+    "BennoLossin"
+]
+alumni = []
+
+[website]
+name = "Meta-language Dictionary Passing Working Group"
+description = "Modelling the trait system and cycle handling via meta-language dictionary passing"
+repo = "https://github.com/rust-lang/project-dictionary-passing"
+zulip-stream = "t-types/dictionary-passing"
+
+[[github]]
+orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "project-dictionary-passing"

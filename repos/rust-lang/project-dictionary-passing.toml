@@ -1,0 +1,11 @@
+org = "rust-lang"
+name = "project-dictionary-passing"
+description = ""
+homepage = "https://rust-lang.github.io/project-dictionary-passing/"
+bots = ["rustbot"]
+
+[access.teams]
+project-dictionary-passing = "maintain"
+all = "write"
+
+[environments.github-pages]

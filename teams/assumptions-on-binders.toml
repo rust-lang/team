@@ -14,7 +14,7 @@ alumni = []
 name = "Assumptions on Binders Project Group"
 description = "Working to support where clauses on `for<'a>` in the Rust language"
 repo = "https://github.com/rust-lang/project-assumptions-on-binders"
-zulip-stream = "T-types/assumptions-on-binders"
+zulip-stream = "t-types/assumptions-on-binders"
 
 [[github]]
 orgs = ["rust-lang"]
