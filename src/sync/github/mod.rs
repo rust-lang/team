@@ -899,18 +899,31 @@ impl SyncGitHub {
         for (name, value) in &expected_repo.custom_properties {
             // GitHub stores values as strings, even bools.
             let expected = value.to_string();
-            let operation = match actual_by_name.get(name) {
-                // Missing on the repo, or value is null.
-                None | Some(None) => CustomPropertyDiffOperation::Create(expected),
-                Some(Some(actual)) if actual != &expected => {
-                    CustomPropertyDiffOperation::Update(actual.clone(), expected)
+            let actual = actual_by_name.get(name).and_then(|v| v.as_deref());
+            let operation = match actual {
+                None => CustomPropertyDiffOperation::Create(expected),
+                Some(actual) if actual != expected => {
+                    CustomPropertyDiffOperation::Update(actual.to_string(), expected)
                 }
-                Some(Some(_)) => continue,
+                Some(_) => continue,
             };
             diffs.push(CustomPropertyDiff {
                 name: name.clone(),
                 operation,
             });
+        }
+
+        // Properties set on GitHub that no longer appear in the team config get removed.
+        for (name, actual) in &actual_by_name {
+            if expected_repo.custom_properties.contains_key(name) {
+                continue;
+            }
+            if let Some(actual) = actual {
+                diffs.push(CustomPropertyDiff {
+                    name: name.clone(),
+                    operation: CustomPropertyDiffOperation::Delete(actual.clone()),
+                });
+            }
         }
 
         Ok(diffs)
@@ -2386,12 +2399,13 @@ impl CustomPropertyDiff {
     async fn apply(&self, sync: &GitHubWrite, org: &str, repo_name: &str) -> anyhow::Result<()> {
         let value = match &self.operation {
             CustomPropertyDiffOperation::Create(v) | CustomPropertyDiffOperation::Update(_, v) => {
-                v.clone()
+                Some(v.clone())
             }
+            CustomPropertyDiffOperation::Delete(_) => None,
         };
         let property = api::CustomPropertyValue {
             property_name: self.name.clone(),
-            value: Some(value),
+            value,
         };
         sync.set_custom_property(org, repo_name, &property).await
     }
@@ -2410,6 +2424,9 @@ impl std::fmt::Display for CustomPropertyDiff {
                     self.name, old, new
                 )
             }
+            CustomPropertyDiffOperation::Delete(old) => {
+                writeln!(f, "      Removing '{}' (was '{}')", self.name, old)
+            }
         }
     }
 }
@@ -2418,6 +2435,7 @@ impl std::fmt::Display for CustomPropertyDiff {
 enum CustomPropertyDiffOperation {
     Create(String),
     Update(String, String), // old, new
+    Delete(String),         // previous value
 }
 
 #[derive(Debug)]

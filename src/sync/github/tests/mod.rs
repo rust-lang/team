@@ -1448,3 +1448,104 @@ async fn repo_environment_update_branches() {
     ]
     "#);
 }
+
+#[tokio::test]
+async fn repo_add_custom_property() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1"));
+    let gh = model.gh_model();
+
+    model
+        .get_repo("repo1")
+        .custom_properties
+        .insert("crabwatch".to_string(), true);
+
+    let diff = model.diff_repos(gh).await;
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                ruleset_diffs: [],
+                environment_diffs: [],
+                app_installation_diffs: [],
+                custom_property_diffs: [
+                    CustomPropertyDiff {
+                        name: "crabwatch",
+                        operation: Create(
+                            "true",
+                        ),
+                    },
+                ],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[tokio::test]
+async fn repo_remove_custom_property() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").custom_property("crabwatch", true));
+    let gh = model.gh_model();
+
+    model.get_repo("repo1").custom_properties.clear();
+
+    let diff = model.diff_repos(gh).await;
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                ruleset_diffs: [],
+                environment_diffs: [],
+                app_installation_diffs: [],
+                custom_property_diffs: [
+                    CustomPropertyDiff {
+                        name: "crabwatch",
+                        operation: Delete(
+                            "true",
+                        ),
+                    },
+                ],
+            },
+        ),
+    ]
+    "#);
+}
