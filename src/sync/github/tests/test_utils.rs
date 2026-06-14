@@ -194,6 +194,15 @@ impl DataModel {
             if let Some(pages) = &repo.pages {
                 org.repo_pages.insert(repo.name.clone(), pages.clone());
             }
+            let properties: Vec<CustomPropertyValue> = repo
+                .custom_properties
+                .iter()
+                .map(|(name, value)| CustomPropertyValue {
+                    property_name: name.clone(),
+                    value: Some(value.to_string()),
+                })
+                .collect();
+            org.custom_properties.insert(repo.name.clone(), properties);
         }
 
         if orgs.is_empty() {
@@ -335,6 +344,8 @@ pub struct RepoData {
     pub environments: IndexMap<String, v1::Environment>,
     #[builder(default)]
     pub pages: Option<v1::Pages>,
+    #[builder(default)]
+    pub custom_properties: IndexMap<String, bool>,
 }
 
 impl RepoData {
@@ -373,6 +384,7 @@ impl From<RepoData> for v1::Repo {
             branch_protections,
             environments,
             pages,
+            custom_properties,
         } = value;
         Self {
             org,
@@ -389,7 +401,7 @@ impl From<RepoData> for v1::Repo {
             archived,
             private: false,
             auto_merge_enabled: allow_auto_merge,
-            custom_properties: Default::default(),
+            custom_properties,
         }
     }
 }
@@ -438,6 +450,13 @@ impl RepoDataBuilder {
             },
         );
         self.environments = Some(environments);
+        self
+    }
+
+    pub fn custom_property(mut self, name: &str, value: bool) -> Self {
+        let mut custom_properties = self.custom_properties.clone().unwrap_or_default();
+        custom_properties.insert(name.to_string(), value);
+        self.custom_properties = Some(custom_properties);
         self
     }
 }
@@ -763,10 +782,15 @@ impl GithubRead for GithubMock {
 
     async fn repo_custom_properties(
         &self,
-        _org: &str,
-        _repo: &str,
+        org: &str,
+        repo: &str,
     ) -> anyhow::Result<Vec<CustomPropertyValue>> {
-        Ok(vec![])
+        Ok(self
+            .get_org(org)
+            .custom_properties
+            .get(repo)
+            .cloned()
+            .unwrap_or_default())
     }
 
     async fn repo_environments(
@@ -815,6 +839,8 @@ struct GithubOrg {
     repo_environments: HashMap<String, HashMap<String, Environment>>,
     // Repo name -> GitHub Pages settings
     repo_pages: HashMap<String, Pages>,
+    // Repo name -> Vec<custom property>
+    custom_properties: HashMap<String, Vec<CustomPropertyValue>>,
 }
 
 #[derive(Clone)]
