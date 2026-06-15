@@ -32,3 +32,7 @@ address = "program@rust-lang.org"
 
 [[zulip-groups]]
 name = "T-program"
+
+[website]
+name = "Program Management team"
+description = "Supporting Rust teams, making connections, coordinating discussions, and managing Project Goals"
