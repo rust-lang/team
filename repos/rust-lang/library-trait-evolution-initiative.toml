@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "library-trait-evolution-initiative"
+description = ""
+bots = ["rustbot"]
+
+[access.teams]
+project-library-trait-evolution = "maintain"
+all = "write"
