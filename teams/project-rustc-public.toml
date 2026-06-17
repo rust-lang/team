@@ -1,4 +1,4 @@
-name = "project-stable-mir"
+name = "project-rustc-public"
 kind = "project-group"
 subteam-of = "compiler"
 
@@ -19,10 +19,10 @@ alumni = [
 ]
 
 [website]
-name = "Stable MIR Project Group"
+name = "Rustc Public Project Group"
 description = "Define compiler intermediate representation usable by external tools"
-repo = "https://github.com/rust-lang/project-stable-mir"
-zulip-stream = "project-stable-mir"
+repo = "https://github.com/rust-lang/rustc_public"
+zulip-stream = "project-rustc-public"
 
 [[github]]
 orgs = ["rust-lang"]

@@ -1,13 +1,12 @@
 org = "rust-lang"
-name = "project-stable-mir"
+name = "rustc_public"
 description = "Define compiler intermediate representation usable by external tools"
 bots = ["rustbot"]
 
 [access.teams]
-project-stable-mir = "write"
+project-rustc-public = "write"
 
 [[rulesets]]
 pattern = "main"
 
 [environments.github-pages]
-
