@@ -12,5 +12,5 @@ types = "maintain"
 release = "maintain"
 
 [environments.github-pages]
-branches = ["gh-pages", "master"]
+branches = ["gh-pages", "main"]
 
