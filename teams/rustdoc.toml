@@ -8,7 +8,6 @@ members = [
     "Manishearth",
     "camelid",
     "notriddle",
-    "aDotInTheVoid",
     "fmease",
     "lolbinarycat",
     "yotamofek",
@@ -24,6 +23,7 @@ alumni = [
     "QuietMisdreavus",
     "onur",
     "steveklabnik",
+    "aDotInTheVoid",
 ]
 
 [[github]]
