@@ -13,6 +13,7 @@ members = [
     "lqd",
     "adwinwhite",
     "ShoyuVanilla",
+    "jdonszelmann",
 ]
 alumni = [
     "compiler-errors",
