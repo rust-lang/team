@@ -8,9 +8,10 @@ rustdoc = "write"
 
 [environments.publish]
 branches = ["trunk"]
+# Matches the `on:` rule of `release.yml`
+tags = ["v*"]
 
 [[crates-io]]
 crates = ["rustdoc-types"]
 publish-workflow = "release.yml"
 publish-environment = "publish"
-
