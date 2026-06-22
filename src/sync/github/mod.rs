@@ -569,7 +569,7 @@ impl SyncGitHub {
                         .iter()
                         .map(|(name, value)| api::CustomPropertyValue {
                             property_name: name.clone(),
-                            value: Some(value.to_string()),
+                            value: Some(value.clone()),
                         })
                         .collect(),
                 }));
@@ -897,8 +897,7 @@ impl SyncGitHub {
 
         let mut diffs = Vec::new();
         for (name, value) in &expected_repo.custom_properties {
-            // GitHub stores values as strings, even bools.
-            let expected = value.to_string();
+            let expected = value.clone();
             let actual = actual_by_name.get(name).and_then(|v| v.as_deref());
             let operation = match actual {
                 None => CustomPropertyDiffOperation::Create(expected),

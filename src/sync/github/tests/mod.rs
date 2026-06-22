@@ -1458,7 +1458,7 @@ async fn repo_add_custom_property() {
     model
         .get_repo("repo1")
         .custom_properties
-        .insert("crabwatch".to_string(), true);
+        .insert("crabwatch".to_string(), "true".to_string());
 
     let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
@@ -1504,7 +1504,7 @@ async fn repo_add_custom_property() {
 #[tokio::test]
 async fn repo_remove_custom_property() {
     let mut model = DataModel::default();
-    model.create_repo(RepoData::new("repo1").custom_property("crabwatch", true));
+    model.create_repo(RepoData::new("repo1").custom_property("crabwatch", "true"));
     let gh = model.gh_model();
 
     model.get_repo("repo1").custom_properties.clear();

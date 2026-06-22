@@ -236,7 +236,7 @@ impl<'a> Generator<'a> {
                 custom_properties: r
                     .custom_properties
                     .iter()
-                    .map(|(k, v)| (k.clone(), *v))
+                    .map(|(k, v)| (k.clone(), v.clone()))
                     .collect(),
             };
 

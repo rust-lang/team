@@ -340,7 +340,7 @@ pub struct RepoData {
     #[builder(default)]
     pub environments: IndexMap<String, v1::Environment>,
     #[builder(default)]
-    pub custom_properties: IndexMap<String, bool>,
+    pub custom_properties: IndexMap<String, String>,
 }
 
 impl RepoData {
@@ -446,9 +446,9 @@ impl RepoDataBuilder {
         self
     }
 
-    pub fn custom_property(mut self, name: &str, value: bool) -> Self {
+    pub fn custom_property(mut self, name: &str, value: &str) -> Self {
         let mut custom_properties = self.custom_properties.clone().unwrap_or_default();
-        custom_properties.insert(name.to_string(), value);
+        custom_properties.insert(name.to_string(), value.to_string());
         self.custom_properties = Some(custom_properties);
         self
     }
