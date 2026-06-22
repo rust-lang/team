@@ -353,6 +353,7 @@ private-non-synced = false
 #### Bots
 
 Here are the available bots that can be added to the `bots` array:
+
 - `datadog`: installs a GitHub App used by DataDog. Used for [CI Visibility](https://www.datadoghq.com/product/ci-cd-monitoring/). It has read access to organization members, and repository
   actions, administration, checks, code scanning alerts, commit statuses, contents,
   deployments, issues, pull requests, secret scanning alerts and secrets.
@@ -533,7 +534,7 @@ branches = ["develop", "staging"]
 
 Only boolean values are supported.
 
-[Repository custom properties]: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/managing-custom-properties-for-a-repository
+[Repository custom properties]: https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization
 
 ```toml
 # Repository custom properties (optional)
@@ -545,6 +546,7 @@ crabwatch = true
 Properties set on GitHub but not declared here are left unchanged.
 
 ### Crates.io crate management
+
 Configure properties of crates.io crates that are deployed using Trusted Publishing from the given repository.
 
 ```toml
