@@ -1,0 +1,26 @@
+name = "project-library-trait-evolution"
+kind = "project-group"
+subteam-of = "lang"
+
+[people]
+leads = ["lcnr"]
+members = [
+    "lcnr",
+    "dingxiangfei2009",
+    "cramertj",
+    "tmandry",
+]
+alumni = []
+
+[website]
+name = "Library Trait Evolution Initiative"
+description = "Enabling library authors to more easily change their trait definitions"
+repo = "https://github.com/rust-lang/library-trait-evolution-initiative"
+zulip-stream = "t-lang/library-trait-evolution"
+
+[[github]]
+orgs = ["rust-lang"]
+team-name = "initiative-library-trait-evolution"
+
+[[zulip-groups]]
+name = "library-trait-evolution-initative"
