@@ -231,6 +231,7 @@ impl<'a> Generator<'a> {
                     envs.sort_by(|a, b| a.0.cmp(&b.0));
                     envs.into_iter().collect()
                 },
+                pages: convert_pages(r)?,
                 archived,
                 auto_merge_enabled: !managed_by_bors,
             };
@@ -514,6 +515,56 @@ impl<'a> Generator<'a> {
         std::fs::write(&dest, bytes)?;
         Ok(())
     }
+}
+
+fn convert_pages(repo: &schema::Repo) -> Result<Option<v1::Pages>, Error> {
+    let Some(pages) = &repo.pages else {
+        return Ok(None);
+    };
+
+    let build_type = match pages.build_type {
+        schema::PagesBuildType::Legacy => v1::PagesBuildType::Legacy,
+        schema::PagesBuildType::Workflow => v1::PagesBuildType::Workflow,
+    };
+
+    let source = match pages.build_type {
+        schema::PagesBuildType::Legacy => {
+            let branch = pages.branch.clone().with_context(|| {
+                format!(
+                    "repo {}/{} configures legacy GitHub Pages without a branch",
+                    repo.org, repo.name
+                )
+            })?;
+            ensure!(
+                !branch.is_empty(),
+                "repo {}/{} configures GitHub Pages with an empty branch",
+                repo.org,
+                repo.name
+            );
+            let path = pages.path.clone().unwrap_or_else(|| "/".to_string());
+
+            // According to the API path can be one of: /, /docs
+            ensure!(
+                path == "/" || path == "/docs",
+                "repo {}/{} configures GitHub Pages with invalid path `{}`",
+                repo.org,
+                repo.name,
+                path
+            );
+            Some(v1::PagesSource { branch, path })
+        }
+        schema::PagesBuildType::Workflow => {
+            ensure!(
+                pages.branch.is_none() && pages.path.is_none(),
+                "repo {}/{} configures workflow GitHub Pages with branch or path",
+                repo.org,
+                repo.name
+            );
+            None
+        }
+    };
+
+    Ok(Some(v1::Pages { build_type, source }))
 }
 
 fn convert_teams<'a>(

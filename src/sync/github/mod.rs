@@ -10,7 +10,7 @@ use crate::sync::github::api::{GithubRead, RepoPermission, RepoSettings, Ruleset
 use anyhow::Context as _;
 use futures_util::StreamExt;
 use log::debug;
-use rust_team_data::v1::{Bot, BranchProtectionMode, ProtectionTarget};
+use rust_team_data::v1::{Bot, BranchProtectionMode, Pages, ProtectionTarget};
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fmt::{Display, Formatter, Write};
 
@@ -563,6 +563,7 @@ impl SyncGitHub {
                         .iter()
                         .map(|(name, env)| (name.clone(), env.clone()))
                         .collect(),
+                    pages: expected_repo.pages.clone(),
                     app_installations: self.diff_app_installations(expected_repo, &[])?,
                 }));
             }
@@ -583,6 +584,7 @@ impl SyncGitHub {
         let ruleset_diffs = self.diff_rulesets(expected_repo).await?;
 
         let environment_diffs = self.diff_environments(expected_repo).await?;
+        let pages_diff = self.diff_pages(expected_repo).await?;
         let old_settings = RepoSettings {
             description: actual_repo.description.clone(),
             homepage: actual_repo.homepage.clone(),
@@ -627,6 +629,7 @@ impl SyncGitHub {
             branch_protection_diffs,
             ruleset_diffs,
             environment_diffs,
+            pages_diff,
             app_installation_diffs,
         }))
     }
@@ -761,6 +764,37 @@ impl SyncGitHub {
         }
 
         Ok(environment_diffs)
+    }
+
+    async fn diff_pages(
+        &self,
+        expected_repo: &rust_team_data::v1::Repo,
+    ) -> anyhow::Result<Option<PagesDiff>> {
+        let Some(expected_pages) = &expected_repo.pages else {
+            return Ok(None);
+        };
+
+        let actual_pages = self
+            .github
+            .repo_pages(&expected_repo.org, &expected_repo.name)
+            .await?;
+
+        // GitHub Pages could be configured for an existing repo
+        // since the GitHub API provides us with POST and PUT endpoints
+        // we need to distinguish such cases, otherwise calling POST on existing Pages
+        // might return 409
+        let Some(actual_pages) = actual_pages else {
+            return Ok(Some(PagesDiff::Create(expected_pages.clone())));
+        };
+
+        if actual_pages == *expected_pages {
+            return Ok(None);
+        }
+
+        Ok(Some(PagesDiff::Update {
+            old: actual_pages,
+            new: expected_pages.clone(),
+        }))
     }
 
     async fn diff_rulesets(
@@ -1343,6 +1377,7 @@ struct CreateRepoDiff {
     permissions: Vec<RepoPermissionAssignmentDiff>,
     rulesets: Vec<api::Ruleset>,
     environments: Vec<(String, rust_team_data::v1::Environment)>,
+    pages: Option<Pages>,
     app_installations: Vec<AppInstallationDiff>,
 }
 
@@ -1371,6 +1406,10 @@ impl CreateRepoDiff {
                 .await?;
         }
 
+        if let Some(pages) = &self.pages {
+            sync.create_pages(&self.org, &self.name, pages).await?;
+        }
+
         for installation in &self.app_installations {
             installation.apply(sync, repo.repo_id, &self.org).await?;
         }
@@ -1388,6 +1427,7 @@ impl std::fmt::Display for CreateRepoDiff {
             permissions,
             rulesets,
             environments,
+            pages,
             app_installations,
         } = self;
 
@@ -1430,6 +1470,10 @@ impl std::fmt::Display for CreateRepoDiff {
             }
         }
 
+        if let Some(pages) = pages {
+            writeln!(f, "  Pages: {}", format_pages(pages))?;
+        }
+
         writeln!(f, "  App Installations:")?;
         for diff in app_installations {
             write!(f, "{diff}")?;
@@ -1450,6 +1494,7 @@ struct UpdateRepoDiff {
     branch_protection_diffs: Vec<BranchProtectionDiff>,
     ruleset_diffs: Vec<RulesetDiff>,
     environment_diffs: Vec<EnvironmentDiff>,
+    pages_diff: Option<PagesDiff>,
     app_installation_diffs: Vec<AppInstallationDiff>,
 }
 
@@ -1468,6 +1513,48 @@ enum EnvironmentDiff {
     Delete(String),
 }
 
+#[derive(Debug)]
+enum PagesDiff {
+    Create(Pages),
+    Update { old: Pages, new: Pages },
+}
+
+impl PagesDiff {
+    async fn apply(&self, sync: &GitHubWrite, org: &str, repo: &str) -> anyhow::Result<()> {
+        match self {
+            Self::Create(pages) => sync.create_pages(org, repo, pages).await?,
+            Self::Update { new, .. } => sync.update_pages(org, repo, new).await?,
+        }
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for PagesDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Create(pages) => writeln!(f, "    ➕ Create: {}", format_pages(pages)),
+            Self::Update { old, new } => {
+                writeln!(f, "    🔄 Update:")?;
+                writeln!(f, "        Old: {}", format_pages(old))?;
+                writeln!(f, "        New: {}", format_pages(new))
+            }
+        }
+    }
+}
+
+fn format_pages(pages: &Pages) -> String {
+    match pages.build_type {
+        rust_team_data::v1::PagesBuildType::Workflow => "workflow".to_string(),
+        rust_team_data::v1::PagesBuildType::Legacy => {
+            if let Some(source) = &pages.source {
+                format!("legacy branch={} path={}", source.branch, source.path)
+            } else {
+                "legacy".to_string()
+            }
+        }
+    }
+}
+
 impl UpdateRepoDiff {
     pub(crate) fn noop(&self) -> bool {
         if !self.can_be_modified() {
@@ -1483,6 +1570,7 @@ impl UpdateRepoDiff {
             branch_protection_diffs,
             ruleset_diffs,
             environment_diffs,
+            pages_diff,
             app_installation_diffs,
         } = self;
 
@@ -1491,6 +1579,7 @@ impl UpdateRepoDiff {
             && branch_protection_diffs.is_empty()
             && ruleset_diffs.is_empty()
             && environment_diffs.is_empty()
+            && pages_diff.is_none()
             && app_installation_diffs.is_empty()
     }
 
@@ -1553,6 +1642,10 @@ impl UpdateRepoDiff {
             }
         }
 
+        if let Some(pages_diff) = &self.pages_diff {
+            pages_diff.apply(sync, &self.org, &self.name).await?;
+        }
+
         if !is_unarchive && self.settings_diff.0 != self.settings_diff.1 {
             sync.edit_repo(&self.org, &self.name, &self.settings_diff.1)
                 .await?;
@@ -1583,6 +1676,7 @@ impl std::fmt::Display for UpdateRepoDiff {
             branch_protection_diffs,
             ruleset_diffs,
             environment_diffs,
+            pages_diff,
             app_installation_diffs,
         } = self;
 
@@ -1687,6 +1781,11 @@ impl std::fmt::Display for UpdateRepoDiff {
                     EnvironmentDiff::Delete(name) => writeln!(f, "    ❌ Delete: {name}")?,
                 }
             }
+        }
+
+        if let Some(pages_diff) = pages_diff {
+            writeln!(f, "  Pages:")?;
+            write!(f, "{pages_diff}")?;
         }
 
         if !app_installation_diffs.is_empty() {

@@ -844,6 +844,8 @@ pub(crate) struct Repo {
     pub crates_io: Vec<CratesIoConfiguration>,
     #[serde(default)]
     pub environments: BTreeMap<String, Environment>,
+    #[serde(default)]
+    pub pages: Option<Pages>,
 }
 
 #[derive(serde::Deserialize, Debug, Clone, PartialEq)]
@@ -1023,6 +1025,21 @@ pub(crate) struct Environment {
     /// Tag patterns that can deploy to this environment
     #[serde(default)]
     pub tags: Vec<String>,
+}
+
+#[derive(serde::Deserialize, Debug, Clone)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub(crate) struct Pages {
+    pub build_type: PagesBuildType,
+    pub branch: Option<String>,
+    pub path: Option<String>,
+}
+
+#[derive(serde::Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum PagesBuildType {
+    Legacy,
+    Workflow,
 }
 
 pub const fn branch_protection_default_prevent_creation() -> bool {

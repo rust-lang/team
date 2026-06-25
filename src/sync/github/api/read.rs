@@ -10,7 +10,7 @@ use crate::sync::utils::ResponseExt;
 use anyhow::Context as _;
 use async_trait::async_trait;
 use reqwest::{Method, StatusCode};
-use rust_team_data::v1::Environment;
+use rust_team_data::v1::{Environment, Pages, PagesBuildType, PagesSource};
 use std::collections::{BTreeMap, HashMap, HashSet};
 
 #[async_trait]
@@ -59,6 +59,9 @@ pub(crate) trait GithubRead {
 
     /// Get a repo by org and name
     async fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>>;
+
+    /// Get GitHub Pages settings for a repo
+    async fn repo_pages(&self, org: &str, repo: &str) -> anyhow::Result<Option<Pages>>;
 
     /// Get teams in a repo
     async fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>>;
@@ -468,6 +471,40 @@ impl GithubRead for GitHubApiRead {
         });
 
         Ok(repo)
+    }
+
+    async fn repo_pages(&self, org: &str, repo: &str) -> anyhow::Result<Option<Pages>> {
+        #[derive(serde::Deserialize)]
+        struct PagesResponse {
+            build_type: Option<PagesBuildType>,
+            source: Option<PagesSource>,
+        }
+
+        let pages: Option<PagesResponse> = self
+            .client
+            .send_option(Method::GET, &GitHubUrl::repos(org, repo, "pages")?)
+            .await?;
+
+        let Some(pages) = pages else {
+            return Ok(None);
+        };
+
+        let build_type = match pages.build_type {
+            Some(build_type) => build_type,
+            None if pages.source.is_some() => PagesBuildType::Legacy,
+            None => {
+                return Err(anyhow::anyhow!(
+                    "GitHub Pages response for {org}/{repo} did not include build_type or source"
+                ));
+            }
+        };
+
+        let source = match build_type {
+            PagesBuildType::Legacy => pages.source,
+            PagesBuildType::Workflow => None,
+        };
+
+        Ok(Some(Pages { build_type, source }))
     }
 
     async fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {

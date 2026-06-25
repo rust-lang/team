@@ -2,8 +2,8 @@ use crate::api::github::GitHubApi;
 use crate::api::zulip::ZulipApi;
 use crate::data::Data;
 use crate::schema::{
-    AllowedMergeApp, Bot, Email, MergeQueueMethod, Permissions, Repo, RepoPermission, Team,
-    TeamKind, TeamPeople, ZulipMember,
+    AllowedMergeApp, Bot, Email, MergeQueueMethod, PagesBuildType, Permissions, Repo,
+    RepoPermission, Team, TeamKind, TeamPeople, ZulipMember,
 };
 use anyhow::{Context as _, Error, bail};
 use log::{error, warn};
@@ -71,6 +71,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_archived_repos,
     validate_rulesets,
     validate_environments,
+    validate_pages,
     validate_trusted_publishing,
     validate_member_roles,
     validate_admin_access,
@@ -1189,6 +1190,54 @@ fn validate_environments(data: &Data, errors: &mut Vec<String>) {
         }
 
         // No need to check for duplicate environment names since HashMap keys are unique
+        Ok(())
+    });
+}
+
+fn validate_pages(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.all_repos(), errors, |repo, _| {
+        let Some(pages) = &repo.pages else {
+            return Ok(());
+        };
+
+        match pages.build_type {
+            PagesBuildType::Legacy => {
+                let Some(branch) = &pages.branch else {
+                    bail!(
+                        "repo {}/{} configures legacy GitHub Pages without a branch",
+                        repo.org,
+                        repo.name
+                    );
+                };
+                if branch.is_empty() {
+                    bail!(
+                        "repo {}/{} configures GitHub Pages with an empty branch",
+                        repo.org,
+                        repo.name
+                    );
+                }
+
+                let path = pages.path.as_deref().unwrap_or("/");
+                if path != "/" && path != "/docs" {
+                    bail!(
+                        "repo {}/{} configures GitHub Pages with invalid path `{}`; allowed paths are `/` and `/docs`",
+                        repo.org,
+                        repo.name,
+                        path
+                    );
+                }
+            }
+            PagesBuildType::Workflow => {
+                if pages.branch.is_some() || pages.path.is_some() {
+                    bail!(
+                        "repo {}/{} configures workflow GitHub Pages with branch or path; workflow Pages must not set either field",
+                        repo.org,
+                        repo.name
+                    );
+                }
+            }
+        }
+
         Ok(())
     });
 }

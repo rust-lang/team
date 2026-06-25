@@ -361,6 +361,29 @@ Here are the available bots that can be added to the `bots` array:
 - `renovate`, `forking-renovate`: See the [Renovate Forge docs](https://forge.rust-lang.org/infra/docs/renovate.html).
 - TODO: Document other bots.
 
+### GitHub Pages
+
+GitHub Pages settings can optionally be managed from the repo TOML file. If the
+`[pages]` section is absent, sync-team tool will not modify the repository's existing
+GitHub Pages settings.
+
+```toml
+# Build Pages from a branch. `path` is optional and defaults to "/".
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/docs"
+```
+
+```toml
+# Build Pages from a GitHub Actions workflow.
+[pages]
+build-type = "workflow"
+```
+
+For `legacy`, `branch` is required and `path` must be either `/` or `/docs`.
+For `workflow`, `branch` and `path` must not be set.
+
 ### Repository access
 
 Access to a repository is given on a per-team basis. Teams who are responsible for a repository may give access to other teams at their discretion.

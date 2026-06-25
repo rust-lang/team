@@ -88,6 +88,13 @@
       "tags": []
     }
   },
+  "pages": {
+    "build_type": "legacy",
+    "source": {
+      "branch": "gh-pages",
+      "path": "/docs"
+    }
+  },
   "archived": false,
   "private": false,
   "auto_merge_enabled": true
