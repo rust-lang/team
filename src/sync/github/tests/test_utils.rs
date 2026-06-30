@@ -12,8 +12,8 @@ use rust_team_data::v1::{
 use crate::schema;
 use crate::sync::Config;
 use crate::sync::github::api::{
-    BranchPolicy, BranchProtection, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation,
-    RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
+    BranchPolicy, BranchProtection, CustomPropertyValue, GithubRead, OrgAppInstallation, Repo,
+    RepoAppInstallation, RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::sync::github::{
     OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_ruleset, convert_permission,
@@ -190,6 +190,16 @@ impl DataModel {
                 repo.environments.clone().into_iter().collect();
             org.repo_environments
                 .insert(repo.name.clone(), environments);
+
+            let properties: Vec<CustomPropertyValue> = repo
+                .custom_properties
+                .iter()
+                .map(|(name, value)| CustomPropertyValue {
+                    property_name: name.clone(),
+                    value: Some(value.to_string()),
+                })
+                .collect();
+            org.custom_properties.insert(repo.name.clone(), properties);
         }
 
         if orgs.is_empty() {
@@ -329,6 +339,8 @@ pub struct RepoData {
     pub branch_protections: Vec<v1::BranchProtection>,
     #[builder(default)]
     pub environments: IndexMap<String, v1::Environment>,
+    #[builder(default)]
+    pub custom_properties: IndexMap<String, String>,
 }
 
 impl RepoData {
@@ -366,6 +378,7 @@ impl From<RepoData> for v1::Repo {
             allow_auto_merge,
             branch_protections,
             environments,
+            custom_properties,
         } = value;
         Self {
             org,
@@ -381,6 +394,7 @@ impl From<RepoData> for v1::Repo {
             archived,
             private: false,
             auto_merge_enabled: allow_auto_merge,
+            custom_properties,
         }
     }
 }
@@ -429,6 +443,13 @@ impl RepoDataBuilder {
             },
         );
         self.environments = Some(environments);
+        self
+    }
+
+    pub fn custom_property(mut self, name: &str, value: &str) -> Self {
+        let mut custom_properties = self.custom_properties.clone().unwrap_or_default();
+        custom_properties.insert(name.to_string(), value.to_string());
+        self.custom_properties = Some(custom_properties);
         self
     }
 }
@@ -725,6 +746,19 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
+    async fn repo_custom_properties(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<Vec<CustomPropertyValue>> {
+        Ok(self
+            .get_org(org)
+            .custom_properties
+            .get(repo)
+            .cloned()
+            .unwrap_or_default())
+    }
+
     async fn repo_environments(
         &self,
         org: &str,
@@ -769,6 +803,8 @@ struct GithubOrg {
     rulesets: HashMap<String, Vec<Ruleset>>,
     // Repo name -> HashMap<env name, environment>
     repo_environments: HashMap<String, HashMap<String, Environment>>,
+    // Repo name -> Vec<custom property>
+    custom_properties: HashMap<String, Vec<CustomPropertyValue>>,
 }
 
 #[derive(Clone)]

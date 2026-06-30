@@ -1,6 +1,6 @@
 use crate::sync::github::api;
 use crate::sync::github::api::url::TokenType;
-use crate::sync::github::api::{BranchPolicy, Ruleset};
+use crate::sync::github::api::{BranchPolicy, CustomPropertyValue, Ruleset};
 use crate::sync::github::api::{
     BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, OrgAppInstallation,
     Repo, RepoAppInstallation, RepoTeam, RepoUser, RestPaginatedError, Team, TeamMember, TeamRole,
@@ -87,6 +87,13 @@ pub(crate) trait GithubRead {
     /// Get rulesets for a repository
     /// Returns a vector of rulesets
     async fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>>;
+
+    /// Get custom property values for a repository
+    async fn repo_custom_properties(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<Vec<CustomPropertyValue>>;
 
     async fn environment_branch_policies(
         &self,
@@ -710,6 +717,26 @@ impl GithubRead for GitHubApiRead {
         }
 
         Ok(rulesets)
+    }
+
+    async fn repo_custom_properties(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<Vec<CustomPropertyValue>> {
+        // REST API endpoint for repository custom property values
+        // https://docs.github.com/en/rest/repos/custom-properties#get-all-custom-property-values-for-a-repository
+        let values: Vec<CustomPropertyValue> = self
+            .client
+            .req(
+                Method::GET,
+                &GitHubUrl::repos(org, repo, "properties/values")?,
+            )?
+            .send()
+            .await?
+            .json_annotated()
+            .await?;
+        Ok(values)
     }
 
     async fn environment_branch_policies(
