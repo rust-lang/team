@@ -848,6 +848,57 @@ pub(crate) struct Repo {
     pub pages: Option<Pages>,
 }
 
+impl Repo {
+    pub(crate) fn normalized_pages(&self) -> Result<Option<NormalizedPages<'_>>, Error> {
+        let Some(pages) = &self.pages else {
+            return Ok(None);
+        };
+
+        let pages = match pages.build_type {
+            PagesBuildType::Legacy => {
+                let Some(branch) = pages.branch.as_deref() else {
+                    bail!(
+                        "repo {}/{} configures legacy GitHub Pages without a branch",
+                        self.org,
+                        self.name
+                    );
+                };
+                if branch.is_empty() {
+                    bail!(
+                        "repo {}/{} configures GitHub Pages with an empty branch",
+                        self.org,
+                        self.name
+                    );
+                }
+
+                let path = pages.path.as_deref().unwrap_or("/");
+                if path != "/" && path != "/docs" {
+                    bail!(
+                        "repo {}/{} configures GitHub Pages with invalid path `{path}`; allowed paths are `/` and `/docs`",
+                        self.org,
+                        self.name,
+                    );
+                }
+
+                NormalizedPages::Legacy { branch, path }
+            }
+            PagesBuildType::Workflow => {
+                if pages.branch.is_some() || pages.path.is_some() {
+                    bail!(
+                        "repo {}/{} configures workflow GitHub Pages with branch or path; workflow Pages must not set either field",
+                        self.org,
+                        self.name
+                    );
+                }
+
+                NormalizedPages::Workflow
+            }
+        };
+
+        Ok(Some(pages))
+    }
+}
+
 #[derive(serde::Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum Bot {
@@ -1039,6 +1090,11 @@ pub(crate) struct Pages {
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum PagesBuildType {
     Legacy,
+    Workflow,
+}
+
+pub(crate) enum NormalizedPages<'a> {
+    Legacy { branch: &'a str, path: &'a str },
     Workflow,
 }
 
