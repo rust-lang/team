@@ -523,14 +523,14 @@ fn convert_pages(repo: &schema::Repo) -> Result<Option<v1::Pages>, Error> {
     };
 
     let (build_type, source) = match pages {
-        schema::NormalizedPages::Legacy { branch, path } => (
+        schema::Pages::Legacy { branch, path } => (
             v1::PagesBuildType::Legacy,
             Some(v1::PagesSource {
                 branch: branch.to_string(),
                 path: path.to_string(),
             }),
         ),
-        schema::NormalizedPages::Workflow => (v1::PagesBuildType::Workflow, None),
+        schema::Pages::Workflow => (v1::PagesBuildType::Workflow, None),
     };
 
     Ok(Some(v1::Pages { build_type, source }))

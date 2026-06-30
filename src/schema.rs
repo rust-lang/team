@@ -845,11 +845,11 @@ pub(crate) struct Repo {
     #[serde(default)]
     pub environments: BTreeMap<String, Environment>,
     #[serde(default)]
-    pub pages: Option<Pages>,
+    pages: Option<RawPages>,
 }
 
 impl Repo {
-    pub(crate) fn normalized_pages(&self) -> Result<Option<NormalizedPages<'_>>, Error> {
+    pub(crate) fn normalized_pages(&self) -> Result<Option<Pages<'_>>, Error> {
         let Some(pages) = &self.pages else {
             return Ok(None);
         };
@@ -880,7 +880,7 @@ impl Repo {
                     );
                 }
 
-                NormalizedPages::Legacy { branch, path }
+                Pages::Legacy { branch, path }
             }
             PagesBuildType::Workflow => {
                 if pages.branch.is_some() || pages.path.is_some() {
@@ -891,7 +891,7 @@ impl Repo {
                     );
                 }
 
-                NormalizedPages::Workflow
+                Pages::Workflow
             }
         };
 
@@ -1078,22 +1078,22 @@ pub(crate) struct Environment {
     pub tags: Vec<String>,
 }
 
-#[derive(serde::Deserialize, Debug, Clone)]
+#[derive(serde::Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
-pub(crate) struct Pages {
-    pub build_type: PagesBuildType,
-    pub branch: Option<String>,
-    pub path: Option<String>,
+struct RawPages {
+    build_type: PagesBuildType,
+    branch: Option<String>,
+    path: Option<String>,
 }
 
 #[derive(serde::Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "kebab-case")]
-pub(crate) enum PagesBuildType {
+enum PagesBuildType {
     Legacy,
     Workflow,
 }
 
-pub(crate) enum NormalizedPages<'a> {
+pub(crate) enum Pages<'a> {
     Legacy { branch: &'a str, path: &'a str },
     Workflow,
 }
