@@ -71,6 +71,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_archived_repos,
     validate_rulesets,
     validate_environments,
+    validate_pages,
     validate_trusted_publishing,
     validate_member_roles,
     validate_admin_access,
@@ -1189,6 +1190,13 @@ fn validate_environments(data: &Data, errors: &mut Vec<String>) {
         }
 
         // No need to check for duplicate environment names since HashMap keys are unique
+        Ok(())
+    });
+}
+
+fn validate_pages(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.all_repos(), errors, |repo, _| {
+        repo.normalized_pages()?;
         Ok(())
     });
 }

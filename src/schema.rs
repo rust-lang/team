@@ -844,6 +844,59 @@ pub(crate) struct Repo {
     pub crates_io: Vec<CratesIoConfiguration>,
     #[serde(default)]
     pub environments: BTreeMap<String, Environment>,
+    #[serde(default)]
+    pages: Option<RawPages>,
+}
+
+impl Repo {
+    pub(crate) fn normalized_pages(&self) -> Result<Option<Pages<'_>>, Error> {
+        let Some(pages) = &self.pages else {
+            return Ok(None);
+        };
+
+        let pages = match pages.build_type {
+            PagesBuildType::Legacy => {
+                let Some(branch) = pages.branch.as_deref() else {
+                    bail!(
+                        "repo {}/{} configures legacy GitHub Pages without a branch",
+                        self.org,
+                        self.name
+                    );
+                };
+                if branch.is_empty() {
+                    bail!(
+                        "repo {}/{} configures GitHub Pages with an empty branch",
+                        self.org,
+                        self.name
+                    );
+                }
+
+                let path = pages.path.as_deref().unwrap_or("/");
+                if path != "/" && path != "/docs" {
+                    bail!(
+                        "repo {}/{} configures GitHub Pages with invalid path `{path}`; allowed paths are `/` and `/docs`",
+                        self.org,
+                        self.name,
+                    );
+                }
+
+                Pages::Legacy { branch, path }
+            }
+            PagesBuildType::Workflow => {
+                if pages.branch.is_some() || pages.path.is_some() {
+                    bail!(
+                        "repo {}/{} configures workflow GitHub Pages with branch or path; workflow Pages must not set either field",
+                        self.org,
+                        self.name
+                    );
+                }
+
+                Pages::Workflow
+            }
+        };
+
+        Ok(Some(pages))
+    }
 }
 
 #[derive(serde::Deserialize, Debug, Clone, PartialEq)]
@@ -1023,6 +1076,26 @@ pub(crate) struct Environment {
     /// Tag patterns that can deploy to this environment
     #[serde(default)]
     pub tags: Vec<String>,
+}
+
+#[derive(serde::Deserialize, Debug)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+struct RawPages {
+    build_type: PagesBuildType,
+    branch: Option<String>,
+    path: Option<String>,
+}
+
+#[derive(serde::Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+#[serde(rename_all = "kebab-case")]
+enum PagesBuildType {
+    Legacy,
+    Workflow,
+}
+
+pub(crate) enum Pages<'a> {
+    Legacy { branch: &'a str, path: &'a str },
+    Workflow,
 }
 
 pub const fn branch_protection_default_prevent_creation() -> bool {

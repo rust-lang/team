@@ -5,8 +5,8 @@ use std::vec;
 
 use derive_builder::Builder;
 use rust_team_data::v1::{
-    self, Bot, BranchProtectionMode, Environment, GitHubTeam, MergeBot, MergeQueueMethod, Person,
-    ProtectionTarget, RepoPermission, TeamGitHub, TeamKind,
+    self, Bot, BranchProtectionMode, Environment, GitHubTeam, MergeBot, MergeQueueMethod, Pages,
+    PagesBuildType, PagesSource, Person, ProtectionTarget, RepoPermission, TeamGitHub, TeamKind,
 };
 
 use crate::schema;
@@ -190,6 +190,10 @@ impl DataModel {
                 repo.environments.clone().into_iter().collect();
             org.repo_environments
                 .insert(repo.name.clone(), environments);
+
+            if let Some(pages) = &repo.pages {
+                org.repo_pages.insert(repo.name.clone(), pages.clone());
+            }
         }
 
         if orgs.is_empty() {
@@ -329,6 +333,8 @@ pub struct RepoData {
     pub branch_protections: Vec<v1::BranchProtection>,
     #[builder(default)]
     pub environments: IndexMap<String, v1::Environment>,
+    #[builder(default)]
+    pub pages: Option<v1::Pages>,
 }
 
 impl RepoData {
@@ -366,6 +372,7 @@ impl From<RepoData> for v1::Repo {
             allow_auto_merge,
             branch_protections,
             environments,
+            pages,
         } = value;
         Self {
             org,
@@ -378,6 +385,7 @@ impl From<RepoData> for v1::Repo {
             branch_protections,
             crates: vec![],
             environments,
+            pages,
             archived,
             private: false,
             auto_merge_enabled: allow_auto_merge,
@@ -430,6 +438,23 @@ impl RepoDataBuilder {
         );
         self.environments = Some(environments);
         self
+    }
+}
+
+pub fn legacy_pages(branch: &str, path: &str) -> Pages {
+    Pages {
+        build_type: PagesBuildType::Legacy,
+        source: Some(PagesSource {
+            branch: branch.to_string(),
+            path: path.to_string(),
+        }),
+    }
+}
+
+pub fn workflow_pages() -> Pages {
+    Pages {
+        build_type: PagesBuildType::Workflow,
+        source: None,
     }
 }
 
@@ -579,6 +604,12 @@ impl GithubMock {
             .push(user.to_string());
     }
 
+    pub fn set_repo_pages(&mut self, org: &str, repo: &str, pages: v1::Pages) {
+        self.get_org_mut(org)
+            .repo_pages
+            .insert(repo.to_string(), pages);
+    }
+
     fn get_org(&self, org: &str) -> &GithubOrg {
         self.orgs
             .get(org)
@@ -680,6 +711,10 @@ impl GithubRead for GithubMock {
             .and_then(|org| org.repos.get(repo).cloned()))
     }
 
+    async fn repo_pages(&self, org: &str, repo: &str) -> anyhow::Result<Option<Pages>> {
+        Ok(self.get_org(org).repo_pages.get(repo).cloned())
+    }
+
     async fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>> {
         Ok(self
             .get_org(org)
@@ -769,6 +804,8 @@ struct GithubOrg {
     rulesets: HashMap<String, Vec<Ruleset>>,
     // Repo name -> HashMap<env name, environment>
     repo_environments: HashMap<String, HashMap<String, Environment>>,
+    // Repo name -> GitHub Pages settings
+    repo_pages: HashMap<String, Pages>,
 }
 
 #[derive(Clone)]

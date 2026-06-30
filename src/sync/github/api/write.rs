@@ -1,5 +1,6 @@
 use log::debug;
 use reqwest::Method;
+use rust_team_data::v1::Pages;
 use std::collections::HashSet;
 
 use crate::sync::github::api::url::GitHubUrl;
@@ -225,6 +226,36 @@ impl GitHubWrite {
         if !self.dry_run {
             self.client
                 .send(Method::PATCH, &GitHubUrl::repos(org, repo_name, "")?, &req)
+                .await?;
+        }
+        Ok(())
+    }
+
+    pub(crate) async fn create_pages(
+        &self,
+        org: &str,
+        repo: &str,
+        pages: &Pages,
+    ) -> anyhow::Result<()> {
+        debug!("Creating GitHub Pages settings for {org}/{repo}: {pages:?}");
+        if !self.dry_run {
+            self.client
+                .send(Method::POST, &GitHubUrl::repos(org, repo, "pages")?, pages)
+                .await?;
+        }
+        Ok(())
+    }
+
+    pub(crate) async fn update_pages(
+        &self,
+        org: &str,
+        repo: &str,
+        pages: &Pages,
+    ) -> anyhow::Result<()> {
+        debug!("Updating GitHub Pages settings for {org}/{repo}: {pages:?}");
+        if !self.dry_run {
+            self.client
+                .send(Method::PUT, &GitHubUrl::repos(org, repo, "pages")?, pages)
                 .await?;
         }
         Ok(())

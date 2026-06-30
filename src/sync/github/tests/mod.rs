@@ -1,6 +1,7 @@
 use super::{construct_ruleset, log_ruleset};
 use crate::sync::github::tests::test_utils::{
-    BranchProtectionBuilder, DEFAULT_ORG, DataModel, RepoData, TeamData,
+    BranchProtectionBuilder, DEFAULT_ORG, DataModel, RepoData, TeamData, legacy_pages,
+    workflow_pages,
 };
 use rust_team_data::v1::{self, BranchProtectionMode, RepoPermission};
 
@@ -235,6 +236,7 @@ async fn repo_change_description() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -279,6 +281,7 @@ async fn repo_change_homepage() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -380,7 +383,139 @@ async fn repo_create() {
                     },
                 ],
                 environments: [],
+                pages: None,
                 app_installations: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[tokio::test]
+async fn repo_pages_unmanaged_noop() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1"));
+    let mut gh = model.gh_model();
+    gh.set_repo_pages(DEFAULT_ORG, "repo1", workflow_pages());
+
+    let diff = model.diff_repos(gh).await;
+    assert!(diff.is_empty());
+}
+
+#[tokio::test]
+async fn repo_pages_noop() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").pages(Some(workflow_pages())));
+    let gh = model.gh_model();
+
+    let diff = model.diff_repos(gh).await;
+    assert!(diff.is_empty());
+}
+
+#[tokio::test]
+async fn repo_pages_create() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1"));
+    let gh = model.gh_model();
+    model.get_repo("repo1").pages = Some(legacy_pages("gh-pages", "/docs"));
+
+    let diff = model.diff_repos(gh).await;
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                ruleset_diffs: [],
+                environment_diffs: [],
+                pages_diff: Some(
+                    Create(
+                        Pages {
+                            build_type: Legacy,
+                            source: Some(
+                                PagesSource {
+                                    branch: "gh-pages",
+                                    path: "/docs",
+                                },
+                            ),
+                        },
+                    ),
+                ),
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[tokio::test]
+async fn repo_pages_update() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").pages(Some(legacy_pages("gh-pages", "/"))));
+    let gh = model.gh_model();
+    model.get_repo("repo1").pages = Some(workflow_pages());
+
+    let diff = model.diff_repos(gh).await;
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                ruleset_diffs: [],
+                environment_diffs: [],
+                pages_diff: Some(
+                    Update {
+                        old: Pages {
+                            build_type: Legacy,
+                            source: Some(
+                                PagesSource {
+                                    branch: "gh-pages",
+                                    path: "/",
+                                },
+                            ),
+                        },
+                        new: Pages {
+                            build_type: Workflow,
+                            source: None,
+                        },
+                    },
+                ),
+                app_installation_diffs: [],
             },
         ),
     ]
@@ -436,6 +571,7 @@ async fn repo_add_member() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -492,6 +628,7 @@ async fn repo_change_member_permissions() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -542,6 +679,7 @@ async fn repo_remove_member() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -594,6 +732,7 @@ async fn repo_add_team() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -645,6 +784,7 @@ async fn repo_change_team_permissions() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -695,6 +835,7 @@ async fn repo_remove_team() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -736,6 +877,7 @@ async fn repo_archive_repo() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -864,6 +1006,7 @@ async fn repo_add_branch_protection() {
                     },
                 ],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -1037,6 +1180,7 @@ async fn repo_update_branch_protection() {
                     },
                 ],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -1092,6 +1236,7 @@ async fn repo_remove_branch_protection() {
                     },
                 ],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -1235,6 +1380,7 @@ async fn repo_environment_create() {
                         },
                     ),
                 ],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -1287,6 +1433,7 @@ async fn repo_environment_delete() {
                         "staging",
                     ),
                 ],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -1358,6 +1505,7 @@ async fn repo_environment_update() {
                         "staging",
                     ),
                 ],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),
@@ -1425,6 +1573,7 @@ async fn repo_environment_update_branches() {
                         new_tags: [],
                     },
                 ],
+                pages_diff: None,
                 app_installation_diffs: [],
             },
         ),

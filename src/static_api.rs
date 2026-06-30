@@ -231,6 +231,7 @@ impl<'a> Generator<'a> {
                     envs.sort_by(|a, b| a.0.cmp(&b.0));
                     envs.into_iter().collect()
                 },
+                pages: convert_pages(r)?,
                 archived,
                 auto_merge_enabled: !managed_by_bors,
             };
@@ -514,6 +515,25 @@ impl<'a> Generator<'a> {
         std::fs::write(&dest, bytes)?;
         Ok(())
     }
+}
+
+fn convert_pages(repo: &schema::Repo) -> Result<Option<v1::Pages>, Error> {
+    let Some(pages) = repo.normalized_pages()? else {
+        return Ok(None);
+    };
+
+    let (build_type, source) = match pages {
+        schema::Pages::Legacy { branch, path } => (
+            v1::PagesBuildType::Legacy,
+            Some(v1::PagesSource {
+                branch: branch.to_string(),
+                path: path.to_string(),
+            }),
+        ),
+        schema::Pages::Workflow => (v1::PagesBuildType::Workflow, None),
+    };
+
+    Ok(Some(v1::Pages { build_type, source }))
 }
 
 fn convert_teams<'a>(

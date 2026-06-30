@@ -189,12 +189,39 @@ pub struct Repo {
     pub branch_protections: Vec<BranchProtection>,
     pub crates: Vec<Crate>,
     pub environments: IndexMap<String, Environment>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub pages: Option<Pages>,
     pub archived: bool,
     // This attribute is not synced by sync-team.
     pub private: bool,
     // Is the GitHub "Auto-merge" option enabled?
     // https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request
     pub auto_merge_enabled: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct Pages {
+    pub build_type: PagesBuildType,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub source: Option<PagesSource>,
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum PagesBuildType {
+    Legacy,
+    Workflow,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct PagesSource {
+    pub branch: String,
+    #[serde(default = "default_pages_path")]
+    pub path: String,
+}
+
+fn default_pages_path() -> String {
+    "/".to_string()
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

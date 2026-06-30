@@ -3,6 +3,11 @@ name = "some_repo"
 description = "A repo!"
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/docs"
+
 [access.teams]
 foo = "maintain"
 
