@@ -4,8 +4,7 @@ description = "Experimental repository for testing the behavior of the new bors 
 bots = ["rustbot"]
 
 [access.teams]
-infra = "write"
-infra-bors = "write"
+all = "write"
 
 [environments.bors]
 
