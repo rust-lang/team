@@ -9,3 +9,5 @@ crates-io = "write"
 [[rulesets]]
 pattern = "main"
 required-approvals = 0
+
+[environments.github-pages]
