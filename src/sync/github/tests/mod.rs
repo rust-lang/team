@@ -499,6 +499,7 @@ async fn repo_pages_create() {
                     ),
                 ),
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -556,6 +557,7 @@ async fn repo_pages_update() {
                     },
                 ),
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1672,6 +1674,7 @@ async fn repo_add_custom_property() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
                 custom_property_diffs: [
                     CustomPropertyDiff {
@@ -1721,6 +1724,7 @@ async fn repo_remove_custom_property() {
                 branch_protection_diffs: [],
                 ruleset_diffs: [],
                 environment_diffs: [],
+                pages_diff: None,
                 app_installation_diffs: [],
                 custom_property_diffs: [
                     CustomPropertyDiff {
