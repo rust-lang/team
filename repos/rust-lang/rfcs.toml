@@ -4,6 +4,9 @@ description = "RFCs for changes to Rust"
 homepage = "https://rust-lang.github.io/rfcs/"
 bots = ["rustbot", "rfcbot", "renovate"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 all = "write"
 
@@ -13,4 +16,3 @@ required-approvals = 0
 
 [environments.github-pages]
 branches = ["master"]
-

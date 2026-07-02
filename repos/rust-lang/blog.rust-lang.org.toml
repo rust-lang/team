@@ -4,6 +4,9 @@ description = "Home of the Rust and Inside Rust blogs"
 homepage = "https://blog.rust-lang.org"
 bots = ["rustbot", "renovate"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 inside-rust-reviewers = "write"
 website = "maintain"

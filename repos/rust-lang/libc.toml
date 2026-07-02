@@ -6,6 +6,11 @@ bots = [
     'rustbot',
 ]
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 crate-maintainers = 'maintain'
 

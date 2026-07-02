@@ -4,6 +4,9 @@ description = "Rust Project Goals tracker"
 homepage = "https://rust-lang.github.io/rust-project-goals/"
 bots = ["rustbot", "rfcbot"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 lang = "maintain"
 lang-ops = "maintain"
@@ -19,4 +22,3 @@ goal-owners = "maintain"
 
 [environments.github-pages]
 branches = ["main"]
-

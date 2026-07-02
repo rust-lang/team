@@ -4,6 +4,11 @@ description = "Are we web yet? A simple reckoning of Rust's readiness for Web-re
 homepage = "https://www.arewewebyet.org/"
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "zola-build"
+path = "/"
+
 [access.teams]
 arewewebyet = "maintain"
 
@@ -11,4 +16,3 @@ arewewebyet = "maintain"
 pattern = 'master'
 
 [environments.github-pages]
-

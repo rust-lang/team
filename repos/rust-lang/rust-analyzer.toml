@@ -4,6 +4,11 @@ description = "A Rust compiler front-end for IDEs"
 homepage = "https://rust-analyzer.github.io/"
 bots = ["rustbot"]
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 rust-analyzer = "write"
 rust-analyzer-contributors = "triage"

@@ -3,6 +3,9 @@ name = "calendar"
 description = "Calendars for Rust project teams"
 bots = ["rustbot"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 cargo = "maintain"
 compiler = "maintain"
@@ -22,4 +25,3 @@ pr-required = false
 
 [environments.github-pages]
 branches = ["main"]
-

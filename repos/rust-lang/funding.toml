@@ -3,5 +3,8 @@ name = "funding"
 description = "Discussions about funding Rust maintainers"
 bots = ["rfcbot"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 funding = "write"

@@ -4,8 +4,12 @@ description = "Impl trait lang team initiative"
 homepage = "https://rust-lang.github.io/impl-trait-initiative/"
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 project-impl-trait = "maintain"
 
 [environments.github-pages]
-

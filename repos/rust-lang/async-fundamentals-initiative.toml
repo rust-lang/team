@@ -4,6 +4,9 @@ description = ""
 homepage = "https://rust-lang.github.io/async-fundamentals-initiative/"
 bots = []
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 wg-async = "maintain"
 
@@ -13,4 +16,3 @@ required-approvals = 0
 
 [environments.github-pages]
 branches = ["master"]
-

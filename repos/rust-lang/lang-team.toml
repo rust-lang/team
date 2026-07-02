@@ -4,6 +4,9 @@ description = "Home of the Rust lang team"
 homepage = "http://lang-team.rust-lang.org/"
 bots = ["rustbot", "rfcbot"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 lang = "maintain"
 lang-ops = "maintain"
@@ -13,4 +16,3 @@ release = "maintain"
 
 [environments.github-pages]
 branches = ["gh-pages", "main"]
-

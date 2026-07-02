@@ -4,6 +4,9 @@ description = "Bisects rustc, either nightlies or CI artifacts"
 homepage = "https://rust-lang.github.io/cargo-bisect-rustc/"
 bots = []
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 compiler = "write"
 
@@ -16,4 +19,3 @@ required-approvals = 0
 
 [environments.github-pages]
 branches = ["gh-pages", "master"]
-
