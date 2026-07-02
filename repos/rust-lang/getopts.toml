@@ -4,8 +4,12 @@ description = 'The getopts repo maintained by the rust-lang project'
 homepage = "https://docs.rs/getopts"
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 crate-maintainers = 'maintain'
 
 [environments.github-pages]
-

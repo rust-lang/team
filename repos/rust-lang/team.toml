@@ -3,6 +3,9 @@ name = "team"
 description = "Rust teams structure"
 bots = ["forking-renovate"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 mods = "write"
 team-repo-admins = "write"

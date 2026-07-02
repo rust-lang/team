@@ -3,9 +3,11 @@ name = "polonius"
 description = "Defines the Rust borrow checker."
 bots = []
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 wg-polonius = "write"
 
 [environments.github-pages]
 branches = ["master"]
-

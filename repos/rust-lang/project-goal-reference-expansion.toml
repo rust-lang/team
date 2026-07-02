@@ -4,8 +4,10 @@ description = "Project Goal coordination repository for expansion of the Rust Re
 homepage = "https://github.com/rust-lang/rust-project-goals/blob/main/src/2025h2/reference-expansion.md"
 bots = []
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 project-goal-reference-expansion = "write"
 
 [environments.github-pages]
-

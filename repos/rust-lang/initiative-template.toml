@@ -4,8 +4,12 @@ description = "A template for lang-team initiatives"
 homepage = "https://nikomatsakis.github.io/initiative-template/"
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 lang = "maintain"
 
 [environments.github-pages]
-

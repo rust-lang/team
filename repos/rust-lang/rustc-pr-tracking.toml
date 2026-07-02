@@ -4,8 +4,12 @@ description = "Statistics about PRs on the rustc repository."
 homepage = "https://rust-lang.github.io/rustc-pr-tracking/"
 bots = ["highfive"]
 
+[pages]
+build-type = "legacy"
+branch = "master"
+path = "/"
+
 [access.teams]
 release = "write"
 
 [environments.github-pages]
-

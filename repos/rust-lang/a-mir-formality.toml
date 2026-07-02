@@ -3,6 +3,9 @@ name = "a-mir-formality"
 description = "a model of MIR and the Rust type/trait system"
 bots = ["rustbot", "rfcbot"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 lang = "maintain"
 lang-ops = "maintain"

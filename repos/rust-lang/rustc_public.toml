@@ -3,6 +3,11 @@ name = "rustc_public"
 description = "Define compiler intermediate representation usable by external tools"
 bots = ["rustbot"]
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 project-rustc-public = "write"
 

@@ -392,14 +392,51 @@ async fn repo_create() {
 }
 
 #[tokio::test]
-async fn repo_pages_unmanaged_noop() {
+async fn repo_pages_delete() {
     let mut model = DataModel::default();
     model.create_repo(RepoData::new("repo1"));
     let mut gh = model.gh_model();
     gh.set_repo_pages(DEFAULT_ORG, "repo1", workflow_pages());
 
     let diff = model.diff_repos(gh).await;
-    assert!(diff.is_empty());
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                ruleset_diffs: [],
+                environment_diffs: [],
+                pages_diff: Some(
+                    Delete(
+                        Pages {
+                            build_type: Workflow,
+                            source: None,
+                        },
+                    ),
+                ),
+                app_installation_diffs: [],
+            },
+        ),
+    ]
+    "#);
 }
 
 #[tokio::test]

@@ -4,6 +4,9 @@ description = "Rust project perspectives on LLMs"
 homepage = "https://rust-lang.github.io/perspectives-on-llms/index.html"
 bots = []
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 perspectives-on-llms-editors = "write"
 

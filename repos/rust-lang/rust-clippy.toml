@@ -4,6 +4,11 @@ description = "A bunch of lints to catch common mistakes and improve your Rust c
 homepage = "https://rust-lang.github.io/rust-clippy/"
 bots = ["rustbot"]
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 clippy = "write"
 clippy-contributors = "triage"

@@ -4,8 +4,12 @@ description = ""
 homepage = "https://rust-analyzer.github.io/metrics/"
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 rust-analyzer = "write"
 
 [environments.github-pages]
-

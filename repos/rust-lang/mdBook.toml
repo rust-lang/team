@@ -4,6 +4,11 @@ description = "Create book from markdown files. Like Gitbook but implemented in 
 homepage = "https://rust-lang.github.io/mdBook/"
 bots = ["rustbot", "renovate"]
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 devtools = "write"
 

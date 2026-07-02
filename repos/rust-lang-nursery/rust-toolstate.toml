@@ -4,6 +4,11 @@ description = "Records build and test status of external tools bundled with the 
 homepage = "https://rust-lang-nursery.github.io/rust-toolstate/"
 bots = ["highfive"]
 
+[pages]
+build-type = "legacy"
+branch = "master"
+path = "/"
+
 [access.teams]
 infra = "write"
 
@@ -12,4 +17,3 @@ pattern = "master"
 pr-required = false
 
 [environments.github-pages]
-

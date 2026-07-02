@@ -3,8 +3,12 @@ name = "async-crashdump-debugging-initiative"
 description = ""
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 project-async-crashdump-debugging = "write"
 
 [environments.github-pages]
-

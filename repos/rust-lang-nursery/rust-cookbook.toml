@@ -3,10 +3,14 @@ name = "rust-cookbook"
 description = "https://rust-lang-nursery.github.io/rust-cookbook"
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 cookbook = "write"
 lang-docs = "write"
 
 [environments.github-pages]
 branches = ["gh-pages"]
-
