@@ -1411,7 +1411,9 @@ impl CreateRepoDiff {
         }
 
         for installation in &self.app_installations {
-            installation.apply(sync, repo.repo_id, &self.org).await?;
+            installation
+                .apply(sync, &self.org, &repo.name, repo.repo_id)
+                .await?;
         }
 
         Ok(())
@@ -1653,7 +1655,7 @@ impl UpdateRepoDiff {
 
         for app_installation in &self.app_installation_diffs {
             app_installation
-                .apply(sync, self.repo_id, &self.org)
+                .apply(sync, &self.org, &self.name, self.repo_id)
                 .await?;
         }
 
@@ -2642,15 +2644,26 @@ enum AppInstallationDiff {
 }
 
 impl AppInstallationDiff {
-    async fn apply(&self, sync: &GitHubWrite, repo_id: u64, org: &str) -> anyhow::Result<()> {
+    async fn apply(
+        &self,
+        sync: &GitHubWrite,
+        org: &str,
+        repo_name: &str,
+        repo_id: u64,
+    ) -> anyhow::Result<()> {
         match self {
             AppInstallationDiff::Add(app) => {
-                sync.add_repo_to_app_installation(app.installation_id, repo_id, org)
+                sync.add_repo_to_app_installation(app.installation_id, repo_name, repo_id, org)
                     .await?;
             }
             AppInstallationDiff::Remove(app) => {
-                sync.remove_repo_from_app_installation(app.installation_id, repo_id, org)
-                    .await?;
+                sync.remove_repo_from_app_installation(
+                    app.installation_id,
+                    repo_name,
+                    repo_id,
+                    org,
+                )
+                .await?;
             }
         }
         Ok(())
