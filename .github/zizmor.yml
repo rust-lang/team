@@ -1,4 +1,6 @@
 rules:
+  github-app:
+    disable: true
   dangerous-triggers:
     ignore:
       - dry-run.yml
