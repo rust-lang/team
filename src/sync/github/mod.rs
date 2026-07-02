@@ -779,13 +779,13 @@ impl SyncGitHub {
             (None, None) => Ok(None),
             (None, Some(actual_pages)) => Ok(Some(PagesDiff::Delete(actual_pages))),
             (Some(expected_pages), None) => Ok(Some(PagesDiff::Create(expected_pages.clone()))),
-            (Some(expected_pages), Some(actual_pages)) if actual_pages == *expected_pages => {
-                Ok(None)
+            (Some(expected_pages), Some(actual_pages)) => {
+                let diff = (actual_pages != *expected_pages).then(|| PagesDiff::Update {
+                    old: actual_pages,
+                    new: expected_pages.clone(),
+                });
+                Ok(diff)
             }
-            (Some(expected_pages), Some(actual_pages)) => Ok(Some(PagesDiff::Update {
-                old: actual_pages,
-                new: expected_pages.clone(),
-            })),
         }
     }
 
