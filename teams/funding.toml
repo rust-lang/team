@@ -33,6 +33,10 @@ name = "funding/private"
 
 [[lists]]
 address = "funding@rust-lang.org"
+extra-teams = ["funding-advisors"]
+
+[[lists]]
+address = "funding-private@rust-lang.org"
 
 [rfcbot]
 label = "T-funding"
