@@ -1,0 +1,11 @@
+name = "comprehensibility"
+subteam-of = "launching-pad"
+
+[people]
+leads = ["davidtwco"]
+members = ["davidtwco"]
+alumni = []
+
+[website]
+name = "Comprehensibility team"
+description = "Charged with documenting the project's structure, policies and processes"
