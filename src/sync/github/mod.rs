@@ -915,6 +915,7 @@ impl SyncGitHub {
             .github
             .repo_custom_properties(&expected_repo.org, &expected_repo.name)
             .await?;
+        let org_property_names = self.github.org_property_names(&expected_repo.org).await?;
 
         let actual_by_name: HashMap<String, Option<String>> = actual
             .into_iter()
@@ -923,6 +924,15 @@ impl SyncGitHub {
 
         let mut diffs = Vec::new();
         for (name, value) in &expected_repo.custom_properties {
+            if !org_property_names.contains(name) {
+                diffs.push(CustomPropertyDiff {
+                    name: name.clone(),
+                    operation: CustomPropertyDiffOperation::CannotApply {
+                        reason: format!("'{name}' is not defined at the org level"),
+                    },
+                });
+                continue;
+            }
             let expected = value.clone();
             let actual = actual_by_name.get(name).and_then(|v| v.as_deref());
             let operation = match actual {
@@ -2495,7 +2505,9 @@ impl CustomPropertyDiff {
                 Some(v.clone())
             }
             CustomPropertyDiffOperation::Delete(_) => None,
+            CustomPropertyDiffOperation::CannotApply { .. } => return Ok(()),
         };
+
         let property = api::CustomPropertyValue {
             property_name: self.name.clone(),
             value,
@@ -2520,6 +2532,9 @@ impl std::fmt::Display for CustomPropertyDiff {
             CustomPropertyDiffOperation::Delete(old) => {
                 writeln!(f, "      Removing '{}' (was '{}')", self.name, old)
             }
+            CustomPropertyDiffOperation::CannotApply { reason } => {
+                writeln!(f, "      Cannot apply '{}': {}", self.name, reason)
+            }
         }
     }
 }
@@ -2529,6 +2544,7 @@ enum CustomPropertyDiffOperation {
     Create(String),
     Update(String, String), // old, new
     Delete(String),         // previous value
+    CannotApply { reason: String },
 }
 
 #[derive(Debug)]

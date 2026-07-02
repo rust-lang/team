@@ -34,6 +34,7 @@ pub struct DataModel {
     teams: Vec<TeamData>,
     repos: Vec<RepoData>,
     config: Config,
+    org_property_names: HashMap<String, HashSet<String>>,
 }
 
 impl DataModel {
@@ -70,6 +71,13 @@ impl DataModel {
             .iter_mut()
             .find(|r| r.name == name)
             .expect("Repo not found")
+    }
+
+    pub fn define_org_property(&mut self, org: &str, name: &str) {
+        self.org_property_names
+            .entry(org.to_string())
+            .or_default()
+            .insert(name.to_string());
     }
 
     pub fn add_allowed_org_member(&mut self, member: &str) {
@@ -203,6 +211,11 @@ impl DataModel {
                 })
                 .collect();
             org.custom_properties.insert(repo.name.clone(), properties);
+        }
+
+        for (org_name, prop_names) in &self.org_property_names {
+            let org = orgs.entry(org_name.clone()).or_default();
+            org.org_property_names.extend(prop_names.iter().cloned());
         }
 
         if orgs.is_empty() {
@@ -793,6 +806,10 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
+    async fn org_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>> {
+        Ok(self.get_org(org).org_property_names.clone())
+    }
+
     async fn repo_environments(
         &self,
         org: &str,
@@ -841,6 +858,8 @@ struct GithubOrg {
     repo_pages: HashMap<String, Pages>,
     // Repo name -> Vec<custom property>
     custom_properties: HashMap<String, Vec<CustomPropertyValue>>,
+    // Set of custom property names defined at the org level
+    org_property_names: HashSet<String>,
 }
 
 #[derive(Clone)]

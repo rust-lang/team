@@ -98,6 +98,9 @@ pub(crate) trait GithubRead {
         repo: &str,
     ) -> anyhow::Result<Vec<CustomPropertyValue>>;
 
+    /// Get the names of custom properties defined at the organization level
+    async fn org_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>>;
+
     async fn environment_branch_policies(
         &self,
         org: &str,
@@ -774,6 +777,24 @@ impl GithubRead for GitHubApiRead {
             .json_annotated()
             .await?;
         Ok(values)
+    }
+
+    async fn org_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>> {
+        #[derive(serde::Deserialize)]
+        struct PropertyDef {
+            property_name: String,
+        }
+
+        // REST API endpoint for organization custom property schema
+        // https://docs.github.com/en/rest/orgs/custom-properties#get-all-custom-properties-for-an-organization
+        let defs: Vec<PropertyDef> = self
+            .client
+            .req(Method::GET, &GitHubUrl::orgs(org, "properties/schema")?)?
+            .send()
+            .await?
+            .json_annotated()
+            .await?;
+        Ok(defs.into_iter().map(|d| d.property_name).collect())
     }
 
     async fn environment_branch_policies(
