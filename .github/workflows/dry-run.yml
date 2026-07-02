@@ -42,6 +42,7 @@ jobs:
           # privileges.
           ref: ${{ (github.event.workflow_run.head_repository.full_name != 'rust-lang/team' && github.event.workflow_run.head_repository.full_name != 'Kobzol/team') && 'main' || github.event.workflow_run.head_sha }}
           persist-credentials: false
+          allow-unsafe-pr-checkout: true
 
       - name: Setup Rust
         uses: ./.github/actions/setup-rust
