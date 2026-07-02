@@ -7,4 +7,4 @@ bots = []
 compiler = "write"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
