@@ -3,9 +3,13 @@ name = "jobserver-rs"
 description = ""
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 cargo = "write"
 compiler = "write"
 
 [environments.github-pages]
-

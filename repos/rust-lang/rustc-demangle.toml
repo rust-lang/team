@@ -3,6 +3,11 @@ name = "rustc-demangle"
 description = "Rust symbol demangling"
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 compiler = "write"
 

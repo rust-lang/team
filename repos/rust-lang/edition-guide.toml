@@ -4,6 +4,11 @@ description = "A guide to changes between various editions of Rust"
 homepage = "https://doc.rust-lang.org/nightly/edition-guide/"
 bots = ["rustbot", "rfcbot"]
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 edition = "maintain"
 

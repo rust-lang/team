@@ -4,9 +4,11 @@ description = ""
 homepage = "https://rust-lang.github.io/project-assumptions-on-binders/"
 bots = ["rustbot"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 project-assumptions-on-binders = "maintain"
 all = "write"
 
 [environments.github-pages]
-

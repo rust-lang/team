@@ -261,6 +261,17 @@ impl GitHubWrite {
         Ok(())
     }
 
+    pub(crate) async fn delete_pages(&self, org: &str, repo: &str) -> anyhow::Result<()> {
+        debug!("Deleting GitHub Pages settings for {org}/{repo}");
+        if !self.dry_run {
+            let method = Method::DELETE;
+            let url = GitHubUrl::repos(org, repo, "pages")?;
+            let resp = self.client.req(method.clone(), &url)?.send().await?;
+            allow_not_found(resp, method, url.url()).await?;
+        }
+        Ok(())
+    }
+
     pub(crate) async fn add_repo_to_app_installation(
         &self,
         installation_id: u64,

@@ -4,6 +4,11 @@ description = "Zero-cost asynchronous programming in Rust"
 homepage = "https://rust-lang.github.io/futures-rs/"
 bots = ["rustbot"]
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 wg-async = "write"
 
@@ -12,4 +17,3 @@ pattern = "master"
 required-approvals = 0
 
 [environments.github-pages]
-

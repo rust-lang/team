@@ -3,8 +3,12 @@ name = "dyn-upcasting-coercion-initiative"
 description = "Initiative to support upcasting dyn Trait values to supertraits"
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 project-dyn-upcasting = "write"
 
 [environments.github-pages]
-

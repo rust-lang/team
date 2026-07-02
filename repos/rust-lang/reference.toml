@@ -4,6 +4,9 @@ description = "The Rust Reference"
 homepage = "https://doc.rust-lang.org/nightly/reference/"
 bots = ["rustbot", "rfcbot"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 lang = "write"
 lang-docs = "write"

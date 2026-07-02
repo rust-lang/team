@@ -4,8 +4,12 @@ description = "Rustup package status history"
 homepage = "https://rust-lang.github.io/rustup-components-history"
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 infra = "write"
 
 [environments.github-pages]
-
