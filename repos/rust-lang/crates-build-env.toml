@@ -9,3 +9,4 @@ infra = "write"
 
 [[rulesets]]
 pattern = 'master'
+required-approvals = 0
