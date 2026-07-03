@@ -436,6 +436,7 @@ async fn repo_pages_delete() {
                     ),
                 ),
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
