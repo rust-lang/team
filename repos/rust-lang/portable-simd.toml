@@ -3,6 +3,11 @@ name = "portable-simd"
 description = "The testing ground for the future of portable SIMD in Rust"
 bots = ["rustbot"]
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 project-portable-simd = "write"
 
@@ -11,4 +16,3 @@ pattern = "master"
 required-approvals = 0
 
 [environments.github-pages]
-

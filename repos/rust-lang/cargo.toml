@@ -4,6 +4,9 @@ description = "The Rust package manager"
 homepage = "https://doc.rust-lang.org/cargo"
 bots = ["rustbot", "rfcbot", "renovate"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 cargo = "write"
 

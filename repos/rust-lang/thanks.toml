@@ -4,10 +4,12 @@ description = "Celebrate Rust contributors."
 homepage = "https://thanks.rust-lang.org"
 bots = []
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 website = "write"
 infra = "write"
 
 [environments.github-pages]
 branches = ["master"]
-

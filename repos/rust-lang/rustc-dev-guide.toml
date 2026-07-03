@@ -4,6 +4,11 @@ description = "A guide to how rustc works and how to contribute to it."
 homepage = "https://rustc-dev-guide.rust-lang.org"
 bots = ["rustbot"]
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 bootstrap = "write"
 compiler = "write"

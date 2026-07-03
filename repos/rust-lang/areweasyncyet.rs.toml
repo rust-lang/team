@@ -4,6 +4,9 @@ description = "Are we async yet?"
 homepage = "https://areweasyncyet.rs"
 bots = []
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 wg-async = "write"
 
@@ -12,4 +15,3 @@ upsuper = "write"
 
 [environments.github-pages]
 branches = ["master"]
-

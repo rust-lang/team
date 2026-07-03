@@ -4,8 +4,12 @@ description = "An implementation and definition of the Rust trait system using a
 homepage = "https://rust-lang.github.io/chalk/book/"
 bots = ["rustbot"]
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 types = "write"
 
 [environments.github-pages]
-

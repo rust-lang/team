@@ -3,8 +3,12 @@ name = "rust-enhanced"
 description = "The official Sublime Text 4 package for the Rust Programming Language"
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 devtools = "write"
 
 [environments.github-pages]
-

@@ -4,6 +4,9 @@ description = "The FLS"
 homepage = "https://rust-lang.github.io/fls"
 bots = ["rustbot", "rfcbot"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 fls = "write"
 fls-contributors = "triage"

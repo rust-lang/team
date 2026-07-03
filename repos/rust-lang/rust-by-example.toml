@@ -4,8 +4,12 @@ description = "Learn Rust with examples (Live code editor included)"
 homepage = "https://doc.rust-lang.org/stable/rust-by-example/"
 bots = ["rustbot"]
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 rust-by-example = "write"
 
 [environments.github-pages]
-

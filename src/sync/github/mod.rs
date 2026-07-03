@@ -770,31 +770,23 @@ impl SyncGitHub {
         &self,
         expected_repo: &rust_team_data::v1::Repo,
     ) -> anyhow::Result<Option<PagesDiff>> {
-        let Some(expected_pages) = &expected_repo.pages else {
-            return Ok(None);
-        };
-
         let actual_pages = self
             .github
             .repo_pages(&expected_repo.org, &expected_repo.name)
             .await?;
 
-        // GitHub Pages could be configured for an existing repo
-        // since the GitHub API provides us with POST and PUT endpoints
-        // we need to distinguish such cases, otherwise calling POST on existing Pages
-        // might return 409
-        let Some(actual_pages) = actual_pages else {
-            return Ok(Some(PagesDiff::Create(expected_pages.clone())));
-        };
-
-        if actual_pages == *expected_pages {
-            return Ok(None);
+        match (&expected_repo.pages, actual_pages) {
+            (None, None) => Ok(None),
+            (None, Some(actual_pages)) => Ok(Some(PagesDiff::Delete(actual_pages))),
+            (Some(expected_pages), None) => Ok(Some(PagesDiff::Create(expected_pages.clone()))),
+            (Some(expected_pages), Some(actual_pages)) => {
+                let diff = (actual_pages != *expected_pages).then(|| PagesDiff::Update {
+                    old: actual_pages,
+                    new: expected_pages.clone(),
+                });
+                Ok(diff)
+            }
         }
-
-        Ok(Some(PagesDiff::Update {
-            old: actual_pages,
-            new: expected_pages.clone(),
-        }))
     }
 
     async fn diff_rulesets(
@@ -1517,6 +1509,7 @@ enum EnvironmentDiff {
 enum PagesDiff {
     Create(Pages),
     Update { old: Pages, new: Pages },
+    Delete(Pages),
 }
 
 impl PagesDiff {
@@ -1524,6 +1517,7 @@ impl PagesDiff {
         match self {
             Self::Create(pages) => sync.create_pages(org, repo, pages).await?,
             Self::Update { new, .. } => sync.update_pages(org, repo, new).await?,
+            Self::Delete(_) => sync.delete_pages(org, repo).await?,
         }
         Ok(())
     }
@@ -1538,6 +1532,7 @@ impl std::fmt::Display for PagesDiff {
                 writeln!(f, "        Old: {}", format_pages(old))?;
                 writeln!(f, "        New: {}", format_pages(new))
             }
+            Self::Delete(pages) => writeln!(f, "    ❌ Delete: {}", format_pages(pages)),
         }
     }
 }

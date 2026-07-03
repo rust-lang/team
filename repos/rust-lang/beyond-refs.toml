@@ -4,6 +4,9 @@ description = "Wiki for design work going beyond Rust's current reference types"
 homepage = "https://rust-lang.github.io/beyond-refs/"
 bots = []
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 beyond-refs-editors = "maintain"
 goal-owners = "maintain"

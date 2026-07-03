@@ -4,8 +4,12 @@ description = "A tool for archiving and displaying Zulip chat channels."
 homepage = "https://zulip-archive.rust-lang.org"
 bots = []
 
+[pages]
+build-type = "legacy"
+branch = "gh-pages"
+path = "/"
+
 [access.teams]
 infra = "write"
 
 [environments.github-pages]
-

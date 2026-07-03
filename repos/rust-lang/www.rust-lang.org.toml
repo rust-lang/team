@@ -4,6 +4,9 @@ description = "The home of the Rust website"
 homepage = "https://www.rust-lang.org"
 bots = ["rustbot"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 website = "write"
 
@@ -18,4 +21,3 @@ branches = ["main"]
 [environments.rust-www-staging]
 
 [environments.rust-www-try]
-

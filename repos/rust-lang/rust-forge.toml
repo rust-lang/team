@@ -4,6 +4,9 @@ description = 'Information useful to people contributing to Rust'
 homepage = "https://forge.rust-lang.org/"
 bots = ["rustbot", "rfcbot"]
 
+[pages]
+build-type = "workflow"
+
 [access.teams]
 community = "maintain"
 compiler = "maintain"
@@ -31,4 +34,3 @@ ci-checks = ["test"]
 
 [environments.github-pages]
 branches = ["master"]
-
