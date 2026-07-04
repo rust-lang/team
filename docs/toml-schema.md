@@ -555,15 +555,17 @@ branches = ["develop", "staging"]
 
 [Repository custom properties] are values set on a repository to opt it into org-wide tooling. The property must first be defined at the organization level.
 
-Values are stored as strings. Only text-type custom properties are supported for now.
+String and boolean values are supported.
 
 [Repository custom properties]: https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization
 
 ```toml
 # Repository custom properties (optional)
 [custom-properties]
-# Set a property name to a string value
-crabwatch = "true"
+# Set a property name to a boolean value
+crabwatch = true
+# Or set a text-type property to a string value
+status = "active"
 ```
 
 Properties set on GitHub but not declared here are left unchanged.

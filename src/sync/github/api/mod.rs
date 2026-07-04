@@ -747,11 +747,11 @@ fn default_branch_policy_type() -> String {
     "branch".to_string()
 }
 
-/// A GitHub repository custom property. Values are strings even for booleans.
+/// A GitHub repository custom property.
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub(crate) struct CustomPropertyValue {
     pub(crate) property_name: String,
-    pub(crate) value: Option<String>,
+    pub(crate) value: Option<rust_team_data::v1::CustomPropertyValue>,
 }
 
 #[derive(Debug, serde::Serialize)]

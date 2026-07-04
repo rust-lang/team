@@ -140,7 +140,10 @@
       "archived": false,
       "private": false,
       "auto_merge_enabled": true,
-      "custom_properties": {}
+      "custom_properties": {
+        "crabwatch": true,
+        "status": "active"
+      }
     }
   ]
 }

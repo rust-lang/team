@@ -5,8 +5,9 @@ use std::vec;
 
 use derive_builder::Builder;
 use rust_team_data::v1::{
-    self, Bot, BranchProtectionMode, Environment, GitHubTeam, MergeBot, MergeQueueMethod, Pages,
-    PagesBuildType, PagesSource, Person, ProtectionTarget, RepoPermission, TeamGitHub, TeamKind,
+    self, Bot, BranchProtectionMode, CustomPropertyValue as CustomPropertyScalar, Environment,
+    GitHubTeam, MergeBot, MergeQueueMethod, Pages, PagesBuildType, PagesSource, Person,
+    ProtectionTarget, RepoPermission, TeamGitHub, TeamKind,
 };
 
 use crate::schema;
@@ -207,7 +208,7 @@ impl DataModel {
                 .iter()
                 .map(|(name, value)| CustomPropertyValue {
                     property_name: name.clone(),
-                    value: Some(value.to_string()),
+                    value: Some(value.clone()),
                 })
                 .collect();
             org.custom_properties.insert(repo.name.clone(), properties);
@@ -358,7 +359,7 @@ pub struct RepoData {
     #[builder(default)]
     pub pages: Option<v1::Pages>,
     #[builder(default)]
-    pub custom_properties: IndexMap<String, String>,
+    pub custom_properties: IndexMap<String, CustomPropertyScalar>,
 }
 
 impl RepoData {
@@ -466,9 +467,9 @@ impl RepoDataBuilder {
         self
     }
 
-    pub fn custom_property(mut self, name: &str, value: &str) -> Self {
+    pub fn custom_property(mut self, name: &str, value: impl Into<CustomPropertyScalar>) -> Self {
         let mut custom_properties = self.custom_properties.clone().unwrap_or_default();
-        custom_properties.insert(name.to_string(), value.to_string());
+        custom_properties.insert(name.to_string(), value.into());
         self.custom_properties = Some(custom_properties);
         self
     }

@@ -10,7 +10,9 @@ use crate::sync::github::api::{GithubRead, RepoPermission, RepoSettings, Ruleset
 use anyhow::Context as _;
 use futures_util::StreamExt;
 use log::debug;
-use rust_team_data::v1::{Bot, BranchProtectionMode, Pages, ProtectionTarget};
+use rust_team_data::v1::{
+    Bot, BranchProtectionMode, CustomPropertyValue as CustomPropertyScalar, Pages, ProtectionTarget,
+};
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fmt::{Display, Formatter, Write};
 
@@ -917,7 +919,7 @@ impl SyncGitHub {
             .await?;
         let org_property_names = self.github.org_property_names(&expected_repo.org).await?;
 
-        let actual_by_name: HashMap<String, Option<String>> = actual
+        let actual_by_name: HashMap<String, Option<CustomPropertyScalar>> = actual
             .into_iter()
             .map(|p| (p.property_name, p.value))
             .collect();
@@ -934,11 +936,11 @@ impl SyncGitHub {
                 continue;
             }
             let expected = value.clone();
-            let actual = actual_by_name.get(name).and_then(|v| v.as_deref());
+            let actual = actual_by_name.get(name).and_then(|v| v.as_ref());
             let operation = match actual {
                 None => CustomPropertyDiffOperation::Create(expected),
-                Some(actual) if actual != expected => {
-                    CustomPropertyDiffOperation::Update(actual.to_string(), expected)
+                Some(actual) if actual != &expected => {
+                    CustomPropertyDiffOperation::Update(actual.clone(), expected)
                 }
                 Some(_) => continue,
             };
@@ -2541,9 +2543,9 @@ impl std::fmt::Display for CustomPropertyDiff {
 
 #[derive(Debug)]
 enum CustomPropertyDiffOperation {
-    Create(String),
-    Update(String, String), // old, new
-    Delete(String),         // previous value
+    Create(CustomPropertyScalar),
+    Update(CustomPropertyScalar, CustomPropertyScalar), // old, new
+    Delete(CustomPropertyScalar),                       // previous value
     CannotApply { reason: String },
 }
 

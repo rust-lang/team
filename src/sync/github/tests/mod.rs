@@ -1648,7 +1648,7 @@ async fn repo_add_custom_property() {
     model
         .get_repo("repo1")
         .custom_properties
-        .insert("crabwatch".to_string(), "true".to_string());
+        .insert("crabwatch".to_string(), "true".into());
 
     let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
@@ -1682,7 +1682,65 @@ async fn repo_add_custom_property() {
                     CustomPropertyDiff {
                         name: "crabwatch",
                         operation: Create(
-                            "true",
+                            String(
+                                "true",
+                            ),
+                        ),
+                    },
+                ],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[tokio::test]
+async fn repo_add_bool_custom_property() {
+    let mut model = DataModel::default();
+    model.define_org_property("rust-lang", "crabwatch");
+    model.create_repo(RepoData::new("repo1"));
+    let gh = model.gh_model();
+
+    model
+        .get_repo("repo1")
+        .custom_properties
+        .insert("crabwatch".to_string(), true.into());
+
+    let diff = model.diff_repos(gh).await;
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                ruleset_diffs: [],
+                environment_diffs: [],
+                pages_diff: None,
+                app_installation_diffs: [],
+                custom_property_diffs: [
+                    CustomPropertyDiff {
+                        name: "crabwatch",
+                        operation: Create(
+                            Bool(
+                                true,
+                            ),
                         ),
                     },
                 ],
@@ -1732,7 +1790,9 @@ async fn repo_remove_custom_property() {
                     CustomPropertyDiff {
                         name: "crabwatch",
                         operation: Delete(
-                            "true",
+                            String(
+                                "true",
+                            ),
                         ),
                     },
                 ],
@@ -1750,7 +1810,7 @@ async fn repo_custom_property_undefined_at_org() {
     model
         .get_repo("repo1")
         .custom_properties
-        .insert("crabwatch".to_string(), "true".to_string());
+        .insert("crabwatch".to_string(), "true".into());
 
     let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"

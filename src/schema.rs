@@ -847,7 +847,7 @@ pub(crate) struct Repo {
     #[serde(default)]
     pages: Option<RawPages>,
     #[serde(default)]
-    pub custom_properties: BTreeMap<String, String>,
+    pub custom_properties: BTreeMap<String, rust_team_data::v1::CustomPropertyValue>,
 }
 
 impl Repo {
