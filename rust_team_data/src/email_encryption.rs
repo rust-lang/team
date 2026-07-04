@@ -10,7 +10,7 @@
 //! to both encrypt and decrypt.
 
 use chacha20poly1305::aead::{Aead, KeyInit};
-use chacha20poly1305::{Key, XChaCha20Poly1305, XNonce};
+use chacha20poly1305::{XChaCha20Poly1305, XNonce};
 use hex::{FromHex, ToHex};
 use std::convert::TryInto;
 use x25519_dalek::{EphemeralSecret, PublicKey, StaticSecret};
@@ -51,16 +51,16 @@ pub fn encrypt_with_public_key(email: &str, public_key: &str) -> Result<String, 
     // Generate random nonce every time something is encrypted
     let mut nonce = [0u8; NONCE_LENGTH];
     getrandom::fill(&mut nonce).map_err(Error::GetRandom)?;
-    let nonce = XNonce::from_slice(&nonce);
+    let nonce = XNonce::from(nonce);
     let shared_key = blake3::derive_key(KDF_CONTEXT, shared_secret.as_bytes());
 
     let mut encrypted = init_cipher(&shared_key)
-        .encrypt(nonce, email.as_bytes())
+        .encrypt(&nonce, email.as_bytes())
         .map_err(|_| Error::EncryptionFailed)?;
 
     // Concatenate ephemeral public key, nonce, and payload, as all three will be needed for decryption.
     let mut payload = ephemeral_public_key.as_bytes().to_vec();
-    payload.append(&mut nonce.to_vec());
+    payload.extend_from_slice(&nonce);
     payload.append(&mut encrypted);
 
     Ok(format!("{}{}{}", PREFIX, hex::encode(payload), SUFFIX))
@@ -87,9 +87,13 @@ pub fn try_decrypt(private_key: &str, email: &str) -> Result<String, Error> {
     }
 
     let (public_key, rest) = combined.split_at(KEY_LENGTH);
-    let public_key: &[u8; KEY_LENGTH] = public_key.try_into().unwrap(); // Safe unwrap as the length is verified above
+    let public_key: &[u8; KEY_LENGTH] = public_key
+        .try_into()
+        .expect("bug: can't convert public key when key length verified above");
     let (nonce, encrypted) = rest.split_at(NONCE_LENGTH);
-    let nonce = XNonce::from_slice(nonce);
+    let nonce = nonce
+        .try_into()
+        .expect("bug: can't convert nonce when nonce length verified above");
 
     let private_key = get_private_key(private_key)?;
     let shared_secret = private_key.diffie_hellman(&PublicKey::from(public_key.to_owned()));
@@ -104,7 +108,7 @@ pub fn try_decrypt(private_key: &str, email: &str) -> Result<String, Error> {
 }
 
 fn init_cipher(key: &[u8; KEY_LENGTH]) -> XChaCha20Poly1305 {
-    let key = Key::from_slice(key);
+    let key = key.into();
     XChaCha20Poly1305::new(key)
 }
 
