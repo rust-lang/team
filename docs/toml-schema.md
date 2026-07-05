@@ -568,7 +568,7 @@ crabwatch = true
 status = "active"
 ```
 
-Properties set on GitHub but not declared here are left unchanged.
+Properties set on GitHub but not declared here are removed.
 
 ### Crates.io crate management
 
