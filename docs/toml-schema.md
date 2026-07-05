@@ -553,7 +553,7 @@ branches = ["develop", "staging"]
 
 ### Repository custom properties
 
-[Repository custom properties] are values set on a repository to opt it into org-wide tooling. The property must first be defined at the organization level.
+[Repository custom properties] are values set on a repository to add metadata. For example, they are used to opt it into org-wide tooling. The property must first be defined at the organization level by an infrastructure admin.
 
 String and boolean values are supported.
 
