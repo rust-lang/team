@@ -34,7 +34,7 @@ crates = [
     "mdbook-renderer",
     "mdbook-summary",
 ]
-publish-workflow = "deploy.yml"
+publish-workflow = "publish-crates-io.yml"
 publish-environment = "publish"
 
 [environments.github-pages]

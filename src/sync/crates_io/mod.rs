@@ -172,8 +172,10 @@ impl SyncCratesIo {
                     config_diffs.push(ConfigDiff::Create(desired.clone()));
                 }
 
-                // Non-matching configs should be deleted
-                config_diffs.extend(configs.iter_mut().map(|c| ConfigDiff::Delete(c.clone())));
+                // Non-matching configs should be deleted.
+                // Drain them from `tp_configs` so the final leftover-config cleanup below doesn't queue
+                // the same configs for deletion a second time.
+                config_diffs.extend(configs.drain(..).map(ConfigDiff::Delete));
             }
 
             // Sync "trusted publishing only" crate option
