@@ -384,7 +384,7 @@ build-type = "workflow"
 ```
 
 For `legacy`, `branch` is required and `path` must be either `/` or `/docs`.
-For `workflow`, `branch` and `path` must not be set, and the repository must
+For the `workflow` build type, `branch` and `path` must not be set, and the repository must
 define the `github-pages` environment (GitHub automatically creates this
 environment for Pages deployments, and sync-team would delete it if it is not
 defined in the repo TOML file).
