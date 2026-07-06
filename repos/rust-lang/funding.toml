@@ -8,3 +8,5 @@ build-type = "workflow"
 
 [access.teams]
 funding = "write"
+
+[environments.github-pages]
