@@ -2,7 +2,7 @@ use crate::api::github::GitHubApi;
 use crate::api::zulip::ZulipApi;
 use crate::data::Data;
 use crate::schema::{
-    AllowedMergeApp, Bot, Email, MergeQueueMethod, Permissions, Repo, RepoPermission, Team,
+    AllowedMergeApp, Bot, Email, MergeQueueMethod, Pages, Permissions, Repo, RepoPermission, Team,
     TeamKind, TeamPeople, ZulipMember,
 };
 use anyhow::{Context as _, Error, bail};
@@ -1196,7 +1196,15 @@ fn validate_environments(data: &Data, errors: &mut Vec<String>) {
 
 fn validate_pages(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.all_repos(), errors, |repo, _| {
-        repo.normalized_pages()?;
+        let pages = repo.normalized_pages()?;
+        if matches!(pages, Some(Pages::Workflow)) && !repo.environments.contains_key("github-pages")
+        {
+            bail!(
+                "repo {}/{} configures workflow GitHub Pages without a `github-pages` environment; add `[environments.github-pages]`",
+                repo.org,
+                repo.name
+            );
+        }
         Ok(())
     });
 }
