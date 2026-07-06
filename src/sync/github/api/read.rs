@@ -1,6 +1,6 @@
 use crate::sync::github::api;
 use crate::sync::github::api::url::TokenType;
-use crate::sync::github::api::{BranchPolicy, Ruleset};
+use crate::sync::github::api::{BranchPolicy, CustomPropertyValue, Ruleset};
 use crate::sync::github::api::{
     BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, OrgAppInstallation,
     Repo, RepoAppInstallation, RepoTeam, RepoUser, RestPaginatedError, Team, TeamMember, TeamRole,
@@ -90,6 +90,16 @@ pub(crate) trait GithubRead {
     /// Get rulesets for a repository
     /// Returns a vector of rulesets
     async fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>>;
+
+    /// Get custom property values for a repository
+    async fn repo_custom_properties(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<Vec<CustomPropertyValue>>;
+
+    /// Get the names of custom properties defined at the organization level
+    async fn org_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>>;
 
     async fn environment_branch_policies(
         &self,
@@ -747,6 +757,44 @@ impl GithubRead for GitHubApiRead {
         }
 
         Ok(rulesets)
+    }
+
+    async fn repo_custom_properties(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<Vec<CustomPropertyValue>> {
+        // REST API endpoint for repository custom property values
+        // https://docs.github.com/en/rest/repos/custom-properties#get-all-custom-property-values-for-a-repository
+        let values: Vec<CustomPropertyValue> = self
+            .client
+            .req(
+                Method::GET,
+                &GitHubUrl::repos(org, repo, "properties/values")?,
+            )?
+            .send()
+            .await?
+            .json_annotated()
+            .await?;
+        Ok(values)
+    }
+
+    async fn org_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>> {
+        #[derive(serde::Deserialize)]
+        struct PropertyDef {
+            property_name: String,
+        }
+
+        // REST API endpoint for organization custom property schema
+        // https://docs.github.com/en/rest/orgs/custom-properties#get-all-custom-properties-for-an-organization
+        let defs: Vec<PropertyDef> = self
+            .client
+            .req(Method::GET, &GitHubUrl::orgs(org, "properties/schema")?)?
+            .send()
+            .await?
+            .json_annotated()
+            .await?;
+        Ok(defs.into_iter().map(|d| d.property_name).collect())
     }
 
     async fn environment_branch_policies(

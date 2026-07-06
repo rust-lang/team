@@ -19,6 +19,10 @@ allowed-merge-teams = ["foo"]
 [environments.deploy]
 branches = ["main"]
 
+[custom-properties]
+crabwatch = true
+status = "active"
+
 [[crates-io]]
 crates = ["my-crate", "my-crate-2"]
 publish-workflow = "ci.yml"

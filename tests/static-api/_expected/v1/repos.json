@@ -37,7 +37,8 @@
       "environments": {},
       "archived": true,
       "private": false,
-      "auto_merge_enabled": true
+      "auto_merge_enabled": true,
+      "custom_properties": {}
     },
     {
       "org": "test-org",
@@ -138,7 +139,11 @@
       },
       "archived": false,
       "private": false,
-      "auto_merge_enabled": true
+      "auto_merge_enabled": true,
+      "custom_properties": {
+        "crabwatch": true,
+        "status": "active"
+      }
     }
   ]
 }

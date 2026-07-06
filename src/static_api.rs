@@ -234,6 +234,11 @@ impl<'a> Generator<'a> {
                 pages: convert_pages(r)?,
                 archived,
                 auto_merge_enabled: !managed_by_bors,
+                custom_properties: r
+                    .custom_properties
+                    .iter()
+                    .map(|(k, v)| (k.clone(), v.clone()))
+                    .collect(),
             };
 
             self.add(&format!("v1/repos/{}.json", r.name), &repo)?;
@@ -492,7 +497,7 @@ impl<'a> Generator<'a> {
         T: serde::Serialize + serde::de::DeserializeOwned + PartialEq,
     {
         info!("writing API object {path}...");
-        let json = serde_json::to_string_pretty(obj)?;
+        let json = serde_json::to_string_pretty(obj)? + "\n";
         self.write(path, json.as_bytes())?;
 
         let obj2: T =

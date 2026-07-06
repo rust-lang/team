@@ -91,6 +91,40 @@ pub struct Repos {
     pub repos: IndexMap<String, Vec<Repo>>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(untagged)]
+pub enum CustomPropertyValue {
+    String(String),
+    Bool(bool),
+}
+
+impl std::fmt::Display for CustomPropertyValue {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            CustomPropertyValue::String(value) => value.fmt(f),
+            CustomPropertyValue::Bool(value) => value.fmt(f),
+        }
+    }
+}
+
+impl From<String> for CustomPropertyValue {
+    fn from(value: String) -> Self {
+        CustomPropertyValue::String(value)
+    }
+}
+
+impl From<&str> for CustomPropertyValue {
+    fn from(value: &str) -> Self {
+        CustomPropertyValue::String(value.to_string())
+    }
+}
+
+impl From<bool> for CustomPropertyValue {
+    fn from(value: bool) -> Self {
+        CustomPropertyValue::Bool(value)
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct List {
     pub address: String,
@@ -197,6 +231,7 @@ pub struct Repo {
     // Is the GitHub "Auto-merge" option enabled?
     // https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request
     pub auto_merge_enabled: bool,
+    pub custom_properties: IndexMap<String, CustomPropertyValue>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
