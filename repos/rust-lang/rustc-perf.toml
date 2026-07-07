@@ -8,6 +8,6 @@ bots = ["renovate"]
 wg-compiler-performance = "write"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 ci-checks = ["conclusion"]
 merge-queue = { enabled = true }
