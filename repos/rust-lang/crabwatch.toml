@@ -11,3 +11,5 @@ pattern = "main"
 ci-checks = ["CI"]
 required-approvals = 0
 
+[custom-properties]
+crabwatch = true

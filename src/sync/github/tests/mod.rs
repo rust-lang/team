@@ -238,6 +238,7 @@ async fn repo_change_description() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -283,6 +284,7 @@ async fn repo_change_homepage() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -385,6 +387,7 @@ async fn repo_create() {
                 environments: [],
                 pages: None,
                 app_installations: [],
+                custom_properties: [],
             },
         ),
     ]
@@ -433,6 +436,7 @@ async fn repo_pages_delete() {
                     ),
                 ),
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -496,6 +500,7 @@ async fn repo_pages_create() {
                     ),
                 ),
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -553,6 +558,7 @@ async fn repo_pages_update() {
                     },
                 ),
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -610,6 +616,7 @@ async fn repo_add_member() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -667,6 +674,7 @@ async fn repo_change_member_permissions() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -718,6 +726,7 @@ async fn repo_remove_member() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -771,6 +780,7 @@ async fn repo_add_team() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -823,6 +833,7 @@ async fn repo_change_team_permissions() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -874,6 +885,7 @@ async fn repo_remove_team() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -916,6 +928,7 @@ async fn repo_archive_repo() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1045,6 +1058,7 @@ async fn repo_add_branch_protection() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1219,6 +1233,7 @@ async fn repo_update_branch_protection() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1275,6 +1290,7 @@ async fn repo_remove_branch_protection() {
                 environment_diffs: [],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1419,6 +1435,7 @@ async fn repo_environment_create() {
                 ],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1472,6 +1489,7 @@ async fn repo_environment_delete() {
                 ],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1544,6 +1562,7 @@ async fn repo_environment_update() {
                 ],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
             },
         ),
     ]
@@ -1612,6 +1631,223 @@ async fn repo_environment_update_branches() {
                 ],
                 pages_diff: None,
                 app_installation_diffs: [],
+                custom_property_diffs: [],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[tokio::test]
+async fn repo_add_custom_property() {
+    let mut model = DataModel::default();
+    model.define_org_property("rust-lang", "crabwatch");
+    model.create_repo(RepoData::new("repo1"));
+    let gh = model.gh_model();
+
+    model
+        .get_repo("repo1")
+        .custom_properties
+        .insert("crabwatch".to_string(), "true".into());
+
+    let diff = model.diff_repos(gh).await;
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                ruleset_diffs: [],
+                environment_diffs: [],
+                pages_diff: None,
+                app_installation_diffs: [],
+                custom_property_diffs: [
+                    CustomPropertyDiff {
+                        name: "crabwatch",
+                        operation: Create(
+                            String(
+                                "true",
+                            ),
+                        ),
+                    },
+                ],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[tokio::test]
+async fn repo_add_bool_custom_property() {
+    let mut model = DataModel::default();
+    model.define_org_property("rust-lang", "crabwatch");
+    model.create_repo(RepoData::new("repo1"));
+    let gh = model.gh_model();
+
+    model
+        .get_repo("repo1")
+        .custom_properties
+        .insert("crabwatch".to_string(), true.into());
+
+    let diff = model.diff_repos(gh).await;
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                ruleset_diffs: [],
+                environment_diffs: [],
+                pages_diff: None,
+                app_installation_diffs: [],
+                custom_property_diffs: [
+                    CustomPropertyDiff {
+                        name: "crabwatch",
+                        operation: Create(
+                            Bool(
+                                true,
+                            ),
+                        ),
+                    },
+                ],
+            },
+        ),
+    ]
+    "#);
+}
+
+#[tokio::test]
+async fn repo_remove_custom_property() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1").custom_property("crabwatch", "true"));
+    let gh = model.gh_model();
+
+    model.get_repo("repo1").custom_properties.clear();
+
+    let diff = model.diff_repos(gh).await;
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                ruleset_diffs: [],
+                environment_diffs: [],
+                pages_diff: None,
+                app_installation_diffs: [],
+                custom_property_diffs: [
+                    CustomPropertyDiff {
+                        name: "crabwatch",
+                        operation: Delete(
+                            String(
+                                "true",
+                            ),
+                        ),
+                    },
+                ],
+            },
+        ),
+    ]
+    "#);
+}
+#[tokio::test]
+async fn repo_custom_property_undefined_at_org() {
+    let mut model = DataModel::default();
+    model.create_repo(RepoData::new("repo1"));
+    let gh = model.gh_model();
+
+    model
+        .get_repo("repo1")
+        .custom_properties
+        .insert("crabwatch".to_string(), "true".into());
+
+    let diff = model.diff_repos(gh).await;
+    insta::assert_debug_snapshot!(diff, @r#"
+    [
+        Update(
+            UpdateRepoDiff {
+                org: "rust-lang",
+                name: "repo1",
+                repo_id: 0,
+                settings_diff: (
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                    RepoSettings {
+                        description: "",
+                        homepage: None,
+                        archived: false,
+                        auto_merge_enabled: false,
+                    },
+                ),
+                permission_diffs: [],
+                branch_protection_diffs: [],
+                ruleset_diffs: [],
+                environment_diffs: [],
+                pages_diff: None,
+                app_installation_diffs: [],
+                custom_property_diffs: [
+                    CustomPropertyDiff {
+                        name: "crabwatch",
+                        operation: CannotApply {
+                            reason: "'crabwatch' is not defined at the org level",
+                        },
+                    },
+                ],
             },
         ),
     ]

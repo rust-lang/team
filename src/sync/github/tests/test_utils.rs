@@ -5,15 +5,16 @@ use std::vec;
 
 use derive_builder::Builder;
 use rust_team_data::v1::{
-    self, Bot, BranchProtectionMode, Environment, GitHubTeam, MergeBot, MergeQueueMethod, Pages,
-    PagesBuildType, PagesSource, Person, ProtectionTarget, RepoPermission, TeamGitHub, TeamKind,
+    self, Bot, BranchProtectionMode, CustomPropertyValue as CustomPropertyScalar, Environment,
+    GitHubTeam, MergeBot, MergeQueueMethod, Pages, PagesBuildType, PagesSource, Person,
+    ProtectionTarget, RepoPermission, TeamGitHub, TeamKind,
 };
 
 use crate::schema;
 use crate::sync::Config;
 use crate::sync::github::api::{
-    BranchPolicy, BranchProtection, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation,
-    RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
+    BranchPolicy, BranchProtection, CustomPropertyValue, GithubRead, OrgAppInstallation, Repo,
+    RepoAppInstallation, RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::sync::github::{
     OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_ruleset, convert_permission,
@@ -34,6 +35,7 @@ pub struct DataModel {
     teams: Vec<TeamData>,
     repos: Vec<RepoData>,
     config: Config,
+    org_property_names: HashMap<String, HashSet<String>>,
 }
 
 impl DataModel {
@@ -70,6 +72,13 @@ impl DataModel {
             .iter_mut()
             .find(|r| r.name == name)
             .expect("Repo not found")
+    }
+
+    pub fn define_org_property(&mut self, org: &str, name: &str) {
+        self.org_property_names
+            .entry(org.to_string())
+            .or_default()
+            .insert(name.to_string());
     }
 
     pub fn add_allowed_org_member(&mut self, member: &str) {
@@ -194,6 +203,20 @@ impl DataModel {
             if let Some(pages) = &repo.pages {
                 org.repo_pages.insert(repo.name.clone(), pages.clone());
             }
+            let properties: Vec<CustomPropertyValue> = repo
+                .custom_properties
+                .iter()
+                .map(|(name, value)| CustomPropertyValue {
+                    property_name: name.clone(),
+                    value: Some(value.clone()),
+                })
+                .collect();
+            org.custom_properties.insert(repo.name.clone(), properties);
+        }
+
+        for (org_name, prop_names) in &self.org_property_names {
+            let org = orgs.entry(org_name.clone()).or_default();
+            org.org_property_names.extend(prop_names.iter().cloned());
         }
 
         if orgs.is_empty() {
@@ -335,6 +358,8 @@ pub struct RepoData {
     pub environments: IndexMap<String, v1::Environment>,
     #[builder(default)]
     pub pages: Option<v1::Pages>,
+    #[builder(default)]
+    pub custom_properties: IndexMap<String, CustomPropertyScalar>,
 }
 
 impl RepoData {
@@ -373,6 +398,7 @@ impl From<RepoData> for v1::Repo {
             branch_protections,
             environments,
             pages,
+            custom_properties,
         } = value;
         Self {
             org,
@@ -389,6 +415,7 @@ impl From<RepoData> for v1::Repo {
             archived,
             private: false,
             auto_merge_enabled: allow_auto_merge,
+            custom_properties,
         }
     }
 }
@@ -437,6 +464,13 @@ impl RepoDataBuilder {
             },
         );
         self.environments = Some(environments);
+        self
+    }
+
+    pub fn custom_property(mut self, name: &str, value: impl Into<CustomPropertyScalar>) -> Self {
+        let mut custom_properties = self.custom_properties.clone().unwrap_or_default();
+        custom_properties.insert(name.to_string(), value.into());
+        self.custom_properties = Some(custom_properties);
         self
     }
 }
@@ -760,6 +794,23 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
+    async fn repo_custom_properties(
+        &self,
+        org: &str,
+        repo: &str,
+    ) -> anyhow::Result<Vec<CustomPropertyValue>> {
+        Ok(self
+            .get_org(org)
+            .custom_properties
+            .get(repo)
+            .cloned()
+            .unwrap_or_default())
+    }
+
+    async fn org_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>> {
+        Ok(self.get_org(org).org_property_names.clone())
+    }
+
     async fn repo_environments(
         &self,
         org: &str,
@@ -806,6 +857,10 @@ struct GithubOrg {
     repo_environments: HashMap<String, HashMap<String, Environment>>,
     // Repo name -> GitHub Pages settings
     repo_pages: HashMap<String, Pages>,
+    // Repo name -> Vec<custom property>
+    custom_properties: HashMap<String, Vec<CustomPropertyValue>>,
+    // Set of custom property names defined at the org level
+    org_property_names: HashSet<String>,
 }
 
 #[derive(Clone)]

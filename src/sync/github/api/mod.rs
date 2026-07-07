@@ -746,3 +746,62 @@ pub(crate) struct BranchPolicy {
 fn default_branch_policy_type() -> String {
     "branch".to_string()
 }
+
+/// A GitHub repository custom property.
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub(crate) struct CustomPropertyValue {
+    pub(crate) property_name: String,
+    #[serde(serialize_with = "serialize_custom_property_value")]
+    pub(crate) value: Option<rust_team_data::v1::CustomPropertyValue>,
+}
+
+fn serialize_custom_property_value<S>(
+    value: &Option<rust_team_data::v1::CustomPropertyValue>,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+    S: serde::Serializer,
+{
+    use rust_team_data::v1::CustomPropertyValue;
+
+    match value {
+        Some(CustomPropertyValue::String(value)) => serializer.serialize_some(value),
+        Some(CustomPropertyValue::Bool(true)) => serializer.serialize_some("true"),
+        Some(CustomPropertyValue::Bool(false)) => serializer.serialize_some("false"),
+        None => serializer.serialize_none(),
+    }
+}
+
+#[derive(Debug, serde::Serialize)]
+pub(crate) struct SetCustomPropertiesRequest {
+    pub(crate) properties: Vec<CustomPropertyValue>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{CustomPropertyValue, SetCustomPropertiesRequest};
+
+    #[test]
+    fn serializes_bool_custom_property_values_as_strings() {
+        let request = SetCustomPropertiesRequest {
+            properties: vec![CustomPropertyValue {
+                property_name: "crabwatch".to_string(),
+                value: Some(rust_team_data::v1::CustomPropertyValue::Bool(true)),
+            }],
+        };
+
+        let serialized = serde_json::to_value(request).unwrap();
+
+        assert_eq!(
+            serialized,
+            serde_json::json!({
+                "properties": [
+                    {
+                        "property_name": "crabwatch",
+                        "value": "true",
+                    },
+                ],
+            })
+        );
+    }
+}
