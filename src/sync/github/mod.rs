@@ -939,7 +939,7 @@ impl SyncGitHub {
             let actual = actual_by_name.get(name).and_then(|v| v.as_ref());
             let operation = match actual {
                 None => CustomPropertyDiffOperation::Create(expected),
-                Some(actual) if actual != &expected => {
+                Some(actual) if !custom_property_values_match(actual, &expected) => {
                     CustomPropertyDiffOperation::Update(actual.clone(), expected)
                 }
                 Some(_) => continue,
@@ -2515,6 +2515,19 @@ impl CustomPropertyDiff {
             value,
         };
         sync.set_custom_property(org, repo_name, &property).await
+    }
+}
+
+fn custom_property_values_match(
+    actual: &CustomPropertyScalar,
+    expected: &CustomPropertyScalar,
+) -> bool {
+    use CustomPropertyScalar::{Bool, String};
+
+    match (actual, expected) {
+        (String(actual), Bool(expected)) => actual == &expected.to_string(),
+        (Bool(actual), String(expected)) => &actual.to_string() == expected,
+        _ => actual == expected,
     }
 }
 
