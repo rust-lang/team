@@ -560,7 +560,7 @@ branches = ["develop", "staging"]
 
 [Repository custom properties] are values set on a repository to add metadata. For example, they are used to opt it into org-wide tooling. The property must first be defined at the organization level by an infrastructure admin.
 
-String and boolean values are supported.
+String, boolean, and string array values are supported.
 
 [Repository custom properties]: https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization
 
@@ -571,6 +571,8 @@ String and boolean values are supported.
 crabwatch = true
 # Or set a text-type property to a string value
 status = "active"
+# Or set a multi-select property to a list of string values
+colors = ["red", "green"]
 ```
 
 Properties set on GitHub but not declared here are removed.

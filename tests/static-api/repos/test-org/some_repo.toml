@@ -22,6 +22,7 @@ branches = ["main"]
 [custom-properties]
 crabwatch = true
 status = "active"
+colors = ["red", "green"]
 
 [[crates-io]]
 crates = ["my-crate", "my-crate-2"]

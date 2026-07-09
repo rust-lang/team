@@ -96,6 +96,7 @@ pub struct Repos {
 pub enum CustomPropertyValue {
     String(String),
     Bool(bool),
+    StringArray(Vec<String>),
 }
 
 impl std::fmt::Display for CustomPropertyValue {
@@ -103,6 +104,7 @@ impl std::fmt::Display for CustomPropertyValue {
         match self {
             CustomPropertyValue::String(value) => value.fmt(f),
             CustomPropertyValue::Bool(value) => value.fmt(f),
+            CustomPropertyValue::StringArray(value) => write!(f, "{value:?}"),
         }
     }
 }
@@ -122,6 +124,12 @@ impl From<&str> for CustomPropertyValue {
 impl From<bool> for CustomPropertyValue {
     fn from(value: bool) -> Self {
         CustomPropertyValue::Bool(value)
+    }
+}
+
+impl From<Vec<String>> for CustomPropertyValue {
+    fn from(value: Vec<String>) -> Self {
+        CustomPropertyValue::StringArray(value)
     }
 }
 
