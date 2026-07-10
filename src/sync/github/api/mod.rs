@@ -768,6 +768,7 @@ where
         Some(CustomPropertyValue::String(value)) => serializer.serialize_some(value),
         Some(CustomPropertyValue::Bool(true)) => serializer.serialize_some("true"),
         Some(CustomPropertyValue::Bool(false)) => serializer.serialize_some("false"),
+        Some(CustomPropertyValue::StringArray(value)) => serializer.serialize_some(value),
         None => serializer.serialize_none(),
     }
 }
@@ -799,6 +800,33 @@ mod tests {
                     {
                         "property_name": "crabwatch",
                         "value": "true",
+                    },
+                ],
+            })
+        );
+    }
+
+    #[test]
+    fn serializes_string_array_custom_property_values_as_arrays() {
+        let request = SetCustomPropertiesRequest {
+            properties: vec![CustomPropertyValue {
+                property_name: "colors".to_string(),
+                value: Some(rust_team_data::v1::CustomPropertyValue::StringArray(vec![
+                    "red".to_string(),
+                    "green".to_string(),
+                ])),
+            }],
+        };
+
+        let serialized = serde_json::to_value(request).unwrap();
+
+        assert_eq!(
+            serialized,
+            serde_json::json!({
+                "properties": [
+                    {
+                        "property_name": "colors",
+                        "value": ["red", "green"],
                     },
                 ],
             })

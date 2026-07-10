@@ -2522,13 +2522,22 @@ fn custom_property_values_match(
     actual: &CustomPropertyScalar,
     expected: &CustomPropertyScalar,
 ) -> bool {
-    use CustomPropertyScalar::{Bool, String};
+    use CustomPropertyScalar::{Bool, String, StringArray};
 
     match (actual, expected) {
         (String(actual), Bool(expected)) => actual == &expected.to_string(),
         (Bool(actual), String(expected)) => &actual.to_string() == expected,
+        (StringArray(actual), StringArray(expected)) => {
+            sorted_string_array(actual) == sorted_string_array(expected)
+        }
         _ => actual == expected,
     }
+}
+
+fn sorted_string_array(values: &[String]) -> Vec<String> {
+    let mut values = values.to_vec();
+    values.sort();
+    values
 }
 
 impl std::fmt::Display for CustomPropertyDiff {

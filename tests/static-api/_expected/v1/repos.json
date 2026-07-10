@@ -141,6 +141,10 @@
       "private": false,
       "auto_merge_enabled": true,
       "custom_properties": {
+        "colors": [
+          "red",
+          "green"
+        ],
         "crabwatch": true,
         "status": "active"
       }
