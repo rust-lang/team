@@ -726,6 +726,13 @@ impl GithubRead for GitHubApiRead {
 
         let mut ruleset_ids = vec![];
 
+        // Exclude inherited organization/enterprise rulesets, as we only manage
+        // repository rulesets.
+        // Note that parent rulesets can contain parent-only rule types, such as `workflows`,
+        // so if you enable this, make sure the deserialization of the ruleset can handle all
+        // organization/enterprise rule types, too.
+        let includes_parents = "includes_parents=false";
+
         // REST API endpoint for rulesets
         // https://docs.github.com/en/rest/repos/rules#get-all-repository-rulesets
         // The API returns only a subset of data for each ruleset :/
@@ -733,7 +740,7 @@ impl GithubRead for GitHubApiRead {
         self.client
             .rest_paginated(
                 &Method::GET,
-                &GitHubUrl::repos(org, repo, "rulesets")?,
+                &GitHubUrl::repos(org, repo, &format!("rulesets?{includes_parents}"))?,
                 |resp: Vec<RulesetInfo>| {
                     ruleset_ids.extend(resp.into_iter().map(|info| info.id));
                     Ok(())
