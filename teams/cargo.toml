@@ -49,3 +49,6 @@ address = "cargo@rust-lang.org"
 
 [[zulip-groups]]
 name = "T-cargo"
+
+[[zulip-streams]]
+name = "t-cargo/private"
