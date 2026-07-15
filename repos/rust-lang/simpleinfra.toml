@@ -8,5 +8,5 @@ infra = "write"
 
 [[rulesets]]
 pattern = "master"
-ci-checks = ["Rust projects", "Terraform configuration", "GitHub Actions (JS)"]
+ci-checks = ["CI"]
 required-approvals = 0
