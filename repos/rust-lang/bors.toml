@@ -1,6 +1,7 @@
 org = "rust-lang"
 name = "bors"
 description = "Rust implementation of bors used for various Rust components (e.g. the compiler)."
+homepage = "https://bors.rust-lang.org"
 bots = ["rustbot", "renovate"]
 
 [access.teams]
