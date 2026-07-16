@@ -25,6 +25,7 @@
           "allowed_merge_teams": [],
           "merge_bots": [],
           "allowed_merge_apps": [],
+          "bypass_apps": [],
           "require_up_to_date_branches": false,
           "merge_queue": false,
           "prevent_creation": true,
@@ -75,7 +76,12 @@
             "foo"
           ],
           "merge_bots": [],
-          "allowed_merge_apps": [],
+          "allowed_merge_apps": [
+            "promote_release"
+          ],
+          "bypass_apps": [
+            "promote_release"
+          ],
           "require_up_to_date_branches": false,
           "merge_queue": false,
           "prevent_creation": true,

@@ -384,7 +384,11 @@ pub struct BranchProtection {
     pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,
     pub merge_bots: Vec<MergeBot>,
+    /// Deprecated name for `bypass_apps`, kept for backwards compatibility.
+    #[serde(default)]
     pub allowed_merge_apps: Vec<MergeBot>,
+    #[serde(default)]
+    pub bypass_apps: Vec<MergeBot>,
     pub require_up_to_date_branches: bool,
     pub merge_queue: bool,
     #[serde(default, skip_serializing_if = "is_default_merge_queue_method")]

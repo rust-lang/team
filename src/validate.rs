@@ -2,7 +2,7 @@ use crate::api::github::GitHubApi;
 use crate::api::zulip::ZulipApi;
 use crate::data::Data;
 use crate::schema::{
-    AllowedMergeApp, Bot, Email, MergeQueueMethod, Pages, Permissions, Repo, RepoPermission, Team,
+    Bot, BypassApp, Email, MergeQueueMethod, Pages, Permissions, Repo, RepoPermission, Team,
     TeamKind, TeamPeople, ZulipMember,
 };
 use anyhow::{Context as _, Error, bail};
@@ -1305,7 +1305,7 @@ fn validate_rulesets(data: &Data, errors: &mut Vec<String>) {
                 );
             }
 
-            let managed_by_bors = ruleset.allowed_merge_apps.contains(&AllowedMergeApp::Bors);
+            let managed_by_bors = ruleset.bypass_apps.contains(&BypassApp::Bors);
             if managed_by_bors {
                 if !bors_configured {
                     bail!(

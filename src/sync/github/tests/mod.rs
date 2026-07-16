@@ -941,10 +941,14 @@ async fn repo_add_branch_protection() {
     model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Write));
 
     let gh = model.gh_model();
-    model.get_repo("repo1").branch_protections.extend([
-        BranchProtectionBuilder::pr_required("master", &["test", "test 2"], 0).build(),
-        BranchProtectionBuilder::pr_not_required("beta").build(),
-    ]);
+
+    let mut master = BranchProtectionBuilder::pr_required("master", &["test", "test 2"], 0);
+    master.bypass_apps.push(v1::MergeBot::PromoteRelease);
+
+    let repo = model.get_repo("repo1");
+    repo.branch_protections.push(master.build());
+    repo.branch_protections
+        .push(BranchProtectionBuilder::pr_not_required("beta").build());
 
     let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
@@ -980,7 +984,13 @@ async fn repo_add_branch_protection() {
                                 target: Branch,
                                 source_type: Repository,
                                 enforcement: Active,
-                                bypass_actors: [],
+                                bypass_actors: [
+                                    RulesetBypassActor {
+                                        actor_id: 217112,
+                                        actor_type: Integration,
+                                        bypass_mode: Always,
+                                    },
+                                ],
                                 conditions: RulesetConditions {
                                     ref_name: RulesetRefNameCondition {
                                         include: [

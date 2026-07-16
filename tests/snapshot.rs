@@ -24,6 +24,26 @@ fn static_api() -> Result<(), Error> {
         .dir(dir_valid())
         .assert_success()?;
 
+    // The old and new names must contain the same data while v1 consumers migrate.
+    let repos: rust_team_data::v1::Repos =
+        serde_json::from_str(&std::fs::read_to_string(dir_output.join("v1/repos.json"))?)?;
+    let mut found_bypass_app = false;
+    for branch_protection in repos
+        .repos
+        .values()
+        .flatten()
+        .flat_map(|repo| &repo.branch_protections)
+    {
+        assert_eq!(
+            branch_protection.allowed_merge_apps,
+            branch_protection.bypass_apps
+        );
+        if !branch_protection.bypass_apps.is_empty() {
+            found_bypass_app = true;
+        }
+    }
+    assert!(found_bypass_app, "the fixture must contain a bypass app");
+
     step("checking whether the output matched the expected one");
 
     // Collect all the files present in either the output or expected dirs

@@ -15,6 +15,7 @@ foo = "maintain"
 pattern = "master"
 ci-checks = ["CI"]
 allowed-merge-teams = ["foo"]
+bypass-apps = ["promote-release"]
 
 [environments.deploy]
 branches = ["main"]

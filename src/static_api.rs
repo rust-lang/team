@@ -1,8 +1,6 @@
 use crate::data::Data;
 use crate::schema;
-use crate::schema::{
-    AllowedMergeApp, Bot, Email, Permissions, RepoPermission, TeamKind, ZulipMember,
-};
+use crate::schema::{Bot, BypassApp, Email, Permissions, RepoPermission, TeamKind, ZulipMember};
 use anyhow::{Context as _, Error, ensure};
 use indexmap::IndexMap;
 use log::info;
@@ -73,16 +71,10 @@ impl<'a> Generator<'a> {
                         BranchProtectionMode::PrNotRequired
                     },
                     allowed_merge_teams: b.allowed_merge_teams.clone(),
-                    allowed_merge_apps: b
-                        .allowed_merge_apps
-                        .iter()
-                        .map(|app| match app {
-                            AllowedMergeApp::RustTimer => v1::MergeBot::RustTimer,
-                            AllowedMergeApp::Bors => v1::MergeBot::Bors,
-                            AllowedMergeApp::WorkflowsCratesIo => v1::MergeBot::WorkflowsCratesIo,
-                            AllowedMergeApp::PromoteRelease => v1::MergeBot::PromoteRelease,
-                        })
-                        .collect(),
+                    // Temporarily support the old allowed_merge_apps to avoid
+                    // deserialization errors in triagebot.
+                    allowed_merge_apps: Self::convert_bypass_apps(&b.bypass_apps),
+                    bypass_apps: Self::convert_bypass_apps(&b.bypass_apps),
                     require_up_to_date_branches: b.require_up_to_date_branches,
                     merge_queue: b.merge_queue.enabled,
                     merge_queue_method: b.merge_queue.method.into(),
@@ -250,6 +242,17 @@ impl<'a> Generator<'a> {
 
         self.add("v1/repos.json", &v1::Repos { repos })?;
         Ok(())
+    }
+
+    fn convert_bypass_apps(apps: &[BypassApp]) -> Vec<v1::MergeBot> {
+        apps.iter()
+            .map(|app| match app {
+                BypassApp::RustTimer => v1::MergeBot::RustTimer,
+                BypassApp::Bors => v1::MergeBot::Bors,
+                BypassApp::WorkflowsCratesIo => v1::MergeBot::WorkflowsCratesIo,
+                BypassApp::PromoteRelease => v1::MergeBot::PromoteRelease,
+            })
+            .collect()
     }
 
     fn generate_teams(&self) -> Result<(), Error> {

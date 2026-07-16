@@ -937,7 +937,7 @@ pub(crate) enum RepoPermission {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Eq)]
 #[serde(rename_all = "kebab-case")]
-pub(crate) enum AllowedMergeApp {
+pub(crate) enum BypassApp {
     RustTimer,
     Bors,
     WorkflowsCratesIo,
@@ -1042,7 +1042,7 @@ pub(crate) struct Ruleset {
     #[serde(default)]
     pub allowed_merge_teams: Vec<String>,
     #[serde(default)]
-    pub allowed_merge_apps: Vec<AllowedMergeApp>,
+    pub bypass_apps: Vec<BypassApp>,
     #[serde(default)]
     pub merge_queue: MergeQueue,
     #[serde(default = "branch_protection_default_prevent_creation")]
