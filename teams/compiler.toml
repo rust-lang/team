@@ -43,7 +43,6 @@ members = [
     "Kobzol",
     { github = "lcnr", roles = ["compiler-maintainer"] },
     { github = "lqd", roles = ["compiler-maintainer"] },
-    "lukas-code",
     "m-ou-se",
     "madsmtm",
     "mati865",
@@ -101,7 +100,8 @@ alumni = [
     { github = "varkor", roles = ["compiler-maintainer"] },
     "Xanewok",
     "zackmdavis",
-    { github = "Zoxc", roles = ["compiler-maintainer"] }
+    { github = "Zoxc", roles = ["compiler-maintainer"] },
+    "lukas-code",
 ]
 
 [[roles]]
