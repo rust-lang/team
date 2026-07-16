@@ -620,7 +620,15 @@ If you want to keep being a member of Rust teams, please let us know!
 "#,
                     removed_teams
                         .iter()
-                        .map(|team| format!("- {}", team.name()))
+                        .map(|team| {
+                            let mut leads = team
+                                .leads()
+                                .iter()
+                                .map(|username| format!("@{username}"))
+                                .collect::<Vec<_>>();
+                            leads.sort();
+                            format!("- {} (CC {})", team.name(), leads.join(" "))
+                        })
                         .collect::<Vec<_>>()
                         .join("\n")
                 );
