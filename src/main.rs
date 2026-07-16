@@ -38,6 +38,7 @@ use clap::Parser;
 use log::{error, info, warn};
 use std::collections::{BTreeMap, HashMap};
 use std::path::PathBuf;
+use std::process::Command;
 use std::str::FromStr;
 
 #[derive(clap::ValueEnum, Clone, Debug)]
@@ -129,6 +130,12 @@ enum RootOpts {
         /// If not specified, then the person will be moved to alumni in all their teams.
         #[arg(long, value_delimiter = ',')]
         teams: Vec<String>,
+        /// Create a git commit after moving the person to alumni and then
+        /// create a pull request using the `gh` CLI tool.
+        ///
+        /// You will be redirected to the GitHub web interface to confirm the PR.
+        #[arg(long, default_value = "false")]
+        create_pr: bool,
     },
     /// Encrypt an email address
     EncryptEmail,
@@ -592,8 +599,55 @@ async fn run() -> Result<(), Error> {
             team_filter,
             cutoff_days,
         } => find_inactive_members(team_filter, cutoff_days).await?,
-        RootOpts::MoveToAlumni { username, teams } => {
-            move_person_to_alumni(data, &cli.data_dir, username, teams)?;
+        RootOpts::MoveToAlumni {
+            username,
+            teams,
+            create_pr,
+        } => {
+            let removed_teams = move_person_to_alumni(&data, &cli.data_dir, &username, teams)?;
+            if !removed_teams.is_empty() && create_pr {
+                let body = format!(
+                    r#"Move `{username}` to alumni, as they have been inactive on GitHub and Zulip for some time. This is in accordance with https://github.com/rust-lang/leadership-council/blob/main/policies/membership/auto-alumni.md.
+
+`{username}` will be moved to alumni in the following team(s):
+{}
+
+This pull request should be left open at least for 10 days to allow the contributor to respond.
+
+CC @{username}
+
+If you want to keep being a member of Rust teams, please let us know!
+"#,
+                    removed_teams
+                        .iter()
+                        .map(|team| format!("- {}", team.name()))
+                        .collect::<Vec<_>>()
+                        .join("\n")
+                );
+                Command::new("git")
+                    .arg("add")
+                    .arg("teams")
+                    .spawn()?
+                    .wait()?;
+                Command::new("git")
+                    .arg("commit")
+                    .arg("-m")
+                    .arg(&format!("Move {username} to alumni"))
+                    .spawn()?
+                    .wait()?;
+
+                let mut cmd = Command::new("gh");
+                cmd.arg("pr")
+                    .arg("create")
+                    .arg("--body")
+                    .arg(body)
+                    .arg("--title")
+                    .arg(&format!("Move {username} to alumni"))
+                    .arg("--web")
+                    .arg("--repo")
+                    .arg("rust-lang/team");
+                cmd.spawn()?.wait()?;
+            }
         }
         RootOpts::EncryptEmail => {
             let plain: String = dialoguer::Input::new()

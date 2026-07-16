@@ -1,4 +1,5 @@
 use crate::data::Data;
+use crate::schema::Team;
 use anyhow::{Context, bail, format_err};
 use indexmap::IndexSet;
 use log::info;
@@ -195,13 +196,12 @@ fn remove_team_from_repository(team_name: &str, repo_path: &Path) -> anyhow::Res
     Ok(())
 }
 
-pub fn move_person_to_alumni(
-    data: Data,
+pub fn move_person_to_alumni<'a>(
+    data: &'a Data,
     data_dir: &Path,
-    username: String,
+    username: &str,
     team_filter: Vec<String>,
-) -> anyhow::Result<()> {
-    let username = username.to_string();
+) -> anyhow::Result<Vec<&'a Team>> {
     let username = username.to_lowercase();
 
     let mut teams = data.teams().collect::<Vec<_>>();
@@ -273,5 +273,5 @@ pub fn move_person_to_alumni(
 
         std::fs::write(path, document.to_string())?;
     }
-    Ok(())
+    Ok(teams)
 }
