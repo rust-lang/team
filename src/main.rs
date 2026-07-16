@@ -6,6 +6,7 @@ mod permissions;
 mod api;
 mod archive;
 mod ci;
+mod find_inactive_members;
 mod schema;
 mod static_api;
 mod sync;
@@ -27,6 +28,7 @@ use schema::{Email, Team, TeamKind};
 
 use crate::archive::{archive_repo, archive_team};
 use crate::ci::{check_codeowners, generate_codeowners_file};
+use crate::find_inactive_members::find_inactive_members;
 use crate::schema::RepoPermission;
 use crate::sync::run_sync_team;
 use crate::sync::team_api::TeamApi;
@@ -108,6 +110,17 @@ enum RootOpts {
     },
     /// Dump all repositories with their environments
     DumpEnvironments,
+    /// Find inactive Project members
+    FindInactiveMembers {
+        /// Only look for teams whose name contains this string.
+        #[arg(long)]
+        team_filter: Option<String>,
+        /// Minimum number of days for which a user would have to not send any public
+        /// Zulip message or not send any GitHub comment in `rust-lang` for them to be considered
+        /// inactive.
+        #[arg(long, default_value = "30")]
+        cutoff_days: u64,
+    },
     /// Encrypt an email address
     EncryptEmail,
     /// Decrypt an email address
@@ -566,6 +579,10 @@ async fn run() -> Result<(), Error> {
                 }
             }
         }
+        RootOpts::FindInactiveMembers {
+            team_filter,
+            cutoff_days,
+        } => find_inactive_members(team_filter, cutoff_days).await?,
         RootOpts::EncryptEmail => {
             let plain: String = dialoguer::Input::new()
                 .with_prompt("Plaintext address")

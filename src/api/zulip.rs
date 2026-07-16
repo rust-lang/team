@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use anyhow::{Error, bail};
+use chrono::{DateTime, Utc};
 use reqwest::Method;
 use reqwest::{Client, ClientBuilder, Response};
 use serde::Deserialize;
@@ -75,6 +76,48 @@ impl ZulipApi {
         Ok(response)
     }
 
+    pub async fn get_last_n_messages_sent_by_user(
+        &self,
+        user: u64,
+        n: u64,
+    ) -> anyhow::Result<Vec<MessageInfo>> {
+        let query = serde_json::json!([{
+            "operator": "sender",
+            "operand": user
+        }])
+        .to_string();
+
+        #[derive(serde::Deserialize)]
+        struct Message {
+            subject: String,
+            timestamp: u64,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct Response {
+            messages: Vec<Message>,
+        }
+
+        let response = self
+            .req(
+                Method::GET,
+                &format!("/messages?anchor=newest&num_before={n}&num_after=0&narrow={query}"),
+                None,
+            )
+            .await?
+            .json::<Response>()
+            .await?;
+        Ok(response
+            .messages
+            .into_iter()
+            .rev()
+            .map(|msg| MessageInfo {
+                subject: msg.subject,
+                timestamp: DateTime::from_timestamp(msg.timestamp as i64, 0).unwrap_or(Utc::now()),
+            })
+            .collect())
+    }
+
     /// Perform a request against the Zulip API
     async fn req(
         &self,
@@ -129,4 +172,10 @@ impl ZulipUser {
     pub(crate) fn get_github_username(&self) -> Option<&str> {
         self.profile_data.get("3873").map(|v| v.value.as_str())
     }
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Debug)]
+pub struct MessageInfo {
+    pub subject: String,
+    pub timestamp: chrono::DateTime<Utc>,
 }
