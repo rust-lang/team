@@ -1,0 +1,13 @@
+org = "rust-lang"
+name = "ssh2-rs"
+description = "Rust bindings for libssh2"
+homepage = "https://crates.io/crates/ssh2"
+bots = ["rustbot", "rfcbot"]
+
+[access.teams]
+cargo = "write"
+
+[access.individuals]
+crisidev = "write"
+wez = "write"
+yodaldevoid = "write"
