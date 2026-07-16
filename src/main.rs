@@ -632,7 +632,7 @@ If you want to keep being a member of Rust teams, please let us know!
                 Command::new("git")
                     .arg("commit")
                     .arg("-m")
-                    .arg(&format!("Move {username} to alumni"))
+                    .arg(format!("Move {username} to alumni"))
                     .spawn()?
                     .wait()?;
 
@@ -642,7 +642,7 @@ If you want to keep being a member of Rust teams, please let us know!
                     .arg("--body")
                     .arg(body)
                     .arg("--title")
-                    .arg(&format!("Move {username} to alumni"))
+                    .arg(format!("Move {username} to alumni"))
                     .arg("--web")
                     .arg("--repo")
                     .arg("rust-lang/team");

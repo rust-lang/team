@@ -74,8 +74,9 @@ pub fn archive_repo(data_dir: &Path, name: &str) -> anyhow::Result<()> {
 /// Handles both bare strings (`"alice"`) and inline tables (`{ github = "alice" }`),
 /// skipping any entries that don't match either shape or that have an empty
 /// `github` field.
-fn collect_all_team_members(people_table: &toml_edit::Table) -> IndexSet<String> {
+fn collect_all_team_members(people_table: &toml_edit::Table) -> Vec<toml_edit::Value> {
     let mut all = IndexSet::new();
+    let mut values = Vec::new();
     for key in ["leads", "members", "alumni"] {
         let Some(arr) = people_table.get(key).and_then(|v| v.as_array()) else {
             continue;
@@ -91,22 +92,23 @@ fn collect_all_team_members(people_table: &toml_edit::Table) -> IndexSet<String>
             } else {
                 continue;
             };
-            if !username.is_empty() {
-                all.insert(username);
+            if !username.is_empty() && all.insert(username) {
+                values.push(item.clone());
             }
         }
     }
-    all
+    values
 }
 
 /// Build a TOML array of usernames laid out one per line with `    ` indentation
 /// and a trailing comma — matching the style used elsewhere in the team repo.
-fn build_alumni_array(usernames: &IndexSet<String>) -> toml_edit::Array {
+fn build_alumni_array(values: &[toml_edit::Value]) -> toml_edit::Array {
     let mut arr = toml_edit::Array::new();
-    for person in usernames {
-        let mut val = toml_edit::Value::from(person.as_str());
-        val.decor_mut().set_prefix("\n    ");
-        arr.push_formatted(val);
+    for value in values {
+        let mut value = value.clone();
+        value.decor_mut().set_prefix("\n    ");
+        value.decor_mut().set_suffix("");
+        arr.push_formatted(value);
     }
     arr.set_trailing("\n");
     arr.set_trailing_comma(true);
@@ -210,7 +212,7 @@ pub fn move_person_to_alumni<'a>(
     }
 
     teams.retain(|t| {
-        t.members(&data)
+        t.members(data)
             .unwrap()
             .iter()
             .any(|m| m.to_lowercase() == username.to_lowercase())
@@ -270,6 +272,7 @@ pub fn move_person_to_alumni<'a>(
             .as_array_mut()
             .unwrap();
         alumni.push_formatted(entry);
+        *alumni = build_alumni_array(&alumni.iter().cloned().collect::<Vec<_>>());
 
         std::fs::write(path, document.to_string())?;
     }
