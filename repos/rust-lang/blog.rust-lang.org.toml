@@ -8,7 +8,10 @@ bots = ["rustbot", "renovate"]
 build-type = "workflow"
 
 [access.teams]
-inside-rust-reviewers = "write"
+foundation-board-project-directors = "write"
+leadership-council = "write"
+leads = "write"
+project-group-leads = "write"
 website = "maintain"
 # For Rust release blog posts
 release = "write"
