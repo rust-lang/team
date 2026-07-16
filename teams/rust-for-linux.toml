@@ -24,3 +24,6 @@ bors.rust.try = true
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "rust-for-linux"
