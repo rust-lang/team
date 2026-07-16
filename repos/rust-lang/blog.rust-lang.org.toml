@@ -11,6 +11,7 @@ build-type = "workflow"
 foundation-board-project-directors = "write"
 leadership-council = "write"
 leads = "write"
+program = "write"
 project-group-leads = "write"
 website = "maintain"
 # For Rust release blog posts
