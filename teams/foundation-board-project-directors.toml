@@ -27,3 +27,6 @@ email = "project-directors@rust-lang.org"
 
 [[lists]]
 address = "project-directors@rust-lang.org"
+
+[[github]]
+orgs = ["rust-lang"]
