@@ -1,7 +1,9 @@
+use crate::data::Data;
 use anyhow::{Context, bail, format_err};
 use indexmap::IndexSet;
 use log::info;
 use std::path::Path;
+use toml_edit::{Array, Item, Value};
 
 fn get_access_teams(doc: &mut toml_edit::DocumentMut) -> Option<&mut toml_edit::Table> {
     doc.get_mut("access")?.get_mut("teams")?.as_table_mut()
@@ -189,6 +191,87 @@ fn remove_team_from_repository(team_name: &str, repo_path: &Path) -> anyhow::Res
         std::fs::write(repo_path, doc.to_string())
             .with_context(|| format!("failed to write {repo_path:?}"))?;
         info!("removed team '{team_name}' from {repo_path:?}");
+    }
+    Ok(())
+}
+
+pub fn move_person_to_alumni(
+    data: Data,
+    data_dir: &Path,
+    username: String,
+    team_filter: Vec<String>,
+) -> anyhow::Result<()> {
+    let username = username.to_string();
+    let username = username.to_lowercase();
+
+    let mut teams = data.teams().collect::<Vec<_>>();
+    if !team_filter.is_empty() {
+        teams.retain(|t| team_filter.iter().any(|f| f == t.name()));
+    }
+
+    teams.retain(|t| {
+        t.members(&data)
+            .unwrap()
+            .iter()
+            .any(|m| m.to_lowercase() == username.to_lowercase())
+            && t.name() != "all"
+            && t.name() != "leads"
+    });
+    teams.sort_by_key(|t| t.name());
+    println!(
+        "User {username} found in {} team(s): {}",
+        teams.len(),
+        teams
+            .iter()
+            .map(|t| t.name())
+            .collect::<Vec<_>>()
+            .join(", ")
+    );
+    for team in teams.iter() {
+        let path = data_dir.join("teams").join(format!("{}.toml", team.name()));
+        if !path.is_file() {
+            return Err(anyhow::anyhow!("Cannot find {path:?}"));
+        }
+        let mut document = read_toml_mut(&path)?;
+        let Some(people) = document.get_mut("people").and_then(|t| t.as_table_mut()) else {
+            continue;
+        };
+        let Some(members) = people.get_mut("members").and_then(|t| t.as_array_mut()) else {
+            continue;
+        };
+        let Some(index) = members
+            .iter()
+            .enumerate()
+            .filter_map(|(index, entry)| {
+                if let Some(name) = entry.as_str()
+                    && name.to_lowercase() == username
+                {
+                    Some(index)
+                } else if let Some(table) = entry.as_inline_table()
+                    && let Some(name) = table.get("github")
+                    && let Some(name) = name.as_str()
+                    && name.to_lowercase() == username
+                {
+                    Some(index)
+                } else {
+                    None
+                }
+            })
+            .next()
+        else {
+            println!("{username} not found in {}", path.display());
+            continue;
+        };
+        let entry = members.remove(index);
+
+        let alumni = people
+            .entry("alumni")
+            .or_insert(Item::Value(Value::Array(Array::new())))
+            .as_array_mut()
+            .unwrap();
+        alumni.push_formatted(entry);
+
+        std::fs::write(path, document.to_string())?;
     }
     Ok(())
 }

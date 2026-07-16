@@ -239,8 +239,7 @@ struct UserInfo {
 impl UserInfo {
     fn zulip_age_days(&self) -> Option<u64> {
         self.last_zulip_messages
-            .iter()
-            .next()
+            .first()
             .map(|msg| Utc::now().signed_duration_since(msg.timestamp).num_days() as u64)
     }
     fn github_age_days(&self) -> Option<u64> {

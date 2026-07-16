@@ -4,12 +4,12 @@ mod data;
 #[macro_use]
 mod permissions;
 mod api;
-mod archive;
 mod ci;
 mod find_inactive_members;
 mod schema;
 mod static_api;
 mod sync;
+mod toml_manipulation;
 mod validate;
 
 const AVAILABLE_SERVICES: &[&str] = &[
@@ -26,12 +26,12 @@ use api::zulip::ZulipApi;
 use data::Data;
 use schema::{Email, Team, TeamKind};
 
-use crate::archive::{archive_repo, archive_team};
 use crate::ci::{check_codeowners, generate_codeowners_file};
 use crate::find_inactive_members::find_inactive_members;
 use crate::schema::RepoPermission;
 use crate::sync::run_sync_team;
 use crate::sync::team_api::TeamApi;
+use crate::toml_manipulation::{archive_repo, archive_team, move_person_to_alumni};
 use anyhow::{Context, Error, bail, format_err};
 use api::github;
 use clap::Parser;
@@ -120,6 +120,15 @@ enum RootOpts {
         /// inactive.
         #[arg(long, default_value = "30")]
         cutoff_days: u64,
+    },
+    /// Move a person to alumni status
+    MoveToAlumni {
+        /// GitHub username of the person.
+        username: String,
+        /// Subset of teams in which the person should be moved to alumni.
+        /// If not specified, then the person will be moved to alumni in all their teams.
+        #[arg(long, value_delimiter = ',')]
+        teams: Vec<String>,
     },
     /// Encrypt an email address
     EncryptEmail,
@@ -583,6 +592,9 @@ async fn run() -> Result<(), Error> {
             team_filter,
             cutoff_days,
         } => find_inactive_members(team_filter, cutoff_days).await?,
+        RootOpts::MoveToAlumni { username, teams } => {
+            move_person_to_alumni(data, &cli.data_dir, username, teams)?;
+        }
         RootOpts::EncryptEmail => {
             let plain: String = dialoguer::Input::new()
                 .with_prompt("Plaintext address")
