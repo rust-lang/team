@@ -105,6 +105,7 @@ impl ZulipApi {
                 None,
             )
             .await?
+            .error_for_status()?
             .json::<Response>()
             .await?;
         Ok(response
