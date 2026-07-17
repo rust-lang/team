@@ -34,6 +34,7 @@ use crate::sync::team_api::TeamApi;
 use crate::toml_manipulation::{archive_repo, archive_team, move_person_to_alumni};
 use anyhow::{Context, Error, bail, format_err};
 use api::github;
+use chrono::Utc;
 use clap::Parser;
 use log::{error, info, warn};
 use std::collections::{BTreeMap, HashMap};
@@ -606,13 +607,14 @@ async fn run() -> Result<(), Error> {
         } => {
             let removed_teams = move_person_to_alumni(&data, &cli.data_dir, &username, teams)?;
             if !removed_teams.is_empty() && create_pr {
+                let date = Utc::now() + chrono::Duration::days(10);
                 let body = format!(
                     r#"Move `{username}` to alumni, as they have been inactive on GitHub and Zulip for some time. This is in accordance with https://github.com/rust-lang/leadership-council/blob/main/policies/membership/auto-alumni.md.
 
 `{username}` will be moved to alumni in the following team(s):
 {}
 
-This pull request should be left open at least for 10 days to allow the contributor to respond.
+This pull request should be left open at least for 10 days (until `{}`) to allow the contributor to respond.
 
 CC @{username}
 
@@ -627,10 +629,17 @@ If you want to keep being a member of Rust teams, please let us know!
                                 .map(|username| format!("@{username}"))
                                 .collect::<Vec<_>>();
                             leads.sort();
-                            format!("- {} (CC {})", team.name(), leads.join(" "))
+                            let leads_cc = if !leads.is_empty() {
+                                format!(" (CC {})", leads.join(" "))
+                            } else {
+                                String::new()
+                            };
+
+                            format!("- {}{}", team.name(), leads_cc)
                         })
                         .collect::<Vec<_>>()
-                        .join("\n")
+                        .join("\n"),
+                    date.format("%d.%m.%Y")
                 );
                 Command::new("git")
                     .arg("add")
