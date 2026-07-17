@@ -619,6 +619,8 @@ This pull request should be left open at least for 10 days (until `{}`) to allow
 CC @{username}
 
 If you want to keep being a member of Rust teams, please let us know!
+
+@rustbot label +alumni
 "#,
                     removed_teams
                         .iter()
