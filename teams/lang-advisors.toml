@@ -11,13 +11,14 @@ members = [
     "dianne",
     "ehuss",
     "jackh726",
-    "JakobDegen",
     "RalfJung",
     "Mark-Simulacrum",
     "Nadrieril",
     "wesleywiser",
 ]
-alumni = []
+alumni = [
+    "JakobDegen",
+]
 
 # Granting these permissions because an advisor can use these to help when
 # reviewing a proposed change.
