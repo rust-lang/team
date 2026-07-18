@@ -337,6 +337,33 @@ query($query: String!, $issueLimit: Int!, $commentLimit: Int!) {
 
         Ok(all_comments)
     }
+
+    pub(crate) async fn recent_user_commits_in_org(
+        &self,
+        username: &str,
+        org: &str,
+        limit: usize,
+    ) -> anyhow::Result<Vec<CommitInfo>> {
+        #[derive(serde::Deserialize, Debug)]
+        struct Response {
+            items: Vec<octocrab::models::search::CommitSearchResultItem>,
+        }
+
+        let response: Response = self.get(&format!("search/commits?q=author:{username}+org:{org}&sort=author-date&order=desc&per_page={limit}")).await?;
+        Ok(response
+            .items
+            .into_iter()
+            .filter_map(|c| {
+                Some(CommitInfo {
+                    repo_owner: c.repository.owner.login,
+                    repo_name: c.repository.name,
+                    created_at: chrono::DateTime::parse_from_rfc3339(&c.commit.committer?.date?)
+                        .ok()?
+                        .with_timezone(&Utc),
+                })
+            })
+            .collect())
+    }
 }
 
 fn user_node_id(id: u64) -> String {
@@ -354,4 +381,12 @@ pub struct UserComment {
     pub comment_url: String,
     pub body: String,
     pub created_at: Option<DateTime<Utc>>,
+}
+
+/// A commit made by a user on a given repository.
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct CommitInfo {
+    pub repo_owner: String,
+    pub repo_name: String,
+    pub created_at: DateTime<Utc>,
 }

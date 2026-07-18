@@ -3,7 +3,7 @@
 //!
 //! It should help members of the Leadership Council with their duty of periodically removing
 //! inactive users (https://github.com/rust-lang/leadership-council/blob/main/policies/membership/auto-alumni.md).
-use crate::api::github::{GitHubApi, UserComment};
+use crate::api::github::{CommitInfo, GitHubApi, UserComment};
 use crate::api::zulip::{MessageInfo, ZulipApi};
 use crate::sync::team_api::TeamApi;
 use chrono::Utc;
@@ -42,7 +42,14 @@ pub async fn find_inactive_members(
         let last_github_comments = gh_api
             .recent_user_comments_in_org(&user.username, "rust-lang", 3)
             .await
-            .expect("Cannot fetch GitHub activity");
+            .expect("Cannot fetch GitHub comment activity");
+
+        // We search for commits, because finding issues/PRs is more expensive in terms of rate
+        // limits
+        let last_github_commits = gh_api
+            .recent_user_commits_in_org(&user.username, "rust-lang", 3)
+            .await
+            .expect("Cannot fetch GitHub commit activity");
 
         let last_zulip_messages = if let Some(zulip_id) = user.zulip_id {
             zulip_api
@@ -58,6 +65,7 @@ pub async fn find_inactive_members(
         let info = UserInfo {
             last_zulip_messages,
             last_github_comments,
+            last_github_commits,
         };
         cache
             .store(&user.username, info.clone())
@@ -140,16 +148,18 @@ async fn print_results(
     // `cutoff_days`.
     users.retain(|(_, info)| {
         info.zulip_age_days().unwrap_or(NEVER) > cutoff_days
-            && info.github_age_days().unwrap_or(NEVER) > cutoff_days
+            && info.github_comment_age_days().unwrap_or(NEVER) > cutoff_days
+            && info.github_commit_age_days().unwrap_or(NEVER) > cutoff_days
     });
     eprintln!("Inactive users: {}", users.len());
 
     users.sort_by_key(|(_, info)| {
-        // Sort by the largest minimum of those two durations
+        // Sort by the largest minimum of these durations
         Reverse(
             info.zulip_age_days()
                 .unwrap_or(NEVER)
-                .min(info.github_age_days().unwrap_or(NEVER)),
+                .min(info.github_comment_age_days().unwrap_or(NEVER))
+                .min(info.github_commit_age_days().unwrap_or(NEVER)),
         )
     });
 
@@ -166,11 +176,39 @@ async fn print_results(
         }
     }
 
+    let now = Utc::now();
     for (user, info) in users {
+        let comments = if info.last_github_comments.is_empty() {
+            "never".to_string()
+        } else {
+            format!(
+                "{} days ago",
+                info.last_github_comments
+                    .iter()
+                    .filter_map(|c| c.created_at)
+                    .map(|d| now.signed_duration_since(d).num_days().to_string())
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            )
+        };
+        let commits = if info.last_github_commits.is_empty() {
+            "never".to_string()
+        } else {
+            format!(
+                "{} days ago",
+                info.last_github_commits
+                    .iter()
+                    .map(|c| c.created_at)
+                    .map(|d| now.signed_duration_since(d).num_days().to_string())
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            )
+        };
         println!(
             r#"**{}**
     - Zulip: {}{}
-    - GitHub (rust-lang): {}
+    - GitHub comments (rust-lang): {comments}
+    - GitHub commits (rust-lang): {commits}
     - Teams: {}
 "#,
             user.username,
@@ -182,9 +220,6 @@ async fn print_results(
             } else {
                 ""
             },
-            info.github_age_days()
-                .map(|s| format!("{s} days ago"))
-                .unwrap_or_else(|| "never".to_string()),
             person_to_teams
                 .get(&user.username)
                 .cloned()
@@ -250,6 +285,7 @@ struct User {
 struct UserInfo {
     last_zulip_messages: Vec<MessageInfo>,
     last_github_comments: Vec<UserComment>,
+    last_github_commits: Vec<CommitInfo>,
 }
 
 impl UserInfo {
@@ -258,10 +294,19 @@ impl UserInfo {
             .first()
             .map(|msg| Utc::now().signed_duration_since(msg.timestamp).num_days() as u64)
     }
-    fn github_age_days(&self) -> Option<u64> {
+
+    fn github_comment_age_days(&self) -> Option<u64> {
         self.last_github_comments
             .iter()
             .filter_map(|comment| comment.created_at)
+            .next()
+            .map(|date| Utc::now().signed_duration_since(date).num_days() as u64)
+    }
+
+    fn github_commit_age_days(&self) -> Option<u64> {
+        self.last_github_commits
+            .iter()
+            .map(|commit| commit.created_at)
             .next()
             .map(|date| Utc::now().signed_duration_since(date).num_days() as u64)
     }
