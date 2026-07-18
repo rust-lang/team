@@ -2,10 +2,10 @@ use crate::sync::utils::ResponseExt;
 use anyhow::{Context, Error, bail};
 use base64::Engine;
 use base64::prelude::BASE64_STANDARD;
-use chrono::{DateTime, Utc};
-use reqwest::Method;
+use chrono::{DateTime, Duration, Utc};
 use reqwest::header::{self, HeaderValue};
 use reqwest::{Client, ClientBuilder, RequestBuilder};
+use reqwest::{Method, StatusCode};
 use std::borrow::Cow;
 use std::collections::HashMap;
 
@@ -125,12 +125,41 @@ impl GitHubApi {
     where
         T: serde::de::DeserializeOwned,
     {
-        self.prepare(false, Method::GET, url)?
-            .send()
-            .await?
-            .error_for_status()?
-            .json_annotated()
-            .await
+        loop {
+            let response = self.prepare(false, Method::GET, url)?.send().await?;
+
+            let status = response.status();
+            if status != StatusCode::OK {
+                let headers = response.headers();
+
+                // Rate limited
+                if status == StatusCode::FORBIDDEN
+                    && headers
+                        .get("x-ratelimit-remaining")
+                        .and_then(|v| v.to_str().ok())
+                        == Some("0")
+                {
+                    let reset_at = headers
+                        .get("x-ratelimit-reset")
+                        .and_then(|v| v.to_str().ok())
+                        .and_then(|t| t.parse::<u64>().ok())
+                        .and_then(|timestamp| chrono::DateTime::from_timestamp(timestamp as i64, 0))
+                        .map(|d| d + chrono::Duration::seconds(1))
+                        .unwrap_or(Utc::now() + chrono::Duration::minutes(1));
+                    eprintln!("Rate limited. Waiting until {reset_at}");
+                    let duration = reset_at
+                        .signed_duration_since(Utc::now())
+                        .max(Duration::zero());
+                    tokio::time::sleep(duration.to_std().unwrap()).await;
+                    continue;
+                }
+
+                let text = response.text().await?;
+                return Err(anyhow::anyhow!("Request failed with {status}: {text}"));
+            } else {
+                return Ok(response.json_annotated().await?);
+            }
+        }
     }
 
     pub(crate) async fn usernames(&self, ids: &[u64]) -> Result<HashMap<u64, String>, Error> {

@@ -1,9 +1,10 @@
 use std::collections::HashMap;
 
+use crate::sync::utils::ResponseExt;
 use anyhow::{Error, bail};
 use chrono::{DateTime, Utc};
-use reqwest::Method;
 use reqwest::{Client, ClientBuilder, Response};
+use reqwest::{Method, StatusCode};
 use serde::Deserialize;
 
 const ZULIP_BASE_URL: &str = "https://rust-lang.zulipchat.com/api/v1";
@@ -104,19 +105,32 @@ impl ZulipApi {
                 &format!("/messages?anchor=newest&num_before={n}&num_after=0&narrow={query}"),
                 None,
             )
-            .await?
-            .error_for_status()?
-            .json::<Response>()
             .await?;
-        Ok(response
-            .messages
-            .into_iter()
-            .rev()
-            .map(|msg| MessageInfo {
-                subject: msg.subject,
-                timestamp: DateTime::from_timestamp(msg.timestamp as i64, 0).unwrap_or(Utc::now()),
-            })
-            .collect())
+        let status = response.status();
+        if status == StatusCode::OK {
+            let response: Response = response.json_annotated().await?;
+            Ok(response
+                .messages
+                .into_iter()
+                .rev()
+                .map(|msg| MessageInfo {
+                    subject: msg.subject,
+                    timestamp: DateTime::from_timestamp(msg.timestamp as i64, 0)
+                        .unwrap_or(Utc::now()),
+                })
+                .collect())
+        } else {
+            let text = response.text().await?;
+            // User might not exist
+            if status == StatusCode::BAD_REQUEST && text.contains("unknown user") {
+                eprintln!("Cannot get Zulip messages for user {user}, status {status}: {text}");
+                Ok(vec![])
+            } else {
+                Err(anyhow::anyhow!(
+                    "Cannot get Zulip messages for user {user}, status {status}: {text}"
+                ))
+            }
+        }
     }
 
     /// Perform a request against the Zulip API
