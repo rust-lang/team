@@ -175,7 +175,7 @@ impl ZulipUser {
     }
 }
 
-#[derive(serde::Serialize, serde::Deserialize, Debug)]
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
 pub struct MessageInfo {
     pub subject: String,
     pub timestamp: chrono::DateTime<Utc>,

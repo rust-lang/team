@@ -60,7 +60,7 @@ pub async fn find_inactive_members(
             last_github_comments,
         };
         cache
-            .store(&user.username, &info)
+            .store(&user.username, info.clone())
             .expect("Cannot write cache entry");
 
         (user, info)
@@ -209,11 +209,21 @@ impl UserCache {
 
     fn load(&self, username: &str) -> anyhow::Result<UserInfo> {
         let data = std::fs::read(self.path(username))?;
-        Ok(serde_json::from_slice(&data)?)
+        let entry: CacheEntry = serde_json::from_slice(&data)?;
+
+        // If the cache is too old, do not use it
+        if Utc::now().signed_duration_since(entry.timestamp) > chrono::Duration::days(30) {
+            Err(anyhow::anyhow!("Cache entry for {username} is too old"))
+        } else {
+            Ok(entry.info)
+        }
     }
 
-    fn store(&self, username: &str, info: &UserInfo) -> anyhow::Result<()> {
-        let data = serde_json::to_string(info)?;
+    fn store(&self, username: &str, info: UserInfo) -> anyhow::Result<()> {
+        let data = serde_json::to_string(&CacheEntry {
+            timestamp: Utc::now(),
+            info,
+        })?;
         std::fs::write(self.path(username), data)?;
         Ok(())
     }
@@ -223,6 +233,12 @@ impl UserCache {
     }
 }
 
+#[derive(serde::Serialize, serde::Deserialize)]
+struct CacheEntry {
+    timestamp: chrono::DateTime<Utc>,
+    info: UserInfo,
+}
+
 #[derive(PartialEq, Eq, Hash, Debug)]
 struct User {
     username: String,
@@ -230,7 +246,7 @@ struct User {
     zulip_id: Option<u64>,
 }
 
-#[derive(serde::Serialize, serde::Deserialize, Debug)]
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
 struct UserInfo {
     last_zulip_messages: Vec<MessageInfo>,
     last_github_comments: Vec<UserComment>,
