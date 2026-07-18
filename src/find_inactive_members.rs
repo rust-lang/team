@@ -14,14 +14,22 @@ use std::cmp::Reverse;
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 
+pub struct InactiveTeamFilter {
+    /// Only search within teams that contain this string in their name.
+    pub name: Option<String>,
+    /// Include all teams, including working groups, project groups and marker teams.
+    pub include_all_teams: bool,
+}
+
 pub async fn find_inactive_members(
-    team_filter: Option<String>,
+    filter: InactiveTeamFilter,
     cutoff_days: u64,
 ) -> anyhow::Result<()> {
     let team_api = TeamApi::Production;
     let teams = team_api.get_teams().await?;
 
-    let users = find_team_members(&team_api, &teams, team_filter).await?;
+    let mut users = find_team_members(&team_api, &teams, filter).await?;
+    users.sort_by_key(|u| u.username.clone());
     println!("Found {} team members", users.len());
 
     let zulip_api = ZulipApi::new();
@@ -46,10 +54,16 @@ pub async fn find_inactive_members(
 
         // We search for commits, because finding issues/PRs is more expensive in terms of rate
         // limits
-        let last_github_commits = gh_api
+        let last_github_commits = match gh_api
             .recent_user_commits_in_org(&user.username, "rust-lang", 3)
             .await
-            .expect("Cannot fetch GitHub commit activity");
+        {
+            Ok(c) => c,
+            Err(error) => {
+                eprintln!("Cannot load commits for {}: {error:?}", user.username);
+                vec![]
+            }
+        };
 
         let last_zulip_messages = if let Some(zulip_id) = user.zulip_id {
             zulip_api
@@ -95,20 +109,20 @@ pub async fn find_inactive_members(
 async fn find_team_members(
     team_api: &TeamApi,
     teams: &[v1::Team],
-    team_filter: Option<String>,
+    filter: InactiveTeamFilter,
 ) -> anyhow::Result<Vec<User>> {
     let team_teams = teams
         .iter()
         .filter(|team| match team.kind {
             TeamKind::Team => true,
-            TeamKind::WorkingGroup => false,
-            TeamKind::ProjectGroup => false,
-            TeamKind::MarkerTeam => false,
+            TeamKind::WorkingGroup | TeamKind::ProjectGroup | TeamKind::MarkerTeam => {
+                filter.include_all_teams
+            }
             TeamKind::Unknown => false,
         })
         .filter(|team| {
-            if let Some(filter) = &team_filter {
-                team.name.contains(filter)
+            if let Some(name) = &filter.name {
+                team.name.contains(name)
             } else {
                 true
             }

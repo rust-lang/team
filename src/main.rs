@@ -27,7 +27,7 @@ use data::Data;
 use schema::{Email, Team, TeamKind};
 
 use crate::ci::{check_codeowners, generate_codeowners_file};
-use crate::find_inactive_members::find_inactive_members;
+use crate::find_inactive_members::{InactiveTeamFilter, find_inactive_members};
 use crate::schema::RepoPermission;
 use crate::sync::run_sync_team;
 use crate::sync::team_api::TeamApi;
@@ -117,6 +117,9 @@ enum RootOpts {
         /// Only look for teams whose name contains this string.
         #[arg(long)]
         team_filter: Option<String>,
+        /// Include also working groups, project groups and marker teams in the search.
+        #[arg(long)]
+        include_all_teams: bool,
         /// Minimum number of days for which a user would have to not send any public
         /// Zulip message or not send any GitHub comment in `rust-lang` for them to be considered
         /// inactive.
@@ -598,8 +601,18 @@ async fn run() -> Result<(), Error> {
         }
         RootOpts::FindInactiveMembers {
             team_filter,
+            include_all_teams,
             cutoff_days,
-        } => find_inactive_members(team_filter, cutoff_days).await?,
+        } => {
+            find_inactive_members(
+                InactiveTeamFilter {
+                    name: team_filter,
+                    include_all_teams,
+                },
+                cutoff_days,
+            )
+            .await?
+        }
         RootOpts::MoveToAlumni {
             username,
             teams,
