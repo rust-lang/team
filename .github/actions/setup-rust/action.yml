@@ -13,7 +13,7 @@ runs:
     - name: Install Rust Stable
       shell: bash
       env:
-        RUST_VERSION: "1.96.1"
+        RUST_VERSION: "1.97.1"
         COMPONENTS: ${{ inputs.components }}
       run: |
         rustc -vV
