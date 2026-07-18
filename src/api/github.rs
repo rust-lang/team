@@ -157,7 +157,7 @@ impl GitHubApi {
                 let text = response.text().await?;
                 return Err(anyhow::anyhow!("Request failed with {status}: {text}"));
             } else {
-                return Ok(response.json_annotated().await?);
+                return response.json_annotated().await;
             }
         }
     }

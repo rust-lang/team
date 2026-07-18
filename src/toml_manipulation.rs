@@ -229,19 +229,9 @@ pub fn move_person_to_alumni<'a>(
             .collect::<Vec<_>>()
             .join(", ")
     );
-    for team in teams.iter() {
-        let path = data_dir.join("teams").join(format!("{}.toml", team.name()));
-        if !path.is_file() {
-            return Err(anyhow::anyhow!("Cannot find {path:?}"));
-        }
-        let mut document = read_toml_mut(&path)?;
-        let Some(people) = document.get_mut("people").and_then(|t| t.as_table_mut()) else {
-            continue;
-        };
-        let Some(members) = people.get_mut("members").and_then(|t| t.as_array_mut()) else {
-            continue;
-        };
-        let Some(index) = members
+
+    fn find_index(array: &Array, username: &str) -> Option<usize> {
+        array
             .iter()
             .enumerate()
             .filter_map(|(index, entry)| {
@@ -260,7 +250,28 @@ pub fn move_person_to_alumni<'a>(
                 }
             })
             .next()
-        else {
+    }
+
+    for team in teams.iter() {
+        let path = data_dir.join("teams").join(format!("{}.toml", team.name()));
+        if !path.is_file() {
+            return Err(anyhow::anyhow!("Cannot find {path:?}"));
+        }
+        let mut document = read_toml_mut(&path)?;
+        let Some(people) = document.get_mut("people").and_then(|t| t.as_table_mut()) else {
+            continue;
+        };
+
+        if let Some(leads) = people.get_mut("leads").and_then(|t| t.as_array_mut())
+            && let Some(index) = find_index(leads, &username)
+        {
+            leads.remove(index);
+        }
+
+        let Some(members) = people.get_mut("members").and_then(|t| t.as_array_mut()) else {
+            continue;
+        };
+        let Some(index) = find_index(members, &username) else {
             println!("{username} not found in {}", path.display());
             continue;
         };
