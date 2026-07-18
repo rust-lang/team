@@ -142,7 +142,7 @@ pub(crate) async fn run(
         }
     }
 
-    for (_, list) in addr2list.iter() {
+    for list in addr2list.values() {
         create(&mailgun, list)
             .await
             .with_context(|| format!("failed to create {}", list.address))?;
