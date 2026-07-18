@@ -127,6 +127,7 @@ async fn find_team_members(
                 true
             }
         })
+        .filter(|team| team.name != "alumni" && team.name != "all" && team.name != "leads")
         .collect::<Vec<_>>();
 
     let mut team_members = HashSet::new();
