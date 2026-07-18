@@ -19,7 +19,6 @@ members = [
     "anden3",
     "KittyBorgX",
     "Enselic",
-    "tranquillity-codes",
     "oskgo",
     "lolbinarycat",
     "alex-semenyuk",
@@ -41,6 +40,7 @@ members = [
 ]
 alumni = [
     "jieyouxu",
+    "tranquillity-codes",
 ]
 
 [website]
