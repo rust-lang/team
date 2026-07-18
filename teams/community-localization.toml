@@ -2,15 +2,15 @@ name = "community-localization"
 subteam-of = "community"
 
 [people]
-leads = ["vertexclique", "Manishearth"]
+leads = ["Manishearth"]
 members = [
     "Manishearth",
     "JohnTitor",
-    "vertexclique",
 ]
 alumni = [
     "sebasmagri",
     "XAMPPRocky",
+    "vertexclique",
 ]
 
 [rfcbot]
