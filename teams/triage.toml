@@ -7,7 +7,6 @@ members = [
     "Dylan-DPC",
     "JohnTitor",
     "joelpalmer",
-    "JohnCSimon",
     "edmilsonefs",
     "Alexendoo",
     "bstrie",
@@ -41,6 +40,7 @@ members = [
 ]
 alumni = [
     "jieyouxu",
+    "JohnCSimon",
 ]
 
 [website]
