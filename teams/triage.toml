@@ -28,7 +28,6 @@ members = [
     "Darksonn",
     "cyrgani",
     "nuzzles",
-    "shard77",
     "xizheyin",
     "karolzwolak",
     "probablytaylors",
@@ -41,6 +40,7 @@ members = [
 ]
 alumni = [
     "jieyouxu",
+    "shard77",
 ]
 
 [website]
