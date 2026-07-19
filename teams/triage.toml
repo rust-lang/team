@@ -6,7 +6,6 @@ leads = ["Dylan-DPC"]
 members = [
     "Dylan-DPC",
     "JohnTitor",
-    "JohnCSimon",
     "Alexendoo",
     "bstrie",
     "crlf0710",
@@ -41,6 +40,7 @@ alumni = [
     "anden3",
     "edmilsonefs",
     "joelpalmer",
+    "JohnCSimon",
 ]
 
 [website]
