@@ -27,3 +27,23 @@ jobs:
         run: |
           cargo build --release
           ./target/release/rust-team ci check-untracked-repos
+
+  notify-infra:
+    name: Notify the infrastructure team
+    needs: [ check-untracked-repos ]
+    if: ${{ !cancelled() && needs.check-untracked-repos.result == 'failure' }}
+    runs-on: ubuntu-latest
+    environment: deploy
+    steps:
+      - name: Send Zulip message
+        uses: zulip/github-actions-zulip/send-message@f675f2b4eb2a95fae974215476dcb7ad8dfeff6b # v2.0.2
+        with:
+          api-key: ${{ secrets.ZULIP_API_TOKEN }}
+          email: ${{ secrets.ZULIP_USERNAME }}
+          organization-url: "https://rust-lang.zulipchat.com"
+          to: "t-infra"
+          type: "stream"
+          topic: "Untracked repositories"
+          content: |
+            The untracked repositories workflow failed.
+            Check out the [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
