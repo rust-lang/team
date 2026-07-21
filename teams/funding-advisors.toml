@@ -19,5 +19,5 @@ description = "People coordinating closely with the Funding team"
 name = "T-funding-advisors"
 
 [[zulip-streams]]
-name = "t-funding/with-advisors"
+name = "funding/with-advisors"
 extra-teams = ["funding"]
