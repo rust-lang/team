@@ -3,3 +3,6 @@ github = 'dianqk'
 github-id = 10829914
 email = 'dianqk@dianqk.net'
 zulip-id = 480980
+
+[funding]
+github-sponsors = true
