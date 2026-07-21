@@ -5,7 +5,6 @@ subteam-of = "community"
 leads = []
 members = [
     "mattgathu",
-    "celaus",
     "flaki",
     "badboy",
     "Manishearth",
@@ -13,6 +12,7 @@ members = [
 ]
 alumni = [
     "skade",
+    "celaus",
 ]
 
 [website]
