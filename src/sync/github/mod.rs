@@ -469,17 +469,14 @@ impl SyncGitHub {
             .allowed_merge_teams(expected_repo, branch_protection)
             .await?;
         bypass_actors.extend(allowed_teams);
-        let allowed_apps = branch_protection
-            .allowed_merge_apps
-            .iter()
-            .filter_map(|app| {
-                app.app_id().map(|app_id| RulesetBypassActor {
-                    actor_id: app_id,
-                    actor_type: RulesetActorType::Integration,
-                    bypass_mode: RulesetBypassMode::Always,
-                })
-            });
-        bypass_actors.extend(allowed_apps);
+        let bypass_apps = branch_protection.bypass_apps.iter().filter_map(|app| {
+            app.app_id().map(|app_id| RulesetBypassActor {
+                actor_id: app_id,
+                actor_type: RulesetActorType::Integration,
+                bypass_mode: RulesetBypassMode::Always,
+            })
+        });
+        bypass_actors.extend(bypass_apps);
         Ok(bypass_actors)
     }
 

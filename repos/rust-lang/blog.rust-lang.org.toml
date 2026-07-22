@@ -24,7 +24,7 @@ ci-checks = [
 ]
 require-conversation-resolution = true
 # Allow promote release to push without PRs
-allowed-merge-apps = ["promote-release"]
+bypass-apps = ["promote-release"]
 merge-queue = { enabled = true }
 
 [environments.github-pages]

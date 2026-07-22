@@ -487,13 +487,13 @@ required-approvals = 1
 # in [access.teams].
 # (optional)
 allowed-merge-teams = ["awesome-team"]
-# Determines the GitHub Apps that manage pushes to this branch.
+# Determines the GitHub Apps that can bypass this ruleset.
 # When a bot manages the queue, some other options, like
 # `required-approvals` and `pr-required` options are not valid.
 #
-# Currently supported values: "rust-timer", "bors", "workflows-crates-io".
+# Currently supported values: "rust-timer", "bors", "workflows-crates-io", "promote-release".
 # (optional)
-allowed-merge-apps = ["bors"]
+bypass-apps = ["bors"]
 # Merge queue configuration for this branch. (optional)
 merge-queue = {
   # (optional - default `false`)

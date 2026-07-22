@@ -17,7 +17,7 @@ ci-checks = [
     "Frontend / Test",
 ]
 required-approvals = 0
-allowed-merge-apps = ["workflows-crates-io"]
+bypass-apps = ["workflows-crates-io"]
 
 [environments.crates-io]
 

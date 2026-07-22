@@ -35,7 +35,7 @@ rust-timer = "write"
 [[rulesets]]
 name = "main"
 pattern = "main"
-allowed-merge-apps = ["bors"]
+bypass-apps = ["bors"]
 prevent-update = true
 
 # No one can force push to main
@@ -50,14 +50,14 @@ pr-required = false
 [[rulesets]]
 name = "stable"
 pattern = "stable"
-allowed-merge-apps = ["bors", "promote-release"]
+bypass-apps = ["bors", "promote-release"]
 prevent-update = true
 
 # Only `promote-release` can force-push to `stable`
 [[rulesets]]
 name = "stable - force-push"
 pattern = "stable"
-allowed-merge-apps = ["promote-release"]
+bypass-apps = ["promote-release"]
 # `stable` already requires users to open PRs.
 # This allows bors to push without opening a PR.
 pr-required = false
@@ -73,14 +73,14 @@ prevent-force-push = false
 [[rulesets]]
 name = "beta"
 pattern = "beta"
-allowed-merge-apps = ["bors", "promote-release"]
+bypass-apps = ["bors", "promote-release"]
 prevent-update = true
 
 # Only `promote-release` can force-push to `beta`
 [[rulesets]]
 name = "beta - force-push"
 pattern = "beta"
-allowed-merge-apps = ["promote-release"]
+bypass-apps = ["promote-release"]
 # `beta` already requires users to open PRs.
 # This allows bors to push without opening a PR.
 pr-required = false
@@ -94,13 +94,13 @@ prevent-force-push = false
 
 [[rulesets]]
 pattern = "*"
-allowed-merge-apps = ["bors", "promote-release"]
+bypass-apps = ["bors", "promote-release"]
 prevent-update = true
 allowed-merge-teams = ["rust-timer"]
 
 [[rulesets]]
 pattern = "*/**/*"
-allowed-merge-apps = ["bors", "promote-release"]
+bypass-apps = ["bors", "promote-release"]
 prevent-update = true
 
 [[rulesets]]
@@ -113,28 +113,28 @@ prevent-force-push = false
 # Must support force-pushes.
 [[rulesets]]
 pattern = "automation/bors/try"
-allowed-merge-apps = ["bors"]
+bypass-apps = ["bors"]
 prevent-update = true
 
 # Required for running try builds created by bors.
 # Must support force-pushes.
 [[rulesets]]
 pattern = "automation/bors/try-merge"
-allowed-merge-apps = ["bors"]
+bypass-apps = ["bors"]
 prevent-update = true
 
 # Required for running auto builds created by bors.
 # Must support force-pushes.
 [[rulesets]]
 pattern = "automation/bors/auto"
-allowed-merge-apps = ["bors"]
+bypass-apps = ["bors"]
 prevent-update = true
 
 # Required for running auto builds created by bors.
 # Must support force-pushes.
 [[rulesets]]
 pattern = "automation/bors/auto-merge"
-allowed-merge-apps = ["bors"]
+bypass-apps = ["bors"]
 prevent-update = true
 
 # Required for unrolled PR builds created by perfbot.
