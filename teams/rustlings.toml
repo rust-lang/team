@@ -2,14 +2,14 @@ name = "rustlings"
 subteam-of = "lang-docs"
 
 [people]
-leads = ["mo8it", "manyinsects"]
+leads = ["mo8it"]
 members = [
-    "manyinsects",
     "mo8it",
     "senekor",
 ]
 alumni = [
     "carols10cents",
+    "manyinsects",
 ]
 
 [[github]]
