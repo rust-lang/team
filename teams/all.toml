@@ -39,3 +39,11 @@ name = "all/private"
 extra-teams = [
     "foundation-staff",
 ]
+
+# Secondary channel for people sharing vacation plans for better separation from all/private.
+# [Same level of privacy as all/private though.]
+[[zulip-streams]]
+name = "all/rustacean-connection"
+extra-teams = [
+    "foundation-staff",
+]
