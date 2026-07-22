@@ -1,0 +1,28 @@
+name = "maintainers-in-residence"
+kind = "marker-team"
+
+[people]
+leads = []
+members = []
+alumni = []
+
+[[roles]]
+id = "full-time"
+description = "Full-time Maintainer in Residence"
+
+[[roles]]
+id = "part-time"
+description = "Part-time Maintainer in Residence"
+
+[permissions]
+dev-desktop = true
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Maintainer in Residence"
+description = "Rust maintainers sponsored by the Rust Foundation Maintainers Fund"
+
+[[zulip-groups]]
+name = "T-mir"

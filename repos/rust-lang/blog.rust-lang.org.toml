@@ -20,8 +20,7 @@ release = "write"
 [[rulesets]]
 pattern = "main"
 ci-checks = [
-    "lint",
-    "build",
+    "CI"
 ]
 require-conversation-resolution = true
 # Allow promote release to push without PRs
@@ -29,4 +28,4 @@ bypass-apps = ["promote-release"]
 merge-queue = { enabled = true }
 
 [environments.github-pages]
-branches = ["main"]
+branches = ["gh-readonly-queue/main/*"]

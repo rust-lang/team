@@ -13,3 +13,12 @@ cargo = "write"
 compiler = "write"
 
 [environments.github-pages]
+
+[environments.publish]
+tags = ["*"]
+
+[[crates-io]]
+crates = ["jobserver"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["cargo", "compiler"]

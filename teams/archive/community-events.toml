@@ -3,15 +3,14 @@ subteam-of = "community"
 
 [people]
 leads = []
-members = [
+members = []
+alumni = [
     "mattgathu",
     "celaus",
     "flaki",
     "badboy",
     "Manishearth",
     "JohnTitor",
-]
-alumni = [
     "skade",
 ]
 
