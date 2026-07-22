@@ -48,6 +48,15 @@ enum DumpIndividualAccessGroupBy {
     Repo,
 }
 
+#[derive(clap::ValueEnum, Clone, Debug)]
+enum CreateAlumniPr {
+    /// Create the alumni pull request on your behalf.
+    Myself,
+    /// Create the alumni pull request of behalf of someone else, who you are moving to alumni
+    /// status.
+    External,
+}
+
 #[derive(clap::Parser, Debug)]
 /// Manage the Rust team members
 struct Cli {
@@ -138,8 +147,11 @@ enum RootOpts {
         /// create a pull request using the `gh` CLI tool.
         ///
         /// You will be redirected to the GitHub web interface to confirm the PR.
-        #[arg(long, default_value = "false")]
-        create_pr: bool,
+        ///
+        /// Specify either `myself` or `external`, based on whether you are moving yourself to
+        /// alumni, or if you are moving someone else to alumni.
+        #[arg(long)]
+        create_pr: Option<CreateAlumniPr>,
     },
     /// Encrypt an email address
     EncryptEmail,
@@ -618,11 +630,36 @@ async fn run() -> Result<(), Error> {
             teams,
             create_pr,
         } => {
+            let specific_teams = !teams.is_empty();
             let removed_teams = move_person_to_alumni(&data, &cli.data_dir, &username, teams)?;
-            if !removed_teams.is_empty() && create_pr {
+            if !removed_teams.is_empty()
+                && let Some(create_pr) = create_pr
+            {
+                let removed_teams_str = {
+                    let mut teams = removed_teams.iter().map(|t| t.name()).collect::<Vec<_>>();
+                    teams.sort();
+                    teams.join(", ")
+                };
+
+                let title_suffix = if specific_teams {
+                    format!(" in {removed_teams_str}")
+                } else {
+                    String::new()
+                };
+                let title = format!("Move `{username}` to alumni{title_suffix}");
+
                 let date = Utc::now() + chrono::Duration::days(10);
-                let body = format!(
-                    r#"Move `{username}` to alumni, as they have been inactive on GitHub and Zulip for some time. This is in accordance with https://github.com/rust-lang/leadership-council/blob/main/policies/membership/auto-alumni.md.
+                let body = match create_pr {
+                    CreateAlumniPr::Myself => {
+                        format!(
+                            r#"Move myself to alumni{title_suffix}.
+
+@rustbot label +alumni
+"#
+                        )
+                    }
+                    CreateAlumniPr::External => format!(
+                        r#"{title}, as they have been inactive on GitHub and Zulip for some time. This is in accordance with https://github.com/rust-lang/leadership-council/blob/main/policies/membership/auto-alumni.md.
 
 `{username}` will be moved to alumni in the following team(s):
 {}
@@ -635,27 +672,28 @@ If you want to keep being a member of Rust teams, please let us know!
 
 @rustbot label +alumni
 "#,
-                    removed_teams
-                        .iter()
-                        .map(|team| {
-                            let mut leads = team
-                                .leads()
-                                .iter()
-                                .map(|username| format!("@{username}"))
-                                .collect::<Vec<_>>();
-                            leads.sort();
-                            let leads_cc = if !leads.is_empty() {
-                                format!(" (CC {})", leads.join(" "))
-                            } else {
-                                String::new()
-                            };
+                        removed_teams
+                            .iter()
+                            .map(|team| {
+                                let mut leads = team
+                                    .leads()
+                                    .iter()
+                                    .map(|username| format!("@{username}"))
+                                    .collect::<Vec<_>>();
+                                leads.sort();
+                                let leads_cc = if !leads.is_empty() {
+                                    format!(" (CC {})", leads.join(" "))
+                                } else {
+                                    String::new()
+                                };
 
-                            format!("- {}{}", team.name(), leads_cc)
-                        })
-                        .collect::<Vec<_>>()
-                        .join("\n"),
-                    date.format("%d.%m.%Y")
-                );
+                                format!("- {}{}", team.name(), leads_cc)
+                            })
+                            .collect::<Vec<_>>()
+                            .join("\n"),
+                        date.format("%d.%m.%Y")
+                    ),
+                };
                 Command::new("git")
                     .arg("add")
                     .arg("teams")
@@ -664,7 +702,7 @@ If you want to keep being a member of Rust teams, please let us know!
                 Command::new("git")
                     .arg("commit")
                     .arg("-m")
-                    .arg(format!("Move {username} to alumni"))
+                    .arg(&title)
                     .spawn()?
                     .wait()?;
 
@@ -674,7 +712,7 @@ If you want to keep being a member of Rust teams, please let us know!
                     .arg("--body")
                     .arg(body)
                     .arg("--title")
-                    .arg(format!("Move {username} to alumni"))
+                    .arg(&title)
                     .arg("--web")
                     .arg("--repo")
                     .arg("rust-lang/team");
