@@ -4,4 +4,3 @@ description = ""
 bots = []
 
 [access.teams]
-community-localization = "write"
