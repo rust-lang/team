@@ -50,6 +50,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_list_addresses,
     validate_people_addresses,
     validate_people_gws,
+    validate_people_hardware_keys_ownership,
     validate_duplicate_permissions,
     validate_permissions,
     validate_rfcbot_labels,
@@ -581,6 +582,23 @@ fn validate_people_gws(data: &Data, errors: &mut Vec<String>) {
             };
         }
 
+        Ok(())
+    });
+}
+
+/// Ensure hardware keys declared for a person actually exist as assets
+fn validate_people_hardware_keys_ownership(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.people(), errors, |person, _| {
+        for key in person.hardware_keys() {
+            if !data.hardware_keys(key) {
+                dbg!(data);
+                bail!(
+                    "hardware key `{}` is declared for person `{}` but assets could not be found",
+                    key,
+                    person.name(),
+                );
+            }
+        }
         Ok(())
     });
 }

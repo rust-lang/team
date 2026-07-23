@@ -2,3 +2,4 @@ name = 'Test Admin'
 github = 'test-admin'
 github-id = 7
 email = 'test-admin@example.com'
+hardware-keys = ["12345678"]

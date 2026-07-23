@@ -13,6 +13,7 @@ pub(crate) struct Data {
     archived_teams: Vec<Team>,
     repos: Vec<Repo>,
     archived_repos: Vec<Repo>,
+    hardware_keys: Vec<String>,
     config: Config,
 }
 
@@ -24,6 +25,7 @@ impl Data {
             archived_teams: Vec::new(),
             repos: Vec::new(),
             archived_repos: Vec::new(),
+            hardware_keys: Vec::new(),
             config: load_file(Path::new("config.toml"))?,
         };
 
@@ -89,6 +91,14 @@ impl Data {
                 Ok(())
             },
         )?;
+
+        let hardware_keys_dir = directory.join("hardware-keys");
+        for entry in std::fs::read_dir(hardware_keys_dir)? {
+            let path = entry?.path();
+
+            data.hardware_keys
+                .push(path.file_name().unwrap().to_str().unwrap().to_string());
+        }
 
         Ok(data)
     }
@@ -207,6 +217,10 @@ impl Data {
 
     pub(crate) fn archived_teams(&self) -> impl Iterator<Item = &Team> {
         self.archived_teams.iter()
+    }
+
+    pub(crate) fn hardware_keys(&self, key_alias: &str) -> bool {
+        self.hardware_keys.contains(&key_alias.to_string())
     }
 
     /// All the configured GitHub teams in the a hashset of (org, team_name) tuples.
