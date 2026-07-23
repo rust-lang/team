@@ -1,0 +1,24 @@
+name = "funding-advisors"
+subteam-of = "funding"
+
+[people]
+leads = []
+members = [
+    "jlizen",
+    "becrumbul",
+    "m-ou-se",
+    "erikjee",
+    "obi1kenobi",
+]
+alumni = []
+
+[website]
+name = "Funding advisors team"
+description = "People coordinating closely with the Funding team"
+
+[[zulip-groups]]
+name = "T-funding-advisors"
+
+[[zulip-streams]]
+name = "funding/with-advisors"
+extra-teams = ["funding"]
