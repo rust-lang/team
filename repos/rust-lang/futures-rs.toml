@@ -17,3 +17,23 @@ pattern = "main"
 required-approvals = 0
 
 [environments.github-pages]
+
+[environments.publish]
+branches = ["main"]
+
+[[crates-io]]
+crates = [
+    "futures",
+    "futures-channel",
+    "futures-core",
+    "futures-executor",
+    "futures-io",
+    "futures-macro",
+    "futures-sink",
+    "futures-task",
+    "futures-test",
+    "futures-util",
+]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["wg-async"]
