@@ -2,6 +2,7 @@ name: CI
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, auto_merge_enabled]
   merge_group:
   workflow_dispatch:
   schedule:
