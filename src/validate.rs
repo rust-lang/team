@@ -8,8 +8,8 @@ use crate::schema::{
 use anyhow::{Context as _, Error, bail};
 use log::{error, warn};
 use regex::Regex;
-use std::collections::HashSet;
 use std::collections::hash_map::{Entry, HashMap};
+use std::collections::{BTreeSet, HashSet};
 
 macro_rules! checks {
     ($($f:ident,)*) => {
@@ -374,11 +374,11 @@ fn validate_alumni(data: &Data, errors: &mut Vec<String>) {
             };
             let exempt_composition = members.is_empty() // intentionally not team.members(data).is_empty()
                 && (*include_team_leads
-                    || *include_wg_leads
-                    || *include_project_group_leads
-                    || *include_all_team_members
-                    || *include_all_alumni
-                    || !included_teams.is_empty());
+                || *include_wg_leads
+                || *include_project_group_leads
+                || *include_all_team_members
+                || *include_all_alumni
+                || !included_teams.is_empty());
             let exempt = exempt_team_kind || exempt_composition;
             if !exempt {
                 let team_name = team.name();
@@ -589,8 +589,26 @@ fn validate_people_gws(data: &Data, errors: &mut Vec<String>) {
 /// Ensure hardware keys declared for a person actually exist as assets
 fn validate_people_hardware_keys_ownership(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.people(), errors, |person, _| {
+        let all_declared_keys = data
+            .people()
+            .flat_map(|p| p.hardware_keys().iter().map(|k| k.to_string()))
+            .collect::<BTreeSet<_>>();
+
+        let dangling_keys = &data
+            .hardware_keys()
+            .difference(&all_declared_keys)
+            .cloned()
+            .collect::<Vec<_>>();
+
+        if !dangling_keys.is_empty() {
+            bail!(
+                "the following hardware-key files exist but do not belong to any person: {}",
+                dangling_keys.join(","),
+            );
+        }
+
         for key in person.hardware_keys() {
-            if !data.hardware_keys(key) {
+            if !data.are_hardware_key_files_present(key) {
                 bail!(
                     "hardware key `{}` is declared for person `{}` but assets could not be found",
                     key,
@@ -598,6 +616,7 @@ fn validate_people_hardware_keys_ownership(data: &Data, errors: &mut Vec<String>
                 );
             }
         }
+
         Ok(())
     });
 }

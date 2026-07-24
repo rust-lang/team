@@ -2,7 +2,7 @@ use crate::schema::{Config, List, Person, Repo, Team, ZulipGroup, ZulipStream};
 use crate::sync;
 use anyhow::{Context as _, Error, bail};
 use serde::de::DeserializeOwned;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeSet, HashMap, HashSet};
 use std::ffi::OsStr;
 use std::path::Path;
 
@@ -13,7 +13,7 @@ pub(crate) struct Data {
     archived_teams: Vec<Team>,
     repos: Vec<Repo>,
     archived_repos: Vec<Repo>,
-    hardware_keys: Vec<String>,
+    hardware_keys: BTreeSet<String>,
     config: Config,
 }
 
@@ -25,7 +25,7 @@ impl Data {
             archived_teams: Vec::new(),
             repos: Vec::new(),
             archived_repos: Vec::new(),
-            hardware_keys: Vec::new(),
+            hardware_keys: BTreeSet::new(),
             config: load_file(Path::new("config.toml"))?,
         };
 
@@ -104,7 +104,7 @@ impl Data {
             }
 
             data.hardware_keys
-                .push(path.file_name().unwrap().to_str().unwrap().to_string());
+                .insert(path.file_name().unwrap().to_str().unwrap().to_string());
         }
 
         Ok(data)
@@ -226,8 +226,12 @@ impl Data {
         self.archived_teams.iter()
     }
 
-    pub(crate) fn hardware_keys(&self, key_alias: &str) -> bool {
+    pub(crate) fn are_hardware_key_files_present(&self, key_alias: &str) -> bool {
         self.hardware_keys.iter().any(|key| key == key_alias)
+    }
+
+    pub(crate) fn hardware_keys(&self) -> BTreeSet<String> {
+        self.hardware_keys.clone()
     }
 
     /// All the configured GitHub teams in the a hashset of (org, team_name) tuples.
