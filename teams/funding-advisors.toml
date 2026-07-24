@@ -21,4 +21,7 @@ name = "T-funding-advisors"
 
 [[zulip-streams]]
 name = "funding/with-advisors"
-extra-teams = ["funding"]
+extra-teams = [
+    "funding",
+    "foundation-board-project-directors"
+]
