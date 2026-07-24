@@ -18,6 +18,15 @@ email = "john@doe.com"  # Email address used for mailing lists (optional)
 irc = "jdoe"  # Nickname of the person on IRC, if different than the GitHub one (optional)
 matrix = "@john:doe.com" # Matrix username (MXID) of the person (optional)
 
+hardware-keys =  ["key-id"]
+# Optional, available for members who want to use `team` to host and share attestation and certificates
+# extracted from hardware security keys like YubiKeys
+# These files will live at hardware-keys/<key-id> folder
+#
+# Consider using the serial number of your hardware key as its unique identifier,
+# especially if you own 2+ keys
+# See https://forge.rust-lang.org/infra/docs/hardware-security-keys.html
+
 [funding]
 # Optional, specify that you have GitHub Sponsors enabled and you
 # are looking for sponsors to fund your work on Rust.
@@ -32,15 +41,6 @@ github-sponsors = true
 first-name = "John"  # Your first name
 last-name = "Doe"   # Your last name or preferred surname
 account-handle = "john.doe" # The handle to define a @rust-lang.org account (e.g. john.doe@rust-lang.org)
-
-hardware-keys =  ["key-id"]
-# Optional, available for members who want to use `team` to host and share attestation and certificates
-# extracted from hardware security keys like YubiKeys
-# These files will live at hardware-keys/<key-id> folder
-#
-# Consider using the serial number of your hardware key as its unique identifier,
-# especially if you own 2+ keys
-# See https://forge.rust-lang.org/infra/docs/hardware-security-keys.html
 ```
 
 The file must be named the same as the GitHub username.
