@@ -112,6 +112,8 @@ pub(crate) struct Person {
     #[serde(default)]
     permissions: Permissions,
     google_workspace: Option<GoogleWorkspace>,
+    #[serde(default)]
+    hardware_keys: Vec<String>,
 }
 
 impl Person {
@@ -168,6 +170,10 @@ impl Person {
 
     pub(crate) fn google_workspace(&self) -> Option<&GoogleWorkspace> {
         self.google_workspace.as_ref()
+    }
+
+    pub(crate) fn hardware_keys(&self) -> &[String] {
+        self.hardware_keys.as_slice()
     }
 
     pub(crate) fn validate(&self) -> Result<(), Error> {
