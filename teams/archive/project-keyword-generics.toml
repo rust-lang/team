@@ -3,18 +3,15 @@ kind = "project-group"
 subteam-of = "lang"
 
 [people]
-leads = [
-    "oli-obk",
-    "yoshuawuyts",
-]
-members = [
-    "oli-obk",
-    "nikomatsakis",
-    "yoshuawuyts",
+leads = []
+members = []
+alumni = [
     "lcnr",
+    "nikomatsakis",
+    "oli-obk",
     "traviscross",
+    "yoshuawuyts",
 ]
-alumni = []
 
 [website]
 name = "Keyword Generics Initiative"
