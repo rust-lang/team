@@ -112,7 +112,7 @@ pub(crate) struct Person {
     #[serde(default)]
     permissions: Permissions,
     google_workspace: Option<GoogleWorkspace>,
-    #[serde(skip_serializing_if = "Vec::is_empty", default)]
+    #[serde(default)]
     hardware_keys: Vec<String>,
 }
 

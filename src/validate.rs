@@ -591,7 +591,6 @@ fn validate_people_hardware_keys_ownership(data: &Data, errors: &mut Vec<String>
     wrapper(data.people(), errors, |person, _| {
         for key in person.hardware_keys() {
             if !data.hardware_keys(key) {
-                dbg!(data);
                 bail!(
                     "hardware key `{}` is declared for person `{}` but assets could not be found",
                     key,
