@@ -14,7 +14,7 @@ spec = "write"
 spec-contributors = "write"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 ci-checks = ["Success gate"]
 merge-queue = { enabled = true }
 
