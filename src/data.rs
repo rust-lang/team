@@ -220,7 +220,7 @@ impl Data {
     }
 
     pub(crate) fn hardware_keys(&self, key_alias: &str) -> bool {
-        self.hardware_keys.contains(&key_alias.to_string())
+        self.hardware_keys.iter().any(|key| key == key_alias)
     }
 
     /// All the configured GitHub teams in the a hashset of (org, team_name) tuples.
