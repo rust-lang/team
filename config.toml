@@ -79,6 +79,5 @@ members-without-zulip-id = [
     "Stammark",
     "therealprof",
     "zeenix",
-    "abibroom",
     "rust-timer",
 ]
