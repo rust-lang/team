@@ -1,10 +1,11 @@
 use crate::sync::utils::ResponseExt;
-use anyhow::{Error, bail};
+use anyhow::{Context, Error, bail};
 use base64::Engine;
 use base64::prelude::BASE64_STANDARD;
-use reqwest::Method;
+use chrono::{DateTime, Duration, Utc};
 use reqwest::header::{self, HeaderValue};
 use reqwest::{Client, ClientBuilder, RequestBuilder};
+use reqwest::{Method, StatusCode};
 use std::borrow::Cow;
 use std::collections::HashMap;
 
@@ -124,12 +125,41 @@ impl GitHubApi {
     where
         T: serde::de::DeserializeOwned,
     {
-        self.prepare(false, Method::GET, url)?
-            .send()
-            .await?
-            .error_for_status()?
-            .json_annotated()
-            .await
+        loop {
+            let response = self.prepare(false, Method::GET, url)?.send().await?;
+
+            let status = response.status();
+            if status != StatusCode::OK {
+                let headers = response.headers();
+
+                // Rate limited
+                if status == StatusCode::FORBIDDEN
+                    && headers
+                        .get("x-ratelimit-remaining")
+                        .and_then(|v| v.to_str().ok())
+                        == Some("0")
+                {
+                    let reset_at = headers
+                        .get("x-ratelimit-reset")
+                        .and_then(|v| v.to_str().ok())
+                        .and_then(|t| t.parse::<u64>().ok())
+                        .and_then(|timestamp| chrono::DateTime::from_timestamp(timestamp as i64, 0))
+                        .map(|d| d + chrono::Duration::seconds(1))
+                        .unwrap_or(Utc::now() + chrono::Duration::minutes(1));
+                    eprintln!("Rate limited. Waiting until {reset_at}");
+                    let duration = reset_at
+                        .signed_duration_since(Utc::now())
+                        .max(Duration::zero());
+                    tokio::time::sleep(duration.to_std().unwrap()).await;
+                    continue;
+                }
+
+                let text = response.text().await?;
+                return Err(anyhow::anyhow!("Request failed with {status}: {text}"));
+            } else {
+                return response.json_annotated().await;
+            }
+        }
     }
 
     pub(crate) async fn usernames(&self, ids: &[u64]) -> Result<HashMap<u64, String>, Error> {
@@ -209,8 +239,183 @@ impl GitHubApi {
         }
         Ok(result)
     }
+
+    pub(crate) async fn recent_user_comments_in_org(
+        &self,
+        username: &str,
+        org: &str,
+        limit: usize,
+    ) -> anyhow::Result<Vec<UserComment>> {
+        // GitHub's GraphQL API doesn't seem to support filtering comments by author directly.
+        // We can use two endpoints here - either use the search query and filter by commented and
+        // organization, or use the user query and access its issueComments connection.
+        // The user endpoint would be more efficient, in theory. However, if the user makes a lot of
+        // comments in different organizations, we might load a lot of data before we get to their
+        // comments in the given organization. So instead we use the search endpoint.
+
+        // The endpoint loads issues (and PRs), not comments.
+        // The `commenter:` filter guarantees each returned issue has at least one comment
+        // from the user. So we fetch `limit` issues and a small number of recent comments
+        // per issue, then filter to only the user's comments.
+        let search_query = format!("commenter:{username} org:{org} sort:updated-desc");
+        let issues_to_fetch = limit;
+        let comments_per_issue = 100;
+
+        let data = self
+            .graphql::<serde_json::Value, _>(
+                r#"
+query($query: String!, $issueLimit: Int!, $commentLimit: Int!) {
+  search(query: $query, type: ISSUE, first: $issueLimit) {
+    nodes {
+      ... on Issue {
+        number
+        url
+        title
+        repository {
+          name
+          owner { login }
+        }
+        comments(first: $commentLimit, orderBy: {field: UPDATED_AT, direction: DESC}) {
+          nodes {
+            author { login }
+            body
+            url
+            createdAt
+          }
+        }
+      }
+      ... on PullRequest {
+        number
+        url
+        title
+        repository {
+          name
+          owner { login }
+        }
+        comments(first: $commentLimit, orderBy: {field: UPDATED_AT, direction: DESC}) {
+          nodes {
+            author { login }
+            body
+            url
+            createdAt
+          }
+        }
+      }
+    }
+  }
+}
+                "#,
+                serde_json::json!({
+                    "query": search_query,
+                    "issueLimit": issues_to_fetch,
+                    "commentLimit": comments_per_issue,
+                }),
+            )
+            .await
+            .context("failed to search for user comments")?;
+
+        let mut all_comments: Vec<UserComment> = Vec::new();
+
+        if let Some(nodes) = data["search"]["nodes"].as_array() {
+            for node in nodes {
+                let repo_owner = node["repository"]["owner"]["login"]
+                    .as_str()
+                    .unwrap_or("")
+                    .to_string();
+                let repo_name = node["repository"]["name"]
+                    .as_str()
+                    .unwrap_or("")
+                    .to_string();
+                let issue_number = node["number"].as_u64().unwrap_or(0);
+                let issue_title = node["title"].as_str().unwrap_or("Unknown");
+                let issue_url = node["url"].as_str().unwrap_or("");
+
+                if let Some(comments) = node["comments"]["nodes"].as_array() {
+                    for comment in comments {
+                        // Filter to only comments by the target user
+                        let author = comment["author"]["login"].as_str().unwrap_or("");
+                        if !author.eq_ignore_ascii_case(username) {
+                            continue;
+                        }
+
+                        let body = comment["body"].as_str().unwrap_or("");
+                        let url = comment["url"].as_str().unwrap_or("");
+                        let created_at = comment["createdAt"]
+                            .as_str()
+                            .and_then(|s| chrono::DateTime::parse_from_rfc3339(s).ok())
+                            .map(|dt| dt.with_timezone(&chrono::Utc));
+
+                        all_comments.push(UserComment {
+                            repo_owner: repo_owner.clone(),
+                            repo_name: repo_name.clone(),
+                            issue_number,
+                            issue_title: issue_title.to_string(),
+                            issue_url: issue_url.to_string(),
+                            comment_url: url.to_string(),
+                            body: body.to_string(),
+                            created_at,
+                        });
+                    }
+                }
+            }
+        }
+
+        // Sort by creation date (most recent first) and take the limit
+        all_comments.sort_by_key(|b| std::cmp::Reverse(b.created_at));
+        all_comments.truncate(limit);
+
+        Ok(all_comments)
+    }
+
+    pub(crate) async fn recent_user_commits_in_org(
+        &self,
+        username: &str,
+        org: &str,
+        limit: usize,
+    ) -> anyhow::Result<Vec<CommitInfo>> {
+        #[derive(serde::Deserialize, Debug)]
+        struct Response {
+            items: Vec<octocrab::models::search::CommitSearchResultItem>,
+        }
+
+        let response: Response = self.get(&format!("search/commits?q=author:{username}+org:{org}&sort=author-date&order=desc&per_page={limit}")).await?;
+        Ok(response
+            .items
+            .into_iter()
+            .filter_map(|c| {
+                Some(CommitInfo {
+                    repo_owner: c.repository.owner.login,
+                    repo_name: c.repository.name,
+                    created_at: chrono::DateTime::parse_from_rfc3339(&c.commit.committer?.date?)
+                        .ok()?
+                        .with_timezone(&Utc),
+                })
+            })
+            .collect())
+    }
 }
 
 fn user_node_id(id: u64) -> String {
     BASE64_STANDARD.encode(format!("04:User{id}"))
+}
+
+/// A comment made by a user on an issue or PR.
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct UserComment {
+    pub repo_owner: String,
+    pub repo_name: String,
+    pub issue_number: u64,
+    pub issue_title: String,
+    pub issue_url: String,
+    pub comment_url: String,
+    pub body: String,
+    pub created_at: Option<DateTime<Utc>>,
+}
+
+/// A commit made by a user on a given repository.
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct CommitInfo {
+    pub repo_owner: String,
+    pub repo_name: String,
+    pub created_at: DateTime<Utc>,
 }

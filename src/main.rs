@@ -4,11 +4,12 @@ mod data;
 #[macro_use]
 mod permissions;
 mod api;
-mod archive;
 mod ci;
+mod find_inactive_members;
 mod schema;
 mod static_api;
 mod sync;
+mod toml_manipulation;
 mod validate;
 
 const AVAILABLE_SERVICES: &[&str] = &[
@@ -25,23 +26,35 @@ use api::zulip::ZulipApi;
 use data::Data;
 use schema::{Email, Team, TeamKind};
 
-use crate::archive::{archive_repo, archive_team};
 use crate::ci::{check_codeowners, generate_codeowners_file};
+use crate::find_inactive_members::{InactiveTeamFilter, find_inactive_members};
 use crate::schema::RepoPermission;
 use crate::sync::run_sync_team;
 use crate::sync::team_api::TeamApi;
+use crate::toml_manipulation::{archive_repo, archive_team, move_person_to_alumni};
 use anyhow::{Context, Error, bail, format_err};
 use api::github;
+use chrono::Utc;
 use clap::Parser;
 use log::{error, info, warn};
 use std::collections::{BTreeMap, HashMap};
 use std::path::PathBuf;
+use std::process::Command;
 use std::str::FromStr;
 
 #[derive(clap::ValueEnum, Clone, Debug)]
 enum DumpIndividualAccessGroupBy {
     Person,
     Repo,
+}
+
+#[derive(clap::ValueEnum, Clone, Debug)]
+enum CreateAlumniPr {
+    /// Create the alumni pull request on your behalf.
+    Myself,
+    /// Create the alumni pull request of behalf of someone else, who you are moving to alumni
+    /// status.
+    External,
 }
 
 #[derive(clap::Parser, Debug)]
@@ -108,6 +121,38 @@ enum RootOpts {
     },
     /// Dump all repositories with their environments
     DumpEnvironments,
+    /// Find inactive Project members
+    FindInactiveMembers {
+        /// Only look for teams whose name contains this string.
+        #[arg(long)]
+        team_filter: Option<String>,
+        /// Include also working groups, project groups and marker teams in the search.
+        #[arg(long)]
+        include_all_teams: bool,
+        /// Minimum number of days for which a user would have to not send any public
+        /// Zulip message or not send any GitHub comment in `rust-lang` for them to be considered
+        /// inactive.
+        #[arg(long, default_value = "30")]
+        cutoff_days: u64,
+    },
+    /// Move a person to alumni status
+    MoveToAlumni {
+        /// GitHub username of the person.
+        username: String,
+        /// Subset of teams in which the person should be moved to alumni.
+        /// If not specified, then the person will be moved to alumni in all their teams.
+        #[arg(long, value_delimiter = ',')]
+        teams: Vec<String>,
+        /// Create a git commit after moving the person to alumni and then
+        /// create a pull request using the `gh` CLI tool.
+        ///
+        /// You will be redirected to the GitHub web interface to confirm the PR.
+        ///
+        /// Specify either `myself` or `external`, based on whether you are moving yourself to
+        /// alumni, or if you are moving someone else to alumni.
+        #[arg(long)]
+        create_pr: Option<CreateAlumniPr>,
+    },
     /// Encrypt an email address
     EncryptEmail,
     /// Decrypt an email address
@@ -564,6 +609,114 @@ async fn run() -> Result<(), Error> {
                 } else {
                     println!("{repo_name}: (no environments)");
                 }
+            }
+        }
+        RootOpts::FindInactiveMembers {
+            team_filter,
+            include_all_teams,
+            cutoff_days,
+        } => {
+            find_inactive_members(
+                InactiveTeamFilter {
+                    name: team_filter,
+                    include_all_teams,
+                },
+                cutoff_days,
+            )
+            .await?
+        }
+        RootOpts::MoveToAlumni {
+            username,
+            teams,
+            create_pr,
+        } => {
+            let specific_teams = !teams.is_empty();
+            let removed_teams = move_person_to_alumni(&data, &cli.data_dir, &username, teams)?;
+            if !removed_teams.is_empty()
+                && let Some(create_pr) = create_pr
+            {
+                let removed_teams_str = {
+                    let mut teams = removed_teams.iter().map(|t| t.name()).collect::<Vec<_>>();
+                    teams.sort();
+                    teams.join(", ")
+                };
+
+                let title_suffix = if specific_teams {
+                    format!(" in {removed_teams_str}")
+                } else {
+                    String::new()
+                };
+                let title = format!("Move `{username}` to alumni{title_suffix}");
+
+                let date = Utc::now() + chrono::Duration::days(10);
+                let body = match create_pr {
+                    CreateAlumniPr::Myself => {
+                        format!(
+                            r#"Move myself to alumni{title_suffix}.
+
+@rustbot label +alumni
+"#
+                        )
+                    }
+                    CreateAlumniPr::External => format!(
+                        r#"{title}, as they have been inactive on GitHub and Zulip for some time. This is in accordance with https://github.com/rust-lang/leadership-council/blob/main/policies/membership/auto-alumni.md.
+
+`{username}` will be moved to alumni in the following team(s):
+{}
+
+This pull request should be left open at least for 10 days (until `{}`) to allow the contributor to respond.
+
+CC @{username}
+
+If you want to keep being a member of Rust teams, please let us know!
+
+@rustbot label +alumni
+"#,
+                        removed_teams
+                            .iter()
+                            .map(|team| {
+                                let mut leads = team
+                                    .leads()
+                                    .iter()
+                                    .map(|username| format!("@{username}"))
+                                    .collect::<Vec<_>>();
+                                leads.sort();
+                                let leads_cc = if !leads.is_empty() {
+                                    format!(" (CC {})", leads.join(" "))
+                                } else {
+                                    String::new()
+                                };
+
+                                format!("- {}{}", team.name(), leads_cc)
+                            })
+                            .collect::<Vec<_>>()
+                            .join("\n"),
+                        date.format("%d.%m.%Y")
+                    ),
+                };
+                Command::new("git")
+                    .arg("add")
+                    .arg("teams")
+                    .spawn()?
+                    .wait()?;
+                Command::new("git")
+                    .arg("commit")
+                    .arg("-m")
+                    .arg(&title)
+                    .spawn()?
+                    .wait()?;
+
+                let mut cmd = Command::new("gh");
+                cmd.arg("pr")
+                    .arg("create")
+                    .arg("--body")
+                    .arg(body)
+                    .arg("--title")
+                    .arg(&title)
+                    .arg("--web")
+                    .arg("--repo")
+                    .arg("rust-lang/team");
+                cmd.spawn()?.wait()?;
             }
         }
         RootOpts::EncryptEmail => {
