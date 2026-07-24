@@ -96,6 +96,13 @@ impl Data {
         for entry in std::fs::read_dir(hardware_keys_dir)? {
             let path = entry?.path();
 
+            if !path.is_dir() {
+                bail!(
+                    "expecting hardware-keys/{} to be a directory",
+                    path.display()
+                );
+            }
+
             data.hardware_keys
                 .push(path.file_name().unwrap().to_str().unwrap().to_string());
         }
