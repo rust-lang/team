@@ -2,7 +2,9 @@ use crate::data::Data;
 use crate::schema::RepoPermission;
 use anyhow::{Context, bail};
 use log::{debug, info, warn};
-use std::collections::{BTreeSet, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashSet};
+use std::fs::OpenOptions;
+use std::io::Write;
 use std::path::{Path, PathBuf};
 
 /// Generates the contents of `.github/CODEOWNERS`, based on
@@ -176,17 +178,31 @@ fn codeowners_path() -> PathBuf {
 #[derive(Debug, serde::Deserialize)]
 struct GitHubRepo {
     name: String,
+    description: Option<String>,
+    homepage: Option<String>,
     fork: bool,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 struct UntrackedRepo {
     org: String,
     name: String,
+    description: String,
+    homepage: Option<String>,
 }
 
-/// Check for untracked repositories and fail if any are found
-pub async fn check_untracked_repos(data: &Data) -> anyhow::Result<()> {
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum CheckUntrackedReposResult {
+    AllTracked,
+    MissingRepositoryConfigsCreated,
+}
+
+/// Check for untracked repositories and create missing configuration files
+pub async fn check_untracked_repos(
+    data: &Data,
+    data_dir: &Path,
+    create_missing: bool,
+) -> anyhow::Result<CheckUntrackedReposResult> {
     let github = crate::api::github::GitHubApi::new();
 
     // Get allowed GitHub organizations from config instead of hardcoding
@@ -228,12 +244,20 @@ pub async fn check_untracked_repos(data: &Data) -> anyhow::Result<()> {
 
     if untracked.is_empty() {
         info!("✅ All repositories are tracked!");
-        return Ok(());
+        return Ok(CheckUntrackedReposResult::AllTracked);
     }
 
     warn!("❌ Found {} untracked repositories:", untracked.len());
     for repo in &untracked {
         warn!("  - {}/{}", repo.org, repo.name);
+    }
+
+    if create_missing {
+        let created = create_missing_repo_configs(data_dir, &untracked)?;
+        for path in created {
+            info!("Created {}", path.display());
+        }
+        return Ok(CheckUntrackedReposResult::MissingRepositoryConfigsCreated);
     }
 
     bail!(
@@ -300,6 +324,189 @@ fn find_untracked_repos(
         .map(|(org, repo)| UntrackedRepo {
             org: org.clone(),
             name: repo.name.clone(),
+            description: repo.description.clone().unwrap_or_default(),
+            homepage: repo
+                .homepage
+                .clone()
+                .filter(|homepage| !homepage.is_empty()),
         })
         .collect()
+}
+
+#[derive(serde::Serialize)]
+struct GeneratedRepoConfig<'a> {
+    org: &'a str,
+    name: &'a str,
+    description: &'a str,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    homepage: Option<&'a str>,
+    // schema::Repo has no Serde defaults for bots and access,
+    // omitting them would make Data::load fail.
+    bots: Vec<&'static str>,
+    access: GeneratedRepoAccess,
+}
+
+#[derive(serde::Serialize)]
+struct GeneratedRepoAccess {
+    teams: BTreeMap<String, String>,
+}
+
+fn create_missing_repo_configs(
+    data_dir: &Path,
+    repos: &[UntrackedRepo],
+) -> anyhow::Result<Vec<PathBuf>> {
+    let mut created = Vec::with_capacity(repos.len());
+    for repo in repos {
+        let contents = toml::to_string_pretty(&GeneratedRepoConfig {
+            org: &repo.org,
+            name: &repo.name,
+            description: &repo.description,
+            homepage: repo.homepage.as_deref(),
+            bots: Vec::new(),
+            access: GeneratedRepoAccess {
+                teams: BTreeMap::new(),
+            },
+        })
+        .with_context(|| {
+            format!(
+                "failed to serialize configuration for {}/{}",
+                repo.org, repo.name
+            )
+        })?;
+
+        let repo_dir = data_dir.join("repos").join(&repo.org);
+        std::fs::create_dir_all(&repo_dir)
+            .with_context(|| format!("failed to create directory {}", repo_dir.display()))?;
+
+        let missing_repo_config_toml = repo_dir.join(format!("{}.toml", repo.name));
+
+        let mut file = OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&missing_repo_config_toml)
+            .with_context(|| format!("failed to create {}", missing_repo_config_toml.display()))?;
+
+        file.write_all(contents.as_bytes())
+            .with_context(|| format!("failed to write {}", missing_repo_config_toml.display()))?;
+
+        created.push(missing_repo_config_toml);
+    }
+
+    Ok(created)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{GitHubRepo, UntrackedRepo, create_missing_repo_configs, find_untracked_repos};
+    use crate::schema::Repo;
+    use std::collections::HashSet;
+
+    #[test]
+    fn finds_only_untracked_non_fork_repositories() {
+        let github_repos = vec![
+            (
+                "rust-lang".into(),
+                GitHubRepo {
+                    name: "tracked".into(),
+                    description: Some("Tracked repository".into()),
+                    homepage: None,
+                    fork: false,
+                },
+            ),
+            (
+                "rust-lang".into(),
+                GitHubRepo {
+                    name: "fork".into(),
+                    description: None,
+                    homepage: None,
+                    fork: true,
+                },
+            ),
+            (
+                "rust-lang".into(),
+                GitHubRepo {
+                    name: "missing".into(),
+                    description: Some("Missing repository".into()),
+                    homepage: Some("https://example.com".into()),
+                    fork: false,
+                },
+            ),
+        ];
+        let tracked = HashSet::from([("rust-lang".into(), "tracked".into())]);
+
+        let untracked = find_untracked_repos(&github_repos, &tracked);
+
+        assert_eq!(
+            untracked,
+            vec![UntrackedRepo {
+                org: "rust-lang".into(),
+                name: "missing".into(),
+                description: "Missing repository".into(),
+                homepage: Some("https://example.com".into()),
+            }]
+        );
+    }
+
+    #[test]
+    fn creates_parseable_repository_config() {
+        let dir = tempfile::tempdir().unwrap();
+        let repo = UntrackedRepo {
+            org: "rust-lang".into(),
+            name: "example".into(),
+            description: "An \"example\" repository\nwith two lines".into(),
+            homepage: Some("https://example.com".into()),
+        };
+
+        let created = create_missing_repo_configs(dir.path(), &[repo]).unwrap();
+
+        assert_eq!(
+            created,
+            vec![dir.path().join("repos/rust-lang/example.toml")]
+        );
+        let contents = std::fs::read_to_string(&created[0]).unwrap();
+        let parsed: Repo = toml::from_str(&contents).unwrap();
+        assert_eq!(parsed.org, "rust-lang");
+        assert_eq!(parsed.name, "example");
+        assert_eq!(
+            parsed.description,
+            "An \"example\" repository\nwith two lines"
+        );
+        assert_eq!(parsed.homepage.as_deref(), Some("https://example.com"));
+        assert!(parsed.bots.is_empty());
+        assert!(parsed.access.teams.is_empty());
+    }
+
+    #[test]
+    fn omits_empty_homepage() {
+        let dir = tempfile::tempdir().unwrap();
+        let repo = UntrackedRepo {
+            org: "rust-lang".into(),
+            name: "example".into(),
+            description: String::new(),
+            homepage: None,
+        };
+
+        let created = create_missing_repo_configs(dir.path(), &[repo]).unwrap();
+        let contents = std::fs::read_to_string(&created[0]).unwrap();
+
+        assert!(!contents.contains("homepage"));
+    }
+
+    #[test]
+    fn does_not_overwrite_existing_config() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("repos/rust-lang/example.toml");
+        std::fs::create_dir_all(path.parent().unwrap()).unwrap();
+        std::fs::write(&path, "existing contents").unwrap();
+        let repo = UntrackedRepo {
+            org: "rust-lang".into(),
+            name: "example".into(),
+            description: "new contents".into(),
+            homepage: None,
+        };
+
+        create_missing_repo_configs(dir.path(), &[repo]).unwrap_err();
+
+        assert_eq!(std::fs::read_to_string(path).unwrap(), "existing contents");
+    }
 }
