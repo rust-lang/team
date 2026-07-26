@@ -47,3 +47,6 @@ name = "all/rustacean-connection"
 extra-teams = [
     "foundation-staff",
 ]
+excluded-people = [
+    "ChayimFriedman2",
+]
