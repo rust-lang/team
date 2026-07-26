@@ -694,17 +694,21 @@ If you want to keep being a member of Rust teams, please let us know!
                         date.format("%d.%m.%Y")
                     ),
                 };
-                Command::new("git")
-                    .arg("add")
-                    .arg("teams")
-                    .spawn()?
-                    .wait()?;
-                Command::new("git")
-                    .arg("commit")
-                    .arg("-m")
-                    .arg(&title)
-                    .spawn()?
-                    .wait()?;
+                assert!(
+                    Command::new("git")
+                        .arg("add")
+                        .arg("teams")
+                        .status()?
+                        .success()
+                );
+                assert!(
+                    Command::new("git")
+                        .arg("commit")
+                        .arg("-m")
+                        .arg(&title)
+                        .status()?
+                        .success()
+                );
 
                 let mut cmd = Command::new("gh");
                 cmd.arg("pr")
@@ -716,7 +720,7 @@ If you want to keep being a member of Rust teams, please let us know!
                     .arg("--web")
                     .arg("--repo")
                     .arg("rust-lang/team");
-                cmd.spawn()?.wait()?;
+                assert!(cmd.status()?.success());
             }
         }
         RootOpts::EncryptEmail => {
