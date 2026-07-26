@@ -27,3 +27,7 @@ repo = "https://github.com/rust-lang/rustfmt"
 
 [[zulip-groups]]
 name = "T-rustfmt"
+
+[[zulip-streams]]
+name = "t-rustfmt/private"
+extra-teams = ["rustfmt-contributors"]
