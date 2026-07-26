@@ -3,8 +3,9 @@ subteam-of = "lang"
 kind = "working-group"
 
 [people]
-leads = ["nikomatsakis", "acfoltzer", "BatmanAoD"]
-members = [
+leads = []
+members = []
+alumni = [
     "Amanieu",
     "BatmanAoD",
     "CAD97",
@@ -13,11 +14,9 @@ members = [
     "chorman0773",
     "cratelyn",
     "gnzlbg",
+    "joshtriplett",
     "nbdd0121",
     "nikomatsakis",
-]
-alumni = [
-    "joshtriplett",
 ]
 
 [website]

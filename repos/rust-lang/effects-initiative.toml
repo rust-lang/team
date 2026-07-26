@@ -10,6 +10,5 @@ branch = "gh-pages"
 path = "/"
 
 [access.teams]
-project-keyword-generics = "write"
 
 [environments.github-pages]

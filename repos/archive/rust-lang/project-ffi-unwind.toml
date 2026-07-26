@@ -4,4 +4,3 @@ description = ""
 bots = []
 
 [access.teams]
-wg-ffi-unwind = "write"

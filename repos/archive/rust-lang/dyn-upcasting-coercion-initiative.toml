@@ -9,6 +9,5 @@ branch = "gh-pages"
 path = "/"
 
 [access.teams]
-project-dyn-upcasting = "write"
 
 [environments.github-pages]
