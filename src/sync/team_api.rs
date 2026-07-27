@@ -40,8 +40,14 @@ impl TeamApi {
     }
 
     pub(crate) async fn get_zulip_groups(&self) -> anyhow::Result<rust_team_data::v1::ZulipGroups> {
-        debug!("loading GitHub id to Zulip id map from the Team API");
+        debug!("loading Zulip groups from the Team API");
         self.req::<rust_team_data::v1::ZulipGroups>("zulip-groups.json")
+            .await
+    }
+
+    pub(crate) async fn get_zulip_map(&self) -> anyhow::Result<rust_team_data::v1::ZulipMapping> {
+        debug!("loading GitHub id to Zulip id map from the Team API");
+        self.req::<rust_team_data::v1::ZulipMapping>("zulip-map.json")
             .await
     }
 
