@@ -33,9 +33,6 @@
         "foo"
       ],
       "merge_bots": [],
-      "allowed_merge_apps": [
-        "promote_release"
-      ],
       "bypass_apps": [
         "promote_release"
       ],

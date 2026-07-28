@@ -563,7 +563,6 @@ impl BranchProtectionBuilder {
             require_linear_history,
             mode,
             allowed_merge_teams,
-            allowed_merge_apps: bypass_apps.clone(),
             bypass_apps,
             require_up_to_date_branches,
             merge_queue,
