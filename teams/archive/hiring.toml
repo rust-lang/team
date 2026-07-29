@@ -3,7 +3,8 @@ kind = "marker-team"
 
 [people]
 leads = []
-members = [
+members = []
+alumni = [
     "JoelMarcey",
     "ehuss",
     "nikomatsakis",
