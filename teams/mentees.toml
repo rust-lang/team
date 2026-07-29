@@ -8,7 +8,7 @@ members = [
     # GSoC
     { github = "Sa4dUs", roles = ["gsoc"] },
     { github = "lapla-cogito", roles = ["gsoc"] },
-    { github = "Shourya742", roles = ["gsoc"] },
+    { github = "bit-aloo", roles = ["gsoc"] },
     { github = "sgasho", roles = ["gsoc"] },
     { github = "moabo3li", roles = ["gsoc"] },
     { github = "CoCo-Japan-pan", roles = ["gsoc"] },
