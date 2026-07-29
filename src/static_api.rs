@@ -71,9 +71,6 @@ impl<'a> Generator<'a> {
                         BranchProtectionMode::PrNotRequired
                     },
                     allowed_merge_teams: b.allowed_merge_teams.clone(),
-                    // Temporarily support the old allowed_merge_apps to avoid
-                    // deserialization errors in triagebot.
-                    allowed_merge_apps: Self::convert_bypass_apps(&b.bypass_apps),
                     bypass_apps: Self::convert_bypass_apps(&b.bypass_apps),
                     require_up_to_date_branches: b.require_up_to_date_branches,
                     merge_queue: b.merge_queue.enabled,
