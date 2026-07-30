@@ -8,8 +8,8 @@ use crate::schema::{
 use anyhow::{Context as _, Error, bail};
 use log::{error, warn};
 use regex::Regex;
-use std::collections::HashSet;
 use std::collections::hash_map::{Entry, HashMap};
+use std::collections::{BTreeSet, HashSet};
 
 macro_rules! checks {
     ($($f:ident,)*) => {
@@ -50,6 +50,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_list_addresses,
     validate_people_addresses,
     validate_people_gws,
+    validate_people_hardware_keys_ownership,
     validate_duplicate_permissions,
     validate_permissions,
     validate_rfcbot_labels,
@@ -583,6 +584,44 @@ fn validate_people_gws(data: &Data, errors: &mut Vec<String>) {
 
         Ok(())
     });
+}
+
+/// Ensure hardware keys declared for a person actually exist as assets
+/// and are not dangling or duplicated per person
+fn validate_people_hardware_keys_ownership(data: &Data, errors: &mut Vec<String>) {
+    let all_declared_keys = data
+        .people()
+        .flat_map(|p| p.hardware_keys().map(|k| (p.name(), k)))
+        .fold(BTreeSet::new(), |mut declared, (person, key)| {
+            if !declared.insert(key.clone()) {
+                errors.push(format!(
+                    "the following hardware-key `{}` is declared for `{}` and another team member",
+                    key, person
+                ));
+            }
+
+            if !data.are_hardware_key_files_present(key) {
+                errors.push(format!(
+                    "hardware key `{}` is declared for person `{}` but assets could not be found",
+                    key, person,
+                ))
+            }
+
+            declared
+        });
+
+    let dangling_keys = data
+        .hardware_keys()
+        .difference(&all_declared_keys)
+        .map(String::as_str)
+        .collect::<Vec<_>>();
+
+    if !dangling_keys.is_empty() {
+        errors.push(format!(
+            "the following hardware-key files exist but do not belong to any person: {}",
+            dangling_keys.join(","),
+        ));
+    }
 }
 
 /// Ensure members of teams with permissions don't explicitly have those permissions
