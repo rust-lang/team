@@ -37,6 +37,7 @@ members = [
     { github = "jieyouxu", roles = ["compiler-maintainer"] },
     "JohnTitor",
     "JonathanBrouwer",
+    "joshtriplett",
     "jswrenn",
     "khyperia",
     "Kivooeo",
