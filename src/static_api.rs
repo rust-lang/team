@@ -421,7 +421,16 @@ impl<'a> Generator<'a> {
         }
 
         teams.sort_keys();
-        self.add("v1/rfcbot.json", &v1::Rfcbot { teams })?;
+
+        let mut all_members = self
+            .data
+            .active_members()?
+            .into_iter()
+            .map(|s| s.to_string())
+            .collect::<Vec<_>>();
+        all_members.sort();
+
+        self.add("v1/rfcbot.json", &v1::Rfcbot { teams, all_members })?;
         Ok(())
     }
 

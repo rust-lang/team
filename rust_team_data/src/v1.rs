@@ -202,6 +202,7 @@ pub struct PermissionPerson {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Rfcbot {
     pub teams: IndexMap<String, RfcbotTeam>,
+    pub all_members: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
