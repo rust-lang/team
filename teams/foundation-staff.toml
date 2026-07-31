@@ -19,3 +19,6 @@ members = [
     "tinakrauss",
 ]
 alumni = []
+
+[[zulip-groups]]
+name = "foundation"
