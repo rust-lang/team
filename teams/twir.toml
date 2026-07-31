@@ -6,13 +6,13 @@ leads = ["nellshamrell"]
 members = [
     "nellshamrell",
     "llogiq",
-    "cdmistman",
     "extrawurst",
     "andrewpollack",
     "JoelMarcey",
 ]
 alumni = [
     "nasa42",
+    "cdmistman",
 ]
 
 [[github]]
