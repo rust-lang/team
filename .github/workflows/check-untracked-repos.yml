@@ -38,42 +38,34 @@ jobs:
 
       - name: Check untracked repositories
         id: check
-        # exit code 2 means that configurations were created, so do not exit immediately
-        shell: bash {0}
         run: |
           cargo build --release
-          CARGO_BUILD_EXIT_CODE=$?
 
-          if [[ "$CARGO_BUILD_EXIT_CODE" -ne 0 ]]; then
-            exit "$CARGO_BUILD_EXIT_CODE"
-          fi
+          CHECK_UNTRACKED_REPOS_EXIT_CODE=0
+          # Capture the status without failing because
+          # exit code 2 means that configurations were created.
+          ./target/release/rust-team ci check-untracked-repos --create-missing \
+            || CHECK_UNTRACKED_REPOS_EXIT_CODE=$?
 
-          ./target/release/rust-team ci check-untracked-repos --create-missing
-          CHECK_UNTRACKED_REPOS_EXIT_CODE=$?
+          case "$CHECK_UNTRACKED_REPOS_EXIT_CODE" in
+            0) configurations_created=false ;;
+            2) configurations_created=true ;;
+            *) exit "$CHECK_UNTRACKED_REPOS_EXIT_CODE" ;;
+          esac
 
-          if [[ "$CHECK_UNTRACKED_REPOS_EXIT_CODE" -eq 0 ]]; then
-            echo "configurations_created=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          if [[ "$CHECK_UNTRACKED_REPOS_EXIT_CODE" -eq 2 ]]; then
-            echo "configurations_created=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          exit "$CHECK_UNTRACKED_REPOS_EXIT_CODE"
+          echo "configurations_created=$configurations_created" >> "$GITHUB_OUTPUT"
 
       - name: Check for an existing pull request
         id: pull_request
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           PULL_REQUEST_EXISTS=$(
             gh pr list \
               --head "$AUTOMATION_BRANCH" \
               --state open \
-              --json number \
-              --jq 'length > 0'
+              --json isCrossRepository \
+              --jq 'map(select(.isCrossRepository == false)) | length > 0'
           )
 
           echo "Pull request exists: $PULL_REQUEST_EXISTS"
@@ -82,7 +74,7 @@ jobs:
       - name: Close previous pull request
         if: ${{ steps.check.outputs.configurations_created == 'false' && steps.pull_request.outputs.exists == 'true' }}
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: gh pr close "$AUTOMATION_BRANCH"
 
       - name: Commit and push generated configurations
@@ -114,7 +106,7 @@ jobs:
       - name: Create pull request
         if: ${{ steps.check.outputs.configurations_created == 'true' && steps.pull_request.outputs.exists == 'false' }}
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PULL_REQUEST_BASE_BRANCH: ${{ github.event.repository.default_branch }}
           PULL_REQUEST_BODY: >-
             This pull request was created automatically because untracked repositories were found.

@@ -3,7 +3,6 @@ use crate::schema::RepoPermission;
 use anyhow::{Context, bail};
 use log::{debug, info, warn};
 use std::collections::{BTreeMap, BTreeSet, HashSet};
-use std::fs::OpenOptions;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
@@ -253,10 +252,7 @@ pub async fn check_untracked_repos(
     }
 
     if create_missing {
-        let created = create_missing_repo_configs(data_dir, &untracked)?;
-        for path in created {
-            info!("Created {}", path.display());
-        }
+        create_missing_repo_configs(data_dir, &untracked)?;
         return Ok(CheckUntrackedReposResult::MissingRepositoryConfigsCreated);
     }
 
@@ -351,13 +347,9 @@ struct GeneratedRepoAccess {
     teams: BTreeMap<String, String>,
 }
 
-fn create_missing_repo_configs(
-    data_dir: &Path,
-    repos: &[UntrackedRepo],
-) -> anyhow::Result<Vec<PathBuf>> {
-    let mut created = Vec::with_capacity(repos.len());
-    for repo in repos {
-        let contents = toml::to_string_pretty(&GeneratedRepoConfig {
+impl<'a> From<&'a UntrackedRepo> for GeneratedRepoConfig<'a> {
+    fn from(repo: &'a UntrackedRepo) -> Self {
+        Self {
             org: &repo.org,
             name: &repo.name,
             description: &repo.description,
@@ -366,33 +358,34 @@ fn create_missing_repo_configs(
             access: GeneratedRepoAccess {
                 teams: BTreeMap::new(),
             },
-        })
-        .with_context(|| {
-            format!(
-                "failed to serialize configuration for {}/{}",
-                repo.org, repo.name
-            )
-        })?;
+        }
+    }
+}
 
-        let repo_dir = data_dir.join("repos").join(&repo.org);
-        std::fs::create_dir_all(&repo_dir)
-            .with_context(|| format!("failed to create directory {}", repo_dir.display()))?;
+fn create_missing_repo_configs(data_dir: &Path, repos: &[UntrackedRepo]) -> anyhow::Result<()> {
+    for repo in repos {
+        let contents =
+            toml::to_string_pretty(&GeneratedRepoConfig::from(repo)).with_context(|| {
+                format!(
+                    "failed to serialize configuration for {}/{}",
+                    repo.org, repo.name
+                )
+            })?;
 
-        let missing_repo_config_toml = repo_dir.join(format!("{}.toml", repo.name));
+        let missing_repo_config_toml = data_dir
+            .join("repos")
+            .join(&repo.org)
+            .join(format!("{}.toml", repo.name));
 
-        let mut file = OpenOptions::new()
-            .write(true)
-            .create_new(true)
-            .open(&missing_repo_config_toml)
-            .with_context(|| format!("failed to create {}", missing_repo_config_toml.display()))?;
+        std::fs::File::create_new(&missing_repo_config_toml)
+            .with_context(|| format!("failed to create {missing_repo_config_toml:?}"))?
+            .write_all(contents.as_bytes())
+            .with_context(|| format!("failed to write {missing_repo_config_toml:?}"))?;
 
-        file.write_all(contents.as_bytes())
-            .with_context(|| format!("failed to write {}", missing_repo_config_toml.display()))?;
-
-        created.push(missing_repo_config_toml);
+        info!("Created {}", missing_repo_config_toml.display());
     }
 
-    Ok(created)
+    Ok(())
 }
 
 #[cfg(test)]
@@ -450,6 +443,10 @@ mod tests {
     #[test]
     fn creates_parseable_repository_config() {
         let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("repos/rust-lang/example.toml");
+
+        std::fs::create_dir_all(path.parent().unwrap()).unwrap();
+
         let repo = UntrackedRepo {
             org: "rust-lang".into(),
             name: "example".into(),
@@ -457,14 +454,13 @@ mod tests {
             homepage: Some("https://example.com".into()),
         };
 
-        let created = create_missing_repo_configs(dir.path(), &[repo]).unwrap();
+        create_missing_repo_configs(dir.path(), &[repo]).unwrap();
 
-        assert_eq!(
-            created,
-            vec![dir.path().join("repos/rust-lang/example.toml")]
-        );
-        let contents = std::fs::read_to_string(&created[0]).unwrap();
+        assert!(path.exists());
+
+        let contents = std::fs::read_to_string(path).unwrap();
         let parsed: Repo = toml::from_str(&contents).unwrap();
+
         assert_eq!(parsed.org, "rust-lang");
         assert_eq!(parsed.name, "example");
         assert_eq!(
@@ -479,6 +475,10 @@ mod tests {
     #[test]
     fn omits_empty_homepage() {
         let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("repos/rust-lang/example.toml");
+
+        std::fs::create_dir_all(path.parent().unwrap()).unwrap();
+
         let repo = UntrackedRepo {
             org: "rust-lang".into(),
             name: "example".into(),
@@ -486,8 +486,8 @@ mod tests {
             homepage: None,
         };
 
-        let created = create_missing_repo_configs(dir.path(), &[repo]).unwrap();
-        let contents = std::fs::read_to_string(&created[0]).unwrap();
+        create_missing_repo_configs(dir.path(), &[repo]).unwrap();
+        let contents = std::fs::read_to_string(path).unwrap();
 
         assert!(!contents.contains("homepage"));
     }

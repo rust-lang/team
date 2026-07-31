@@ -187,7 +187,8 @@ enum CiOpts {
     CheckCodeowners,
     /// Check for untracked repositories in GitHub organizations
     CheckUntrackedRepos {
-        /// Create a TOML configuration file for each untracked repository and exit with code 2
+        /// Create a TOML configuration file for each untracked repository.
+        /// If at least one repository was missing and the file was created, exit with code 2.
         #[arg(long)]
         create_missing: bool,
     },
