@@ -3,7 +3,7 @@ top-level = true
 
 [people]
 leads = ["Manishearth"]
-members = ["Manishearth", "GuillaumeGomez", "rbtcollins", "ehuss", "calebcartwright"]
+members = ["Manishearth", "GuillaumeGomez", "ehuss", "calebcartwright"]
 alumni = [
     "alexcrichton",
     "brson",
@@ -22,6 +22,7 @@ alumni = [
     "withoutboats",
     "wycats",
     "Xanewok",
+    "rbtcollins",
 ]
 
 [rfcbot]
