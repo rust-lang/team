@@ -28,5 +28,14 @@ required-approvals = 0
 merge-queue = { enabled = true, method = "rebase" }
 require-linear-history = true
 
+[[crates-io]]
+crates = ["libc", "ctest"]
+publish-workflow = "release.yaml"
+publish-environment = "release"
+teams = ["libs"]
+
 [environments.github-pages]
 branches = ["gh-pages", "main", "master"]
+
+[environments.release]
+branches = ["main", "libc-0.2"]
