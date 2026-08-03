@@ -6,16 +6,13 @@ leads = ["Dylan-DPC"]
 members = [
     "Dylan-DPC",
     "JohnTitor",
-    "JohnCSimon",
     "Alexendoo",
     "bstrie",
     "crlf0710",
-    "Muirrum",
     "camelid",
     "alice-i-cecile",
     "pitaj",
     "Enselic",
-    "tranquillity-codes",
     "oskgo",
     "lolbinarycat",
     "alex-semenyuk",
@@ -24,7 +21,6 @@ members = [
     "Darksonn",
     "cyrgani",
     "nuzzles",
-    "shard77",
     "xizheyin",
     "karolzwolak",
     "probablytaylors",
@@ -41,6 +37,10 @@ alumni = [
     "anden3",
     "edmilsonefs",
     "joelpalmer",
+    "JohnCSimon",
+    "shard77",
+    "tranquillity-codes",
+    "Muirrum",
 ]
 
 [website]
