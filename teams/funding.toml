@@ -31,6 +31,16 @@ name = "T-funding"
 [[zulip-streams]]
 name = "funding/private"
 
+[[zulip-streams]]
+name = "funding/with-mir"
+extra-teams = [
+    "maintainers-in-residence"
+]
+extra-people = [
+    "abibroom",
+    "becrumbul"
+]
+
 [[lists]]
 address = "funding@rust-lang.org"
 extra-teams = ["funding-advisors"]
