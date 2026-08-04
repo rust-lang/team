@@ -1,0 +1,23 @@
+name = "mdbook"
+subteam-of = "devtools"
+
+[people]
+leads = ["ehuss"]
+members = [
+    "ehuss",
+    "traviscross",
+    "PLeVasseur",
+    "Mark-Simulacrum",
+    "eholk",
+    "GuillaumeGomez",
+]
+
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "mdBook team"
+description = "Maintaining mdBook"
+repo = "https://github.com/rust-lang/mdBook"

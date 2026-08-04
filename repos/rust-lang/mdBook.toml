@@ -11,16 +11,12 @@ path = "/"
 
 [access.teams]
 devtools = "write"
-
-[access.individuals]
-# Dylan-DPC is maintaining mdbook along with ehuss. Planning to add a team
-# soon, and then this can be removed.
-Dylan-DPC = "write"
+mdbook = "write"
 
 [[rulesets]]
 pattern = "master"
 ci-checks = ["Success gate"]
-required-approvals = 0
+required-approvals = 1
 merge-queue = { enabled = true, min-entries-to-merge-wait-minutes = 1 }
 
 [[crates-io]]
