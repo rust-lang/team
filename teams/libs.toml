@@ -6,13 +6,41 @@ leads = [
     "Amanieu",
 ]
 members = [
+    "aapoalas",
+    "adamgemmell",
     "Amanieu",
     "BurntSushi",
+    "calebzulawski",
+    "ChrisDenton",
+    "clarfonthey",
+    "cramertj",
     "cuviper",
+    "Darksonn",
+    "davidtwco",
     "dtolnay",
+    "folkertdev",
+    "hanna-kruppe",
+    "ibraheemdev",
+    "jhpratt",
+    "joboet",
+    "JohnTitor",
     "joshtriplett",
+    "kennytm",
+    "KodrAus",
+    "LawnGnome",
+    "Mark-Simulacrum",
+    "m-ou-se",
+    "nia-e",
+    "Noratrieb",
+    "programmerjake",
+    "sayantn",
+    "SimonSapin",
+    "sunfishcode",
+    "tgross35",
     "the8472",
     "thomcc",
+    "workingjubilee",
+    "yaahc",
 ]
 alumni = [
     "alexcrichton",
@@ -25,6 +53,7 @@ alumni = [
     "LukasKalbertodt",
     "m-ou-se",
     "sfackler",
+    "shepmaster",
     "SimonSapin",
     "withoutboats",
     "yaahc",
@@ -64,4 +93,3 @@ name = "T-libs"
 [[zulip-streams]]
 # NOTE: should be renamed to t-libs/private, but non-urgent
 name = "t-libs/reviewers"
-extra-teams = ["libs-contributors"]

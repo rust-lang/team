@@ -10,7 +10,6 @@ branch = "gh-pages"
 path = "/"
 
 [access.teams]
-libs-contributors = "write"
 libs = "write"
 project-portable-simd = "write"
 

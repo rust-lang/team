@@ -14,7 +14,6 @@ compiler = "write"
 lang = "write"
 lang-ops = "write"
 libs = "write"
-libs-contributors = "write"
 
 [[rulesets]]
 pattern = "main"

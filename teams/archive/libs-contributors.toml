@@ -1,0 +1,49 @@
+# Library Contributors has been incorporated into Library with RFC#3984
+name = "libs-contributors"
+subteam-of = "libs"
+
+[people]
+leads = []
+members = []
+alumni = [
+    "aapoalas",
+    "adamgemmell",
+    "calebzulawski",
+    "ChrisDenton",
+    "clarfonthey",
+    "cramertj",
+    "Darksonn",
+    "davidtwco",
+    "dtolnay",
+    "folkertdev",
+    "hanna-kruppe",
+    "ibraheemdev",
+    "jhpratt",
+    "joboet",
+    "JohnTitor",
+    "kennytm",
+    "KodrAus",
+    "LawnGnome",
+    "Mark-Simulacrum",
+    "m-ou-se",
+    "nia-e",
+    "Noratrieb",
+    "programmerjake",
+    "sayantn",
+    "shepmaster",
+    "SimonSapin",
+    "sunfishcode",
+    "tgross35",
+    "workingjubilee",
+    "yaahc",
+]
+
+[[github]]
+orgs = ["rust-lang", "rust-lang-nursery"]
+
+[website]
+name = "Library contributors"
+description = "Contributing to the Rust standard library on a regular basis"
+
+[[zulip-groups]]
+name = "T-libs-contributors"
