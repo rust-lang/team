@@ -186,7 +186,12 @@ enum CiOpts {
     /// Check if the .github/CODEOWNERS file is up-to-date
     CheckCodeowners,
     /// Check for untracked repositories in GitHub organizations
-    CheckUntrackedRepos,
+    CheckUntrackedRepos {
+        /// Create a TOML configuration file for each untracked repository.
+        /// If at least one repository was missing and the file was created, exit with code 2.
+        #[arg(long)]
+        create_missing: bool,
+    },
 }
 
 #[derive(clap::Parser, Clone, Debug)]
@@ -756,7 +761,13 @@ If you want to keep being a member of Rust teams, please let us know!
         RootOpts::Ci(opts) => match opts {
             CiOpts::GenerateCodeowners => generate_codeowners_file(data)?,
             CiOpts::CheckCodeowners => check_codeowners(data)?,
-            CiOpts::CheckUntrackedRepos => ci::check_untracked_repos(&data).await?,
+            CiOpts::CheckUntrackedRepos { create_missing } => {
+                let result =
+                    ci::check_untracked_repos(&data, &cli.data_dir, create_missing).await?;
+                if result == ci::CheckUntrackedReposResult::MissingRepositoryConfigsCreated {
+                    std::process::exit(2);
+                }
+            }
         },
         RootOpts::Sync(opts) => {
             if let Err(err) = perform_sync(opts, data).await {

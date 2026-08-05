@@ -1,3 +1,6 @@
+# This workflow checks the default branch every six hours for repositories that do not have a corresponding repos/*/*.toml file.
+# If missing configurations are generated, it force-pushes them to a fixed automation branch and creates a pull request if needed.
+# If no configurations are needed, it closes any open pull request from the automation branch.
 name: Check Untracked Repositories
 
 on:
@@ -6,24 +9,110 @@ on:
     - cron: '0 */6 * * *'
   workflow_dispatch:
 
+concurrency:
+  group: check-untracked-repositories
+  cancel-in-progress: false
+
 permissions: {}
+
+env:
+  AUTOMATION_BRANCH: automation/import-untracked-repositories
+  AUTOMATION_PR_TITLE: "Automation: automatically import untracked repositories"
 
 jobs:
   check-untracked-repos:
     name: Check untracked repositories
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write       # Needed to push the automation branch
+      pull-requests: write  # Needed to find and close an existing pull request
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Check out the default branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ github.event.repository.default_branch }}
 
       - name: Install Rust stable
         uses: ./.github/actions/setup-rust
 
-      - name: Check for untracked repositories
-        shell: bash
+      - name: Check untracked repositories
+        id: check
         run: |
           cargo build --release
-          ./target/release/rust-team ci check-untracked-repos
+
+          CHECK_UNTRACKED_REPOS_EXIT_CODE=0
+          # Capture the status without failing because
+          # exit code 2 means that configurations were created.
+          ./target/release/rust-team ci check-untracked-repos --create-missing \
+            || CHECK_UNTRACKED_REPOS_EXIT_CODE=$?
+
+          case "$CHECK_UNTRACKED_REPOS_EXIT_CODE" in
+            0) configurations_created=false ;;
+            2) configurations_created=true ;;
+            *) exit "$CHECK_UNTRACKED_REPOS_EXIT_CODE" ;;
+          esac
+
+          echo "configurations_created=$configurations_created" >> "$GITHUB_OUTPUT"
+
+      - name: Check for an existing pull request
+        id: pull_request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PULL_REQUEST_EXISTS=$(
+            gh pr list \
+              --head "$AUTOMATION_BRANCH" \
+              --state open \
+              --json isCrossRepository \
+              --jq 'map(select(.isCrossRepository == false)) | length > 0'
+          )
+
+          echo "Pull request exists: $PULL_REQUEST_EXISTS"
+          echo "exists=$PULL_REQUEST_EXISTS" >> "$GITHUB_OUTPUT"
+
+      - name: Close previous pull request
+        if: ${{ steps.check.outputs.configurations_created == 'false' && steps.pull_request.outputs.exists == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr close "$AUTOMATION_BRANCH"
+
+      - name: Commit and push generated configurations
+        if: ${{ steps.check.outputs.configurations_created == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git switch --create "$AUTOMATION_BRANCH"
+          gh auth setup-git
+
+          git config user.name "rust-lang-team automation"
+          git config user.email "github-actions@github.com"
+
+          git add repos/
+          git commit -m "Automatically add configurations for untracked repositories"
+
+          git push --force --set-upstream origin "$AUTOMATION_BRANCH"
+
+      # a PR created with the built-in GITHUB_TOKEN may not run CI automatically.
+      # use a GitHub App token so that the pull request triggers CI normally.
+      - name: Generate GitHub App token
+        if: ${{ steps.check.outputs.configurations_created == 'true' && steps.pull_request.outputs.exists == 'false' }}
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
+          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
+
+      - name: Create pull request
+        if: ${{ steps.check.outputs.configurations_created == 'true' && steps.pull_request.outputs.exists == 'false' }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PULL_REQUEST_BASE_BRANCH: ${{ github.event.repository.default_branch }}
+          PULL_REQUEST_BODY: >-
+            This pull request was created automatically because untracked repositories were found.
+        run: |
+          gh pr create \
+            --base "$PULL_REQUEST_BASE_BRANCH" \
+            --head "$AUTOMATION_BRANCH" \
+            --title "$AUTOMATION_PR_TITLE" \
+            --body "$PULL_REQUEST_BODY"
