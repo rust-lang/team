@@ -77,10 +77,20 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh pr close "$AUTOMATION_BRANCH"
 
+      # Changes pushed with the built-in GITHUB_TOKEN don't trigger CI.
+      # Use a GitHub App token instead.
+      - name: Generate GitHub App token
+        if: ${{ steps.check.outputs.configurations_created == 'true' }}
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
+          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
+
       - name: Commit and push generated configurations
         if: ${{ steps.check.outputs.configurations_created == 'true' }}
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           git switch --create "$AUTOMATION_BRANCH"
           gh auth setup-git
@@ -92,16 +102,6 @@ jobs:
           git commit -m "Automatically add configurations for untracked repositories"
 
           git push --force --set-upstream origin "$AUTOMATION_BRANCH"
-
-      # a PR created with the built-in GITHUB_TOKEN may not run CI automatically.
-      # use a GitHub App token so that the pull request triggers CI normally.
-      - name: Generate GitHub App token
-        if: ${{ steps.check.outputs.configurations_created == 'true' && steps.pull_request.outputs.exists == 'false' }}
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
-        id: app-token
-        with:
-          app-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
-          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
 
       - name: Create pull request
         if: ${{ steps.check.outputs.configurations_created == 'true' && steps.pull_request.outputs.exists == 'false' }}
