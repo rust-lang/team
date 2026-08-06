@@ -4,20 +4,27 @@ subteam-of = "libs"
 
 [people]
 leads = [
-    "TimDiekmann",
+    "nia-e",
 ]
 members = [
     "Amanieu",
+    "clarfonthey",
+    "n1ark",
+    "nia-e",
+]
+alumni = [
     "CAD97",
     "Lokathor",
     "scottjmaddox",
     "TimDiekmann",
     "Wodann",
 ]
-alumni = []
 
 [[github]]
 orgs = ["rust-lang"]
+
+[permissions]
+perf = true
 
 [website]
 name = "Allocator working group"
@@ -27,3 +34,6 @@ zulip-stream = "t-libs/wg-allocators"
 
 [[lists]]
 address = "wg-allocators@rust-lang.org"
+
+[[zulip-groups]]
+name = "WG-allocators"
