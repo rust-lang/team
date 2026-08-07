@@ -1,4 +1,4 @@
-# Auto-generated from the rust-project-goals repository
+# Auto-generated from the goals repository
 name = "goal-owners"
 kind = "marker-team"
 

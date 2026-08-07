@@ -28,10 +28,10 @@ ping = "rust-lang/goals"
 
 [website]
 name = "Goals team"
-description = "Administering the Rust goal setting program"
+description = "Administering the Rust Project Goals"
 email = "goals@rust-lang.org"
-zulip-stream = "project goals"
-repo = "https://github.com/rust-lang/rust-project-goals"
+zulip-stream = "goals"
+repo = "https://github.com/rust-lang/goals"
 
 [[zulip-groups]]
 name = "T-goals"
