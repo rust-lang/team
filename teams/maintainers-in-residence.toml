@@ -3,7 +3,14 @@ kind = "marker-team"
 
 [people]
 leads = []
-members = []
+members = [
+    { github = "rami3l", roles = ["full-time"] },
+    { github = "blyxyas", roles = ["part-time"] },
+    { github = "ChrisDenton", roles = ["part-time"] },
+    { github = "fmease", roles = ["part-time"] },
+    { github = "joboet", roles = ["maintainer-grant"] },
+    { github = "Jarcho", roles = ["maintainer-grant"] },
+]
 alumni = []
 
 [[roles]]
@@ -13,6 +20,10 @@ description = "Full-time Maintainer in Residence"
 [[roles]]
 id = "part-time"
 description = "Part-time Maintainer in Residence"
+
+[[roles]]
+id = "maintainer-grant"
+description = "Mantainer grantee"
 
 [permissions]
 dev-desktop = true
