@@ -103,12 +103,6 @@ pattern = "*/**/*"
 bypass-apps = ["bors", "promote-release"]
 prevent-update = true
 
-[[rulesets]]
-pattern = "cargo_update"
-pr-required = false
-prevent-deletion = false
-prevent-force-push = false
-
 # Required for running try builds created by bors.
 # Must support force-pushes.
 [[rulesets]]
