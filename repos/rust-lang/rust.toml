@@ -151,5 +151,19 @@ pattern = "perf-tmp"
 allowed-merge-teams = ["rust-timer"]
 prevent-update = true
 
+# Required for running unrolled perf builds created by bors.
+# Must support force-pushes.
+[[rulesets]]
+pattern = "automation/bors/try-perf"
+bypass-apps = ["bors"]
+prevent-update = true
+
+# Required for running unrolled perf builds created by bors.
+# Must support force-pushes.
+[[rulesets]]
+pattern = "automation/bors/try-perf-merge"
+bypass-apps = ["bors"]
+prevent-update = true
+
 [environments.bors]
-branches = ["automation/bors/auto", "automation/bors/try", "try-perf"]
+branches = ["automation/bors/auto", "automation/bors/try", "automation/bors/try-perf", "try-perf"]
