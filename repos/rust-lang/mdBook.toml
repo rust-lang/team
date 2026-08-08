@@ -5,17 +5,12 @@ homepage = "https://rust-lang.github.io/mdBook/"
 bots = ["rustbot", "renovate"]
 
 [access.teams]
-devtools = "write"
-
-[access.individuals]
-# Dylan-DPC is maintaining mdbook along with ehuss. Planning to add a team
-# soon, and then this can be removed.
-Dylan-DPC = "write"
+mdbook = "write"
 
 [[branch-protections]]
 pattern = "master"
 ci-checks = ["Success gate"]
-required-approvals = 0
+required-approvals = 1
 merge-queue = { enabled = true, min-entries-to-merge-wait-minutes = 1 }
 
 [[crates-io]]
