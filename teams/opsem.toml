@@ -31,4 +31,4 @@ name = "T-opsem"
 
 [[zulip-groups]]
 name = "T-opsem/meetings"
-extra-people = ["chorman0773", "thomcc", "burakemir", "fbq", "n1ark"]
+extra-people = ["chorman0773", "thomcc", "burakemir", "fbq", "N1ark"]
