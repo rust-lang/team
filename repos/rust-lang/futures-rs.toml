@@ -16,4 +16,8 @@ wg-async = "write"
 pattern = "main"
 required-approvals = 0
 
+[[rulesets]]
+pattern = "0.[1-9]"
+required-approvals = 0
+
 [environments.github-pages]
