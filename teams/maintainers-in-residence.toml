@@ -23,7 +23,7 @@ description = "Part-time Maintainer in Residence"
 
 [[roles]]
 id = "maintainer-grant"
-description = "Mantainer grantee"
+description = "Maintainer grantee"
 
 [permissions]
 dev-desktop = true
