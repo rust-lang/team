@@ -25,6 +25,7 @@ alumni = [
 orgs = ["rust-lang"]
 
 [permissions]
+bors.rust.try = true
 perf = true
 
 [website]
