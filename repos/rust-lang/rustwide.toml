@@ -8,7 +8,8 @@ infra = "write"
 docs-rs = "write"
 
 [environments.publish]
-branches = ["main"]
+# Matches the `on:` rule of `release.yml`
+tags = ["*"]
 
 [[crates-io]]
 crates = ["rustwide"]
