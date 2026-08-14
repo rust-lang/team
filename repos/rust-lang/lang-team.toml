@@ -16,3 +16,12 @@ release = "maintain"
 
 [environments.github-pages]
 branches = ["gh-pages", "main"]
+
+[[rulesets]]
+pattern = "main"
+merge-queue = {
+  enabled = true,
+  method = "merge",
+  min-entries-to-merge-wait-minutes = 0,
+  check-response-timeout-minutes = 6
+}
