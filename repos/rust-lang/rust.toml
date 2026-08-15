@@ -28,8 +28,6 @@ rust-analyzer = "write"
 style = "write"
 types = "write"
 triage = "write"
-# needed for the branch protection
-rust-timer = "write"
 
 # Only `bors` can push to `main`
 [[rulesets]]
@@ -96,7 +94,6 @@ prevent-force-push = false
 pattern = "*"
 bypass-apps = ["bors", "promote-release"]
 prevent-update = true
-allowed-merge-teams = ["rust-timer"]
 
 [[rulesets]]
 pattern = "*/**/*"
@@ -131,20 +128,6 @@ pattern = "automation/bors/auto-merge"
 bypass-apps = ["bors"]
 prevent-update = true
 
-# Required for unrolled PR builds created by perfbot.
-# Must support force-pushes.
-[[rulesets]]
-pattern = "try-perf"
-allowed-merge-teams = ["rust-timer"]
-prevent-update = true
-
-# Required for unrolled PR builds created by perfbot.
-# Must support force-pushes.
-[[rulesets]]
-pattern = "perf-tmp"
-allowed-merge-teams = ["rust-timer"]
-prevent-update = true
-
 # Required for running unrolled perf builds created by bors.
 # Must support force-pushes.
 [[rulesets]]
@@ -160,4 +143,4 @@ bypass-apps = ["bors"]
 prevent-update = true
 
 [environments.bors]
-branches = ["automation/bors/auto", "automation/bors/try", "automation/bors/try-perf", "try-perf"]
+branches = ["automation/bors/auto", "automation/bors/try", "automation/bors/try-perf"]
