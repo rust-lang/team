@@ -334,21 +334,17 @@ pub enum BranchProtectionMode {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum MergeBot {
-    Homu,
-    RustTimer,
     Bors,
     WorkflowsCratesIo,
     PromoteRelease,
 }
 
 impl MergeBot {
-    pub fn app_id(&self) -> Option<i64> {
+    pub fn app_id(&self) -> i64 {
         match self {
-            MergeBot::WorkflowsCratesIo => Some(2201425),
-            MergeBot::Bors => Some(278306),
-            MergeBot::PromoteRelease => Some(217112),
-            // These are user-based bots, not GitHub Apps
-            MergeBot::RustTimer | MergeBot::Homu => None,
+            MergeBot::WorkflowsCratesIo => 2201425,
+            MergeBot::Bors => 278306,
+            MergeBot::PromoteRelease => 217112,
         }
     }
 }
