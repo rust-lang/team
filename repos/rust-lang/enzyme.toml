@@ -9,7 +9,6 @@ compiler = "maintain"
 lang = "maintain"
 lang-ops = "maintain"
 libs = "maintain"
-libs-api = "maintain"
 release = "maintain"
 wg-llvm = "maintain"
 

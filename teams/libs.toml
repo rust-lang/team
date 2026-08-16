@@ -7,13 +7,26 @@ leads = [
 ]
 members = [
     "Amanieu",
-    "joshtriplett",
+    "BurntSushi",
     "cuviper",
+    "dtolnay",
+    "joshtriplett",
     "the8472",
     "thomcc",
 ]
 alumni = [
+    "alexcrichton",
+    "aturon",
+    "brson",
+    "Gankra",
+    "huonw",
+    "Kimundi",
+    "KodrAus",
+    "LukasKalbertodt",
     "m-ou-se",
+    "sfackler",
+    "SimonSapin",
+    "withoutboats",
     "yaahc",
 ]
 
@@ -25,11 +38,6 @@ perf = true
 crater = true
 dev-desktop = true
 bors.rust.review = true
-
-[rfcbot]
-label = "T-libs"
-name = "Library"
-ping = "rust-lang/libs"
 
 [website]
 page = "library"
@@ -45,11 +53,15 @@ address = "libs-private@rust-lang.org"
 address = "libs@rust-lang.org"
 
 [[lists]]
+address = "libs-api@rust-lang.org"
+
+[[lists]]
 address = "library-team@rust-lang.org"
 
 [[zulip-groups]]
 name = "T-libs"
 
 [[zulip-streams]]
-name = "t-libs/private"
-extra-teams = ["libs-api"]
+# NOTE: should be renamed to t-libs/private, but non-urgent
+name = "t-libs/reviewers"
+extra-teams = ["libs-contributors"]

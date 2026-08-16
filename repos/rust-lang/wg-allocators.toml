@@ -6,6 +6,5 @@ bots = []
 
 [access.teams]
 libs = "write"
-libs-api = "write"
 libs-contributors = "write"
 wg-allocators = "maintain"

@@ -1,0 +1,30 @@
+name = "libs-fcp"
+subteam-of = "libs"
+
+[people]
+leads = []
+members = [
+    "Amanieu",
+    "BurntSushi",
+    "cuviper",
+    "dtolnay",
+    "joshtriplett",
+    "the8472",
+    "thomcc",
+]
+alumni = []
+
+[rfcbot]
+label = "T-libs"
+name = "Library"
+ping = "rust-lang/libs"
+
+[website]
+page = "library"
+name = "Library FCP team"
+description = "Library team members with responsibility for signing off on API changes"
+zulip-stream = "t-libs"
+repo = "https://github.com/rust-lang/libs-team"
+
+[[zulip-groups]]
+name = "T-libs-fcp"
