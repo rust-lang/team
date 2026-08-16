@@ -54,7 +54,3 @@ description = "Contributing to the Rust standard library on a regular basis"
 
 [[zulip-groups]]
 name = "T-libs-contributors"
-
-[[zulip-streams]]
-name = "t-libs/reviewers"
-extra-teams = ["libs", "libs-api"]

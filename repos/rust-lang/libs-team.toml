@@ -5,5 +5,4 @@ bots = ["rustbot"]
 
 [access.teams]
 libs = "maintain"
-libs-api = "maintain"
 libs-contributors = "maintain"
