@@ -25,3 +25,6 @@ repo = "https://github.com/rust-lang/mdBook"
 
 [[zulip-groups]]
 name = "T-mdbook"
+
+[[zulip-streams]]
+name = "t-mdbook/private"
