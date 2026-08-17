@@ -21,4 +21,3 @@ branches = ["main"]
 crates = ["libm"]
 publish-workflow = "publish.yaml"
 publish-environment = "publish"
-teams = ["libs"]
