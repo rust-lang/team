@@ -19,3 +19,17 @@ branches = ["main"]
 
 [environments.staging]
 branches = ["main"]
+
+[environments.publish]
+tags = [
+    "font-awesome-as-a-crate-v*",
+    "docs_rs_crates_io-v*"
+]
+
+[[crates-io]]
+crates = [
+    "font-awesome-as-a-crate",
+    "docs_rs_crates_io"
+]
+publish-workflow = "release.yml"
+publish-environment = "publish"
