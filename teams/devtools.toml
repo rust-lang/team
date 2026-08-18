@@ -3,12 +3,13 @@ top-level = true
 
 [people]
 leads = ["Manishearth"]
-members = ["Manishearth", "GuillaumeGomez", "ehuss", "calebcartwright"]
+members = ["Manishearth", "GuillaumeGomez", "calebcartwright"]
 alumni = [
     "alexcrichton",
     "brson",
     "carols10cents",
     "dwijnand",
+    "ehuss",
     "fitzgen",
     "japaric",
     "killercup",

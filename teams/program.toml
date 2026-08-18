@@ -12,10 +12,13 @@ subteam-of = "edition" # And of goals.
 leads = []
 members = [
     "traviscross",
-    "ehuss",
     "nikomatsakis",
     "tomassedovic",
     "nxsaken",
+]
+
+alumni = [
+    "ehuss",
 ]
 
 [[github]]

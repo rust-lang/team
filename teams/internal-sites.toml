@@ -2,13 +2,13 @@ name = "internal-sites"
 subteam-of = "infra"
 
 [people]
-leads = ["ehuss", "Urgau", "jieyouxu"]
+leads = ["Urgau", "jieyouxu"]
 members = [
-    "ehuss",
     "Urgau",
     "jieyouxu",
 ]
 alumni = [
+    "ehuss",
 ]
 
 [[github]]

@@ -5,7 +5,6 @@ subteam-of = "lang"
 leads = ["nikomatsakis"]
 members = [
     "JoelMarcey",
-    "ehuss",
     "traviscross",
     "nikomatsakis",
 ]
@@ -13,6 +12,7 @@ alumni = [
     "joshtriplett",
     "m-ou-se",
     "pnkfelix",
+    "ehuss",
 ]
 
 [website]

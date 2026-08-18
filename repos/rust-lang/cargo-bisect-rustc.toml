@@ -11,7 +11,6 @@ build-type = "workflow"
 compiler = "write"
 
 [access.individuals]
-ehuss = "write"
 
 [[rulesets]]
 pattern = "master"

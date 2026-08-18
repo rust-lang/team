@@ -4,11 +4,9 @@ subteam-of = "launching-pad"
 [people]
 leads = [
     "traviscross",
-    "ehuss",
 ]
 members = [
     "traviscross",
-    "ehuss",
     "PLeVasseur",
     "Mark-Simulacrum",
     "eholk",
@@ -16,6 +14,7 @@ members = [
 alumni = [
     "bstrie",
     "m-ou-se",
+    "ehuss",
 ]
 
 [permissions]

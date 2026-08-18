@@ -2,9 +2,8 @@ name = "lang-docs"
 subteam-of = "lang"
 
 [people]
-leads = ["ehuss", "traviscross"]
+leads = ["traviscross"]
 members = [
-    "ehuss",
     "JohnTitor",
     "traviscross",
 ]
@@ -13,6 +12,7 @@ alumni = [
     "Gankra",
     "Havvy",
     "matthewjasper",
+    "ehuss",
 ]
 
 [[github]]
