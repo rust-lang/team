@@ -3,3 +3,6 @@ email = "59372212+mejrs@users.noreply.github.com"
 github = "mejrs"
 github-id = 59372212
 zulip-id = 433532
+
+[funding]
+github-sponsors = true
