@@ -17,5 +17,6 @@ spec-contributors = "write"
 pattern = "master"
 ci-checks = ["Success gate"]
 merge-queue = { enabled = true }
+required-approvals = 0
 
 [environments.github-pages]
