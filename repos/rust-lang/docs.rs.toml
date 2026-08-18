@@ -33,3 +33,9 @@ crates = [
 ]
 publish-workflow = "release.yml"
 publish-environment = "publish"
+
+[pages]
+build-type = "workflow"
+
+[environments.github-pages]
+branches = ["main"]
