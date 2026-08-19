@@ -9,7 +9,6 @@ members = [
     "cramertj",
     "Darksonn",
     "dianne",
-    "ehuss",
     "jackh726",
     "RalfJung",
     "Mark-Simulacrum",
@@ -18,6 +17,7 @@ members = [
 ]
 alumni = [
     "JakobDegen",
+    "ehuss",
 ]
 
 # Granting these permissions because an advisor can use these to help when
