@@ -6,14 +6,57 @@ leads = [
     "Amanieu",
 ]
 members = [
+    "aapoalas",
+    "adamgemmell",
     "Amanieu",
-    "joshtriplett",
+    "BurntSushi",
+    "Byron",
+    "calebzulawski",
+    "ChrisDenton",
+    "clarfonthey",
+    "cramertj",
     "cuviper",
+    "Darksonn",
+    "davidtwco",
+    "dtolnay",
+    "folkertdev",
+    "hanna-kruppe",
+    "ibraheemdev",
+    "jhpratt",
+    "joboet",
+    "JohnTitor",
+    "joshtriplett",
+    "kennytm",
+    "KodrAus",
+    "LawnGnome",
+    "Mark-Simulacrum",
+    "m-ou-se",
+    "nia-e",
+    "NobodyXu",
+    "Noratrieb",
+    "programmerjake",
+    "sayantn",
+    "SimonSapin",
+    "sunfishcode",
+    "tgross35",
     "the8472",
     "thomcc",
+    "workingjubilee",
+    "yaahc",
 ]
 alumni = [
+    "alexcrichton",
+    "aturon",
+    "brson",
+    "Gankra",
+    "huonw",
+    "Kimundi",
+    "LukasKalbertodt",
     "m-ou-se",
+    "sfackler",
+    "shepmaster",
+    "SimonSapin",
+    "withoutboats",
     "yaahc",
 ]
 
@@ -25,11 +68,6 @@ perf = true
 crater = true
 dev-desktop = true
 bors.rust.review = true
-
-[rfcbot]
-label = "T-libs"
-name = "Library"
-ping = "rust-lang/libs"
 
 [website]
 page = "library"
@@ -45,11 +83,14 @@ address = "libs-private@rust-lang.org"
 address = "libs@rust-lang.org"
 
 [[lists]]
+address = "libs-api@rust-lang.org"
+
+[[lists]]
 address = "library-team@rust-lang.org"
 
 [[zulip-groups]]
 name = "T-libs"
 
 [[zulip-streams]]
-name = "t-libs/private"
-extra-teams = ["libs-api"]
+# NOTE: should be renamed to t-libs/private, but non-urgent
+name = "t-libs/reviewers"
