@@ -301,6 +301,7 @@ where
 }
 
 /// Ensure no duplicate entries in team leads, members and alumni
+/// Also ensures that there are no duplicates *across* members and alumni.
 fn validate_duplicate_team_entries(data: &Data, errors: &mut Vec<String>) {
     wrapper(data.teams(), errors, |team, errors| {
         // Check leads for duplicates
@@ -326,6 +327,30 @@ fn validate_duplicate_team_entries(data: &Data, errors: &mut Vec<String>) {
             team.name(),
             "alumni",
             team.explicit_alumni().iter().map(|a| a.github.as_str()),
+        ) {
+            errors.push(e.to_string());
+        }
+
+        // Check leads + alumni for duplicates
+        if let Err(e) = check_duplicates(
+            team.name(),
+            "leads + alumni",
+            team.explicit_alumni()
+                .iter()
+                .map(|a| a.github.as_str())
+                .chain(team.explicit_leads().iter().map(|s| s.as_str())),
+        ) {
+            errors.push(e.to_string());
+        }
+
+        // Check members + alumni for duplicates
+        if let Err(e) = check_duplicates(
+            team.name(),
+            "members + alumni",
+            team.explicit_alumni()
+                .iter()
+                .map(|a| a.github.as_str())
+                .chain(team.explicit_members().iter().map(|s| s.github.as_str())),
         ) {
             errors.push(e.to_string());
         }
