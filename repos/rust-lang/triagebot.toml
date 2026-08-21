@@ -9,6 +9,6 @@ infra = "maintain"
 triagebot = "maintain"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 ci-checks = ["ci"]
 merge-queue = { enabled = true }
