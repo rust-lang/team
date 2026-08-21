@@ -4,4 +4,3 @@ description = "Rayon: A data parallelism library for Rust"
 bots = []
 
 [access.teams]
-compiler = "write"
