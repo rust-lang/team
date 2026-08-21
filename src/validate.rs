@@ -10,6 +10,7 @@ use log::{error, warn};
 use regex::Regex;
 use std::collections::hash_map::{Entry, HashMap};
 use std::collections::{BTreeSet, HashSet};
+use std::iter;
 
 macro_rules! checks {
     ($($f:ident,)*) => {
@@ -317,10 +318,7 @@ fn validate_duplicate_team_entries(data: &Data, errors: &mut Vec<String>) {
         if let Err(e) = check_duplicates(
             team.name(),
             "duplicates within or between members and/or alumni",
-            team.explicit_alumni()
-                .iter()
-                .map(|a| a.github.as_str())
-                .chain(team.explicit_members().iter().map(|s| s.github.as_str())),
+            iter::chain(team.explicit_members(), team.explicit_alumni()).map(|a| a.github.as_str()),
         ) {
             errors.push(e.to_string());
         }
