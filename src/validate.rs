@@ -290,7 +290,7 @@ where
     if !duplicates.is_empty() {
         let dup_list: Vec<&str> = duplicates.into_iter().collect();
         bail!(
-            "team `{}` has duplicate {}: {}",
+            "team `{}` has {}: {}",
             team_name,
             label,
             dup_list.join(", ")
@@ -307,38 +307,8 @@ fn validate_duplicate_team_entries(data: &Data, errors: &mut Vec<String>) {
         // Check leads for duplicates
         if let Err(e) = check_duplicates(
             team.name(),
-            "leads",
+            "duplicate leads",
             team.explicit_leads().iter().map(|s| s.as_str()),
-        ) {
-            errors.push(e.to_string());
-        }
-
-        // Check members for duplicates
-        if let Err(e) = check_duplicates(
-            team.name(),
-            "members",
-            team.explicit_members().iter().map(|m| m.github.as_str()),
-        ) {
-            errors.push(e.to_string());
-        }
-
-        // Check alumni for duplicates
-        if let Err(e) = check_duplicates(
-            team.name(),
-            "alumni",
-            team.explicit_alumni().iter().map(|a| a.github.as_str()),
-        ) {
-            errors.push(e.to_string());
-        }
-
-        // Check leads + alumni for duplicates
-        if let Err(e) = check_duplicates(
-            team.name(),
-            "leads + alumni",
-            team.explicit_alumni()
-                .iter()
-                .map(|a| a.github.as_str())
-                .chain(team.explicit_leads().iter().map(|s| s.as_str())),
         ) {
             errors.push(e.to_string());
         }
@@ -346,7 +316,7 @@ fn validate_duplicate_team_entries(data: &Data, errors: &mut Vec<String>) {
         // Check members + alumni for duplicates
         if let Err(e) = check_duplicates(
             team.name(),
-            "members + alumni",
+            "duplicates within or between members and/or alumni",
             team.explicit_alumni()
                 .iter()
                 .map(|a| a.github.as_str())
