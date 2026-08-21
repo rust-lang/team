@@ -28,8 +28,8 @@ types = "maintain"
 rustc-dev-guide = "maintain"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 ci-checks = ["test"]
 
 [environments.github-pages]
-branches = ["master"]
+branches = ["main"]
