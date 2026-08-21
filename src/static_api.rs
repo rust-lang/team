@@ -244,7 +244,6 @@ impl<'a> Generator<'a> {
     fn convert_bypass_apps(apps: &[BypassApp]) -> Vec<v1::MergeBot> {
         apps.iter()
             .map(|app| match app {
-                BypassApp::RustTimer => v1::MergeBot::RustTimer,
                 BypassApp::Bors => v1::MergeBot::Bors,
                 BypassApp::WorkflowsCratesIo => v1::MergeBot::WorkflowsCratesIo,
                 BypassApp::PromoteRelease => v1::MergeBot::PromoteRelease,

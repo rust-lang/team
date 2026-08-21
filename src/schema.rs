@@ -944,7 +944,6 @@ pub(crate) enum RepoPermission {
 #[derive(serde::Deserialize, Debug, PartialEq, Eq)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum BypassApp {
-    RustTimer,
     Bors,
     WorkflowsCratesIo,
     PromoteRelease,
