@@ -202,7 +202,7 @@ pub async fn check_untracked_repos(
     data_dir: &Path,
     create_missing: bool,
 ) -> anyhow::Result<CheckUntrackedReposResult> {
-    let github = crate::api::github::GitHubApi::new();
+    let github = crate::api::github::GitHubApi::new_with_org_tokens();
 
     // Get allowed GitHub organizations from config instead of hardcoding
     let orgs_to_monitor: Vec<&str> = data
@@ -276,7 +276,7 @@ async fn fetch_all_github_repos(
             let url = format!("orgs/{}/repos?per_page=100&page={}", org, page);
 
             let repos: Vec<GitHubRepo> = github
-                .get(&url)
+                .get(Some(org), &url)
                 .await
                 .with_context(|| format!("Failed to fetch repos for org: {}", org))?;
 

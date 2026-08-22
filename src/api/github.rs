@@ -1,3 +1,4 @@
+use crate::sync::GitHubTokens;
 use crate::sync::utils::ResponseExt;
 use anyhow::{Context, Error, bail};
 use base64::Engine;
@@ -6,6 +7,7 @@ use chrono::{DateTime, Duration, Utc};
 use reqwest::header::{self, HeaderValue};
 use reqwest::{Client, ClientBuilder, RequestBuilder};
 use reqwest::{Method, StatusCode};
+use secrecy::ExposeSecret;
 use std::borrow::Cow;
 use std::collections::HashMap;
 
@@ -40,6 +42,7 @@ struct GraphNodes<T> {
 pub(crate) struct GitHubApi {
     http: Client,
     token: Option<String>,
+    org_tokens: Option<GitHubTokens>,
 }
 
 impl GitHubApi {
@@ -50,12 +53,25 @@ impl GitHubApi {
                 .build()
                 .unwrap(),
             token: std::env::var(TOKEN_VAR).ok(),
+            org_tokens: None,
+        }
+    }
+
+    pub(crate) fn new_with_org_tokens() -> Self {
+        GitHubApi {
+            http: ClientBuilder::new()
+                .user_agent(crate::USER_AGENT)
+                .build()
+                .unwrap(),
+            token: std::env::var(TOKEN_VAR).ok(),
+            org_tokens: Some(GitHubTokens::from_env_org_tokens_only()),
         }
     }
 
     fn prepare(
         &self,
         require_auth: bool,
+        org: Option<&str>,
         method: Method,
         url: &str,
     ) -> Result<RequestBuilder, Error> {
@@ -69,7 +85,16 @@ impl GitHubApi {
         }
 
         let mut req = self.http.request(method, url.as_ref());
-        if let Some(token) = &self.token {
+        let token = match org {
+            Some(org) => self
+                .org_tokens
+                .as_ref()
+                .and_then(|tokens| tokens.get_organization_token(org).ok())
+                .map(|token| token.expose_secret()),
+            None => self.token.as_deref(),
+        };
+
+        if let Some(token) = token {
             req = req.header(
                 header::AUTHORIZATION,
                 HeaderValue::from_str(&format!("token {token}"))?,
@@ -89,7 +114,7 @@ impl GitHubApi {
             variables: V,
         }
         let res: GraphResult<R> = self
-            .prepare(true, Method::POST, "graphql")?
+            .prepare(true, None, Method::POST, "graphql")?
             .json(&Request { query, variables })
             .send()
             .await?
@@ -113,7 +138,7 @@ impl GitHubApi {
     }
 
     pub(crate) async fn user(&self, login: &str) -> Result<User, Error> {
-        self.prepare(false, Method::GET, &format!("users/{login}"))?
+        self.prepare(false, None, Method::GET, &format!("users/{login}"))?
             .send()
             .await?
             .error_for_status()?
@@ -121,12 +146,12 @@ impl GitHubApi {
             .await
     }
 
-    pub(crate) async fn get<T>(&self, url: &str) -> Result<T, Error>
+    pub(crate) async fn get<T>(&self, org: Option<&str>, url: &str) -> Result<T, Error>
     where
         T: serde::de::DeserializeOwned,
     {
         loop {
-            let response = self.prepare(false, Method::GET, url)?.send().await?;
+            let response = self.prepare(false, org, Method::GET, url)?.send().await?;
 
             let status = response.status();
             if status != StatusCode::OK {
@@ -378,7 +403,7 @@ query($query: String!, $issueLimit: Int!, $commentLimit: Int!) {
             items: Vec<octocrab::models::search::CommitSearchResultItem>,
         }
 
-        let response: Response = self.get(&format!("search/commits?q=author:{username}+org:{org}&sort=author-date&order=desc&per_page={limit}")).await?;
+        let response: Response = self.get(None, &format!("search/commits?q=author:{username}+org:{org}&sort=author-date&order=desc&per_page={limit}")).await?;
         Ok(response
             .items
             .into_iter()
@@ -418,4 +443,79 @@ pub struct CommitInfo {
     pub repo_owner: String,
     pub repo_name: String,
     pub created_at: DateTime<Utc>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use secrecy::SecretString;
+
+    #[test]
+    fn prepare_uses_organization_token() {
+        let github = github_with_org_tokens(HashMap::from([(
+            "rust-lang".to_string(),
+            SecretString::from("organization-token"),
+        )]));
+
+        let request = github
+            .prepare(
+                false,
+                Some("rust-lang"),
+                Method::GET,
+                "orgs/rust-lang/repos",
+            )
+            .unwrap()
+            .build()
+            .unwrap();
+
+        assert_eq!(
+            request.headers().get(header::AUTHORIZATION).unwrap(),
+            "token organization-token"
+        );
+    }
+
+    #[test]
+    fn prepare_without_organization_token_is_unauthenticated() {
+        let github = github_with_org_tokens(HashMap::new());
+
+        let request = github
+            .prepare(
+                false,
+                Some("rust-lang"),
+                Method::GET,
+                "orgs/rust-lang/repos",
+            )
+            .unwrap()
+            .build()
+            .unwrap();
+
+        assert!(!request.headers().contains_key(header::AUTHORIZATION));
+    }
+
+    #[test]
+    fn prepare_without_organization_uses_default_token() {
+        let github = github_with_org_tokens(HashMap::new());
+
+        let request = github
+            .prepare(false, None, Method::GET, "users/rust-lang-owner")
+            .unwrap()
+            .build()
+            .unwrap();
+
+        assert_eq!(
+            request.headers().get(header::AUTHORIZATION).unwrap(),
+            "token default-token"
+        );
+    }
+
+    fn github_with_org_tokens(org_tokens: HashMap<String, SecretString>) -> GitHubApi {
+        GitHubApi {
+            http: ClientBuilder::new().build().unwrap(),
+            token: Some("default-token".to_string()),
+            org_tokens: Some(GitHubTokens::App {
+                org_tokens,
+                enterprise_client_ctx: None,
+            }),
+        }
+    }
 }
