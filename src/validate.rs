@@ -10,6 +10,7 @@ use log::{error, warn};
 use regex::Regex;
 use std::collections::hash_map::{Entry, HashMap};
 use std::collections::{BTreeSet, HashSet};
+use std::iter;
 
 macro_rules! checks {
     ($($f:ident,)*) => {
@@ -290,7 +291,7 @@ where
     if !duplicates.is_empty() {
         let dup_list: Vec<&str> = duplicates.into_iter().collect();
         bail!(
-            "team `{}` has duplicate {}: {}",
+            "team `{}` has {}: {}",
             team_name,
             label,
             dup_list.join(", ")
@@ -307,38 +308,8 @@ fn validate_duplicate_team_entries(data: &Data, errors: &mut Vec<String>) {
         // Check leads for duplicates
         if let Err(e) = check_duplicates(
             team.name(),
-            "leads",
+            "duplicate leads",
             team.explicit_leads().iter().map(|s| s.as_str()),
-        ) {
-            errors.push(e.to_string());
-        }
-
-        // Check members for duplicates
-        if let Err(e) = check_duplicates(
-            team.name(),
-            "members",
-            team.explicit_members().iter().map(|m| m.github.as_str()),
-        ) {
-            errors.push(e.to_string());
-        }
-
-        // Check alumni for duplicates
-        if let Err(e) = check_duplicates(
-            team.name(),
-            "alumni",
-            team.explicit_alumni().iter().map(|a| a.github.as_str()),
-        ) {
-            errors.push(e.to_string());
-        }
-
-        // Check leads + alumni for duplicates
-        if let Err(e) = check_duplicates(
-            team.name(),
-            "leads + alumni",
-            team.explicit_alumni()
-                .iter()
-                .map(|a| a.github.as_str())
-                .chain(team.explicit_leads().iter().map(|s| s.as_str())),
         ) {
             errors.push(e.to_string());
         }
@@ -346,11 +317,8 @@ fn validate_duplicate_team_entries(data: &Data, errors: &mut Vec<String>) {
         // Check members + alumni for duplicates
         if let Err(e) = check_duplicates(
             team.name(),
-            "members + alumni",
-            team.explicit_alumni()
-                .iter()
-                .map(|a| a.github.as_str())
-                .chain(team.explicit_members().iter().map(|s| s.github.as_str())),
+            "duplicates within or between members and/or alumni",
+            iter::chain(team.explicit_members(), team.explicit_alumni()).map(|a| a.github.as_str()),
         ) {
             errors.push(e.to_string());
         }
