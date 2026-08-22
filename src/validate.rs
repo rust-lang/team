@@ -3,13 +3,15 @@ use crate::api::zulip::ZulipApi;
 use crate::data::Data;
 use crate::schema::{
     Bot, BypassApp, Email, MergeQueueMethod, Pages, Permissions, Repo, RepoPermission, Team,
-    TeamKind, TeamPeople, ZulipMember,
+    TeamKind, TeamMember, TeamPeople, ZulipMember,
 };
 use anyhow::{Context as _, Error, bail};
+use indexmap::IndexMap;
 use log::{error, warn};
 use regex::Regex;
 use std::collections::hash_map::{Entry, HashMap};
 use std::collections::{BTreeSet, HashSet};
+use std::{fmt, hash, iter};
 
 macro_rules! checks {
     ($($f:ident,)*) => {
@@ -273,90 +275,63 @@ fn validate_team_gws_group(data: &Data, errors: &mut Vec<String>) {
     });
 }
 
-/// Helper for checking duplicates in a list
-fn check_duplicates<'a, I>(team_name: &str, label: &str, items: I) -> Result<(), Error>
-where
-    I: IntoIterator<Item = &'a str>,
-{
-    let mut seen = HashSet::new();
-    let mut duplicates = HashSet::new();
+/// Helper for reporting duplicates in a list
+/// and returning the deduplicated result
+fn no_duplicates<'a, T, K: hash::Hash + Eq + fmt::Display + 'a>(
+    items: impl IntoIterator<Item = &'a T>,
+    by_key: impl Fn(&'a T) -> &'a K,
+    errors: &mut Vec<String>,
+    message: String,
+) -> Vec<&'a T> {
+    let mut deduplicated = IndexMap::new();
+    let mut duplicates = BTreeSet::new();
 
     for item in items {
-        if !seen.insert(item) {
-            duplicates.insert(item);
+        if let (ix, Some(_)) = deduplicated.insert_full(by_key(item), item) {
+            duplicates.insert(ix);
         }
     }
 
     if !duplicates.is_empty() {
-        let dup_list: Vec<&str> = duplicates.into_iter().collect();
-        bail!(
-            "team `{}` has duplicate {}: {}",
-            team_name,
-            label,
-            dup_list.join(", ")
-        );
+        let dup_list = Vec::from_iter(
+            (duplicates.into_iter()).map(|i| format!("`{}`", deduplicated.get_index(i).unwrap().0)),
+        )
+        .join(", ");
+        errors.push(format!("{message}: {dup_list}"));
     }
 
-    Ok(())
+    deduplicated.into_values().collect()
 }
 
 /// Ensure no duplicate entries in team leads, members and alumni
-/// Also ensures that there are no duplicates *across* members and alumni.
+/// Also ensures that there are no duplicates *across* members and alumni,
+/// or duplicates in the list of roles of a person.
 fn validate_duplicate_team_entries(data: &Data, errors: &mut Vec<String>) {
-    wrapper(data.teams(), errors, |team, errors| {
-        // Check leads for duplicates
-        if let Err(e) = check_duplicates(
-            team.name(),
-            "leads",
-            team.explicit_leads().iter().map(|s| s.as_str()),
-        ) {
-            errors.push(e.to_string());
-        }
+    for team in data.teams() {
+        let team_name = team.name();
 
-        // Check members for duplicates
-        if let Err(e) = check_duplicates(
-            team.name(),
-            "members",
-            team.explicit_members().iter().map(|m| m.github.as_str()),
-        ) {
-            errors.push(e.to_string());
-        }
+        no_duplicates(team.explicit_leads(), |l| l, errors, {
+            format!("team `{team_name}` has duplicate leads")
+        });
 
-        // Check alumni for duplicates
-        if let Err(e) = check_duplicates(
-            team.name(),
-            "alumni",
-            team.explicit_alumni().iter().map(|a| a.github.as_str()),
-        ) {
-            errors.push(e.to_string());
-        }
+        let members = no_duplicates(team.explicit_members(), |m| &m.github, errors, {
+            format!("team `{team_name}` has duplicate members")
+        });
 
-        // Check leads + alumni for duplicates
-        if let Err(e) = check_duplicates(
-            team.name(),
-            "leads + alumni",
-            team.explicit_alumni()
-                .iter()
-                .map(|a| a.github.as_str())
-                .chain(team.explicit_leads().iter().map(|s| s.as_str())),
-        ) {
-            errors.push(e.to_string());
-        }
+        let alumni = no_duplicates(team.explicit_alumni(), |a| &a.github, errors, {
+            format!("team `{team_name}` has duplicate alumni")
+        });
 
-        // Check members + alumni for duplicates
-        if let Err(e) = check_duplicates(
-            team.name(),
-            "members + alumni",
-            team.explicit_alumni()
-                .iter()
-                .map(|a| a.github.as_str())
-                .chain(team.explicit_members().iter().map(|s| s.github.as_str())),
-        ) {
-            errors.push(e.to_string());
-        }
+        let mems_and_almni = no_duplicates(iter::chain(members, alumni), |m| &m.github, errors, {
+            format!("team `{team_name}` has overlap between members and alumni")
+        });
 
-        Ok(())
-    });
+        for TeamMember { github, roles } in mems_and_almni {
+            no_duplicates(roles, |r| r, errors, {
+                format!("person `{github}` in team `{team_name}` has duplicate roles")
+            });
+        }
+    }
 }
 
 /// Alumni team must consist only of automatically populated alumni from the other teams
@@ -1503,6 +1478,17 @@ fn validate_member_roles(data: &Data, errors: &mut Vec<String>) {
                         errors.push(format!(
                             "person '{person}' in team '{team_name}' has unrecognized role '{role}'",
                             person = member.github,
+                        ));
+                    }
+                }
+            }
+
+            for former_member in team.explicit_alumni() {
+                for role in &former_member.roles {
+                    if !role_ids.contains(role) {
+                        errors.push(format!(
+                            "person '{person}' in alumni of team '{team_name}' has unrecognized role '{role}'",
+                            person = former_member.github,
                         ));
                     }
                 }
