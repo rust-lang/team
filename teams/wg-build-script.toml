@@ -1,0 +1,27 @@
+name = "wg-build-script"
+subteam-of = "cargo"
+kind = "working-group"
+
+[people]
+leads = ["celinval", "weihanglo"]
+members = [
+    "LawnGnome",
+    "NobodyXu",
+    "celinval",
+    "epage",
+    "joshtriplett",
+    "ranger-ross",
+    "weihanglo",
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "Build Script Working Group"
+description = "Improving the security, determinism, and performance of Cargo build scripts"
+zulip-stream = "t-cargo/build-script"
+
+[[zulip-groups]]
+name = "WG-build-script"
