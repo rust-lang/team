@@ -14,6 +14,11 @@ alumni = [
     "Dylan-DPC",
 ]
 
+[rfcbot]
+label = "T-mdbook"
+name = "mdBook"
+ping = "rust-lang/mdbook"
+
 [[github]]
 orgs = ["rust-lang"]
 
