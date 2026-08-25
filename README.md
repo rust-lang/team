@@ -40,9 +40,9 @@ from all the supported services.
 
 [rfcbot]: https://rfcbot.rs
 
-[rfcbot-src]: https://github.com/rust-lang/rfcbot-rs/blob/master/src/teams.rs
+[rfcbot-src]: https://github.com/rust-lang/rfcbot-rs/blob/main/src/teams.rs
 
-[sync-team-src]: sync-team
+[sync-team-src]: src/sync
 
 [crates-io-admin-src]: https://github.com/rust-lang/crates.io/blob/main/src/worker/jobs/sync_admins.rs
 
