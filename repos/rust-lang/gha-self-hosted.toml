@@ -12,3 +12,6 @@ ci-checks = ["CI finished"]
 merge-queue = { enabled = true, max-entries-to-build = 1, min-entries-to-merge-wait-minutes = 1, max-entries-to-merge = 1 }
 
 [environments.upload]
+
+[custom-properties]
+crabwatch = true

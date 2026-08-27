@@ -13,3 +13,5 @@ required-approvals = 0
 
 [environments.github-pages]
 
+[custom-properties]
+crabwatch = true

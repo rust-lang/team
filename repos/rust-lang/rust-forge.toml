@@ -33,3 +33,6 @@ ci-checks = ["test"]
 
 [environments.github-pages]
 branches = ["main"]
+
+[custom-properties]
+crabwatch = true
