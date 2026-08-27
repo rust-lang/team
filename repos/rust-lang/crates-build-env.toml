@@ -10,3 +10,6 @@ infra = "write"
 [[rulesets]]
 pattern = 'master'
 required-approvals = 0
+
+[custom-properties]
+crabwatch = true

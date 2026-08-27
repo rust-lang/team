@@ -15,3 +15,6 @@ tags = ["*"]
 crates = ["rustwide"]
 publish-workflow = "release.yml"
 publish-environment = "publish"
+
+[custom-properties]
+crabwatch = true

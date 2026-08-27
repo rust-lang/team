@@ -12,3 +12,6 @@ pattern = "master"
 ci-checks = ["conclusion"]
 required-approvals = 0
 merge-queue = { enabled = true }
+
+[custom-properties]
+crabwatch = true
