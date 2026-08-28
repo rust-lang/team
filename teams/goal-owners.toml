@@ -79,3 +79,6 @@ alumni = [
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "goal-owners"
