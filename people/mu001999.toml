@@ -3,3 +3,6 @@ email = "rcu@live.com"
 github = "mu001999"
 github-id = 21022101
 zulip-id = 506723
+
+[funding]
+github-sponsors = true
