@@ -1,7 +1,7 @@
 org = "rust-lang"
 name = "goals"
 description = "Rust Project Goals tracker"
-homepage = "https://rust-lang.github.io/goals/"
+homepage = "https://goals.rust-lang.org/"
 bots = ["rustbot", "rfcbot"]
 
 [pages]
