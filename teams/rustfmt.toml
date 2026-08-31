@@ -2,7 +2,7 @@ name = "rustfmt"
 subteam-of = "devtools"
 
 [people]
-leads = ["calebcartwright"]
+leads = ["ytmimi"]
 members = [
     "calebcartwright",
     "ytmimi",
