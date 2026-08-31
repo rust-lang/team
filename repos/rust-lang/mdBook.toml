@@ -13,7 +13,7 @@ path = "/"
 mdbook = "write"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 ci-checks = ["Success gate"]
 required-approvals = 1
 merge-queue = { enabled = true, min-entries-to-merge-wait-minutes = 1 }
@@ -35,5 +35,5 @@ publish-environment = "publish"
 [environments.github-pages]
 
 [environments.publish]
-branches = ["master"]
+branches = ["main"]
 tags = ["*"]
