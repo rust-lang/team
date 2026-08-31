@@ -2,10 +2,11 @@ name = "goals"
 subteam-of = "launching-pad"
 
 [people]
-leads = ["nikomatsakis"]
+leads = ["lcnr", "tomassedovic"]
 members = [
     "nikomatsakis",
     "joshtriplett",
+    "lcnr",
     "lqd",
     "tomassedovic",
     "nxsaken",
