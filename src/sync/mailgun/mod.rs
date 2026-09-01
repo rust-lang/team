@@ -15,6 +15,10 @@ const DESCRIPTION: &str = "managed by an automatic script on github";
 // Limit (in bytes) of the size of a Mailgun rule's actions list.
 const ACTIONS_SIZE_LIMIT_BYTES: usize = 4000;
 
+// Helper subdomain to use while we migrate lists from Mailgun
+// See https://github.com/rust-lang/infra-team/issues/297
+const MIGRATION_HELPER_SUBDOMAIN: &str = "legacy-lists";
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct List {
     address: String,
@@ -74,17 +78,28 @@ fn mangle_lists(email_private_key: &str, lists: team_data::Lists) -> anyhow::Res
 }
 
 fn mangle_address(addr: &str) -> anyhow::Result<String> {
+    let Some((user, domain)) = addr.split_once('@') else {
+        bail!("the address `{addr}` doesn't have any '@'");
+    };
+
+    // A list defined directly under the legacy subdomain would be matched both
+    // by its own route and by the route of the list with the same name on the
+    // parent domain, delivering every message twice.
+    if domain.starts_with(&format!("{MIGRATION_HELPER_SUBDOMAIN}.")) {
+        bail!("the address `{addr}` is under the legacy migration subdomain");
+    }
+
     // Escape dots since they have a special meaning in Python regexes
-    let mangled = addr.replace('.', "\\.");
+    let user = user.replace('.', "\\.");
+    let domain = domain.replace('.', "\\.");
 
     // Inject (?:\+.+)? before the '@' in the address to support '+' aliases like
-    // infra+botname@rust-lang.org
-    if let Some(at_pos) = mangled.find('@') {
-        let (user, domain) = mangled.split_at(at_pos);
-        Ok(format!("^{user}(?:\\+.+)?{domain}$"))
-    } else {
-        bail!("the address `{}` doesn't have any '@'", addr);
-    }
+    // infra+botname@rust-lang.org, and accept the legacy subdomain so a single
+    // route serves both mail arriving directly at Mailgun and mail relayed by
+    // Google Workspace.
+    Ok(format!(
+        "^{user}(?:\\+.+)?@(?:{MIGRATION_HELPER_SUBDOMAIN}\\.)?{domain}$"
+    ))
 }
 
 pub(crate) async fn run(
@@ -223,11 +238,32 @@ mod tests {
 
     #[test]
     fn test_mangle_address() {
+        assert!(
+            mangle_address(&format!("list@{MIGRATION_HELPER_SUBDOMAIN}.example.com")).is_err(),
+            "a list under the migrated subdomain would be matched twice"
+        );
+
         assert_eq!(
-            r"^list-name(?:\+.+)?@example\.com$",
+            r"^list-name(?:\+.+)?@(?:legacy-lists\.)?example\.com$",
             mangle_address("list-name@example.com").unwrap()
         );
+
         assert!(mangle_address("list-name.example.com").is_err());
+        assert!(mangle_address("list@legacy-mail.example.com").is_ok());
+    }
+
+    #[test]
+    fn test_mangle_address_matching() {
+        let re = regex::Regex::new(&mangle_address("list@example.com").unwrap());
+
+        for addr in [
+            "list@example.com",
+            "list@legacy-lists.example.com",
+            "list+bot@example.com",
+            "list+bot@legacy-lists.example.com",
+        ] {
+            assert!(re.as_ref().unwrap().is_match(addr), "should match {addr}");
+        }
     }
 
     #[test]
