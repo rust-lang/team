@@ -6,7 +6,7 @@ use indexmap::IndexMap;
 use log::info;
 use rust_team_data::v1;
 use rust_team_data::v1::{
-    BranchProtectionMode, Crate, CrateTeamOwner, GoogleWorkspace, RepoMember,
+    BranchProtectionMode, Crate, CrateTeamOwner, GoogleWorkspace, Krate, RepoMember,
 };
 use std::collections::HashMap;
 use std::path::Path;
@@ -36,6 +36,7 @@ impl<'a> Generator<'a> {
         self.generate_rfcbot()?;
         self.generate_zulip_map()?;
         self.generate_people()?;
+        self.generate_crates()?;
         self.generate_index_html()?;
         Ok(())
     }
@@ -473,6 +474,31 @@ impl<'a> Generator<'a> {
         people.sort_keys();
 
         self.add("v1/people.json", &v1::People { people })?;
+
+        Ok(())
+    }
+
+    fn generate_crates(&self) -> Result<(), Error> {
+        let mut crates = IndexMap::new();
+
+        for repo in self.data.repos() {
+            for crates_io_conf in &repo.crates_io {
+                // Note: validation should check that crates are unique
+                for krate in &crates_io_conf.crates {
+                    crates.insert(
+                        krate.clone(),
+                        Krate {
+                            name: krate.clone(),
+                            teams: crates_io_conf.teams.clone(),
+                        },
+                    );
+                }
+            }
+        }
+
+        crates.sort_by(|k1, _, k2, _| k1.cmp(k2));
+
+        self.add("v1/crates.json", &v1::Crates { crates })?;
 
         Ok(())
     }

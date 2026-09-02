@@ -1,0 +1,16 @@
+{
+  "crates": {
+    "my-crate": {
+      "name": "my-crate",
+      "teams": [
+        "foo"
+      ]
+    },
+    "my-crate-2": {
+      "name": "my-crate-2",
+      "teams": [
+        "foo"
+      ]
+    }
+  }
+}

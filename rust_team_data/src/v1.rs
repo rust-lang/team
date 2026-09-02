@@ -441,6 +441,19 @@ pub struct People {
     pub people: IndexMap<String, Person>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Krate {
+    pub name: String,
+    /// Teams that have access to this crate.
+    pub teams: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Crates {
+    /// Crate name as key.
+    pub crates: IndexMap<String, Krate>,
+}
+
 fn is_branch_target(target: &ProtectionTarget) -> bool {
     matches!(target, ProtectionTarget::Branch)
 }
