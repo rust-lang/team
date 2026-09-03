@@ -265,6 +265,38 @@ impl ZulipApi {
         Ok(())
     }
 
+    /// Set whether a Zulip stream's history is public to new subscribers.
+    ///
+    /// See <https://zulip.com/api/update-stream#parameter-history_public_to_subscribers>.
+    pub(crate) async fn update_stream_public_history(
+        &self,
+        stream_id: u64,
+        public_history: bool,
+    ) -> anyhow::Result<()> {
+        log::info!("updating stream {stream_id} to public_history={public_history}");
+
+        if self.dry_run {
+            return Ok(());
+        }
+
+        let history_public_to_subscribers = public_history.to_string();
+        let mut form = HashMap::new();
+        form.insert(
+            "history_public_to_subscribers",
+            history_public_to_subscribers.as_str(),
+        );
+
+        self.req(
+            reqwest::Method::PATCH,
+            &format!("/streams/{stream_id}"),
+            Some(form),
+        )
+        .await?
+        .error_for_status()?;
+
+        Ok(())
+    }
+
     /// Perform a request against the Zulip API
     async fn req(
         &self,
@@ -330,6 +362,7 @@ pub(crate) struct ZulipStream {
     pub(crate) stream_id: u64,
     pub(crate) name: String,
     pub(crate) invite_only: bool,
+    pub(crate) history_public_to_subscribers: bool,
 }
 
 /// Membership of a Zulip stream

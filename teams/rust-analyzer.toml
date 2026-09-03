@@ -40,3 +40,4 @@ name = "T-rust-analyzer"
 
 [[zulip-streams]]
 name = "t-compiler/rust-analyzer-private"
+public-history = false

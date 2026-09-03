@@ -11,8 +11,13 @@ use std::collections::BTreeMap;
 
 pub(crate) struct SyncZulip {
     zulip_controller: ZulipController,
-    stream_definitions: BTreeMap<String, Vec<u64>>,
+    stream_definitions: BTreeMap<String, StreamDefinition>,
     user_group_definitions: BTreeMap<String, Vec<u64>>,
+}
+
+struct StreamDefinition {
+    member_ids: Vec<u64>,
+    public_history: Option<bool>,
 }
 
 impl SyncZulip {
@@ -41,14 +46,22 @@ impl SyncZulip {
 
     pub(crate) async fn diff_all(&self) -> anyhow::Result<Diff> {
         let stream_membership_diffs = futures_util::stream::iter(&self.stream_definitions)
-            .filter_map(|(stream_name, member_ids)| async move {
-                self.diff_stream_membership(stream_name, member_ids)
+            .filter_map(|(stream_name, definition)| async move {
+                self.diff_stream_membership(stream_name, &definition.member_ids)
                     .await
                     .transpose()
             })
             .collect::<Vec<_>>()
             .await
             .into_iter()
+            .collect::<anyhow::Result<Vec<_>>>()?;
+        let stream_history_diffs = self
+            .stream_definitions
+            .iter()
+            .filter_map(|(stream_name, definition)| {
+                self.diff_stream_history(stream_name, definition.public_history)
+                    .transpose()
+            })
             .collect::<anyhow::Result<Vec<_>>>()?;
         let user_group_diffs = self
             .user_group_definitions
@@ -60,8 +73,37 @@ impl SyncZulip {
             .collect::<anyhow::Result<Vec<_>>>()?;
         Ok(Diff {
             user_group_diffs,
+            stream_history_diffs,
             stream_membership_diffs,
         })
+    }
+
+    fn diff_stream_history(
+        &self,
+        stream_name: &str,
+        public_history: Option<bool>,
+    ) -> anyhow::Result<Option<UpdateStreamHistoryDiff>> {
+        let Some(public_history) = public_history else {
+            return Ok(None);
+        };
+
+        let stream = self
+            .zulip_controller
+            .stream_from_name(stream_name)
+            .with_context(|| format!("no '{stream_name}' stream found on Zulip"))?;
+        if stream.history_public_to_subscribers == public_history {
+            log::debug!(
+                "'{stream_name}' stream ({}) already has public_history={public_history}",
+                stream.stream_id
+            );
+            Ok(None)
+        } else {
+            Ok(Some(UpdateStreamHistoryDiff {
+                stream_name: stream_name.to_owned(),
+                stream_id: stream.stream_id,
+                public_history,
+            }))
+        }
     }
 
     fn diff_user_group(
@@ -174,12 +216,12 @@ impl SyncZulip {
 }
 
 async fn add_rust_lang_owner_to_private_streams(
-    stream_definitions: &mut BTreeMap<String, Vec<u64>>,
+    stream_definitions: &mut BTreeMap<String, StreamDefinition>,
     zulip_controller: &ZulipController,
 ) -> anyhow::Result<()> {
     // Id of the `rust-lang-owner` Zulip user.
     let rust_lang_owner_id = 494485;
-    for (stream_name, members) in stream_definitions {
+    for (stream_name, definition) in stream_definitions {
         let stream_id = zulip_controller
             .stream_id_from_name(stream_name)
             .with_context(|| {
@@ -194,7 +236,7 @@ async fn add_rust_lang_owner_to_private_streams(
             .is_stream_private(stream_id)
             .await?;
         if is_stream_private {
-            members.insert(0, rust_lang_owner_id);
+            definition.member_ids.insert(0, rust_lang_owner_id);
         }
     }
     Ok(())
@@ -202,6 +244,7 @@ async fn add_rust_lang_owner_to_private_streams(
 
 pub(crate) struct Diff {
     user_group_diffs: Vec<UserGroupDiff>,
+    stream_history_diffs: Vec<UpdateStreamHistoryDiff>,
     stream_membership_diffs: Vec<StreamMembershipDiff>,
 }
 
@@ -210,6 +253,9 @@ impl Diff {
         for user_group_diff in &self.user_group_diffs {
             user_group_diff.apply(sync).await?;
         }
+        for stream_history_diff in &self.stream_history_diffs {
+            stream_history_diff.apply(sync).await?;
+        }
         for stream_membership_diff in &self.stream_membership_diffs {
             stream_membership_diff.apply(sync).await?;
         }
@@ -217,7 +263,9 @@ impl Diff {
     }
 
     pub(crate) fn is_empty(&self) -> bool {
-        self.user_group_diffs.is_empty() && self.stream_membership_diffs.is_empty()
+        self.user_group_diffs.is_empty()
+            && self.stream_history_diffs.is_empty()
+            && self.stream_membership_diffs.is_empty()
     }
 }
 
@@ -230,6 +278,13 @@ impl std::fmt::Display for Diff {
             }
         }
 
+        if !&self.stream_history_diffs.is_empty() {
+            writeln!(f, "💻 Stream History Diffs:")?;
+            for stream_history_diff in &self.stream_history_diffs {
+                write!(f, "{stream_history_diff}")?;
+            }
+        }
+
         if !&self.stream_membership_diffs.is_empty() {
             writeln!(f, "💻 Stream Membership Diffs:")?;
             for stream_membership_diff in &self.stream_membership_diffs {
@@ -238,6 +293,30 @@ impl std::fmt::Display for Diff {
         }
 
         Ok(())
+    }
+}
+
+struct UpdateStreamHistoryDiff {
+    stream_name: String,
+    stream_id: u64,
+    public_history: bool,
+}
+
+impl UpdateStreamHistoryDiff {
+    async fn apply(&self, sync: &SyncZulip) -> anyhow::Result<()> {
+        sync.zulip_controller
+            .zulip_api
+            .update_stream_public_history(self.stream_id, self.public_history)
+            .await
+    }
+}
+
+impl std::fmt::Display for UpdateStreamHistoryDiff {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "📝 Updating stream history:")?;
+        writeln!(f, "  Name: {}", self.stream_name)?;
+        writeln!(f, "  ID: {}", self.stream_id)?;
+        writeln!(f, "  Public history: {}", self.public_history)
     }
 }
 
@@ -424,7 +503,7 @@ async fn get_user_group_definitions(
 async fn get_stream_definitions(
     team_api: &TeamApi,
     zulip_api: &ZulipApi,
-) -> anyhow::Result<BTreeMap<String, Vec<u64>>> {
+) -> anyhow::Result<BTreeMap<String, StreamDefinition>> {
     let email_map = zulip_api
         .get_users()
         .await?
@@ -451,7 +530,13 @@ async fn get_stream_definitions(
                     ZulipStreamMember::Id(id) => Some(*id),
                 })
                 .collect::<Vec<_>>();
-            (name, member_ids)
+            (
+                name,
+                StreamDefinition {
+                    member_ids,
+                    public_history: stream.public_history,
+                },
+            )
         })
         .collect();
     Ok(stream_definitions)
@@ -501,6 +586,10 @@ impl ZulipController {
     /// Get a stream id for the given stream name
     fn stream_id_from_name(&self, stream_name: &str) -> Option<u64> {
         self.stream_ids.get(stream_name).map(|st| st.stream_id)
+    }
+
+    fn stream_from_name(&self, stream_name: &str) -> Option<&ZulipStream> {
+        self.stream_ids.get(stream_name)
     }
 
     /// Create a user group with a certain name, description, and members
