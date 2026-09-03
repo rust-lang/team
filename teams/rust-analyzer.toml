@@ -36,3 +36,6 @@ orgs = ["rust-lang", "rust-analyzer"]
 
 [[zulip-groups]]
 name = "T-rust-analyzer"
+
+[[zulip-streams]]
+name = "t-compiler/rust-analyzer-private"
