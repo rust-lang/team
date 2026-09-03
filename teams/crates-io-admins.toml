@@ -7,4 +7,4 @@ kind = "marker-team"
 [people]
 leads = []
 members = []
-included-teams = ["crates-io"]
+included-teams = ["crates-io", "crates-io-on-call"]

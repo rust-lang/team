@@ -12,7 +12,6 @@ members = [
     "Turbo87",
     "LawnGnome",
 ]
-included-teams = ["crates-io-on-call"]
 
 [[github]]
 orgs = ["rust-lang"]
