@@ -8,6 +8,7 @@ members = [
     "pitaj",
     "profetia",
     "alex-semenyuk",
+    "CommanderStorm",
 ]
 alumni = [
     # User deleted their account
