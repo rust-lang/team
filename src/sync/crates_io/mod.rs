@@ -8,8 +8,12 @@ use crate::sync::crates_io::api::{
 };
 use anyhow::Context;
 use secrecy::SecretString;
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap};
 use std::fmt::{Display, Formatter};
+
+/// Crates.io user that should be the sole owner of our tracked crates.
+/// 55123 corresponds to `rust-lang-owner`
+const CRATES_IO_CRATE_OWNER_ID: u64 = 55123;
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 struct CrateName(String);
@@ -199,41 +203,24 @@ impl SyncCratesIo {
                 .await
                 .with_context(|| anyhow::anyhow!("Cannot list crate owners of {krate}"))?;
 
-            // Sync team owners
-            let existing_teams: HashSet<CratesIoOwner> = owners
-                .iter()
+            // We want to ensure that all tracked crates are owned solely by rust-lang-owner.
+            // And not by any individuals or teams.
+            let owners_to_remove = owners
+                .into_iter()
                 .filter(|owner| match owner.kind() {
-                    OwnerKind::User => false,
+                    OwnerKind::User => owner.id() != CRATES_IO_CRATE_OWNER_ID,
                     OwnerKind::Team => true,
                 })
-                .cloned()
-                .collect();
-            let target_teams: HashSet<CratesIoOwner> = desired
-                .teams
-                .iter()
-                .map(|team| CratesIoOwner::team(team.org.clone(), team.name.clone()))
-                .collect();
-            let teams_to_add = target_teams
-                .difference(&existing_teams)
-                .cloned()
                 .collect::<Vec<_>>();
-            if !teams_to_add.is_empty() {
-                crate_diffs.push(CrateDiff::AddOwners {
+            if !owners_to_remove.is_empty() {
+                crate_diffs.push(CrateDiff::RemoveOwners {
                     krate: krate.to_string(),
-                    owners: teams_to_add,
+                    owners: owners_to_remove,
                 });
             }
 
-            let teams_to_remove = existing_teams
-                .difference(&target_teams)
-                .cloned()
-                .collect::<Vec<_>>();
-            if !teams_to_remove.is_empty() {
-                crate_diffs.push(CrateDiff::RemoveOwners {
-                    krate: krate.to_string(),
-                    owners: teams_to_remove,
-                });
-            }
+            // Note that we don't add rust-lang-owner here. If it is not already the owner, syncing
+            // ownership will fail anyway!
         }
 
         // If any trusted publishing configs remained in the hashmap, they are leftover and should
@@ -378,10 +365,6 @@ enum CrateDiff {
         krate: String,
         value: bool,
     },
-    AddOwners {
-        krate: String,
-        owners: Vec<CratesIoOwner>,
-    },
     RemoveOwners {
         krate: String,
         owners: Vec<CratesIoOwner>,
@@ -395,9 +378,6 @@ impl CrateDiff {
                 sync.crates_io_api
                     .set_trusted_publishing_only(krate, *value)
                     .await
-            }
-            CrateDiff::AddOwners { krate, owners } => {
-                sync.crates_io_api.invite_crate_owners(krate, owners).await
             }
             CrateDiff::RemoveOwners { krate, owners } => {
                 sync.crates_io_api.delete_crate_owners(krate, owners).await
@@ -414,19 +394,6 @@ impl std::fmt::Display for CrateDiff {
                     f,
                     "  Setting trusted publishing only option for krate `{krate}` to `{value}`",
                 )?;
-            }
-            CrateDiff::AddOwners { krate, owners } => {
-                for owner in owners {
-                    let kind = match owner.kind() {
-                        OwnerKind::User => "user",
-                        OwnerKind::Team => "team",
-                    };
-                    writeln!(
-                        f,
-                        "  Adding `{kind}` owner `{}` to krate `{krate}`",
-                        owner.login()
-                    )?;
-                }
             }
             CrateDiff::RemoveOwners { krate, owners } => {
                 for owner in owners {
