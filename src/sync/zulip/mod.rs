@@ -263,9 +263,14 @@ impl Diff {
     }
 
     pub(crate) fn is_empty(&self) -> bool {
-        self.user_group_diffs.is_empty()
-            && self.stream_history_diffs.is_empty()
-            && self.stream_membership_diffs.is_empty()
+        let Self {
+            user_group_diffs,
+            stream_history_diffs,
+            stream_membership_diffs,
+        } = self;
+        user_group_diffs.is_empty()
+            && stream_history_diffs.is_empty()
+            && stream_membership_diffs.is_empty()
     }
 }
 
