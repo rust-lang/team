@@ -345,6 +345,7 @@ impl<'a> Generator<'a> {
                             ZulipMember::MemberWithoutId { .. } => None,
                         })
                         .collect(),
+                    public_history: stream.public_history(),
                 },
             );
         }

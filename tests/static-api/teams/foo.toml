@@ -50,3 +50,4 @@ name = "T-foo"
 
 [[zulip-streams]]
 name = "t-foo/private"
+public-history = false

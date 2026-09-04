@@ -497,17 +497,20 @@ impl Team {
         let zulip_streams = self.raw_zulip_streams();
 
         for raw_stream in zulip_streams {
-            streams.push(ZulipStream(ZulipCommon {
-                name: raw_stream.common.name.clone(),
-                includes_team_members: raw_stream.common.include_team_members,
-                members: self.expand_zulip_membership(
-                    data,
-                    &raw_stream.common,
-                    |excluded| {
-                        format_err!("'{excluded}' was specifically excluded from the Zulip stream '{}' but they were already not included", raw_stream.common.name)
-                    },
-                )?,
-            }));
+            streams.push(ZulipStream {
+                common: ZulipCommon {
+                    name: raw_stream.common.name.clone(),
+                    includes_team_members: raw_stream.common.include_team_members,
+                    members: self.expand_zulip_membership(
+                        data,
+                        &raw_stream.common,
+                        |excluded| {
+                            format_err!("'{excluded}' was specifically excluded from the Zulip stream '{}' but they were already not included", raw_stream.common.name)
+                        },
+                    )?,
+                },
+                public_history: raw_stream.public_history,
+            });
         }
         Ok(streams)
     }
@@ -758,6 +761,8 @@ pub(crate) struct RawZulipGroup {
 pub(crate) struct RawZulipStream {
     #[serde(flatten)]
     pub(crate) common: RawZulipCommon,
+    #[serde(default)]
+    pub(crate) public_history: Option<bool>,
 }
 
 #[derive(Debug)]
@@ -809,12 +814,21 @@ impl std::ops::Deref for ZulipGroup {
 }
 
 #[derive(Debug)]
-pub(crate) struct ZulipStream(ZulipCommon);
+pub(crate) struct ZulipStream {
+    common: ZulipCommon,
+    public_history: Option<bool>,
+}
+
+impl ZulipStream {
+    pub(crate) fn public_history(&self) -> Option<bool> {
+        self.public_history
+    }
+}
 
 impl std::ops::Deref for ZulipStream {
     type Target = ZulipCommon;
     fn deref(&self) -> &Self::Target {
-        &self.0
+        &self.common
     }
 }
 

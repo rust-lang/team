@@ -168,6 +168,8 @@ pub struct ZulipGroups {
 pub struct ZulipStream {
     pub name: String,
     pub members: Vec<ZulipStreamMember>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub public_history: Option<bool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

@@ -242,6 +242,10 @@ excluded-people = [
 [[zulip-streams]]
 # The name of the Zulip stream (required)
 name = "t-overlords/private"
+# Whether newly subscribed members can access messages sent before they joined
+# the stream. This is optional. If omitted, the current setting is left
+# unchanged.
+public-history = false
 # This can be set to false to avoid including all the team members in the stream
 # It's useful if you want to create the stream with a different set of members
 # It's optional, and the default is `true`.
@@ -265,6 +269,9 @@ excluded-people = [
     "rylev",
 ]
 ```
+
+The `public-history` option corresponds to Zulip's
+[`history_public_to_subscribers` channel setting](https://zulip.com/api/update-stream#parameter-history_public_to_subscribers).
 
 ### Configuring Zulip streams
 

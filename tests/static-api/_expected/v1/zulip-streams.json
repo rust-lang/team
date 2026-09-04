@@ -9,7 +9,8 @@
         {
           "id": 4321
         }
-      ]
+      ],
+      "public_history": false
     }
   }
 }
