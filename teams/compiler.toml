@@ -10,6 +10,7 @@ members = [
     "antoyo",
     "apiraino",
     "b-naber",
+    "beetrees",
     "bjorn3",
     { github = "BoxyUwU", roles = ["compiler-maintainer"] },
     "camelid",
