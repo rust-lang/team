@@ -10,5 +10,6 @@ bots = ["rustbot", "rfcbot"]
 [access.teams]
 compiler = 'maintain'
 
-# Likewise, eventually we may want a branch protections section, but we will
-# tackle that later.
+[[rulesets]]
+pattern = "main"
+pr-required = false
