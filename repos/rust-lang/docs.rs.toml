@@ -33,6 +33,7 @@ crates = [
 ]
 publish-workflow = "release.yml"
 publish-environment = "publish"
+teams = ["docs-rs"]
 
 [pages]
 build-type = "workflow"

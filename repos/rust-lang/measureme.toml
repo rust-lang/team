@@ -19,6 +19,7 @@ ci-checks = ["success"]
 crates = ["analyzeme", "decodeme", "measureme"]
 publish-workflow = "publish.yml"
 publish-environment = "publish"
+teams = ["compiler"]
 
 [environments.publish]
 branches = ["master"]
