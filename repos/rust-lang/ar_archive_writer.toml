@@ -14,3 +14,4 @@ tags = ["*"]
 crates = ["ar_archive_writer"]
 publish-workflow = "publish.yml"
 publish-environment = "publish"
+teams = ["compiler"]

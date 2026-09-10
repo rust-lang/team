@@ -33,6 +33,7 @@ require-linear-history = true
 crates = ["libc", "ctest"]
 publish-workflow = "release.yaml"
 publish-environment = "release"
+teams = ["crate-maintainers"]
 
 [environments.github-pages]
 branches = ["gh-pages", "main", "master"]

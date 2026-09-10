@@ -18,3 +18,4 @@ pr-required = false
 crates = ["crates_io_og_image"]
 publish-workflow = "release.yml"
 publish-environment = "release"
+teams = ["crates-io"]
