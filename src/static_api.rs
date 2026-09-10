@@ -224,11 +224,22 @@ impl<'a> Generator<'a> {
                 pages: convert_pages(r)?,
                 archived,
                 auto_merge_enabled: !managed_by_bors,
-                custom_properties: r
-                    .custom_properties
-                    .iter()
-                    .map(|(k, v)| (k.clone(), v.clone()))
-                    .collect(),
+                custom_properties: {
+                    let mut properties = r.custom_properties.clone();
+                    if r.org != "rust-lang"
+                        || archived
+                        || self
+                            .data
+                            .config()
+                            .crabwatch_deny_list()
+                            .contains(&format!("{}/{}", r.org, r.name))
+                    {
+                        properties.remove("crabwatch");
+                    } else {
+                        properties.insert("crabwatch".to_string(), true.into());
+                    }
+                    properties.into_iter().collect()
+                },
             };
 
             self.add(&format!("v1/repos/{}.json", r.name), &repo)?;

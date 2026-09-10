@@ -21,6 +21,11 @@ independent-github-orgs = [
     "rust-embedded",
 ]
 
+# Crabwatch is enabled for all non-archived repositories except those listed here.
+crabwatch-deny-list = [
+    "rust-lang/rust",
+]
+
 permissions-bors-repos = [
     "bors-kindergarten",
     "rust",

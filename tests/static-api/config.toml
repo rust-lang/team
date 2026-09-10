@@ -10,6 +10,10 @@ independent-github-orgs = [
     "org-independent",
 ]
 
+crabwatch-deny-list = [
+    "test-org/some_repo",
+]
+
 permissions-bors-repos = [
     "crates-io",
     "crater",

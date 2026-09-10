@@ -25,6 +25,3 @@ pr-required = false
 
 [environments.github-pages]
 branches = ["main"]
-
-[custom-properties]
-crabwatch = true

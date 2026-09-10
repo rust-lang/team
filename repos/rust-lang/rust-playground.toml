@@ -11,6 +11,3 @@ infra = "maintain"
 pattern = "main"
 ci-checks = []
 required-approvals = 0
-
-[custom-properties]
-crabwatch = true

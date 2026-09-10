@@ -13,6 +13,3 @@ path = "/"
 infra = "write"
 
 [environments.github-pages]
-
-[custom-properties]
-crabwatch = true

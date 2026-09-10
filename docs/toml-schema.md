@@ -584,12 +584,17 @@ String, boolean, and string array values are supported.
 # Repository custom properties (optional)
 [custom-properties]
 # Set a property name to a boolean value
-crabwatch = true
+example-flag = true
 # Or set a text-type property to a string value
 status = "active"
 # Or set a multi-select property to a list of string values
 colors = ["red", "green"]
 ```
+
+By default, `team` sets the `crabwatch` custom property to `true` for all non-archived repositories in the `rust-lang` organization.
+This enables the [Crabwatch](https://github.com/rust-lang/crabwatch) GitHub Action.
+
+If you want to disable Crabwatch in a repository, add it to the `crabwatch-deny-list` in the root `config.toml`.
 
 Properties set on GitHub but not declared here are removed.
 

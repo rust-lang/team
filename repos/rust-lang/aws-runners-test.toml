@@ -6,6 +6,3 @@ bots = []
 [access.teams]
 infra = "write"
 infra-admins = "maintain"
-
-[custom-properties]
-crabwatch = true

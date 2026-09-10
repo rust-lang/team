@@ -11,6 +11,3 @@ infra = "write"
 pattern = "main"
 ci-checks = ["Test"]
 required-approvals = 0
-
-[custom-properties]
-crabwatch = true
