@@ -118,35 +118,6 @@ impl CratesIoApi {
         Ok(response.users)
     }
 
-    /// Invite the specified user(s) or team(s) to own a given crate.
-    pub(crate) async fn invite_crate_owners(
-        &self,
-        krate: &str,
-        owners: &[CratesIoOwner],
-    ) -> anyhow::Result<()> {
-        debug!("Inviting owners {owners:?} to crate {krate}");
-
-        #[derive(serde::Serialize)]
-        struct InviteOwnersRequest<'a> {
-            owners: Vec<&'a str>,
-        }
-
-        let owners = owners.iter().map(|o| o.login.as_str()).collect::<Vec<_>>();
-
-        if !self.dry_run {
-            self.req(
-                reqwest::Method::PUT,
-                &format!("/crates/{krate}/owners"),
-                HashMap::new(),
-                Some(&InviteOwnersRequest { owners }),
-            )
-            .await?
-            .error_for_status()?;
-        }
-
-        Ok(())
-    }
-
     /// Delete the specified owner(s) of a given crate.
     pub(crate) async fn delete_crate_owners(
         &self,
@@ -430,16 +401,14 @@ pub(crate) enum OwnerKind {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Eq, Hash, Clone)]
 pub(crate) struct CratesIoOwner {
+    id: u64,
     login: String,
     kind: OwnerKind,
 }
 
 impl CratesIoOwner {
-    pub(crate) fn team(org: String, name: String) -> Self {
-        Self {
-            login: format!("github:{org}:{name}"),
-            kind: OwnerKind::Team,
-        }
+    pub(crate) fn id(&self) -> u64 {
+        self.id
     }
 
     pub(crate) fn kind(&self) -> OwnerKind {
