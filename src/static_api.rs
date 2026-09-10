@@ -197,7 +197,7 @@ impl<'a> Generator<'a> {
                                         workflow_file: p.workflow_filename.clone(),
                                         environment: p.environment.clone(),
                                     }),
-                                    trusted_publishing_only: p.disable_other_publish_methods,
+                                    trusted_publishing_only: true,
                                     teams: team_owners,
                                 })
                             })

@@ -280,9 +280,14 @@ pub struct CrateTeamOwner {
 pub struct Crate {
     pub name: String,
     pub crates_io_publishing: Option<CratesIoPublishing>,
+    #[serde(default = "default_true")]
     pub trusted_publishing_only: bool,
     /// GitHub teams that have access to this crate on crates.io
     pub teams: Vec<CrateTeamOwner>,
+}
+
+fn default_true() -> bool {
+    true
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
