@@ -1082,9 +1082,6 @@ pub(crate) struct CratesIoConfiguration {
     pub workflow_filename: String,
     #[serde(rename = "publish-environment")]
     pub environment: String,
-    #[serde(default = "default_true")]
-    pub disable_other_publish_methods: bool,
-    #[serde(default)]
     pub teams: Vec<String>,
 }
 

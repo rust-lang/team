@@ -1421,12 +1421,13 @@ fn validate_trusted_publishing(data: &Data, errors: &mut Vec<String>) {
                 }
             }
 
-            if !publishing.teams.is_empty() && !publishing.disable_other_publish_methods {
+            if publishing.teams.is_empty() {
                 return Err(anyhow::anyhow!(
-                    "Repository `{repo_name}` configures crates.io access for team(s) `{}` while setting `disable-other-publish-methods = false`. Either remove the team access or set it to `true`.",
-                    publishing.teams.join(", ")
+                    "Repository `{repo_name}` has no owner teams for crates `{}`. Each crate must be owned at least by a single team.",
+                    publishing.crates.join(", ")
                 ));
             }
+
             for team in &publishing.teams {
                 let Some(team) = data.team(team) else {
                     return Err(anyhow::anyhow!(
