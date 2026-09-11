@@ -19,11 +19,11 @@ use serde::{Deserialize, de::DeserializeOwned};
 use std::collections::BTreeSet;
 use std::fmt;
 use thiserror::Error;
-use tokens::GitHubTokens;
 use url::GitHubUrl;
 
 use crate::sync::Config;
 pub(crate) use read::{GitHubApiRead, GithubRead};
+pub(crate) use tokens::GitHubTokens;
 pub(crate) use write::GitHubWrite;
 
 #[derive(Debug, Error)]

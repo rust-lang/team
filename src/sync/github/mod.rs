@@ -2,6 +2,7 @@ mod api;
 #[cfg(test)]
 mod tests;
 
+pub(crate) use self::api::GitHubTokens;
 pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
 use self::api::{TeamPrivacy, TeamRole};
 use crate::schema;
