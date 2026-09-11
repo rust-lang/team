@@ -18,6 +18,3 @@ ci-checks = [
 ]
 required-approvals = 0
 require-conversation-resolution = true
-
-[custom-properties]
-crabwatch = true

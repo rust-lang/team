@@ -17,6 +17,3 @@ wg-async = "write"
 
 [[rulesets]]
 pattern = "main"
-
-[custom-properties]
-crabwatch = true

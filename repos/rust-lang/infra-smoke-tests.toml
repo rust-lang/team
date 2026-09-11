@@ -20,6 +20,3 @@ ci-checks = [
     "Lint YAML files",
     "Run tests",
 ]
-
-[custom-properties]
-crabwatch = true

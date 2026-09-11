@@ -11,6 +11,7 @@ pub(crate) struct Config {
     allowed_mailing_lists_domains: HashSet<String>,
     allowed_github_orgs: HashSet<String>,
     independent_github_orgs: BTreeSet<String>,
+    crabwatch_deny_list: HashSet<String>,
     permissions_bors_repos: HashSet<String>,
     permissions_bools: HashSet<String>,
     // Use a BTreeSet for consistent ordering in tests
@@ -37,6 +38,10 @@ impl Config {
 
     pub(crate) fn independent_github_orgs(&self) -> &BTreeSet<String> {
         &self.independent_github_orgs
+    }
+
+    pub(crate) fn crabwatch_deny_list(&self) -> &HashSet<String> {
+        &self.crabwatch_deny_list
     }
 
     pub(crate) fn special_org_members(&self) -> &BTreeSet<String> {

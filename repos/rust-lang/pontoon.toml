@@ -7,6 +7,3 @@ bots = []
 infra = "write"
 
 [environments.rust-pontoon]
-
-[custom-properties]
-crabwatch = true

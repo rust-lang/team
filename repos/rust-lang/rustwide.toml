@@ -16,6 +16,3 @@ crates = ["rustwide"]
 publish-workflow = "release.yml"
 publish-environment = "publish"
 teams = ["infra", "docs-rs"]
-
-[custom-properties]
-crabwatch = true

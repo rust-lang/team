@@ -21,7 +21,6 @@ bypass-apps = ["promote-release"]
 branches = ["main"]
 
 [custom-properties]
-crabwatch = true
 status = "active"
 colors = ["red", "green"]
 

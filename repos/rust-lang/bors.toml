@@ -22,6 +22,3 @@ branches = ["main"]
 
 [environments.staging]
 branches = ["main"]
-
-[custom-properties]
-crabwatch = true

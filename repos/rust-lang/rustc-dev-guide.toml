@@ -34,6 +34,3 @@ pattern = "master-old"
 prevent-update = true
 
 [environments.github-pages]
-
-[custom-properties]
-crabwatch = true
