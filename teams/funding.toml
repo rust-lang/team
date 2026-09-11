@@ -43,10 +43,6 @@ extra-people = [
 
 [[lists]]
 address = "funding@rust-lang.org"
-extra-teams = ["funding-advisors"]
-
-[[lists]]
-address = "funding-private@rust-lang.org"
 
 [[lists]]
 address = "hiring@rust-lang.org"
