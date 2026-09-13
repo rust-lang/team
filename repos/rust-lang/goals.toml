@@ -21,3 +21,8 @@ goal-owners = "maintain"
 
 [environments.github-pages]
 branches = ["main"]
+
+[[rulesets]]
+pattern = "main"
+ci-checks = ["build"]
+required-approvals = 0
