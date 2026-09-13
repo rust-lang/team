@@ -23,6 +23,7 @@ independent-github-orgs = [
 
 # Crabwatch is enabled for all non-archived repositories except those listed here.
 crabwatch-deny-list = [
+    "rust-lang/crates.io",
     "rust-lang/rust",
 ]
 
