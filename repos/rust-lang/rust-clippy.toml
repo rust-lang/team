@@ -14,7 +14,7 @@ clippy = "write"
 clippy-contributors = "triage"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 ci-checks = [
     "conclusion",
     "conclusion_dev",
