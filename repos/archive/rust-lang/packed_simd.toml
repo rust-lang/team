@@ -10,7 +10,5 @@ branch = "gh-pages"
 path = "/"
 
 [access.teams]
-libs = "write"
-project-portable-simd = "write"
 
 [environments.github-pages]
