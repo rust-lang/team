@@ -75,6 +75,7 @@ members = [
     "tmiasko",
     "Urgau",
     "WaffleLapkin",
+    "Walnut356",
     { github = "wesleywiser", roles = ["compiler-maintainer"] },
     "workingjubilee",
     "yaahc",
