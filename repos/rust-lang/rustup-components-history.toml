@@ -5,11 +5,15 @@ homepage = "https://rust-lang.github.io/rustup-components-history"
 bots = []
 
 [pages]
-build-type = "legacy"
-branch = "gh-pages"
-path = "/"
+build-type = "workflow"
 
 [access.teams]
 infra = "write"
+rustup = "write"
 
 [environments.github-pages]
+
+[[rulesets]]
+pattern = "main"
+ci-checks = ["build"]
+required-approvals = 0
