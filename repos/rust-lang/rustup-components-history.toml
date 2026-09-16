@@ -11,5 +11,6 @@ path = "/"
 
 [access.teams]
 infra = "write"
+rustup = "write"
 
 [environments.github-pages]
