@@ -12,7 +12,7 @@ path = "/"
 project-portable-simd = "write"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 required-approvals = 0
 
 [environments.github-pages]
