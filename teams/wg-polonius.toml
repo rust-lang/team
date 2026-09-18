@@ -9,9 +9,10 @@ members = [
     "nikomatsakis",
     "amandasystems",
     "matthewjasper",
+]
+alumni = [
     "ecstatic-morse",
 ]
-alumni = []
 
 [website]
 name = "Polonius working area"
