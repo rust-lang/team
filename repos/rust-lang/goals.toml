@@ -8,16 +8,8 @@ bots = ["rustbot", "rfcbot"]
 build-type = "workflow"
 
 [access.teams]
-lang = "maintain"
-lang-ops = "maintain"
-lang-docs = "maintain"
-types = "maintain"
-release = "maintain"
-leadership-council = "maintain"
-libs = "maintain"
-edition = "maintain"
 goals = "maintain"
-goal-owners = "maintain"
+all = "write"
 
 [environments.github-pages]
 branches = ["main"]
@@ -26,3 +18,4 @@ branches = ["main"]
 pattern = "main"
 ci-checks = ["build"]
 required-approvals = 0
+allowed-merge-teams = ["goals"]
