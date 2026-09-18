@@ -89,5 +89,4 @@ address = "library-team@rust-lang.org"
 name = "T-libs"
 
 [[zulip-streams]]
-# NOTE: should be renamed to t-libs/private, but non-urgent
-name = "t-libs/reviewers"
+name = "t-libs/private"
