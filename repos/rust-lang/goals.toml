@@ -18,4 +18,3 @@ branches = ["main"]
 pattern = "main"
 ci-checks = ["build"]
 required-approvals = 0
-allowed-merge-teams = ["goals"]
