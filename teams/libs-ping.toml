@@ -1,0 +1,38 @@
+# pings for FCPs + backports
+# should include:
+# * libs-fcp
+# * libs leads
+# * any other libs member who wants to be included
+name = "libs-ping"
+kind = "marker-team"
+subteam-of = "libs"
+
+[people]
+leads = []
+members = [
+    "aapoalas",
+    "Amanieu",
+    "ChrisDenton",
+    "clarfonthey",
+    "cuviper",
+    "dtolnay",
+    "hanna-kruppe",
+    "jhpratt",
+    "joboet",
+    "JohnTitor",
+    "joshtriplett",
+    "LawnGnome",
+    "Mark-Simulacrum",
+    "nia-e",
+    "tgross35",
+    "the8472",
+    "thomcc",
+    "workingjubilee",
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "T-libs-ping"
