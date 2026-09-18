@@ -4,7 +4,13 @@ kind = "working-group"
 
 [people]
 leads = ["lqd", "nikomatsakis"]
-members = ["lqd", "nikomatsakis", "amandasystems", "matthewjasper", "ecstatic-morse"]
+members = [
+    "lqd",
+    "nikomatsakis",
+    "amandasystems",
+    "matthewjasper",
+    "ecstatic-morse",
+]
 alumni = []
 
 [website]
