@@ -5,6 +5,7 @@ kind = "marker-team"
 leads = []
 members = [
     { github = "rami3l", roles = ["full-time"] },
+    { github = "Muscraft", roles = ["full-time"] },
     { github = "blyxyas", roles = ["part-time"] },
     { github = "ChrisDenton", roles = ["part-time"] },
     { github = "fmease", roles = ["part-time"] },
