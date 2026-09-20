@@ -14,7 +14,7 @@ libs = "maintain"
 rustc-dev-guide = "write"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 ci-checks = ["book-test"]
 require-up-to-date-branches = true
 
