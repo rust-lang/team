@@ -16,6 +16,11 @@ project-group-leads = "write"
 website = "maintain"
 # For Rust release blog posts
 release = "write"
+# For security blog posts
+# Admin allows security-response members to merge without requiring
+# review from maintainers, though they *should* at least get other project
+# members to review
+security-response = "admin"
 
 [[rulesets]]
 pattern = "main"
