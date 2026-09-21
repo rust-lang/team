@@ -13,6 +13,7 @@ leadership-council = "write"
 leads = "write"
 program = "write"
 project-group-leads = "write"
+security-response = "write"
 website = "maintain"
 # For Rust release blog posts
 release = "write"
