@@ -16,6 +16,8 @@ project-group-leads = "write"
 website = "maintain"
 # For Rust release blog posts
 release = "write"
+# For security blog posts
+security-response = "write"
 
 [[rulesets]]
 pattern = "main"
