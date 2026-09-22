@@ -3,7 +3,7 @@ kind = "project-group"
 subteam-of = "lang"
 
 [people]
-leads = ["BoxyUwU", "lcnr"]
+leads = ["BoxyUwU", "khyperia"]
 members = [
     "lcnr",
     "nikomatsakis",
@@ -11,6 +11,7 @@ members = [
     "BoxyUwU",
     "camelid",
     "khyperia",
+    "bit-aloo",
 ]
 alumni = [
     "compiler-errors",
