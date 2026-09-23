@@ -1,0 +1,23 @@
+name = "llm-policy"
+subteam-of = "leadership-council"
+
+[people]
+leads = []
+members = [
+    "davidtwco",
+    "jdonszelmann",
+    "PLeVasseur",
+    "jackh726",
+]
+alumni = [
+]
+
+[rfcbot]
+label = "T-llm-policy"
+name = "LLM-Policy"
+ping = "rust-lang/llm-policy"
+
+[website]
+name = "LLM policy team"
+description = "Leadership-Council-selected group of maintainers that work on our LLM policies"
+zulip-stream = "t-llm-policy"
