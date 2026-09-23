@@ -600,22 +600,21 @@ Properties set on GitHub but not declared here are removed.
 
 ### Crates.io crate management
 
-Configure properties of crates.io crates that are deployed using Trusted Publishing from the given repository.
+Configure properties of crates.io recorded in the `team` database. Such crates will only be owned by the special
+`rust-lang-owner` crate on crates.io. You can also configure Trusted Publishing from the given repository, so that
+the crates can be published from CI, and configure teams that will be able to yank/unyank releases of this crate.
 
 ```toml
 [[crates-io]]
-# Crates that will be published with the given workflow file from this repository (required)
+# Crates to which the settings below apply. (required)
 crates = ["regex"]
-# Name of a GitHub Actions workflow file that will publish the crates (required)
+# Name of a GitHub Actions workflow file that will publish the crates (optional)
+# Must be present if `publish-environment` is set.
 publish-workflow = "ci.yml"
-# GitHub Actions environment that has to be used for the publishing (required)
+# GitHub Actions environment that has to be used for the publishing (optional)
+# Must be present if `publish-workflow` is set.
 publish-environment = "deploy"
-# Disable other mechanisms for publishing this set of crates (optional, default is true)
-# If set to `true`, the crates will only be publishable through trusted publishing
-disable-other-publish-methods = true
 # Set of GitHub teams that will have yank/unyank access to these crates. (optional, defaults to empty array)
-# Note that teams can only be specified if `disable-other-publish-methods` is set to `true`,
-# as we only want to give teams access if they cannot actually publish new crate versions.
 teams = ["awesome-team"]
 ```
 

@@ -1393,7 +1393,7 @@ Please remove the attributes when using bors"#,
     })
 }
 
-/// Validate that trusted publishing configuration has unique crates across all repositories.
+/// Validate crates.io crate configuration.
 fn validate_trusted_publishing(data: &Data, errors: &mut Vec<String>) {
     let mut crates = HashMap::new();
     wrapper(data.repos(), errors, |repo, _| {
@@ -1401,15 +1401,22 @@ fn validate_trusted_publishing(data: &Data, errors: &mut Vec<String>) {
         for publishing in &repo.crates_io {
             if publishing.crates.is_empty() {
                 return Err(anyhow::anyhow!(
-                    "Repository `{repo_name}` has trusted publishing for an empty set of crates.",
+                    "Repository `{repo_name}` has a [[crates-io]] section with an empty set of crates.",
+                ));
+            }
+
+            if publishing.environment.is_some() != publishing.workflow_filename.is_some() {
+                return Err(anyhow::anyhow!(
+                    "Repository `{repo_name}` configures trusted publishing. In that case, it must provide both the `publish-workflow` and `environment`.",
                 ));
             }
 
             // Validate that the environment referenced in crates-io exists
-            if !repo.environments.contains_key(&publishing.environment) {
+            if let Some(environment) = &publishing.environment
+                && !repo.environments.contains_key(environment)
+            {
                 return Err(anyhow::anyhow!(
-                    "Repository `{repo_name}` configures trusted publishing with environment `{}` which is not defined in the repository's environments. Please add an environment with this name in the repository configuration.",
-                    publishing.environment
+                    "Repository `{repo_name}` configures trusted publishing with environment `{environment}` which is not defined in the repository's environments. Please add an environment with this name in the repository configuration.",
                 ));
             }
 
@@ -1421,9 +1428,9 @@ fn validate_trusted_publishing(data: &Data, errors: &mut Vec<String>) {
                 }
             }
 
-            if publishing.teams.is_empty() {
+            if publishing.environment.is_some() && publishing.teams.is_empty() {
                 return Err(anyhow::anyhow!(
-                    "Repository `{repo_name}` has no owner teams for crates `{}`. Each crate must be owned at least by a single team.",
+                    "Repository `{repo_name}` has no owner teams for crates `{}`, but it configures trusted publishing. Each publishable crate must be owned at least by a single team.",
                     publishing.crates.join(", ")
                 ));
             }
