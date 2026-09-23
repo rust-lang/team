@@ -31,12 +31,17 @@ struct TeamOwner {
 }
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
-struct CrateConfig {
-    krate: CrateName,
+struct TrustedPublishingConfig {
     repo_org: String,
     repo_name: String,
     workflow_file: String,
     environment: String,
+}
+
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
+struct CrateConfig {
+    krate: CrateName,
+    trusted_publishing: Option<TrustedPublishingConfig>,
     trusted_publishing_only: bool,
     teams: Vec<TeamOwner>,
 }
@@ -65,19 +70,19 @@ impl SyncCratesIo {
             .flat_map(|repo| {
                 repo.crates
                     .iter()
-                    .filter_map(|krate| {
-                        let Some(publishing) = &krate.crates_io_publishing else {
-                            return None;
-                        };
-
-                        Some((
+                    .map(|krate| {
+                        (
                             CrateName(krate.name.clone()),
                             CrateConfig {
                                 krate: CrateName(krate.name.clone()),
-                                repo_org: repo.org.clone(),
-                                repo_name: repo.name.clone(),
-                                workflow_file: publishing.workflow_file.clone(),
-                                environment: publishing.environment.clone(),
+                                trusted_publishing: krate.crates_io_publishing.clone().map(|p| {
+                                    TrustedPublishingConfig {
+                                        repo_org: repo.org.clone(),
+                                        repo_name: repo.name.clone(),
+                                        workflow_file: p.workflow_file,
+                                        environment: p.environment,
+                                    }
+                                }),
                                 trusted_publishing_only: krate.trusted_publishing_only,
                                 teams: krate
                                     .teams
@@ -89,7 +94,7 @@ impl SyncCratesIo {
                                     })
                                     .collect(),
                             },
-                        ))
+                        )
                     })
                     .collect::<Vec<_>>()
             })
@@ -147,39 +152,56 @@ impl SyncCratesIo {
                 let mut empty_vec = vec![];
                 let configs = tp_configs.get_mut(&krate.0).unwrap_or(&mut empty_vec);
 
-                // Find if there are config(s) that match what we need and remove them from the list
-                // of found configs.
-                let matching_configs = configs
-                    .extract_if(.., |config| {
-                        let TrustedPublishingGitHubConfig {
-                            krate: _,
-                            id: _,
-                            repository_owner,
-                            repository_name,
-                            workflow_filename,
-                            environment,
-                        } = config;
-                        *repository_owner.to_lowercase() == desired.repo_org.to_lowercase()
-                            && *repository_name.to_lowercase() == desired.repo_name.to_lowercase()
-                            && *workflow_filename == desired.workflow_file
-                            && environment.as_deref() == Some(&desired.environment)
-                    })
-                    .collect::<Vec<_>>();
+                match &desired.trusted_publishing {
+                    Some(tp_config) => {
+                        let TrustedPublishingConfig {
+                            repo_org: config_repo_org,
+                            repo_name: config_repo_name,
+                            workflow_file: config_workflow,
+                            environment: config_environment,
+                        } = tp_config;
 
-                if !matching_configs.is_empty() {
-                    // If we found a matching config, we don't need to do anything with it
-                    // It shouldn't be possible to have multiple configs with the same repo, workflow
-                    // and environment for a single crate.
-                    assert_eq!(matching_configs.len(), 1);
-                } else {
-                    // If no match was found, we want to create this config
-                    config_diffs.push(ConfigDiff::Create(desired.clone()));
+                        // Find if there are config(s) that match what we need and remove them from the list
+                        // of found configs.
+                        let matching_configs = configs
+                            .extract_if(.., |config| {
+                                let TrustedPublishingGitHubConfig {
+                                    krate: _,
+                                    id: _,
+                                    repository_owner,
+                                    repository_name,
+                                    workflow_filename,
+                                    environment,
+                                } = config;
+
+                                *repository_owner.to_lowercase() == config_repo_org.to_lowercase()
+                                    && *repository_name.to_lowercase()
+                                        == config_repo_name.to_lowercase()
+                                    && *workflow_filename == *config_workflow
+                                    && environment.as_deref() == Some(config_environment)
+                            })
+                            .collect::<Vec<_>>();
+
+                        if !matching_configs.is_empty() {
+                            // If we found a matching config, we don't need to do anything with it
+                            // It shouldn't be possible to have multiple configs with the same repo, workflow
+                            // and environment for a single crate.
+                            assert_eq!(matching_configs.len(), 1);
+                        } else {
+                            // If no match was found, we want to create this config
+                            config_diffs.push(ConfigDiff::Create(krate.clone(), tp_config.clone()));
+                        }
+
+                        // Non-matching configs should be deleted.
+                        // Drain them from `tp_configs` so the final leftover-config cleanup below doesn't queue
+                        // the same configs for deletion a second time.
+                        config_diffs.extend(configs.drain(..).map(ConfigDiff::Delete));
+                    }
+                    // No trusted publishing configured, so remove all existing configs
+                    None => {
+                        config_diffs.extend(configs.drain(..).map(ConfigDiff::Delete));
+                    }
                 }
-
-                // Non-matching configs should be deleted.
-                // Drain them from `tp_configs` so the final leftover-config cleanup below doesn't queue
-                // the same configs for deletion a second time.
-                config_diffs.extend(configs.drain(..).map(ConfigDiff::Delete));
             }
 
             // Sync "trusted publishing only" crate option
@@ -232,10 +254,10 @@ impl SyncCratesIo {
         // We want to apply deletions first, and only then create new configs, to ensure that we
         // don't try to create a duplicate config where e.g. only the environment differs.
         config_diffs.sort_by(|a, b| match &(a, b) {
-            (ConfigDiff::Delete(_), ConfigDiff::Create(_)) => Ordering::Less,
-            (ConfigDiff::Create(_), ConfigDiff::Delete(_)) => Ordering::Greater,
+            (ConfigDiff::Delete(_), ConfigDiff::Create(..)) => Ordering::Less,
+            (ConfigDiff::Create(..), ConfigDiff::Delete(_)) => Ordering::Greater,
             (ConfigDiff::Delete(a), ConfigDiff::Delete(b)) => a.id.cmp(&b.id),
-            (ConfigDiff::Create(a), ConfigDiff::Create(b)) => a.cmp(b),
+            (ConfigDiff::Create(a, ..), ConfigDiff::Create(b, ..)) => a.cmp(b),
         });
 
         Ok(Diff {
@@ -303,16 +325,16 @@ impl std::fmt::Display for Diff {
 }
 
 enum ConfigDiff {
-    Create(CrateConfig),
+    Create(CrateName, TrustedPublishingConfig),
     Delete(TrustedPublishingGitHubConfig),
 }
 
 impl ConfigDiff {
     async fn apply(&self, sync: &SyncCratesIo) -> anyhow::Result<()> {
         match self {
-            ConfigDiff::Create(config) => {
+            ConfigDiff::Create(krate, config) => {
                 sync.crates_io_api
-                    .create_trusted_publishing_github_config(config)
+                    .create_trusted_publishing_github_config(krate, config)
                     .await
             }
             ConfigDiff::Delete(config) => {
@@ -327,11 +349,11 @@ impl ConfigDiff {
 impl std::fmt::Display for ConfigDiff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ConfigDiff::Create(config) => {
+            ConfigDiff::Create(krate, config) => {
                 writeln!(
                     f,
                     "  Creating trusted publishing config for crate `{}`",
-                    config.krate.0
+                    krate.0
                 )?;
                 writeln!(f, "    Repo: {}/{}", config.repo_org, config.repo_name)?;
                 writeln!(f, "    Workflow file: {}", config.workflow_file)?;

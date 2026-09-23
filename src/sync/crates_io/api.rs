@@ -1,4 +1,4 @@
-use crate::sync::crates_io::CrateConfig;
+use crate::sync::crates_io::{CrateName, TrustedPublishingConfig};
 use crate::sync::utils::ResponseExt;
 use anyhow::{Context, anyhow};
 use log::debug;
@@ -152,15 +152,12 @@ impl CratesIoApi {
     /// Create a new trusted publishing configuration for a given crate.
     pub(crate) async fn create_trusted_publishing_github_config(
         &self,
-        config: &CrateConfig,
+        krate: &CrateName,
+        config: &TrustedPublishingConfig,
     ) -> anyhow::Result<()> {
         debug!(
-            "Creating trusted publishing config for '{}' in repo '{}/{}', workflow file '{}' and environment '{}'",
-            config.krate.0,
-            config.repo_org,
-            config.repo_name,
-            config.workflow_file,
-            config.environment
+            "Creating trusted publishing config for '{krate}' in repo '{}/{}', workflow file '{}' and environment '{}'",
+            config.repo_org, config.repo_name, config.workflow_file, config.environment
         );
 
         if self.dry_run {
@@ -186,7 +183,7 @@ impl CratesIoApi {
             github_config: TrustedPublishingGitHubConfigCreate {
                 repository_owner: &config.repo_org,
                 repository_name: &config.repo_name,
-                krate: &config.krate.0,
+                krate: &krate.0,
                 workflow_filename: &config.workflow_file,
                 environment: Some(&config.environment),
             },
@@ -200,7 +197,9 @@ impl CratesIoApi {
         )
         .await?
         .error_for_status()
-        .with_context(|| anyhow!("Cannot created trusted publishing config {config:?}"))?;
+        .with_context(|| {
+            anyhow!("Cannot created trusted publishing config {config:?} for crate {krate}")
+        })?;
 
         Ok(())
     }
