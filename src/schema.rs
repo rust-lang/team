@@ -1084,9 +1084,10 @@ pub(crate) struct Ruleset {
 pub(crate) struct CratesIoConfiguration {
     pub crates: Vec<String>,
     #[serde(rename = "publish-workflow")]
-    pub workflow_filename: String,
+    pub workflow_filename: Option<String>,
     #[serde(rename = "publish-environment")]
-    pub environment: String,
+    pub environment: Option<String>,
+    #[serde(default)]
     pub teams: Vec<String>,
 }
 

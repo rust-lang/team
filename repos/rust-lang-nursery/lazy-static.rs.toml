@@ -12,3 +12,6 @@ path = "/"
 libs = "write"
 
 [environments.github-pages]
+
+[[crates-io]]
+crates = ["lazy_static"]

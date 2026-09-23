@@ -190,13 +190,19 @@ impl<'a> Generator<'a> {
                                             });
                                     team_owners.extend(github_teams);
                                 }
+                                let crates_io_publishing = if let Some(workflow) = &p.workflow_filename {
+                                    let environment = p.environment.clone().expect("Missing publish environment when publish workflow is configured");
+                                    Some(v1::CratesIoPublishing {
+                                        workflow_file: workflow.clone(),
+                                        environment
+                                    })
+                                } else {
+                                    None
+                                };
 
                                 Ok(v1::Crate {
                                     name: krate.to_string(),
-                                    crates_io_publishing: Some(v1::CratesIoPublishing {
-                                        workflow_file: p.workflow_filename.clone(),
-                                        environment: p.environment.clone(),
-                                    }),
+                                    crates_io_publishing,
                                     trusted_publishing_only: true,
                                     teams: team_owners,
                                 })
