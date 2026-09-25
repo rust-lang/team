@@ -75,3 +75,12 @@ extra-teams = [
     "foundation-board-project-directors"
 ]
 public-history = false
+ 
+[[zulip-streams]]
+name = "foundation-council-private"
+extra-teams = [
+  "foundation-staff",
+  "foundation-board-project-directors",
+  "program-managers"
+]
+public-history = false
