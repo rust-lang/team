@@ -1,0 +1,28 @@
+name = "foundation-board"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+  "alexandruradovici", # silver member rep
+  "awafaa", # arm
+  "jacobcreech", # solana
+  "jlwass", # meta
+  "jroesch", # nvidia
+  "jvanderstoep", # google
+  "nellshamrell", # microsoft
+  "obi1kenobi", # openai
+  "peixinhou" # huawei
+  # missing seth aws
+]
+included-teams = [
+  "foundation-board-project-directors"
+]
+alumni = []
+
+[[zulip-streams]]
+name = "foundation-board"
+extra-teams = [
+  "foundation-smt"
+]
+public-history = false
