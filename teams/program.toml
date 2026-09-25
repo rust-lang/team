@@ -13,8 +13,9 @@ leads = []
 members = [
     "traviscross",
     "nikomatsakis",
-    "tomassedovic",
-    "nxsaken",
+]
+included-teams = [
+    "program-managers"
 ]
 
 alumni = [

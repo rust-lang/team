@@ -1,0 +1,14 @@
+# This team includes the program managers hired by the Project
+# (via the Foundation) in support of program management. This team
+# exists so the program managers can be added to private streams
+# without the project members who provide oversight (e.g. to
+# support teams in their private channels, etc.)
+name = "program-managers"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "tomassedovic",
+    "nxsaken",
+]
