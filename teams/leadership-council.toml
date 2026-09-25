@@ -83,4 +83,4 @@ extra-teams = [
   "foundation-board-project-directors",
   "program-managers"
 ]
-public-history = false
+public-history = true
