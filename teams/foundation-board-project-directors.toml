@@ -30,3 +30,7 @@ address = "project-directors@rust-lang.org"
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-streams]]
+name = "project-directors"
+public-history = false
