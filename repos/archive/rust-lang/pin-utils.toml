@@ -4,8 +4,10 @@ description = "Utilities for pinning"
 bots = []
 
 [access.teams]
-wg-async = "write"
 
 [[rulesets]]
 pattern = "main"
 required-approvals = 0
+
+[[crates-io]]
+crates = ["pin-utils"]
