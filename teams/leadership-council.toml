@@ -9,7 +9,7 @@ members = [
     { github = "m-ou-se", roles = ["council-rep-launching-pad"] },
     { github = "Kobzol", roles = ["council-rep-infra"] },
     { github = "oli-obk", roles = ["council-rep-mods"] },
-    { github = "joshtriplett", roles = ["council-rep-libs"] },
+    { github = "Mark-Simulacrum", roles = ["council-rep-libs"] },
 ]
 alumni = [
     "khionu",
@@ -19,11 +19,11 @@ alumni = [
     "jackh726",
     "technetos",
     "eholk",
-    "Mark-Simulacrum",
     "jamesmunns",
     "cuviper",
     "ehuss",
     "traviscross",
+    "joshtriplett",
 ]
 
 [[github]]
