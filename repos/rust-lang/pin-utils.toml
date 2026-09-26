@@ -9,3 +9,6 @@ wg-async = "write"
 [[rulesets]]
 pattern = "main"
 required-approvals = 0
+
+[[crates-io]]
+crates = ["pin-utils"]
