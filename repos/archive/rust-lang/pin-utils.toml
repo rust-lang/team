@@ -4,7 +4,6 @@ description = "Utilities for pinning"
 bots = []
 
 [access.teams]
-wg-async = "write"
 
 [[rulesets]]
 pattern = "main"
