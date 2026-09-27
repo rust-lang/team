@@ -4,6 +4,7 @@ top-level = true
 [people]
 leads = [
     "Amanieu",
+    "nia-e",
 ]
 members = [
     "aapoalas",
