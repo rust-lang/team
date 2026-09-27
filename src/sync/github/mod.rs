@@ -1186,7 +1186,7 @@ fn github_int(value: u32) -> i32 {
 
 pub fn construct_ruleset(
     branch_protection: &rust_team_data::v1::BranchProtection,
-    bypass_actors: Vec<api::RulesetBypassActor>,
+    mut bypass_actors: Vec<api::RulesetBypassActor>,
 ) -> api::Ruleset {
     use api::*;
 
@@ -1277,6 +1277,7 @@ pub fn construct_ruleset(
         rules.insert(RulesetRule::MergeQueue { parameters });
     }
 
+    bypass_actors.sort();
     api::Ruleset {
         id: None,
         name: branch_protection
