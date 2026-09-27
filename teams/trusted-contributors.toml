@@ -1,0 +1,18 @@
+# People who are not members of Rust teams that have try/perf. permissions,
+# but we nevertheless trust them with those permissions.
+name = "trusted-contributors"
+kind = "marker-team"
+
+[people]
+leads = []
+# Note: if you are a member of a Rust team that has permissions.bors.rust.try or
+# permissions.perf set to true in its team toml file, then you do not need
+# to be added to this list.
+# For example, T-compiler and T-infra both have those permissions enabled.
+members = []
+
+alumni = []
+
+[permissions]
+perf = true
+bors.rust.try = true
