@@ -97,3 +97,6 @@ extra-teams = [
     "program-managers",
 ]
 public-history = true
+
+[[zulip-streams]]
+name = "council/private"
