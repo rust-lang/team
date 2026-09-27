@@ -590,14 +590,14 @@ pub(crate) enum RulesetEnforcement {
     Evaluate,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 pub(crate) struct RulesetBypassActor {
     pub(crate) actor_id: i64,
     pub(crate) actor_type: RulesetActorType,
     pub(crate) bypass_mode: RulesetBypassMode,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 pub(crate) enum RulesetActorType {
     Integration,
     OrganizationAdmin,
@@ -606,7 +606,7 @@ pub(crate) enum RulesetActorType {
     DeployKey,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum RulesetBypassMode {
     Always,
