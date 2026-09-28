@@ -1,5 +1,6 @@
 # People who are not members of Rust teams that have try/perf. permissions,
 # but we nevertheless trust them with those permissions.
+# This was established in https://github.com/rust-lang/leadership-council/issues/325.
 name = "trusted-contributors"
 kind = "marker-team"
 
@@ -9,8 +10,9 @@ leads = []
 # permissions.perf set to true in its team toml file, then you do not need
 # to be added to this list.
 # For example, T-compiler and T-infra both have those permissions enabled.
+# Project members who gain access to these permissions through other teams should be
+# ideally removed from this team.
 members = []
-
 alumni = []
 
 [permissions]
