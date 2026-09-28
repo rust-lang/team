@@ -2,7 +2,7 @@ name = "infra"
 top-level = true
 
 [people]
-leads = ["shepmaster", "jdno"]
+leads = ["shepmaster", "marcoieni"]
 members = [
     "Mark-Simulacrum",
     "emilyalbini",
