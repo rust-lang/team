@@ -12,7 +12,9 @@ leads = []
 # For example, T-compiler and T-infra both have those permissions enabled.
 # Project members who gain access to these permissions through other teams should be
 # ideally removed from this team.
-members = []
+members = [
+    "obi1kenobi"
+]
 alumni = []
 
 [permissions]
