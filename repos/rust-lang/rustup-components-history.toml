@@ -17,3 +17,7 @@ rustup = "write"
 pattern = "main"
 ci-checks = ["build"]
 required-approvals = 0
+
+[[crates-io]]
+crates = ["rustup-available-packages"]
+teams = ["infra", "rustup"]
