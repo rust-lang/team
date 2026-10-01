@@ -31,7 +31,7 @@ crates = [
     "font-awesome-as-a-crate",
     "docs_rs_crates_io"
 ]
-publish-workflow = "release.yml"
+publish-workflow = "publish.yml"
 publish-environment = "publish"
 teams = ["docs-rs"]
 
