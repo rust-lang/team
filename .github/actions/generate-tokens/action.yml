@@ -2,8 +2,8 @@ name: Generate GitHub App Tokens
 description: Generate organization-scoped GitHub tokens using GitHub App credentials
 
 inputs:
-  app-id:
-    description: GitHub App ID
+  client-id:
+    description: GitHub App client ID (or legacy app ID)
     required: true
   private-key:
     description: GitHub App private key
@@ -38,7 +38,7 @@ runs:
       uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
       id: rust-lang-token
       with:
-        app-id: ${{ inputs.app-id }}
+        client-id: ${{ inputs.client-id }}
         private-key: ${{ inputs.private-key }}
         owner: rust-lang
 
@@ -46,7 +46,7 @@ runs:
       uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
       id: rust-lang-deprecated-token
       with:
-        app-id: ${{ inputs.app-id }}
+        client-id: ${{ inputs.client-id }}
         private-key: ${{ inputs.private-key }}
         owner: rust-lang-deprecated
 
@@ -54,7 +54,7 @@ runs:
       uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
       id: rust-lang-nursery-token
       with:
-        app-id: ${{ inputs.app-id }}
+        client-id: ${{ inputs.client-id }}
         private-key: ${{ inputs.private-key }}
         owner: rust-lang-nursery
 
@@ -62,7 +62,7 @@ runs:
       uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
       id: rust-analyzer-token
       with:
-        app-id: ${{ inputs.app-id }}
+        client-id: ${{ inputs.client-id }}
         private-key: ${{ inputs.private-key }}
         owner: rust-analyzer
 
@@ -70,7 +70,7 @@ runs:
       uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
       id: rust-embedded-token
       with:
-        app-id: ${{ inputs.app-id }}
+        client-id: ${{ inputs.client-id }}
         private-key: ${{ inputs.private-key }}
         owner: rust-embedded
 
@@ -78,6 +78,6 @@ runs:
       uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
       id: rust-dev-tools-token
       with:
-        app-id: ${{ inputs.app-id }}
+        client-id: ${{ inputs.client-id }}
         private-key: ${{ inputs.private-key }}
         owner: rust-dev-tools
