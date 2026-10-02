@@ -5,3 +5,26 @@ bots = []
 
 [access.teams]
 rust-analyzer = "maintain"
+
+[environments.release]
+branches = ["master"]
+
+[[crates-io]]
+crates = [
+    "ra-ap-rustc_abi",
+    "ra-ap_rustc_ast_ir",
+    "ra-ap_rustc_hashes",
+    "ra-ap_rustc_index",
+    "ra-ap_rustc_index_macros",
+    "ra-ap_rustc_lexer",
+    "ra-ap_rustc_macros",
+    "ra-ap_rustc_next_trait_solver",
+    "ra-ap_rustc_parse_format",
+    "ra-ap_rustc_pattern_analysis",
+    "ra-ap_rustc_serialize",
+    "ra-ap_rustc_type_ir_macros",
+    "ra-ap_rustc_type_ir",
+]
+publish-workflow = "release.yml"
+publish-environment = "release"
+teams = ["rust-analyzer"]
