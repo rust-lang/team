@@ -5,3 +5,64 @@ bots = []
 
 [access.teams]
 rust-analyzer = "maintain"
+
+[environments.release]
+branches = ["master"]
+
+[[crates-io]]
+crates = [
+    "ra-ap-rustc_abi",
+    "ra-ap_rustc_ast_ir",
+    "ra-ap_rustc_hashes",
+    "ra-ap_rustc_index",
+    "ra-ap_rustc_index_macros",
+    "ra-ap_rustc_lexer",
+    "ra-ap_rustc_macros",
+    "ra-ap_rustc_next_trait_solver",
+    "ra-ap_rustc_parse_format",
+    "ra-ap_rustc_pattern_analysis",
+    "ra-ap_rustc_serialize",
+    "ra-ap_rustc_type_ir",
+    "ra-ap_rustc_type_ir_macros",
+]
+publish-workflow = "release.yml"
+publish-environment = "release"
+teams = ["rust-analyzer"]
+
+# Obsolete crates
+[[crates-io]]
+crates = [
+    "ra-ap-rustc_arena",
+    "ra-ap-rustc_data_structures",
+    "ra-ap-rustc_graphviz",
+    "ra-ap-rustc_hir",
+    "ra-ap-rustc_serialize",
+    "ra-ap-rustc_macros",
+    "rustc-ap-arena",
+    "rustc-ap-graphviz",
+    "rustc-ap-rustc_arena",
+    "rustc-ap-rustc_ast",
+    "rustc-ap-rustc_ast_passes",
+    "rustc-ap-rustc_ast_pretty",
+    "rustc-ap-rustc_attr",
+    "rustc-ap-rustc_cratesio_shim",
+    "rustc-ap-rustc_data_structures",
+    "rustc-ap-rustc_errors",
+    "rustc-ap-rustc_error_codes",
+    "rustc-ap-rustc_expand",
+    "rustc-ap-rustc_feature",
+    "rustc-ap-rustc_fs_util",
+    "rustc-ap-rustc_graphviz",
+    "rustc-ap-rustc_index",
+    "rustc-ap-rustc_lexer",
+    "rustc-ap-rustc_lint_defs",
+    "rustc-ap-rustc_macros",
+    "rustc-ap-rustc_parse",
+    "rustc-ap-rustc_serialize",
+    "rustc-ap-rustc_session",
+    "rustc-ap-rustc_span",
+    "rustc-ap-rustc_target",
+    "rustc-ap-serialize",
+    "rustc-ap-syntax",
+    "rustc-ap-syntax_pos",
+]
