@@ -18,7 +18,7 @@ required-approvals = 0
 branches = ["main"]
 
 [environments.publish]
-branches = ["main"]
+tags = ["v*"]
 
 [[crates-io]]
 crates = ["cargo-bisect-rustc"]
