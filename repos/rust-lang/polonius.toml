@@ -16,5 +16,5 @@ branches = ["main"]
 crates = [
     "polonius",
     "polonius-engine",
-    "polonius-parser"
+    "polonius-parser",
 ]
