@@ -10,4 +10,11 @@ build-type = "workflow"
 wg-polonius = "write"
 
 [environments.github-pages]
-branches = ["master"]
+branches = ["main"]
+
+[[crates-io]]
+crates = [
+    "polonius",
+    "polonius-engine",
+    "polonius-parser",
+]
