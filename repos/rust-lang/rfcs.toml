@@ -11,8 +11,8 @@ build-type = "workflow"
 all = "write"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 required-approvals = 0
 
 [environments.github-pages]
-branches = ["master"]
+branches = ["main"]
