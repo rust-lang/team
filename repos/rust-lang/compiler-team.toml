@@ -15,7 +15,7 @@ compiler-ops = "write"
 types = "write"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 required-approvals = 0
 
 [environments.github-pages]
