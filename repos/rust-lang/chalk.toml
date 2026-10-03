@@ -13,3 +13,19 @@ path = "/"
 types = "write"
 
 [environments.github-pages]
+
+[environments.publish]
+branches = ["master"]
+
+[[crates-io]]
+crates = [
+    "chalk-derive",
+    "chalk-engine",
+    "chalk-ir",
+    "chalk-macros",
+    "chalk-recursive",
+    "chalk-solve",
+]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["types"]
