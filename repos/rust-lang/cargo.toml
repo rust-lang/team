@@ -28,6 +28,29 @@ pr-required = false
 bypass-apps = ["promote-release"]
 prevent-update = true
 
+[[crates-io]]
+crates = [
+    "build-rs",
+    "cargo",
+    "cargo-credential",
+    "cargo-credential-1password",
+    "cargo-credential-gnome-secret",
+    "cargo-credential-libsecret",
+    "cargo-credential-macos-keychain",
+    "cargo-credential-wincred",
+    "cargo-platform",
+    "cargo-test-macro",
+    "cargo-test-support",
+    "cargo-util",
+    "cargo-util-schemas",
+    "cargo-util-terminal",
+    "crates-io",
+    "home",
+    "rustfix",
+]
+publish-workflow = "release.yml"
+publish-environment = "release"
+
 [environments.github-pages]
 
 [environments.release]
