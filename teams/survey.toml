@@ -7,10 +7,9 @@ leads = [
     "apiraino"
 ]
 members = [
-    "graciegregory",
     "Kobzol",
     "apiraino",
-    "hashcatHitman"
+    "hashcatHitman",
 ]
 alumni = [
     "Manishearth",
@@ -19,6 +18,7 @@ alumni = [
     "sophiajt",
     "yaahc",
     "rylev",
+    "graciegregory",
 ]
 
 [website]
