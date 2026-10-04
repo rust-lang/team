@@ -26,7 +26,6 @@ members = [
     "karolzwolak",
     "lolbinarycat",
     "maxdexh",
-    "nuzzles",
     "oskgo",
     "pitaj",
     "probablytaylors",
@@ -44,6 +43,7 @@ alumni = [
     "joelpalmer",
     "shard77",
     "tranquillity-codes",
+    "nuzzles",
 ]
 
 [website]
