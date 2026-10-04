@@ -34,7 +34,7 @@ orgs = ["rust-lang"]
 [[zulip-streams]]
 name = "project-directors"
 public-history = false
- 
+
 [[zulip-streams]]
 name = "foundation/with-project-directors"
 extra-teams = [
@@ -44,3 +44,6 @@ extra-people = [
     "tinakrauss"
 ]
 public-history = false
+
+[[zulip-groups]]
+name = "foundation-project-directors"
