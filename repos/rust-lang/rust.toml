@@ -142,3 +142,10 @@ prevent-update = true
 
 [environments.bors]
 branches = ["automation/bors/auto", "automation/bors/try", "automation/bors/try-perf"]
+
+[[crates-io]]
+crates = [
+    "rustc-std-workspace-alloc",
+    "rustc-std-workspace-core",
+    "rustc_lexer",
+]
