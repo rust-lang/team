@@ -11,3 +11,6 @@ path = "/"
 [access.teams]
 
 [environments.github-pages]
+
+[[crates-io]]
+crates = ["cfg-if"]
