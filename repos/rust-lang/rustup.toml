@@ -4,11 +4,6 @@ description = "The Rust toolchain installer"
 homepage = "https://rustup.rs/"
 bots = ["rustbot", "renovate"]
 
-[pages]
-build-type = "legacy"
-branch = "gh-pages"
-path = "/"
-
 [access.teams]
 rustup = "maintain"
 
@@ -23,7 +18,8 @@ ci-checks = ["conclusion"]
 required-approvals = 0
 prevent-creation = false
 
-[environments.github-pages]
+[pages]
+build-type = "workflow"
 
-[environments.www-deploy]
-branches = ["www"]
+[environments.github-pages]
+branches = ["main", "stable"]
