@@ -4,18 +4,20 @@ subteam-of = "launching-pad"
 [people]
 leads = []
 members = [
-    "carols10cents",
     "davidtwco",
     "jackh726",
+    "jdonszelmann",
+    "nia-e",
     "nikomatsakis",
-    "rylev",
 ]
 alumni = [
-    "cuviper",
     "JakobDegen",
     "Mark-Simulacrum",
-    "spastorino",
+    "carols10cents",
+    "cuviper",
+    "rylev",
     "scottmcm",
+    "spastorino",
     "tmandry",
     "yaahc",
 ]
