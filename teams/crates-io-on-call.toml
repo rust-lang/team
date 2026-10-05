@@ -6,13 +6,15 @@ kind = "marker-team"
 [people]
 leads = []
 members = [
-    "JoelMarcey",
     "LawnGnome",
     "marcoieni",
     "Turbo87",
     "walterhpearce",
     "ubiratansoares",
     "jlizen"
+]
+alumni = [
+    "JoelMarcey",
 ]
 
 [[github]]

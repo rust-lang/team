@@ -9,12 +9,13 @@ members = [
     "LawnGnome",
     "marcoieni",
     "ubiratansoares",
-    "ernestkissiedu",
     "teor2345",
     "tinakrauss",
     "jlizen",
 ]
-alumni = []
+alumni = [
+    "ernestkissiedu",
+]
 included-teams = [
     "foundation-smt"
 ]
