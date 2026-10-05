@@ -14,3 +14,17 @@ required-approvals = 0
 merge-queue = { enabled = true, min-entries-to-merge-wait-minutes = 1 }
 
 [environments.github-pages]
+
+[environments.publish]
+branches = ["main"]
+tags = ["*"]
+
+[[crates-io]]
+crates = [
+    "git2",
+    "git2-curl",
+    "libgit2-sys",
+]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["cargo"]
