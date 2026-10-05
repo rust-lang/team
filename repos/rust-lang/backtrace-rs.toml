@@ -1,14 +1,26 @@
-org = 'rust-lang'
-name = 'backtrace-rs'
-description = 'Backtraces in Rust'
+org = "rust-lang"
+name = "backtrace-rs"
+description = "Backtraces in Rust"
 homepage = "https://docs.rs/backtrace"
 bots = []
 
 [access.teams]
-crate-maintainers = 'maintain'
+crate-maintainers = "maintain"
 
 [[rulesets]]
-pattern = 'master'
+pattern = "main"
 
 [environments.github-pages]
 
+[environments.publish]
+branches = ["main"]
+
+[[crates-io]]
+crates = ["backtrace"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["crate-maintainers"]
+
+# Obsolete crate
+[[crates-io]]
+crates = ["backtrace-sys"]
