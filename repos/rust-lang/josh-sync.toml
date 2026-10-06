@@ -1,7 +1,7 @@
 org = "rust-lang"
 name = "josh-sync"
 description = "Utilities for synchronizing Josh subtrees to the Rust compiler repo"
-bots = []
+bots = ["renovate"]
 
 [access.teams]
 compiler = "write"
