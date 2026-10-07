@@ -6,4 +6,12 @@ bots = []
 [access.teams]
 
 [[crates-io]]
-crates = ["rls"]
+crates = [
+    "rls",
+    "rls-analysis",
+    "rls-blacklist",
+    "rls-data",
+    "rls-rustc",
+    "rls-span",
+    "rls-vfs",
+]
