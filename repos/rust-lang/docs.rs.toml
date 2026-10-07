@@ -35,6 +35,10 @@ publish-workflow = "publish.yml"
 publish-environment = "publish"
 teams = ["docs-rs"]
 
+# Obsolete crate
+[[crates-io]]
+crates = ["docsrs-metadata"]
+
 [pages]
 build-type = "workflow"
 
