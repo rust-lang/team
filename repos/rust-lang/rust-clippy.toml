@@ -29,5 +29,6 @@ merge-queue = { enabled = true }
 [[crates-io]]
 crates = [
     "clippy",
-    "clippy_lints"
+    "clippy_dummy",
+    "clippy_lints",
 ]
