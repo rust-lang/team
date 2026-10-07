@@ -6,4 +6,7 @@ bots = []
 [access.teams]
 
 [[crates-io]]
-crates = ["rustc_term"]
+crates = [
+    "rustc_term",
+    "libtest"
+]
