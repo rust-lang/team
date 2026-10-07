@@ -22,3 +22,10 @@ bypass-apps = ["workflows-crates-io"]
 [environments.crates-io]
 
 [environments.staging-crates-io]
+
+# Obsolete crates
+[[crates-io]]
+crates = [
+    "cargo-registry",
+    "cargo-registry-s3"
+]
