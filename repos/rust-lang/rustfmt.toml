@@ -32,3 +32,10 @@ required-approvals = 0
 
 [environments.github-pages]
 branches = ["main"]
+
+# Obsolete crates
+[[crates-io]]
+crates = [
+    "rustfmt",
+    "rustfmt-nightly"
+]
