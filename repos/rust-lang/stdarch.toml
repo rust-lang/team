@@ -24,4 +24,8 @@ merge-queue = { enabled = true }
 [environments.github-pages]
 
 [[crates-io]]
-crates = ["stdsimd"]
+crates = [
+    "stdsimd",
+    "core_arch",
+    "std_detect"
+]
