@@ -4,17 +4,19 @@ description = "Support for matching file paths against Unix shell style patterns
 homepage = "https://doc.rust-lang.org/glob"
 bots = ["rustbot"]
 
-[pages]
-build-type = "legacy"
-branch = "gh-pages"
-path = "/"
-
 [access.teams]
 crate-maintainers = "maintain"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 ci-checks = ["success"]
 required-approvals = 0
 
-[environments.github-pages]
+[environments.publish]
+branches = ["main"]
+
+[[crates-io]]
+crates = ["cmake"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["crate-maintainers"]
