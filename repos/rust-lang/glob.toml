@@ -16,7 +16,7 @@ required-approvals = 0
 branches = ["main"]
 
 [[crates-io]]
-crates = ["cmake"]
+crates = ["glob"]
 publish-workflow = "publish.yml"
 publish-environment = "publish"
 teams = ["crate-maintainers"]
