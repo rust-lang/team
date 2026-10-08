@@ -24,3 +24,21 @@ required-approvals = 0
 merge-queue = { enabled = true }
 
 [environments.github-pages]
+
+[environments.publish-libs]
+branches = ["master"]
+
+# Library crates - dependencies of rust-analyzer that follow independent semantic versioning.
+[[crates-io]]
+crates = [
+    "la-arena",
+    "line-index",
+    "lsp-server",
+    "smol_str",
+    "text-size",
+    "ungrammar",
+    "ungrammar2json"
+]
+publish-workflow = "publish-libs.yaml"
+publish-environment = "publish-libs"
+teams = ["rust-analyzer"]
