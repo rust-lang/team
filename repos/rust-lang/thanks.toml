@@ -18,3 +18,6 @@ required-approvals = 0
 
 [environments.github-pages]
 branches = ["main"]
+
+[[crates-io]]
+crates = ["mailmap"]
