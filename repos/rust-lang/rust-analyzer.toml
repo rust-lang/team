@@ -28,6 +28,9 @@ merge-queue = { enabled = true }
 [environments.publish-libs]
 branches = ["master"]
 
+[environments.publish-auto]
+branches = ["master", "release"]
+
 # Library crates - dependencies of rust-analyzer that follow independent semantic versioning.
 [[crates-io]]
 crates = [
@@ -41,4 +44,62 @@ crates = [
 ]
 publish-workflow = "publish-libs.yaml"
 publish-environment = "publish-libs"
+teams = ["rust-analyzer"]
+
+# Automatically published rust analyzer crates
+# Note that some of them are no longer published
+[[crates-io]]
+crates = [
+    "ra_ap_arena",
+    "ra_ap_assists",
+    "ra_ap_completion",
+    "ra_ap_base_db",
+    "ra_ap_cfg",
+    "ra_ap_edition",
+    "ra_ap_flycheck",
+    "ra_ap_hir",
+    "ra_ap_hir_def",
+    "ra_ap_hir_expand",
+    "ra_ap_hir_ty",
+    "ra_ap_ide",
+    "ra_ap_ide_assists",
+    "ra_ap_ide_completion",
+    "ra_ap_ide_db",
+    "ra_ap_ide_diagnostics",
+    "ra_ap_ide_ssr",
+    "ra_ap_intern",
+    "ra_ap_la-arena",
+    "ra_ap_limit",
+    "ra_ap_line-index",
+    "ra_ap_load-cargo",
+    "ra_ap_lsp-server",
+    "ra_ap_macros",
+    "ra_ap_mbe",
+    "ra_ap_parser",
+    "ra_ap_paths",
+    "ra_ap_proc_macro_api",
+    "ra_ap_proc_macro_srv",
+    "ra_ap_proc-macro-srv-cli",
+    "ra_ap_profile",
+    "ra_ap_project_model",
+    "ra_ap_query-group-macro",
+    "ra_ap_rust-analyzer",
+    "ra_ap_rustc-dependencies",
+    "ra_ap_salsa",
+    "ra_ap_salsa-macros",
+    "ra_ap_span",
+    "ra_ap_ssr",
+    "ra_ap_stdx",
+    "ra_ap_syntax",
+    "ra_ap_syntax-bridge",
+    "ra_ap_test_fixture",
+    "ra_ap_test_utils",
+    "ra_ap_text_edit",
+    "ra_ap_toolchain",
+    "ra_ap_tt",
+    "ra_ap_vfs",
+    "ra_ap_vfs-notify"
+]
+publish-workflow = "autopublish.yaml"
+publish-environment = "publish-auto"
 teams = ["rust-analyzer"]
