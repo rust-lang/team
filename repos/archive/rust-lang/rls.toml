@@ -4,3 +4,14 @@ description = "Repository for the Rust Language Server (aka RLS)"
 bots = []
 
 [access.teams]
+
+[[crates-io]]
+crates = [
+    "rls",
+    "rls-analysis",
+    "rls-blacklist",
+    "rls-data",
+    "rls-rustc",
+    "rls-span",
+    "rls-vfs",
+]
