@@ -43,7 +43,7 @@ pub enum GitHubTokens {
         /// The token has to be available for the whole duration of the process.
         org_tokens: HashMap<String, SecretString>,
         /// Context for using enterprise GitHub App.
-        enterprise_client_ctx: EnterpriseAppCtx,
+        enterprise_client_ctx: Option<EnterpriseAppCtx>,
     },
     /// One token for all API calls (used with Personal Access Token).
     Pat(SecretString),
@@ -55,13 +55,7 @@ impl GitHubTokens {
     /// Parses environment variables in the format GITHUB_TOKEN_{ORG_NAME}
     /// to retrieve GitHub tokens.
     pub async fn from_env(config: &Config) -> anyhow::Result<Self> {
-        let mut tokens = HashMap::new();
-
-        for (key, value) in std::env::vars() {
-            if let Some(org_name) = org_name_from_env_var(&key) {
-                tokens.insert(org_name, SecretString::from(value));
-            }
-        }
+        let tokens = collect_org_envs();
 
         if tokens.is_empty() {
             let pat_token = std::env::var("GITHUB_TOKEN")
@@ -136,13 +130,24 @@ impl GitHubTokens {
 
             Ok(GitHubTokens::App {
                 org_tokens: tokens,
-                enterprise_client_ctx: EnterpriseAppCtx {
+                enterprise_client_ctx: Some(EnterpriseAppCtx {
                     enterprise_token,
                     org_tokens: enterprise_org_tokens,
                     enterprise_name,
-                },
+                }),
             })
         }
+    }
+
+    pub fn from_env_org_tokens_only() -> Self {
+        GitHubTokens::App {
+            org_tokens: collect_org_envs(),
+            enterprise_client_ctx: None,
+        }
+    }
+
+    pub fn get_organization_token(&self, org: &str) -> anyhow::Result<&SecretString> {
+        Self::get_token_for_org(self, org, &TokenType::Organization)
     }
 
     /// Get a token for a GitHub organization.
@@ -163,6 +168,10 @@ impl GitHubTokens {
                     )
                 }),
                 TokenType::EnterpriseOrganization => {
+                    let enterprise_client_ctx = enterprise_client_ctx
+                        .as_ref()
+                        .context("No enterprise GitHub App is configured")?;
+
                     enterprise_client_ctx.org_tokens.get(org).with_context(|| {
                         format!(
                             "failed to get the GitHub token environment variable for organization `{org}` for the enterprise GH app"
@@ -170,6 +179,10 @@ impl GitHubTokens {
                     })
                 }
                 TokenType::Enterprise => {
+                    let enterprise_client_ctx = enterprise_client_ctx
+                        .as_ref()
+                        .context("No enterprise GitHub App is configured")?;
+
                     Ok(&enterprise_client_ctx.enterprise_token)
                 }
             },
@@ -183,12 +196,28 @@ impl GitHubTokens {
             GitHubTokens::App {
                 enterprise_client_ctx,
                 ..
-            } => Ok(enterprise_client_ctx.enterprise_name.as_str()),
+            } => Ok(enterprise_client_ctx
+                .as_ref()
+                .context("No enterprise GitHub App is configured")?
+                .enterprise_name
+                .as_str()),
             GitHubTokens::Pat(_) => Err(anyhow::anyhow!(
                 "No enterprise is configured when using a PAT"
             )),
         }
     }
+}
+
+fn collect_org_envs() -> HashMap<String, SecretString> {
+    let mut tokens = HashMap::new();
+
+    for (key, value) in std::env::vars() {
+        if let Some(org_name) = org_name_from_env_var(&key) {
+            tokens.insert(org_name, SecretString::from(value));
+        }
+    }
+
+    tokens
 }
 
 fn org_name_from_env_var(env_var: &str) -> Option<String> {

@@ -6,6 +6,8 @@ pub mod team_api;
 pub mod utils;
 mod zulip;
 
+pub(crate) use github::GitHubTokens;
+
 use std::collections::BTreeSet;
 
 use anyhow::Context;
