@@ -13,9 +13,10 @@ leads = []
 # Project members who gain access to these permissions through other teams should be
 # ideally removed from this team.
 members = [
-    "obi1kenobi",
     "aerooneqq",
-    "scrabsha"
+    "Jules-Bertholet",
+    "obi1kenobi",
+    "scrabsha",
 ]
 alumni = []
 
