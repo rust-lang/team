@@ -21,3 +21,27 @@ pattern = "0.[1-9]"
 required-approvals = 0
 
 [environments.github-pages]
+
+[[crates-io]]
+crates = [
+    "futures01",
+    "futures-preview",
+    "futures-async-runtime",
+    "futures-async-runtime-preview",
+    "futures-channel-preview",
+    "futures-core-preview",
+    "futures-cpupool",
+    "futures-executor-preview",
+    "futures-io-preview",
+    "futures-join-macro-preview",
+    "futures-macro-async",
+    "futures-macro-async-preview",
+    "futures-macro-await",
+    "futures-macro-await-preview",
+    "futures-select-macro-preview",
+    "futures-sink-preview",
+    "futures-stable-preview",
+    "futures-test-preview",
+    "futures-util-preview",
+    "futures-stable",
+]
