@@ -9,6 +9,7 @@ build-type = "workflow"
 
 [access.teams]
 goals = "maintain"
+goal-owners = "write"
 all = "write"
 
 [environments.github-pages]
