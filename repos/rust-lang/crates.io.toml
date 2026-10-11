@@ -22,3 +22,20 @@ bypass-apps = ["workflows-crates-io"]
 [environments.crates-io]
 
 [environments.staging-crates-io]
+
+# Obsolete conduit web framework crates
+# They belong to repositores under the conduit-rs GitHub organization, but that is not managed in
+# team, so we attach these crates to the crates.io repository, in which these crates were used.
+[[crates-io]]
+crates = [
+    "conduit",
+    "conduit-conditional-get",
+    "conduit-cookie",
+    "conduit-git-http-backend",
+    "conduit-hyper",
+    "conduit-middleware",
+    "conduit-mime-types",
+    "conduit-router",
+    "conduit-static",
+    "conduit-test"
+]
