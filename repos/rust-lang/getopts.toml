@@ -1,6 +1,6 @@
-org = 'rust-lang'
-name = 'getopts'
-description = 'The getopts repo maintained by the rust-lang project'
+org = "rust-lang"
+name = "getopts"
+description = "The getopts repo maintained by the rust-lang project"
 homepage = "https://docs.rs/getopts"
 bots = []
 
@@ -10,6 +10,15 @@ branch = "gh-pages"
 path = "/"
 
 [access.teams]
-crate-maintainers = 'maintain'
+crate-maintainers = "maintain"
 
 [environments.github-pages]
+
+[environments.publish]
+branches = ["main"]
+
+[[crates-io]]
+crates = ["getopts"]
+publish-workflow = "publish.yaml"
+publish-environment = "publish"
+teams = ["crate-maintainers"]
