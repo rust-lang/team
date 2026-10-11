@@ -24,3 +24,15 @@ ci-checks = [
 require-up-to-date-branches = true
 
 [environments.github-pages]
+
+[environments.release]
+branches = ["main"]
+
+[[crates-io]]
+crates = [
+    "rustc-demangle",
+    "rustc-demangle-capi",
+]
+publish-workflow = "release.yml"
+publish-environment = "release"
+teams = ["compiler"]
