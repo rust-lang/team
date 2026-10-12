@@ -1932,7 +1932,7 @@ async fn repo_custom_property_undefined_at_org() {
                     CustomPropertyDiff {
                         name: "crabwatch",
                         operation: CannotApply {
-                            reason: "'crabwatch' is not defined at the org level",
+                            reason: "'crabwatch' is not defined at the org level for org rust-lang",
                         },
                     },
                 ],

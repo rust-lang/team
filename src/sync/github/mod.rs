@@ -99,6 +99,7 @@ struct SyncGitHub {
     org_owners: HashMap<OrgName, HashSet<u64>>,
     org_members: HashMap<OrgName, HashMap<u64, String>>,
     org_apps: HashMap<OrgName, Vec<OrgAppInstallation>>,
+    org_property_names: HashMap<String, HashSet<String>>,
 }
 
 impl SyncGitHub {
@@ -126,6 +127,7 @@ impl SyncGitHub {
             .filter_map(|t| t.github.as_ref())
             .flat_map(|gh| &gh.teams)
             .map(|gh_team| &gh_team.org)
+            .chain(repos.iter().map(|repo| &repo.org))
             .collect::<HashSet<_>>();
 
         let mut org_owners = HashMap::new();
@@ -165,6 +167,12 @@ impl SyncGitHub {
             org_apps.insert(org.to_string(), installations);
         }
 
+        let mut org_property_names: HashMap<String, HashSet<String>> = HashMap::new();
+        for org in &orgs {
+            let property_names = github.org_property_names(org).await?;
+            org_property_names.insert(org.to_string(), property_names);
+        }
+
         Ok(SyncGitHub {
             github,
             teams,
@@ -174,6 +182,7 @@ impl SyncGitHub {
             org_owners,
             org_members,
             org_apps,
+            org_property_names,
         })
     }
 
@@ -915,7 +924,6 @@ impl SyncGitHub {
             .github
             .repo_custom_properties(&expected_repo.org, &expected_repo.name)
             .await?;
-        let org_property_names = self.github.org_property_names(&expected_repo.org).await?;
 
         let actual_by_name: HashMap<String, Option<CustomPropertyScalar>> = actual
             .into_iter()
@@ -923,12 +931,19 @@ impl SyncGitHub {
             .collect();
 
         let mut diffs = Vec::new();
+        let property_names = self.org_property_names.get(&expected_repo.org);
         for (name, value) in &expected_repo.custom_properties {
-            if !org_property_names.contains(name) {
+            if !property_names
+                .map(|names| names.contains(name))
+                .unwrap_or(false)
+            {
                 diffs.push(CustomPropertyDiff {
                     name: name.clone(),
                     operation: CustomPropertyDiffOperation::CannotApply {
-                        reason: format!("'{name}' is not defined at the org level"),
+                        reason: format!(
+                            "'{name}' is not defined at the org level for org {}",
+                            expected_repo.org
+                        ),
                     },
                 });
                 continue;
