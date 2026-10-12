@@ -201,6 +201,7 @@ impl HttpClient {
         F: FnMut(T) -> anyhow::Result<()>,
         T: DeserializeOwned,
     {
+        let url = url.with_page_size(100);
         let mut next = Some(url.clone());
         while let Some(next_url) = next.take() {
             let resp = self
