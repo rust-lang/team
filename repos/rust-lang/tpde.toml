@@ -1,0 +1,12 @@
+org = "rust-lang"
+name = "tpde"
+description = "Rust-specific fork of TPDE."
+bots = []
+
+[access.teams]
+wg-llvm = "write"
+compiler = "write"
+
+[[rulesets]]
+pattern = "main"
+pr-required = false
