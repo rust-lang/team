@@ -2,8 +2,8 @@ use crate::sync::github::api;
 use crate::sync::github::api::url::TokenType;
 use crate::sync::github::api::{BranchPolicy, CustomPropertyValue, Ruleset};
 use crate::sync::github::api::{
-    BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, OrgAppInstallation,
-    Repo, RepoAppInstallation, RepoTeam, RepoUser, RestPaginatedError, Team, TeamMember, TeamRole,
+    GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, OrgAppInstallation, Repo,
+    RepoAppInstallation, RepoTeam, RepoUser, RestPaginatedError, Team, TeamMember, TeamRole,
     team_node_id, url::GitHubUrl, user_node_id,
 };
 use crate::sync::utils::ResponseExt;
@@ -11,7 +11,7 @@ use anyhow::Context as _;
 use async_trait::async_trait;
 use reqwest::{Method, StatusCode};
 use rust_team_data::v1::{Environment, Pages, PagesBuildType, PagesSource};
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{HashMap, HashSet};
 
 #[async_trait]
 pub(crate) trait GithubRead {
@@ -70,14 +70,6 @@ pub(crate) trait GithubRead {
     ///
     /// Only fetches those who are direct collaborators (i.e., not a collaborator through a repo team)
     async fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>>;
-
-    /// Get branch_protections
-    /// Returns a map branch pattern -> (protection ID, protection data)
-    async fn branch_protections(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<BTreeMap<String, (String, BranchProtection)>>;
 
     /// Get environments for a repository
     /// Returns a map of environment names to their Environment data
@@ -435,6 +427,12 @@ impl GithubRead for GitHubApiRead {
                     homepageUrl
                     isArchived
                     isPrivate
+                    branchProtectionRules(first: 100) {
+                        nodes {
+                            id
+                            pattern
+                        }
+                    }
                 }
             }
         "#;
@@ -442,6 +440,17 @@ impl GithubRead for GitHubApiRead {
         #[derive(serde::Deserialize)]
         struct Wrapper {
             repository: Option<RepoResponse>,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct BranchProtectionRules {
+            nodes: Vec<BranchProtectionRule>,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct BranchProtectionRule {
+            id: String,
+            pattern: String,
         }
 
         #[derive(serde::Deserialize)]
@@ -454,6 +463,7 @@ impl GithubRead for GitHubApiRead {
             homepage_url: Option<String>,
             is_archived: bool,
             is_private: bool,
+            branch_protection_rules: BranchProtectionRules,
         }
 
         let result: Option<Wrapper> = self
@@ -478,6 +488,12 @@ impl GithubRead for GitHubApiRead {
             homepage: repo_response.homepage_url,
             org: org.to_string(),
             private: repo_response.is_private,
+            branch_protections: repo_response
+                .branch_protection_rules
+                .nodes
+                .into_iter()
+                .map(|rule| (rule.pattern, rule.id))
+                .collect(),
         });
 
         Ok(repo)
@@ -549,93 +565,6 @@ impl GithubRead for GitHubApiRead {
             .await?;
 
         Ok(users)
-    }
-
-    async fn branch_protections(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<BTreeMap<String, (String, BranchProtection)>> {
-        #[derive(serde::Serialize)]
-        struct Params<'a> {
-            org: &'a str,
-            repo: &'a str,
-        }
-        static QUERY: &str = "
-            query($org:String!,$repo:String!) {
-                repository(owner:$org, name:$repo) {
-                    branchProtectionRules(first:100) {
-                        nodes {
-                            id,
-                            pattern,
-                            isAdminEnforced,
-                            allowsForcePushes,
-                            dismissesStaleReviews,
-                            requiresConversationResolution,
-                            requiresLinearHistory,
-                            requiresStrictStatusChecks,
-                            requiredStatusCheckContexts,
-                            requiredApprovingReviewCount,
-                            requiresApprovingReviews
-                            pushAllowances(first: 100) {
-                                nodes {
-                                    actor {
-                                        ... on Actor {
-                                            login
-                                        }
-                                        ... on Team {
-                                            organization {
-                                                login
-                                            },
-                                            name
-                                        }
-                                        ... on App {
-                                            id,
-                                            name
-                                        }
-                                    }
-                                }
-                            }
-                         }
-                    }
-                }
-            }
-        ";
-
-        #[derive(serde::Deserialize)]
-        struct Wrapper {
-            repository: Repository,
-        }
-        #[derive(serde::Deserialize)]
-        #[serde(rename_all = "camelCase")]
-        struct Repository {
-            branch_protection_rules: GraphNodes<BranchProtectionWrapper>,
-        }
-        #[derive(serde::Deserialize)]
-        #[serde(rename_all = "camelCase")]
-        struct BranchProtectionWrapper {
-            id: String,
-            #[serde(flatten)]
-            protection: BranchProtection,
-        }
-
-        let mut result = BTreeMap::new();
-        let res: Wrapper = self
-            .client
-            .graphql(QUERY, Params { org, repo }, org)
-            .await?;
-        for mut node in res
-            .repository
-            .branch_protection_rules
-            .nodes
-            .into_iter()
-            .flatten()
-        {
-            // Normalize check order to avoid diffs based only on the ordering difference
-            node.protection.required_status_check_contexts.sort();
-            result.insert(node.protection.pattern.clone(), (node.id, node.protection));
-        }
-        Ok(result)
     }
 
     async fn repo_environments(

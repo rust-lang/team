@@ -689,16 +689,12 @@ impl SyncGitHub {
             return Ok(vec![]);
         }
 
-        let actual_protections = self
-            .github
-            .branch_protections(&actual_repo.org, &actual_repo.name)
-            .await?;
-
-        Ok(actual_protections
-            .into_iter()
-            .map(|(name, (id, _))| BranchProtectionDiff {
-                pattern: name,
-                operation: BranchProtectionDiffOperation::Delete(id),
+        Ok(actual_repo
+            .branch_protections
+            .iter()
+            .map(|(name, id)| BranchProtectionDiff {
+                pattern: name.clone(),
+                operation: BranchProtectionDiffOperation::Delete(id.clone()),
             })
             .collect())
     }
