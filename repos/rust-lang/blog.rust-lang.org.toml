@@ -30,4 +30,4 @@ bypass-apps = ["promote-release"]
 merge-queue = { enabled = true }
 
 [environments.github-pages]
-branches = ["gh-readonly-queue/main/*"]
+branches = ["main"]
