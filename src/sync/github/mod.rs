@@ -409,8 +409,6 @@ impl SyncGitHub {
                         username.clone(),
                         MemberDiff::ChangeRole((member.role, expected_role)),
                     ));
-                } else {
-                    member_diffs.push((username.clone(), MemberDiff::Noop));
                 }
             } else {
                 if invites.is_none() {
@@ -423,9 +421,7 @@ impl SyncGitHub {
                 let invites = invites.as_ref().unwrap();
 
                 // Check if the user has been invited already
-                if invites.contains(username) {
-                    member_diffs.push((username.clone(), MemberDiff::Noop));
-                } else {
+                if !invites.contains(username) {
                     member_diffs.push((username.clone(), MemberDiff::Create(expected_role)));
                 }
             }
@@ -2725,7 +2721,7 @@ impl EditTeamDiff {
         name_diff.is_none()
             && description_diff.is_none()
             && privacy_diff.is_none()
-            && member_diffs.iter().all(|(_, d)| d.is_noop())
+            && member_diffs.is_empty()
     }
 }
 
@@ -2769,7 +2765,6 @@ impl std::fmt::Display for EditTeamDiff {
                 MemberDiff::Delete => {
                     writeln!(f, "  Deleting member '{member}'")?;
                 }
-                MemberDiff::Noop => {}
             }
         }
         Ok(())
@@ -2781,7 +2776,6 @@ enum MemberDiff {
     Create(TeamRole),
     ChangeRole((TeamRole, TeamRole)),
     Delete,
-    Noop,
 }
 
 impl MemberDiff {
@@ -2797,14 +2791,9 @@ impl MemberDiff {
                 sync.set_team_membership(org, team, member, role).await?;
             }
             MemberDiff::Delete => sync.remove_team_membership(org, team, member).await?,
-            MemberDiff::Noop => {}
         }
 
         Ok(())
-    }
-
-    fn is_noop(&self) -> bool {
-        matches!(self, Self::Noop)
     }
 }
 

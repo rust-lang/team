@@ -57,7 +57,7 @@ async fn team_add_member() {
 
     model.get_team("admins").add_gh_member("admins-gh", user2);
     let team_diff = model.diff_teams(gh).await;
-    insta::assert_debug_snapshot!(team_diff, @r###"
+    insta::assert_debug_snapshot!(team_diff, @r#"
     [
         Edit(
             EditTeamDiff {
@@ -68,10 +68,6 @@ async fn team_add_member() {
                 privacy_diff: None,
                 member_diffs: [
                     (
-                        "mark",
-                        Noop,
-                    ),
-                    (
                         "jan",
                         Create(
                             Member,
@@ -81,7 +77,7 @@ async fn team_add_member() {
             },
         ),
     ]
-    "###);
+    "#);
 }
 
 #[tokio::test]
@@ -140,7 +136,7 @@ async fn team_remove_member() {
         .remove_gh_member("admins-gh", user2);
 
     let team_diff = model.diff_teams(gh).await;
-    insta::assert_debug_snapshot!(team_diff, @r###"
+    insta::assert_debug_snapshot!(team_diff, @r#"
     [
         Edit(
             EditTeamDiff {
@@ -151,10 +147,6 @@ async fn team_remove_member() {
                 privacy_diff: None,
                 member_diffs: [
                     (
-                        "mark",
-                        Noop,
-                    ),
-                    (
                         "jan",
                         Delete,
                     ),
@@ -162,7 +154,7 @@ async fn team_remove_member() {
             },
         ),
     ]
-    "###);
+    "#);
 }
 
 #[tokio::test]
