@@ -22,7 +22,6 @@ crates = [
     "chalk-derive",
     "chalk-engine",
     "chalk-ir",
-    "chalk-macros",
     "chalk-recursive",
     "chalk-solve",
 ]
@@ -32,4 +31,7 @@ teams = ["types"]
 
 # Obsolete crate
 [[crates-io]]
-crates = ["chalk-rust-ir"]
+crates = [
+    "chalk-macros",
+    "chalk-rust-ir",
+]
