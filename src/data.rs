@@ -26,7 +26,7 @@ impl Data {
             repos: Vec::new(),
             archived_repos: Vec::new(),
             hardware_keys: BTreeSet::new(),
-            config: load_file(Path::new("config.toml"))?,
+            config: load_file(&directory.join("config.toml"))?,
         };
 
         fn validate_repo(org: &str, repo: &Repo, path: &Path) -> anyhow::Result<()> {
