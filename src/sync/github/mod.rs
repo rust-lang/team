@@ -138,14 +138,26 @@ impl SyncGitHub {
 
         let mut org_owners = HashMap::new();
         let mut org_members = HashMap::new();
-        let mut org_apps = HashMap::new();
         let mut org_custom_property_names = HashMap::new();
         let mut org_custom_property_values = HashMap::new();
         let mut org_teams = HashMap::new();
+        let mut org_apps = HashMap::new();
 
         for org in &orgs {
             org_owners.insert((*org).to_string(), github.org_owners(org).await?);
             org_members.insert((*org).to_string(), github.org_members(org).await?);
+
+            let property_names = github.org_custom_property_names(org).await?;
+            org_custom_property_names.insert(org.to_string(), property_names);
+
+            let property_values = github.org_custom_property_repo_values(org).await?;
+            org_custom_property_values.insert(org.to_string(), property_values);
+
+            let teams = github.org_teams(org).await?;
+            org_teams.insert(
+                org.to_string(),
+                teams.into_iter().map(|t| (t.name.clone(), t)).collect(),
+            );
 
             let mut installations: Vec<OrgAppInstallation> = vec![];
 
@@ -174,18 +186,6 @@ impl SyncGitHub {
                 }
             }
             org_apps.insert(org.to_string(), installations);
-
-            let property_names = github.org_custom_property_names(org).await?;
-            org_custom_property_names.insert(org.to_string(), property_names);
-
-            let property_values = github.org_custom_property_repo_values(org).await?;
-            org_custom_property_values.insert(org.to_string(), property_values);
-
-            let teams = github.org_teams(org).await?;
-            org_teams.insert(
-                org.to_string(),
-                teams.into_iter().map(|t| (t.name.clone(), t)).collect(),
-            );
         }
 
         Ok(SyncGitHub {
