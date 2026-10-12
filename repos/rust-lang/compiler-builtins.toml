@@ -22,3 +22,7 @@ crates = ["libm"]
 publish-workflow = "publish.yaml"
 publish-environment = "publish"
 teams = ["crate-maintainers"]
+
+# No longer published
+[[crates-io]]
+crates = ["compiler_builtins"]
