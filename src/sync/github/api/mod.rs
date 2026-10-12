@@ -9,6 +9,7 @@ use base64::Engine as _;
 use base64::prelude::BASE64_STANDARD;
 use hyper_old_types::header::{Link, RelationType};
 use log::{debug, trace};
+use octocrab::models::RateLimit;
 use reqwest::header::HeaderMap;
 use reqwest::{
     Client, Method, RequestBuilder, Response, StatusCode,
@@ -65,6 +66,14 @@ impl HttpClient {
 
     pub fn uses_pat(&self) -> bool {
         matches!(self.github_tokens, GitHubTokens::Pat(_))
+    }
+
+    pub(crate) async fn rate_limit(&self) -> anyhow::Result<RateLimit> {
+        self.req(Method::GET, &GitHubUrl::new("rate_limit", "rust-lang"))?
+            .send()
+            .await?
+            .json_annotated()
+            .await
     }
 
     fn auth_header(&self, url: &GitHubUrl) -> anyhow::Result<HeaderValue> {
