@@ -6,7 +6,7 @@ pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
 use self::api::{TeamPrivacy, TeamRole};
 use crate::schema;
 use crate::sync::Config;
-use crate::sync::github::api::{GithubRead, RepoPermission, RepoSettings, Ruleset};
+use crate::sync::github::api::{GithubRead, RepoPermission, RepoSettings, Ruleset, Team};
 use anyhow::Context as _;
 use futures_util::StreamExt;
 use log::debug;
@@ -99,6 +99,8 @@ struct SyncGitHub {
     org_owners: HashMap<OrgName, HashSet<u64>>,
     org_members: HashMap<OrgName, HashMap<u64, String>>,
     org_apps: HashMap<OrgName, Vec<OrgAppInstallation>>,
+    // org -> team name -> team
+    org_teams: HashMap<OrgName, HashMap<String, Team>>,
     org_property_names: HashMap<String, HashSet<String>>,
 }
 
@@ -133,6 +135,8 @@ impl SyncGitHub {
         let mut org_owners = HashMap::new();
         let mut org_members = HashMap::new();
         let mut org_apps = HashMap::new();
+        let mut org_property_names: HashMap<String, HashSet<String>> = HashMap::new();
+        let mut org_teams = HashMap::new();
 
         for org in &orgs {
             org_owners.insert((*org).to_string(), github.org_owners(org).await?);
@@ -165,12 +169,15 @@ impl SyncGitHub {
                 }
             }
             org_apps.insert(org.to_string(), installations);
-        }
 
-        let mut org_property_names: HashMap<String, HashSet<String>> = HashMap::new();
-        for org in &orgs {
             let property_names = github.org_property_names(org).await?;
             org_property_names.insert(org.to_string(), property_names);
+
+            let teams = github.org_teams(org).await?;
+            org_teams.insert(
+                org.to_string(),
+                teams.into_iter().map(|t| (t.name.clone(), t)).collect(),
+            );
         }
 
         Ok(SyncGitHub {
@@ -182,6 +189,7 @@ impl SyncGitHub {
             org_owners,
             org_members,
             org_apps,
+            org_teams,
             org_property_names,
         })
     }
@@ -282,28 +290,16 @@ impl SyncGitHub {
 
     async fn diff_teams(&self) -> anyhow::Result<Vec<TeamDiff>> {
         let mut diffs = Vec::new();
-        let mut unseen_github_teams = HashMap::new();
+        let mut unseen_github_teams = self.org_teams.clone();
         let mut teams_to_diff = vec![];
         for team in &self.teams {
             if let Some(gh) = &team.github {
                 for github_team in &gh.teams {
-                    // Get existing teams we haven't seen yet
-                    let unseen_github_teams = match unseen_github_teams.get_mut(&github_team.org) {
-                        Some(ts) => ts,
-                        None => {
-                            let ts: HashMap<_, _> = self
-                                .github
-                                .org_teams(&github_team.org)
-                                .await?
-                                .into_iter()
-                                .collect();
-                            unseen_github_teams
-                                .entry(github_team.org.clone())
-                                .or_insert(ts)
-                        }
-                    };
                     // Remove the current team from the collection of unseen GitHub teams
-                    unseen_github_teams.remove(&github_team.name);
+                    unseen_github_teams
+                        .get_mut(&github_team.org)
+                        .unwrap()
+                        .remove(&github_team.name);
                     teams_to_diff.push(github_team);
                 }
             }
@@ -320,19 +316,25 @@ impl SyncGitHub {
             }
         }
 
-        let delete_diffs = unseen_github_teams
+        let mut teams_to_delete = unseen_github_teams
             .into_iter()
             .filter(|(org, _)| matches!(org.as_str(), "rust-lang" | "rust-lang-nursery")) // Only delete unmanaged teams in `rust-lang` and `rust-lang-nursery` for now
             .flat_map(|(org, remaining_github_teams)| {
                 remaining_github_teams
-                    .into_iter()
+                    .into_values()
                     .map(move |t| (org.clone(), t))
             })
             // Don't delete the special bot teams
-            .filter(|(_, (remaining_github_team, _))| {
-                !BOTS_TEAMS.contains(&remaining_github_team.as_str())
+            .filter(|(_, team)| !BOTS_TEAMS.contains(&team.name.as_str()))
+            .collect::<Vec<_>>();
+        teams_to_delete.sort_by_key(|(org, team)| (org.clone(), team.name.clone()));
+        let delete_diffs = teams_to_delete.into_iter().map(|(org, team)| {
+            TeamDiff::Delete(DeleteTeamDiff {
+                org,
+                name: team.name,
+                slug: team.slug,
             })
-            .map(|(org, (name, slug))| TeamDiff::Delete(DeleteTeamDiff { org, name, slug }));
+        });
 
         diffs.extend(delete_diffs);
 
@@ -346,11 +348,11 @@ impl SyncGitHub {
         debug!("Diffing team `{}/{}`", github_team.org, github_team.name);
 
         // Ensure the team exists and is consistent
-        let team = match self
-            .github
-            .team(&github_team.org, &github_team.name)
-            .await?
-        {
+        let found_team = self
+            .org_teams
+            .get(&github_team.org)
+            .and_then(|teams| teams.get(&github_team.name));
+        let team = match found_team {
             Some(team) => team,
             None => {
                 let members = github_team
@@ -435,7 +437,7 @@ impl SyncGitHub {
 
         Ok(TeamDiff::Edit(EditTeamDiff {
             org: github_team.org.clone(),
-            name: team.name,
+            name: team.name.clone(),
             name_diff,
             description_diff,
             privacy_diff,
@@ -504,9 +506,9 @@ impl SyncGitHub {
 
         for team_name in &branch_protection.allowed_merge_teams {
             let github_team = self
-                .github
-                .team(&expected_repo.org, team_name)
-                .await?
+                .org_teams
+                .get(&expected_repo.org)
+                .and_then(|teams| teams.get(team_name))
                 .with_context(|| {
                     format!(
                         "failed to find GitHub team '{team_name}' in org '{}' for repo '{}/{}'",

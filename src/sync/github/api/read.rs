@@ -39,10 +39,7 @@ pub(crate) trait GithubRead {
     /// Get all teams associated with a org
     ///
     /// Returns a list of tuples of team name and slug
-    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>>;
-
-    /// Get the team by name and org
-    async fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>>;
+    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<Team>>;
 
     async fn team_memberships(
         &self,
@@ -275,7 +272,7 @@ impl GithubRead for GitHubApiRead {
         Ok(installations)
     }
 
-    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
+    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<Team>> {
         let mut teams = Vec::new();
 
         self.client
@@ -283,22 +280,13 @@ impl GithubRead for GitHubApiRead {
                 &Method::GET,
                 &GitHubUrl::orgs(org, "teams")?,
                 |resp: Vec<Team>| {
-                    teams.extend(resp.into_iter().map(|t| (t.name, t.slug)));
+                    teams.extend(resp);
                     Ok(())
                 },
             )
             .await?;
 
         Ok(teams)
-    }
-
-    async fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
-        self.client
-            .send_option(
-                Method::GET,
-                &GitHubUrl::orgs(org, &format!("teams/{team}"))?,
-            )
-            .await
     }
 
     async fn team_memberships(

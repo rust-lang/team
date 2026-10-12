@@ -691,22 +691,8 @@ impl GithubRead for GithubMock {
         Ok(vec![])
     }
 
-    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
-        Ok(self
-            .get_org(org)
-            .teams
-            .iter()
-            .map(|team| (team.name.clone(), team.slug.clone()))
-            .collect())
-    }
-
-    async fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
-        Ok(self
-            .get_org(org)
-            .teams
-            .iter()
-            .find(|t| t.name == team)
-            .cloned())
+    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<Team>> {
+        Ok(self.get_org(org).teams.clone())
     }
 
     async fn team_memberships(
