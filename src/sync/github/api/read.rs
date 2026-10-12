@@ -80,15 +80,17 @@ pub(crate) trait GithubRead {
     /// Returns a vector of rulesets
     async fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>>;
 
-    /// Get custom property values for a repository
-    async fn repo_custom_properties(
+    /// Get the names of custom properties defined at the organization level
+    async fn org_custom_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>>;
+
+    /// Get custom property values for all repositories in an organization.
+    /// We load them in a batched way to reduce GitHub API calls.
+    ///
+    /// The key of the returned hashmap is the repository name.
+    async fn org_custom_property_repo_values(
         &self,
         org: &str,
-        repo: &str,
-    ) -> anyhow::Result<Vec<CustomPropertyValue>>;
-
-    /// Get the names of custom properties defined at the organization level
-    async fn org_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>>;
+    ) -> anyhow::Result<HashMap<String, Vec<CustomPropertyValue>>>;
 
     async fn environment_branch_policies(
         &self,
@@ -683,27 +685,7 @@ impl GithubRead for GitHubApiRead {
         Ok(rulesets)
     }
 
-    async fn repo_custom_properties(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<Vec<CustomPropertyValue>> {
-        // REST API endpoint for repository custom property values
-        // https://docs.github.com/en/rest/repos/custom-properties#get-all-custom-property-values-for-a-repository
-        let values: Vec<CustomPropertyValue> = self
-            .client
-            .req(
-                Method::GET,
-                &GitHubUrl::repos(org, repo, "properties/values")?,
-            )?
-            .send()
-            .await?
-            .json_annotated()
-            .await?;
-        Ok(values)
-    }
-
-    async fn org_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>> {
+    async fn org_custom_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>> {
         #[derive(serde::Deserialize)]
         struct PropertyDef {
             property_name: String,
@@ -719,6 +701,35 @@ impl GithubRead for GitHubApiRead {
             .json_annotated()
             .await?;
         Ok(defs.into_iter().map(|d| d.property_name).collect())
+    }
+
+    async fn org_custom_property_repo_values(
+        &self,
+        org: &str,
+    ) -> anyhow::Result<HashMap<String, Vec<CustomPropertyValue>>> {
+        #[derive(serde::Deserialize)]
+        struct RepoData {
+            repository_name: String,
+            properties: Vec<CustomPropertyValue>,
+        }
+
+        let mut repos = vec![];
+        // REST API endpoint for all repository custom property values in an organization
+        // https://docs.github.com/en/rest/orgs/custom-properties#list-custom-property-values-for-organization-repositories
+        self.client
+            .rest_paginated(
+                &Method::GET,
+                &GitHubUrl::orgs(org, "properties/values")?,
+                |page: Vec<RepoData>| {
+                    repos.extend(page);
+                    Ok(())
+                },
+            )
+            .await?;
+        Ok(repos
+            .into_iter()
+            .map(|repo| (repo.repository_name, repo.properties))
+            .collect())
     }
 
     async fn environment_branch_policies(

@@ -763,21 +763,15 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
-    async fn repo_custom_properties(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<Vec<CustomPropertyValue>> {
-        Ok(self
-            .get_org(org)
-            .custom_properties
-            .get(repo)
-            .cloned()
-            .unwrap_or_default())
+    async fn org_custom_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>> {
+        Ok(self.get_org(org).org_property_names.clone())
     }
 
-    async fn org_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>> {
-        Ok(self.get_org(org).org_property_names.clone())
+    async fn org_custom_property_repo_values(
+        &self,
+        org: &str,
+    ) -> anyhow::Result<HashMap<String, Vec<CustomPropertyValue>>> {
+        Ok(self.get_org(org).custom_properties.clone())
     }
 
     async fn repo_environments(

@@ -6,7 +6,9 @@ pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
 use self::api::{TeamPrivacy, TeamRole};
 use crate::schema;
 use crate::sync::Config;
-use crate::sync::github::api::{GithubRead, RepoPermission, RepoSettings, Ruleset, Team};
+use crate::sync::github::api::{
+    CustomPropertyValue, GithubRead, RepoPermission, RepoSettings, Ruleset, Team,
+};
 use anyhow::Context as _;
 use futures_util::StreamExt;
 use log::debug;
@@ -101,7 +103,9 @@ struct SyncGitHub {
     org_apps: HashMap<OrgName, Vec<OrgAppInstallation>>,
     // org -> team name -> team
     org_teams: HashMap<OrgName, HashMap<String, Team>>,
-    org_property_names: HashMap<String, HashSet<String>>,
+    org_custom_property_names: HashMap<OrgName, HashSet<String>>,
+    // org - repo name -> custom properties
+    org_custom_property_values: HashMap<OrgName, HashMap<String, Vec<CustomPropertyValue>>>,
 }
 
 impl SyncGitHub {
@@ -135,7 +139,8 @@ impl SyncGitHub {
         let mut org_owners = HashMap::new();
         let mut org_members = HashMap::new();
         let mut org_apps = HashMap::new();
-        let mut org_property_names: HashMap<String, HashSet<String>> = HashMap::new();
+        let mut org_custom_property_names = HashMap::new();
+        let mut org_custom_property_values = HashMap::new();
         let mut org_teams = HashMap::new();
 
         for org in &orgs {
@@ -170,8 +175,11 @@ impl SyncGitHub {
             }
             org_apps.insert(org.to_string(), installations);
 
-            let property_names = github.org_property_names(org).await?;
-            org_property_names.insert(org.to_string(), property_names);
+            let property_names = github.org_custom_property_names(org).await?;
+            org_custom_property_names.insert(org.to_string(), property_names);
+
+            let property_values = github.org_custom_property_repo_values(org).await?;
+            org_custom_property_values.insert(org.to_string(), property_values);
 
             let teams = github.org_teams(org).await?;
             org_teams.insert(
@@ -190,7 +198,8 @@ impl SyncGitHub {
             org_members,
             org_apps,
             org_teams,
-            org_property_names,
+            org_custom_property_names,
+            org_custom_property_values,
         })
     }
 
@@ -394,10 +403,7 @@ impl SyncGitHub {
 
         let mut member_diffs = Vec::new();
 
-        let mut current_members = self
-            .github
-            .team_memberships(&team, &github_team.org)
-            .await?;
+        let mut current_members = self.github.team_memberships(team, &github_team.org).await?;
         // Fetched lazily, because most of the time we don't need it, to save one API call per team
         let mut invites: Option<HashSet<String>> = None;
 
@@ -922,9 +928,11 @@ impl SyncGitHub {
         expected_repo: &rust_team_data::v1::Repo,
     ) -> anyhow::Result<Vec<CustomPropertyDiff>> {
         let actual = self
-            .github
-            .repo_custom_properties(&expected_repo.org, &expected_repo.name)
-            .await?;
+            .org_custom_property_values
+            .get(&expected_repo.org)
+            .and_then(|repos| repos.get(&expected_repo.name))
+            .cloned()
+            .unwrap_or_default();
 
         let actual_by_name: HashMap<String, Option<CustomPropertyScalar>> = actual
             .into_iter()
@@ -932,7 +940,7 @@ impl SyncGitHub {
             .collect();
 
         let mut diffs = Vec::new();
-        let property_names = self.org_property_names.get(&expected_repo.org);
+        let property_names = self.org_custom_property_names.get(&expected_repo.org);
         for (name, value) in &expected_repo.custom_properties {
             if !property_names
                 .map(|names| names.contains(name))
