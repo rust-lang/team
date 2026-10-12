@@ -145,6 +145,7 @@ branches = ["automation/bors/auto", "automation/bors/try", "automation/bors/try-
 
 [[crates-io]]
 crates = [
+    "rust-lang",
     "rustc-std-workspace-alloc",
     "rustc-std-workspace-core",
     "rustc_lexer",

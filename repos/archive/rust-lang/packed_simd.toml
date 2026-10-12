@@ -12,3 +12,9 @@ path = "/"
 [access.teams]
 
 [environments.github-pages]
+
+[[crates-io]]
+crates = [
+    "packed_simd",
+    "packed_simd_2"
+]
