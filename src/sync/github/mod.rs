@@ -396,10 +396,8 @@ impl SyncGitHub {
             .github
             .team_memberships(&team, &github_team.org)
             .await?;
-        let invites = self
-            .github
-            .team_membership_invitations(&github_team.org, &github_team.name)
-            .await?;
+        // Fetched lazily, because most of the time we don't need it, to save one API call per team
+        let mut invites: Option<HashSet<String>> = None;
 
         // Ensure all expected members are in the team
         for member in &github_team.members {
@@ -415,6 +413,15 @@ impl SyncGitHub {
                     member_diffs.push((username.clone(), MemberDiff::Noop));
                 }
             } else {
+                if invites.is_none() {
+                    invites = Some(
+                        self.github
+                            .team_membership_invitations(&github_team.org, &github_team.name)
+                            .await?,
+                    );
+                }
+                let invites = invites.as_ref().unwrap();
+
                 // Check if the user has been invited already
                 if invites.contains(username) {
                     member_diffs.push((username.clone(), MemberDiff::Noop));
