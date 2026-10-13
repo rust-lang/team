@@ -16,5 +16,6 @@ path = "/"
 [[crates-io]]
 crates = [
     "packed_simd",
-    "packed_simd_2"
+    "packed_simd_2",
+    "simd",
 ]
