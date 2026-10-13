@@ -9,3 +9,6 @@ regex = "maintain"
 
 [environments.github-pages]
 
+# Obsolete crate
+[[crates-io]]
+crates = ["regex_macros"]

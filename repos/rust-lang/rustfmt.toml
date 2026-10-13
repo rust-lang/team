@@ -37,5 +37,7 @@ branches = ["main"]
 [[crates-io]]
 crates = [
     "rustfmt",
+    "rustfmt-core",
+    "rustfmt-config",
     "rustfmt-nightly"
 ]

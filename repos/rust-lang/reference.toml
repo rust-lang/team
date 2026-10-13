@@ -20,3 +20,7 @@ merge-queue = { enabled = true }
 required-approvals = 0
 
 [environments.github-pages]
+
+# No longer published to crates.io
+[[crates-io]]
+crates = ["mdbook-spec"]

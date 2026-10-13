@@ -103,3 +103,15 @@ crates = [
 publish-workflow = "autopublish.yaml"
 publish-environment = "publish-auto"
 teams = ["rust-analyzer"]
+
+# Obsolete crates
+[[crates-io]]
+crates = [
+    "gen_lsp_server",
+    "ra_ap_sourcegen",
+    "ra_rustc_lexer",
+    "ra_syntax",
+    "rust-analyzer",
+    "rust-analyzer-salsa",
+    "rust-analyzer-salsa-macros",
+]

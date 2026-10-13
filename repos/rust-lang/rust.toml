@@ -148,5 +148,6 @@ crates = [
     "rust-lang",
     "rustc-std-workspace-alloc",
     "rustc-std-workspace-core",
+    "rustc-std-workspace-std",
     "rustc_lexer",
 ]
