@@ -4,8 +4,8 @@ use crate::sync::github::api::url::TokenType;
 use crate::sync::github::api::{BranchPolicy, CustomPropertyValue, Ruleset};
 use crate::sync::github::api::{
     GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, OrgAppInstallation, Repo,
-    RepoAppInstallation, RepoTeam, RepoUser, RestPaginatedError, Team, TeamMember, TeamRole,
-    team_node_id, url::GitHubUrl, user_node_id,
+    RepoAppInstallation, RepoPermission, RepoTeam, RepoUser, RestPaginatedError, Team, TeamMember,
+    TeamRole, team_node_id, url::GitHubUrl, user_node_id,
 };
 use crate::sync::utils::ResponseExt;
 use anyhow::Context as _;
@@ -62,6 +62,9 @@ pub(crate) trait GithubRead {
     ) -> anyhow::Result<HashSet<String>>;
 
     /// Get a repo by org and name
+    ///
+    /// In addition to basic properties, also fetches its branch protections and direct
+    /// collaborators (i.e., not collaborators through a repo team).
     async fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>>;
 
     /// Get GitHub Pages settings for a repo
@@ -69,11 +72,6 @@ pub(crate) trait GithubRead {
 
     /// Get teams in a repo
     async fn repo_teams(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoTeam>>;
-
-    /// Get collaborators in a repo
-    ///
-    /// Only fetches those who are direct collaborators (i.e., not a collaborator through a repo team)
-    async fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>>;
 
     /// Get environments for a repository
     /// Returns a map of environment names to their Environment data
@@ -439,10 +437,11 @@ impl GithubRead for GitHubApiRead {
         struct Params<'a> {
             owner: &'a str,
             name: &'a str,
+            cursor: Option<&'a str>,
         }
 
         static QUERY: &str = r#"
-            query($owner: String!, $name: String!) {
+            query($owner: String!, $name: String!, $cursor: String) {
                 repository(owner: $owner, name: $name) {
                     databaseId
                     autoMergeAllowed
@@ -454,6 +453,18 @@ impl GithubRead for GitHubApiRead {
                         nodes {
                             id
                             pattern
+                        }
+                    }
+                    collaborators(first: 100, after: $cursor, affiliation: DIRECT) {
+                        pageInfo {
+                            endCursor
+                            hasNextPage
+                        }
+                        edges {
+                            permission
+                            node {
+                                login
+                            }
                         }
                     }
                 }
@@ -478,6 +489,34 @@ impl GithubRead for GitHubApiRead {
 
         #[derive(serde::Deserialize)]
         #[serde(rename_all = "camelCase")]
+        struct Collaborators {
+            page_info: GraphPageInfo,
+            edges: Vec<CollaboratorEdge>,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct CollaboratorEdge {
+            permission: CollaboratorPermission,
+            node: CollaboratorNode,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct CollaboratorNode {
+            login: String,
+        }
+
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+        enum CollaboratorPermission {
+            Admin,
+            Maintain,
+            Write,
+            Triage,
+            Read,
+        }
+
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
         struct RepoResponse {
             // Equivalent of `id` of the Rest API
             database_id: u64,
@@ -487,39 +526,72 @@ impl GithubRead for GitHubApiRead {
             is_archived: bool,
             is_private: bool,
             branch_protection_rules: BranchProtectionRules,
+            collaborators: Collaborators,
         }
 
-        let result: Option<Wrapper> = self
-            .client
-            .graphql_opt(
-                QUERY,
-                Params {
-                    owner: org,
-                    name: repo,
-                },
-                org,
-            )
-            .await
-            .with_context(|| format!("failed to retrieve repo `{org}/{repo}`"))?;
+        let mut repo_data: Option<Repo> = None;
+        let mut page_info = GraphPageInfo::start();
+        while page_info.has_next_page {
+            let result: Option<Wrapper> = self
+                .client
+                .graphql_opt(
+                    QUERY,
+                    Params {
+                        owner: org,
+                        name: repo,
+                        cursor: page_info.end_cursor.as_deref(),
+                    },
+                    org,
+                )
+                .await
+                .with_context(|| format!("failed to retrieve repo `{org}/{repo}`"))?;
 
-        let repo = result.and_then(|r| r.repository).map(|repo_response| Repo {
-            repo_id: repo_response.database_id,
-            name: repo.to_string(),
-            description: repo_response.description.unwrap_or_default(),
-            allow_auto_merge: repo_response.auto_merge_allowed,
-            archived: repo_response.is_archived,
-            homepage: repo_response.homepage_url,
-            org: org.to_string(),
-            private: repo_response.is_private,
-            branch_protections: repo_response
-                .branch_protection_rules
-                .nodes
-                .into_iter()
-                .map(|rule| (rule.pattern, rule.id))
-                .collect(),
-        });
+            let Some(repo_response) = result.and_then(|r| r.repository) else {
+                return Ok(None);
+            };
 
-        Ok(repo)
+            page_info = repo_response.collaborators.page_info;
+            let collaborators =
+                repo_response
+                    .collaborators
+                    .edges
+                    .into_iter()
+                    .map(|edge| RepoUser {
+                        name: edge.node.login,
+                        permission: match edge.permission {
+                            CollaboratorPermission::Admin => RepoPermission::Admin,
+                            CollaboratorPermission::Maintain => RepoPermission::Maintain,
+                            CollaboratorPermission::Write => RepoPermission::Write,
+                            CollaboratorPermission::Triage => RepoPermission::Triage,
+                            CollaboratorPermission::Read => RepoPermission::Read,
+                        },
+                    });
+
+            match &mut repo_data {
+                Some(repo_data) => repo_data.collaborators.extend(collaborators),
+                None => {
+                    repo_data = Some(Repo {
+                        repo_id: repo_response.database_id,
+                        name: repo.to_string(),
+                        description: repo_response.description.unwrap_or_default(),
+                        allow_auto_merge: repo_response.auto_merge_allowed,
+                        archived: repo_response.is_archived,
+                        homepage: repo_response.homepage_url,
+                        org: org.to_string(),
+                        private: repo_response.is_private,
+                        branch_protections: repo_response
+                            .branch_protection_rules
+                            .nodes
+                            .into_iter()
+                            .map(|rule| (rule.pattern, rule.id))
+                            .collect(),
+                        collaborators: collaborators.collect(),
+                    });
+                }
+            }
+        }
+
+        Ok(repo_data)
     }
 
     async fn repo_pages(&self, org: &str, repo: &str) -> anyhow::Result<Option<Pages>> {
@@ -571,23 +643,6 @@ impl GithubRead for GitHubApiRead {
             .await?;
 
         Ok(teams)
-    }
-
-    async fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>> {
-        let mut users = Vec::new();
-
-        self.client
-            .rest_paginated(
-                &Method::GET,
-                &GitHubUrl::repos(org, repo, "collaborators?affiliation=direct")?,
-                |resp: Vec<RepoUser>| {
-                    users.extend(resp);
-                    Ok(())
-                },
-            )
-            .await?;
-
-        Ok(users)
     }
 
     async fn repo_environments(
