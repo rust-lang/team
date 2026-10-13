@@ -467,17 +467,17 @@ impl SyncGitHub {
         Ok(diffs)
     }
 
-    async fn construct_ruleset(
+    fn construct_ruleset(
         &self,
         expected_repo: &rust_team_data::v1::Repo,
         branch_protection: &rust_team_data::v1::BranchProtection,
     ) -> anyhow::Result<api::Ruleset> {
-        let bypass_actors = self.bypass_actors(expected_repo, branch_protection).await?;
+        let bypass_actors = self.bypass_actors(expected_repo, branch_protection)?;
 
         Ok(construct_ruleset(branch_protection, bypass_actors))
     }
 
-    async fn bypass_actors(
+    fn bypass_actors(
         &self,
         expected_repo: &rust_team_data::v1::Repo,
         branch_protection: &rust_team_data::v1::BranchProtection,
@@ -485,9 +485,7 @@ impl SyncGitHub {
         use api::{RulesetActorType, RulesetBypassActor, RulesetBypassMode};
 
         let mut bypass_actors = Vec::new();
-        let allowed_teams = self
-            .allowed_merge_teams(expected_repo, branch_protection)
-            .await?;
+        let allowed_teams = self.allowed_merge_teams(expected_repo, branch_protection)?;
         bypass_actors.extend(allowed_teams);
         let bypass_apps = branch_protection
             .bypass_apps
@@ -501,7 +499,7 @@ impl SyncGitHub {
         Ok(bypass_actors)
     }
 
-    async fn allowed_merge_teams(
+    fn allowed_merge_teams(
         &self,
         expected_repo: &rust_team_data::v1::Repo,
         branch_protection: &rust_team_data::v1::BranchProtection,
@@ -561,9 +559,7 @@ impl SyncGitHub {
 
                 let mut rulesets = Vec::new();
                 for branch_protection in &expected_repo.branch_protections {
-                    let ruleset = self
-                        .construct_ruleset(expected_repo, branch_protection)
-                        .await?;
+                    let ruleset = self.construct_ruleset(expected_repo, branch_protection)?;
                     rulesets.push(ruleset);
                 }
 
@@ -607,11 +603,11 @@ impl SyncGitHub {
 
         let permission_diffs = self.diff_permissions(expected_repo).await?;
 
-        let branch_protection_diffs = self.diff_branch_protections(&actual_repo).await?;
+        let branch_protection_diffs = self.diff_branch_protections(&actual_repo)?;
 
         let ruleset_diffs = self.diff_rulesets(expected_repo).await?;
 
-        let custom_property_diffs = self.diff_custom_properties(expected_repo).await?;
+        let custom_property_diffs = self.diff_custom_properties(expected_repo)?;
 
         let environment_diffs = self.diff_environments(expected_repo).await?;
         let pages_diff = self.diff_pages(expected_repo).await?;
@@ -689,7 +685,7 @@ impl SyncGitHub {
 
     /// We use Rulesets instead of branch protections, so the diff consists only on deletions.
     /// This is useful to detect (and later delete) branch protections that were created manually.
-    async fn diff_branch_protections(
+    fn diff_branch_protections(
         &self,
         actual_repo: &api::Repo,
     ) -> anyhow::Result<Vec<BranchProtectionDiff>> {
@@ -846,9 +842,7 @@ impl SyncGitHub {
 
         // Process each branch protection as a potential ruleset
         for branch_protection in &expected_repo.branch_protections {
-            let expected_ruleset = self
-                .construct_ruleset(expected_repo, branch_protection)
-                .await?;
+            let expected_ruleset = self.construct_ruleset(expected_repo, branch_protection)?;
 
             if let Some(actual_ruleset) = rulesets_by_name.remove(&expected_ruleset.name) {
                 let Ruleset {
@@ -923,7 +917,7 @@ impl SyncGitHub {
         Ok(ruleset_diffs)
     }
 
-    async fn diff_custom_properties(
+    fn diff_custom_properties(
         &self,
         expected_repo: &rust_team_data::v1::Repo,
     ) -> anyhow::Result<Vec<CustomPropertyDiff>> {
