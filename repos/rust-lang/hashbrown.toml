@@ -19,3 +19,12 @@ required-approvals = 0
 merge-queue = { enabled = true }
 
 [environments.github-pages]
+
+[environments.publish]
+branches = ["main"]
+
+[[crates-io]]
+crates = ["hashbrown"]
+publish-workflow = "release-plz.yml"
+publish-environment = "publish"
+teams = ["libs"]
