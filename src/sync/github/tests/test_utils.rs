@@ -14,7 +14,7 @@ use crate::schema;
 use crate::sync::Config;
 use crate::sync::github::api::{
     BranchPolicy, CustomPropertyValue, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation,
-    RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
+    RepoMetadata, RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::sync::github::{
     OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_ruleset, convert_permission,
@@ -693,6 +693,18 @@ impl GithubRead for GithubMock {
 
     async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<Team>> {
         Ok(self.get_org(org).teams.clone())
+    }
+
+    async fn org_repos(&self, org: &str) -> anyhow::Result<Vec<RepoMetadata>> {
+        let org = self.get_org(org);
+        Ok(org
+            .repos
+            .iter()
+            .map(|repo| RepoMetadata {
+                name: repo.0.to_string(),
+                has_pages: org.repo_pages.contains_key(repo.0),
+            })
+            .collect())
     }
 
     async fn team_memberships(

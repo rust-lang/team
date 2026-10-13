@@ -1,4 +1,5 @@
 use crate::sync::github::api;
+use crate::sync::github::api::RepoMetadata;
 use crate::sync::github::api::url::TokenType;
 use crate::sync::github::api::{BranchPolicy, CustomPropertyValue, Ruleset};
 use crate::sync::github::api::{
@@ -40,6 +41,12 @@ pub(crate) trait GithubRead {
     ///
     /// Returns a list of tuples of team name and slug
     async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<Team>>;
+
+    /// Get metadata of all repositories associated with a org
+    ///
+    /// Used as an optimization to bulk load some metadata about repositories, to avoid unnecessary
+    /// point API queries.
+    async fn org_repos(&self, org: &str) -> anyhow::Result<Vec<RepoMetadata>>;
 
     async fn team_memberships(
         &self,
@@ -289,6 +296,32 @@ impl GithubRead for GitHubApiRead {
             .await?;
 
         Ok(teams)
+    }
+
+    async fn org_repos(&self, org: &str) -> anyhow::Result<Vec<RepoMetadata>> {
+        let mut repos = Vec::new();
+
+        #[derive(serde::Deserialize)]
+        struct RepoData {
+            name: String,
+            has_pages: bool,
+        }
+
+        self.client
+            .rest_paginated(
+                &Method::GET,
+                &GitHubUrl::orgs(org, "repos")?,
+                |resp: Vec<RepoData>| {
+                    repos.extend(resp.into_iter().map(|r| RepoMetadata {
+                        name: r.name,
+                        has_pages: r.has_pages,
+                    }));
+                    Ok(())
+                },
+            )
+            .await?;
+
+        Ok(repos)
     }
 
     async fn team_memberships(
