@@ -340,7 +340,7 @@ pub(crate) struct RepoTeam {
     pub(crate) permission: RepoPermission,
 }
 
-#[derive(serde::Deserialize, Clone)]
+#[derive(serde::Deserialize, Debug, Clone)]
 pub(crate) struct RepoUser {
     #[serde(alias = "login")]
     pub(crate) name: String,
@@ -402,6 +402,8 @@ pub(crate) struct Repo {
     // (pattern, branch protection ID)
     #[serde(default)]
     pub(crate) branch_protections: Vec<(String, String)>,
+    #[serde(default)]
+    pub(crate) collaborators: Vec<RepoUser>,
 }
 
 fn repo_owner<'de, D>(deserializer: D) -> Result<String, D::Error>
