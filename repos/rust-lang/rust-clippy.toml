@@ -26,10 +26,12 @@ merge-queue = { enabled = true }
 
 [environments.github-pages]
 
+# Obsolete crates
 [[crates-io]]
 crates = [
     "clippy",
     "clippy_config",
     "clippy_dummy",
     "clippy_lints",
+    "clippy-mini-macro-test",
 ]
