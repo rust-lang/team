@@ -6,7 +6,9 @@ pub(crate) use self::api::{GitHubApiRead, GitHubWrite, HttpClient};
 use self::api::{TeamPrivacy, TeamRole};
 use crate::schema;
 use crate::sync::Config;
-use crate::sync::github::api::{GithubRead, RepoPermission, RepoSettings, Ruleset};
+use crate::sync::github::api::{
+    CustomPropertyValue, GithubRead, RepoPermission, RepoSettings, Ruleset, Team,
+};
 use anyhow::Context as _;
 use futures_util::StreamExt;
 use log::debug;
@@ -99,6 +101,11 @@ struct SyncGitHub {
     org_owners: HashMap<OrgName, HashSet<u64>>,
     org_members: HashMap<OrgName, HashMap<u64, String>>,
     org_apps: HashMap<OrgName, Vec<OrgAppInstallation>>,
+    // org -> team name -> team
+    org_teams: HashMap<OrgName, HashMap<String, Team>>,
+    org_custom_property_names: HashMap<OrgName, HashSet<String>>,
+    // org - repo name -> custom properties
+    org_custom_property_values: HashMap<OrgName, HashMap<String, Vec<CustomPropertyValue>>>,
 }
 
 impl SyncGitHub {
@@ -126,15 +133,31 @@ impl SyncGitHub {
             .filter_map(|t| t.github.as_ref())
             .flat_map(|gh| &gh.teams)
             .map(|gh_team| &gh_team.org)
+            .chain(repos.iter().map(|repo| &repo.org))
             .collect::<HashSet<_>>();
 
         let mut org_owners = HashMap::new();
         let mut org_members = HashMap::new();
+        let mut org_custom_property_names = HashMap::new();
+        let mut org_custom_property_values = HashMap::new();
+        let mut org_teams = HashMap::new();
         let mut org_apps = HashMap::new();
 
         for org in &orgs {
             org_owners.insert((*org).to_string(), github.org_owners(org).await?);
             org_members.insert((*org).to_string(), github.org_members(org).await?);
+
+            let property_names = github.org_custom_property_names(org).await?;
+            org_custom_property_names.insert(org.to_string(), property_names);
+
+            let property_values = github.org_custom_property_repo_values(org).await?;
+            org_custom_property_values.insert(org.to_string(), property_values);
+
+            let teams = github.org_teams(org).await?;
+            org_teams.insert(
+                org.to_string(),
+                teams.into_iter().map(|t| (t.name.clone(), t)).collect(),
+            );
 
             let mut installations: Vec<OrgAppInstallation> = vec![];
 
@@ -174,6 +197,9 @@ impl SyncGitHub {
             org_owners,
             org_members,
             org_apps,
+            org_teams,
+            org_custom_property_names,
+            org_custom_property_values,
         })
     }
 
@@ -273,28 +299,16 @@ impl SyncGitHub {
 
     async fn diff_teams(&self) -> anyhow::Result<Vec<TeamDiff>> {
         let mut diffs = Vec::new();
-        let mut unseen_github_teams = HashMap::new();
+        let mut unseen_github_teams = self.org_teams.clone();
         let mut teams_to_diff = vec![];
         for team in &self.teams {
             if let Some(gh) = &team.github {
                 for github_team in &gh.teams {
-                    // Get existing teams we haven't seen yet
-                    let unseen_github_teams = match unseen_github_teams.get_mut(&github_team.org) {
-                        Some(ts) => ts,
-                        None => {
-                            let ts: HashMap<_, _> = self
-                                .github
-                                .org_teams(&github_team.org)
-                                .await?
-                                .into_iter()
-                                .collect();
-                            unseen_github_teams
-                                .entry(github_team.org.clone())
-                                .or_insert(ts)
-                        }
-                    };
                     // Remove the current team from the collection of unseen GitHub teams
-                    unseen_github_teams.remove(&github_team.name);
+                    unseen_github_teams
+                        .get_mut(&github_team.org)
+                        .unwrap()
+                        .remove(&github_team.name);
                     teams_to_diff.push(github_team);
                 }
             }
@@ -311,19 +325,25 @@ impl SyncGitHub {
             }
         }
 
-        let delete_diffs = unseen_github_teams
+        let mut teams_to_delete = unseen_github_teams
             .into_iter()
             .filter(|(org, _)| matches!(org.as_str(), "rust-lang" | "rust-lang-nursery")) // Only delete unmanaged teams in `rust-lang` and `rust-lang-nursery` for now
             .flat_map(|(org, remaining_github_teams)| {
                 remaining_github_teams
-                    .into_iter()
+                    .into_values()
                     .map(move |t| (org.clone(), t))
             })
             // Don't delete the special bot teams
-            .filter(|(_, (remaining_github_team, _))| {
-                !BOTS_TEAMS.contains(&remaining_github_team.as_str())
+            .filter(|(_, team)| !BOTS_TEAMS.contains(&team.name.as_str()))
+            .collect::<Vec<_>>();
+        teams_to_delete.sort_by_key(|(org, team)| (org.clone(), team.name.clone()));
+        let delete_diffs = teams_to_delete.into_iter().map(|(org, team)| {
+            TeamDiff::Delete(DeleteTeamDiff {
+                org,
+                name: team.name,
+                slug: team.slug,
             })
-            .map(|(org, (name, slug))| TeamDiff::Delete(DeleteTeamDiff { org, name, slug }));
+        });
 
         diffs.extend(delete_diffs);
 
@@ -337,11 +357,11 @@ impl SyncGitHub {
         debug!("Diffing team `{}/{}`", github_team.org, github_team.name);
 
         // Ensure the team exists and is consistent
-        let team = match self
-            .github
-            .team(&github_team.org, &github_team.name)
-            .await?
-        {
+        let found_team = self
+            .org_teams
+            .get(&github_team.org)
+            .and_then(|teams| teams.get(&github_team.name));
+        let team = match found_team {
             Some(team) => team,
             None => {
                 let members = github_team
@@ -383,14 +403,9 @@ impl SyncGitHub {
 
         let mut member_diffs = Vec::new();
 
-        let mut current_members = self
-            .github
-            .team_memberships(&team, &github_team.org)
-            .await?;
-        let invites = self
-            .github
-            .team_membership_invitations(&github_team.org, &github_team.name)
-            .await?;
+        let mut current_members = self.github.team_memberships(team, &github_team.org).await?;
+        // Fetched lazily, because most of the time we don't need it, to save one API call per team
+        let mut invites: Option<HashSet<String>> = None;
 
         // Ensure all expected members are in the team
         for member in &github_team.members {
@@ -402,14 +417,19 @@ impl SyncGitHub {
                         username.clone(),
                         MemberDiff::ChangeRole((member.role, expected_role)),
                     ));
-                } else {
-                    member_diffs.push((username.clone(), MemberDiff::Noop));
                 }
             } else {
+                if invites.is_none() {
+                    invites = Some(
+                        self.github
+                            .team_membership_invitations(&github_team.org, &github_team.name)
+                            .await?,
+                    );
+                }
+                let invites = invites.as_ref().unwrap();
+
                 // Check if the user has been invited already
-                if invites.contains(username) {
-                    member_diffs.push((username.clone(), MemberDiff::Noop));
-                } else {
+                if !invites.contains(username) {
                     member_diffs.push((username.clone(), MemberDiff::Create(expected_role)));
                 }
             }
@@ -423,7 +443,7 @@ impl SyncGitHub {
 
         Ok(TeamDiff::Edit(EditTeamDiff {
             org: github_team.org.clone(),
-            name: team.name,
+            name: team.name.clone(),
             name_diff,
             description_diff,
             privacy_diff,
@@ -492,9 +512,9 @@ impl SyncGitHub {
 
         for team_name in &branch_protection.allowed_merge_teams {
             let github_team = self
-                .github
-                .team(&expected_repo.org, team_name)
-                .await?
+                .org_teams
+                .get(&expected_repo.org)
+                .and_then(|teams| teams.get(team_name))
                 .with_context(|| {
                     format!(
                         "failed to find GitHub team '{team_name}' in org '{}' for repo '{}/{}'",
@@ -680,16 +700,12 @@ impl SyncGitHub {
             return Ok(vec![]);
         }
 
-        let actual_protections = self
-            .github
-            .branch_protections(&actual_repo.org, &actual_repo.name)
-            .await?;
-
-        Ok(actual_protections
-            .into_iter()
-            .map(|(name, (id, _))| BranchProtectionDiff {
-                pattern: name,
-                operation: BranchProtectionDiffOperation::Delete(id),
+        Ok(actual_repo
+            .branch_protections
+            .iter()
+            .map(|(name, id)| BranchProtectionDiff {
+                pattern: name.clone(),
+                operation: BranchProtectionDiffOperation::Delete(id.clone()),
             })
             .collect())
     }
@@ -912,10 +928,11 @@ impl SyncGitHub {
         expected_repo: &rust_team_data::v1::Repo,
     ) -> anyhow::Result<Vec<CustomPropertyDiff>> {
         let actual = self
-            .github
-            .repo_custom_properties(&expected_repo.org, &expected_repo.name)
-            .await?;
-        let org_property_names = self.github.org_property_names(&expected_repo.org).await?;
+            .org_custom_property_values
+            .get(&expected_repo.org)
+            .and_then(|repos| repos.get(&expected_repo.name))
+            .cloned()
+            .unwrap_or_default();
 
         let actual_by_name: HashMap<String, Option<CustomPropertyScalar>> = actual
             .into_iter()
@@ -923,12 +940,19 @@ impl SyncGitHub {
             .collect();
 
         let mut diffs = Vec::new();
+        let property_names = self.org_custom_property_names.get(&expected_repo.org);
         for (name, value) in &expected_repo.custom_properties {
-            if !org_property_names.contains(name) {
+            if !property_names
+                .map(|names| names.contains(name))
+                .unwrap_or(false)
+            {
                 diffs.push(CustomPropertyDiff {
                     name: name.clone(),
                     operation: CustomPropertyDiffOperation::CannotApply {
-                        reason: format!("'{name}' is not defined at the org level"),
+                        reason: format!(
+                            "'{name}' is not defined at the org level for org {}",
+                            expected_repo.org
+                        ),
                     },
                 });
                 continue;
@@ -2707,7 +2731,7 @@ impl EditTeamDiff {
         name_diff.is_none()
             && description_diff.is_none()
             && privacy_diff.is_none()
-            && member_diffs.iter().all(|(_, d)| d.is_noop())
+            && member_diffs.is_empty()
     }
 }
 
@@ -2751,7 +2775,6 @@ impl std::fmt::Display for EditTeamDiff {
                 MemberDiff::Delete => {
                     writeln!(f, "  Deleting member '{member}'")?;
                 }
-                MemberDiff::Noop => {}
             }
         }
         Ok(())
@@ -2763,7 +2786,6 @@ enum MemberDiff {
     Create(TeamRole),
     ChangeRole((TeamRole, TeamRole)),
     Delete,
-    Noop,
 }
 
 impl MemberDiff {
@@ -2779,14 +2801,9 @@ impl MemberDiff {
                 sync.set_team_membership(org, team, member, role).await?;
             }
             MemberDiff::Delete => sync.remove_team_membership(org, team, member).await?,
-            MemberDiff::Noop => {}
         }
 
         Ok(())
-    }
-
-    fn is_noop(&self) -> bool {
-        matches!(self, Self::Noop)
     }
 }
 

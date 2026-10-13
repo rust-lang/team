@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use indexmap::IndexMap;
-use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+use std::collections::{BTreeSet, HashMap, HashSet};
 use std::vec;
 
 use derive_builder::Builder;
@@ -13,8 +13,8 @@ use rust_team_data::v1::{
 use crate::schema;
 use crate::sync::Config;
 use crate::sync::github::api::{
-    BranchPolicy, BranchProtection, CustomPropertyValue, GithubRead, OrgAppInstallation, Repo,
-    RepoAppInstallation, RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
+    BranchPolicy, CustomPropertyValue, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation,
+    RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::sync::github::{
     OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_ruleset, convert_permission,
@@ -153,6 +153,8 @@ impl DataModel {
                     archived: false,
                     private: false,
                     allow_auto_merge: None,
+                    // Branch protections are deprecated so we don't test them anymore
+                    branch_protections: vec![],
                 },
             );
             let teams = repo
@@ -180,9 +182,6 @@ impl DataModel {
                 .collect();
             org.repo_members
                 .insert(repo.name.clone(), RepoMembers { teams, members });
-
-            // Branch protections are deprecated so we don't test them anymore
-            org.branch_protections.insert(repo.name.clone(), Vec::new());
 
             let protections = repo
                 .branch_protections
@@ -692,22 +691,8 @@ impl GithubRead for GithubMock {
         Ok(vec![])
     }
 
-    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
-        Ok(self
-            .get_org(org)
-            .teams
-            .iter()
-            .map(|team| (team.name.clone(), team.slug.clone()))
-            .collect())
-    }
-
-    async fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
-        Ok(self
-            .get_org(org)
-            .teams
-            .iter()
-            .find(|t| t.name == team)
-            .cloned())
+    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<Team>> {
+        Ok(self.get_org(org).teams.clone())
     }
 
     async fn team_memberships(
@@ -769,22 +754,6 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
-    async fn branch_protections(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<BTreeMap<String, (String, BranchProtection)>> {
-        let Some(protections) = self.get_org(org).branch_protections.get(repo) else {
-            return Ok(Default::default());
-        };
-        let mut result = BTreeMap::default();
-        for (id, protection) in protections {
-            result.insert(protection.pattern.clone(), (id.clone(), protection.clone()));
-        }
-
-        Ok(result)
-    }
-
     async fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>> {
         Ok(self
             .get_org(org)
@@ -794,21 +763,15 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
-    async fn repo_custom_properties(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<Vec<CustomPropertyValue>> {
-        Ok(self
-            .get_org(org)
-            .custom_properties
-            .get(repo)
-            .cloned()
-            .unwrap_or_default())
+    async fn org_custom_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>> {
+        Ok(self.get_org(org).org_property_names.clone())
     }
 
-    async fn org_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>> {
-        Ok(self.get_org(org).org_property_names.clone())
+    async fn org_custom_property_repo_values(
+        &self,
+        org: &str,
+    ) -> anyhow::Result<HashMap<String, Vec<CustomPropertyValue>>> {
+        Ok(self.get_org(org).custom_properties.clone())
     }
 
     async fn repo_environments(
@@ -849,8 +812,6 @@ struct GithubOrg {
     repos: HashMap<String, Repo>,
     // Repo name -> (teams, members)
     repo_members: HashMap<String, RepoMembers>,
-    // Repo name -> Vec<(protection ID, branch protection)>
-    branch_protections: HashMap<String, Vec<(String, BranchProtection)>>,
     // Repo name -> Vec<ruleset>
     rulesets: HashMap<String, Vec<Ruleset>>,
     // Repo name -> HashMap<env name, environment>

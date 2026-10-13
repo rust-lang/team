@@ -2,8 +2,8 @@ use crate::sync::github::api;
 use crate::sync::github::api::url::TokenType;
 use crate::sync::github::api::{BranchPolicy, CustomPropertyValue, Ruleset};
 use crate::sync::github::api::{
-    BranchProtection, GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, OrgAppInstallation,
-    Repo, RepoAppInstallation, RepoTeam, RepoUser, RestPaginatedError, Team, TeamMember, TeamRole,
+    GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, OrgAppInstallation, Repo,
+    RepoAppInstallation, RepoTeam, RepoUser, RestPaginatedError, Team, TeamMember, TeamRole,
     team_node_id, url::GitHubUrl, user_node_id,
 };
 use crate::sync::utils::ResponseExt;
@@ -11,7 +11,7 @@ use anyhow::Context as _;
 use async_trait::async_trait;
 use reqwest::{Method, StatusCode};
 use rust_team_data::v1::{Environment, Pages, PagesBuildType, PagesSource};
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{HashMap, HashSet};
 
 #[async_trait]
 pub(crate) trait GithubRead {
@@ -39,10 +39,7 @@ pub(crate) trait GithubRead {
     /// Get all teams associated with a org
     ///
     /// Returns a list of tuples of team name and slug
-    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>>;
-
-    /// Get the team by name and org
-    async fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>>;
+    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<Team>>;
 
     async fn team_memberships(
         &self,
@@ -71,14 +68,6 @@ pub(crate) trait GithubRead {
     /// Only fetches those who are direct collaborators (i.e., not a collaborator through a repo team)
     async fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>>;
 
-    /// Get branch_protections
-    /// Returns a map branch pattern -> (protection ID, protection data)
-    async fn branch_protections(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<BTreeMap<String, (String, BranchProtection)>>;
-
     /// Get environments for a repository
     /// Returns a map of environment names to their Environment data
     async fn repo_environments(
@@ -91,15 +80,17 @@ pub(crate) trait GithubRead {
     /// Returns a vector of rulesets
     async fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>>;
 
-    /// Get custom property values for a repository
-    async fn repo_custom_properties(
+    /// Get the names of custom properties defined at the organization level
+    async fn org_custom_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>>;
+
+    /// Get custom property values for all repositories in an organization.
+    /// We load them in a batched way to reduce GitHub API calls.
+    ///
+    /// The key of the returned hashmap is the repository name.
+    async fn org_custom_property_repo_values(
         &self,
         org: &str,
-        repo: &str,
-    ) -> anyhow::Result<Vec<CustomPropertyValue>>;
-
-    /// Get the names of custom properties defined at the organization level
-    async fn org_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>>;
+    ) -> anyhow::Result<HashMap<String, Vec<CustomPropertyValue>>>;
 
     async fn environment_branch_policies(
         &self,
@@ -283,7 +274,7 @@ impl GithubRead for GitHubApiRead {
         Ok(installations)
     }
 
-    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<(String, String)>> {
+    async fn org_teams(&self, org: &str) -> anyhow::Result<Vec<Team>> {
         let mut teams = Vec::new();
 
         self.client
@@ -291,22 +282,13 @@ impl GithubRead for GitHubApiRead {
                 &Method::GET,
                 &GitHubUrl::orgs(org, "teams")?,
                 |resp: Vec<Team>| {
-                    teams.extend(resp.into_iter().map(|t| (t.name, t.slug)));
+                    teams.extend(resp);
                     Ok(())
                 },
             )
             .await?;
 
         Ok(teams)
-    }
-
-    async fn team(&self, org: &str, team: &str) -> anyhow::Result<Option<Team>> {
-        self.client
-            .send_option(
-                Method::GET,
-                &GitHubUrl::orgs(org, &format!("teams/{team}"))?,
-            )
-            .await
     }
 
     async fn team_memberships(
@@ -435,6 +417,12 @@ impl GithubRead for GitHubApiRead {
                     homepageUrl
                     isArchived
                     isPrivate
+                    branchProtectionRules(first: 100) {
+                        nodes {
+                            id
+                            pattern
+                        }
+                    }
                 }
             }
         "#;
@@ -442,6 +430,17 @@ impl GithubRead for GitHubApiRead {
         #[derive(serde::Deserialize)]
         struct Wrapper {
             repository: Option<RepoResponse>,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct BranchProtectionRules {
+            nodes: Vec<BranchProtectionRule>,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct BranchProtectionRule {
+            id: String,
+            pattern: String,
         }
 
         #[derive(serde::Deserialize)]
@@ -454,6 +453,7 @@ impl GithubRead for GitHubApiRead {
             homepage_url: Option<String>,
             is_archived: bool,
             is_private: bool,
+            branch_protection_rules: BranchProtectionRules,
         }
 
         let result: Option<Wrapper> = self
@@ -478,6 +478,12 @@ impl GithubRead for GitHubApiRead {
             homepage: repo_response.homepage_url,
             org: org.to_string(),
             private: repo_response.is_private,
+            branch_protections: repo_response
+                .branch_protection_rules
+                .nodes
+                .into_iter()
+                .map(|rule| (rule.pattern, rule.id))
+                .collect(),
         });
 
         Ok(repo)
@@ -549,93 +555,6 @@ impl GithubRead for GitHubApiRead {
             .await?;
 
         Ok(users)
-    }
-
-    async fn branch_protections(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<BTreeMap<String, (String, BranchProtection)>> {
-        #[derive(serde::Serialize)]
-        struct Params<'a> {
-            org: &'a str,
-            repo: &'a str,
-        }
-        static QUERY: &str = "
-            query($org:String!,$repo:String!) {
-                repository(owner:$org, name:$repo) {
-                    branchProtectionRules(first:100) {
-                        nodes {
-                            id,
-                            pattern,
-                            isAdminEnforced,
-                            allowsForcePushes,
-                            dismissesStaleReviews,
-                            requiresConversationResolution,
-                            requiresLinearHistory,
-                            requiresStrictStatusChecks,
-                            requiredStatusCheckContexts,
-                            requiredApprovingReviewCount,
-                            requiresApprovingReviews
-                            pushAllowances(first: 100) {
-                                nodes {
-                                    actor {
-                                        ... on Actor {
-                                            login
-                                        }
-                                        ... on Team {
-                                            organization {
-                                                login
-                                            },
-                                            name
-                                        }
-                                        ... on App {
-                                            id,
-                                            name
-                                        }
-                                    }
-                                }
-                            }
-                         }
-                    }
-                }
-            }
-        ";
-
-        #[derive(serde::Deserialize)]
-        struct Wrapper {
-            repository: Repository,
-        }
-        #[derive(serde::Deserialize)]
-        #[serde(rename_all = "camelCase")]
-        struct Repository {
-            branch_protection_rules: GraphNodes<BranchProtectionWrapper>,
-        }
-        #[derive(serde::Deserialize)]
-        #[serde(rename_all = "camelCase")]
-        struct BranchProtectionWrapper {
-            id: String,
-            #[serde(flatten)]
-            protection: BranchProtection,
-        }
-
-        let mut result = BTreeMap::new();
-        let res: Wrapper = self
-            .client
-            .graphql(QUERY, Params { org, repo }, org)
-            .await?;
-        for mut node in res
-            .repository
-            .branch_protection_rules
-            .nodes
-            .into_iter()
-            .flatten()
-        {
-            // Normalize check order to avoid diffs based only on the ordering difference
-            node.protection.required_status_check_contexts.sort();
-            result.insert(node.protection.pattern.clone(), (node.id, node.protection));
-        }
-        Ok(result)
     }
 
     async fn repo_environments(
@@ -766,27 +685,7 @@ impl GithubRead for GitHubApiRead {
         Ok(rulesets)
     }
 
-    async fn repo_custom_properties(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<Vec<CustomPropertyValue>> {
-        // REST API endpoint for repository custom property values
-        // https://docs.github.com/en/rest/repos/custom-properties#get-all-custom-property-values-for-a-repository
-        let values: Vec<CustomPropertyValue> = self
-            .client
-            .req(
-                Method::GET,
-                &GitHubUrl::repos(org, repo, "properties/values")?,
-            )?
-            .send()
-            .await?
-            .json_annotated()
-            .await?;
-        Ok(values)
-    }
-
-    async fn org_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>> {
+    async fn org_custom_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>> {
         #[derive(serde::Deserialize)]
         struct PropertyDef {
             property_name: String,
@@ -802,6 +701,35 @@ impl GithubRead for GitHubApiRead {
             .json_annotated()
             .await?;
         Ok(defs.into_iter().map(|d| d.property_name).collect())
+    }
+
+    async fn org_custom_property_repo_values(
+        &self,
+        org: &str,
+    ) -> anyhow::Result<HashMap<String, Vec<CustomPropertyValue>>> {
+        #[derive(serde::Deserialize)]
+        struct RepoData {
+            repository_name: String,
+            properties: Vec<CustomPropertyValue>,
+        }
+
+        let mut repos = vec![];
+        // REST API endpoint for all repository custom property values in an organization
+        // https://docs.github.com/en/rest/orgs/custom-properties#list-custom-property-values-for-organization-repositories
+        self.client
+            .rest_paginated(
+                &Method::GET,
+                &GitHubUrl::orgs(org, "properties/values")?,
+                |page: Vec<RepoData>| {
+                    repos.extend(page);
+                    Ok(())
+                },
+            )
+            .await?;
+        Ok(repos
+            .into_iter()
+            .map(|repo| (repo.repository_name, repo.properties))
+            .collect())
     }
 
     async fn environment_branch_policies(

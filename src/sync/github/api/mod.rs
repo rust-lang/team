@@ -201,6 +201,7 @@ impl HttpClient {
         F: FnMut(T) -> anyhow::Result<()>,
         T: DeserializeOwned,
     {
+        let url = url.with_page_size(100);
         let mut next = Some(url.clone());
         while let Some(next_url) = next.take() {
             let resp = self
@@ -398,6 +399,9 @@ pub(crate) struct Repo {
     pub(crate) private: bool,
     #[serde(default)]
     pub(crate) allow_auto_merge: Option<bool>,
+    // (pattern, branch protection ID)
+    #[serde(default)]
+    pub(crate) branch_protections: Vec<(String, String)>,
 }
 
 fn repo_owner<'de, D>(deserializer: D) -> Result<String, D::Error>
@@ -464,25 +468,6 @@ fn team_node_id(id: u64) -> String {
     BASE64_STANDARD.encode(format!("04:Team{id}"))
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub(crate) struct BranchProtection {
-    pub(crate) pattern: String,
-    pub(crate) is_admin_enforced: bool,
-    pub(crate) allows_force_pushes: bool,
-    pub(crate) dismisses_stale_reviews: bool,
-    pub(crate) requires_conversation_resolution: bool,
-    pub(crate) requires_linear_history: bool,
-    pub(crate) requires_strict_status_checks: bool,
-    #[serde(default, deserialize_with = "nullable")]
-    pub(crate) required_approving_review_count: u8,
-    #[serde(default, deserialize_with = "nullable")]
-    pub(crate) required_status_check_contexts: Vec<String>,
-    #[serde(deserialize_with = "allowances")]
-    pub(crate) push_allowances: Vec<PushAllowanceActor>,
-    pub(crate) requires_approving_reviews: bool,
-}
-
 fn nullable<'de, D, T>(deserializer: D) -> Result<T, D::Error>
 where
     D: serde::de::Deserializer<'de>,
@@ -490,52 +475,6 @@ where
 {
     let opt = Option::deserialize(deserializer)?;
     Ok(opt.unwrap_or_default())
-}
-
-fn allowances<'de, D>(deserializer: D) -> Result<Vec<PushAllowanceActor>, D::Error>
-where
-    D: serde::de::Deserializer<'de>,
-{
-    #[derive(Deserialize)]
-    struct Allowances {
-        nodes: Vec<Actor>,
-    }
-    #[derive(Deserialize)]
-    struct Actor {
-        actor: PushAllowanceActor,
-    }
-    let allowances = Allowances::deserialize(deserializer)?;
-    Ok(allowances.nodes.into_iter().map(|a| a.actor).collect())
-}
-
-/// Entities that can be allowed to push to a branch in a repo
-#[derive(Clone, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
-#[serde(untagged)]
-pub(crate) enum PushAllowanceActor {
-    User(UserPushAllowanceActor),
-    Team(TeamPushAllowanceActor),
-    App(AppPushAllowanceActor),
-}
-
-/// User who can be allowed to push to a branch in a repo
-#[derive(Clone, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub(crate) struct UserPushAllowanceActor {
-    pub(crate) login: String,
-}
-
-/// Team that can be allowed to push to a branch in a repo
-#[derive(Clone, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub(crate) struct TeamPushAllowanceActor {
-    pub(crate) organization: Login,
-    pub(crate) name: String,
-}
-
-/// GitHub app that can be allowed to push to a branch in a repo
-#[derive(Clone, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub(crate) struct AppPushAllowanceActor {
-    pub(crate) name: String,
-    /// Node ID, which can be used as a push actor ID
-    pub(crate) id: String,
 }
 
 #[derive(PartialEq, Debug)]

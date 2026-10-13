@@ -1,3 +1,5 @@
+use reqwest::Url;
+
 /// Type of a token used for an API request.
 /// If PAT is used, then token type does not matter.
 #[derive(Clone)]
@@ -43,6 +45,22 @@ impl GitHubUrl {
     pub fn with_url(mut self, url: &str) -> GitHubUrl {
         self.url = url.to_owned();
         self
+    }
+
+    /// Ensure that we load `page_size` items in paginated URLs, unless the page size was already
+    /// set.
+    pub fn with_page_size(&self, page_size: u64) -> Self {
+        assert!(page_size <= 100);
+        let mut url =
+            Url::parse(&self.url).unwrap_or_else(|e| panic!("Invalid URL {}: {e:?}", self.url));
+        if !url.query_pairs().any(|(key, _val)| key == "per_page") {
+            url.query_pairs_mut()
+                .append_pair("per_page", &page_size.to_string());
+        }
+
+        let mut github_url = self.clone();
+        github_url.url = url.to_string();
+        github_url
     }
 
     pub fn repos(org: &str, repo: &str, remaining_endpoint: &str) -> anyhow::Result<Self> {

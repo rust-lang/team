@@ -192,6 +192,7 @@ impl GitHubWrite {
                 archived: false,
                 private: false,
                 allow_auto_merge: Some(settings.auto_merge_enabled),
+                branch_protections: vec![],
             })
         } else {
             Ok(self
