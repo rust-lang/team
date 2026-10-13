@@ -30,7 +30,10 @@ merge-queue = { enabled = true, method = "rebase" }
 require-linear-history = true
 
 [[crates-io]]
-crates = ["libc", "ctest"]
+crates = [
+    "libc",
+    "ctest",
+]
 publish-workflow = "release.yaml"
 publish-environment = "release"
 teams = ["crate-maintainers"]
@@ -40,3 +43,7 @@ branches = ["gh-pages", "main", "master"]
 
 [environments.release]
 branches = ["main", "libc-0.2"]
+
+# Obsolete crate
+[[crates-io]]
+crates = ["libc-test"]
