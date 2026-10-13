@@ -485,6 +485,12 @@ pub(crate) struct RepoSettings {
     pub auto_merge_enabled: bool,
 }
 
+#[derive(Debug)]
+pub(crate) struct RepoMetadata {
+    pub name: String,
+    pub has_pages: bool,
+}
+
 /// GitHub Repository Ruleset
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub(crate) struct Ruleset {

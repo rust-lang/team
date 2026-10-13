@@ -7,7 +7,7 @@ use self::api::{TeamPrivacy, TeamRole};
 use crate::schema;
 use crate::sync::Config;
 use crate::sync::github::api::{
-    CustomPropertyValue, GithubRead, RepoPermission, RepoSettings, Ruleset, Team,
+    CustomPropertyValue, GithubRead, RepoMetadata, RepoPermission, RepoSettings, Ruleset, Team,
 };
 use anyhow::Context as _;
 use futures_util::StreamExt;
@@ -103,6 +103,8 @@ struct SyncGitHub {
     org_apps: HashMap<OrgName, Vec<OrgAppInstallation>>,
     // org -> team name -> team
     org_teams: HashMap<OrgName, HashMap<String, Team>>,
+    // org -> repo name -> repo
+    org_repos: HashMap<OrgName, HashMap<String, RepoMetadata>>,
     org_custom_property_names: HashMap<OrgName, HashSet<String>>,
     // org - repo name -> custom properties
     org_custom_property_values: HashMap<OrgName, HashMap<String, Vec<CustomPropertyValue>>>,
@@ -141,6 +143,7 @@ impl SyncGitHub {
         let mut org_custom_property_names = HashMap::new();
         let mut org_custom_property_values = HashMap::new();
         let mut org_teams = HashMap::new();
+        let mut org_repos = HashMap::new();
         let mut org_apps = HashMap::new();
 
         for org in &orgs {
@@ -157,6 +160,12 @@ impl SyncGitHub {
             org_teams.insert(
                 org.to_string(),
                 teams.into_iter().map(|t| (t.name.clone(), t)).collect(),
+            );
+
+            let repos = github.org_repos(org).await?;
+            org_repos.insert(
+                org.to_string(),
+                repos.into_iter().map(|r| (r.name.clone(), r)).collect(),
             );
 
             let mut installations: Vec<OrgAppInstallation> = vec![];
@@ -198,6 +207,7 @@ impl SyncGitHub {
             org_members,
             org_apps,
             org_teams,
+            org_repos,
             org_custom_property_names,
             org_custom_property_values,
         })
@@ -793,6 +803,18 @@ impl SyncGitHub {
         &self,
         expected_repo: &rust_team_data::v1::Repo,
     ) -> anyhow::Result<Option<PagesDiff>> {
+        // API usage optimization: if we don't expect pages, and they are not enabled on GitHub,
+        // do not even attempt to load the full repo pages information from GitHub
+        if let Some(metadata) = self
+            .org_repos
+            .get(&expected_repo.org)
+            .and_then(|repos| repos.get(&expected_repo.name))
+            && expected_repo.pages.is_none()
+            && !metadata.has_pages
+        {
+            return Ok(None);
+        }
+
         let actual_pages = self
             .github
             .repo_pages(&expected_repo.org, &expected_repo.name)
