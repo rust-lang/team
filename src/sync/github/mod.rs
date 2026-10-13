@@ -7,7 +7,8 @@ use self::api::{TeamPrivacy, TeamRole};
 use crate::schema;
 use crate::sync::Config;
 use crate::sync::github::api::{
-    CustomPropertyValue, GithubRead, RepoMetadata, RepoPermission, RepoSettings, Ruleset, Team,
+    CustomPropertyValue, GithubRead, Repo, RepoMetadata, RepoPermission, RepoSettings, Ruleset,
+    Team,
 };
 use anyhow::Context as _;
 use futures_util::StreamExt;
@@ -611,7 +612,7 @@ impl SyncGitHub {
             ));
         }
 
-        let permission_diffs = self.diff_permissions(expected_repo).await?;
+        let permission_diffs = self.diff_permissions(expected_repo, &actual_repo).await?;
 
         let branch_protection_diffs = self.diff_branch_protections(&actual_repo)?;
 
@@ -674,6 +675,7 @@ impl SyncGitHub {
     async fn diff_permissions(
         &self,
         expected_repo: &rust_team_data::v1::Repo,
+        actual_repo: &Repo,
     ) -> anyhow::Result<Vec<RepoPermissionAssignmentDiff>> {
         let actual_teams: HashMap<_, _> = self
             .github
@@ -682,10 +684,9 @@ impl SyncGitHub {
             .into_iter()
             .map(|t| (t.name.clone(), t))
             .collect();
-        let actual_collaborators: HashMap<_, _> = self
-            .github
-            .repo_collaborators(&expected_repo.org, &expected_repo.name)
-            .await?
+        let actual_collaborators: HashMap<_, _> = actual_repo
+            .collaborators
+            .clone()
             .into_iter()
             .map(|u| (u.name.clone(), u))
             .collect();

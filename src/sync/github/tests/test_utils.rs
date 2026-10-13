@@ -14,7 +14,7 @@ use crate::schema;
 use crate::sync::Config;
 use crate::sync::github::api::{
     BranchPolicy, CustomPropertyValue, GithubRead, OrgAppInstallation, Repo, RepoAppInstallation,
-    RepoMetadata, RepoTeam, RepoUser, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
+    RepoMetadata, RepoTeam, Ruleset, Team, TeamMember, TeamPrivacy, TeamRole,
 };
 use crate::sync::github::{
     OrgMembershipDiff, RepoDiff, SyncGitHub, TeamDiff, api, construct_ruleset, convert_permission,
@@ -141,6 +141,16 @@ impl DataModel {
         }
 
         for repo in &self.repos {
+            let collaborators = repo
+                .members
+                .clone()
+                .into_iter()
+                .map(|m| api::RepoUser {
+                    name: m.name,
+                    permission: convert_permission(&m.permission),
+                })
+                .collect();
+
             let org = orgs.entry(repo.org.clone()).or_default();
             org.repos.insert(
                 repo.name.clone(),
@@ -155,6 +165,7 @@ impl DataModel {
                     allow_auto_merge: None,
                     // Branch protections are deprecated so we don't test them anymore
                     branch_protections: vec![],
+                    collaborators,
                 },
             );
             let teams = repo
@@ -171,17 +182,8 @@ impl DataModel {
                     },
                 })
                 .collect();
-            let members = repo
-                .members
-                .clone()
-                .into_iter()
-                .map(|m| api::RepoUser {
-                    name: m.name,
-                    permission: convert_permission(&m.permission),
-                })
-                .collect();
             org.repo_members
-                .insert(repo.name.clone(), RepoMembers { teams, members });
+                .insert(repo.name.clone(), RepoMembers { teams });
 
             let protections = repo
                 .branch_protections
@@ -756,16 +758,6 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
-    async fn repo_collaborators(&self, org: &str, repo: &str) -> anyhow::Result<Vec<RepoUser>> {
-        Ok(self
-            .get_org(org)
-            .repo_members
-            .get(repo)
-            .cloned()
-            .map(|members| members.members)
-            .unwrap_or_default())
-    }
-
     async fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>> {
         Ok(self
             .get_org(org)
@@ -839,5 +831,4 @@ struct GithubOrg {
 #[derive(Clone)]
 pub struct RepoMembers {
     teams: Vec<RepoTeam>,
-    members: Vec<RepoUser>,
 }
