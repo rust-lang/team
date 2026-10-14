@@ -4,7 +4,6 @@ description = "GitHub Actions self-hosted runners infrastructure"
 bots = []
 
 [access.teams]
-infra = "write"
 
 [[rulesets]]
 pattern = "main"
