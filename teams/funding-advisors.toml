@@ -16,6 +16,9 @@ members = [
 ]
 alumni = []
 
+[[github]]
+orgs = ["rust-lang"]
+
 [website]
 name = "Funding advisors team"
 description = "People coordinating closely with the Funding team"
