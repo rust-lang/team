@@ -32,6 +32,7 @@ branches = ["main"]
 crates = [
     "rustc-demangle",
     "rustc-demangle-capi",
+    "rustfilt",
 ]
 publish-workflow = "release.yml"
 publish-environment = "release"
