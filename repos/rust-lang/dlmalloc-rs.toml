@@ -1,0 +1,8 @@
+org = "rust-lang"
+name = "dlmalloc-rs"
+description = "dlmalloc ported into Rust"
+bots = []
+
+[access.teams]
+compiler = "write"
+libs = "write"
