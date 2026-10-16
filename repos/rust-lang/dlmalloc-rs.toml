@@ -6,3 +6,7 @@ bots = []
 [access.teams]
 compiler = "write"
 libs = "write"
+
+[[rulesets]]
+pattern = "main"
+required-approvals = 0
