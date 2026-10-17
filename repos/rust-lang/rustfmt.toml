@@ -2,7 +2,10 @@ org = "rust-lang"
 name = "rustfmt"
 description = "Format Rust code"
 homepage = "https://rust-lang.github.io/rustfmt/"
-bots = ["rustbot"]
+bots = [
+    "renovate",
+    "rustbot",
+]
 
 [pages]
 build-type = "legacy"
