@@ -11,3 +11,12 @@ crate-maintainers = "maintain"
 Thomasdezeeuw = "maintain"
 
 [environments.github-pages]
+
+[environments.publish]
+branches = ["main"]
+
+[[crates-io]]
+crates = ["log"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["crate-maintainers"]
