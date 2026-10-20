@@ -1,14 +1,13 @@
-org = 'rust-lang'
-name = 'log'
-description = 'Logging implementation for Rust'
+org = "rust-lang"
+name = "log"
+description = "Logging implementation for Rust"
 homepage = "https://docs.rs/log"
 bots = ["rustbot"]
 
 [access.teams]
-crate-maintainers = 'maintain'
+crate-maintainers = "maintain"
 
 [access.individuals]
-Thomasdezeeuw = 'maintain'
+Thomasdezeeuw = "maintain"
 
 [environments.github-pages]
-
