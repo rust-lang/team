@@ -19,3 +19,15 @@ ci-checks = ["success"]
 merge-queue = { enabled = true, method = "rebase" }
 
 [environments.github-pages]
+
+[environments.publish]
+tags = ["*"]
+
+[[crates-io]]
+crates = [
+    "bindgen",
+    "bindgen-cli"
+]
+publish-workflow = "release.yml"
+publish-environment = "publish"
+teams = ["wg-bindgen"]
