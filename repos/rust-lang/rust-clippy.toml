@@ -26,6 +26,15 @@ merge-queue = { enabled = true }
 
 [environments.github-pages]
 
+[environments.publish]
+branches = ["master"]
+
+[[crates-io]]
+crates = ["clippy_utils"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["clippy"]
+
 # Obsolete crates
 [[crates-io]]
 crates = [
