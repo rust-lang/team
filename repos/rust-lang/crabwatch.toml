@@ -5,8 +5,10 @@ bots = []
 
 [access.teams]
 infra = "write"
+infra-admins = "write"
 
 [[rulesets]]
 pattern = "main"
 ci-checks = ["CI"]
 required-approvals = 0
+merge-queue = { enabled = true }
