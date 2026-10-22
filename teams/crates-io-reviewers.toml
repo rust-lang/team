@@ -1,0 +1,17 @@
+# This team contains people who review crates.io pull requests. It is not
+# limited to members of the crates.io team.
+
+name = "crates-io-reviewers"
+kind = "marker-team"
+
+[people]
+leads = []
+members = [
+    "carols10cents",
+    "eth3lbert",
+    "LawnGnome",
+    "Turbo87",
+]
+
+[[github]]
+orgs = ["rust-lang"]
