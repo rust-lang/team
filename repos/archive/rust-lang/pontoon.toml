@@ -4,6 +4,3 @@ description = "Localization platform used by Rust"
 bots = []
 
 [access.teams]
-infra = "write"
-
-[environments.rust-pontoon]
