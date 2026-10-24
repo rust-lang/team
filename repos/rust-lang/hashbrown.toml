@@ -10,6 +10,7 @@ branch = "gh-pages"
 path = "/"
 
 [access.teams]
+crate-maintainers = "write"
 libs = "write"
 
 [[rulesets]]
