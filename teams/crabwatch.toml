@@ -1,0 +1,19 @@
+name = "crabwatch"
+subteam-of = "infra"
+
+[people]
+leads = []
+members = [
+    "hashcatHitman",
+    "marcoieni",
+    "ubiratansoares",
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "CrabWatch team"
+description = "CrabWatch detects issues in the CI of Rust project repositories"
+repo = "https://github.com/rust-lang/crabwatch"
