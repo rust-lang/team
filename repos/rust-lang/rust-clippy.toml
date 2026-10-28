@@ -14,7 +14,7 @@ clippy = "write"
 clippy-contributors = "triage"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 ci-checks = [
     "conclusion",
     "conclusion_dev",
@@ -27,7 +27,7 @@ merge-queue = { enabled = true }
 [environments.github-pages]
 
 [environments.publish]
-branches = ["master"]
+branches = ["main"]
 
 [[crates-io]]
 crates = ["clippy_utils"]
