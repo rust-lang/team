@@ -6,3 +6,11 @@ bots = []
 
 [access.teams]
 crate-maintainers = "maintain"
+
+# The crates are not obsolete, but they are published very rarely, so
+# for now we just track them, without providing a way to publish them.
+[[crates-io]]
+crates = [
+    "ferris-says",
+    "fsays",
+]
