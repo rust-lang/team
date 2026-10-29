@@ -1,0 +1,17 @@
+name = "lang-research"
+subteam-of = "lang"
+
+[people]
+leads = ["Nadrieril", "tmandry"]
+members = [
+    "Nadrieril",
+    "tmandry",
+]
+alumni = []
+
+[[github]]
+orgs = ["rust-lang"]
+
+[website]
+name = "lang-research team"
+description = "Maintaining the Rust Lang Research blog"

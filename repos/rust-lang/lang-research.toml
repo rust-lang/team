@@ -1,0 +1,25 @@
+org = "rust-lang"
+name = "lang-research"
+description = "Rust Lang Research blog: ideas in progress from people working on Rust language design"
+homepage = "https://rust-lang.github.io/lang-research/"
+bots = []
+
+[pages]
+build-type = "workflow"
+
+[access.teams]
+lang-research = "maintain"
+lang = "write"
+lang-advisors = "write"
+types = "write"
+opsem = "write"
+goal-owners = "write"
+
+[[rulesets]]
+# Authors may merge their own posts once CI passes.
+pattern = "main"
+ci-checks = ["CI"]
+required-approvals = 0
+
+[environments.github-pages]
+branches = ["main"]
