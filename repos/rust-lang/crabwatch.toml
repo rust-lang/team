@@ -6,6 +6,7 @@ bots = []
 [access.teams]
 infra = "write"
 infra-admins = "write"
+crabwatch = "triage"
 
 [[rulesets]]
 pattern = "main"
