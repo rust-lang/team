@@ -40,7 +40,12 @@ branches = ["main"]
 [[crates-io]]
 crates = [
     "rustfmt",
+    "rustfmt-config_proc_macro",
     "rustfmt-core",
     "rustfmt-config",
-    "rustfmt-nightly"
+    "rustfmt-nightly",
+    "rustfmt_configuration",
+    "rustfmt_emitter",
+    "rustfmt_ignore",
+    "rustfmt_lib",
 ]
