@@ -6,6 +6,7 @@ bots = ["renovate", "rustbot", "heroku-deploy-access", "datadog"]
 
 [access.teams]
 crates-io = "write"
+crates-io-reviewers = "triage"
 
 [[rulesets]]
 pattern = "main"
