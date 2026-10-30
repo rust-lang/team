@@ -34,6 +34,7 @@ branches = ["master", "release"]
 # Library crates - dependencies of rust-analyzer that follow independent semantic versioning.
 [[crates-io]]
 crates = [
+    "expect-test",
     "la-arena",
     "line-index",
     "lsp-server",
