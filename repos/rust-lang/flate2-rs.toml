@@ -9,6 +9,7 @@ crate-maintainers = 'maintain'
 
 [[rulesets]]
 pattern = 'main'
+required-approvals = 0
 
 [environments.github-pages]
 
