@@ -6,6 +6,7 @@ leads = ["davidtwco", "BoxyUwU"]
 members = [
     "Amanieu",
     "adwinwhite",
+    "aerooneqq",
     "alexcrichton",
     "antoyo",
     "apiraino",
@@ -59,6 +60,7 @@ members = [
     "Noratrieb",
     { github = "nnethercote", roles = ["compiler-maintainer"] },
     { github = "oli-obk", roles = ["compiler-maintainer"] },
+    "panstromek",
     { github = "petrochenkov", roles = ["compiler-maintainer"] },
     "RalfJung",
     "rcvalle",
