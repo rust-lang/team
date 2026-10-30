@@ -7,13 +7,6 @@ bots = []
 [access.teams]
 crate-maintainers = 'maintain'
 
-[access.individuals]
-chansuke = 'triage'
-sfackler = 'maintain'
-Thomasdezeeuw = 'maintain'
-carllerche = 'maintain'
-Darksonn = 'maintain'
-
 [[rulesets]]
 pattern = 'master'
 ci-checks = [
@@ -26,4 +19,3 @@ ci-checks = [
 ]
 
 [environments.github-pages]
-

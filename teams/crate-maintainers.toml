@@ -4,25 +4,34 @@ subteam-of = "libs"
 [people]
 leads = []
 members = [
-    "Amanieu",
-    "JohnTitor",
-    "KodrAus",
-    "joshtriplett",
-    "the8472",
-    "thomcc",
-    "workingjubilee",
-    "ChrisDenton",
-    "Byron",
-    "lcnr",
-    "tgross35",
-    "jongiddy",
-    "Kobzol",
-    "NobodyXu",
-    "madsmtm",
-    "folkertdev",
-    "beetrees",
+    { github = "Amanieu", roles = ["hashbrown-maintainer"] },
+    { github = "beetrees", roles = ["compiler-builtins-maintainer"] },
+    { github = "Byron", roles = ["flate2-maintainer", "libz-sys-maintainer"] },
+    { github = "ChrisDenton", roles = [] },
+    { github = "clarfonthey", roles = ["hashbrown-maintainer"] },
+    { github = "cuviper", roles = ["hashbrown-maintainer"] },
+    { github = "Darksonn", roles = ["socket2-maintainer"] },
+    { github = "folkertdev", roles = [] },
+    { github = "JohnTitor", roles = ["libc-maintainer"] },
+    { github = "jongiddy", roles = ["flate2-maintainer"] },
+    { github = "joshtriplett", roles = ["flate2-maintainer", "libc-maintainer", "libz-sys-maintainer"] },
+    { github = "Kobzol", roles = [] },
+    { github = "KodrAus", roles = ["log-maintainer"] },
+    { github = "lcnr", roles = [] },
+    { github = "madsmtm", roles = ["cc-maintainer"] },
+    { github = "NobodyXu", roles = ["cc-maintainer"] },
+    { github = "sdroege", roles = ["pkg-config-maintainer"] },
+    { github = "tgross35", roles = ["compiler-builtins-maintainer", "getopts-maintainer", "glob-maintainer", "libc-maintainer"] },
+    { github = "the8472", roles = [] },
+    { github = "Thomasdezeeuw", roles = ["log-maintainer", "socket2-maintainer"] },
+    { github = "thomcc", roles = ["cc-maintainer", "cmake-maintainer"] },
+    { github = "workingjubilee", roles = [] },
 ]
-alumni = []
+alumni = [
+    "carllerche",
+    "chansuke",
+    "sfackler",
+]
 
 [[github]]
 orgs = ["rust-lang"]
@@ -32,6 +41,54 @@ weight = -200
 name = "Crate maintainers"
 description = "Maintaining official rust-lang crates such as log, libc, cc, and more."
 zulip-stream = "t-libs/crates"
+
+[[roles]]
+id = "cc-maintainer"
+description = "cc"
+
+[[roles]]
+id = "cmake-maintainer"
+description = "cmake"
+
+[[roles]]
+id = "compiler-builtins-maintainer"
+description = "compiler-builtins"
+
+[[roles]]
+id = "flate2-maintainer"
+description = "flate2"
+
+[[roles]]
+id = "getopts-maintainer"
+description = "getopts"
+
+[[roles]]
+id = "glob-maintainer"
+description = "glob"
+
+[[roles]]
+id = "hashbrown-maintainer"
+description = "hashbrown"
+
+[[roles]]
+id = "libc-maintainer"
+description = "libc"
+
+[[roles]]
+id = "libz-sys-maintainer"
+description = "libz-sys"
+
+[[roles]]
+id = "log-maintainer"
+description = "log"
+
+[[roles]]
+id = "pkg-config-maintainer"
+description = "pkg-config"
+
+[[roles]]
+id = "socket2-maintainer"
+description = "socket2"
 
 [[zulip-groups]]
 name = "T-crate-maintainers"
