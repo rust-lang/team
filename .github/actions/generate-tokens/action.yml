@@ -35,7 +35,7 @@ runs:
     # GitHub tokens generated from GitHub Apps can access resources from one organization,
     # so we need to generate a token for each organization.
     - name: Generate GitHub token (rust-lang)
-      uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+      uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
       id: rust-lang-token
       with:
         client-id: ${{ inputs.client-id }}
@@ -43,7 +43,7 @@ runs:
         owner: rust-lang
 
     - name: Generate GitHub token (rust-lang-deprecated)
-      uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+      uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
       id: rust-lang-deprecated-token
       with:
         client-id: ${{ inputs.client-id }}
@@ -51,7 +51,7 @@ runs:
         owner: rust-lang-deprecated
 
     - name: Generate GitHub token (rust-lang-nursery)
-      uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+      uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
       id: rust-lang-nursery-token
       with:
         client-id: ${{ inputs.client-id }}
@@ -59,7 +59,7 @@ runs:
         owner: rust-lang-nursery
 
     - name: Generate GitHub token (rust-analyzer)
-      uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+      uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
       id: rust-analyzer-token
       with:
         client-id: ${{ inputs.client-id }}
@@ -67,7 +67,7 @@ runs:
         owner: rust-analyzer
 
     - name: Generate GitHub token (rust-embedded)
-      uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+      uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
       id: rust-embedded-token
       with:
         client-id: ${{ inputs.client-id }}
@@ -75,7 +75,7 @@ runs:
         owner: rust-embedded
 
     - name: Generate GitHub token (rust-dev-tools)
-      uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+      uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
       id: rust-dev-tools-token
       with:
         client-id: ${{ inputs.client-id }}
