@@ -7,9 +7,6 @@ bots = ["rustbot"]
 [access.teams]
 crate-maintainers = "maintain"
 
-[access.individuals]
-Thomasdezeeuw = "maintain"
-
 [environments.github-pages]
 
 [environments.publish]

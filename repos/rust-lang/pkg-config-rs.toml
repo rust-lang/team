@@ -12,7 +12,4 @@ path = "/"
 [access.teams]
 crate-maintainers = "maintain"
 
-[access.individuals]
-sdroege = "write"
-
 [environments.github-pages]
