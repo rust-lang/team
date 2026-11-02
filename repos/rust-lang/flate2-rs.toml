@@ -1,14 +1,22 @@
-org = 'rust-lang'
-name = 'flate2-rs'
-description = 'DEFLATE, gzip, and zlib bindings for Rust'
+org = "rust-lang"
+name = "flate2-rs"
+description = "DEFLATE, gzip, and zlib bindings for Rust"
 homepage = "https://docs.rs/flate2"
 bots = []
 
 [access.teams]
-crate-maintainers = 'maintain'
+crate-maintainers = "maintain"
 
 [[rulesets]]
-pattern = 'main'
+pattern = "main"
 
 [environments.github-pages]
 
+[environments.publish]
+branches = ["main"]
+
+[[crates-io]]
+crates = ["flate2"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["crate-maintainers"]
