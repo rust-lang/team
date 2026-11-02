@@ -7,7 +7,7 @@ bots = []
 release = "write"
 
 [[rulesets]]
-pattern = "master"
+pattern = "main"
 ci-checks = [
     "build (macos-latest, beta)",
     "build (macos-latest, nightly)",
