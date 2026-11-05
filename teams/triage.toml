@@ -55,4 +55,4 @@ zulip-stream = "t-release/triage"
 orgs = ["rust-lang"]
 
 [[zulip-groups]]
-name = "WG-triage"
+name = "T-triage"
