@@ -70,16 +70,34 @@ impl Data {
         data.load_dir(
             directory.join("people"),
             false,
-            |this, _dir, person: Person, _path| {
+            |this, _dir, person: Person, path| {
                 person.validate()?;
-                this.people.insert(person.github().to_string(), person);
+                if let Some(existing) = this
+                    .people
+                    .insert(person.github().to_string(), person.clone())
+                {
+                    return Err(anyhow::anyhow!(
+                        "Person {} in `{}` has the same GitHub username `{}` as {}",
+                        person.name(),
+                        path.display(),
+                        person.github(),
+                        existing.name()
+                    ));
+                }
                 Ok(())
             },
         )?;
 
         let teams_dir = directory.join("teams");
-        data.load_dir(&teams_dir, false, |this, _dir, team: Team, _path| {
-            this.teams.insert(team.name().to_string(), team);
+        data.load_dir(&teams_dir, false, |this, _dir, team: Team, path| {
+            if let Some(existing) = this.teams.insert(team.name().to_string(), team.clone()) {
+                return Err(anyhow::anyhow!(
+                    "Team {} in `{}` has the same name as another team {}",
+                    team.name(),
+                    path.display(),
+                    existing.name()
+                ));
+            }
             Ok(())
         })?;
 
