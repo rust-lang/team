@@ -14,7 +14,7 @@ env_logger = { version = "0.11.0", default-features = false }
 futures-util = "0.3"
 hyper-old-types = "0.11"
 indexmap.workspace = true
-jsonwebtoken = "10"
+jsonwebtoken = "11"
 log = "0.4"
 octocrab = { version = "0.54", default-features = false, features = ["jwt-aws-lc-rs", "default-client", "rustls", "rustls-aws-lc-rs", "follow-redirect", "timeout", "retry"] }
 regex = "1.5.5"
