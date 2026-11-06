@@ -1,4 +1,5 @@
 name = "docs-rs-reviewers"
+kind = "marker-team"
 subteam-of = "docs-rs"
 
 [people]
@@ -13,9 +14,3 @@ alumni = [
 
 [[github]]
 orgs = ["rust-lang"]
-
-[website]
-name = "Docs.rs reviewers"
-description = "Docs.rs team members responsible for reviews"
-repo = "https://github.com/rust-lang/docs.rs"
-zulip-stream = "t-docs-rs"
