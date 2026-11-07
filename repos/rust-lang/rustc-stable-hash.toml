@@ -8,3 +8,12 @@ compiler = "write"
 
 [[rulesets]]
 pattern = "main"
+
+[environments.publish]
+tags = ["v*"]
+
+[[crates-io]]
+crates = ["rustc-stable-hash"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["compiler"]
