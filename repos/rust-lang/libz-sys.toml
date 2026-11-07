@@ -1,10 +1,21 @@
-org = 'rust-lang'
-name = 'libz-sys'
-description = 'Rust crate package to link to a system libz (zlib)'
+org = "rust-lang"
+name = "libz-sys"
+description = "Rust crate package to link to a system libz (zlib)"
 bots = []
 
 [access.teams]
-crate-maintainers = 'maintain'
+crate-maintainers = "maintain"
 
 [environments.github-pages]
 
+[environments.publish]
+tags = ["*"]
+
+[[crates-io]]
+crates = [
+    "libz-sys",
+    "libz-ng-sys",
+]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["crate-maintainers"]
