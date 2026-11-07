@@ -8,6 +8,7 @@ kind = "marker-team"
 leads = []
 members = [
     "alex-semenyuk",
+    "clarfonthey",
     "jieyouxu",
     "joshtriplett",
     "lcnr",
