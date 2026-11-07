@@ -143,8 +143,10 @@ prevent-update = true
 [environments.bors]
 branches = ["automation/bors/auto", "automation/bors/try", "automation/bors/try-perf"]
 
+# Obsolete crates and placeholders.
 [[crates-io]]
 crates = [
+    "empty-library",
     "rust-lang",
     "rustc-std-workspace-alloc",
     "rustc-std-workspace-core",
