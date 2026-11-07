@@ -6,8 +6,3 @@ bots = ["rustbot", "rfcbot"]
 
 [access.teams]
 cargo = "write"
-
-[access.individuals]
-crisidev = "write"
-wez = "write"
-yodaldevoid = "write"
