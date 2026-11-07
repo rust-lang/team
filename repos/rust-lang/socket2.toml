@@ -19,3 +19,9 @@ ci-checks = [
 ]
 
 [environments.github-pages]
+
+[[crates-io]]
+# This crate is deprecated. It lives in the https://github.com/deprecrated/net2-rs repository,
+# which is not tracked in team. Since socket2 is a spiritual successor of this crate, we track it
+# here.
+crates = ["net2"]
