@@ -51,7 +51,17 @@ publish-workflow = "release.yml"
 publish-environment = "release"
 teams = ["cargo"]
 
+[[crates-io]]
+crates = ["home"]
+publish-workflow = "release-home.yml"
+publish-environment = "release-home"
+teams = ["cargo"]
+
 [environments.github-pages]
 
 [environments.release]
+tags = ["*"]
+
+[environments.release-home]
+branches = ["master"]
 tags = ["*"]
