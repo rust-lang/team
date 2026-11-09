@@ -12,6 +12,7 @@ path = "/"
 [access.teams]
 clippy = "write"
 clippy-contributors = "triage"
+mods-venue = "triage"
 
 [[rulesets]]
 pattern = "main"
