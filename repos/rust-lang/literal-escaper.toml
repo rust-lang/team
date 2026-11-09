@@ -5,3 +5,12 @@ bots = []
 
 [access.teams]
 compiler = "write"
+
+[environments.publish]
+tags = ["*"]
+
+[[crates-io]]
+crates = ["rustc-literal-escaper"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["compiler"]
