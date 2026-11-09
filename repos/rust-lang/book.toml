@@ -19,3 +19,12 @@ required-approvals = 0
 
 [environments.github-pages]
 branches = ["gh-pages"]
+
+[environments.publish]
+tags = ["*"]
+
+[[crates-io]]
+crates = ["trpl"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["book"]
