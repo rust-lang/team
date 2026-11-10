@@ -2,9 +2,11 @@ name = "expect-test"
 kind = "marker-team"
 
 [people]
-leads = ["quad"]
-members = ["quad"]
-alumni = []
+leads = []
+members = []
+alumni = [
+    "quad",
+]
 
 [[github]]
 orgs = ["rust-analyzer"]
