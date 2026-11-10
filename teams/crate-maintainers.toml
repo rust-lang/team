@@ -32,6 +32,9 @@ alumni = [
     "carllerche",
     "chansuke",
     "sfackler",
+    "crisidev", # For ssh2-rs
+    "wez", # For ssh2-rs
+    "yodaldevoid", # For ssh2-rs
 ]
 
 [[github]]
