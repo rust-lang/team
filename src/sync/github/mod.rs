@@ -616,11 +616,11 @@ impl SyncGitHub {
 
         let branch_protection_diffs = self.diff_branch_protections(&actual_repo)?;
 
-        let ruleset_diffs = self.diff_rulesets(expected_repo).await?;
+        let ruleset_diffs = self.diff_rulesets(expected_repo, &actual_repo).await?;
 
         let custom_property_diffs = self.diff_custom_properties(expected_repo)?;
 
-        let environment_diffs = self.diff_environments(expected_repo).await?;
+        let environment_diffs = self.diff_environments(expected_repo, &actual_repo).await?;
         let pages_diff = self.diff_pages(expected_repo).await?;
         let old_settings = RepoSettings {
             description: actual_repo.description.clone(),
@@ -720,13 +720,11 @@ impl SyncGitHub {
     async fn diff_environments(
         &self,
         expected_repo: &rust_team_data::v1::Repo,
+        actual_repo: &Repo,
     ) -> anyhow::Result<Vec<EnvironmentDiff>> {
         let mut environment_diffs = Vec::new();
 
-        let actual_environments_map = self
-            .github
-            .repo_environments(&expected_repo.org, &expected_repo.name)
-            .await?;
+        let actual_environments_map = self.github.repo_environments(actual_repo).await?;
 
         let actual_environments: BTreeSet<String> =
             actual_environments_map.keys().cloned().collect();
@@ -838,14 +836,12 @@ impl SyncGitHub {
     async fn diff_rulesets(
         &self,
         expected_repo: &rust_team_data::v1::Repo,
+        actual_repo: &Repo,
     ) -> anyhow::Result<Vec<RulesetDiff>> {
         let mut ruleset_diffs = Vec::new();
 
         // Fetch existing rulesets from GitHub
-        let actual_rulesets = self
-            .github
-            .repo_rulesets(&expected_repo.org, &expected_repo.name)
-            .await?;
+        let actual_rulesets = self.github.repo_rulesets(actual_repo).await?;
 
         // Build a map of actual rulesets by branch name (the logical identity)
         let mut rulesets_by_name: HashMap<String, api::Ruleset> = HashMap::new();

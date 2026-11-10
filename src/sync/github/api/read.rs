@@ -4,8 +4,8 @@ use crate::sync::github::api::url::TokenType;
 use crate::sync::github::api::{BranchPolicy, CustomPropertyValue, Ruleset};
 use crate::sync::github::api::{
     GraphNode, GraphNodes, GraphPageInfo, HttpClient, Login, OrgAppInstallation, Repo,
-    RepoAppInstallation, RepoPermission, RepoTeam, RepoUser, RestPaginatedError, Team, TeamMember,
-    TeamRole, team_node_id, url::GitHubUrl, user_node_id,
+    RepoAppInstallation, RepoEnvironment, RepoPermission, RepoTeam, RepoUser, RestPaginatedError,
+    Team, TeamMember, TeamRole, team_node_id, url::GitHubUrl, user_node_id,
 };
 use crate::sync::utils::ResponseExt;
 use anyhow::Context as _;
@@ -63,8 +63,8 @@ pub(crate) trait GithubRead {
 
     /// Get a repo by org and name
     ///
-    /// In addition to basic properties, also fetches its branch protections and direct
-    /// collaborators (i.e., not collaborators through a repo team).
+    /// In addition to basic properties, also fetches its branch protections, direct
+    /// collaborators (i.e., not collaborators through a repo team), ruleset IDs and environments.
     async fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>>;
 
     /// Get GitHub Pages settings for a repo
@@ -75,15 +75,11 @@ pub(crate) trait GithubRead {
 
     /// Get environments for a repository
     /// Returns a map of environment names to their Environment data
-    async fn repo_environments(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<HashMap<String, Environment>>;
+    async fn repo_environments(&self, repo: &Repo) -> anyhow::Result<HashMap<String, Environment>>;
 
     /// Get rulesets for a repository
     /// Returns a vector of rulesets
-    async fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>>;
+    async fn repo_rulesets(&self, repo: &Repo) -> anyhow::Result<Vec<Ruleset>>;
 
     /// Get the names of custom properties defined at the organization level
     async fn org_custom_property_names(&self, org: &str) -> anyhow::Result<HashSet<String>>;
@@ -433,6 +429,12 @@ impl GithubRead for GitHubApiRead {
     async fn repo(&self, org: &str, repo: &str) -> anyhow::Result<Option<Repo>> {
         // We use the GraphQL API instead of REST because of
         // this bug: https://github.com/orgs/community/discussions/153258
+        //
+        // Rulesets exclude inherited organization/enterprise rulesets (`includeParents: false`),
+        // as we only manage repository rulesets.
+        // Note that parent rulesets can contain parent-only rule types, such as `workflows`,
+        // so if you enable this, make sure the deserialization of the ruleset can handle all
+        // organization/enterprise rule types, too.
         #[derive(serde::Serialize)]
         struct Params<'a> {
             owner: &'a str,
@@ -453,6 +455,27 @@ impl GithubRead for GitHubApiRead {
                         nodes {
                             id
                             pattern
+                        }
+                    }
+                    rulesets(first: 100, includeParents: false) {
+                        pageInfo {
+                            hasNextPage
+                        }
+                        nodes {
+                            databaseId
+                        }
+                    }
+                    environments(first: 100) {
+                        pageInfo {
+                            hasNextPage
+                        }
+                        nodes {
+                            name
+                            protectionRules(first: 100) {
+                                nodes {
+                                    type
+                                }
+                            }
                         }
                     }
                     collaborators(first: 100, after: $cursor, affiliation: DIRECT) {
@@ -485,6 +508,44 @@ impl GithubRead for GitHubApiRead {
         struct BranchProtectionRule {
             id: String,
             pattern: String,
+        }
+
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct Rulesets {
+            page_info: GraphPageInfo,
+            nodes: Vec<RulesetNode>,
+        }
+
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct RulesetNode {
+            database_id: Option<u64>,
+        }
+
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct Environments {
+            page_info: GraphPageInfo,
+            nodes: Vec<EnvironmentNode>,
+        }
+
+        #[derive(serde::Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct EnvironmentNode {
+            name: String,
+            protection_rules: ProtectionRules,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct ProtectionRules {
+            nodes: Vec<ProtectionRule>,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct ProtectionRule {
+            #[serde(rename = "type")]
+            rule_type: String,
         }
 
         #[derive(serde::Deserialize)]
@@ -526,6 +587,8 @@ impl GithubRead for GitHubApiRead {
             is_archived: bool,
             is_private: bool,
             branch_protection_rules: BranchProtectionRules,
+            rulesets: Option<Rulesets>,
+            environments: Environments,
             collaborators: Collaborators,
         }
 
@@ -570,6 +633,28 @@ impl GithubRead for GitHubApiRead {
             match &mut repo_data {
                 Some(repo_data) => repo_data.collaborators.extend(collaborators),
                 None => {
+                    let rulesets = repo_response.rulesets.with_context(|| {
+                        format!("GitHub returned null rulesets for repo `{org}/{repo}`")
+                    })?;
+                    let ruleset_ids = rulesets
+                        .nodes
+                        .into_iter()
+                        .map(|ruleset| {
+                            ruleset.database_id.with_context(|| {
+                                format!(
+                                    "GitHub returned a ruleset without a database ID for repo `{org}/{repo}`"
+                                )
+                            })
+                        })
+                        .collect::<anyhow::Result<Vec<_>>>()?;
+
+                    // For simplicity, we don't paginate rulesets and environments, because no repo
+                    // comes close to 100 of them. If this assumption fails, implement pagination.
+                    anyhow::ensure!(
+                        !rulesets.page_info.has_next_page
+                            && !repo_response.environments.page_info.has_next_page,
+                        "repo `{org}/{repo}` has more than 100 rulesets or environments"
+                    );
                     repo_data = Some(Repo {
                         repo_id: repo_response.database_id,
                         name: repo.to_string(),
@@ -584,6 +669,20 @@ impl GithubRead for GitHubApiRead {
                             .nodes
                             .into_iter()
                             .map(|rule| (rule.pattern, rule.id))
+                            .collect(),
+                        ruleset_ids,
+                        environments: repo_response
+                            .environments
+                            .nodes
+                            .into_iter()
+                            .map(|env| RepoEnvironment {
+                                has_branch_policies: env
+                                    .protection_rules
+                                    .nodes
+                                    .iter()
+                                    .any(|rule| rule.rule_type == "BRANCH_POLICY"),
+                                name: env.name,
+                            })
                             .collect(),
                         collaborators: collaborators.collect(),
                     });
@@ -645,64 +744,23 @@ impl GithubRead for GitHubApiRead {
         Ok(teams)
     }
 
-    async fn repo_environments(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<HashMap<String, Environment>> {
-        #[derive(serde::Deserialize)]
-        struct ProtectionRule {
-            #[serde(rename = "type")]
-            rule_type: String,
-        }
-
-        #[derive(serde::Deserialize)]
-        struct GitHubEnvironment {
-            name: String,
-            protection_rules: Vec<ProtectionRule>,
-        }
-
-        #[derive(serde::Deserialize)]
-        struct EnvironmentsResponse {
-            environments: Vec<GitHubEnvironment>,
-        }
-
-        let mut env_infos = Vec::new();
-
-        // Fetch all environments with their protection_rules metadata
-        // REST API: https://docs.github.com/en/rest/deployments/environments#list-environments
-        self.client
-            .rest_paginated(
-                &Method::GET,
-                &GitHubUrl::repos(org, repo, "environments")?,
-                |resp: EnvironmentsResponse| {
-                    env_infos.extend(resp.environments);
-                    Ok(())
-                },
-            )
-            .await?;
-
+    async fn repo_environments(&self, repo: &Repo) -> anyhow::Result<HashMap<String, Environment>> {
         use futures_util::StreamExt;
+
+        let (org, repo_name) = (repo.org.as_str(), repo.name.as_str());
 
         // For each environment, fetch deployment branch policies if they exist
         // REST API: https://docs.github.com/en/rest/deployments/branch-policies#list-deployment-branch-policies
-        futures_util::stream::iter(env_infos)
-            .then(|env_info| async move {
-                // Check if branch policies exist by looking at protection_rules metadata
-                let has_branch_policies = env_info
-                    .protection_rules
-                    .iter()
-                    .any(|rule| rule.rule_type == "branch_policy");
-
-                let (branches, tags) = if has_branch_policies {
+        futures_util::stream::iter(&repo.environments)
+            .then(|RepoEnvironment { name: env_name, has_branch_policies }| async move {
+                let (branches, tags) = if *has_branch_policies {
                     let mut branches = Vec::new();
                     let mut tags = Vec::new();
                     let policies =
-                        self.environment_branch_policies(org, repo, &env_info.name).await.with_context(
+                        self.environment_branch_policies(org, repo_name, env_name).await.with_context(
                             || {
                                 format!(
-                                    "failed to load deployment branch policies for environment '{}' in '{org}/{repo}'",
-                                    env_info.name
+                                    "failed to load deployment branch policies for environment '{env_name}' in '{org}/{repo_name}'"
                                 )
                             },
                         )?;
@@ -717,7 +775,7 @@ impl GithubRead for GitHubApiRead {
                     (Vec::new(), Vec::new())
                 };
 
-                Ok((env_info.name, Environment { branches, tags }))
+                Ok((env_name.clone(), Environment { branches, tags }))
             })
             .collect::<Vec<_>>()
             .await
@@ -725,43 +783,16 @@ impl GithubRead for GitHubApiRead {
             .collect::<anyhow::Result<HashMap<_, _>>>()
     }
 
-    async fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>> {
-        #[derive(serde::Deserialize)]
-        struct RulesetInfo {
-            id: u64,
-        }
-
-        let mut ruleset_ids = vec![];
-
-        // Exclude inherited organization/enterprise rulesets, as we only manage
-        // repository rulesets.
-        // Note that parent rulesets can contain parent-only rule types, such as `workflows`,
-        // so if you enable this, make sure the deserialization of the ruleset can handle all
-        // organization/enterprise rule types, too.
-        let includes_parents = "includes_parents=false";
-
-        // REST API endpoint for rulesets
-        // https://docs.github.com/en/rest/repos/rules#get-all-repository-rulesets
-        // The API returns only a subset of data for each ruleset :/
-        // So we then have to fetch the rulesets individually to get the full data.
-        self.client
-            .rest_paginated(
-                &Method::GET,
-                &GitHubUrl::repos(org, repo, &format!("rulesets?{includes_parents}"))?,
-                |resp: Vec<RulesetInfo>| {
-                    ruleset_ids.extend(resp.into_iter().map(|info| info.id));
-                    Ok(())
-                },
-            )
-            .await?;
-
+    /// Fetch the full rulesets individually through the REST API.
+    /// https://docs.github.com/en/rest/repos/rules#get-a-repository-ruleset
+    async fn repo_rulesets(&self, repo: &Repo) -> anyhow::Result<Vec<Ruleset>> {
         let mut rulesets: Vec<Ruleset> = vec![];
-        for id in ruleset_ids {
+        for id in &repo.ruleset_ids {
             let ruleset: api::Ruleset = self
                 .client
                 .req(
                     Method::GET,
-                    &GitHubUrl::repos(org, repo, &format!("rulesets/{id}"))?,
+                    &GitHubUrl::repos(&repo.org, &repo.name, &format!("rulesets/{id}"))?,
                 )?
                 .send()
                 .await?

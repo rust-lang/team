@@ -166,6 +166,10 @@ impl DataModel {
                     // Branch protections are deprecated so we don't test them anymore
                     branch_protections: vec![],
                     collaborators,
+                    // The mock returns rulesets and environments directly from
+                    // `repo_rulesets` and `repo_environments`, so these fields are unused.
+                    ruleset_ids: vec![],
+                    environments: vec![],
                 },
             );
             let teams = repo
@@ -758,11 +762,11 @@ impl GithubRead for GithubMock {
             .unwrap_or_default())
     }
 
-    async fn repo_rulesets(&self, org: &str, repo: &str) -> anyhow::Result<Vec<Ruleset>> {
+    async fn repo_rulesets(&self, repo: &Repo) -> anyhow::Result<Vec<Ruleset>> {
         Ok(self
-            .get_org(org)
+            .get_org(&repo.org)
             .rulesets
-            .get(repo)
+            .get(&repo.name)
             .cloned()
             .unwrap_or_default())
     }
@@ -778,15 +782,11 @@ impl GithubRead for GithubMock {
         Ok(self.get_org(org).custom_properties.clone())
     }
 
-    async fn repo_environments(
-        &self,
-        org: &str,
-        repo: &str,
-    ) -> anyhow::Result<HashMap<String, Environment>> {
+    async fn repo_environments(&self, repo: &Repo) -> anyhow::Result<HashMap<String, Environment>> {
         Ok(self
-            .get_org(org)
+            .get_org(&repo.org)
             .repo_environments
-            .get(repo)
+            .get(&repo.name)
             .cloned()
             .unwrap_or_default())
     }
