@@ -21,6 +21,6 @@ crates = [
     "rustlings",
     "rustlings-macros",
 ]
-publish-workflow = "publish.yml"
+publish-workflow = "publish-crates-io.yml‎"
 publish-environment = "publish"
 teams = ["rustlings"]
