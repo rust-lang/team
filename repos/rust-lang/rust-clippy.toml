@@ -44,4 +44,5 @@ crates = [
     "clippy_dummy",
     "clippy_lints",
     "clippy-mini-macro-test",
+    "rustc_tools_util",
 ]
