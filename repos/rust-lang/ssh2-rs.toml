@@ -11,3 +11,12 @@ cargo = "write"
 crisidev = "write"
 wez = "write"
 yodaldevoid = "write"
+
+[environments.publish]
+branches = ["master"]
+
+[[crates-io]]
+crates = ["ssh2", "libssh2-sys"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["cargo"]
