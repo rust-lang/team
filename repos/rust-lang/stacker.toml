@@ -8,3 +8,17 @@ compiler = "write"
 
 [environments.github-pages]
 
+[environments.publish]
+tags = [
+    "psm-*",
+    "stacker-*",
+]
+
+[[crates-io]]
+crates = [
+    "psm",
+    "stacker",
+]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["compiler"]
