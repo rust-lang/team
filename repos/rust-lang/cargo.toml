@@ -42,6 +42,7 @@ crates = [
     "cargo-test-macro",
     "cargo-test-support",
     "cargo-util",
+    "cargo-util-config",
     "cargo-util-schemas",
     "cargo-util-terminal",
     "crates-io",
