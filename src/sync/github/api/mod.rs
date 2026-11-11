@@ -404,6 +404,19 @@ pub(crate) struct Repo {
     pub(crate) branch_protections: Vec<(String, String)>,
     #[serde(default)]
     pub(crate) collaborators: Vec<RepoUser>,
+    /// IDs of rulesets defined directly on the repository (not inherited from the org).
+    #[serde(default)]
+    pub(crate) ruleset_ids: Vec<u64>,
+    #[serde(default)]
+    pub(crate) environments: Vec<RepoEnvironment>,
+}
+
+/// An environment of a repository.
+#[derive(serde::Deserialize, Debug, Clone)]
+pub(crate) struct RepoEnvironment {
+    pub(crate) name: String,
+    /// Whether the environment has deployment branch policies, which have to be loaded separately.
+    pub(crate) has_branch_policies: bool,
 }
 
 fn repo_owner<'de, D>(deserializer: D) -> Result<String, D::Error>
