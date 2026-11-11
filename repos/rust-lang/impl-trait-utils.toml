@@ -9,3 +9,12 @@ wg-async = "maintain"
 [[rulesets]]
 pattern = "main"
 required-approvals = 0
+
+[environments.publish]
+tags = ["v*"]
+
+[[crates-io]]
+crates = ["trait-variant"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["wg-async"]
