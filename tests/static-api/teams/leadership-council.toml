@@ -2,7 +2,10 @@ name = "leadership-council"
 
 [people]
 leads = []
-members = []
+members = [
+    "user-0",
+    "user-1",
+]
 alumni = []
 
 [website]
