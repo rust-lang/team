@@ -5,3 +5,15 @@ bots = []
 
 [access.teams]
 wg-gcc-backend = "maintain"
+
+[environments.publish]
+tags = ["v*"]
+
+[[crates-io]]
+crates = [
+    "gccjit",
+    "gccjit_sys",
+]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["wg-gcc-backend"]

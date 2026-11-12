@@ -7,4 +7,13 @@ bots = []
 compiler = "write"
 
 [[rulesets]]
-pattern = 'master'
+pattern = "main"
+
+[environments.publish]
+tags = ["*"]
+
+[[crates-io]]
+crates = ["ena"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["compiler"]

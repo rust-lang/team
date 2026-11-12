@@ -6,6 +6,7 @@ leads = []
 members = [
     { github = "Amanieu", roles = ["hashbrown-maintainer"] },
     { github = "beetrees", roles = ["compiler-builtins-maintainer"] },
+    { github = "BurntSushi", roles = ["regex-maintainer"] },
     { github = "Byron", roles = ["flate2-maintainer", "libz-sys-maintainer"] },
     { github = "ChrisDenton", roles = [] },
     { github = "clarfonthey", roles = ["hashbrown-maintainer"] },
@@ -31,6 +32,9 @@ alumni = [
     "carllerche",
     "chansuke",
     "sfackler",
+    "crisidev", # For ssh2-rs
+    "wez", # For ssh2-rs
+    "yodaldevoid", # For ssh2-rs
 ]
 
 [[github]]
@@ -85,6 +89,10 @@ description = "log"
 [[roles]]
 id = "pkg-config-maintainer"
 description = "pkg-config"
+
+[[roles]]
+id = "regex-maintainer"
+description = "regex"
 
 [[roles]]
 id = "socket2-maintainer"

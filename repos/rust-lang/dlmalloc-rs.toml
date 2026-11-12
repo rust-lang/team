@@ -10,3 +10,12 @@ libs = "write"
 [[rulesets]]
 pattern = "main"
 required-approvals = 0
+
+[environments.publish]
+tags = ["*"]
+
+[[crates-io]]
+crates = ["dlmalloc"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["compiler", "libs"]

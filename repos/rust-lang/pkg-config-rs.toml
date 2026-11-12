@@ -13,3 +13,12 @@ path = "/"
 crate-maintainers = "maintain"
 
 [environments.github-pages]
+
+[environments.publish]
+tags = ["*"]
+
+[[crates-io]]
+crates = ["pkg-config"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["crate-maintainers"]

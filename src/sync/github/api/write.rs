@@ -194,6 +194,8 @@ impl GitHubWrite {
                 allow_auto_merge: Some(settings.auto_merge_enabled),
                 branch_protections: vec![],
                 collaborators: vec![],
+                ruleset_ids: vec![],
+                environments: vec![],
             })
         } else {
             Ok(self
