@@ -1,24 +1,33 @@
-org = 'rust-lang'
-name = 'socket2'
-description = 'Advanced configuration options for sockets.'
+org = "rust-lang"
+name = "socket2"
+description = "Advanced configuration options for sockets."
 homepage = "https://docs.rs/socket2"
 bots = []
 
 [access.teams]
-crate-maintainers = 'maintain'
+crate-maintainers = "maintain"
 
 [[rulesets]]
-pattern = 'master'
+pattern = "master"
 ci-checks = [
-    'Rustfmt',
-    'Test (beta)',
-    'Test (macos)',
-    'Test (nightly)',
-    'Test (stable)',
-    'Test (windows)',
+    "Rustfmt",
+    "Test (beta)",
+    "Test (macos)",
+    "Test (nightly)",
+    "Test (stable)",
+    "Test (windows)",
 ]
 
 [environments.github-pages]
+
+[environments.publish]
+tags = ["v*"]
+
+[[crates-io]]
+crates = ["socket2"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["crate-maintainers"]
 
 [[crates-io]]
 # This crate is deprecated. It lives in the https://github.com/deprecrated/net2-rs repository,
