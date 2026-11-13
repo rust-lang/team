@@ -32,7 +32,6 @@ toml_edit = "0.25"
 
 [dev-dependencies]
 ansi_term = "0.12.1"
-atty = "0.2.14"
 derive_builder = "0.20.2"
 difference = "2.0.0"
 dir-diff = "0.3"
