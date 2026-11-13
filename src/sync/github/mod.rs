@@ -1201,6 +1201,7 @@ pub fn convert_permission(p: &rust_team_data::v1::RepoPermission) -> RepoPermiss
         v1::RepoPermission::Admin => RepoPermission::Admin,
         v1::RepoPermission::Maintain => RepoPermission::Maintain,
         v1::RepoPermission::Triage => RepoPermission::Triage,
+        v1::RepoPermission::Moderate => RepoPermission::Moderate,
     }
 }
 

@@ -572,6 +572,7 @@ impl GithubRead for GitHubApiRead {
             Admin,
             Maintain,
             Write,
+            Moderate,
             Triage,
             Read,
         }
@@ -625,6 +626,7 @@ impl GithubRead for GitHubApiRead {
                             CollaboratorPermission::Admin => RepoPermission::Admin,
                             CollaboratorPermission::Maintain => RepoPermission::Maintain,
                             CollaboratorPermission::Write => RepoPermission::Write,
+                            CollaboratorPermission::Moderate => RepoPermission::Moderate,
                             CollaboratorPermission::Triage => RepoPermission::Triage,
                             CollaboratorPermission::Read => RepoPermission::Read,
                         },

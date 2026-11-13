@@ -785,7 +785,7 @@ async fn repo_change_team_permissions() {
     model.create_repo(RepoData::new("repo1").team("team1", RepoPermission::Triage));
 
     let gh = model.gh_model();
-    model.get_repo("repo1").teams.last_mut().unwrap().permission = RepoPermission::Admin;
+    model.get_repo("repo1").teams.last_mut().unwrap().permission = RepoPermission::Moderate;
 
     let diff = model.diff_repos(gh).await;
     insta::assert_debug_snapshot!(diff, @r#"
@@ -816,7 +816,7 @@ async fn repo_change_team_permissions() {
                         ),
                         diff: Update(
                             Triage,
-                            Admin,
+                            Moderate,
                         ),
                     },
                 ],
