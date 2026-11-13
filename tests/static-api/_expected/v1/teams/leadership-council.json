@@ -2,7 +2,20 @@
   "name": "leadership-council",
   "kind": "team",
   "subteam_of": null,
-  "members": [],
+  "members": [
+    {
+      "name": "Zeroth user",
+      "github": "user-0",
+      "github_id": 0,
+      "is_lead": false
+    },
+    {
+      "name": "First user",
+      "github": "user-1",
+      "github_id": 0,
+      "is_lead": false
+    }
+  ],
   "alumni": [],
   "github": null,
   "website_data": {
