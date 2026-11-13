@@ -77,7 +77,7 @@ fn generate_codeowners_content(data: Data) -> String {
         .individuals
         .iter()
         .filter_map(|(user, permission)| match permission {
-            RepoPermission::Triage => None,
+            RepoPermission::Triage | RepoPermission::Moderate => None,
             RepoPermission::Write | RepoPermission::Maintain | RepoPermission::Admin => {
                 Some(user.as_str())
             }
@@ -89,7 +89,7 @@ fn generate_codeowners_content(data: Data) -> String {
             .teams
             .iter()
             .filter(|(_, permission)| match permission {
-                RepoPermission::Triage => false,
+                RepoPermission::Triage | RepoPermission::Moderate => false,
                 RepoPermission::Write | RepoPermission::Maintain | RepoPermission::Admin => true,
             })
             .flat_map(|(team, _)| {

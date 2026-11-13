@@ -415,7 +415,8 @@ See [GitHub's documentation][github-roles] for information on what each role is 
 - `admin` — No users or teams except for org owners should have this permission level.
 - `maintain` — Teams may have this permission level at their discretion for repositories the team is responsible for.
 - `write` — Teams that are responsible for a repository should have at least this permission level.
-- `triage` — This role is available if teams want to give these permissions to other teams, such as for triage support. Unfortunately this role does not allow contributors to edit issue descriptions or titles, so its utility for that purpose is limited.
+- `moderate` — This role is available if teams want to let other teams moderate issues without giving them write access. Unlike `triage`, it can edit anyone's issue titles, descriptions and comments, hide comments and lock conversations on issues, transfer issues, and create and edit issue labels, milestones and discussion categories. It grants nothing extra on pull requests, and it can't lock, move or delete discussions, which `triage` can.
+- `triage` — This role is available if teams want to give these permissions to other teams, such as for triage support. This role does not allow contributors to edit other people's issue descriptions or titles; use `moderate` if that is needed.
 
 [github-roles]: https://help.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization
 
@@ -424,6 +425,7 @@ See [GitHub's documentation][github-roles] for information on what each role is 
 #
 # The key is the team name, and the value is either:
 # - "triage"
+# - "moderate"
 # - "write"
 # - "maintain"
 # - "admin"
