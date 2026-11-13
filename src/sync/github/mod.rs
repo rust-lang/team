@@ -1711,10 +1711,7 @@ impl UpdateRepoDiff {
         // Archived repositories cannot be modified
         // If the repository should be archived, and we do not change its archival status,
         // we should not change any other properties of the repo.
-        if self.settings_diff.1.archived && self.settings_diff.0.archived {
-            return false;
-        }
-        true
+        !(self.settings_diff.1.archived && self.settings_diff.0.archived)
     }
 
     async fn apply(&self, sync: &GitHubWrite) -> anyhow::Result<()> {
