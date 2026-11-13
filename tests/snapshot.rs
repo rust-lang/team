@@ -1,3 +1,6 @@
+use std::io;
+use std::io::IsTerminal as _;
+
 use anyhow::{Error, bail};
 use duct::{Expression, cmd};
 use std::{
@@ -119,7 +122,7 @@ trait ExpressionExt {
 impl ExpressionExt for Expression {
     fn assert_success(mut self) -> Result<(), Error> {
         // If the environment variable is not passed colors will never be shown.
-        if atty::is(atty::Stream::Stdout) {
+        if io::stdout().is_terminal() {
             self = self.env("RUST_TEAM_FORCE_COLORS", "1");
         }
 
