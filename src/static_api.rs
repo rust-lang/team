@@ -62,6 +62,7 @@ impl<'a> Generator<'a> {
                     name: b.name.clone(),
                     dismiss_stale_review: b.dismiss_stale_review,
                     require_conversation_resolution: b.require_conversation_resolution,
+                    require_code_owner_review: b.require_code_owner_review,
                     require_linear_history: b.require_linear_history,
                     mode: if b.pr_required {
                         BranchProtectionMode::PrRequired {

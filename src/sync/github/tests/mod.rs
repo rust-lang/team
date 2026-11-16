@@ -1096,6 +1096,7 @@ async fn repo_update_branch_protection() {
     }
     protection.dismiss_stale_review = true;
     protection.require_conversation_resolution = true;
+    protection.require_code_owner_review = true;
     protection.require_linear_history = true;
     protection.prevent_force_push = false;
     protection.require_up_to_date_branches = true;
@@ -1199,7 +1200,7 @@ async fn repo_update_branch_protection() {
                                     PullRequest {
                                         parameters: PullRequestParameters {
                                             dismiss_stale_reviews_on_push: true,
-                                            require_code_owner_review: false,
+                                            require_code_owner_review: true,
                                             require_last_push_approval: false,
                                             required_approving_review_count: 0,
                                             required_review_thread_resolution: true,

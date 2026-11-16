@@ -385,6 +385,8 @@ pub struct BranchProtection {
     #[serde(default)]
     pub require_conversation_resolution: bool,
     #[serde(default)]
+    pub require_code_owner_review: bool,
+    #[serde(default)]
     pub require_linear_history: bool,
     pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,

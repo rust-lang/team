@@ -1059,6 +1059,8 @@ pub(crate) struct Ruleset {
     #[serde(default)]
     pub require_conversation_resolution: bool,
     #[serde(default)]
+    pub require_code_owner_review: bool,
+    #[serde(default)]
     pub require_linear_history: bool,
     #[serde(default)]
     pub required_approvals: Option<u32>,
