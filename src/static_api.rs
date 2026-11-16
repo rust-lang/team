@@ -92,7 +92,7 @@ impl<'a> Generator<'a> {
                     merge_bots: vec![],
                 })
                 .collect();
-            let managed_by_bors = r.bots.contains(&Bot::Bors);
+            let merges_managed_by_bors = self.data.bors_performs_merges(r);
             let repo = v1::Repo {
                 org: r.org.clone(),
                 name: r.name.clone(),
@@ -229,7 +229,7 @@ impl<'a> Generator<'a> {
                 },
                 pages: convert_pages(r)?,
                 archived,
-                auto_merge_enabled: !managed_by_bors,
+                auto_merge_enabled: !merges_managed_by_bors,
                 custom_properties: {
                     let mut properties = r.custom_properties.clone();
                     if r.org != "rust-lang"
