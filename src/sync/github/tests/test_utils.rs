@@ -178,12 +178,7 @@ impl DataModel {
                 .into_iter()
                 .map(|t| api::RepoTeam {
                     name: t.name,
-                    permission: match t.permission {
-                        RepoPermission::Write => api::RepoPermission::Write,
-                        RepoPermission::Admin => api::RepoPermission::Admin,
-                        RepoPermission::Maintain => api::RepoPermission::Maintain,
-                        RepoPermission::Triage => api::RepoPermission::Triage,
-                    },
+                    permission: convert_permission(&t.permission),
                 })
                 .collect();
             org.repo_members

@@ -14,7 +14,12 @@
       "permission": "maintain"
     }
   ],
-  "members": [],
+  "members": [
+    {
+      "name": "user-0",
+      "permission": "moderate"
+    }
+  ],
   "branch_protections": [
     {
       "pattern": "master",
