@@ -59,6 +59,7 @@ crates = [
     "ra_ap_edition",
     "ra_ap_flycheck",
     "ra_ap_hir",
+    "ra_ap_hir-ide",
     "ra_ap_hir_def",
     "ra_ap_hir_expand",
     "ra_ap_hir_ty",
