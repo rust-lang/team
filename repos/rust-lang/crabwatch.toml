@@ -13,3 +13,6 @@ pattern = "main"
 ci-checks = ["CI"]
 required-approvals = 0
 merge-queue = { enabled = true }
+
+[environments.analyze-org]
+branches = ["gh-readonly-queue/main/*"]
