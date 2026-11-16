@@ -125,6 +125,7 @@ impl<'a> Generator<'a> {
                             RepoPermission::Write => v1::RepoPermission::Write,
                             RepoPermission::Maintain => v1::RepoPermission::Maintain,
                             RepoPermission::Triage => v1::RepoPermission::Triage,
+                            RepoPermission::Moderate => v1::RepoPermission::Moderate,
                         };
 
                         // Look up the team by name and get all its GitHub teams
@@ -158,6 +159,7 @@ impl<'a> Generator<'a> {
                                 RepoPermission::Write => v1::RepoPermission::Write,
                                 RepoPermission::Maintain => v1::RepoPermission::Maintain,
                                 RepoPermission::Triage => v1::RepoPermission::Triage,
+                                RepoPermission::Moderate => v1::RepoPermission::Moderate,
                             };
                             v1::RepoMember {
                                 name: name.clone(),

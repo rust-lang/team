@@ -955,6 +955,7 @@ pub(crate) struct RepoAccess {
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) enum RepoPermission {
     Triage,
+    Moderate,
     Write,
     Maintain,
     Admin,
