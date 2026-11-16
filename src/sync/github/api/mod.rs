@@ -130,16 +130,18 @@ impl HttpClient {
         V: serde::Serialize,
     {
         let res = self.send_graphql_req(query, variables, org).await?;
-
-        if let Some(error) = res.errors.first() {
-            bail!("graphql error: {}", error.message);
-        }
-
         read_graphql_data(res)
     }
 
     /// Send a request to the GitHub API and return the response.
-    /// If the request contains the error type `NOT_FOUND`, this method returns `Ok(None)`.
+    ///
+    /// If all the errors in the response are of type `NOT_FOUND` and refer to a top-level field
+    /// of the query (e.g. `repository(owner: ..., name: ...)`), meaning that the queried resource
+    /// doesn't exist or isn't visible to the token, this method returns `Ok(None)`.
+    /// Any other error, including a `NOT_FOUND` error for a nested field, is returned as an error.
+    ///
+    /// This assumes that the query has a single top-level field. With multiple top-level fields,
+    /// `Ok(None)` would be returned if any of them isn't found, discarding the data of the others.
     async fn graphql_opt<R, V>(
         &self,
         query: &str,
@@ -151,15 +153,7 @@ impl HttpClient {
         V: serde::Serialize,
     {
         let res = self.send_graphql_req(query, variables, org).await?;
-
-        if let Some(error) = res.errors.first() {
-            if error.type_ == Some(GraphErrorType::NotFound) {
-                return Ok(None);
-            }
-            bail!("graphql error: {}", error.message);
-        }
-
-        read_graphql_data(res)
+        read_graphql_data_opt(res)
     }
 
     async fn send_graphql_req<R, V>(
@@ -250,15 +244,24 @@ impl HttpClient {
     }
 }
 
-fn read_graphql_data<R>(res: GraphResult<R>) -> anyhow::Result<R>
-where
-    R: serde::de::DeserializeOwned,
-{
-    if let Some(data) = res.data {
-        Ok(data)
-    } else {
-        bail!("missing graphql data");
+fn read_graphql_data<R>(res: GraphResult<R>) -> anyhow::Result<R> {
+    if let Some(error) = res.errors.first() {
+        bail!("graphql error: {error}");
     }
+    res.data.context("missing graphql data")
+}
+
+/// See [`HttpClient::graphql_opt`].
+fn read_graphql_data_opt<R>(res: GraphResult<R>) -> anyhow::Result<Option<R>> {
+    if let Some(error) = res.errors.iter().find(|error| !error.is_root_not_found()) {
+        bail!("graphql error: {error}");
+    }
+    if !res.errors.is_empty() {
+        // All the errors are `NOT_FOUND` errors for top-level fields.
+        return Ok(None);
+    }
+
+    res.data.context("missing graphql data").map(Some)
 }
 
 async fn allow_not_found(resp: Response, method: Method, url: &str) -> Result<(), anyhow::Error> {
@@ -285,6 +288,33 @@ struct GraphError {
     #[serde(rename = "type")]
     type_: Option<GraphErrorType>,
     message: String,
+    /// Path of the field that produced the error, e.g. `["repository", "collaborators"]`.
+    /// Segments are field names or list indices.
+    /// `None` if the error isn't tied to a field (the key is missing or `null`).
+    path: Option<Vec<serde_json::Value>>,
+}
+
+impl GraphError {
+    /// Returns `true` if this is a `NOT_FOUND` error for a top-level field of the query,
+    /// i.e. the queried resource itself (e.g. a repository) doesn't exist or isn't visible to the
+    /// token.
+    fn is_root_not_found(&self) -> bool {
+        self.type_ == Some(GraphErrorType::NotFound) && matches!(self.path.as_deref(), Some([_]))
+    }
+}
+
+impl fmt::Display for GraphError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.message)?;
+        // The path tells which field of the query failed, which the message alone often doesn't
+        // (e.g. "Could not resolve to a node.").
+        if let Some(path) = &self.path {
+            // Printed as JSON, e.g. `["repository","collaborators","edges",0,"node"]`.
+            let path = serde_json::to_string(path).map_err(|_| fmt::Error)?;
+            write!(f, " (path: {path})")?;
+        }
+        Ok(())
+    }
 }
 
 #[derive(Debug, serde::Deserialize, PartialEq, Eq)]
@@ -749,7 +779,188 @@ pub(crate) struct SetCustomPropertiesRequest {
 
 #[cfg(test)]
 mod tests {
-    use super::{CustomPropertyValue, SetCustomPropertiesRequest};
+    use super::{
+        CustomPropertyValue, GraphResult, SetCustomPropertiesRequest, read_graphql_data,
+        read_graphql_data_opt,
+    };
+    use serde_json::json;
+
+    fn read_opt(response: serde_json::Value) -> anyhow::Result<Option<serde_json::Value>> {
+        let res: GraphResult<serde_json::Value> = serde_json::from_value(response).unwrap();
+        read_graphql_data_opt(res)
+    }
+
+    fn read_opt_err(response: serde_json::Value) -> String {
+        read_opt(response).unwrap_err().to_string()
+    }
+
+    #[test]
+    fn graphql_opt_returns_data_without_errors() {
+        let data = json!({ "repository": { "databaseId": 1 } });
+        let result = read_opt(json!({ "data": data })).unwrap();
+        assert_eq!(result, Some(data));
+    }
+
+    #[test]
+    fn graphql_opt_returns_none_when_root_field_is_not_found() {
+        let result = read_opt(json!({
+            "data": { "repository": null },
+            "errors": [{
+                "type": "NOT_FOUND",
+                "path": ["repository"],
+                "locations": [{ "line": 3, "column": 17 }],
+                "message": "Could not resolve to a Repository with the name 'rust-lang/foo'.",
+            }],
+        }))
+        .unwrap();
+        assert_eq!(result, None);
+    }
+
+    #[test]
+    fn graphql_opt_returns_none_when_all_errors_are_root_not_found() {
+        // Having several errors doesn't prevent returning `None`, as long as all of them are
+        // `NOT_FOUND` errors for top-level fields.
+        let result = read_opt(json!({
+            "data": { "a": null, "b": null },
+            "errors": [
+                {
+                    "type": "NOT_FOUND",
+                    "path": ["a"],
+                    "message": "Could not resolve to a Repository with the name 'rust-lang/foo'.",
+                },
+                {
+                    "type": "NOT_FOUND",
+                    "path": ["b"],
+                    "message": "Could not resolve to a Repository with the name 'rust-lang/bar'.",
+                },
+            ],
+        }))
+        .unwrap();
+        assert_eq!(result, None);
+    }
+
+    #[test]
+    fn graphql_fails_on_root_not_found() {
+        // Unlike `graphql_opt`, `graphql` doesn't treat a missing resource as `None`.
+        let res: GraphResult<serde_json::Value> = serde_json::from_value(json!({
+            "data": { "repository": null },
+            "errors": [{
+                "type": "NOT_FOUND",
+                "path": ["repository"],
+                "message": "Could not resolve to a Repository with the name 'rust-lang/foo'.",
+            }],
+        }))
+        .unwrap();
+        let error = read_graphql_data(res).unwrap_err().to_string();
+        assert_eq!(
+            error,
+            r#"graphql error: Could not resolve to a Repository with the name 'rust-lang/foo'. (path: ["repository"])"#
+        );
+    }
+
+    #[test]
+    fn graphql_opt_fails_on_missing_data_without_errors() {
+        // Only a `NOT_FOUND` error proves that the resource is missing, not the lack of data.
+        let error = read_opt_err(json!({ "data": null }));
+        assert_eq!(error, "missing graphql data");
+    }
+
+    #[test]
+    fn graphql_opt_fails_when_nested_field_is_not_found() {
+        let error = read_opt_err(json!({
+            "data": { "repository": { "collaborators": { "edges": [null] } } },
+            "errors": [{
+                "type": "NOT_FOUND",
+                "path": ["repository", "collaborators", "edges", 0, "node"],
+                "message": "Could not resolve to a node.",
+            }],
+        }));
+        assert_eq!(
+            error,
+            r#"graphql error: Could not resolve to a node. (path: ["repository","collaborators","edges",0,"node"])"#
+        );
+    }
+
+    #[test]
+    fn graphql_opt_fails_when_contains_nested_not_found_error_and_root_field_null() {
+        let error = read_opt_err(json!({
+            "data": { "repository": null },
+            "errors": [{
+                "type": "NOT_FOUND",
+                "path": ["repository", "branchProtectionRules"],
+                "message": "Could not resolve to a node.",
+            }],
+        }));
+        assert_eq!(
+            error,
+            r#"graphql error: Could not resolve to a node. (path: ["repository","branchProtectionRules"])"#
+        );
+    }
+
+    #[test]
+    fn graphql_opt_fails_when_not_found_is_accompanied_by_other_errors() {
+        let error = read_opt_err(json!({
+            "data": { "repository": null },
+            "errors": [
+                {
+                    "type": "NOT_FOUND",
+                    "path": ["repository"],
+                    "message": "Could not resolve to a Repository with the name 'rust-lang/foo'.",
+                },
+                {
+                    "type": "FORBIDDEN",
+                    "path": ["repository"],
+                    "message": "Resource not accessible by integration",
+                },
+            ],
+        }));
+        // The reported error is the one that prevents treating the resource as missing, not the
+        // first one.
+        assert_eq!(
+            error,
+            r#"graphql error: Resource not accessible by integration (path: ["repository"])"#
+        );
+    }
+
+    #[test]
+    fn graphql_opt_fails_on_errors_other_than_root_not_found() {
+        let cases = [
+            (
+                json!({
+                    "type": "FORBIDDEN",
+                    "path": ["repository"],
+                    "message": "Resource not accessible by integration",
+                }),
+                r#"graphql error: Resource not accessible by integration (path: ["repository"])"#,
+            ),
+            // Query validation errors have no `type`, even if their path has a single segment.
+            (
+                json!({
+                    "path": ["query"],
+                    "extensions": { "code": "variableNotUsed", "variableName": "x" },
+                    "message": "Variable $x is declared by anonymous query but not used",
+                }),
+                r#"graphql error: Variable $x is declared by anonymous query but not used (path: ["query"])"#,
+            ),
+            // `NOT_FOUND` errors not tied to a top-level field: the path is missing, `null` or
+            // empty. An explicit `null` path must deserialize like a missing one.
+            (
+                json!({ "type": "NOT_FOUND", "message": "Something went wrong" }),
+                "graphql error: Something went wrong",
+            ),
+            (
+                json!({ "type": "NOT_FOUND", "path": null, "message": "Something went wrong" }),
+                "graphql error: Something went wrong",
+            ),
+            (
+                json!({ "type": "NOT_FOUND", "path": [], "message": "Something went wrong" }),
+                "graphql error: Something went wrong (path: [])",
+            ),
+        ];
+        for (error, expected) in cases {
+            assert_eq!(read_opt_err(json!({ "errors": [error] })), expected);
+        }
+    }
 
     #[test]
     fn serializes_bool_custom_property_values_as_strings() {
