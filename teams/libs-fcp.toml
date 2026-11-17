@@ -13,7 +13,23 @@ members = [
     "nia-e",
     "Mark-Simulacrum",
 ]
-alumni = []
+alumni = [
+    "alexcrichton",
+    "Amanieu",
+    "aturon",
+    "brson",
+    "BurntSushi",
+    "Gankra",
+    "huonw",
+    "Kimundi",
+    "KodrAus",
+    "LukasKalbertodt",
+    "m-ou-se",
+    "sfackler",
+    "SimonSapin",
+    "withoutboats",
+    "yaahc",
+]
 
 [rfcbot]
 label = "T-libs"
