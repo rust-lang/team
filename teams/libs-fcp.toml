@@ -4,7 +4,6 @@ subteam-of = "libs"
 [people]
 leads = []
 members = [
-    "cuviper",
     "dtolnay",
     "joshtriplett",
     "the8472",
@@ -19,6 +18,7 @@ alumni = [
     "aturon",
     "brson",
     "BurntSushi",
+    "cuviper",
     "Gankra",
     "huonw",
     "Kimundi",
