@@ -11,6 +11,8 @@ crabwatch = "triage"
 [[rulesets]]
 pattern = "main"
 ci-checks = ["CI"]
+dismiss-stale-review = true
+require-code-owner-review = true
 required-approvals = 0
 merge-queue = { enabled = true }
 
