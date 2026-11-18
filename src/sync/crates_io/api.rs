@@ -328,10 +328,16 @@ impl CratesIoApi {
                 "Did not find any pending crate invitation for crate `{krate}`. Please invite `{username}` to be its owner.",
             ));
         };
-        self.accept_pending_invitation(invitation.id)
-            .await
-            .with_context(|| anyhow::anyhow!("Cannot accept pending invitation for {username}"))?;
 
+        debug!("Accepting a pending invitation for crate {krate}");
+
+        if !self.dry_run {
+            self.accept_pending_invitation(invitation.id)
+                .await
+                .with_context(|| {
+                    anyhow::anyhow!("Cannot accept pending invitation for {username}")
+                })?;
+        }
         Ok(())
     }
 
@@ -352,6 +358,8 @@ impl CratesIoApi {
         struct Crate {
             trustpub_only: bool,
         }
+
+        debug!("Set Trusted publishing only to value `{value}` for {krate}");
 
         if !self.dry_run {
             self.req(
