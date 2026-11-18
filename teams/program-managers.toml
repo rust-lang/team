@@ -12,3 +12,9 @@ members = [
     "tomassedovic",
     "nxsaken",
 ]
+
+[[github]]
+orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "T-program-managers"

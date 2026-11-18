@@ -5,3 +5,4 @@ bots = ["rustbot"]
 
 [access.teams]
 libs = "maintain"
+program-managers = "write"
