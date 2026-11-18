@@ -242,7 +242,7 @@ impl CratesIoApi {
                 None::<&()>,
             )
             .await?;
-        let krate: CrateResponse = response.json_annotated().await?;
+        let krate: CrateResponse = response.error_for_status()?.json_annotated().await?;
         Ok(krate.krate)
     }
 
