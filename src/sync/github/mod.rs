@@ -1020,7 +1020,6 @@ impl SyncGitHub {
             | Bot::RustTimer
             | Bot::Rustbot
             | Bot::Craterbot
-            | Bot::Glacierbot
             | Bot::LogAnalyzer
             | Bot::HerokuDeployAccess => None,
         }) {
@@ -1183,7 +1182,6 @@ impl From<&Bot> for BotDetails {
             Bot::RustTimer => write_access("rust-timer"),
             Bot::Rfcbot => write_access("rust-rfcbot"),
             Bot::Craterbot => write_access("craterbot"),
-            Bot::Glacierbot => write_access("rust-lang-glacier-bot"),
             Bot::LogAnalyzer => write_access("rust-log-analyzer"),
             Bot::Bors | Bot::Datadog | Bot::Renovate | Bot::ForkingRenovate => {
                 BotDetails::GitHubApp
