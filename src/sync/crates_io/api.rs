@@ -297,11 +297,23 @@ impl CratesIoApi {
 
     /// Accept a pending crate owner invitaiton.
     async fn accept_pending_invitation(&self, invitation_id: u64) -> anyhow::Result<()> {
+        #[derive(serde::Serialize)]
+        struct Invitation {
+            state: &'static str,
+        }
+
+        #[derive(serde::Serialize)]
+        struct Request {
+            crate_owner_invitation: Invitation,
+        }
+
         self.req(
             Method::PATCH,
             &format!("/crate_owner_invitations/{invitation_id}"),
             HashMap::default(),
-            None::<&()>,
+            Some(&Request {
+                crate_owner_invitation: Invitation { state: "accepted" },
+            }),
         )
         .await?
         .error_for_status()?;
