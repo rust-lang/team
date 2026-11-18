@@ -29,6 +29,7 @@ crabwatch-deny-list = [
 permissions-bors-repos = [
     "bors-kindergarten",
     "rust",
+    "miri",
 ]
 
 permissions-bools = [

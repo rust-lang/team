@@ -289,6 +289,13 @@ impl Data {
             independent_github_orgs: self.config.independent_github_orgs().clone(),
         })
     }
+
+    /// Is bors performing merges on this repository?
+    pub(crate) fn bors_performs_merges(&self, repo: &Repo) -> bool {
+        // We hardcode the compiler repository for now, because there are other repositories
+        // that want to use production bors for auxiliary functionality (e.g. squashes).
+        repo.org == "rust-lang" && repo.name == "rust"
+    }
 }
 
 fn load_file<T: DeserializeOwned>(path: &Path) -> Result<T, Error> {
