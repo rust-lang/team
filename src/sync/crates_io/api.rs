@@ -64,7 +64,8 @@ impl CratesIoApi {
                 None,
             )
             .await?
-            .custom_error_for_status()?
+            .custom_error_for_status()
+            .await?
             .json_annotated()
             .await?;
 
@@ -111,7 +112,8 @@ impl CratesIoApi {
                 None,
             )
             .await?
-            .custom_error_for_status()?
+            .custom_error_for_status()
+            .await?
             .json_annotated()
             .await?;
 
@@ -142,6 +144,7 @@ impl CratesIoApi {
             )
             .await?
             .custom_error_for_status()
+            .await
             .with_context(|| {
                 anyhow::anyhow!("Cannot delete owner(s) {owners:?} from krate {krate}")
             })?;
@@ -197,6 +200,7 @@ impl CratesIoApi {
         )
         .await?
         .custom_error_for_status()
+        .await
         .with_context(|| {
             anyhow!("Cannot created trusted publishing config {config:?} for crate {krate}")
         })?;
@@ -220,6 +224,7 @@ impl CratesIoApi {
             )
             .await?
             .custom_error_for_status()
+            .await
             .with_context(|| anyhow!("Cannot delete trusted publishing config with ID {id}"))?;
         }
 
@@ -242,7 +247,11 @@ impl CratesIoApi {
                 None::<&()>,
             )
             .await?;
-        let krate: CrateResponse = response.custom_error_for_status()?.json_annotated().await?;
+        let krate: CrateResponse = response
+            .custom_error_for_status()
+            .await?
+            .json_annotated()
+            .await?;
         Ok(krate.krate)
     }
 
@@ -316,7 +325,8 @@ impl CratesIoApi {
             }),
         )
         .await?
-        .custom_error_for_status()?;
+        .custom_error_for_status()
+        .await?;
         Ok(())
     }
 
@@ -386,6 +396,7 @@ impl CratesIoApi {
             )
             .await?
             .custom_error_for_status()
+            .await
             .with_context(|| anyhow::anyhow!("Cannot patch crate {krate}"))?;
         }
 
@@ -450,7 +461,8 @@ impl CratesIoApi {
             let response: Response<R> = self
                 .req(reqwest::Method::GET, &path, query, data)
                 .await?
-                .custom_error_for_status()?
+                .custom_error_for_status()
+                .await?
                 .json_annotated()
                 .await?;
             handle_response(response.data);
