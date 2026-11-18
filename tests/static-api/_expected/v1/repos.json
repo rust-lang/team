@@ -13,6 +13,7 @@
           "pattern": "master",
           "dismiss_stale_review": false,
           "require_conversation_resolution": false,
+          "require_code_owner_review": false,
           "require_linear_history": false,
           "mode": {
             "pr_required": {
@@ -67,6 +68,7 @@
           "pattern": "master",
           "dismiss_stale_review": false,
           "require_conversation_resolution": false,
+          "require_code_owner_review": true,
           "require_linear_history": false,
           "mode": {
             "pr_required": {

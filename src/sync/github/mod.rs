@@ -1263,7 +1263,7 @@ pub fn construct_ruleset(
         rules.insert(RulesetRule::PullRequest {
             parameters: PullRequestParameters {
                 dismiss_stale_reviews_on_push: branch_protection.dismiss_stale_review,
-                require_code_owner_review: REQUIRE_CODE_OWNER_REVIEW_DEFAULT,
+                require_code_owner_review: branch_protection.require_code_owner_review,
                 require_last_push_approval: REQUIRE_LAST_PUSH_APPROVAL_DEFAULT,
                 required_approving_review_count: github_int(required_approvals),
                 required_review_thread_resolution: branch_protection

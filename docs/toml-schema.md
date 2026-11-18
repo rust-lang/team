@@ -486,6 +486,13 @@ dismiss-stale-review = false
 # Whether all PR conversations must be resolved before merging.
 # (optional - default `false`)
 require-conversation-resolution = false
+# Whether PRs that modify files with a designated code owner require
+# an approving review from one of those code owners.
+# This only has an effect if the repository has a CODEOWNERS file.
+# Cannot be set if `pr-required` is `false`.
+# Cannot be set if `bypass-apps` contains "bors".
+# (optional - default `false`)
+require-code-owner-review = false
 # Prevent merge commits from being pushed to matching branches.
 # When this option is set, one cannot use `merge` as merging method
 # for a Merge Queue. Use squash or rebase instead.

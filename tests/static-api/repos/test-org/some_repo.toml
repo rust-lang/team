@@ -19,6 +19,7 @@ pattern = "master"
 ci-checks = ["CI"]
 allowed-merge-teams = ["foo"]
 bypass-apps = ["promote-release"]
+require-code-owner-review = true
 
 [environments.deploy]
 branches = ["main"]
