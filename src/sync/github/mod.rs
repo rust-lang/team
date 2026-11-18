@@ -1178,7 +1178,6 @@ impl From<&Bot> for BotDetails {
         let admin_access = |name| user(name, RepoPermission::Admin);
 
         match bot {
-            Bot::Bors => write_access("bors"),
             Bot::Highfive => write_access("rust-highfive"),
             Bot::Rustbot => write_access("rustbot"),
             Bot::RustTimer => write_access("rust-timer"),
@@ -1186,7 +1185,9 @@ impl From<&Bot> for BotDetails {
             Bot::Craterbot => write_access("craterbot"),
             Bot::Glacierbot => write_access("rust-lang-glacier-bot"),
             Bot::LogAnalyzer => write_access("rust-log-analyzer"),
-            Bot::Datadog | Bot::Renovate | Bot::ForkingRenovate => BotDetails::GitHubApp,
+            Bot::Bors | Bot::Datadog | Bot::Renovate | Bot::ForkingRenovate => {
+                BotDetails::GitHubApp
+            }
             // Unfortunately linking to Heroku requires admin access, since the integration creates
             // GitHub webhooks, which require admin access.
             Bot::HerokuDeployAccess => admin_access("rust-heroku-deploy-access"),
