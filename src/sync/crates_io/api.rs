@@ -304,7 +304,7 @@ impl CratesIoApi {
         Ok(invitations)
     }
 
-    /// Accept a pending crate owner invitaiton.
+    /// Accept a pending crate owner invitation.
     async fn accept_pending_invitation(&self, invitation_id: u64) -> anyhow::Result<()> {
         #[derive(serde::Serialize)]
         struct Invitation {
