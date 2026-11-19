@@ -9,7 +9,9 @@ The `team` repository manages various sensitive permissions:
 
 ## User categories
 There are three groups of users that come into play here:
-- Infra *admins*. This is a small group of users that essentially have all the permissions.
+- *Admins*. This is a small group of users that essentially have all the permissions. It consists of:
+  - Members of the `infra-admins` team.
+  - Members of the `team-repo-admins` team who are also members of the `infra` team.
 - Team repo *maintainers*. This is a larger set of users with `write` access to this repository, which can include e.g. team leads.
 - *Unprivileged* users, which is everyone else. This includes people that send PRs to this repository.
 
