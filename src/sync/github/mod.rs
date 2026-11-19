@@ -1020,7 +1020,6 @@ impl SyncGitHub {
             | Bot::RustTimer
             | Bot::Rustbot
             | Bot::Craterbot
-            | Bot::Glacierbot
             | Bot::LogAnalyzer
             | Bot::HerokuDeployAccess => None,
         }) {
@@ -1178,15 +1177,15 @@ impl From<&Bot> for BotDetails {
         let admin_access = |name| user(name, RepoPermission::Admin);
 
         match bot {
-            Bot::Bors => write_access("bors"),
             Bot::Highfive => write_access("rust-highfive"),
             Bot::Rustbot => write_access("rustbot"),
             Bot::RustTimer => write_access("rust-timer"),
             Bot::Rfcbot => write_access("rust-rfcbot"),
             Bot::Craterbot => write_access("craterbot"),
-            Bot::Glacierbot => write_access("rust-lang-glacier-bot"),
             Bot::LogAnalyzer => write_access("rust-log-analyzer"),
-            Bot::Datadog | Bot::Renovate | Bot::ForkingRenovate => BotDetails::GitHubApp,
+            Bot::Bors | Bot::Datadog | Bot::Renovate | Bot::ForkingRenovate => {
+                BotDetails::GitHubApp
+            }
             // Unfortunately linking to Heroku requires admin access, since the integration creates
             // GitHub webhooks, which require admin access.
             Bot::HerokuDeployAccess => admin_access("rust-heroku-deploy-access"),
@@ -1201,6 +1200,7 @@ pub fn convert_permission(p: &rust_team_data::v1::RepoPermission) -> RepoPermiss
         v1::RepoPermission::Admin => RepoPermission::Admin,
         v1::RepoPermission::Maintain => RepoPermission::Maintain,
         v1::RepoPermission::Triage => RepoPermission::Triage,
+        v1::RepoPermission::Moderate => RepoPermission::Moderate,
     }
 }
 
@@ -1262,7 +1262,7 @@ pub fn construct_ruleset(
         rules.insert(RulesetRule::PullRequest {
             parameters: PullRequestParameters {
                 dismiss_stale_reviews_on_push: branch_protection.dismiss_stale_review,
-                require_code_owner_review: REQUIRE_CODE_OWNER_REVIEW_DEFAULT,
+                require_code_owner_review: branch_protection.require_code_owner_review,
                 require_last_push_approval: REQUIRE_LAST_PUSH_APPROVAL_DEFAULT,
                 required_approving_review_count: github_int(required_approvals),
                 required_review_thread_resolution: branch_protection

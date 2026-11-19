@@ -1,7 +1,8 @@
 org = "rust-lang"
 name = "miri"
 description = "An interpreter for Rust's mid-level intermediate representation"
-bots = ["rustbot"]
+# bors is only used for auxiliary functionality, like squashing
+bots = ["bors", "rustbot"]
 
 [access.teams]
 compiler = "write"

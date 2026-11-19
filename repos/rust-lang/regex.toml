@@ -9,6 +9,24 @@ regex = "maintain"
 
 [environments.github-pages]
 
+[environments.publish]
+branches = ["master"]
+tags = ["*"]
+
+[[crates-io]]
+crates = [
+    "regex",
+    "regex-automata",
+    "regex-cli",
+    "regex-lite",
+    "regex-syntax",
+    "regex-test",
+    "rure",
+]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["regex"]
+
 # Obsolete crate
 [[crates-io]]
 crates = ["regex_macros"]

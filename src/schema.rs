@@ -935,7 +935,6 @@ pub(crate) enum Bot {
     RustTimer,
     Rfcbot,
     Craterbot,
-    Glacierbot,
     LogAnalyzer,
     Datadog,
     Renovate,
@@ -955,6 +954,7 @@ pub(crate) struct RepoAccess {
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
 pub(crate) enum RepoPermission {
     Triage,
+    Moderate,
     Write,
     Maintain,
     Admin,
@@ -1057,6 +1057,8 @@ pub(crate) struct Ruleset {
     pub dismiss_stale_review: bool,
     #[serde(default)]
     pub require_conversation_resolution: bool,
+    #[serde(default)]
+    pub require_code_owner_review: bool,
     #[serde(default)]
     pub require_linear_history: bool,
     #[serde(default)]

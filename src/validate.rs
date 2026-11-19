@@ -1336,6 +1336,13 @@ fn validate_rulesets(data: &Data, errors: &mut Vec<String>) {
                         ruleset.pattern,
                     );
                 }
+                if ruleset.require_code_owner_review {
+                    bail!(
+                        r#"repo '{}' uses a ruleset for {} that does not require a PR, but enables `require-code-owner-review`"#,
+                        repo.name,
+                        ruleset.pattern,
+                    );
+                }
             }
 
             if ruleset.require_up_to_date_branches && ruleset.ci_checks.is_empty() {
@@ -1376,12 +1383,13 @@ fn validate_rulesets(data: &Data, errors: &mut Vec<String>) {
                 }
                 if ruleset.required_approvals.is_some()
                     || ruleset.dismiss_stale_review
+                    || ruleset.require_code_owner_review
                     || !ruleset.pr_required
                     || !ruleset.allowed_merge_teams.is_empty() && !ruleset.pattern.contains('*')
                 {
                     bail!(
                         r#"repo '{}' uses bors, but its ruleset for {} uses invalid
-attributes (`required-approvals`, `dismiss-stale-review`, `pr-required` or `allowed-merge-teams`).
+attributes (`required-approvals`, `dismiss-stale-review`, `require-code-owner-review`, `pr-required` or `allowed-merge-teams`).
 Please remove the attributes when using bors"#,
                         repo.name,
                         ruleset.pattern,

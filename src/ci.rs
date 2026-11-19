@@ -6,16 +6,14 @@ use std::collections::{BTreeMap, BTreeSet, HashSet};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-/// Generates the contents of `.github/CODEOWNERS`, based on
-/// the infra admins in `infra-admins.toml`.
+/// Generates the contents of `.github/CODEOWNERS`.
 pub fn generate_codeowners_file(data: Data) -> anyhow::Result<()> {
     let codeowners_content = generate_codeowners_content(data);
     std::fs::write(codeowners_path(), codeowners_content).context("cannot write CODEOWNERS")?;
     Ok(())
 }
 
-/// Check if `.github/CODEOWNERS` are up-to-date, based on the
-/// `infra-admins.toml` file.
+/// Check if `.github/CODEOWNERS` is up-to-date.
 pub fn check_codeowners(data: Data) -> anyhow::Result<()> {
     let expected_codeowners = generate_codeowners_content(data);
     let actual_codeowners =
@@ -30,16 +28,19 @@ pub fn check_codeowners(data: Data) -> anyhow::Result<()> {
 }
 
 /// Sensitive TOML data files.
-/// PRs that modify them need to be approved by an infra-admin.
+/// PRs that modify them need to be approved by an admin.
+/// This includes the TOML file of every team used to compute
+/// the admins in `generate_codeowners_content`.
 const PROTECTED_PATHS: &[&str] = &[
     "/repos/rust-lang/team.toml",
     "/repos/rust-lang/rust.toml",
     "/teams/infra-admins.toml",
+    "/teams/infra.toml",
     "/teams/team-repo-admins.toml",
 ];
 
 /// We want to allow access to the data files to `team-repo-admins`
-/// (maintainers), while requiring a review from `infra-admins` (admins)
+/// (maintainers), while requiring a review from admins (see below)
 /// for any other changes.
 ///
 /// We also want to explicitly protect special data files.
@@ -57,16 +58,22 @@ fn generate_codeowners_content(data: Data) -> String {
     .unwrap();
 
     // For the admins, we use just the people directly listed
-    // in the infra-admins.toml file, without resolving
+    // in the team TOML files, without resolving
     // other included members, just to be extra sure that no one else is included.
-    let admins = data
-        .team("infra-admins")
-        .expect("infra-admins team not found")
-        .raw_people()
-        .members
-        .iter()
-        .map(|m| m.github.as_str())
-        .collect::<Vec<&str>>();
+    let get_explicit_members = |team: &str| {
+        data.team(team)
+            .unwrap_or_else(|| panic!("{team} team not found"))
+            .explicit_members()
+            .iter()
+            .map(|m| m.github.as_str())
+            .collect::<BTreeSet<_>>()
+    };
+
+    // The admins are the infra-admins, plus the team-repo-admins
+    // that are also members of the infra team.
+    let infra_members = get_explicit_members("infra");
+    let mut admins = get_explicit_members("infra-admins");
+    admins.extend(get_explicit_members("team-repo-admins").intersection(&infra_members));
 
     let team_repo = data
         .repos()
@@ -77,7 +84,7 @@ fn generate_codeowners_content(data: Data) -> String {
         .individuals
         .iter()
         .filter_map(|(user, permission)| match permission {
-            RepoPermission::Triage => None,
+            RepoPermission::Triage | RepoPermission::Moderate => None,
             RepoPermission::Write | RepoPermission::Maintain | RepoPermission::Admin => {
                 Some(user.as_str())
             }
@@ -89,7 +96,7 @@ fn generate_codeowners_content(data: Data) -> String {
             .teams
             .iter()
             .filter(|(_, permission)| match permission {
-                RepoPermission::Triage => false,
+                RepoPermission::Triage | RepoPermission::Moderate => false,
                 RepoPermission::Write | RepoPermission::Maintain | RepoPermission::Admin => true,
             })
             .flat_map(|(team, _)| {
@@ -141,8 +148,9 @@ fn generate_codeowners_content(data: Data) -> String {
 
     // There are several data files that we want to be protected more
     // Notably, the properties of the team and sync-team repositories,
-    // the infra-admins and team-repo-admins teams and also the
-    // accounts of the infra-admins and team-repo-admins members.
+    // the infra-admins, team-repo-admins and infra teams (which determine
+    // who is an admin) and also the accounts of the infra-admins and
+    // team-repo-admins members.
 
     writeln!(
         codeowners,

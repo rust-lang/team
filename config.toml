@@ -29,6 +29,7 @@ crabwatch-deny-list = [
 permissions-bors-repos = [
     "bors-kindergarten",
     "rust",
+    "miri",
 ]
 
 permissions-bools = [
@@ -52,7 +53,6 @@ special-org-members = [
     "rust-heroku-deploy-access",
     "rust-highfive",
     "rust-lang-core-team-agenda-bot",
-    "rust-lang-glacier-bot",
     "rust-lang-owner",
     "rust-log-analyzer",
     "rust-timer",

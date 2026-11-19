@@ -204,13 +204,25 @@ impl SyncCratesIo {
                 }
             }
 
-            // Sync "trusted publishing only" crate option
-            let Some(crates_io_crate) = crates.get(&krate.0) else {
-                return Err(anyhow::anyhow!(
-                    "Crate `{krate}` is not owned by user `{0}`. Please invite `{0}` to be its owner.",
-                    self.username
-                ));
+            // If we don't yet own the crate, we want to add a diff to accept an invite for it.
+            let crates_io_crate = match crates.get(&krate.0) {
+                Some(krate) => krate.clone(),
+                None => {
+                    // We insert it at the beginning, because we want to accept invites first,
+                    // before making further changes, otherwise we wouldn't have permission to make
+                    // them.
+                    crate_diffs.insert(
+                        0,
+                        CrateDiff::TryAcceptPendingInvitation {
+                            krate: krate.to_string(),
+                            username: self.username.clone(),
+                        },
+                    );
+                    self.crates_io_api.get_crate(krate).await?
+                }
             };
+
+            // Sync "trusted publishing only" crate option
             if crates_io_crate.trusted_publishing_only != desired.trusted_publishing_only {
                 crate_diffs.push(CrateDiff::SetTrustedPublishingOnly {
                     krate: krate.to_string(),
@@ -261,28 +273,30 @@ impl SyncCratesIo {
         });
 
         Ok(Diff {
-            config_diffs,
             crate_diffs,
+            config_diffs,
         })
     }
 }
 
 pub(crate) struct Diff {
-    config_diffs: Vec<ConfigDiff>,
     crate_diffs: Vec<CrateDiff>,
+    config_diffs: Vec<ConfigDiff>,
 }
 
 impl Diff {
     pub(crate) async fn apply(&self, sync: &SyncCratesIo) -> anyhow::Result<()> {
         let Diff {
-            config_diffs,
             crate_diffs,
+            config_diffs,
         } = self;
 
-        for diff in config_diffs {
+        // Apply crate diffs first, to accept potential invites that would then allow us to modify
+        // the configs.
+        for diff in crate_diffs {
             diff.apply(sync).await?;
         }
-        for diff in crate_diffs {
+        for diff in config_diffs {
             diff.apply(sync).await?;
         }
         Ok(())
@@ -383,6 +397,11 @@ impl std::fmt::Display for ConfigDiff {
 }
 
 enum CrateDiff {
+    /// Accept a potential invite for the given crate for the `username` account.
+    TryAcceptPendingInvitation {
+        krate: String,
+        username: String,
+    },
     SetTrustedPublishingOnly {
         krate: String,
         value: bool,
@@ -396,12 +415,17 @@ enum CrateDiff {
 impl CrateDiff {
     async fn apply(&self, sync: &SyncCratesIo) -> anyhow::Result<()> {
         match self {
+            Self::TryAcceptPendingInvitation { krate, username } => {
+                sync.crates_io_api
+                    .try_accept_pending_invitation(krate, CRATES_IO_CRATE_OWNER_ID, username)
+                    .await
+            }
             Self::SetTrustedPublishingOnly { krate, value } => {
                 sync.crates_io_api
                     .set_trusted_publishing_only(krate, *value)
                     .await
             }
-            CrateDiff::RemoveOwners { krate, owners } => {
+            Self::RemoveOwners { krate, owners } => {
                 sync.crates_io_api.delete_crate_owners(krate, owners).await
             }
         }
@@ -411,13 +435,19 @@ impl CrateDiff {
 impl std::fmt::Display for CrateDiff {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Self::TryAcceptPendingInvitation { krate, username } => {
+                writeln!(
+                    f,
+                    "  Trying to accept a pending invitation for `{username}` for crate `{krate}`"
+                )?;
+            }
             Self::SetTrustedPublishingOnly { krate, value } => {
                 writeln!(
                     f,
-                    "  Setting trusted publishing only option for krate `{krate}` to `{value}`",
+                    "  Setting trusted publishing only option for crate `{krate}` to `{value}`",
                 )?;
             }
-            CrateDiff::RemoveOwners { krate, owners } => {
+            Self::RemoveOwners { krate, owners } => {
                 for owner in owners {
                     let kind = match owner.kind() {
                         OwnerKind::User => "user",
@@ -425,7 +455,7 @@ impl std::fmt::Display for CrateDiff {
                     };
                     writeln!(
                         f,
-                        "  Removing `{kind}` owner `{}` from krate `{krate}`",
+                        "  Removing `{kind}` owner `{}` from crate `{krate}`",
                         owner.login()
                     )?;
                 }

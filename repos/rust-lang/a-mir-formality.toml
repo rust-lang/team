@@ -20,3 +20,21 @@ merge-queue = { enabled = true }
 
 [environments.github-pages]
 branches = ["main"]
+
+[environments.publish]
+branches = ["main"]
+
+[[crates-io]]
+crates = [
+    "formality-core",
+    "formality-macros",
+]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = [
+    "lang",
+    "lang-ops",
+    "lang-docs",
+    "types",
+    "formality",
+]

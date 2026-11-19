@@ -387,6 +387,7 @@ pub(crate) enum RepoPermission {
     Admin,
     Maintain,
     Triage,
+    Moderate,
     #[serde(alias = "pull")]
     Read,
 }
@@ -398,6 +399,7 @@ impl fmt::Display for RepoPermission {
             Self::Admin => write!(f, "admin"),
             Self::Maintain => write!(f, "maintain"),
             Self::Triage => write!(f, "triage"),
+            Self::Moderate => write!(f, "moderate"),
             Self::Read => write!(f, "read"),
         }
     }

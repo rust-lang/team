@@ -178,12 +178,7 @@ impl DataModel {
                 .into_iter()
                 .map(|t| api::RepoTeam {
                     name: t.name,
-                    permission: match t.permission {
-                        RepoPermission::Write => api::RepoPermission::Write,
-                        RepoPermission::Admin => api::RepoPermission::Admin,
-                        RepoPermission::Maintain => api::RepoPermission::Maintain,
-                        RepoPermission::Triage => api::RepoPermission::Triage,
-                    },
+                    permission: convert_permission(&t.permission),
                 })
                 .collect();
             org.repo_members
@@ -504,6 +499,7 @@ pub struct BranchProtectionBuilder {
     pub target: ProtectionTarget,
     pub dismiss_stale_review: bool,
     pub require_conversation_resolution: bool,
+    pub require_code_owner_review: bool,
     pub require_linear_history: bool,
     pub mode: BranchProtectionMode,
     pub allowed_merge_teams: Vec<String>,
@@ -543,6 +539,7 @@ impl BranchProtectionBuilder {
             target,
             dismiss_stale_review,
             require_conversation_resolution,
+            require_code_owner_review,
             require_linear_history,
             mode,
             allowed_merge_teams,
@@ -565,6 +562,7 @@ impl BranchProtectionBuilder {
             target,
             dismiss_stale_review,
             require_conversation_resolution,
+            require_code_owner_review,
             require_linear_history,
             mode,
             allowed_merge_teams,
@@ -595,6 +593,7 @@ impl BranchProtectionBuilder {
             mode,
             dismiss_stale_review: false,
             require_conversation_resolution: false,
+            require_code_owner_review: false,
             require_linear_history: false,
             allowed_merge_teams: vec![],
             bypass_apps: vec![],

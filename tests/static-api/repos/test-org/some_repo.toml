@@ -11,11 +11,15 @@ path = "/docs"
 [access.teams]
 foo = "maintain"
 
+[access.individuals]
+user-0 = "moderate"
+
 [[rulesets]]
 pattern = "master"
 ci-checks = ["CI"]
 allowed-merge-teams = ["foo"]
 bypass-apps = ["promote-release"]
+require-code-owner-review = true
 
 [environments.deploy]
 branches = ["main"]

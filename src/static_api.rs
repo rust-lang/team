@@ -62,6 +62,7 @@ impl<'a> Generator<'a> {
                     name: b.name.clone(),
                     dismiss_stale_review: b.dismiss_stale_review,
                     require_conversation_resolution: b.require_conversation_resolution,
+                    require_code_owner_review: b.require_code_owner_review,
                     require_linear_history: b.require_linear_history,
                     mode: if b.pr_required {
                         BranchProtectionMode::PrRequired {
@@ -92,7 +93,7 @@ impl<'a> Generator<'a> {
                     merge_bots: vec![],
                 })
                 .collect();
-            let managed_by_bors = r.bots.contains(&Bot::Bors);
+            let merges_managed_by_bors = self.data.bors_performs_merges(r);
             let repo = v1::Repo {
                 org: r.org.clone(),
                 name: r.name.clone(),
@@ -109,7 +110,6 @@ impl<'a> Generator<'a> {
                         Bot::Rustbot => v1::Bot::Rustbot,
                         Bot::Rfcbot => v1::Bot::Rfcbot,
                         Bot::Craterbot => v1::Bot::Craterbot,
-                        Bot::Glacierbot => v1::Bot::Glacierbot,
                         Bot::LogAnalyzer => v1::Bot::LogAnalyzer,
                         Bot::Datadog => v1::Bot::Datadog,
                         Bot::Renovate => v1::Bot::Renovate,
@@ -125,6 +125,7 @@ impl<'a> Generator<'a> {
                             RepoPermission::Write => v1::RepoPermission::Write,
                             RepoPermission::Maintain => v1::RepoPermission::Maintain,
                             RepoPermission::Triage => v1::RepoPermission::Triage,
+                            RepoPermission::Moderate => v1::RepoPermission::Moderate,
                         };
 
                         // Look up the team by name and get all its GitHub teams
@@ -158,6 +159,7 @@ impl<'a> Generator<'a> {
                                 RepoPermission::Write => v1::RepoPermission::Write,
                                 RepoPermission::Maintain => v1::RepoPermission::Maintain,
                                 RepoPermission::Triage => v1::RepoPermission::Triage,
+                                RepoPermission::Moderate => v1::RepoPermission::Moderate,
                             };
                             v1::RepoMember {
                                 name: name.clone(),
@@ -229,7 +231,7 @@ impl<'a> Generator<'a> {
                 },
                 pages: convert_pages(r)?,
                 archived,
-                auto_merge_enabled: !managed_by_bors,
+                auto_merge_enabled: !merges_managed_by_bors,
                 custom_properties: {
                     let mut properties = r.custom_properties.clone();
                     if r.org != "rust-lang"

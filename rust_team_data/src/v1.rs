@@ -299,7 +299,6 @@ pub enum Bot {
     RustTimer,
     Rfcbot,
     Craterbot,
-    Glacierbot,
     LogAnalyzer,
     Datadog,
     Renovate,
@@ -326,6 +325,7 @@ pub enum RepoPermission {
     Admin,
     Maintain,
     Triage,
+    Moderate,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -383,6 +383,8 @@ pub struct BranchProtection {
     pub dismiss_stale_review: bool,
     #[serde(default)]
     pub require_conversation_resolution: bool,
+    #[serde(default)]
+    pub require_code_owner_review: bool,
     #[serde(default)]
     pub require_linear_history: bool,
     pub mode: BranchProtectionMode,
