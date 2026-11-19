@@ -21,7 +21,7 @@ required-approvals = 0
 branches = ["gh-pages"]
 
 [environments.publish]
-tags = ["*"]
+tags = ["trpl-v*"]
 
 [[crates-io]]
 crates = ["trpl"]
