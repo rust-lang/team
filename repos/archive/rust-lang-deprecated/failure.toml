@@ -4,3 +4,9 @@ description = "Error management"
 bots = []
 
 [access.teams]
+
+[[crates-io]]
+crates = [
+    "failure",
+    "failure_derive",
+]
