@@ -23,3 +23,6 @@ branches = ["gh-readonly-queue/main/*", "main"]
 
 [environments.github-pages]
 branches = ["main"]
+
+[environments.untracked-repos]
+branches = ["main"]
