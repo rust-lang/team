@@ -299,7 +299,6 @@ pub enum Bot {
     RustTimer,
     Rfcbot,
     Craterbot,
-    Glacierbot,
     LogAnalyzer,
     Datadog,
     Renovate,

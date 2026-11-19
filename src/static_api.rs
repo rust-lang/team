@@ -110,7 +110,6 @@ impl<'a> Generator<'a> {
                         Bot::Rustbot => v1::Bot::Rustbot,
                         Bot::Rfcbot => v1::Bot::Rfcbot,
                         Bot::Craterbot => v1::Bot::Craterbot,
-                        Bot::Glacierbot => v1::Bot::Glacierbot,
                         Bot::LogAnalyzer => v1::Bot::LogAnalyzer,
                         Bot::Datadog => v1::Bot::Datadog,
                         Bot::Renovate => v1::Bot::Renovate,
