@@ -2,9 +2,9 @@ use crate::sync::crates_io::{CrateName, TrustedPublishingConfig};
 use crate::sync::utils::ResponseExt;
 use anyhow::{Context, anyhow};
 use log::debug;
-use reqwest::Client;
 use reqwest::header;
 use reqwest::header::{HeaderMap, HeaderValue};
+use reqwest::{Client, Method};
 use secrecy::{ExposeSecret, SecretString};
 use serde::Serialize;
 use serde::de::DeserializeOwned;
@@ -64,7 +64,8 @@ impl CratesIoApi {
                 None,
             )
             .await?
-            .error_for_status()?
+            .custom_error_for_status()
+            .await?
             .json_annotated()
             .await?;
 
@@ -111,7 +112,8 @@ impl CratesIoApi {
                 None,
             )
             .await?
-            .error_for_status()?
+            .custom_error_for_status()
+            .await?
             .json_annotated()
             .await?;
 
@@ -141,7 +143,8 @@ impl CratesIoApi {
                 Some(&DeleteOwnersRequest { owners: &owners }),
             )
             .await?
-            .error_for_status()
+            .custom_error_for_status()
+            .await
             .with_context(|| {
                 anyhow::anyhow!("Cannot delete owner(s) {owners:?} from krate {krate}")
             })?;
@@ -196,7 +199,8 @@ impl CratesIoApi {
             Some(&request),
         )
         .await?
-        .error_for_status()
+        .custom_error_for_status()
+        .await
         .with_context(|| {
             anyhow!("Cannot created trusted publishing config {config:?} for crate {krate}")
         })?;
@@ -219,11 +223,36 @@ impl CratesIoApi {
                 None,
             )
             .await?
-            .error_for_status()
+            .custom_error_for_status()
+            .await
             .with_context(|| anyhow!("Cannot delete trusted publishing config with ID {id}"))?;
         }
 
         Ok(())
+    }
+
+    /// Return information about a single crate.
+    pub(crate) async fn get_crate(&self, krate: &CrateName) -> anyhow::Result<CratesIoCrate> {
+        #[derive(serde::Deserialize)]
+        struct CrateResponse {
+            #[serde(rename = "crate")]
+            krate: CratesIoCrate,
+        }
+
+        let response = self
+            .req(
+                Method::GET,
+                &format!("/crates/{}", krate.0),
+                HashMap::default(),
+                None::<&()>,
+            )
+            .await?;
+        let krate: CrateResponse = response
+            .custom_error_for_status()
+            .await?
+            .json_annotated()
+            .await?;
+        Ok(krate.krate)
     }
 
     /// Return all crates owned by the given user.
@@ -250,6 +279,90 @@ impl CratesIoApi {
         Ok(crates)
     }
 
+    /// Return all pending invitations for the given user.
+    /// The user account has to be the same one with which we are logged in.
+    async fn get_pending_crate_invitations(
+        &self,
+        user: u64,
+    ) -> anyhow::Result<Vec<PendingCrateOwnerInvitation>> {
+        #[derive(serde::Deserialize)]
+        struct InvitationsResponse {
+            crate_owner_invitations: Vec<PendingCrateOwnerInvitation>,
+        }
+
+        let mut invitations = vec![];
+        self.req_paged::<(), InvitationsResponse, _>(
+            "/crate_owner_invitations",
+            HashMap::from([("invitee_id".to_string(), user.to_string())]),
+            None,
+            |res| {
+                invitations.extend(res.crate_owner_invitations);
+            },
+        )
+        .await?;
+
+        Ok(invitations)
+    }
+
+    /// Accept a pending crate owner invitation.
+    async fn accept_pending_invitation(&self, invitation_id: u64) -> anyhow::Result<()> {
+        #[derive(serde::Serialize)]
+        struct Invitation {
+            state: &'static str,
+        }
+
+        #[derive(serde::Serialize)]
+        struct Request {
+            crate_owner_invitation: Invitation,
+        }
+
+        self.req(
+            Method::PATCH,
+            &format!("/crate_owner_invitations/{invitation_id}"),
+            HashMap::default(),
+            Some(&Request {
+                crate_owner_invitation: Invitation { state: "accepted" },
+            }),
+        )
+        .await?
+        .custom_error_for_status()
+        .await?;
+        Ok(())
+    }
+
+    /// Try to accept a pending invitation for the given `krate` on behalf of `user_id`, if there
+    /// is any.
+    /// If there is no pending invitation, returns an error.
+    /// The `username` is provided for a better error message.
+    pub(crate) async fn try_accept_pending_invitation(
+        &self,
+        krate: &str,
+        user_id: u64,
+        username: &str,
+    ) -> anyhow::Result<()> {
+        // This will load all pending invitations for every crate that we want to accept.
+        // But usually that will be only a small amount of crates, so it should be fine.
+        // We cannot determine the pending invitations without using an actual crates.io token, so
+        // we cannot do it in the dry run.
+        let pending_invitations = self.get_pending_crate_invitations(user_id).await?;
+        let Some(invitation) = pending_invitations.iter().find(|k| k.crate_name == krate) else {
+            return Err(anyhow::anyhow!(
+                "Did not find any pending crate invitation for crate `{krate}`. Please invite `{username}` to be its owner.",
+            ));
+        };
+
+        debug!("Accepting a pending invitation for crate {krate}");
+
+        if !self.dry_run {
+            self.accept_pending_invitation(invitation.id)
+                .await
+                .with_context(|| {
+                    anyhow::anyhow!("Cannot accept pending invitation for {username}")
+                })?;
+        }
+        Ok(())
+    }
+
     /// Enable or disable the `trustpub_only` crate option, which specifies whether a crate
     /// has to be published **only** through trusted publishing.
     pub(crate) async fn set_trusted_publishing_only(
@@ -268,6 +381,8 @@ impl CratesIoApi {
             trustpub_only: bool,
         }
 
+        debug!("Set Trusted publishing only to value `{value}` for {krate}");
+
         if !self.dry_run {
             self.req(
                 reqwest::Method::PATCH,
@@ -280,7 +395,8 @@ impl CratesIoApi {
                 }),
             )
             .await?
-            .error_for_status()
+            .custom_error_for_status()
+            .await
             .with_context(|| anyhow::anyhow!("Cannot patch crate {krate}"))?;
         }
 
@@ -345,7 +461,8 @@ impl CratesIoApi {
             let response: Response<R> = self
                 .req(reqwest::Method::GET, &path, query, data)
                 .await?
-                .error_for_status()?
+                .custom_error_for_status()
+                .await?
                 .json_annotated()
                 .await?;
             handle_response(response.data);
@@ -384,7 +501,7 @@ pub(crate) struct TrustedPublishingGitHubConfig {
     pub(crate) environment: Option<String>,
 }
 
-#[derive(serde::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug, Clone)]
 pub(crate) struct CratesIoCrate {
     pub(crate) name: String,
     #[serde(rename = "trustpub_only")]
@@ -417,4 +534,10 @@ impl CratesIoOwner {
     pub(crate) fn login(&self) -> &str {
         &self.login
     }
+}
+
+#[derive(serde::Deserialize, Debug)]
+struct PendingCrateOwnerInvitation {
+    id: u64,
+    crate_name: String,
 }
