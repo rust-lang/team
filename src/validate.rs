@@ -1404,7 +1404,7 @@ Please remove the attributes when using bors"#,
 /// Validate crates.io crate configuration.
 fn validate_trusted_publishing(data: &Data, errors: &mut Vec<String>) {
     let mut crates = HashMap::new();
-    wrapper(data.repos(), errors, |repo, _| {
+    wrapper(data.all_repos(), errors, |repo, _| {
         let repo_name = format!("{}/{}", repo.org, repo.name);
         for publishing in &repo.crates_io {
             if publishing.crates.is_empty() {
