@@ -23,9 +23,12 @@ jobs:
   check-untracked-repos:
     name: Check untracked repositories
     runs-on: ubuntu-latest
+    environment:
+      name: untracked-repos
+      # The environment is only used for its secrets, so don't create a deployment on every run.
+      deployment: false
     permissions:
-      contents: write       # Needed to push the automation branch
-      pull-requests: write  # Needed to find and close an existing pull request
+      contents: read
     steps:
       - name: Check out the default branch
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -55,10 +58,21 @@ jobs:
 
           echo "configurations_created=$configurations_created" >> "$GITHUB_OUTPUT"
 
+      # Use a GitHub App token for the automation branch and pull request,
+      # because changes pushed with the built-in GITHUB_TOKEN don't trigger CI.
+      - name: Generate GitHub App token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        id: app-token
+        with:
+          client-id: ${{ secrets.UNTRACKED_REPOS_APP_CLIENT_ID }}
+          private-key: ${{ secrets.UNTRACKED_REPOS_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
       - name: Check for an existing pull request
         id: pull_request
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           PULL_REQUEST_EXISTS=$(
             gh pr list \
@@ -74,18 +88,8 @@ jobs:
       - name: Close previous pull request
         if: ${{ steps.check.outputs.configurations_created == 'false' && steps.pull_request.outputs.exists == 'true' }}
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh pr close "$AUTOMATION_BRANCH"
-
-      # Changes pushed with the built-in GITHUB_TOKEN don't trigger CI.
-      # Use a GitHub App token instead.
-      - name: Generate GitHub App token
-        if: ${{ steps.check.outputs.configurations_created == 'true' }}
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
-        id: app-token
-        with:
-          client-id: ${{ secrets.SYNC_TEAM_GH_APP_ID }}
-          private-key: ${{ secrets.SYNC_TEAM_GH_APP_PRIVATE_KEY }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh pr close --delete-branch "$AUTOMATION_BRANCH"
 
       - name: Commit and push generated configurations
         if: ${{ steps.check.outputs.configurations_created == 'true' }}
