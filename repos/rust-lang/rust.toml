@@ -143,6 +143,16 @@ prevent-update = true
 [environments.bors]
 branches = ["automation/bors/auto", "automation/bors/try", "automation/bors/try-perf"]
 
+[environments.publish-crates-io]
+branches = ["main"]
+
+# Crate published directly from rust-lang/rust.
+[[crates-io]]
+crates = ["backtrace"]
+publish-workflow = "post-merge.yml"
+publish-environment = "publish-crates-io"
+teams = ["crate-maintainers"]
+
 # Obsolete crates and placeholders.
 [[crates-io]]
 crates = [

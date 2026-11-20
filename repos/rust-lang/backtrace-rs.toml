@@ -12,15 +12,7 @@ pattern = "main"
 
 [environments.github-pages]
 
-[environments.publish]
-branches = ["main"]
-
-[[crates-io]]
-crates = ["backtrace"]
-publish-workflow = "publish.yml"
-publish-environment = "publish"
-teams = ["crate-maintainers"]
-
 # Obsolete crate
+# Note that the backtrace crate is published from rust-lang/rust.
 [[crates-io]]
 crates = ["backtrace-sys"]
