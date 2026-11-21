@@ -21,6 +21,10 @@ zulip-stream = "t-types/formality"
 [[zulip-groups]]
 name = "T-formality"
 
+[[zulip-streams]]
+name = "t-types/formality/private"
+public-history = true
+
 [[github]]
 orgs = ["rust-lang"]
 
