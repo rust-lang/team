@@ -4,4 +4,3 @@ description = "Heroku metrics collector for crates.io"
 bots = []
 
 [access.teams]
-infra = "write"
