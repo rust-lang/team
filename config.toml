@@ -29,6 +29,8 @@ crabwatch-deny-list = [
 permissions-bors-repos = [
     "bors-kindergarten",
     "rust",
+    # Repositories below use bors only for auxiliary functinoality
+    "rust-clippy",
     "miri",
 ]
 
