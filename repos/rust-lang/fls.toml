@@ -14,7 +14,6 @@ lang = "write"
 lang-docs = "write"
 lang-ops = "write"
 spec = "write"
-spec-contributors = "triage"
 
 [[rulesets]]
 pattern = "main"

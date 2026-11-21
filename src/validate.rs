@@ -3,7 +3,7 @@ use crate::api::zulip::ZulipApi;
 use crate::data::Data;
 use crate::schema::{
     Bot, BypassApp, Email, MergeQueueMethod, Pages, Permissions, Repo, RepoPermission, Team,
-    TeamKind, TeamPeople, ZulipMember,
+    TeamKind, TeamList, TeamPeople, ZulipMember,
 };
 use anyhow::{Context as _, Error, bail};
 use log::{error, warn};
@@ -42,6 +42,7 @@ static CHECKS: &[Check<fn(&Data, &mut Vec<String>)>] = checks![
     validate_team_gws_group,
     validate_duplicate_team_entries,
     validate_alumni,
+    validate_active_teams,
     validate_archived_teams,
     validate_inactive_members,
     validate_list_email_addresses,
@@ -408,6 +409,32 @@ fn validate_alumni(data: &Data, errors: &mut Vec<String>) {
         }
         Ok(())
     });
+}
+
+fn validate_active_teams(data: &Data, errors: &mut Vec<String>) {
+    wrapper(data.teams(), errors, |team, _| {
+        // case 1: team has active members, which is okay
+        if !team.members(data)?.is_empty() {
+            return Ok(());
+        }
+
+        // case 2: team has subteams, which is okay
+        if data.subteams_of(team.name()).next().is_some() {
+            return Ok(());
+        }
+
+        // case 3: team is a marker just for email redirects
+        if team.kind() == TeamKind::MarkerTeam
+            && team.raw_lists().iter().all(TeamList::is_nonteam_redirect)
+        {
+            return Ok(());
+        }
+
+        bail!(
+            "team '{}' does not satisfy activity requirements and should be archived",
+            team.name()
+        );
+    })
 }
 
 fn validate_archived_teams(data: &Data, errors: &mut Vec<String>) {

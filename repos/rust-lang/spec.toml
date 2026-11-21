@@ -5,4 +5,3 @@ bots = ["rustbot", "rfcbot"]
 
 [access.teams]
 spec = 'maintain'
-spec-contributors = "write"
