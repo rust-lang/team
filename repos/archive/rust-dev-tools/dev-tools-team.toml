@@ -4,4 +4,3 @@ description = "resources for the Rust dev-tools team"
 bots = []
 
 [access.teams]
-devtools = "write"
