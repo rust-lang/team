@@ -3,7 +3,13 @@ subteam-of = "types"
 
 [people]
 leads = ["nikomatsakis"]
-members = ["jackh726", "lqd", "tiif", "nikomatsakis"]
+members = [
+    "jackh726",
+    "liolin",
+    "lqd",
+    "tiif",
+    "nikomatsakis",
+]
 alumni = []
 
 [website]
