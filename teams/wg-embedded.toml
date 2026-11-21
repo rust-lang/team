@@ -74,3 +74,6 @@ matrix-room = "#rust-embedded:matrix.org"
 
 [[lists]]
 address = "embedded-wg@rust-lang.org"
+
+[[zulip-groups]]
+name = "WG-embedded"
