@@ -25,7 +25,8 @@ merge-queue = { enabled = true }
 
 [[crates-io]]
 crates = [
-    "stdsimd",
     "core_arch",
-    "std_detect"
+    "coresimd",
+    "stdsimd",
+    "std_detect",
 ]
