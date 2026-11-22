@@ -932,7 +932,6 @@ pub(crate) enum Bot {
     Bors,
     Highfive,
     Rustbot,
-    RustTimer,
     Rfcbot,
     Craterbot,
     LogAnalyzer,

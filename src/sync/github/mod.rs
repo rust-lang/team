@@ -1017,7 +1017,6 @@ impl SyncGitHub {
             Bot::Datadog => Some(GithubApp::Datadog),
             Bot::Highfive
             | Bot::Rfcbot
-            | Bot::RustTimer
             | Bot::Rustbot
             | Bot::Craterbot
             | Bot::LogAnalyzer
@@ -1179,7 +1178,6 @@ impl From<&Bot> for BotDetails {
         match bot {
             Bot::Highfive => write_access("rust-highfive"),
             Bot::Rustbot => write_access("rustbot"),
-            Bot::RustTimer => write_access("rust-timer"),
             Bot::Rfcbot => write_access("rust-rfcbot"),
             Bot::Craterbot => write_access("craterbot"),
             Bot::LogAnalyzer => write_access("rust-log-analyzer"),

@@ -296,7 +296,6 @@ pub enum Bot {
     Bors,
     Highfive,
     Rustbot,
-    RustTimer,
     Rfcbot,
     Craterbot,
     LogAnalyzer,
