@@ -3,13 +3,11 @@ kind = "project-group"
 subteam-of = "wg-async"
 
 [people]
-leads = [
+leads = []
+members = []
+alumni = [
     "michaelwoerister",
 ]
-members = [
-    "michaelwoerister",
-]
-alumni = []
 
 [website]
 name = "Async Crashdump Debugging Initiative"
