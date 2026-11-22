@@ -4,4 +4,3 @@ description = "Semantic code navigation for Rust"
 bots = []
 
 [access.teams]
-devtools = "write"
