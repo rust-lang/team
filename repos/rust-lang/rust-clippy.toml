@@ -2,7 +2,8 @@ org = "rust-lang"
 name = "rust-clippy"
 description = "A bunch of lints to catch common mistakes and improve your Rust code. Book: https://doc.rust-lang.org/clippy/"
 homepage = "https://clippy.rust-lang.org/"
-bots = ["rustbot"]
+# bors is only used for auxiliary functionality, like squashing and try builds
+bots = ["bors", "rustbot"]
 
 [pages]
 build-type = "legacy"
