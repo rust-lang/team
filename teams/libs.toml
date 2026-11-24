@@ -62,7 +62,7 @@ alumni = [
 
 # note: we use libs-all here, and libs for the ping group only
 [[github]]
-orgs = ["rust-lang", "rust-lang-nursery"]
+orgs = ["rust-lang"]
 team-name = "libs-all"
 
 [[zulip-groups]]
