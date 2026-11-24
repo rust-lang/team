@@ -60,8 +60,13 @@ alumni = [
     "withoutboats",
 ]
 
+# note: we use libs-all here, and libs for the ping group only
 [[github]]
 orgs = ["rust-lang", "rust-lang-nursery"]
+team-name = "libs-all"
+
+[[zulip-groups]]
+name = "T-libs-all"
 
 [permissions]
 perf = true
@@ -87,9 +92,6 @@ address = "libs-api@rust-lang.org"
 
 [[lists]]
 address = "library-team@rust-lang.org"
-
-[[zulip-groups]]
-name = "T-libs"
 
 [[zulip-streams]]
 name = "t-libs/private"

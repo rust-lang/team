@@ -30,8 +30,10 @@ members = [
 ]
 alumni = []
 
+# note: libs-all is the group for the whole team
 [[github]]
 orgs = ["rust-lang"]
+team-name = "libs"
 
 [[zulip-groups]]
-name = "T-libs-ping"
+name = "T-libs"
