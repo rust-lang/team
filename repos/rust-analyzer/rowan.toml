@@ -5,3 +5,12 @@ bots = []
 
 [access.teams]
 rust-analyzer = "write"
+
+[environments.publish]
+tags = ["*"]
+
+[[crates-io]]
+crates = ["rowan"]
+publish-workflow = "publish.yml"
+publish-environment = "publish"
+teams = ["rust-analyzer"]
