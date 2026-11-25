@@ -3,13 +3,10 @@ kind = "project-group"
 subteam-of = "lang"
 
 [people]
-leads = [
-    "nikomatsakis",
-]
-members = [
-    "nikomatsakis",
-]
+leads = []
+members = []
 alumni = [
+    "nikomatsakis",
     "pnkfelix",
     "spastorino",
 ]
