@@ -4,4 +4,3 @@ description = "Home for the Inline Assembly project group"
 bots = []
 
 [access.teams]
-wg-inline-asm = "write"
