@@ -106,7 +106,6 @@ impl<'a> Generator<'a> {
                     .map(|b| match b {
                         Bot::Bors => v1::Bot::Bors,
                         Bot::Highfive => v1::Bot::Highfive,
-                        Bot::RustTimer => v1::Bot::RustTimer,
                         Bot::Rustbot => v1::Bot::Rustbot,
                         Bot::Rfcbot => v1::Bot::Rfcbot,
                         Bot::Craterbot => v1::Bot::Craterbot,

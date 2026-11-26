@@ -358,7 +358,7 @@ description = "A repo for awesome things!"
 # A URL that is displayed next to the description.
 homepage = "https://www.rust-lang.org/"
 # The bots that this repo requires (required)
-bots = ["bors", "rustbot", "rust-timer"]
+bots = ["bors", "rustbot"]
 # Should the repository be private? (optional - default `false`)
 # Note that this only serves for documentation purposes, it is
 # not synchronized by automation. If you need to create a private
@@ -517,7 +517,7 @@ allowed-merge-teams = ["awesome-team"]
 # When a bot manages the queue, some other options, like
 # `required-approvals` and `pr-required` options are not valid.
 #
-# Currently supported values: "rust-timer", "bors", "workflows-crates-io", "promote-release".
+# Currently supported values: "bors", "workflows-crates-io", "promote-release".
 # (optional)
 bypass-apps = ["bors"]
 # Merge queue configuration for this branch. (optional)
