@@ -83,8 +83,6 @@ jobs:
     environment: deploy
     permissions:
       contents: read
-      id-token: write  # Needed for GitHub Pages OIDC authentication in `actions/deploy-pages`
-      pages: write     # Needed to deploy the built static API to GitHub Pages
     if: github.event_name != 'pull_request'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -120,8 +118,20 @@ jobs:
         with:
           path: build
 
-      # Upload the pages only if the sync succeeded, to always keep the
-      # most up-to-date state in the web endpoint.
+  # Upload the pages only if the sync succeeded, to always keep the most
+  # up-to-date state in the web endpoint.
+  #
+  # NB: we use a separate job to avoid upload vs artifact lookup racing, see
+  # <https://github.com/actions/deploy-pages/issues/451>.
+  deploy-pages:
+    name: Deploy GitHub Pages
+    needs: [ deploy ]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Needed for GitHub Pages OIDC authentication in `actions/deploy-pages`
+      pages: write     # Needed to deploy the built static API to GitHub Pages
+    if: github.event_name != 'pull_request'
+    steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
 
@@ -146,7 +156,7 @@ jobs:
   CI:
     # Keep `name` matching the status check.
     name: CI
-    needs: [ test, deploy, zizmor ]
+    needs: [ test, deploy, deploy-pages, zizmor ]
     # We need to ensure this job does *not* get skipped if its dependencies fail,
     # because a skipped job is considered a success by GitHub. So we have to
     # overwrite `if:`. We use `!cancelled()` to ensure the job does still not get run
