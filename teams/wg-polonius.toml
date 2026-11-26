@@ -23,3 +23,6 @@ zulip-stream = "t-types/polonius"
 
 [[github]]
 orgs = ["rust-lang"]
+
+[[zulip-groups]]
+name = "WG-polonius"
