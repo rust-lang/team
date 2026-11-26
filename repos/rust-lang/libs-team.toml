@@ -6,3 +6,9 @@ bots = ["rustbot"]
 [access.teams]
 libs = "maintain"
 program-managers = "write"
+
+[[rulesets]]
+pattern = "main"
+require-linear-history = true
+pr-required = false
+required-approvals = 0
