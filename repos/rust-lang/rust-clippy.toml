@@ -25,6 +25,21 @@ ci-checks = [
 ]
 required-approvals = 0
 merge-queue = { enabled = true }
+allowed-merge-teams = ["clippy"]
+
+# Required for running try builds created by bors.
+# Must support force-pushes.
+[[rulesets]]
+pattern = "automation/bors/try"
+bypass-apps = ["bors"]
+prevent-update = true
+
+# Required for running try builds created by bors.
+# Must support force-pushes.
+[[rulesets]]
+pattern = "automation/bors/try-merge"
+bypass-apps = ["bors"]
+prevent-update = true
 
 [environments.github-pages]
 
