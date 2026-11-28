@@ -737,6 +737,14 @@ pub(crate) struct TeamList {
     #[serde(default)]
     pub(crate) extra_teams: Vec<String>,
 }
+impl TeamList {
+    /// If this is purely a redirect for another email and doesn't have a better place on another team.
+    ///
+    /// This exists to validate the `rustconf-emails` and `foundation-email-redirects` marker teams.
+    pub(crate) fn is_nonteam_redirect(&self) -> bool {
+        self.extra_people.is_empty() && self.extra_teams.is_empty()
+    }
+}
 
 #[derive(serde::Deserialize, Clone, Debug)]
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]

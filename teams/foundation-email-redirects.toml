@@ -14,9 +14,7 @@ members = []
 [[lists]]
 address = "foundation@rust-lang.org"
 extra-emails = ["foundation@rustfoundation.org"]
-include-team-members = false
 
 [[lists]]
 address = "accounting@rust-lang.org"
 extra-emails = ["accounting@rustfoundation.org"]
-include-team-members = false
