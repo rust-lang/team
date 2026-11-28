@@ -22,6 +22,7 @@ crates = [
     "ra-ap-rustc_pattern_analysis",
     "ra-ap-rustc_type_ir",
     "ra-ap-rustc_type_ir_macros",
+    "ra-ap-rustc_unicode",
 ]
 publish-workflow = "release.yml"
 publish-environment = "release"
