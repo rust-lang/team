@@ -12,7 +12,6 @@ all = "write"
 
 [[rulesets]]
 pattern = "main"
-required-approvals = 0
 
 [environments.github-pages]
 branches = ["main"]
