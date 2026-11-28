@@ -4,3 +4,6 @@ description = "Semantic code navigation for Rust"
 bots = []
 
 [access.teams]
+
+[[crates-io]]
+crates = ["cargo-src"]
