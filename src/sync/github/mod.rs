@@ -51,6 +51,7 @@ enum GithubApp {
     ForkingRenovateBot,
     Bors,
     Datadog,
+    Triagebot,
 }
 
 impl GithubApp {
@@ -60,6 +61,7 @@ impl GithubApp {
         match app_id {
             2740 => Some(GithubApp::RenovateBot),
             7402 => Some(GithubApp::ForkingRenovateBot),
+            59835 => Some(GithubApp::Triagebot),
             278306 => Some(GithubApp::Bors),
             // Link for infra admins:
             // https://github.com/organizations/rust-lang/settings/apps/datadog-rust-lang
@@ -76,6 +78,7 @@ impl Display for GithubApp {
             GithubApp::RenovateBot => f.write_str("RenovateBot"),
             GithubApp::Bors => f.write_str("Bors"),
             GithubApp::Datadog => f.write_str("Datadog"),
+            GithubApp::Triagebot => f.write_str("Triagebot"),
         }
     }
 }
@@ -1015,9 +1018,9 @@ impl SyncGitHub {
             Bot::ForkingRenovate => Some(GithubApp::ForkingRenovateBot),
             Bot::Bors => Some(GithubApp::Bors),
             Bot::Datadog => Some(GithubApp::Datadog),
+            Bot::Rustbot => Some(GithubApp::Triagebot),
             Bot::Highfive
             | Bot::Rfcbot
-            | Bot::Rustbot
             | Bot::Craterbot
             | Bot::LogAnalyzer
             | Bot::HerokuDeployAccess => None,
@@ -1177,6 +1180,7 @@ impl From<&Bot> for BotDetails {
 
         match bot {
             Bot::Highfive => write_access("rust-highfive"),
+            // FIXME: remove once triagebot has been fully migrated to being a GitHub App
             Bot::Rustbot => write_access("rustbot"),
             Bot::Rfcbot => write_access("rust-rfcbot"),
             Bot::Craterbot => write_access("craterbot"),
